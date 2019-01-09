@@ -13,19 +13,19 @@ type Props = {
   creationDate: string,
   locale: string,
   modified: boolean,
-  userNameAdditionalClasses?: ?string
+  userNameModerationClasses?: ?string
 };
 
 class ProfileLine extends React.PureComponent<Props> {
   static defaultProps = {
     modified: false,
     creationDate: null,
-    userNameAdditionalClasses: null
+    userNameModerationClasses: null
   };
 
   render() {
-    const { userId, userName, creationDate, locale, modified, userNameAdditionalClasses } = this.props;
-    const userNameClasses = classnames('creator', userNameAdditionalClasses);
+    const { userId, userName, creationDate, locale, modified, userNameModerationClasses } = this.props;
+    const userNameClasses = classnames('creator', userNameModerationClasses);
     return (
       <div className="profileLine">
         <div className="inline">

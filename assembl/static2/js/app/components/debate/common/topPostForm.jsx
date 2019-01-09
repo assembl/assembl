@@ -164,7 +164,7 @@ export class DumbTopPostForm extends React.Component<Props, State> {
               successMessage = draftSuccessMsgId;
               break;
             case PublicationStates.SUBMITTED_AWAITING_MODERATION:
-              successMessage = 'debate.survey.postToBeValidated'; // TODO: add translation for thread
+              successMessage = 'debate.thread.postToBeValidated';
               break;
             default:
               successMessage = postSuccessMsgId;

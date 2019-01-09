@@ -14,7 +14,7 @@ import PostBody from './postBody';
 import HarvestingMenu from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
 import { getExtractTagId } from '../../../../utils/extract';
-import { PublicationStates } from '../../../../constants';
+import { PublicationStates, pendingOrange } from '../../../../constants';
 
 type Props = PostProps & {
   body: string,
@@ -24,7 +24,7 @@ type Props = PostProps & {
   multiColumns: boolean,
   subject: string,
   timeline: Timeline,
-  connectedUserId: string
+  connectedUserId: ?string
 };
 
 type State = {
@@ -166,7 +166,7 @@ class PostView extends React.PureComponent<Props, State> {
     };
 
     const boxStyle = {
-      borderLeftColor: isPending ? '#ffd58f' : borderLeftColor
+      borderLeftColor: isPending ? pendingOrange : borderLeftColor
     };
     let canReply = !multiColumns;
     // If we're in thread mode, check if the first idea associated to the post is multi columns.

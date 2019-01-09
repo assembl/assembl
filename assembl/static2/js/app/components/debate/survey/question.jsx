@@ -13,7 +13,6 @@ import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
-// graphql
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { DebateContext } from '../../../../app/app';
 

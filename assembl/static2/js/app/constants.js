@@ -388,3 +388,5 @@ export const harvestingColorsMapping: { [string]: ColorDefinition } = {
   knowledge: harvestingColors.purple,
   cognitive_bias: harvestingColors.black
 };
+
+export const pendingOrange = '#ffd58f"';

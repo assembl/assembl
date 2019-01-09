@@ -2,6 +2,7 @@
 import React from 'react';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
+import { OverlayTrigger } from 'react-bootstrap';
 
 import { PostActions } from '../../../../../js/app/components/debate/common/postActions';
 import Sentiments from '../../../../../js/app/components/debate/common/sentiments';
@@ -108,23 +109,17 @@ describe('<PostActions /> - with shallow', () => {
     expect(wrapper.find(Sentiments)).toHaveLength(1);
   });
 
-  // TODO: update the tests below with tne new display of post actions
-
-  // it('should render 1 overlay when the user has permissions', () => {
-  //   expect(wrapper.find(OverlayTrigger)).toHaveLength(1);
-  // });
-
-  // it('should render 2 overlays when the user has permissions and the total of sentiments is greater than 0', () => {
-  //   wrapper.setProps({
-  //     sentimentCounts: {
-  //       disagree: 1,
-  //       dontUnderstand: 1,
-  //       like: 1,
-  //       moreInfo: 1
-  //     }
-  //   });
-  //   expect(wrapper.find(OverlayTrigger)).toHaveLength(2);
-  // });
+  it('should render 1 overlay when the total of sentiments is greater than 0', () => {
+    wrapper.setProps({
+      sentimentCounts: {
+        disagree: 1,
+        dontUnderstand: 1,
+        like: 1,
+        moreInfo: 1
+      }
+    });
+    expect(wrapper.find(OverlayTrigger)).toHaveLength(1);
+  });
 
   it('should not render overlays and sentiments component if debateData is null', () => {
     wrapper.setProps({ debateData: null });
