@@ -12,7 +12,7 @@ from sqlalchemy import exists
 
 from assembl import models
 from assembl.auth import (
-    Everyone, P_SYSADMIN, P_ADMIN_DISC, P_DELETE_MY_POST, P_DELETE_POST, CrudPermissions)
+    Everyone, P_MODERATE, P_DELETE_MY_POST, P_DELETE_POST, CrudPermissions)
 from assembl.auth.util import get_permissions
 from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.models.auth import (LanguagePreferenceCollection,
@@ -596,7 +596,7 @@ class ValidatePost(graphene.Mutation):
         post = models.Post.get(post_id)
 
         permissions = get_permissions(user_id, discussion_id)
-        allowed = P_ADMIN_DISC in permissions or P_SYSADMIN in permissions
+        allowed = P_MODERATE in permissions
         if not allowed:
             raise HTTPUnauthorized()
 
