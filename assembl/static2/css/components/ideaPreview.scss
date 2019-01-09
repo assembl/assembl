@@ -3,8 +3,6 @@
 
   .light-title-3 {
     font-size: $font-size-sm;
-    //position: absolute;
-    //top: 0;
     width: calc(100% - 40px);
     margin-right: 0;
     margin-left: 0;
@@ -24,8 +22,6 @@
   }
 
   .access-discussion {
-    //position: absolute;
-    //top: calc(50% - 20px);
     width: calc(100% - 40px);
     text-align: center;
     padding-bottom: 160px;
@@ -143,8 +139,6 @@
   height: 500px;
 
   .light-title-3 {
-    //position: absolute;
-    //top: 80px;
     width: calc(100% - 40px);
   }
 }
@@ -197,12 +191,12 @@
   }
 
   .idea-preview-level-1 {
-    height: 435.8px;
+    height: 436px;
   }
 
   .mobile-illustration-box {
     .box-hyphen {
-      top: 46%;
+      top: 40%;
     }
   }
 }
