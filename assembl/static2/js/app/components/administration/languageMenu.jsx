@@ -1,10 +1,13 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 import { OverlayTrigger } from 'react-bootstrap';
 
 import { languageTooltip } from '../common/tooltips';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import { updateEditLocale } from '../../actions/adminActions';
+import DiscussionPreferences from '../../graphql/DiscussionPreferences.graphql';
 import De from '../svg/flags/de';
 import En from '../svg/flags/en';
 import Es from '../svg/flags/es';
@@ -24,7 +27,7 @@ import ZhCN from '../svg/flags/zh_CN';
 
 type Props = {
   editLocale: string,
-  discussionPreferences: Array<string>,
+  discussionPreferencesLanguages: Array<{ locale: string, name: string }>,
   isHidden: boolean,
   changeLocale: string => void
 };
@@ -68,22 +71,22 @@ const Flag = ({ locale }: { locale: string }) => {
   }
 };
 
-const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, isHidden }: Props) => {
+const LanguageMenu = ({ changeLocale, editLocale, discussionPreferencesLanguages, isHidden }: Props) => {
   if (!isHidden) {
     return (
       <div className="relative">
         <div className="language-menu">
           <OverlayTrigger placement="top" overlay={languageTooltip}>
             <div>
-              {discussionPreferences.map((key, index) => (
+              {discussionPreferencesLanguages.map((language, index) => (
                 <div
-                  title={key}
-                  onClick={() => changeLocale(key)}
-                  id={key}
-                  className={editLocale === key ? 'flag-container active' : 'flag-container'}
+                  title={language.name}
+                  onClick={() => changeLocale(language.locale)}
+                  id={language.locale}
+                  className={editLocale === language.locale ? 'flag-container active' : 'flag-container'}
                   key={index}
                 >
-                  <Flag locale={key} />
+                  <Flag locale={language.locale} />
                 </div>
               ))}
             </div>
@@ -97,9 +100,9 @@ const LanguageMenu = ({ changeLocale, editLocale, discussionPreferences, isHidde
 };
 
 const mapStateToProps = state => ({
+  i18n: state.i18n,
   translations: state.i18n.translations,
   editLocale: state.admin.editLocale,
-  discussionPreferences: state.admin.discussionLanguagePreferences,
   isHidden: state.admin.displayLanguageMenu
 });
 
@@ -109,4 +112,29 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LanguageMenu);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  graphql(DiscussionPreferences, {
+    options: props => ({
+      variables: {
+        inLocale: props.i18n.locale
+      }
+    }),
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading,
+          discussionPreferencesLanguages: []
+        };
+      }
+
+      return {
+        error: data.error,
+        loading: data.loading,
+        discussionPreferencesLanguages: data.discussionPreferences.languages
+      };
+    }
+  }),
+  manageErrorAndLoading({ displayLoader: false })
+)(LanguageMenu);

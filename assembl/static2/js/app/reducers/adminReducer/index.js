@@ -1,5 +1,4 @@
 // @flow
-import { List } from 'immutable';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 
@@ -24,26 +23,6 @@ export const editLocale: EditLocaleReducer = (state = 'fr', action) => {
   }
 };
 
-const hasLocale = (l: string, arr: Array<string>): boolean => {
-  const i = arr.findIndex(a => a === l);
-  return i >= 0;
-};
-
-export type LanguagePreferencesState = List<string>;
-type LanguagePreferencesReducer = (LanguagePreferencesState, ReduxAction<Action>) => LanguagePreferencesState;
-export const languagePreferences: LanguagePreferencesReducer = (state = List(), action) => {
-  switch (action.type) {
-  case 'ADD_LANGUAGE_PREFERENCE':
-    // Language preferences can be added in different components
-    if (!hasLocale(action.locale, state)) {
-      return state.push(action.locale);
-    }
-    return state;
-  default:
-    return state;
-  }
-};
-
 type DisplayLanguageMenuState = boolean;
 type DisplayLanguageMenuReducer = (DisplayLanguageMenuState, ReduxAction<Action>) => DisplayLanguageMenuState;
 export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, action) => {
@@ -57,7 +36,6 @@ export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, a
 
 const reducers = {
   editLocale: editLocale,
-  discussionLanguagePreferences: languagePreferences,
   displayLanguageMenu: displayLanguageMenu,
   sections: sections,
   voteSession: voteSession,
