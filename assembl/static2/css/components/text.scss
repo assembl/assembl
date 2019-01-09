@@ -224,7 +224,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $screen-sm-min) {
   .collapsed-title {
     font-size: $font-size-s;
     line-height: $font-size-s + 6px;

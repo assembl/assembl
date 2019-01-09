@@ -320,7 +320,7 @@
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: $screen-sm-min) {
   .votesession-page {
     .proposal.row {
       padding: 15px 5px 15px 0;
@@ -340,7 +340,7 @@
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: $screen-xs-max) {
   .votesession-page {
     .votes-in-progress {
       padding: 0 0 15px 0;

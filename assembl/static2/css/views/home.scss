@@ -418,7 +418,7 @@
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: $screen-sm-min) {
   .home {
     .header-section {
       .header-content {
@@ -428,7 +428,7 @@
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $screen-sm-min) {
   .container-objectives-img {
     align-items: center;
     display: flex;
@@ -443,14 +443,6 @@
       .header-content {
         max-width: 100%;
       }
-    }
-  }
-}
-
-@media screen and (min-width: 421px) {
-  .twitter-section {
-    .tweet-section {
-      padding: 45px 75px 65px;
     }
   }
 }
@@ -481,6 +473,14 @@
       &:nth-child(3) {
         display: none;
       }
+    }
+  }
+}
+
+@media screen and (min-width: 421px) {
+  .twitter-section {
+    .tweet-section {
+      padding: 45px 75px 65px;
     }
   }
 }
