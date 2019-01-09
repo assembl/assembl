@@ -438,7 +438,8 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         identifiers = args.get('identifiers', [])
         model = models.AssemblPost
-        query = get_posts_for_phases(discussion, identifiers)
+        # Note: This is only used by BigDatext, posts in moderating phase excluded
+        query = get_posts_for_phases(discussion, identifiers, include_moderating=False)
         # If no posts in the specified identifiers, we return an empty list
         if identifiers and query is None:
             return []
