@@ -247,6 +247,14 @@
           padding: 0 px !important;
 
           .stat-box {
+            flex-direction: column;
+            justify-content: center;
+
+            [class^="assembl-icon-"]:before, [class*=" assembl-icon-"]:before {
+              //increase icon size
+              font-size: 170%;
+            }
+
             .stat-icon {
               padding-top: 0;
               display: block;
@@ -254,13 +262,12 @@
             }
 
             .stat {
-              margin-left: 5px;
               padding-left: 0;
+              text-align: center;
               word-break: break-word;
             }
 
             .stat-nb {
-              margin-left: 3px;
               padding-top: 3px;
             }
           }
