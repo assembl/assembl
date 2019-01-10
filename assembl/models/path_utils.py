@@ -262,8 +262,11 @@ class PostPathLocalCollection(object):
             state_condition = post.publication_state.in_(states)
             if include_moderating and include_moderating is not True:
                 state_condition = state_condition | (
-                    (post.publication_state == PublicationStates.SUBMITTED_AWAITING_MODERATION) &
+                    post.publication_state.in_([
+                        PublicationStates.SUBMITTED_AWAITING_MODERATION,
+                        PublicationStates.DRAFT]) &
                     (post.creator_id == include_moderating))
+            # Missing: an admin's drafts... dammit.
             query = query.filter(state_condition)
             return post, query
         if not self.paths:
@@ -490,7 +493,9 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         state_condition = post.publication_state.in_(states)
         if include_moderating and include_moderating is not True:
             state_condition = state_condition | (
-                (post.publication_state == PublicationStates.SUBMITTED_AWAITING_MODERATION) &
+                post.publication_state.in_([
+                    PublicationStates.SUBMITTED_AWAITING_MODERATION,
+                    PublicationStates.DRAFT]) &
                 (post.creator_id == include_moderating))
         q = q.filter(state_condition)
 
