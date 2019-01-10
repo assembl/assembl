@@ -13,20 +13,24 @@ const getChildrenVariables = (client, thematic, initialTheme) =>
       const order = idx + 1;
       const initialChild = initialTheme && initialTheme.children.find(theme => t.id === theme.id);
       const initialImg = initialChild ? initialChild.img : null;
-      const bodyVars = await convertRichTextToVariables(t.announcement.body, client);
-      const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
-      const titleEntries = convertToEntries(t.announcement.title);
-      const quote = await (t.announcement.quote && t.messageViewOverride && t.messageViewOverride.value === MESSAGE_VIEW.survey
-        ? convertRichTextToVariables(t.announcement.quote, client)
-        : Promise.resolve({ attachments: [], entries: [] }));
       let announcement = null;
-      if (titleEntries.length > 0) {
-        announcement = {
-          titleEntries: titleEntries,
-          bodyAttachments: bodyAttachments,
-          bodyEntries: bodyEntries,
-          quoteEntries: quote.entries
-        };
+      if (t.announcement) {
+        const bodyVars = await convertRichTextToVariables(t.announcement.body, client);
+        const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
+        const titleEntries = convertToEntries(t.announcement.title);
+        const quote = await (t.announcement.quote &&
+          t.messageViewOverride &&
+          t.messageViewOverride.value === MESSAGE_VIEW.survey
+          ? convertRichTextToVariables(t.announcement.quote, client)
+          : Promise.resolve({ attachments: [], entries: [] }));
+        if (titleEntries.length > 0) {
+          announcement = {
+            titleEntries: titleEntries,
+            bodyAttachments: bodyAttachments,
+            bodyEntries: bodyEntries,
+            quoteEntries: quote.entries
+          };
+        }
       }
       return {
         id: t.id.startsWith('-') ? null : t.id,
@@ -43,22 +47,24 @@ const getChildrenVariables = (client, thematic, initialTheme) =>
 
 async function getIdeaInput(client, theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
-  const bodyVars = await convertRichTextToVariables(theme.announcement.body, client);
-  const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
-  const titleEntries = convertToEntries(theme.announcement.title);
-  const quote = await (theme.announcement.quote &&
-  theme.messageViewOverride &&
-  theme.messageViewOverride.value === MESSAGE_VIEW.survey
-    ? convertRichTextToVariables(theme.announcement.quote, client)
-    : Promise.resolve({ attachments: [], entries: [] }));
   let announcement = null;
-  if (titleEntries.length > 0) {
-    announcement = {
-      titleEntries: titleEntries,
-      bodyAttachments: bodyAttachments,
-      bodyEntries: bodyEntries,
-      quoteEntries: quote.entries
-    };
+  if (theme.announcement) {
+    const bodyVars = await convertRichTextToVariables(theme.announcement.body, client);
+    const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
+    const titleEntries = convertToEntries(theme.announcement.title);
+    const quote = await (theme.announcement.quote &&
+    theme.messageViewOverride &&
+    theme.messageViewOverride.value === MESSAGE_VIEW.survey
+      ? convertRichTextToVariables(theme.announcement.quote, client)
+      : Promise.resolve({ attachments: [], entries: [] }));
+    if (titleEntries.length > 0) {
+      announcement = {
+        titleEntries: titleEntries,
+        bodyAttachments: bodyAttachments,
+        bodyEntries: bodyEntries,
+        quoteEntries: quote.entries
+      };
+    }
   }
   return {
     id: theme.id.startsWith('-') ? null : theme.id,

@@ -85,6 +85,7 @@ export const PHASES = {
 };
 
 export const MESSAGE_VIEW = {
+  noModule: 'noModule',
   survey: 'survey',
   thread: 'thread',
   messageColumns: 'messageColumns',
@@ -292,7 +293,14 @@ export const fictionBackgroundColors = [
   '#cfd8dc'
 ];
 
-export const modulesTranslationKeys = ['survey', 'thread', 'multiColumns', 'voteSession', 'brightMirror'];
+export const modulesTranslationKeys = [
+  MESSAGE_VIEW.noModule,
+  MESSAGE_VIEW.survey,
+  MESSAGE_VIEW.thread,
+  MESSAGE_VIEW.messageColumns,
+  MESSAGE_VIEW.voteSession,
+  MESSAGE_VIEW.brightMirror
+];
 
 export const BlockingPublicationStates = {};
 BlockingPublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;

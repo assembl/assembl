@@ -32,7 +32,7 @@ const getMessageViewOverride = (key: ?string): Option => {
   if (key) {
     return { value: key, label: I18n.t(`administration.modules.${key}`) };
   }
-  return { value: 'thread', label: I18n.t('administration.modules.thread') };
+  return { value: 'noModule', label: I18n.t('administration.modules.noModule') };
 };
 
 const getThemeData = (t: ThemeValueFromQuery): ThemeValueWithChildren => {

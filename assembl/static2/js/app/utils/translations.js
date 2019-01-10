@@ -659,9 +659,10 @@ const Translations = {
         warningLabel: "Les dates que vous avez configuré entrent en conflit."
       },
       modules: {
+        noModule: "Aucun module",
         survey: "Module Questions",
         thread: "Module Threads",
-        multiColumns: "Module Multi-colonnes",
+        messageColumns: "Module Multi-colonnes",
         voteSession: "Module de vote",
         brightMirror: "Module Bright Mirror"
       },
@@ -1613,9 +1614,10 @@ const Translations = {
         warningLabel: "The dates you have set are in conflict"
       },
       modules: {
+        noModule: "No module",
         survey: "Survey module",
         thread: "Thread module",
-        multiColumns: "Multi-columns module",
+        messageColumns: "Multi-columns module",
         voteSession: "Vote module",
         brightMirror: "Bright Mirror module"
       },

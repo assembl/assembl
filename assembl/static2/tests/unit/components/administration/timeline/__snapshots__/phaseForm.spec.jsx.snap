@@ -147,24 +147,6 @@ exports[`PhaseForm component should render a form to update the dates and module
         bsClass="dropdown"
         disabled={false}
         divider={false}
-        eventKey="multiColumns"
-        header={false}
-      >
-        Multi-columns module
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
-        eventKey="voteSession"
-        header={false}
-      >
-        Vote module
-      </MenuItem>
-      <MenuItem
-        bsClass="dropdown"
-        disabled={false}
-        divider={false}
         eventKey="brightMirror"
         header={false}
       >

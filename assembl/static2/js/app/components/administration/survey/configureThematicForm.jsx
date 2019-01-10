@@ -131,28 +131,32 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           // label={I18n.t('administration.tableOfThematics.moduleTypeLabel')}
           options={modulesTranslationKeys.map(key => ({ value: key, label: I18n.t(`administration.modules.${key}`) }))}
         />
-        <Helper
-          label={I18n.t('administration.instructions')}
-          helperUrl="/static2/img/helpers/helper_BM_1.png"
-          helperText={I18n.t('administration.tableOfThematics.instructionHeader')}
-          classname="title"
-        />
-        <Field
-          key={`${announcementTitleName}-${editLocale}`}
-          editLocale={editLocale}
-          name={announcementTitleName}
-          label={`${I18n.t('administration.tableOfThematics.sectionTitleLabel')} ${upperCaseLocale}`}
-          component={MultilingualTextFieldAdapter}
-          required
-        />
-        <Field
-          key={`${announcementBodyName}-${editLocale}`}
-          editLocale={editLocale}
-          name={announcementBodyName}
-          label={`${I18n.t('administration.tableOfThematics.instructionLabel')} ${upperCaseLocale}`}
-          withAttachment
-          component={MultilingualRichTextFieldAdapter}
-        />
+        {theme && theme.messageViewOverride && theme.messageViewOverride.value !== MESSAGE_VIEW.noModule ? (
+          <React.Fragment>
+            <Helper
+              label={I18n.t('administration.instructions')}
+              helperUrl="/static2/img/helpers/helper_BM_1.png"
+              helperText={I18n.t('administration.tableOfThematics.instructionHeader')}
+              classname="title"
+            />
+            <Field
+              key={`${announcementTitleName}-${editLocale}`}
+              editLocale={editLocale}
+              name={announcementTitleName}
+              label={`${I18n.t('administration.tableOfThematics.sectionTitleLabel')} ${upperCaseLocale}`}
+              component={MultilingualTextFieldAdapter}
+              required
+            />
+            <Field
+              key={`${announcementBodyName}-${editLocale}`}
+              editLocale={editLocale}
+              name={announcementBodyName}
+              label={`${I18n.t('administration.tableOfThematics.instructionLabel')} ${upperCaseLocale}`}
+              withAttachment
+              component={MultilingualRichTextFieldAdapter}
+            />
+          </React.Fragment>
+        ) : null}
         {this.addVoteModuleLink(theme)}
         {theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.survey ? (
           <SurveyFields editLocale={editLocale} fieldPrefix={name} />

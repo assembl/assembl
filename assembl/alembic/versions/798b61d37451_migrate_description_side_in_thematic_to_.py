@@ -25,7 +25,8 @@ def upgrade(pyramid_env):
         op.execute('DELETE FROM vote_specification')
         op.execute('DELETE FROM vote_session')
         # convert thematic to idea
-        op.execute("UPDATE idea SET message_view_override='survey' WHERE sqla_type='thematic' and hidden=false")
+        op.execute("UPDATE idea SET message_view_override='thread' WHERE hidden=false AND message_view_override IS NULL")
+        op.execute("UPDATE idea SET message_view_override='survey' WHERE sqla_type='thematic' AND hidden=false")
         op.execute("UPDATE idea SET sqla_type='idea' WHERE sqla_type='thematic'")
         mark_changed()
         # this drop video module associated to survey ideas, we don't do migration to announcement

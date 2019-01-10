@@ -7,7 +7,6 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { SplitButton, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { type moment } from 'moment';
-import { modulesTranslationKeys } from '../../../constants';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 import {
@@ -118,7 +117,7 @@ export const DumbPhaseForm = ({
           title={splitButtonTitle}
           onSelect={handleIdentifierChange}
         >
-          {modulesTranslationKeys.map(key => (
+          {['survey', 'thread', 'brightMirror'].map(key => (
             <MenuItem key={`module-${key}`} eventKey={key}>
               {I18n.t(`administration.modules.${key}`)}
             </MenuItem>
