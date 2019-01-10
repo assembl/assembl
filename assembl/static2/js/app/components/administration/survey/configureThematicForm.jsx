@@ -73,7 +73,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     );
     if (thematicId.startsWith('-') || !this.props.pristine) {
       return (
-        <p>
+        <p className="warning-message" role="alert">
           <Translate value="administration.saveBeforeConfigureVoteSession" />
         </p>
       );
@@ -131,7 +131,6 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           // label={I18n.t('administration.tableOfThematics.moduleTypeLabel')}
           options={modulesTranslationKeys.map(key => ({ value: key, label: I18n.t(`administration.modules.${key}`) }))}
         />
-        {this.addVoteModuleLink(theme)}
         <Helper
           label={I18n.t('administration.instructions')}
           helperUrl="/static2/img/helpers/helper_BM_1.png"
@@ -154,6 +153,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           withAttachment
           component={MultilingualRichTextFieldAdapter}
         />
+        {this.addVoteModuleLink(theme)}
         {theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.survey ? (
           <SurveyFields editLocale={editLocale} fieldPrefix={name} />
         ) : null}
