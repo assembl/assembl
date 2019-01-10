@@ -12,6 +12,8 @@ import { MESSAGE_VIEW } from '../../../constants';
 
 configure({ adapter: new Adapter() });
 
+configure({ adapter: new Adapter() });
+
 describe('Announcement component', () => {
   const announcement = {
     title: 'Super Smash Bros Ultimate Nintendo Switch',
@@ -237,6 +239,38 @@ describe('Announcement component', () => {
       props = {
         announcement: announcement,
         idea: threadIdea
+      };
+      wrapper = shallow(<Announcement {...props} />);
+    });
+
+    it('should render a Navbar', () => {
+      expect(wrapper.find(Tabs)).toHaveLength(1);
+    });
+
+    it('should render a 3 Tab', () => {
+      expect(wrapper.find(Tab)).toHaveLength(3);
+    });
+  });
+
+  describe('<Announcement /> - with shallow', () => {
+    let wrapper;
+    let props;
+
+    beforeEach(() => {
+      const threadIdea = {
+        id: '1234',
+        messageColumns: [],
+        messageViewOverride: null,
+        numContributors: 2,
+        numPosts: 2,
+        posts: fakeThreadPosts,
+        __typename: 'Idea'
+      };
+
+      props = {
+        announcementContent: announcementContent,
+        idea: threadIdea,
+        isMultiColumns: false
       };
       wrapper = shallow(<Announcement {...props} />);
     });
