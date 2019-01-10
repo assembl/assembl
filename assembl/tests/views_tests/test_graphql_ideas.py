@@ -1077,11 +1077,27 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
                     'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'red',
-                    'messageClassifier': 'positive'},
+                    'messageClassifier': 'positive',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]},
                     {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
                     'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'green',
-                    'messageClassifier': 'negative'}
+                    'messageClassifier': 'negative',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]}
                 ],
                 'announcement': {
                     'titleEntries': [

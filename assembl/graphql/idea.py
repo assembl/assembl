@@ -600,6 +600,8 @@ class IdeaMessageColumnInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaMessageColumnInput.title_entries)
     color = graphene.String(required=True, description=docs.IdeaMessageColumnInput.color)
     message_classifier = graphene.String(description=docs.IdeaMessageColumnInput.message_classifier)
+    column_synthesis = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis)
+    column_synthesis_title = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis_title)
 
 
 def create_idea(parent_idea, phase, args, context):
@@ -697,12 +699,20 @@ def create_idea(parent_idea, phase, args, context):
 
                     title = langstring_from_input_entries(column['title_entries'])
                     color = column['color']
+                    body = langstring_from_input_entries(column['column_synthesis'])
+                    subject = langstring_from_input_entries(input['column_synthesis_title'])
                     saobj.message_columns.append(
                         models.IdeaMessageColumn(
                             message_classifier=message_classifier,
                             name=name,
                             title=title,
                             color=color))
+                    db.add(models.ColumnSynthesisPost(
+                        message_classifier=message_classifier,
+                        discussion_id=discussion_id,
+                        subject=subject if subject else models.LangString.EMPTY(),
+                        body=body if body else models.LangString.EMPTY()
+                    ))
 
         update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
