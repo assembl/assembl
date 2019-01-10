@@ -4,16 +4,10 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
 <div
   className="announcement"
 >
-  <div
-    className="announcement-title"
-  >
-    <div
-      className="title-hyphen"
-    >
-       
-    </div>
-    <h3
-      className="announcement-title-text dark-title-1"
+  <div>
+    <ul
+      className="nav nav-tabs"
+      role="tablist"
     >
       <span>
         Announcement
@@ -27,16 +21,20 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
       className="media-section background-light"
     >
       <div
-        className="max-container"
+        aria-hidden={false}
+        aria-labelledby={null}
+        className="tab-pane active fade in"
+        id={null}
+        role="tabpanel"
       >
         <div
-          className="container-fluid"
+          className="announcement-media col-md-push-4 col-md-8 col-xs-12"
         >
           <div
             className="announcement-media col-md-push-4 col-md-8 col-xs-12"
           >
             <div
-              className="media-right"
+              className="max-container"
             >
               <div
                 className="media-description-layer media-description-top"
@@ -155,6 +153,15 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
                   />
                 </span>
               </div>
+              <div
+                className="color"
+              >
+                2
+                 
+                <span
+                  className="assembl-icon-profil"
+                />
+              </div>
             </div>
           </div>
         </div>
@@ -168,16 +175,10 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
 <div
   className="announcement"
 >
-  <div
-    className="announcement-title"
-  >
-    <div
-      className="title-hyphen"
-    >
-       
-    </div>
-    <h3
-      className="announcement-title-text dark-title-1"
+  <div>
+    <ul
+      className="nav nav-tabs"
+      role="tablist"
     >
       <span>
         Announcement
@@ -191,16 +192,20 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
       className="media-section background-light"
     >
       <div
-        className="max-container"
+        aria-hidden={false}
+        aria-labelledby={null}
+        className="tab-pane active fade in"
+        id={null}
+        role="tabpanel"
       >
         <div
-          className="container-fluid"
+          className="announcement-media col-md-push-4 col-md-8 col-xs-12"
         >
           <div
             className="announcement-media col-md-push-4 col-md-8 col-xs-12"
           >
             <div
-              className="media-right"
+              className="max-container"
             >
               <div
                 className="media-description-layer media-description-top"

@@ -1,14 +1,15 @@
 // @flow
 import * as React from 'react';
-import { Translate } from 'react-redux-i18n';
-import { Col, Row, Tooltip } from 'react-bootstrap';
+import { Translate, I18n } from 'react-redux-i18n';
+import { Col, Row, Tabs, Tab, Tooltip } from 'react-bootstrap';
 
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject } from './sentimentDefinitions';
-import type { SentimentDefinition } from './sentimentDefinitions';
 import TextAndMedia from '../../common/textAndMedia';
-import { CountablePublicationStates, MESSAGE_VIEW } from '../../../constants';
+import { CountablePublicationStates, ANNOUNCEMENT_TAB_ITEM_ID, MESSAGE_VIEW } from '../../../constants';
 import PostsAndContributorsCount, { Counter } from '../../common/postsAndContributorsCount';
+
+import type { SentimentDefinition } from './sentimentDefinitions';
 
 export const createTooltip = (sentiment: SentimentDefinition, count: number) => (
   <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">
@@ -99,26 +100,60 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
   const sentimentsCount = getSentimentsCount(posts);
   const columnInfos = getColumnInfos(messageColumns);
   const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
-  return (
-    <Col xs={12} md={4} className="col-md-pull-8">
-      <div className="announcement-statistics">
-        <div className="announcement-doughnut">
-          <StatisticsDoughnut elements={doughnutElements} />
-        </div>
-        {isMultiColumns ? (
-          <div className="announcement-numbers">
-            {columnInfos.map((col, index) => (
-              <div style={{ color: col.color }} key={`col-${index}`}>
-                {col.count} <span className="col-announcement-count">{col.name}</span>
-              </div>
-            ))}
-            <Counter num={numContributors} className="assembl-icon assembl-icon-profil" />
+
+  const instructionTitleKey = 'debate.thread.instruction';
+  const mindmapTitleKey = 'debate.thread.mindmap';
+  const semanticAnalysisLongTitleKey = 'debate.thread.semanticAnalysis.long';
+  // const semanticAnalysisShortTitleKey = 'debate.thread.semanticAnalysis.short';
+
+  const instructionTabTitle = I18n.t(instructionTitleKey);
+  const mindmapTabTitle = I18n.t(mindmapTitleKey);
+  const semanticAnalysisTabLongTitle = I18n.t(semanticAnalysisLongTitleKey);
+  // const semanticAnalysisTabShortTitle = I18n.t(semanticAnalysisShortTitleKey);
+
+  const instructionContent = (
+    <React.Fragment>
+      <Col xs={12} md={4} className="col-md-pull-8">
+        <div className="announcement-statistics">
+          <div className="announcement-doughnut">
+            <StatisticsDoughnut elements={doughnutElements} />
           </div>
-        ) : (
-          <PostsAndContributorsCount className="announcement-numbers" numContributors={numContributors} numPosts={numPosts} />
-        )}
-      </div>
-    </Col>
+          {isMultiColumns ? (
+            <div className="announcement-numbers">
+              {columnInfos.map((col, index) => (
+                <div style={{ color: col.color }} key={`col-${index}`}>
+                  {col.count} <span className="col-announcement-count">{col.name}</span>
+                </div>
+              ))}
+              <Counter num={numContributors} className="assembl-icon assembl-icon-profil" />
+            </div>
+          ) : (
+            <PostsAndContributorsCount className="announcement-numbers" numContributors={numContributors} numPosts={numPosts} />
+          )}
+        </div>
+      </Col>
+    </React.Fragment>
+  );
+
+  const mindmapContent = <h1>A retenir</h1>;
+
+  const semanticAnalysisContent = <h1>Analyse sémantique</h1>;
+
+  return (
+    <div className="announcement">
+      {/** will need to update the overall structure to remove announcement css class */}
+      <Tabs defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION}>
+        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION} title={instructionTabTitle}>
+          {instructionContent}
+        </Tab>
+        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.MINDMAP} title={mindmapTabTitle}>
+          {mindmapContent}
+        </Tab>
+        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabLongTitle}>
+          {semanticAnalysisContent}
+        </Tab>
+      </Tabs>
+    </div>
   );
 };
 

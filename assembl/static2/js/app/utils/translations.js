@@ -424,7 +424,13 @@ const Translations = {
         voteForProposals: "Votez pour les propositions",
         seeSubIdeas: "Voir les %{count} sous-thèmes",
         seeSubIdeas_1: "Voir le sous-thème",
-        announcement: "Consigne"
+        announcement: "Consigne",
+        instruction: "Consigne",
+        mindmap: "A retenir",
+        semanticAnalysis: {
+          long: "Analyse Sémantique",
+          short: "Analyse"
+        }
       },
       brightMirror: {
         deleteFiction: "Supprimez votre texte",
@@ -1397,7 +1403,13 @@ const Translations = {
         voteForProposals: "Vote for the proposals",
         seeSubIdeas: "See %{count} sub-thematics",
         seeSubIdeas_1: "See sub-thematic",
-        announcement: "Announcement"
+        announcement: "Announcement",
+        instruction: "Instruction",
+        mindmap: "Mindmap",
+        semanticAnalysis: {
+          long: "Semantic Analysis",
+          short: "Analysis"
+        }
       },
       brightMirror: {
         deleteFiction: "Delete your text",

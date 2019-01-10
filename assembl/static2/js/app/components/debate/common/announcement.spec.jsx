@@ -1,6 +1,12 @@
 import React from 'react';
-import renderer from 'react-test-renderer'; // eslint-disable-line
+/* eslint-disable import/no-extraneous-dependencies */
+import renderer from 'react-test-renderer';
+import { configure, shallow } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16.3';
+/* eslint-enable */
 
+// Component imports
+import { Tabs, Tab } from 'react-bootstrap';
 import Announcement, {
   AnnouncementCounters,
   createDoughnutElements,
@@ -9,6 +15,8 @@ import Announcement, {
   getSentimentsCount
 } from './announcement';
 import { MESSAGE_VIEW } from '../../../constants';
+
+configure({ adapter: new Adapter() });
 
 describe('Announcement component', () => {
   const announcement = {
@@ -221,6 +229,38 @@ describe('Announcement component', () => {
     it('should return the counts of each sentiments given we pass it a Posts object', () => {
       const result = getSentimentsCount(fakeThreadPosts);
       expect(result).toMatchSnapshot();
+    });
+  });
+
+  describe('<Announcement /> - with shallow', () => {
+    let wrapper;
+    let props;
+
+    beforeEach(() => {
+      const threadIdea = {
+        id: '1234',
+        messageColumns: [],
+        messageViewOverride: null,
+        numContributors: 2,
+        numPosts: 2,
+        posts: fakeThreadPosts,
+        __typename: 'Idea'
+      };
+
+      props = {
+        announcementContent: announcementContent,
+        idea: threadIdea,
+        isMultiColumns: false
+      };
+      wrapper = shallow(<Announcement {...props} />);
+    });
+
+    it('should render a Navbar', () => {
+      expect(wrapper.find(Tabs)).toHaveLength(1);
+    });
+
+    it('should render a 3 Tab', () => {
+      expect(wrapper.find(Tab)).toHaveLength(3);
     });
   });
 });

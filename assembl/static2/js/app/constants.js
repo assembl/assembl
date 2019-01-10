@@ -371,3 +371,9 @@ export const harvestingColorsMapping: { [string]: ColorDefinition } = {
 };
 
 export const pendingOrange = '#ffd58f"';
+
+export const ANNOUNCEMENT_TAB_ITEM_ID = {
+  INSTRUCTION: 0,
+  MINDMAP: 1,
+  SEMANTIC_ANALYSIS: 2
+};
