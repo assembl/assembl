@@ -43,15 +43,18 @@ class Proposals extends React.Component {
     })}`;
     return (
       <div className="shown">
-        <h3 className="collapsed-title padding-title">
-          <span>{questionTitle}</span>
-          <div className={postsToShow.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
-            <span
-              className={this.state.hideProposals ? 'assembl-icon-down-open color pointer' : 'assembl-icon-up-open color pointer'}
-              onClick={this.displayProposals}
-            />
-          </div>
-        </h3>
+        <div onClick={this.displayProposals} className="pointer">
+          <h3 className="collapsed-title padding-title">
+            <span>{questionTitle}</span>
+            <div className={postsToShow.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
+              <span
+                className={
+                  this.state.hideProposals ? 'assembl-icon-down-open color pointer' : 'assembl-icon-up-open color pointer'
+                }
+              />
+            </div>
+          </h3>
+        </div>
         {postsToShow.length > 0 ? (
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {postsToShow.map((post, index) => (
