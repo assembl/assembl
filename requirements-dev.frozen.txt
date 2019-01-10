@@ -13,7 +13,7 @@
 -e git+https://github.com/assembl/langdetect.git@49a67668866fffd99a2978aec81d1e759cc0511e#egg=langdetect
 -e git+https://github.com/assembl/pyramid_beaker.git@1677e82555ec09449f5bc97a843062e3c1226b34#egg=pyramid_beaker
 -e git+https://github.com/assembl/sockjs-tornado.git@conflicting_localhost#egg=sockjs_tornado
--e git+https://github.com/assembl/sqltap.git@assembl#egg=sqltap
+-e git+https://github.com/assembl/sqltap.git@readonly_binds#egg=sqltap
 alabaster==0.7.10         # via sphinx
 alembic==0.8.6
 amqp==2.3.2               # via kombu
