@@ -114,8 +114,11 @@ def graphql_api(request):
     # Using a middleware transforms the request to a promise that
     # doesn't play nice with multiprocesses or multithreading and sqlalchemy session.
     # We monkey patch get_graphql_params for logging instead.
+    session = get_session_maker()()
+    ro = session.readonly
     solver = graphql_wsgi_wrapper(Schema)  # , middleware=[LoggingMiddleware()])
     response = solver(request)
+    session.set_readonly(ro)
     if has_cors:
         response.headerlist.extend(cors_headers)
     return response
