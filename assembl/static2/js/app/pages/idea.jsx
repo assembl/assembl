@@ -157,7 +157,7 @@ export const getDebateTotalMessages = (transformedFilteredPosts: Array<Object>) 
 };
 
 export const noRowsRenderer = () => (
-  <div className="center no-rows">
+  <div className="center no-rows margin-txt-xxs">
     <Translate value="debate.thread.noPostsInThread" />
   </div>
 );

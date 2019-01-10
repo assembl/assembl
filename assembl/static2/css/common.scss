@@ -356,16 +356,6 @@ input.placeholder, textarea.placeholder {
   text-transform: capitalize;
 }
 
-@media screen and (max-width: 420px) {
-  .content-section {
-    padding: $margin-section-xs 0;
-  }
-
-  .max-container {
-    padding: 0 10px;
-  }
-}
-
 strong {
   font-family: $font-family3;
 }
@@ -376,6 +366,16 @@ strong {
 
 .cursor-wait {
   cursor: wait !important;
+}
+
+@media screen and (max-width: $screen-xxs-max) {
+  .content-section {
+    padding: $margin-section-xs 0;
+  }
+
+  .max-container {
+    padding: 0 5px !important;
+  }
 }
 
 @media screen and (max-width: $screen-sm-min) {
