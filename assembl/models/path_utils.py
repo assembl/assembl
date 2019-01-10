@@ -222,7 +222,8 @@ class PostPathLocalCollection(object):
         return " ; ".join((repr(x) for x in self.paths))
 
     def as_clause_base(self, db, include_breakpoints=False,
-                       include_deleted=False, include_moderating=None):
+                       include_deleted=False, include_moderating=None,
+                       user_id=None):
         """Express collection as a SQLAlchemy query clause.
 
         :param bool include_breakpoints: Include posts where
@@ -232,7 +233,7 @@ class PostPathLocalCollection(object):
             False means only live posts or deleted posts with live descendants.
         :param include_moderating: Include posts in SUBMITTED_AWAITING_MODERATION.
             True means include all those posts, Falsish means none of those posts,
-            a user_id value means only those belonging to this user.
+            a "mine" value means only those belonging to this user.
             There is not currently a way to only get those posts. (todo?)
             NOTE: that parameter is interpreted differently in Idea.get_related_posts_query
         """
@@ -260,13 +261,17 @@ class PostPathLocalCollection(object):
             if include_moderating is True:
                 states.add(PublicationStates.SUBMITTED_AWAITING_MODERATION)
             state_condition = post.publication_state.in_(states)
-            if include_moderating and include_moderating is not True:
-                state_condition = state_condition | (
-                    post.publication_state.in_([
-                        PublicationStates.SUBMITTED_AWAITING_MODERATION,
-                        PublicationStates.DRAFT]) &
-                    (post.creator_id == include_moderating))
-            # Missing: an admin's drafts... dammit.
+            if user_id:
+                if include_moderating == "mine":
+                    state_condition = state_condition | (
+                        post.publication_state.in_([
+                            PublicationStates.SUBMITTED_AWAITING_MODERATION,
+                            PublicationStates.DRAFT]) &
+                        (post.creator_id == user_id))
+                else:
+                    state_condition = state_condition | (
+                        (post.publication_state == PublicationStates.DRAFT) &
+                        (post.creator_id == user_id))
             query = query.filter(state_condition)
             return post, query
         if not self.paths:
@@ -344,7 +349,9 @@ class PostPathLocalCollection(object):
 
     def as_clause(self, db, discussion_id, user_id=None, content=None,
                   include_deleted=False, include_moderating=None):
-        subq = self.as_clause_base(db, include_deleted=include_deleted, include_moderating=include_moderating)
+        subq = self.as_clause_base(
+            db, include_deleted=include_deleted, include_moderating=include_moderating,
+            user_id=user_id if include_moderating else None)
         content = content or with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)
@@ -460,11 +467,14 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
                 result.combine(path)
         return result
 
-    def orphan_clause(self, user_id=None, content=None, include_deleted=False, include_moderating=None):
+    def orphan_clause(self, user_id=None, content=None, include_deleted=False,
+                      include_moderating=None):
         root_path = self.paths[self.root_idea_id]
         db = self.discussion.default_db
-        subq = root_path.as_clause_base(db, include_deleted=include_deleted,
-                                        include_moderating=include_moderating)
+        subq = root_path.as_clause_base(
+            db, include_deleted=include_deleted,
+            include_moderating=include_moderating,
+            user_id=user_id if include_moderating else None)
         content = content or with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)
@@ -491,12 +501,17 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
         if include_moderating is True:
             states.add(PublicationStates.SUBMITTED_AWAITING_MODERATION)
         state_condition = post.publication_state.in_(states)
-        if include_moderating and include_moderating is not True:
-            state_condition = state_condition | (
-                post.publication_state.in_([
-                    PublicationStates.SUBMITTED_AWAITING_MODERATION,
-                    PublicationStates.DRAFT]) &
-                (post.creator_id == include_moderating))
+        if user_id:
+            if include_moderating == "mine":
+                state_condition = state_condition | (
+                    post.publication_state.in_([
+                        PublicationStates.SUBMITTED_AWAITING_MODERATION,
+                        PublicationStates.DRAFT]) &
+                    (post.creator_id == user_id))
+            else:
+                state_condition = state_condition | (
+                    (post.publication_state == PublicationStates.DRAFT) &
+                    (post.creator_id == user_id))
         q = q.filter(state_condition)
 
         if user_id:
@@ -619,7 +634,7 @@ class DiscussionGlobalData(object):
         self.db = db
         self.user_id = user_id
         user_can_moderate = user_has_permission(discussion_id, user_id, P_MODERATE)
-        self.include_moderating = True if user_can_moderate else user_id
+        self.include_moderating = True if user_can_moderate else "mine"
         self._discussion = discussion
         self._parent_dict = None
         self._children_dict = None

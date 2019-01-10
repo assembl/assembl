@@ -132,6 +132,7 @@ def get_posts_for_phases(
     query = discussion.db.query(model)
     queries = []
     for idea in ideas:
+        # Note we are not sending user_id
         related = idea.get_related_posts_query(
             True, include_deleted, include_moderating)
         related_query = query.join(
