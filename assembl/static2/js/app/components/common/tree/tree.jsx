@@ -7,10 +7,6 @@ import NuggetsManager from '../nuggetsManager';
 import Child from './treeItem';
 import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
 
-type ChildType = TreeItem & {
-  [string]: any
-};
-
 type Props = {
   contentLocaleMapping: Map<string, any>,
   identifier: string,
@@ -122,7 +118,6 @@ class Tree extends React.Component<Props> {
       SeparatorComponent, // separator component between first level children
       fictionCommentExtraProps // Optional Bright Mirror fiction debate props
     } = this.props;
-
     const childData = data[index];
     return (
       <CellMeasurer cache={this.cache} columnIndex={0} key={key} parent={parent} rowIndex={index}>

@@ -1,16 +1,15 @@
 // @flow
 import React from 'react';
-import { connect, type Dispatch, type MapStateToProps } from 'react-redux';
+import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 import moment from 'moment';
 
-import { languagePreferencesHasChanged, updateEditLocale } from '../actions/adminActions';
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalContentsForm from '../components/administration/legalContents/index';
 import TimelineForm from '../components/administration/discussion/timelineForm';
-import LanguageSection from '../components/administration/discussion/languageSection';
+import PreferencesSection from '../components/administration/discussion/preferences/index';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import PersonalizeInterface from '../components/administration/discussion/personalizeInterface';
 import { displayAlert } from '../utils/utilityManager';
@@ -18,8 +17,6 @@ import SaveButton, { getMutationsPromises, runSerial } from '../components/admin
 import createSectionMutation from '../graphql/mutations/createSection.graphql';
 import updateSectionMutation from '../graphql/mutations/updateSection.graphql';
 import deleteSectionMutation from '../graphql/mutations/deleteSection.graphql';
-import updateDiscussionPreferenceQuery from '../graphql/mutations/updateDiscussionPreference.graphql';
-import getDiscussionPreferenceLanguage from '../graphql/DiscussionPreferenceLanguage.graphql';
 import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import createTextFieldMutation from '../graphql/mutations/createTextField.graphql';
 import updateTextFieldMutation from '../graphql/mutations/updateTextField.graphql';
@@ -27,7 +24,6 @@ import deleteTextFieldMutation from '../graphql/mutations/deleteTextField.graphq
 import updateDiscussionPhaseMutation from '../graphql/mutations/updateDiscussionPhase.graphql';
 import createDiscussionPhaseMutation from '../graphql/mutations/createDiscussionPhase.graphql';
 import deleteDiscussionPhaseMutation from '../graphql/mutations/deleteDiscussionPhase.graphql';
-import { type LanguagePreferencesState } from '../reducers/adminReducer';
 import { type State as ReduxState } from '../reducers/rootReducer';
 
 type Section = Object;
@@ -80,16 +76,12 @@ type Props = {
     locale: string,
     translations: { [string]: string }
   },
-  languagePreferenceHasChanged: boolean,
-  preferences: LanguagePreferencesState,
   refetchSections: Function,
-  resetLanguagePreferenceChanged: Function,
   route: Route,
   router: Router,
   section: string,
   sections: Array<Section>,
   sectionsHaveChanged: boolean,
-  updateDiscussionPreference: Function,
   updateSection: Function,
   debateId: string,
   createTextField: Function,
@@ -134,26 +126,16 @@ class DiscussionAdmin extends React.Component<Props, State> {
     return null;
   };
 
-  dataHaveChanged = () =>
-    this.props.languagePreferenceHasChanged ||
-    this.props.sectionsHaveChanged ||
-    this.props.profileOptionsHasChanged ||
-    this.props.phasesHaveChanged;
+  dataHaveChanged = () => this.props.sectionsHaveChanged || this.props.profileOptionsHasChanged || this.props.phasesHaveChanged;
 
   saveAction = () => {
     const {
-      changeLocale,
-      client,
       createSection,
       deleteSection,
       i18n,
-      languagePreferenceHasChanged,
-      preferences,
       refetchSections,
-      resetLanguagePreferenceChanged,
       sections,
       sectionsHaveChanged,
-      updateDiscussionPreference,
       updateSection,
       createTextField,
       updateTextField,
@@ -170,26 +152,6 @@ class DiscussionAdmin extends React.Component<Props, State> {
       editLocale
     } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`, false, -1);
-
-    if (languagePreferenceHasChanged) {
-      const payload = {
-        variables: {
-          languages: preferences
-        }
-      };
-      updateDiscussionPreference(payload).then(() => {
-        client.query({
-          query: getDiscussionPreferenceLanguage,
-          variables: {
-            inLocale: i18n.locale
-          },
-          fetchPolicy: 'network-only'
-        });
-        displayAlert('success', I18n.t('administration.successLanguagePreference'));
-        changeLocale(i18n.locale);
-      });
-      resetLanguagePreferenceChanged();
-    }
 
     if (sectionsHaveChanged) {
       const mutationsPromises = getMutationsPromises({
@@ -274,11 +236,11 @@ class DiscussionAdmin extends React.Component<Props, State> {
     const { section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     // @TODO use final-form logic
-    const showSaveButton = section !== '6' && section !== '4';
+    const showSaveButton = section !== '6' && section !== '4' && section !== '1';
     return (
       <div className="discussion-admin">
         {showSaveButton && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
-        {section === '1' && <LanguageSection {...this.props} />}
+        {section === '1' && <PreferencesSection {...this.props} />}
         {section === '2' && <ManageSectionsForm {...this.props} />}
         {section === '3' && <ManageProfileOptionsForm />}
         {section === '4' && <LegalContentsForm {...this.props} />}
@@ -289,17 +251,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
-  admin: {
-    discussionLanguagePreferences,
-    discussionLanguagePreferencesHasChanged,
-    editLocale,
-    sections,
-    profileOptions,
-    timeline
-  },
-  i18n
-}) => {
+const mapStateToProps: ReduxState => Object = ({ admin: { editLocale, sections, profileOptions, timeline }, i18n }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
   const { phasesById, phasesHaveChanged } = timeline;
   const { profileOptionsHasChanged, textFieldsById } = profileOptions;
@@ -325,8 +277,6 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
   return {
     editLocale: editLocale,
     i18n: i18n,
-    preferences: discussionLanguagePreferences,
-    languagePreferenceHasChanged: discussionLanguagePreferencesHasChanged,
     sectionsHaveChanged: sectionsHaveChanged,
     sections: sectionsById
       .map((section) => {
@@ -351,16 +301,6 @@ const mapStateToProps: MapStateToProps<ReduxState, *, *> = ({
   };
 };
 
-type MapDispatchToProps = Dispatch => { changeLocale: Function, resetLanguagePreferenceChanged: Function };
-const mapDispatchToProps: MapDispatchToProps = dispatch => ({
-  resetLanguagePreferenceChanged: () => {
-    dispatch(languagePreferencesHasChanged(false));
-  },
-  changeLocale: (newLocale) => {
-    dispatch(updateEditLocale(newLocale));
-  }
-});
-
 export default compose(
   graphql(createSectionMutation, {
     name: 'createSection'
@@ -370,9 +310,6 @@ export default compose(
   }),
   graphql(updateSectionMutation, {
     name: 'updateSection'
-  }),
-  graphql(updateDiscussionPreferenceQuery, {
-    name: 'updateDiscussionPreference'
   }),
   graphql(createDiscussionPhaseMutation, {
     name: 'createDiscussionPhase'
@@ -392,6 +329,6 @@ export default compose(
   graphql(updateTextFieldMutation, {
     name: 'updateTextField'
   }),
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(mapStateToProps),
   withApollo
 )(DiscussionAdmin);

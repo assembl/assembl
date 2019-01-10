@@ -5,7 +5,7 @@ import { get } from '../utils/routeMap';
 import { PHASES } from '../constants';
 import ExportSection from '../components/administration/exportSection';
 import Navbar from '../components/administration/navbar';
-import DiscussionPreferenceLanguageQuery from '../graphql/DiscussionPreferenceLanguage.graphql';
+import DiscussionPreferencesQuery from '../graphql/DiscussionPreferences.graphql';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 
 class MultiColumnsAdmin extends React.Component {
@@ -68,7 +68,7 @@ const mapStateToProps = ({ context, i18n }) => ({
 
 export default compose(
   connect(mapStateToProps),
-  graphql(DiscussionPreferenceLanguageQuery, {
+  graphql(DiscussionPreferencesQuery, {
     options: ({ i18n: { locale } }) => ({
       variables: {
         inLocale: locale

@@ -111,12 +111,10 @@ const creationDateLastDescendantComparator = (a: PostWithChildren, b: PostWithCh
 
 export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>, additionnalProps: { [string]: any } = {}) => {
   const postsByParent = {};
-
   const columns = { null: { colColor: null, colName: null } };
   messageColumns.forEach((col) => {
     columns[col.messageClassifier] = { colColor: col.color, colName: col.name };
   });
-
   edges.forEach((e) => {
     const p = { ...e.node, ...additionnalProps, ...columns[e.node.messageClassifier] };
     const items = postsByParent[p.parentId] || [];

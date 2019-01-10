@@ -39,6 +39,10 @@
     padding: 0;
     position: relative;
     text-align: center;
+
+    &.pending {
+      border-left: 4px solid $orange;
+    }
   }
 
   .statistics-container {
@@ -47,6 +51,10 @@
 
   .user {
     text-align: left;
+
+    &.pending {
+      color: $orange3;
+    }
 
     .username {
       color: $first-color;
@@ -62,6 +70,11 @@
     padding: 15px 0 0;
     display: flex;
     justify-content: space-between;
+
+    &.pending {
+      display: flex;
+      justify-content: flex-end;
+    }
 
     .sentiments {
       font-family: $font-family4;
@@ -124,9 +137,18 @@
     width: 100%;
   }
 
-  .no-proposals,
-  .all-proposals {
+  .question-footer {
     margin: 0 0 70px;
+    display: flex;
+    justify-content: center;
+
+    :first-child {
+      margin-left: 0;
+    }
+
+    span {
+      margin-left: 5px;
+    }
   }
 }
 
@@ -134,6 +156,10 @@ $deleted-post-border: 1px solid $grey1 !default;
 
 .idea .level .deleted-post .box {
   border-left: $deleted-post-border;
+}
+
+.idea .level .box.pending {
+  border-left: 4px solid $orange;
 }
 
 .posts {
@@ -186,6 +212,12 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
   }
 
+  .post-right {
+    &.pending {
+      background-color: $orange;
+    }
+  }
+
   .translate {
     padding: 20px 0 0;
   }
@@ -217,6 +249,11 @@ $deleted-post-border: 1px solid $grey1 !default;
     .creator {
       color: $second-color;
       padding: 0 0 0 10px;
+
+      &.pending {
+        color: $orange;
+        text-transform: uppercase;
+      }
     }
 
     .date {
@@ -267,9 +304,15 @@ $deleted-post-border: 1px solid $grey1 !default;
     cursor: pointer;
     margin: 10px 0 0;
     transition: all 0.2s ease-in-out;
+    border: none;
+    background-color: inherit;
 
     &:hover {
       transform: scale(1.2);
+    }
+
+    &.share-multiColumns {
+      margin-bottom: -10px;
     }
   }
 
@@ -423,6 +466,10 @@ $deleted-post-border: 1px solid $grey1 !default;
       position: absolute;
       right: 0;
       width: 20%;
+
+      &.pending {
+        background-color: $orange;
+      }
 
       .statistics-doughnut {
         height: 100px;
@@ -609,8 +656,7 @@ $deleted-post-border: 1px solid $grey1 !default;
         border-top: 1px solid $grey1;
         padding: 18px 0 10px;
 
-        .post-action,
-        .overflow-action {
+        .post-action {
           display: inline-block;
           margin: 0 10px;
         }
@@ -690,5 +736,21 @@ $deleted-post-border: 1px solid $grey1 !default;
     letter-spacing: 1px;
     line-height: 30px;
     padding-top: 20px;
+  }
+}
+
+.action-validate {
+  border: none;
+}
+
+.post-actions-separator {
+  margin: 20px auto 10px auto;
+  border-bottom: 2px solid white;
+  width: 85%;
+}
+
+.column-post {
+  .post-actions-separator {
+    margin: 10px auto 0 auto;
   }
 }

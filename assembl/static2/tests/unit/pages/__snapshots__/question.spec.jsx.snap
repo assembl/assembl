@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Question page should match Question with data snapshot 1`] = `
+exports[`Question page should display a question 1`] = `
 <div
   className="question"
 >
@@ -91,6 +91,130 @@ exports[`Question page should match Question with data snapshot 1`] = `
               </span>
             </h3>
             <Connect(withRouter(Apollo(Component)))
+              isModerating={false}
+              isPhaseCompleted={false}
+              questionId="FooInd"
+              themeId="ThematicId"
+            />
+            <div
+              className="back-btn-container"
+            >
+              <Link
+                className="button-submit button-dark"
+                onlyActiveOnIndex={false}
+                style={Object {}}
+                to="/FooSlug/debate/survey/theme/ThematicId"
+              >
+                <Translate
+                  value="debate.question.backToQuestions"
+                />
+              </Link>
+            </div>
+          </div>
+          <div
+            className="margin-xl"
+          >
+             
+          </div>
+        </div>
+      </Grid>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Question page should display a question in moderation context 1`] = `
+<div
+  className="question"
+>
+  <div
+    className="relative"
+  >
+    <Connect(Header)
+      imgUrl="https://foo.bar/umgurl"
+      phaseId="phaseFoo"
+      title="Bar"
+    >
+      <HeaderStatistics
+        statElements={
+          Array [
+            Object {
+              "iconName": "message",
+              "metricNameTranslateKey": "home.messages",
+              "metricValue": 2,
+            },
+            Object {
+              "iconName": "sentiment-neutral",
+              "metricNameTranslateKey": "home.contribution",
+              "metricValue": 3,
+            },
+            Object {
+              "iconName": "profil",
+              "metricNameTranslateKey": "home.participant",
+              "metricValue": 2,
+            },
+          ]
+        }
+      />
+    </Connect(Header)>
+    <div
+      className="background-light proposals"
+    >
+      <Grid
+        bsClass="container"
+        className="background-light"
+        componentClass="div"
+        fluid={true}
+      >
+        <div
+          className="max-container"
+        >
+          <div
+            className="margin-xl"
+          >
+             
+          </div>
+          <Link
+            className="button-diamond-dark button-submit button-dark"
+            onlyActiveOnIndex={false}
+            style={Object {}}
+            to="/FooSlug/debate/survey/theme/ThematicId"
+          >
+            <Translate
+              value="debate.question.backToQuestions"
+            />
+            <span
+              className="button-diamond-dark-back"
+            />
+          </Link>
+          <div
+            className="question-title"
+          >
+            <div
+              className="title-hyphen"
+            >
+               
+            </div>
+            <h1
+              className="dark-title-1"
+            >
+              <Translate
+                value="debate.survey.moderateProposalsTitle"
+              />
+            </h1>
+          </div>
+          <div
+            className="center"
+          >
+            <h3
+              className="collapsed-title"
+            >
+              <span>
+                Index/ Foo
+              </span>
+            </h3>
+            <Connect(withRouter(Apollo(Component)))
+              isModerating={true}
               isPhaseCompleted={false}
               questionId="FooInd"
               themeId="ThematicId"

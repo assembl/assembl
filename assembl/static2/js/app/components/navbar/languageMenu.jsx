@@ -5,10 +5,9 @@ import { setLocale } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { NavDropdown, MenuItem } from 'react-bootstrap';
 import { getAvailableLocales } from '../../utils/i18n';
-import { addLanguagePreference } from '../../actions/adminActions';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import { setCookieItem } from '../../utils/globalFunctions';
-import getDiscussionPreferenceLanguage from '../../graphql/DiscussionPreferenceLanguage.graphql';
+import DiscussionPreferences from '../../graphql/DiscussionPreferences.graphql';
 
 const doNothing = () => {};
 
@@ -18,7 +17,6 @@ export const refWidthUpdate = (setWidth: (width: number) => void) => (ref: ?HTML
 
 type Props = {
   changeLanguage: Function,
-  addLanguageToStore: Function,
   size: number,
   i18n: Object,
   style: Object,
@@ -27,28 +25,10 @@ type Props = {
   data: Object
 };
 
-type State = {
-  availableLocales: Array<string>,
-  preferencesMapByLocale: { [string]: { nativeName: string, name: string, locale: string } }
-};
-
-class LanguageMenu extends React.Component<Props, State> {
+class LanguageMenu extends React.Component<Props> {
   static defaultProps = {
     className: ''
   };
-
-  constructor(props) {
-    super(props);
-    this.state = { availableLocales: [], preferencesMapByLocale: {} };
-  }
-
-  componentWillMount() {
-    this.setAvailableLanguages(this.props);
-  }
-
-  componentWillReceiveProps(nextProps: Props) {
-    this.setAvailableLanguages(nextProps);
-  }
 
   doChangeLanguage(key: string) {
     const { changeLanguage } = this.props;
@@ -61,8 +41,13 @@ class LanguageMenu extends React.Component<Props, State> {
     location.reload(true);
   }
 
-  setAvailableLanguages = (props: Props) => {
-    const { addLanguageToStore, data, i18n } = props;
+  getAvailableLanguages = (
+    props: Props
+  ): {
+    availableLocales: Array<string>,
+    preferencesMapByLocale: { [string]: { nativeName: string, name: string, locale: string } }
+  } => {
+    const { data, i18n } = props;
     const prefs = data.discussionPreferences.languages;
     const preferencesMapByLocale = {};
     prefs.forEach((p) => {
@@ -79,37 +64,34 @@ class LanguageMenu extends React.Component<Props, State> {
         preferencesMapByLocale[p.locale].name = p.name.split(' (')[0]; // shorten the name for japanese, not need for hiragana
         preferencesMapByLocale[p.locale].nativeName = p.nativeName.split(' (')[0];
       }
-      // Big side effect, addLanguageToStore needs to be called here for the languages in the admininistration page
-      // to be selected... if we remove that line, we can remove the state, componentWillMount, componentWillReceiveProps
-      // and just calculate availableLocales and preferencesMapByLocale in render.
-      addLanguageToStore(p.locale);
     });
     const availableLocales = getAvailableLocales(i18n.locale, preferencesMapByLocale);
-    this.setState({ availableLocales: availableLocales, preferencesMapByLocale: preferencesMapByLocale });
+    return { availableLocales: availableLocales, preferencesMapByLocale: preferencesMapByLocale };
   };
 
-  getLocaleLabel = (locale) => {
-    const info = this.state.preferencesMapByLocale[locale];
+  getLocaleLabel = (preferencesMapByLocale, locale) => {
+    const info = preferencesMapByLocale[locale];
     return info ? info.nativeName : locale;
   };
 
   render() {
     const { size, i18n, style, className, setWidth = doNothing } = this.props;
-    if (this.state.availableLocales.length > 0) {
+    const { availableLocales, preferencesMapByLocale } = this.getAvailableLanguages(this.props);
+    if (availableLocales.length > 0) {
       return (
         <ul ref={refWidthUpdate(setWidth)} className={`dropdown-${size} uppercase ${className}`} style={style}>
           <NavDropdown pullRight title={i18n.locale.split('-')[0]} id="nav-dropdown">
             <MenuItem key={i18n.locale} className="active">
-              {this.getLocaleLabel(i18n.locale)}
+              {this.getLocaleLabel(preferencesMapByLocale, i18n.locale)}
             </MenuItem>
-            {this.state.availableLocales.map(availableLocale => (
+            {availableLocales.map(availableLocale => (
               <MenuItem
                 onClick={() => {
                   this.doChangeLanguage(availableLocale);
                 }}
                 key={availableLocale}
               >
-                {this.getLocaleLabel(availableLocale)}
+                {this.getLocaleLabel(preferencesMapByLocale, availableLocale)}
               </MenuItem>
             ))}
           </NavDropdown>
@@ -127,15 +109,12 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   changeLanguage: (locale) => {
     dispatch(setLocale(locale));
-  },
-  addLanguageToStore: (locale) => {
-    dispatch(addLanguagePreference(locale));
   }
 });
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  graphql(getDiscussionPreferenceLanguage, {
+  graphql(DiscussionPreferences, {
     options: props => ({
       variables: {
         inLocale: props.i18n.locale

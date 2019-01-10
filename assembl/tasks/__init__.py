@@ -140,6 +140,7 @@ class CeleryWithConfig(Celery):
         import assembl.tasks.notification_dispatch
         import assembl.tasks.translate
         import assembl.tasks.watson
+        assembl.tasks.notification_dispatch.create_dispatcher()
 
 
 celery = CeleryWithConfig('celery_tasks')
@@ -151,3 +152,4 @@ def includeme(config):
     config.include('.threaded_model_watcher')
     configure(config.registry, 'assembl')
     config.include('.source_reader')
+    config.include('.notification_dispatch')

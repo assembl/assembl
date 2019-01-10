@@ -1,0 +1,33 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`QuestionModeratePosts page should display a question 1`] = `
+<Connect(Apollo(Component))
+  imgUrl="https://foo.bar/umgurl"
+  isModerating={true}
+  numContributors={2}
+  numPosts={2}
+  params={
+    Object {
+      "questionId": "FooInd",
+      "questionIndex": "Index",
+      "slug": "FooSlug",
+    }
+  }
+  phaseId="phaseFoo"
+  thematicId="ThematicId"
+  thematicTitle="Bar"
+  timeline={
+    Array [
+      Object {
+        "end": "2100-01-27T20:00:00+00:00",
+        "id": "phaseFoo",
+        "identifier": "survey",
+        "start": "2018-09-27T20:00:00+00:00",
+        "title": "Survey",
+      },
+    ]
+  }
+  title="Foo"
+  totalSentiments={1}
+/>
+`;

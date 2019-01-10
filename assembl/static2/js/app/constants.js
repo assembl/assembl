@@ -135,7 +135,7 @@ export const ADMIN_MENU = {
     sectionId: '1',
     subMenu: {
       language: {
-        title: 'administration.menu.language',
+        title: 'administration.menu.preferences',
         sectionId: '1'
       },
       sections: {
@@ -258,6 +258,7 @@ export const PHASES_ADMIN_MENU = {
 // Those states lists need to be kept in sync with models/post.py
 export const PublicationStates = {
   DRAFT: 'DRAFT',
+  SUBMITTED_AWAITING_MODERATION: 'SUBMITTED_AWAITING_MODERATION',
   SUBMITTED_IN_EDIT_GRACE_PERIOD: 'SUBMITTED_IN_EDIT_GRACE_PERIOD',
   PUBLISHED: 'PUBLISHED',
   MODERATED_TEXT_ON_DEMAND: 'MODERATED_TEXT_ON_DEMAND',
@@ -387,3 +388,5 @@ export const harvestingColorsMapping: { [string]: ColorDefinition } = {
   knowledge: harvestingColors.purple,
   cognitive_bias: harvestingColors.black
 };
+
+export const pendingOrange = '#ffd58f"';

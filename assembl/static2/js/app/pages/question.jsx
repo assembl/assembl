@@ -16,10 +16,12 @@ import { getIsPhaseCompletedById } from '../utils/timeline';
 
 type NavigationParams = {
   questionIndex: string,
-  questionId: string
+  questionId: string,
+  slug: string
 };
 
-type Props = {
+export type Props = {
+  isModerating: boolean,
   phaseId: string,
   timeline: Timeline,
   title: string,
@@ -29,12 +31,12 @@ type Props = {
   thematicTitle: string,
   thematicId: string,
   imgUrl: string,
-  slug: string,
   totalSentiments: number
 };
 
 export function DumbQuestion(props: Props) {
   const {
+    isModerating,
     phaseId,
     imgUrl,
     timeline,
@@ -44,7 +46,7 @@ export function DumbQuestion(props: Props) {
     thematicTitle,
     thematicId,
     params,
-    slug,
+    params: { slug },
     totalSentiments
   } = props;
   const link = `${getRoute('idea', { slug: slug, phase: 'survey', phaseId: phaseId, themeId: thematicId })}`;
@@ -69,14 +71,23 @@ export function DumbQuestion(props: Props) {
               <div className="question-title">
                 <div className="title-hyphen">&nbsp;</div>
                 <h1 className="dark-title-1">
-                  <Translate value="debate.survey.proposalsTitle" />
+                  {isModerating ? (
+                    <Translate value="debate.survey.moderateProposalsTitle" />
+                  ) : (
+                    <Translate value="debate.survey.proposalsTitle" />
+                  )}
                 </h1>
               </div>
               <div className="center">
                 <h3 className="collapsed-title">
                   <span>{`${params.questionIndex}/ ${title}`}</span>
                 </h3>
-                <Posts questionId={params.questionId} themeId={thematicId} isPhaseCompleted={isPhaseCompleted} />
+                <Posts
+                  isModerating={isModerating}
+                  questionId={params.questionId}
+                  themeId={thematicId}
+                  isPhaseCompleted={isPhaseCompleted}
+                />
                 <div className="back-btn-container">
                   <Link to={link} className="button-submit button-dark">
                     <Translate value="debate.question.backToQuestions" />
@@ -92,9 +103,12 @@ export function DumbQuestion(props: Props) {
   );
 }
 
+DumbQuestion.defaultProps = {
+  isModerating: false
+};
+
 const mapStateToProps = state => ({
   lang: state.i18n.locale,
-  slug: state.debate.debateData.slug,
   timeline: state.timeline
 });
 

@@ -1,0 +1,114 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CheckboxListFieldAdapter component should render a list of checkboxes multivalued field 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  >
+    <div
+      className="checkbox"
+    >
+      <label
+        title="German"
+      >
+        <input
+          checked={false}
+          disabled={false}
+          onChange={[Function]}
+          type="checkbox"
+          value="de"
+        />
+        German
+      </label>
+    </div>
+    <div
+      className="checkbox"
+    >
+      <label
+        title="English"
+      >
+        <input
+          checked={false}
+          disabled={false}
+          onChange={[Function]}
+          type="checkbox"
+          value="en"
+        />
+        English
+      </label>
+    </div>
+    <div
+      className="checkbox"
+    >
+      <label
+        title="French"
+      >
+        <input
+          checked={true}
+          disabled={false}
+          onChange={[Function]}
+          type="checkbox"
+          value="fr"
+        />
+        French
+      </label>
+    </div>
+  </div>
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`CheckboxListFieldAdapter component should render a list of checkboxes multivalued field touched with error 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group has-error"
+  />
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`CheckboxListFieldAdapter component should render a list of checkboxes multivalued field untouched with error 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  />
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;
+
+exports[`CheckboxListFieldAdapter component should render a list of checkboxes multivalued field without value 1`] = `
+<form
+  onSubmit={[Function]}
+>
+  <div
+    className="form-group"
+  />
+  <button
+    disabled={true}
+    type="submit"
+  >
+    Submit
+  </button>
+</form>
+`;

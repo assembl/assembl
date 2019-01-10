@@ -20,6 +20,7 @@ type PostNode = {
 };
 
 type Props = {
+  isModerating: boolean,
   posts: {
     edges: Array<PostNode>
   },
@@ -61,7 +62,7 @@ export class DumbPosts extends React.Component<Props> {
   }
 
   render() {
-    const { networkStatus, fetchMore, refetch, themeId, posts, questionId, isPhaseCompleted } = this.props;
+    const { isModerating, networkStatus, fetchMore, refetch, themeId, posts, questionId, isPhaseCompleted } = this.props;
     return (
       <FlatList
         items={posts}
@@ -75,6 +76,7 @@ export class DumbPosts extends React.Component<Props> {
         itemData={item => ({
           id: item.node.id,
           isPhaseCompleted: isPhaseCompleted,
+          isModerating: isModerating,
           originalLocale: item.node.originalLocale,
           questionId: questionId,
           themeId: themeId
@@ -105,7 +107,13 @@ export default compose(
         id = hash.replace('#', '').split('?')[0];
       }
       return {
-        variables: { first: 8, after: '', id: props.questionId, fromNode: id }
+        variables: {
+          first: 8,
+          after: '',
+          id: props.questionId,
+          fromNode: id,
+          isModerating: props.isModerating
+        }
       };
     },
     props: ({ data }) => {

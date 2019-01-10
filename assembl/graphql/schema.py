@@ -29,7 +29,7 @@ from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModu
 from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
-                                  DeletePostAttachment, UndeletePost,
+                                  ValidatePost, DeletePostAttachment, UndeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract)
 from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
@@ -438,7 +438,8 @@ class Query(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         identifiers = args.get('identifiers', [])
         model = models.AssemblPost
-        query = get_posts_for_phases(discussion, identifiers)
+        # Note: This is only used by BigDatext, posts in moderating phase excluded
+        query = get_posts_for_phases(discussion, identifiers, include_moderating=False)
         # If no posts in the specified identifiers, we return an empty list
         if identifiers and query is None:
             return []
@@ -476,6 +477,7 @@ class Mutations(graphene.ObjectType):
     create_post = CreatePost.Field(description=docs.CreatePost.__doc__)
     update_post = UpdatePost.Field(description=docs.UpdatePost.__doc__)
     delete_post = DeletePost.Field(description=docs.DeletePost.__doc__)
+    validate_post = ValidatePost.Field(description=docs.ValidatePost.__doc__)
     undelete_post = UndeletePost.Field(description=docs.UndeletePost.__doc__)
     add_sentiment = AddSentiment.Field(description=docs.AddSentiment.__doc__)
     delete_sentiment = DeleteSentiment.Field(description=docs.DeleteSentiment.__doc__)

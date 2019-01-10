@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`FlatList component should match Posts with data snapshot 1`] = `
+exports[`Posts component should display a flat list of posts 1`] = `
 <withRouter(DumbFlatList)
   ListItem={[Function]}
   extractItems={[Function]}

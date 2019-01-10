@@ -6,15 +6,18 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { Grid, Col, Button } from 'react-bootstrap';
 import { EditorState } from 'draft-js';
 
-import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { getConnectedUserId, getPostPublicationState } from '../../../utils/globalFunctions';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
-import createPostMutation from '../../../graphql/mutations/createPost.graphql';
+import { connectedUserIsModerator } from '../../../utils/permissions';
 import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
+import createPostMutation from '../../../graphql/mutations/createPost.graphql';
+import { DebateContext } from '../../../../app/app';
 
 type Props = {
+  isDebateModerated: boolean,
   isPhaseCompleted: boolean,
   title: string,
   contentLocale: string,
@@ -33,7 +36,7 @@ type State = {
   postBody: EditorState
 };
 
-class Question extends React.Component<Props, State> {
+export class Question extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -43,14 +46,25 @@ class Question extends React.Component<Props, State> {
   }
 
   createPost = () => {
-    const { contentLocale, questionId, scrollToQuestion, index, refetchTheme } = this.props;
+    const { contentLocale, questionId, scrollToQuestion, index, refetchTheme, isDebateModerated } = this.props;
     const body = this.state.postBody;
+    const userIsModerator = connectedUserIsModerator();
+    const publicationState = getPostPublicationState(isDebateModerated, userIsModerator);
+    displayAlert('success', I18n.t('loading.wait'), false, 10000);
     this.setState({ buttonDisabled: true }, () =>
       this.props
-        .mutate({ variables: { contentLocale: contentLocale, ideaId: questionId, body: convertEditorStateToHTML(body) } })
+        .mutate({
+          variables: {
+            contentLocale: contentLocale,
+            ideaId: questionId,
+            body: convertEditorStateToHTML(body),
+            publicationState: publicationState
+          }
+        })
         .then(() => {
           scrollToQuestion(true, index + 1);
-          displayAlert('success', I18n.t('debate.survey.postSuccess'));
+          const successMessage = isDebateModerated && !userIsModerator ? 'postToBeValidated' : 'postSuccess';
+          displayAlert('success', I18n.t(`debate.survey.${successMessage}`), false, 10000);
           refetchTheme();
           this.setState({
             postBody: EditorState.createEmpty(),
@@ -66,7 +80,7 @@ class Question extends React.Component<Props, State> {
     );
   };
 
-  updateBody = (newValue) => {
+  updateBody = (newValue: EditorState) => {
     this.setState({
       postBody: newValue
     });
@@ -141,4 +155,10 @@ const mapStateToProps = state => ({
   contentLocale: state.i18n.locale
 });
 
-export default compose(connect(mapStateToProps), graphql(createPostMutation), withScreenDimensions)(Question);
+const QuestionWithContext = props => (
+  <DebateContext.Consumer>
+    {({ isDebateModerated }) => <Question {...props} isDebateModerated={isDebateModerated} />}
+  </DebateContext.Consumer>
+);
+
+export default compose(connect(mapStateToProps), graphql(createPostMutation), withScreenDimensions)(QuestionWithContext);

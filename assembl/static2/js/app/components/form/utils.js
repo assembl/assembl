@@ -6,6 +6,7 @@ import { I18n } from 'react-redux-i18n';
 import flatMap from 'lodash/flatMap';
 
 import type {
+  CheckboxListValue,
   I18nValue,
   FileValue,
   FileVariable,
@@ -150,6 +151,9 @@ export function getFileVariable(img: FileValue, initialImg: ?FileValue): FileVar
   return variab;
 }
 
+export function convertCheckboxListValueToVariable(values: CheckboxListValue): Array<string> {
+  return values.filter(item => item.isChecked).map(item => item.value);
+}
 export function compareEditorState(a: mixed, b: mixed): ?boolean {
   // compare two richtext EditorState to be used as third param of lodash isEqualWith
   if (

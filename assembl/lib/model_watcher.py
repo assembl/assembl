@@ -47,6 +47,9 @@ class IModelEventWatcher(interface.Interface):
     def processPostCreated(self, id):
         pass
 
+    def processPostModified(self, id, state_changed):
+        pass
+
     def processIdeaCreated(self, id):
         pass
 
@@ -78,6 +81,9 @@ class BaseModelEventWatcher(object):
 
     def processPostCreated(self, id):
         log.debug("processPostCreated: %d" % (id or 0))
+
+    def processPostModified(self, id, state_changed):
+        log.debug("processPostModified: %d %d" % (id or 0, state_changed))
 
     def processIdeaCreated(self, id):
         log.debug("processIdeaCreated: %d" % (id or 0))
@@ -114,6 +120,10 @@ class CompositeModelEventWatcher(object):
     def processPostCreated(self, id):
         for watcher in self.watchers:
             watcher.processPostCreated(id)
+
+    def processPostModified(self, id, state_changed):
+        for watcher in self.watchers:
+            watcher.processPostModified(id, state_changed)
 
     def processIdeaCreated(self, id):
         for watcher in self.watchers:

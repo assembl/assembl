@@ -15,6 +15,9 @@ import RichTextEditor from '../../common/richTextEditor';
 import { BODY_MAX_LENGTH } from '../common/topPostForm';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
+import { getPostPublicationState } from '../../../utils/globalFunctions';
+import { connectedUserIsModerator } from '../../../utils/permissions';
+import { DebateContext } from '../../../../app/app';
 
 type Props = {
   contentLocale: string,
@@ -27,7 +30,8 @@ type Props = {
   uploadDocument: Function,
   timeline: Timeline,
   phaseId: string,
-  handleAnswerClick: Function
+  handleAnswerClick: Function,
+  isDebateModerated: boolean
 };
 
 type State = {
@@ -69,7 +73,16 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
   };
 
   handleSubmit = () => {
-    const { createPost, contentLocale, parentId, ideaId, refetchIdea, hideAnswerForm, uploadDocument } = this.props;
+    const {
+      createPost,
+      contentLocale,
+      parentId,
+      ideaId,
+      refetchIdea,
+      hideAnswerForm,
+      uploadDocument,
+      isDebateModerated
+    } = this.props;
     const { body } = this.state;
     this.setState({ submitting: true });
     const bodyIsEmpty = !body || editorStateIsEmpty(body);
@@ -81,15 +94,17 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
         if (!result.contentState) {
           return;
         }
-
+        const userIsModerator = connectedUserIsModerator();
+        const publicationState = getPostPublicationState(isDebateModerated, userIsModerator);
         const variables = {
           contentLocale: contentLocale,
           ideaId: ideaId,
           parentId: parentId,
           body: convertContentStateToHTML(result.contentState),
-          attachments: result.documentIds
+          attachments: result.documentIds,
+          publicationState: publicationState
         };
-        displayAlert('success', I18n.t('loading.wait'));
+        displayAlert('success', I18n.t('loading.wait'), false, 10000);
         createPost({ variables: variables })
           .then((res) => {
             const postId = res.data.createPost.post.id;
@@ -109,7 +124,8 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
                 });
               });
             });
-            displayAlert('success', I18n.t('debate.thread.postSuccess'));
+            const successMessage = isDebateModerated && !userIsModerator ? 'postToBeValidated' : 'postSuccess';
+            displayAlert('success', I18n.t(`debate.thread.${successMessage}`), false, 10000);
           })
           .catch((error) => {
             displayAlert('danger', `${error}`);
@@ -167,8 +183,14 @@ const mapStateToProps = state => ({
   timeline: state.timeline
 });
 
+const DumbAnswerFormWithContext = props => (
+  <DebateContext.Consumer>
+    {({ isDebateModerated }) => <DumbAnswerForm {...props} isDebateModerated={isDebateModerated} />}
+  </DebateContext.Consumer>
+);
+
 export default compose(
   connect(mapStateToProps),
   graphql(createPostMutation, { name: 'createPost' }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
-)(DumbAnswerForm);
+)(DumbAnswerFormWithContext);

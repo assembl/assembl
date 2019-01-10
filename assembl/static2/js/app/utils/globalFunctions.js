@@ -4,7 +4,8 @@ import type Moment from 'moment';
 import { type Map } from 'immutable';
 
 import { getDisplayedPhaseIdentifier } from './timeline';
-import { HARVESTABLE_PHASES, ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION } from '../constants';
+
+import { HARVESTABLE_PHASES, ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION, PublicationStates } from '../constants';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
@@ -336,3 +337,11 @@ export function compareByTextPosition(extractA: ?FictionExtractFragment, extract
 }
 
 export const convertISO8601StringToDate = (s: string): Moment => moment(s).utc();
+
+export const getPostPublicationState = (isDebateModerated: boolean, connectedUserIsModerator: boolean): string => {
+  if (!isDebateModerated || connectedUserIsModerator) {
+    return PublicationStates.PUBLISHED;
+  }
+
+  return PublicationStates.SUBMITTED_AWAITING_MODERATION;
+};

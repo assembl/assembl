@@ -270,16 +270,19 @@ class AgentProfile(Base):
 
     @classmethod
     def count_posts_in_discussion_all_profiles(cls, discussion):
-        from .post import Post
+        from .post import Post, countable_publication_states
         return dict(discussion.db.query(
             Post.creator_id, count(Post.id)).filter_by(
-            discussion_id=discussion.id, hidden=False).group_by(
-            Post.creator_id))
+                discussion_id=discussion.id, hidden=False).filter(
+                    Post.publication_state.in_(countable_publication_states)).group_by(
+                        Post.creator_id))
 
     def count_posts_in_discussion(self, discussion_id):
-        from .post import Post
+        from .post import Post, countable_publication_states
         return self.db.query(Post).filter_by(
-            creator_id=self.id, discussion_id=discussion_id).count()
+            creator_id=self.id,
+            discussion_id=discussion_id).filter(
+                Post.publication_state.in_(countable_publication_states)).count()
 
     def count_posts_in_current_discussion(self):
         "CAN ONLY BE CALLED FROM API V2"

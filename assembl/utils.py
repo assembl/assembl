@@ -15,7 +15,7 @@ def format_date(datetime_to_format):
 def get_published_posts(idea):
     """Get published posts for given idea."""
     Post = models.Post
-    related = idea.get_related_posts_query(True)
+    related = idea.get_related_posts_query(True, include_moderating=False)
     query = Post.query.join(
         related, Post.id == related.c.post_id
         ).filter(Post.publication_state == models.PublicationStates.PUBLISHED
@@ -88,7 +88,8 @@ def get_ideas(phase, options=None):
     return query
 
 
-def get_posts_for_phases(discussion, identifiers, include_deleted=False):
+def get_posts_for_phases(
+        discussion, identifiers, include_deleted=False, include_moderating=None):
     """Return related posts for the given phases `identifiers` on `discussion`.
     """
     # Retrieve the phases with posts
@@ -131,7 +132,9 @@ def get_posts_for_phases(discussion, identifiers, include_deleted=False):
     query = discussion.db.query(model)
     queries = []
     for idea in ideas:
-        related = idea.get_related_posts_query(True)
+        # Note we are not sending user_id
+        related = idea.get_related_posts_query(
+            True, include_deleted, include_moderating)
         related_query = query.join(
             related, model.id == related.c.post_id
         )

@@ -9,7 +9,7 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 
 import { get } from './utils/routeMap';
-import { getDiscussionId, getConnectedUserId, getConnectedUserName } from './utils/globalFunctions';
+import { getDiscussionId, getConnectedUserName, getConnectedUserId } from './utils/globalFunctions';
 import { getCurrentPhaseData } from './utils/timeline';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
@@ -19,8 +19,9 @@ import ErrorMessage from './components/common/error';
 import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
+import DiscussionPreferencesQuery from './graphql/DiscussionPreferencesQuery.graphql';
 
-export const IsHarvestingContext = React.createContext(false);
+export const DebateContext = React.createContext({ isDebateModerated: false, isHarvesting: false, connectedUserId: null });
 
 type Debate = {
   debateData: DebateData,
@@ -54,16 +55,19 @@ type Props = {
   route: Route,
   timeline: Timeline,
   timelineLoading: boolean,
-  isHarvesting: boolean
+  isHarvesting: boolean,
+  isDebateModerated: boolean,
+  connectedUserId: ?string
 };
 
-class App extends React.Component<Props> {
+export class DumbApp extends React.Component<Props> {
   componentDidMount() {
+    const { route } = this.props;
     const debateId = getDiscussionId();
-    const connectedUserId = getConnectedUserId();
     const connectedUserName = getConnectedUserName();
+    const connectedUserId = getConnectedUserId();
     this.props.fetchDebateData(debateId);
-    this.props.addContext(this.props.route.path, debateId, connectedUserId, connectedUserName);
+    this.props.addContext(route.path, debateId, connectedUserId, connectedUserName);
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -85,7 +89,12 @@ class App extends React.Component<Props> {
 
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
-    const { isHarvesting, children } = this.props;
+    const { isHarvesting, children, isDebateModerated, connectedUserId } = this.props;
+    const contextValues = {
+      isHarvesting: isHarvesting,
+      isDebateModerated: isDebateModerated,
+      connectedUserId: connectedUserId
+    };
     const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
     return (
       <div className={divClassNames}>
@@ -93,7 +102,7 @@ class App extends React.Component<Props> {
         {debateLoading && <Loader />}
         {debateData && (
           <div className="app-child">
-            <IsHarvestingContext.Provider value={this.props.isHarvesting}>{children}</IsHarvestingContext.Provider>
+            <DebateContext.Provider value={contextValues}>{children}</DebateContext.Provider>
           </div>
         )}
         {debateError && <ErrorMessage errorMessage={debateError} />}
@@ -105,7 +114,8 @@ class App extends React.Component<Props> {
 const mapStateToProps = state => ({
   i18n: state.i18n,
   debate: state.debate,
-  isHarvesting: state.context.isHarvesting
+  isHarvesting: state.context.isHarvesting,
+  connectedUserId: state.context.connectedUserId
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -163,5 +173,22 @@ export default compose(
         timeline: phasesForStore
       };
     }
+  }),
+  graphql(DiscussionPreferencesQuery, {
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading,
+          isDebateModerated: false
+        };
+      }
+
+      return {
+        error: data.error,
+        loading: data.loading,
+        isDebateModerated: data.discussionPreferences.withModeration
+      };
+    }
   })
-)(App);
+)(DumbApp);

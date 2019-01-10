@@ -3,26 +3,29 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql, withApollo } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
+import classnames from 'classnames';
 
 import { getConnectedUserId } from '../../../utils/globalFunctions';
-import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import Permissions, { connectedUserCan, connectedUserIsModerator } from '../../../utils/permissions';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
 import { inviteUserToLogin, displayAlert, displayModal } from '../../../utils/utilityManager';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
+import validatePostMutation from '../../../graphql/mutations/validatePost.graphql';
 import PostQuery from '../../../graphql/PostQuery.graphql';
-import { deleteMessageTooltip, likeTooltip, disagreeTooltip } from '../../common/tooltips';
+import { deleteMessageTooltip, likeTooltip, disagreeTooltip, validateMessageTooltip } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
-import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates } from '../../../constants';
+import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates, PublicationStates } from '../../../constants';
 import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
 import PostBody from '../common/post/postBody';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 import DeletePostButton from '../common/deletePostButton';
+import ValidatePostButton from '../common/validatePostButton';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
 
@@ -40,7 +43,8 @@ type Props = {
   questionId: string,
   screenWidth: number,
   themeId: string,
-  isHarvesting: boolean
+  isHarvesting: boolean,
+  validatePost: Function
 };
 
 class Post extends React.Component<Props> {
@@ -146,6 +150,33 @@ class Post extends React.Component<Props> {
       });
   }
 
+  handleValidatePost = (refetchQueries) => {
+    const { id } = this.props.data.post;
+    this.props
+      .validatePost({
+        variables: {
+          postId: id
+        },
+        optimisticResponse: {
+          validatePost: {
+            post: {
+              id: id,
+              publicationState: 'PUBLISHED',
+              __typename: 'Post'
+            },
+            __typename: 'ValidatePost'
+          }
+        },
+        refetchQueries: refetchQueries
+      })
+      .then(() => {
+        displayAlert('success', I18n.t('debate.validateSuccess'));
+      })
+      .catch((error) => {
+        displayAlert('danger', `${error}`);
+      });
+  };
+
   render() {
     const { post } = this.props.data;
     const { bodyEntries, publicationState } = post;
@@ -215,24 +246,28 @@ class Post extends React.Component<Props> {
       </div>
     );
 
+    const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
+
     let creatorName = '';
     let userCanDeleteThisMessage = false;
+    const userIsModerator = connectedUserIsModerator();
+
     if (post.creator) {
       const { displayName, isDeleted } = post.creator;
       const connectedUserId = getConnectedUserId();
       userCanDeleteThisMessage =
         (post.creator && (connectedUserId === String(post.creator.userId) && connectedUserCan(Permissions.DELETE_MY_POST))) ||
         connectedUserCan(Permissions.DELETE_POST);
-      creatorName = isDeleted ? I18n.t('deletedUser') : displayName;
+      creatorName = isDeleted ? I18n.t('deletedUser') : displayName || '';
     }
-
-    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="action-delete" />;
-
+    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />;
+    const validatePostButton = (
+      <ValidatePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />
+    );
     return (
-      <div className="shown box" id={post.id}>
+      <div className={classnames('shown box', { pending: isPending })} id={post.id}>
         <div className="content">
-          {/* $FlowFixMe */}
-          <PostCreator name={creatorName} />
+          <PostCreator name={creatorName} isPending={isPending} />
           <PostBody
             dbId={post.dbId}
             translationEnabled={debateData.translationEnabled}
@@ -246,19 +281,26 @@ class Post extends React.Component<Props> {
             bodyMimeType={post.bodyMimeType}
             isHarvesting={isHarvesting}
           />
-          <div className="post-footer">
-            <div className="sentiments">
-              <div className="sentiment-label">
-                <Translate value="debate.survey.react" />
+          <div className={classnames('post-footer', { pending: isPending })}>
+            {!isPending ? (
+              <div className="sentiments">
+                <div className="sentiment-label">
+                  <Translate value="debate.survey.react" />
+                </div>
+                <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
+                  {likeComponent}
+                </ResponsiveOverlayTrigger>
+                <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip}>
+                  {disagreeComponent}
+                </ResponsiveOverlayTrigger>
               </div>
-              <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
-                {likeComponent}
-              </ResponsiveOverlayTrigger>
-              <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip}>
-                {disagreeComponent}
-              </ResponsiveOverlayTrigger>
-            </div>
+            ) : null}
             <div className="actions">
+              {userIsModerator && isPending ? (
+                <ResponsiveOverlayTrigger placement="top" tooltip={validateMessageTooltip}>
+                  {validatePostButton}
+                </ResponsiveOverlayTrigger>
+              ) : null}
               {userCanDeleteThisMessage ? (
                 <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip}>
                   {deleteButton}
@@ -267,7 +309,7 @@ class Post extends React.Component<Props> {
             </div>
           </div>
         </div>
-        <div className="statistic">
+        <div className={classnames('statistic', { pending: isPending })}>
           {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
             <div className="sentiments">
               <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
@@ -278,7 +320,7 @@ class Post extends React.Component<Props> {
               </ResponsiveOverlayTrigger>
             </div>
           )}
-          <div>
+          <div className={classnames({ hidden: isPending })}>
             <StatisticsDoughnut
               elements={[
                 { color: sentimentDefinitionsObject.like.color, count: currentCounts.like },
@@ -329,6 +371,9 @@ export default compose(
   }),
   graphql(deleteSentimentMutation, {
     name: 'deleteSentiment'
+  }),
+  graphql(validatePostMutation, {
+    name: 'validatePost'
   }),
   manageErrorAndLoading({ displayLoader: true }),
   withScreenWidth,

@@ -67,6 +67,14 @@
   }
 }
 
+.button-pending {
+  @include button-with-hover-animation($white, $orange);
+
+  border-width: $btn-light-border-width;
+  border-style: $btn-light-border-style;
+  color: $orange3;
+}
+
 .btn-draft {
   margin-right: 20px;
 }

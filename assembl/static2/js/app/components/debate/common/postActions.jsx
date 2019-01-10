@@ -5,10 +5,10 @@ import { ApolloClient, compose, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
+import classnames from 'classnames';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
 import { sharePostTooltip } from '../../common/tooltips';
 
-import getOverflowMenuForPost from './overflowMenu';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { openShareModal } from '../../../utils/utilityManager';
@@ -18,6 +18,9 @@ import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { withScreenWidth } from '../../common/screenDimensions';
+import DeletePostButton from './deletePostButton';
+import ValidatePostButton from './validatePostButton';
+import EditPostButton from './editPostButton';
 
 export type Props = {
   timeline: Timeline,
@@ -32,7 +35,10 @@ export type Props = {
   postId: string,
   routerParams: RouterParams,
   screenWidth: number,
-  sentimentCounts: SentimentCountsFragment
+  sentimentCounts: SentimentCountsFragment,
+  isPending: boolean,
+  isPendingPostForModerator: boolean,
+  isMultiColumns: boolean
 };
 
 export class PostActions extends React.Component<Props> {
@@ -55,7 +61,10 @@ export class PostActions extends React.Component<Props> {
       postId,
       routerParams,
       screenWidth,
-      sentimentCounts
+      sentimentCounts,
+      isPending,
+      isPendingPostForModerator,
+      isMultiColumns
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -69,65 +78,51 @@ export class PostActions extends React.Component<Props> {
     const modalTitle = <Translate value="debate.sharePost" />;
     if (!debateData) return null;
     const useSocial = debateData.useSocialMedia;
-    let overflowMenu = null;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
-    if (editable && (userCanDeleteThisMessage || userCanEditThisMessage)) {
-      overflowMenu = (
-        <div className="overflow-action">
-          <OverlayTrigger
-            trigger="click"
-            rootClose
-            placement={tooltipPlacement}
-            overlay={getOverflowMenuForPost(postId, userCanDeleteThisMessage, userCanEditThisMessage, handleEditClick)}
-          >
-            <div>
-              {screenWidth >= MEDIUM_SCREEN_WIDTH ? (
-                <span className="assembl-icon-ellipsis-vert" />
-              ) : (
-                <span className="assembl-icon-ellipsis" />
-              )}
-            </div>
-          </OverlayTrigger>
-        </div>
-      );
-    }
-    const shareIcon = <span className="assembl-icon-share color" />;
+    const shareIcon = <span className={classnames('assembl-icon-share color', { 'share-multiColumns': isMultiColumns })} />;
+    const isPendingForUser = isPending && !isPendingPostForModerator;
+    const showLastSeparator =
+      !isPendingForUser && ((editable && userCanEditThisMessage) || userCanDeleteThisMessage || isPendingPostForModerator);
     return (
       <div className="post-actions">
         <div className="post-icons">
-          <div
-            className="post-action"
-            onClick={() =>
-              openShareModal({
-                type: 'post',
-                title: modalTitle,
-                routerParams: routerParams,
-                elementId: postId,
-                social: useSocial
-              })
-            }
-          >
-            <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
-              {shareIcon}
-            </ResponsiveOverlayTrigger>
-          </div>
-          <Sentiments
-            sentimentCounts={sentimentCounts}
-            mySentiment={mySentiment}
-            placement={tooltipPlacement}
-            client={client}
-            postId={postId}
-            isPhaseCompleted={isPhaseCompleted}
-          />
-          {screenWidth >= MEDIUM_SCREEN_WIDTH ? null : overflowMenu}
+          <React.Fragment>
+            <div
+              className={classnames('post-action', { 'share-multiColumns': isMultiColumns })}
+              onClick={() =>
+                openShareModal({
+                  type: 'post',
+                  title: modalTitle,
+                  routerParams: routerParams,
+                  elementId: postId,
+                  social: useSocial
+                })
+              }
+            >
+              <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
+                {shareIcon}
+              </ResponsiveOverlayTrigger>
+            </div>
+            <div className={classnames('post-actions-separator', { hidden: isMultiColumns })} />
+          </React.Fragment>
+          {!isPendingForUser ? (
+            <Sentiments
+              sentimentCounts={sentimentCounts}
+              mySentiment={mySentiment}
+              placement={tooltipPlacement}
+              client={client}
+              postId={postId}
+              isPhaseCompleted={isPhaseCompleted}
+            />
+          ) : null}
         </div>
         {totalSentimentsCount > 0 ? (
           <OverlayTrigger
             overlay={getSentimentStats(totalSentimentsCount, sentimentCounts, mySentiment)}
             placement={tooltipPlacement}
           >
-            <div className="sentiments-count margin-m">
+            <div className="sentiments-count">
               <div>
                 {sentimentDefinitions.reduce((result, sentiment) => {
                   const sentimentCount = get(sentimentCounts, sentiment.camelType, 0);
@@ -153,12 +148,15 @@ export class PostActions extends React.Component<Props> {
         ) : (
           <div className="empty-sentiments-count" />
         )}
-        {screenWidth >= MEDIUM_SCREEN_WIDTH ? overflowMenu : null}
-        {editable && (
+        <div className={classnames({ 'post-actions-separator': showLastSeparator })} />
+        {isPendingPostForModerator ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
+        {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
+        {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
+        {editable ? (
           <div className="answers annotation">
             <Translate value="debate.thread.numberOfResponses" count={numChildren} />
           </div>
-        )}
+        ) : null}
         <div className="clear">&nbsp;</div>
       </div>
     );
@@ -169,5 +167,4 @@ const mapStateToProps = state => ({
   timeline: state.timeline
 });
 
-// $FlowFixMe
 export default compose(connect(mapStateToProps), withScreenWidth, withApollo)(PostActions);

@@ -1,8 +1,13 @@
-.all-proposals {
+.question-footer {
   .button-light {
     color: $first-color;
 
-    &:hover, &:focus, &:active, &:focus:active, &:active:hover, &[disabled]:hover {
+    &:hover,
+    &:focus,
+    &:active,
+    &:focus:active,
+    &:active:hover,
+    &[disabled]:hover {
       color: #fff; /* opposite of current non-hover color */
     }
   }
@@ -14,7 +19,12 @@
   .button-dark {
     color: $first-color;
 
-    &:hover, &:focus, &:active, &:focus:active, &:active:hover, &[disabled]:hover {
+    &:hover,
+    &:focus,
+    &:active,
+    &:focus:active,
+    &:active:hover,
+    &[disabled]:hover {
       color: #fff; /* opposite of current non-hover color */
     }
   }

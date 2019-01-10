@@ -532,19 +532,76 @@ mutation myFirstMutation {
     assert test_session.query(models.Question).filter(models.Question.tombstone_condition()).count() == 0
 
 
-def test_get_thematic_via_node_query(graphql_request, thematic_and_question):
+def test_get_thematic_via_node_query(graphql_request, graphql_registry, thematic_and_question):
     thematic_id, first_question_id = thematic_and_question
-    res = schema.execute(u"""query {
-        node(id:"%s") {
-            __typename,
-            ... on Thematic {
-                title
-            }
-        }
-    }""" % thematic_id, context_value=graphql_request)
-    assert json.loads(json.dumps(res.data)) == {
-        u'node': {u"__typename": u"Thematic",
-                  u"title": u"Understanding the dynamics and issues"}}
+    res = schema.execute(
+        graphql_registry['ThematicQuery'],
+        variable_values={
+            "id": thematic_id,
+            "lang": "fr"
+        },
+        context_value=graphql_request)
+    assert res.errors is None
+    result = res.data['thematic']
+    assert result['title'] == u'Comprendre les dynamiques et les enjeux'
+    assert result['id'] == thematic_id
+    assert result['numPosts'] == 0
+    assert result['numContributors'] == 0
+    assert result['totalSentiments'] == 0
+    assert result['video'] is None
+    assert len(result['questions']) == 1
+    assert result['questions'][0]['title'] == u'Comment qualifiez-vous l\'emergence de l\'Intelligence Artificielle dans notre société ?'
+    assert result['questions'][0]['id'] == first_question_id
+    assert result['questions'][0]['hasPendingPosts'] is False
+    assert result['questions'][0]['posts']['edges'] == []
+
+
+def test_get_thematic_with_question_with_pending_posts(graphql_request, graphql_registry, thematic_and_question, proposals):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(
+        graphql_registry['ThematicQuery'],
+        variable_values={
+            "id": thematic_id,
+            "lang": "fr"
+        },
+        context_value=graphql_request)
+    assert res.errors is None
+    result = res.data['thematic']
+    assert result['title'] == u'Comprendre les dynamiques et les enjeux'
+    assert result['id'] == thematic_id
+    assert result['numPosts'] == 15
+    assert result['numContributors'] == 1
+    assert result['totalSentiments'] == 0
+    assert result['video'] is None
+    assert len(result['questions']) == 1
+    assert result['questions'][0]['title'] == u'Comment qualifiez-vous l\'emergence de l\'Intelligence Artificielle dans notre société ?'
+    assert result['questions'][0]['id'] == first_question_id
+    assert result['questions'][0]['hasPendingPosts'] is True
+    assert len(result['questions'][0]['posts']['edges']) == 3
+
+
+def test_get_thematic_with_question_without_pending_posts(graphql_request, graphql_registry, thematic_and_question, proposals_no_pending):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(
+        graphql_registry['ThematicQuery'],
+        variable_values={
+            "id": thematic_id,
+            "lang": "fr"
+        },
+        context_value=graphql_request)
+    assert res.errors is None
+    result = res.data['thematic']
+    assert result['title'] == u'Comprendre les dynamiques et les enjeux'
+    assert result['id'] == thematic_id
+    assert result['numPosts'] == 10
+    assert result['numContributors'] == 1
+    assert result['totalSentiments'] == 0
+    assert result['video'] is None
+    assert len(result['questions']) == 1
+    assert result['questions'][0]['title'] == u'Comment qualifiez-vous l\'emergence de l\'Intelligence Artificielle dans notre société ?'
+    assert result['questions'][0]['id'] == first_question_id
+    assert result['questions'][0]['hasPendingPosts'] is False
+    assert len(result['questions'][0]['posts']['edges']) == 3
 
 
 def test_get_question_via_node_query(graphql_request, thematic_and_question):
@@ -1385,7 +1442,7 @@ query QuestionPosts($id: ID!, $first: Int, $last: Int, $after: String, $before: 
 }
 """
 
-def test_get_proposals(graphql_request, thematic_and_question, proposals):
+def test_get_proposals(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         SIMPLIFIED_QUESTION_POSTS_QUERY,
@@ -1414,7 +1471,7 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals):
     }
 
 
-def test_get_proposals_after(graphql_request, thematic_and_question, proposals):
+def test_get_proposals_after(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         SIMPLIFIED_QUESTION_POSTS_QUERY,
@@ -1438,7 +1495,7 @@ def test_get_proposals_after(graphql_request, thematic_and_question, proposals):
     }
 
 
-def test_get_proposals_before(graphql_request, thematic_and_question, proposals):
+def test_get_proposals_before(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         SIMPLIFIED_QUESTION_POSTS_QUERY,
@@ -1463,12 +1520,12 @@ def test_get_proposals_before(graphql_request, thematic_and_question, proposals)
     }
 
 
-def test_get_proposals_from_node(graphql_request, thematic_and_question, proposals):
+def test_get_proposals_from_node(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
         SIMPLIFIED_QUESTION_POSTS_QUERY,
         context_value=graphql_request,
-        variable_values={"id": first_question_id, "first": 10, "after": "", "fromNode": proposals[4]})
+        variable_values={"id": first_question_id, "first": 10, "after": "", "fromNode": proposals15published[4]})
     assert json.loads(json.dumps(res.data)) == {
         u'node': {
             u'title': u"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre soci\xe9t\xe9 ?",
@@ -1487,7 +1544,7 @@ def test_get_proposals_from_node(graphql_request, thematic_and_question, proposa
     }
 
 
-def test_get_proposals_random(graphql_request, thematic_and_question, proposals):
+def test_get_proposals_random(graphql_request, thematic_and_question, proposals15published):
     # verify that the posts are in a random order even if we get them all
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""query {
@@ -1792,8 +1849,8 @@ mutation deletePostAttachment($postId: ID!, $attachmentId: Int!) {
     }
 
 
-def test_query_discussion_preferences(graphql_request,
-                                      discussion_with_lang_prefs):
+def test_query_discussion_preferences(
+    graphql_request, graphql_registry, discussion_with_lang_prefs):
     res = schema.execute(u"""
 query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeName } } } """, context_value=graphql_request)
     assert json.loads(json.dumps(res.data)) == {
@@ -1807,6 +1864,32 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
                     {u'locale': u'ja', u'name': u'japonais',
                         u'nativeName': u'日本語 (にほんご)'},
                 ]
+        }
+    }
+
+    result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request)
+    assert result.errors is None
+    res_data = json.loads(json.dumps(result.data))
+    assert res_data == {
+        u'discussionPreferences': {
+            u'favicon': None,
+            u'tabTitle': '',
+            u'withModeration': False,
+            u'mandatoryLegalContentsValidation': False
+        }
+    }
+
+
+def test_query_discussion_preferences_moderation(graphql_registry, graphql_request_with_moderation):
+    result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request_with_moderation)
+    assert result.errors is None
+    res_data = json.loads(json.dumps(result.data))
+    assert res_data == {
+        u'discussionPreferences': {
+            u'favicon': None,
+            u'tabTitle': '',
+            u'withModeration': True,
+            u'mandatoryLegalContentsValidation': False
         }
     }
 
@@ -1839,9 +1922,9 @@ mutation myMutation($languages: [String]!) {
     }
 }
 """, context_value=graphql_request,
-                         variable_values={
-                             "languages": ["ja", "de"]
-                         })
+                        variable_values={
+                            "languages": ["ja", "de"]
+                        })
     assert json.loads(json.dumps(res.data)) == {
         u'updateDiscussionPreferences': {
             u'preferences': {
@@ -1888,6 +1971,27 @@ def test_query_post_message_classifier(graphql_request,
             u"messageClassifier": u'positive'
         }
     }
+
+
+def test_mutation_update_moderation_preference(graphql_request):
+    res = schema.execute(u"""
+mutation myMutationModeration($withModeration: Boolean!) {
+    updateDiscussionPreferences(withModeration: $withModeration) {
+        preferences {
+            withModeration
+        }
+    }
+}
+""", context_value=graphql_request,
+                        variable_values={
+                            "withModeration": True
+                        })
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateDiscussionPreferences': {
+            u'preferences': {
+                u'withModeration': True
+            }
+        }}
 
 
 def test_query_post_no_message_classifier(graphql_request,

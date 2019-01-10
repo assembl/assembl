@@ -1072,6 +1072,16 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "item_default": ""
         },
 
+        # Moderation
+        {
+            "id": "with_moderation",
+            "value_type": "bool",
+            "name": _("Use moderation"),
+            "description": _("Is the moderation activated or not"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False,
+        },
     ]
 
     # Precompute, this is not mutable.

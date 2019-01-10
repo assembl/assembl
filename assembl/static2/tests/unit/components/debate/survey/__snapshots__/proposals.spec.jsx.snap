@@ -1,0 +1,138 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Proposals component should display a list of proposals with pending posts 1`] = `
+<div
+  className="shown"
+>
+  <h3
+    className="collapsed-title"
+  >
+    <span>
+      1/ To be or not to be?
+    </span>
+    <div
+      className="shown proposal-arrow"
+    >
+      <span
+        className="assembl-icon-up-open color pointer"
+        onClick={[Function]}
+      />
+    </div>
+  </h3>
+  <div
+    className="shown"
+  >
+    <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
+      id="post-987654"
+      isPhaseCompleted={false}
+      originalLocale="en"
+      postIndex={0}
+      questionId="question-885432"
+      themeId="theme-187263"
+    />
+  </div>
+  <div
+    className="question-footer"
+  >
+    <span
+      className="all-proposals"
+    >
+      <Link
+        className="button-submit button-light"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/my/phase/url/question/question-885432/1/"
+      >
+        <Translate
+          value="debate.survey.allProposals"
+        />
+      </Link>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Proposals component should display a list of proposals without pending posts 1`] = `
+<div
+  className="shown"
+>
+  <h3
+    className="collapsed-title"
+  >
+    <span>
+      1/ To be or not to be?
+    </span>
+    <div
+      className="shown proposal-arrow"
+    >
+      <span
+        className="assembl-icon-up-open color pointer"
+        onClick={[Function]}
+      />
+    </div>
+  </h3>
+  <div
+    className="shown"
+  >
+    <Connect(Apollo(Apollo(Apollo(Apollo(Component)))))
+      id="post-987654"
+      isPhaseCompleted={false}
+      originalLocale="en"
+      postIndex={0}
+      questionId="question-885432"
+      themeId="theme-187263"
+    />
+  </div>
+  <div
+    className="question-footer"
+  >
+    <span
+      className="all-proposals"
+    >
+      <Link
+        className="button-submit button-light"
+        onlyActiveOnIndex={false}
+        style={Object {}}
+        to="/my/phase/url/question/question-885432/1/"
+      >
+        <Translate
+          value="debate.survey.allProposals"
+        />
+      </Link>
+    </span>
+  </div>
+</div>
+`;
+
+exports[`Proposals component should display a list of proposals without posts 1`] = `
+<div
+  className="shown"
+>
+  <h3
+    className="collapsed-title"
+  >
+    <span>
+      1/ To be or not to be?
+    </span>
+    <div
+      className="hidden proposal-arrow"
+    >
+      <span
+        className="assembl-icon-up-open color pointer"
+        onClick={[Function]}
+      />
+    </div>
+  </h3>
+  <div
+    className="question-footer"
+  >
+    <span
+      className="no-proposals"
+    >
+      <Translate
+        value="debate.survey.noProposals"
+      />
+    </span>
+  </div>
+</div>
+`;

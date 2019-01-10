@@ -6,8 +6,6 @@ const Translations = {
     yes: "oui",
     no: "non",
     and: " et ",
-    "Number of contributions": "Nombre de messages",
-    "Number of users": "Nombre de contributeurs",
     accept: "Accepter",
     refuse: "Refuser",
     cancel: "Annuler",
@@ -172,6 +170,8 @@ const Translations = {
         PUBLISHED: "Publié"
       },
       Sort: "Trier",
+      number_of_contributions: "Nombre de messages",
+      number_of_users: "Nombre de contributeurs",
       "By relevance": "Par pertinence",
       "Most recent first": "Du plus récent au plus ancien",
       "Oldest first": "Du plus ancien au plus récent",
@@ -333,6 +333,8 @@ const Translations = {
       panelTitle: "Bienvenue dans la communauté d'Assembl"
     },
     debate: {
+      postAwaitingModeration: "Proposition en attente de modération",
+      validateMessage: "Accepter ce message",
       shareThematic: "Partagez cette thématique",
       votes: "Votes",
       vote: "Vote",
@@ -363,6 +365,7 @@ const Translations = {
       whatYouNeedToKnow: "À retenir",
       syntheses: "Synthèses",
       back: "Retour",
+      validateSuccess: "La contribution a bien été validée. Elle est désormais visible par l'ensemble des participants.",
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
         themesTitle: "Choisissez une thématique !",
@@ -370,6 +373,7 @@ const Translations = {
         question_x_on_total: "Question %{current} sur %{total}",
         titleVideo: "Une vidéo pour mieux comprendre le sujet...",
         proposalsTitle: "Êtes-vous d'accord avec les propositions exprimées ?",
+        moderateProposalsTitle: "Modérer les propositions exprimées par les participants.",
         thematicNumerotation: "thématique %{count}",
         reactions_0: "Réaction",
         reactions_1: "Réaction",
@@ -377,9 +381,12 @@ const Translations = {
         react: "Réagissez :",
         moreProposals: "Voir plus de propositions",
         allProposals: "Voir toutes les propositions",
+        pendingProposals: "Voir les propositions en attente de modération",
         noProposals: "Il n'y a pas de propositions. Soyez le premier à contribuer !",
         submit: "Envoyer",
         postSuccess: "Merci pour votre participation. Votre proposition a bien été envoyée !",
+        postToBeValidated:
+          "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
         endPhase: "La phase %{closedPhaseName} est terminée."
       },
       question: {
@@ -397,6 +404,8 @@ const Translations = {
         postDeletedByUser: "Ce message a été supprimé par son auteur.",
         postEdited: "modifié",
         postSuccess: "Merci pour votre participation. Votre message a bien été envoyé !",
+        postToBeValidated:
+          "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
         fillSubject: "Veuillez écrire un titre",
         fillBody: "Veuillez écrire un message",
         linkIdea: "Ce post est en lien avec les thématiques suivantes :",
@@ -625,7 +634,7 @@ const Translations = {
       previousStep: "Étape précédente",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Éditer la langue du débat",
+        preferences: "Préférences de la discussion",
         sections: "Éditer les rubriques du débat",
         legalContents: "Éditer les contenus juridiques",
         timeline: "Éditer les phases et modules",
@@ -814,13 +823,15 @@ const Translations = {
       annotation: "Les champs * sont requis.",
       themeNum: "Thématique %{index}",
       discussion: {
-        "0": "Langues utilisées",
+        "0": "Préférences de la discussion",
         "3": "Options d'inscription",
         "4": "Contenus juridiques",
         "5": "Édition des phases et modules",
         "6": "Personnaliser l'interface"
       },
       languageChoice: "Sélection des langues du débat",
+      moderation: "Modération à priori",
+      activateModeration: "Activer la modération",
       ph: {
         title: "Titre",
         quote: "Citation",
@@ -881,7 +892,7 @@ const Translations = {
       step_x_total: "Section %{num} sur %{total}",
       saveThemes: "Sauvegarder",
       successThemeCreation: "Les thématiques ont été enregistrées avec succès !",
-      successLanguagePreference: "Les langues du débat ont été enregistrées avec succès !",
+      successDiscussionPreference: "Les préférences de la discussion ont été enregistrées avec succès !",
       legalContents: {
         legalNoticeLabel: "Mentions légales",
         termsAndConditionsLabel: "Conditions générales d'utilisation",
@@ -1146,6 +1157,8 @@ const Translations = {
         PUBLISHED: "Published"
       },
       Sort: "Sort",
+      number_of_contributions: "Number of contributions",
+      number_of_users: "Number of users",
       "By relevance": "By relevance",
       "Most recent first": "More recent first",
       "Oldest first": "Oldest first",
@@ -1306,6 +1319,8 @@ const Translations = {
       tableOfContents: "Table of contents"
     },
     debate: {
+      postAwaitingModeration: "Proposal awaiting moderation",
+      validateMessage: "Accept this message",
       shareThematic: "Share this thematic",
       votes: "Votes",
       vote: "Vote",
@@ -1336,6 +1351,7 @@ const Translations = {
       whatYouNeedToKnow: "What you need to know",
       syntheses: "Syntheses",
       back: "Back",
+      validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {
         loadRecentPosts: "Load recent proposals",
         themesTitle: "Choose a theme!",
@@ -1343,6 +1359,7 @@ const Translations = {
         question_x_on_total: "Question %{current} on %{total}",
         titleVideo: "A video to better understand the subject...",
         proposalsTitle: "Do you agree with these points of view?",
+        moderateProposalsTitle: "Moderate these points of view",
         thematicNumerotation: "Thematic %{count}",
         reactions_0: "Reaction",
         reactions_1: "Reaction",
@@ -1350,9 +1367,12 @@ const Translations = {
         react: "React:",
         moreProposals: "More points of view",
         allProposals: "See all points of view",
+        pendingProposals: "See all pending points of view",
         noProposals: "There is no point of view for the moment. Be the first to contribute!",
         submit: "Submit",
         postSuccess: "Thanks for your participation. Your proposal has been sent!",
+        postToBeValidated:
+          "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.",
         endPhase: "The %{closedPhaseName} phase is closed."
       },
       question: {
@@ -1370,6 +1390,8 @@ const Translations = {
         postDeletedByUser: "This message has been deleted by the author.",
         postEdited: "edited",
         postSuccess: "Thanks for your participation. Your comment has been sent!",
+        postToBeValidated:
+          "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.",
         fillSubject: "Please, write a title",
         fillBody: "Please, write a comment",
         linkIdea: "This post is related to the following themes:",
@@ -1597,7 +1619,7 @@ const Translations = {
       previousStep: "Previous step",
       menu: {
         phase: "Phase %{count} - %{description}",
-        language: "Discussion language",
+        preferences: "Discussion preferences",
         sections: "Edit debate sections",
         legalContents: "Edit legal content",
         timeline: "Edit the phases and modules",
@@ -1780,13 +1802,15 @@ const Translations = {
       annotation: "* Fields are required.",
       themeNum: "Theme %{index}",
       discussion: {
-        "0": "Languages of the Discussion",
+        "0": "Discussion preferences",
         "3": "Registration options",
         "4": "Legal contents",
         "5": "Edition of the phases and modules",
         "6": "Personalize the interface"
       },
       languageChoice: "Select desired languages below",
+      moderation: "Post pending for moderation",
+      activateModeration: "Activate the moderation",
       ph: {
         title: "Title",
         quote: "Quote",
@@ -1845,7 +1869,7 @@ const Translations = {
       step_x_total: "Section %{num} on %{total}",
       saveThemes: "Save",
       successThemeCreation: "Themes have been saved with success!",
-      successLanguagePreference: "Discussion language preferences have been saved with success!",
+      successDiscussionPreference: "Discussion preferences have been saved with success!",
       legalContents: {
         legalNoticeLabel: "Legal notice",
         termsAndConditionsLabel: "Terms and conditions",

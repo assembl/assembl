@@ -12,7 +12,7 @@ import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 import { DeletedPublicationStates, PublicationStates } from '../../../../constants';
 import hashLinkScroll from '../../../../utils/hashLinkScroll';
 import NuggetsManager from '../../../common/nuggetsManager';
-import { IsHarvestingContext } from '../../../../app';
+import { DebateContext } from '../../../../app';
 
 const getSubjectPrefixString = fullLevel =>
   fullLevel && (
@@ -52,7 +52,8 @@ export type Props = {
   parentId: string,
   refetchIdea: Function,
   routerParams: RouterParams,
-  rowIndex: number
+  rowIndex: number,
+  connectedUserId: string
 };
 
 type State = {
@@ -67,12 +68,9 @@ export class DumbPost extends React.PureComponent<Props, State> {
     multiColumns: false
   };
 
-  constructor(props: Props) {
-    super(props);
-    this.state = {
-      mode: 'view'
-    };
-  }
+  state = {
+    mode: 'view'
+  };
 
   componentDidMount() {
     this.props.measureTreeHeight(400);
@@ -92,13 +90,15 @@ export class DumbPost extends React.PureComponent<Props, State> {
   }
 
   componentDidUpdate(prevProps: Props) {
+    const { measureTreeHeight, lang, data } = this.props;
+    const { publicationState } = data.post;
     const { body } = this.getBodyAndSubject(false);
     if (body && body.indexOf('<img src')) {
-      this.props.measureTreeHeight(200);
+      measureTreeHeight(200);
     }
 
-    if (this.props.lang !== prevProps.lang || this.props.data.post.publicationState !== prevProps.data.post.publicationState) {
-      this.props.measureTreeHeight(200);
+    if (lang !== prevProps.lang || publicationState !== prevProps.data.post.publicationState) {
+      measureTreeHeight(200);
     }
   }
 
@@ -154,7 +154,9 @@ export class DumbPost extends React.PureComponent<Props, State> {
       originalLocale,
       parentId,
       refetchIdea,
-      timeline
+      timeline,
+      connectedUserId,
+      borderLeftColor
     } = this.props;
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
@@ -201,12 +203,14 @@ export class DumbPost extends React.PureComponent<Props, State> {
         ) : (
           <PostView
             {...this.props}
+            borderLeftColor={borderLeftColor}
             isHarvesting={isHarvesting}
             body={body}
             subject={subject}
             handleEditClick={this.handleEditClick}
             modifiedSubject={modifiedSubject}
             timeline={timeline}
+            connectedUserId={connectedUserId}
           />
         )}
       </div>
@@ -215,9 +219,9 @@ export class DumbPost extends React.PureComponent<Props, State> {
 }
 
 const PostWithContext = props => (
-  <IsHarvestingContext.Consumer>
-    {isHarvesting => <DumbPost {...props} isHarvesting={isHarvesting} />}
-  </IsHarvestingContext.Consumer>
+  <DebateContext.Consumer>
+    {({ isHarvesting, connectedUserId }) => <DumbPost {...props} isHarvesting={isHarvesting} connectedUserId={connectedUserId} />}
+  </DebateContext.Consumer>
 );
 
 const withData: OperationComponent<Response> = graphql(PostQuery);

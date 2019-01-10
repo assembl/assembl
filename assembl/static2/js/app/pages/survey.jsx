@@ -27,6 +27,7 @@ type PostNode = {
 
 type QuestionType = {
   id: string,
+  hasPendingPosts: boolean,
   posts: {
     edges: Array<PostNode>
   },
@@ -180,6 +181,7 @@ class Survey extends React.Component<Props, State> {
                       {questions &&
                         questions.map((question, index) => (
                           <Proposals
+                            hasPendingPosts={question.hasPendingPosts}
                             nbPostsToShow={3}
                             questionsLength={questions.length}
                             themeId={id}

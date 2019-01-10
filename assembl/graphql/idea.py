@@ -14,8 +14,8 @@ from sqlalchemy import desc, func, join, select, or_, and_
 from sqlalchemy.orm import joinedload
 
 from assembl import models
-from assembl.auth import IF_OWNED, CrudPermissions
-from assembl.auth.util import get_permissions
+from assembl.auth import P_MODERATE, IF_OWNED, CrudPermissions
+from assembl.auth.util import get_permissions, user_has_permission
 from assembl.models.action import SentimentOfPost
 from assembl.models import Phases
 from assembl.models.idea import MessageView
@@ -248,7 +248,7 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_num_posts(self, args, context, info):
         related = self.idea.get_related_posts_query(
-            partial=True, include_deleted=False)
+            partial=True, include_deleted=False, include_moderating=False)
         return models.Post.query.join(
             related, models.Post.id == related.c.post_id
         ).filter(
@@ -438,9 +438,11 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         'assembl.graphql.post.PostConnection',  # use dotted name to avoid circular import  # noqa: E501
         random=graphene.Boolean(),
         from_node=graphene.ID(),
+        isModerating=graphene.Boolean(),
         description=docs.Question.posts)
     thematic = graphene.Field(lambda: Thematic, description=docs.Question.thematic)
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
+    has_pending_posts = graphene.Boolean(description=docs.Question.has_pending_posts)
 
     def resolve_thematic(self, args, context, info):
         parents = self.get_parents()
@@ -459,23 +461,38 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         random = args.get('random', False)
+        is_moderating = args.get('isModerating', False)
+        user_id = context.authenticated_userid
+        can_moderate = user_has_permission(discussion_id, user_id, P_MODERATE)
         Post = models.Post
+        if is_moderating:
+            state_condition = Post.publication_state == models.PublicationStates.SUBMITTED_AWAITING_MODERATION
+        elif can_moderate:
+            state_condition = Post.publication_state.in_(
+                [models.PublicationStates.SUBMITTED_AWAITING_MODERATION,
+                 models.PublicationStates.PUBLISHED])
+        else:
+            state_condition = (Post.publication_state == models.PublicationStates.PUBLISHED) | (
+                (Post.publication_state == models.PublicationStates.SUBMITTED_AWAITING_MODERATION) &
+                (Post.creator_id == user_id))
+
         related = self.get_related_posts_query(True)
+
         # If random is True returns 10 posts, the first one is the latest post
         # created by the user, then the remaining ones are in random order.
         # If random is False, return all the posts in creation_date desc order.
         if random:
-            user_id = context.authenticated_userid
             if user_id is None:
                 first_post = None
             else:
                 first_post = Post.query.join(
                     related, Post.id == related.c.post_id
                 ).filter(Post.creator_id == user_id
-                         ).order_by(desc(Post.creation_date), Post.id).first()
+                ).filter(state_condition
+                ).order_by(desc(Post.creation_date), Post.id).first()
 
             query = Post.default_db.query(Post.id).join(
-                related, Post.id == related.c.post_id)
+                related, Post.id == related.c.post_id).filter(state_condition)
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
             limit = args.get('first', 10)
@@ -514,7 +531,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             query = Post.query.join(
                 related, Post.id == related.c.post_id
             ).filter(
-                Post.publication_state == models.PublicationStates.PUBLISHED
+                state_condition
             ).order_by(
                 desc(Post.creation_date), Post.id
             ).options(joinedload(Post.creator))
@@ -541,6 +558,17 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_total_sentiments(self, args, context, info):
         return self.get_total_sentiments()
+
+    def resolve_has_pending_posts(self, args, context, info):
+        Post = models.Post
+        related = self.get_related_posts_query(True)
+        query = Post.query.join(
+            related, Post.id == related.c.post_id
+        ).filter(
+            Post.publication_state == models.PublicationStates.SUBMITTED_AWAITING_MODERATION
+        )
+        pending_count = query.count()
+        return pending_count > 0
 
 
 class Thematic(SecureObjectType, SQLAlchemyObjectType):

@@ -15,6 +15,8 @@ import { getDomElementOffset } from '../../../utils/globalFunctions';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
+import { connectedUserIsModerator } from '../../../utils/permissions';
+import { DebateContext } from '../../../../app/app';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
@@ -35,7 +37,8 @@ export type Props = {
   postSuccessMsgId: string,
   bodyMaxLength?: number,
   draftable?: boolean,
-  draftSuccessMsgId?: string
+  draftSuccessMsgId?: string,
+  isDebateModerated: boolean
 };
 
 type State = {
@@ -132,10 +135,10 @@ export class DumbTopPostForm extends React.Component<Props, State> {
     this.setState(submittingState(true));
     const bodyIsEmpty = editorStateIsEmpty(body);
     if (
-      ((subject || this.props.ideaOnColumn) && !bodyIsEmpty) ||
+      ((subject || ideaOnColumn) && !bodyIsEmpty) ||
       (publicationState === PublicationStates.DRAFT && (subject || !bodyIsEmpty))
     ) {
-      displayAlert('success', I18n.t('loading.wait'));
+      displayAlert('success', I18n.t('loading.wait'), false, 10000);
 
       // first, we upload each attachment
       // $FlowFixMe we know that body is not empty
@@ -155,8 +158,18 @@ export class DumbTopPostForm extends React.Component<Props, State> {
         createPost({ variables: variables })
           .then(() => {
             refetchIdea();
-            const successMsgId = publicationState === PublicationStates.DRAFT ? draftSuccessMsgId : postSuccessMsgId;
-            displayAlert('success', I18n.t(successMsgId));
+            let successMessage;
+            switch (publicationState) {
+            case PublicationStates.DRAFT:
+              successMessage = draftSuccessMsgId;
+              break;
+            case PublicationStates.SUBMITTED_AWAITING_MODERATION:
+              successMessage = 'debate.thread.postToBeValidated';
+              break;
+            default:
+              successMessage = postSuccessMsgId;
+            }
+            displayAlert('success', I18n.t(successMessage), false, 10000);
             this.resetForm();
             this.setState(submittingState(false));
           })
@@ -191,9 +204,11 @@ export class DumbTopPostForm extends React.Component<Props, State> {
   };
 
   render() {
-    const { bodyMaxLength, ideaOnColumn, bodyPlaceholderMsgId, draftable } = this.props;
+    const { bodyMaxLength, ideaOnColumn, bodyPlaceholderMsgId, draftable, isDebateModerated } = this.props;
     const { subject, body, isActive, submitting } = this.state;
-
+    const userIsModerator = connectedUserIsModerator();
+    const publicationState =
+      !userIsModerator && isDebateModerated ? PublicationStates.SUBMITTED_AWAITING_MODERATION : PublicationStates.PUBLISHED;
     return (
       <div className="form-container" ref={this.setFormContainerRef}>
         <FormGroup>
@@ -226,7 +241,7 @@ export class DumbTopPostForm extends React.Component<Props, State> {
               ) : null}
               <Button
                 className={getClassNames(ideaOnColumn, submitting)}
-                onClick={() => this.createTopPost(PublicationStates.PUBLISHED)}
+                onClick={() => this.createTopPost(publicationState)}
                 style={{ marginBottom: '30px' }}
                 disabled={submitting}
               >
@@ -253,8 +268,14 @@ const mapStateToProps = state => ({
   contentLocale: state.i18n.locale
 });
 
+const TopPostFormWithContext = props => (
+  <DebateContext.Consumer>
+    {({ isDebateModerated }) => <DumbTopPostForm {...props} isDebateModerated={isDebateModerated} />}
+  </DebateContext.Consumer>
+);
+
 export default compose(
   connect(mapStateToProps),
   graphql(createPostMutation, { name: 'createPost' }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
-)(DumbTopPostForm);
+)(TopPostFormWithContext);

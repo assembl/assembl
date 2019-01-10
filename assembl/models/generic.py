@@ -16,6 +16,7 @@ from sqlalchemy import (
     String,
     DateTime,
     ForeignKey,
+    inspect,
 )
 from sqlalchemy.orm import relationship, backref, aliased
 from sqlalchemy.sql.functions import count
@@ -483,6 +484,12 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         watcher = get_model_watcher()
         if operation == CrudOperation.CREATE:
             watcher.processPostCreated(self.id)
+        elif operation == CrudOperation.UPDATE:
+            state_changed = False
+            if hasattr(self, 'publication_state'):
+                hist = inspect(self).attrs.publication_state.history
+                state_changed = hist.has_changes()
+            watcher.processPostModified(self.id, state_changed)
 
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id

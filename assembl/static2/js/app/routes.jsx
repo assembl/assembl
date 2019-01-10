@@ -17,6 +17,7 @@ import VoteSession from './pages/voteSession';
 import Idea from './pages/idea';
 import Community from './pages/community';
 import Question from './pages/question';
+import QuestionModeratePosts from './pages/questionModeratePosts';
 import Profile from './pages/profile';
 import Styleguide from './pages/styleguide';
 import NotFound from './pages/notFound';
@@ -176,8 +177,18 @@ export default [
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
           <Route
-            path={routeForRouter('question', false, { questionId: ':questionId', questionIndex: ':questionIndex' })}
+            path={routeForRouter('question', false, {
+              questionId: ':questionId',
+              questionIndex: ':questionIndex'
+            })}
             component={Question}
+          />
+          <Route
+            path={routeForRouter('questionModeratePosts', false, {
+              questionId: ':questionId',
+              questionIndex: ':questionIndex'
+            })}
+            component={QuestionModeratePosts}
           />
         </Route>
         <Route

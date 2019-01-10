@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { configure, shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16';
+import Adapter from 'enzyme-adapter-react-16.3';
 
 import { DumbTopPostForm, getClassNames, submittingState } from '../../../../../js/app/components/debate/common/topPostForm';
 import type { Props } from '../../../../../js/app/components/debate/common/topPostForm';
@@ -23,7 +23,8 @@ const topPostFormProps: Props = {
   uploadDocument: jest.fn(),
   onDisplayForm: jest.fn(),
   draftable: false,
-  ideaOnColumn: false
+  ideaOnColumn: false,
+  isDebateModerated: false
 };
 
 describe('<TopPostForm /> - with shallow', () => {

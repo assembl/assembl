@@ -1,7 +1,9 @@
 // @flow
 import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
+import classnames from 'classnames';
 import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
+import { connectedUserIsModerator } from '../../../../utils/permissions';
 import Attachments from '../../../common/attachments';
 import ProfileLine from '../../../common/profileLine';
 import PostActions from '../../common/postActions';
@@ -12,6 +14,7 @@ import PostBody from './postBody';
 import HarvestingMenu from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
 import { getExtractTagId } from '../../../../utils/extract';
+import { PublicationStates, pendingOrange } from '../../../../constants';
 
 type Props = PostProps & {
   body: string,
@@ -20,7 +23,8 @@ type Props = PostProps & {
   modifiedSubject: React.Element<any>,
   multiColumns: boolean,
   subject: string,
-  timeline: Timeline
+  timeline: Timeline,
+  connectedUserId: ?string
 };
 
 type State = {
@@ -124,7 +128,8 @@ class PostView extends React.PureComponent<Props, State> {
       sentimentCounts,
       mySentiment,
       attachments,
-      extracts
+      extracts,
+      publicationState
     } = this.props.data.post;
     const {
       borderLeftColor,
@@ -150,6 +155,8 @@ class PostView extends React.PureComponent<Props, State> {
       multiColumns,
       isHarvesting
     } = this.props;
+    const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
+    const isPendingPostForModerator = connectedUserIsModerator() && isPending;
     const translate = contentLocale !== originalLocale;
 
     const completeLevelArray = fullLevel ? [rowIndex, ...fullLevel.split('-').map(string => Number(string))] : [rowIndex];
@@ -159,9 +166,8 @@ class PostView extends React.PureComponent<Props, State> {
     };
 
     const boxStyle = {
-      borderLeftColor: borderLeftColor
+      borderLeftColor: isPending ? pendingOrange : borderLeftColor
     };
-
     let canReply = !multiColumns;
     // If we're in thread mode, check if the first idea associated to the post is multi columns.
     if (!multiColumns && indirectIdeaContentLinks && indirectIdeaContentLinks.length > 0) {
@@ -176,7 +182,12 @@ class PostView extends React.PureComponent<Props, State> {
       ? indirectIdeaContentLinks.map(link => link && link.idea && link.idea.title)
       : [];
     const hasRelatedIdeas = relatedIdeasTitles.length > 0;
-
+    const isPublished = publicationState === 'PUBLISHED';
+    let userName = isPublished ? creator.displayName : I18n.t('debate.postAwaitingModeration');
+    if (creator.isDeleted) {
+      userName = I18n.t('deletedUser');
+    }
+    const userNameClasses = classnames({ pending: isPending });
     return (
       <div
         ref={(p) => {
@@ -202,13 +213,14 @@ class PostView extends React.PureComponent<Props, State> {
             showNuggetAction={!multiColumns}
           />
         )}
-        <div className="box" style={boxStyle}>
+        <div className={classnames('box', { pending: isPending })} style={boxStyle}>
           <div className="post-row">
             <div className="post-left">
               {creator && (
                 <ProfileLine
+                  userNameAdditionalClasses={userNameClasses}
                   userId={creator.userId}
-                  userName={creator.isDeleted ? I18n.t('deletedUser') : creator.displayName}
+                  userName={userName}
                   creationDate={creationDate}
                   locale={lang}
                   modified={modified}
@@ -243,7 +255,7 @@ class PostView extends React.PureComponent<Props, State> {
                 </React.Fragment>
               ) : null}
             </div>
-            <div className="post-right">
+            <div className={classnames('post-right', { pending: isPending })}>
               <PostActions
                 creatorUserId={creator.userId}
                 postId={id}
@@ -255,11 +267,14 @@ class PostView extends React.PureComponent<Props, State> {
                 debateData={debateData}
                 postSubject={subject ? subject.replace('Re: ', '') : ''}
                 phaseId={phaseId}
+                isPending={isPending}
+                isPendingPostForModerator={isPendingPostForModerator}
+                isMultiColumns={multiColumns}
               />
             </div>
           </div>
         </div>
-        {canReply && (
+        {canReply && !isPending ? (
           <div className={this.state.showAnswerForm ? 'answer-form' : 'collapsed-answer-form'}>
             <AnswerForm
               parentId={id}
@@ -271,7 +286,7 @@ class PostView extends React.PureComponent<Props, State> {
               phaseId={phaseId}
             />
           </div>
-        )}
+        ) : null}
       </div>
     );
   }

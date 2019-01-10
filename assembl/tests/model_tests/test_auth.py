@@ -137,3 +137,12 @@ def test_delete_cookie_2(test_session, agent_status_in_discussion_2):
     """Testing delete cookie on a user who has not accepted any cookie."""
     agent_status_in_discussion_2.delete_cookie("ACCEPT_CGU")
     assert agent_status_in_discussion_2.cookies == []
+
+
+def test_count_posts_in_discussion_all_profiles(test_app, discussion, admin_user, proposals):
+    from assembl.models import AgentProfile
+    result = AgentProfile.count_posts_in_discussion_all_profiles(discussion)
+    assert result[admin_user.id] == 15
+
+def test_count_posts_in_discussion(test_app, discussion, admin_user, proposals):
+    assert admin_user.count_posts_in_discussion(discussion.id) == 15

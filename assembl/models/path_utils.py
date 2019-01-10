@@ -10,10 +10,12 @@ from sqlalchemy.orm import (with_polymorphic, aliased)
 from sqlalchemy.sql.expression import or_, union, except_
 from sqlalchemy.sql.functions import count
 
+from ..auth import P_MODERATE
+from ..auth.util import user_has_permission
 from .idea_content_link import (
     IdeaContentLink, IdeaContentPositiveLink, IdeaContentNegativeLink)
 from .post import (
-    Post, Content, SynthesisPost,
+    Post, Content, SynthesisPost, PublicationStates,
     countable_publication_states, deleted_publication_states)
 from .annotation import Webpage
 from .idea import IdeaVisitor, Idea, IdeaLink, RootIdea
@@ -220,7 +222,8 @@ class PostPathLocalCollection(object):
         return " ; ".join((repr(x) for x in self.paths))
 
     def as_clause_base(self, db, include_breakpoints=False,
-                       include_deleted=False):
+                       include_deleted=False, include_moderating=None,
+                       user_id=None):
         """Express collection as a SQLAlchemy query clause.
 
         :param bool include_breakpoints: Include posts where
@@ -228,6 +231,11 @@ class PostPathLocalCollection(object):
         :param include_deleted: Include posts in deleted_publication_states.
             True means only deleted posts, None means all posts,
             False means only live posts or deleted posts with live descendants.
+        :param include_moderating: Include posts in SUBMITTED_AWAITING_MODERATION.
+            True means include all those posts, Falsish means none of those posts,
+            a "mine" value means only those belonging to this user.
+            There is not currently a way to only get those posts. (todo?)
+            NOTE: that parameter is interpreted differently in Idea.get_related_posts_query
         """
         assert self.reduced
 
@@ -243,12 +251,28 @@ class PostPathLocalCollection(object):
             else:
                 query = db.query(post.id)
             query = query.join(content, content.id == post.id)
+            states = set(countable_publication_states)  # Or just published?
+            states.update(deleted_publication_states)
             if include_deleted is not None:
-                if include_deleted:
-                    query = query.filter(
-                        post.publication_state.in_(deleted_publication_states))
+                if include_deleted is True:
+                    states = set(deleted_publication_states)
                 else:
                     query = query.filter(content.tombstone_date == None)  # noqa: E711
+            if include_moderating is True:
+                states.add(PublicationStates.SUBMITTED_AWAITING_MODERATION)
+            state_condition = post.publication_state.in_(states)
+            if user_id:
+                if include_moderating == "mine":
+                    state_condition = state_condition | (
+                        post.publication_state.in_([
+                            PublicationStates.SUBMITTED_AWAITING_MODERATION,
+                            PublicationStates.DRAFT]) &
+                        (post.creator_id == user_id))
+                else:
+                    state_condition = state_condition | (
+                        (post.publication_state == PublicationStates.DRAFT) &
+                        (post.creator_id == user_id))
+            query = query.filter(state_condition)
             return post, query
         if not self.paths:
             post, q = base_query(True)
@@ -324,8 +348,10 @@ class PostPathLocalCollection(object):
         return q
 
     def as_clause(self, db, discussion_id, user_id=None, content=None,
-                  include_deleted=False):
-        subq = self.as_clause_base(db, include_deleted=include_deleted)
+                  include_deleted=False, include_moderating=None):
+        subq = self.as_clause_base(
+            db, include_deleted=include_deleted, include_moderating=include_moderating,
+            user_id=user_id if include_moderating else None)
         content = content or with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)
@@ -333,16 +359,6 @@ class PostPathLocalCollection(object):
         q = db.query(content).filter(
             (content.discussion_id == discussion_id) & (content.hidden == False)  # noqa: E712
             ).join(subq, content.id == subq.c.post_id)
-        if include_deleted is not None:
-            if include_deleted:
-                post = with_polymorphic(
-                    Post, [], Post.__table__,
-                    aliased=False, flat=True)
-                q = q.join(
-                    post, (post.id == content.id) &
-                    post.publication_state.in_(deleted_publication_states))
-            else:
-                q = q.filter(content.tombstone_date == None)  # noqa: E711
 
         if user_id:
             # subquery?
@@ -451,10 +467,14 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
                 result.combine(path)
         return result
 
-    def orphan_clause(self, user_id=None, content=None, include_deleted=False):
+    def orphan_clause(self, user_id=None, content=None, include_deleted=False,
+                      include_moderating=None):
         root_path = self.paths[self.root_idea_id]
         db = self.discussion.default_db
-        subq = root_path.as_clause_base(db, include_deleted=include_deleted)
+        subq = root_path.as_clause_base(
+            db, include_deleted=include_deleted,
+            include_moderating=include_moderating,
+            user_id=user_id if include_moderating else None)
         content = content or with_polymorphic(
             Content, [], Content.__table__,
             aliased=False, flat=True)
@@ -466,16 +486,33 @@ class PostPathCombiner(PostPathGlobalCollection, IdeaVisitor):
             (content.hidden == False) &  # noqa: E712
             (content.type.notin_((synth_post_type, webpage_post_type))) &
             content.id.notin_(subq))
+
+        post = with_polymorphic(
+            Post, [], Post.__table__,
+            aliased=False, flat=True)
+        q = q.join(post, post.id == content.id)
+        states = set(countable_publication_states)  # Or just published?
+        states.update(deleted_publication_states)
         if include_deleted is not None:
-            if include_deleted:
-                post = with_polymorphic(
-                    Post, [], Post.__table__,
-                    aliased=False, flat=True)
-                q = q.join(
-                    post, (post.id == content.id) &
-                    post.publication_state.in_(deleted_publication_states))
+            if include_deleted is True:
+                states = set(deleted_publication_states)
             else:
                 q = q.filter(content.tombstone_date == None)  # noqa: E711
+        if include_moderating is True:
+            states.add(PublicationStates.SUBMITTED_AWAITING_MODERATION)
+        state_condition = post.publication_state.in_(states)
+        if user_id:
+            if include_moderating == "mine":
+                state_condition = state_condition | (
+                    post.publication_state.in_([
+                        PublicationStates.SUBMITTED_AWAITING_MODERATION,
+                        PublicationStates.DRAFT]) &
+                    (post.creator_id == user_id))
+            else:
+                state_condition = state_condition | (
+                    (post.publication_state == PublicationStates.DRAFT) &
+                    (post.creator_id == user_id))
+        q = q.filter(state_condition)
 
         if user_id:
             # subquery?
@@ -554,7 +591,7 @@ class PostPathCounter(PostPathCombiner):
             return (0, 0, 0)
         q = path_collection.as_clause(
             self.discussion.db, self.discussion.id, user_id=self.user_id,
-            include_deleted=None)
+            include_deleted=None, include_moderating=None)
         (
             post_count, contributor_count, viewed_count
         ) = self.get_counts_for_query(q)
@@ -596,6 +633,8 @@ class DiscussionGlobalData(object):
         self.discussion_id = discussion_id
         self.db = db
         self.user_id = user_id
+        user_can_moderate = user_has_permission(discussion_id, user_id, P_MODERATE)
+        self.include_moderating = True if user_can_moderate else "mine"
         self._discussion = discussion
         self._parent_dict = None
         self._children_dict = None
