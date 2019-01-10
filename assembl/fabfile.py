@@ -1475,8 +1475,7 @@ def setup_nginx_file(ready_for_production=False):
         sudo("rm /etc/nginx/sites-enabled/assembl.%s" % (env.public_hostname))
     if exists("/etc/nginx/sites-enabled/assembl.%s" % (env.server_ip_address)):
         sudo("rm /etc/nginx.sites-enabled/assembl.%s" % (env.server_ip_address))
-    rc_info = filter_global_names(combine_rc(env['rcfile']))
-    fill_template('assembl/templates/system/nginx_default.jinja2', rc_info, 'assembl.%s' % (env.public_hostname))
+    fill_template('assembl/templates/system/nginx_default.jinja2', env, 'assembl.%s' % (env.public_hostname))
     sudoer = env.get("sudoer", None) or env.get("user")
     with settings(user=sudoer):
         put("assembl.%s" % (env.public_hostname), "/etc/nginx/sites-available/assembl.%s" % (env.public_hostname), use_sudo=True)
