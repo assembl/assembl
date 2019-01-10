@@ -136,15 +136,25 @@
   font-size: $font-size-m;
   margin: 0 0 $margin-section-xs 0;
   padding: 20px;
-  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 
   &.padding-title {
-    padding-left: 85px;
+    padding-left: 80px;
+
+    .title-txt {
+      display: block;
+      text-align: left;
+      width: 95%;
+    }
   }
 
   .proposal-arrow {
-    display: inline;
-    float: right;
+    display: block;
+    text-align: center;
+    width: 5%;
 
     .assembl-icon-up-open {
       &:before {
@@ -229,18 +239,14 @@
     font-size: $font-size-s;
     line-height: $font-size-s + 6px;
     margin: 0 -15px 30px -15px;
-    text-align: center;
     padding: 20px 10px 20px 10px;
 
     &.padding-title {
-      padding-left: 0;
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
     .proposal-arrow {
-      display: block;
-      float: none;
-      margin: 10px 0 0;
-
       .assembl-icon-up-open {
         &:before {
           font-size: 8px;

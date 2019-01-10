@@ -244,6 +244,7 @@
 @media screen and (max-width: $screen-xxs-max) {
   .button-submit {
     white-space: pre-wrap;
+    display: inline-block;
   }
 }
 
