@@ -1,4 +1,4 @@
--e git+https://github.com/assembl/sqltap.git@assembl#egg=sqltap
+-e git+https://github.com/assembl/sqltap.git@readonly_binds#egg=sqltap
 flake8==3.6.0   # also in tests
 PdbSublimeTextSupport==0.2
 pre-commit==1.8.2
