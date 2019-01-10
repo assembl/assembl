@@ -101,6 +101,20 @@
   border-style: $btn-dark-border-style;
 }
 
+.button-disable {
+  background: $btn-light-txt;
+  color: $grey11;
+  cursor: not-allowed;
+
+  &:active,
+  &:focus,
+  &:hover,
+  &:visited {
+    color: $grey11 !important;
+    border: 1px solid $grey11;
+  }
+}
+
 .button-generic {
   border-radius: $btn-radius;
   font-family: $font-family2;
