@@ -328,7 +328,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 'Received incompatible instance "{}".'
             ).format(root))
         # return isinstance(root, cls._meta.model)  # this was the original code  # noqa: E501
-        return type(root) == cls._meta.model or type(root) == models.VoteProposal or type(root) == models.RootIdea or type(root) == models.Thematic
+        return type(root) == cls._meta.model or type(root) == models.VoteProposal or type(root) == models.RootIdea
 
     def resolve_synthesis_title(self, args, context, info):
         return resolve_langstring(self.synthesis_title, args.get('lang'))

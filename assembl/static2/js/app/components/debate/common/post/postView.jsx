@@ -171,7 +171,7 @@ class PostView extends React.PureComponent<Props, State> {
     let canReply = !multiColumns;
     // If we're in thread mode, check if the first idea associated to the post is multi columns.
     if (!multiColumns && indirectIdeaContentLinks && indirectIdeaContentLinks.length > 0) {
-      canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
+      canReply = indirectIdeaContentLinks[0].idea && indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
     }
 
     const { displayHarvestingAnchor, displayHarvestingBox, harvestingAnchorPosition } = this.state;

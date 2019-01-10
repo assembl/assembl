@@ -19,12 +19,17 @@ from assembl.lib.sqla import mark_changed
 def upgrade(pyramid_env):
     from assembl import models as m
     with context.begin_transaction():
-        # op.drop_table('thematic')
         op.execute("DELETE FROM attachment WHERE type='vote_session_attachment'")
         op.execute('DELETE FROM idea_vote')
         op.execute('DELETE FROM token_category_specification')
         op.execute('DELETE FROM vote_specification')
         op.execute('DELETE FROM vote_session')
+        # convert thematic to idea
+        op.execute("UPDATE idea SET message_view_override='survey' WHERE sqla_type='thematic' and hidden=false")
+        op.execute("UPDATE idea SET sqla_type='idea' WHERE sqla_type='thematic'")
+        mark_changed()
+        # this drop video module associated to survey ideas, we don't do migration to announcement
+        op.drop_table('thematic')
         op.add_column('announce', sa.Column('quote_id', sa.Integer, sa.ForeignKey('langstring.id')))
         op.drop_column("vote_session", "title_id")
         op.drop_column("vote_session", "sub_title_id")

@@ -13,7 +13,6 @@ from assembl.graphql.utils import create_root_thematic
 def test_graphene_id():
     assert models.RootIdea.graphene_type() == 'Idea'
     assert models.Idea.graphene_type() == 'Idea'
-    assert models.Thematic.graphene_type() == 'Idea'
     assert models.VoteProposal.graphene_type() == 'Idea'
     assert models.Question.graphene_type() == 'Question'
     assert models.AgentProfile.graphene_type() == 'AgentProfile'

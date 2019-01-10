@@ -187,7 +187,6 @@ from .idea import (  # noqa: E402, F401
 )
 from .thematic import (  # noqa: E402, F401
     Question,
-    Thematic,
 )
 from .idea_msg_columns import (  # noqa: E402, F401
     IdeaMessageColumn,
