@@ -598,8 +598,8 @@ class IdeaMessageColumnInput(graphene.InputObjectType):
     id = graphene.ID(description=docs.IdeaMessageColumnInput.id)
     name_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaMessageColumnInput.name_entries)
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaMessageColumnInput.title_entries)
-    color = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumnInput.color)
-    message_classifier = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumnInput.message_classifier)
+    color = graphene.String(required=True, description=docs.IdeaMessageColumnInput.color)
+    message_classifier = graphene.String(description=docs.IdeaMessageColumnInput.message_classifier)
 
 
 def create_idea(parent_idea, phase, args, context):
@@ -687,17 +687,22 @@ def create_idea(parent_idea, phase, args, context):
                         models.IdeaLink(source=saobj, target=question,
                                         order=idx + 1.0))
         if is_multicolumns:
-            multicolumn_input = args.get('message_columns')
-            if multicolumn_input is not None:
-                for input in multicolumn_input:
-                    name = langstring_from_input_entries(input['name_entries'])
-                    if 'message_classifier' not in input:
-                        message_classifier = name.first_original().value
-                    else:
-                        message_classifier = input['message_classifier']
-                    title = langstring_from_input_entries(input['title_entries'])
-                    color = input['color']
-                    db.add(models.IdeaMessageColumn(idea=saobj, message_classifier=message_classifier, name=name, title=title, color=color))
+            message_columns = args.get('message_columns')
+            if message_columns is not None:
+                for column in message_columns:
+                    name = langstring_from_input_entries(column['name_entries'])
+                    message_classifier = column.get('message_classifier', None)
+                    if not message_classifier:
+                        message_classifier = name.first_original().value.lower()
+
+                    title = langstring_from_input_entries(column['title_entries'])
+                    color = column['color']
+                    saobj.message_columns.append(
+                        models.IdeaMessageColumn(
+                            message_classifier=message_classifier,
+                            name=name,
+                            title=title,
+                            color=color))
 
         update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
@@ -719,6 +724,7 @@ def update_idea(args, phase, context):
 
     message_view_override = args.get('message_view_override')
     is_survey_thematic = message_view_override == MessageView.survey.value
+    is_multicolumns = message_view_override == MessageView.messageColumns.value
 
     permissions = get_permissions(user_id, discussion_id)
     allowed = thematic.user_can(
@@ -823,6 +829,31 @@ def update_idea(args, phase, context):
             # if the idea was type survey before, remove all questions
             for question_id in existing_questions:
                 existing_questions[question_id].is_tombstone = True
+
+        if is_multicolumns:
+            message_columns = args.get('message_columns')
+            if message_columns is not None:
+                for column in message_columns:
+                    message_classifier = column.get('message_classifier', None)
+                    existing_column = [col for col in thematic.message_columns if col.message_classifier == message_classifier]
+                    if existing_column:
+                        existing_column = existing_column[0]
+                        update_langstring_from_input_entries(existing_column, 'name', column['name_entries'])
+                        update_langstring_from_input_entries(existing_column, 'title', column['title_entries'])
+                        existing_column.color = column['color']
+                    else:
+                        name = langstring_from_input_entries(column['name_entries'])
+                        if not message_classifier:
+                            message_classifier = name.first_original().value.lower()
+
+                        title = langstring_from_input_entries(column['title_entries'])
+                        color = column['color']
+                        thematic.message_columns.append(
+                            models.IdeaMessageColumn(
+                                message_classifier=message_classifier,
+                                name=name,
+                                title=title,
+                                color=color))
 
         update_ideas_recursively(thematic, args.get('children', []), phase, context)
 

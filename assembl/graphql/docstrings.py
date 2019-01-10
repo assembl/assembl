@@ -415,10 +415,10 @@ class QuestionInput:
 
 class IdeaMessageColumnInput:
     id = """Id of the IdeaMessageColumnInput."""
-    name_entries = Default.langstring_entries % ("Name of the Column.")
-    title_entries = Default.langstring_entries % ("Title of the Column.")
+    name_entries = Default.langstring_entries % ("Name of the column.")
+    title_entries = Default.langstring_entries % ("Title of the column.")
     color = Default.string_entry % ("The color of the column.")
-    message_classifier = Default.string_entry % ("Message_classifier of the update ideas")
+    message_classifier = Default.string_entry % ("Message classifier of the column.")
     column_synthesis = IdeaMessageColumn.column_synthesis
 
 
