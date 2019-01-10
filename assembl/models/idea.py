@@ -480,7 +480,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             return counters.paths[root_idea_id].as_clause(
                 cls.default_db(), discussion_id, counters.user_id, Content,
                 include_deleted=include_deleted,
-                include_moderating=include_moderating, user_id=user_id)
+                include_moderating=include_moderating)
 
     def top_keywords(
             self, limit=30, group=True, display_lang='en', filter_lang=None):
@@ -612,7 +612,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         return counters.orphan_clause(
             counters.user_id if get_read_status else None,
             content_alias, include_deleted=include_deleted,
-            include_moderating=include_moderating, user_id=user_id)
+            include_moderating=include_moderating)
 
     @property
     def num_posts(self):
