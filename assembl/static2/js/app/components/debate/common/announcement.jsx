@@ -8,7 +8,7 @@ import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import type { SentimentDefinition } from './sentimentDefinitions';
 import TextAndMedia from '../../common/textAndMedia';
 import { CountablePublicationStates, MESSAGE_VIEW } from '../../../constants';
-import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
+import PostsAndContributorsCount, { Counter } from '../../common/postsAndContributorsCount';
 
 export const createTooltip = (sentiment: SentimentDefinition, count: number) => (
   <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">
@@ -106,20 +106,16 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
           <StatisticsDoughnut elements={doughnutElements} />
         </div>
         {isMultiColumns ? (
-          <div className="announcement-numbers-multicol">
+          <div className="announcement-numbers">
             {columnInfos.map((col, index) => (
               <div style={{ color: col.color }} key={`col-${index}`}>
                 {col.count} <span className="col-announcement-count">{col.name}</span>
               </div>
             ))}
-            <div className="color">
-              {numContributors} <span className="assembl-icon-profil" />
-            </div>
+            <Counter num={numContributors} className="assembl-icon assembl-icon-profil" />
           </div>
         ) : (
-          <div className="announcement-numbers">
-            <PostsAndContributorsCount className="announcement-numbers" numContributors={numContributors} numPosts={numPosts} />
-          </div>
+          <PostsAndContributorsCount className="announcement-numbers" numContributors={numContributors} numPosts={numPosts} />
         )}
       </div>
     </Col>
