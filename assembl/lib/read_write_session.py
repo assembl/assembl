@@ -15,7 +15,8 @@ class ReadWriteSession(orm.Session):
     def __init__(self, bind=None, autoflush=False,
                  read_bind=None, readonly=False, **options):
         self.read_bind = read_bind
-        read_bind.is_readonly = True
+        if read_bind:
+            read_bind.is_readonly = True
         self.readonly = readonly
         orm.Session.__init__(
             self, bind=bind, autoflush=autoflush, **options)
