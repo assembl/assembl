@@ -422,12 +422,10 @@ def test_get_thematic_via_node_query(graphql_request, graphql_registry, thematic
         context_value=graphql_request)
     assert res.errors is None
     result = res.data['thematic']
-    assert result['title'] == u'Comprendre les dynamiques et les enjeux'
     assert result['id'] == thematic_id
     assert result['numPosts'] == 0
     assert result['numContributors'] == 0
     assert result['totalSentiments'] == 0
-    assert result['video'] is None
     assert len(result['questions']) == 1
     assert result['questions'][0]['title'] == u'Comment qualifiez-vous l\'emergence de l\'Intelligence Artificielle dans notre société ?'
     assert result['questions'][0]['id'] == first_question_id
@@ -446,12 +444,10 @@ def test_get_thematic_with_question_with_pending_posts(graphql_request, graphql_
         context_value=graphql_request)
     assert res.errors is None
     result = res.data['thematic']
-    assert result['title'] == u'Comprendre les dynamiques et les enjeux'
     assert result['id'] == thematic_id
     assert result['numPosts'] == 15
     assert result['numContributors'] == 1
     assert result['totalSentiments'] == 0
-    assert result['video'] is None
     assert len(result['questions']) == 1
     assert result['questions'][0]['title'] == u'Comment qualifiez-vous l\'emergence de l\'Intelligence Artificielle dans notre société ?'
     assert result['questions'][0]['id'] == first_question_id
@@ -470,12 +466,10 @@ def test_get_thematic_with_question_without_pending_posts(graphql_request, graph
         context_value=graphql_request)
     assert res.errors is None
     result = res.data['thematic']
-    assert result['title'] == u'Comprendre les dynamiques et les enjeux'
     assert result['id'] == thematic_id
     assert result['numPosts'] == 10
     assert result['numContributors'] == 1
     assert result['totalSentiments'] == 0
-    assert result['video'] is None
     assert len(result['questions']) == 1
     assert result['questions'][0]['title'] == u'Comment qualifiez-vous l\'emergence de l\'Intelligence Artificielle dans notre société ?'
     assert result['questions'][0]['id'] == first_question_id
