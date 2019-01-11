@@ -218,7 +218,7 @@ class PostView extends React.PureComponent<Props, State> {
             <div className="post-left">
               {creator && (
                 <ProfileLine
-                  userNameAdditionalClasses={userNameClasses}
+                  userNameModerationClasses={userNameClasses}
                   userId={creator.userId}
                   userName={userName}
                   creationDate={creationDate}
