@@ -1718,6 +1718,51 @@ def aws_server_startup_from_local():
     webservers_reload()
 
 
+def get_aws_localrc():
+    try:
+        import boto3  # noqa
+    except ImportError:
+        # we don't have boto3 yet
+        return
+    sts = boto3.client('sts')
+    info = sts.get_caller_identity()
+    account = info['Account']
+    # instance_id = info['Arn'].split('/')[-1]
+    s3 = boto3.client('s3')
+    try:
+        # This introduces a convention: local.rc files
+        # for a given amazon account will be stored in
+        # s3://bluenove-assembl-configurations/local_{account_id}.rc
+        ob = s3.get_object(
+            Bucket='bluenove-assembl-configurations',
+            Key='local_%s.rc' % account)
+        with open(env.projectpath + '/local.rc', 'w') as f:
+            f.write(ob['Body'].read())
+    except s3.exceptions.NoSuchKey as e:
+        print(red("local_%s.rc was not defined in S3" % account))
+        raise e
+
+
+@task
+def aws_instance_startup():
+    """Operations to startup a fresh aws instance from an assembl AMI"""
+    if not exists("local.rc"):
+        if not env.projectpath:
+            # Assumption: Started from project directory
+            env.projectpath = os.cwd()
+        get_aws_localrc()
+        if not exists(env.projectpath + "/local.rc"):
+            raise RuntimeError("Missing local.rc file")
+        env['rcfile'] = "local.rc"
+        load_rcfile_config()
+    create_local_ini()
+    venvcmd('assembl-ini-files populate %s' % (env.ini_file))
+    fill_template('assembl/templates/system/nginx_default.jinja2', env, 'var/share/assembl.nginx')
+    if not is_supervisord_running():
+        venvcmd('supervisord')
+    webservers_reload()
+
+
 @task
 def webservers_reload():
     """

@@ -2,7 +2,6 @@ _extends = base_env.rc
 ini_files = production.ini no_sentry.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
 *db_user = assembl_user
 hosts = localhost
-_webmaster_user =
 attachment_service = s3
 celery_tasks.broker = sqs://
 rds_certificate = rds-combined-ca-bundle.pem
