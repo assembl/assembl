@@ -3,7 +3,7 @@
 # This script try to connect to elastic search and access the DB
 # return 0 if success / return 1 if error
 
-ASSEMBL_ROOT=$VIRTUAL_ENV/..
+if [ -z "$VIRTUAL_ENV" ]; then ASSEMBL_ROOT=$PWD; else ASSEMBL_ROOT=$VIRTUAL_ENV/..; fi
 LOCAL_INI=$ASSEMBL_ROOT/local.ini
 
 elasticsearch_host="$(grep "elasticsearch_host" $LOCAL_INI | tr -d ' ' | awk -F "=" '{print $2}')"
