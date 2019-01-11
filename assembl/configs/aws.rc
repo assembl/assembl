@@ -1,0 +1,16 @@
+_extends = assembl/configs/base_env.rc
+ini_files = production.ini no_sentry.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
+*db_user = assembl_user
+attachment_service = s3
+celery_tasks.broker = sqs://
+elasticsearch_version = 5.6.8
+rds_certificate = rds-combined-ca-bundle.pem
+aws_region = eu-west-1
+attachment_bucket = assembl-sandbox-attachments
+elasticsearch_port = 80
+supervisor__autostart_celery = false
+supervisor__autostart_celery_notify_beat = false
+supervisor__autostart_source_reader = false
+supervisor__autostart_changes_router = false
+supervisor__autostart_urlmetadata = false
+supervisor__autostart_elasticsearch = false
