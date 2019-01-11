@@ -707,11 +707,17 @@ def create_idea(parent_idea, phase, args, context):
                             name=name,
                             title=title,
                             color=color))
-                    db.add(models.ColumnSynthesisPost(
+                    synthesis = models.ColumnSynthesisPost(
                         message_classifier=message_classifier,
                         discussion_id=discussion_id,
                         subject=subject if subject else models.LangString.EMPTY(),
                         body=body if body else models.LangString.EMPTY()
+                    )
+                    db.add(synthesis)
+                    db.add(models.IdeaRelatedPostLink(
+                        creator_id=user_id,
+                        content=synthesis,
+                        idea=saobj
                     ))
 
         update_ideas_recursively(saobj, args.get('children', []), phase, context)

@@ -1069,6 +1069,14 @@ def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_ses
             }]
         })
     assert res.errors is None
+    created_ideas = test_session.query(models.Idea).all()
+    for idea in created_ideas:
+        if not isinstance(idea, models.RootIdea):
+            created_idea = idea
+    assert created_idea.message_columns[0].message_classifier == u'premier entrée pour le nom'
+    assert created_idea.message_columns[1].message_classifier == u'deuxième entrée pour le nom'
+    assert created_idea.message_columns[0].color == 'red'
+    assert created_idea.message_columns[1].color == 'green'
     test_session.rollback()
 
 def test_mutation_update_ideas_create_multicol(test_session, graphql_request, graphql_registry, phases):
@@ -1128,6 +1136,14 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
             }]
         })
     assert res.errors is None
+    created_ideas = test_session.query(models.Idea).all()
+    for idea in created_ideas:
+        if not isinstance(idea, models.RootIdea):
+            created_idea = idea
+    assert created_idea.message_columns[0].message_classifier == 'positive'
+    assert created_idea.message_columns[1].message_classifier == 'negative'
+    assert created_idea.message_columns[0].color == 'red'
+    assert created_idea.message_columns[1].color == 'green'
     test_session.rollback()
 
 def test_mutation_update_ideas_create(test_session, graphql_request, graphql_registry, phases):
