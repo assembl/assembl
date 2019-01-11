@@ -700,7 +700,7 @@ def create_idea(parent_idea, phase, args, context):
                     title = langstring_from_input_entries(column['title_entries'])
                     color = column['color']
                     body = langstring_from_input_entries(column['column_synthesis'])
-                    subject = langstring_from_input_entries(input['column_synthesis_title'])
+                    subject = langstring_from_input_entries(column['column_synthesis_title'])
                     saobj.message_columns.append(
                         models.IdeaMessageColumn(
                             message_classifier=message_classifier,
