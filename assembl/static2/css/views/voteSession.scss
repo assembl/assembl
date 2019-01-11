@@ -101,11 +101,12 @@
   }
 
   .proposal.row {
-    margin: 90px 10px 10px;
+    margin: 90px 10px 70px;
 
     .proposal-title {
       font-family: $font-family;
       margin-top: 0;
+      font-size: 22px;
     }
 
     .text {
@@ -113,6 +114,8 @@
     }
 
     .proposal-vote-modules {
+      display: flex;
+      justify-content: center;
       padding-top: 20px;
     }
 
@@ -199,13 +202,14 @@
 
   .participants-count__text {
     color: $first-color;
+    padding: 0 10px 20px 10px;
   }
 
   .proposal-results {
     .participants-count {
       border: 1px solid $grey5;
-      margin: 30px 0;
-      height: 120px;
+      margin: 20px 0;
+      min-height: 120px;
     }
 
     .doughnut-container {
@@ -214,6 +218,7 @@
       width: 150px;
       padding: 10px 0 0;
       position: relative;
+      margin: auto;
 
       .doughnut {
         .circle {
@@ -223,8 +228,8 @@
 
       .doughnut-totalCount {
         position: absolute;
-        top: 60px;
-        left: 54px;
+        top: 63px;
+        left: 53px;
         width: 45px;
         font-size: $font-size-s;
 
@@ -250,6 +255,7 @@
       border: 1px solid $grey5;
       margin-top: 10px;
       height: 140px;
+      text-align: center;
     }
 
     .tokens-box {
@@ -257,7 +263,7 @@
     }
 
     .doughnut-container {
-      margin: 0 auto;
+      margin: 0 auto 0 auto;
       height: 80px;
       width: 80px;
       position: relative;
@@ -314,23 +320,27 @@
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: $screen-sm-min) {
   .votesession-page {
     .proposal.row {
-      padding: 15px 5px 0 0;
+      padding: 15px 5px 15px 0;
+      display: flex;
+      align-items: center;
     }
 
     .participants-count {
+      height: inherit;
       padding: 20px 0 0;
     }
 
     .tokens-box {
-      padding: 19px 0 0;
+      padding: 19px 0 19px 0;
+      text-align: center;
     }
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: $screen-xs-max) {
   .votesession-page {
     .votes-in-progress {
       padding: 0 0 15px 0;
@@ -351,7 +361,7 @@
     }
 
     .proposal.row {
-      padding: 15px 0 0;
+      padding: 15px 0 15px;
     }
 
     .participants-count {
@@ -359,7 +369,8 @@
     }
 
     .tokens-box {
-      padding: 10px 0 0;
+      padding: 10px 0 20px 0;
+      text-align: center;
     }
 
     .section-title {
@@ -370,6 +381,12 @@
       padding-left: 15px;
       padding-right: 15px;
     }
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .proposal-results {
+    width: 80%;
   }
 }
 

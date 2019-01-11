@@ -55,6 +55,13 @@ $small-margin: 5px;
       bottom: 0;
       right: 0;
     }
+
+    @media screen and (max-width: 320px) {
+      .synthesis-stats {
+        left: 32px;
+        padding-left: 0;
+      }
+    }
   }
 
   .title-under-hyphen-container {

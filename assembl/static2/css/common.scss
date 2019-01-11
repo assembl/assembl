@@ -356,20 +356,6 @@ input.placeholder, textarea.placeholder {
   text-transform: capitalize;
 }
 
-@media screen and (min-width: 992px) {
-  .col-bottom {
-    display: table-cell;
-    float: none;
-    vertical-align: bottom;
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .content-section {
-    padding: $margin-section-xs 0;
-  }
-}
-
 strong {
   font-family: $font-family3;
 }
@@ -382,7 +368,35 @@ strong {
   cursor: wait !important;
 }
 
+@media screen and (max-width: $screen-xxs-max) {
+  .content-section {
+    padding: $margin-section-xs 0;
+  }
+
+  .max-container {
+    padding: 0 5px !important;
+  }
+}
+
+@media screen and (max-width: $screen-sm-min) {
+  .max-container {
+    padding: 0 20px;
+  }
+}
+
+@media screen and (min-width: $screen-md-min) {
+  .col-bottom {
+    display: table-cell;
+    float: none;
+    vertical-align: bottom;
+  }
+}
+
 @media screen and (min-width: 1024px) {
+  .max-container {
+    padding: 0 20px;
+  }
+
   .page-body {
     margin: 0 90px 80px 90px;
   }

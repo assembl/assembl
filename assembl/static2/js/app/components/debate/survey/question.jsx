@@ -134,15 +134,17 @@ export class Question extends React.Component<Props, State> {
                 placeHolder={I18n.t('debate.survey.txtAreaPh')}
                 handleInputFocus={this.redirectToLogin}
               />
-              {this.getPostBodyCharCount() > MINIMUM_BODY_LENGTH && (
-                <Button
-                  onClick={this.createPost}
-                  disabled={this.state.buttonDisabled}
-                  className="button-submit button-dark right margin-l clear"
-                >
-                  <Translate value="debate.survey.submit" />
-                </Button>
-              )}
+              <Button
+                onClick={this.createPost}
+                disabled={this.getPostBodyCharCount() > MINIMUM_BODY_LENGTH ? this.state.buttonDisabled : true}
+                className={
+                  this.getPostBodyCharCount() > MINIMUM_BODY_LENGTH
+                    ? 'button-submit button-dark right margin-l clear'
+                    : 'button-submit button-disable right margin-l clear'
+                }
+              >
+                <Translate value="debate.survey.submit" />
+              </Button>
             </Col>
           </div>
         </Grid>

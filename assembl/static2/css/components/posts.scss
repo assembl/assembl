@@ -137,6 +137,11 @@
     width: 100%;
   }
 
+  .sentiment-label {
+    font-weight: bold;
+    color: $theme-local-blue;
+  }
+
   .question-footer {
     margin: 0 0 70px;
     display: flex;
@@ -265,7 +270,7 @@ $deleted-post-border: 1px solid $grey1 !default;
   }
 
   .body {
-    padding: 20px 0 40px;
+    padding: 20px 0;
 
     p {
       margin: 0;

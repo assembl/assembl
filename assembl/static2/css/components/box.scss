@@ -145,3 +145,11 @@
     top: 50%;
   }
 }
+
+@media screen and (max-width: $screen-sm-max) {
+  .media-right {
+    .box-hyphen {
+      display: none;
+    }
+  }
+}

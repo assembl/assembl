@@ -101,6 +101,20 @@
   border-style: $btn-dark-border-style;
 }
 
+.button-disable {
+  background: $btn-light-txt;
+  color: $grey11;
+  cursor: not-allowed;
+
+  &:active,
+  &:focus,
+  &:hover,
+  &:visited {
+    color: $grey11 !important;
+    border: 1px solid $grey11;
+  }
+}
+
 .button-generic {
   border-radius: $btn-radius;
   font-family: $font-family2;
@@ -172,11 +186,11 @@
 
 .action-button {
   display: inline-block;
-  padding: 10px 0 8px;
+  padding: 10px 0 10px 15px;
   margin-right: 30px;
   cursor: pointer;
   min-width: 165px;
-  text-align: center;
+  text-align: left;
 
   &:hover {
     .action-button-label {
@@ -238,6 +252,13 @@
 
   .icon-button {
     font-size: 20px;
+  }
+}
+
+@media screen and (max-width: $screen-xxs-max) {
+  .button-submit {
+    white-space: pre-wrap;
+    display: inline-block;
   }
 }
 

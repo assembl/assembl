@@ -4,21 +4,27 @@ exports[`Proposals component should display a list of proposals with pending pos
 <div
   className="shown"
 >
-  <h3
-    className="collapsed-title"
+  <div
+    className="pointer"
+    onClick={[Function]}
   >
-    <span>
-      1/ To be or not to be?
-    </span>
-    <div
-      className="shown proposal-arrow"
+    <h3
+      className="collapsed-title padding-title"
     >
       <span
-        className="assembl-icon-up-open color pointer"
-        onClick={[Function]}
-      />
-    </div>
-  </h3>
+        className="title-txt"
+      >
+        1/ To be or not to be?
+      </span>
+      <div
+        className="shown proposal-arrow"
+      >
+        <span
+          className="assembl-icon-up-open color pointer"
+        />
+      </div>
+    </h3>
+  </div>
   <div
     className="shown"
   >
@@ -56,21 +62,27 @@ exports[`Proposals component should display a list of proposals without pending 
 <div
   className="shown"
 >
-  <h3
-    className="collapsed-title"
+  <div
+    className="pointer"
+    onClick={[Function]}
   >
-    <span>
-      1/ To be or not to be?
-    </span>
-    <div
-      className="shown proposal-arrow"
+    <h3
+      className="collapsed-title padding-title"
     >
       <span
-        className="assembl-icon-up-open color pointer"
-        onClick={[Function]}
-      />
-    </div>
-  </h3>
+        className="title-txt"
+      >
+        1/ To be or not to be?
+      </span>
+      <div
+        className="shown proposal-arrow"
+      >
+        <span
+          className="assembl-icon-up-open color pointer"
+        />
+      </div>
+    </h3>
+  </div>
   <div
     className="shown"
   >
@@ -108,21 +120,27 @@ exports[`Proposals component should display a list of proposals without posts 1`
 <div
   className="shown"
 >
-  <h3
-    className="collapsed-title"
+  <div
+    className="pointer"
+    onClick={[Function]}
   >
-    <span>
-      1/ To be or not to be?
-    </span>
-    <div
-      className="hidden proposal-arrow"
+    <h3
+      className="collapsed-title padding-title"
     >
       <span
-        className="assembl-icon-up-open color pointer"
-        onClick={[Function]}
-      />
-    </div>
-  </h3>
+        className="title-txt"
+      >
+        1/ To be or not to be?
+      </span>
+      <div
+        className="hidden proposal-arrow"
+      >
+        <span
+          className="assembl-icon-up-open color pointer"
+        />
+      </div>
+    </h3>
+  </div>
   <div
     className="question-footer"
   >

@@ -26,7 +26,7 @@ hr {
   border-top-color: $greyish-brown;
 }
 
-@media screen and (min-width: $screen-sm-min) {
+@media screen and (min-width: $screen-md-min) {
   .header {
     align-items: flex-start;
     flex-direction: column;
@@ -36,7 +36,11 @@ hr {
       padding-left: 0;
       padding-top: 10px;
     }
+  }
+}
 
+@media screen and (min-width: $screen-sm-min) {
+  .header {
     .author {
       margin-bottom: 7px;
     }

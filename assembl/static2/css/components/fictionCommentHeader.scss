@@ -6,9 +6,9 @@
   .title {
     color: $black;
     font-family: $font-family4;
-    font-size: $font-size-l;
+    font-size: $font-size-ml;
     font-weight: 300;
-    line-height: 52px;
+    line-height: 1.44;
     letter-spacing: 2px;
   }
 
@@ -20,7 +20,7 @@
   .subtitle {
     color: $black;
     font-family: $font-family;
-    font-size: $font-size-ml;
+    font-size: $font-size-m;
     letter-spacing: 1.1px;
     margin: 0;
   }
@@ -28,8 +28,12 @@
 
 @media screen and (min-width: $screen-sm-min) {
   .comments-header {
-    padding-left: 54px;
-    padding-right: 54px;
+    .title {
+      font-size: $font-size-xll;
+      letter-spacing: 2.4px;
+      line-height: 1.4;
+      margin-bottom: 35px;
+    }
 
     .title .highlight {
       display: inline-block;
@@ -41,18 +45,9 @@
   }
 }
 
-@media screen and (min-width: $screen-lg-min) {
-  .comments-header {
-    .title {
-      text-align: center;
-    }
-  }
-}
-
 @media screen and (min-width: $screen-xl-min) {
   .comments-header {
     .title {
-      font-size: $font-size-xl;
       margin-bottom: 35px;
     }
 

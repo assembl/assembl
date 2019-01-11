@@ -404,6 +404,18 @@
   }
 }
 
+@media screen and (max-width: 320px) {
+  .debate {
+    .questions {
+      .questions-section {
+        .dark-title-5 {
+          margin: 20px 0 10px 20px;
+        }
+      }
+    }
+  }
+}
+
 @media screen and (min-width: 601px) {
   .debate {
     .survey {
@@ -414,13 +426,13 @@
   }
 }
 
-@media screen and (max-width: 1200px) {
+@media screen and (max-width: $screen-lg-min) {
   .start-discussion-container {
     margin-left: -20px;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $screen-sm-min) {
   .start-discussion-container {
     margin-left: 0;
   }
@@ -432,19 +444,29 @@
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: $screen-sm-min) {
   .top-post-form {
     padding: 33px 0 0;
   }
+
+  .debate {
+    .questions {
+      .questions-section {
+        .dark-title-5 {
+          margin: 20px 0 10px 20px;
+        }
+      }
+    }
+  }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: $screen-xs-max) {
   .navigation-section.shown {
     display: none;
   }
 
   .top-post-form {
-    padding: 20px 0;
+    padding: 20px 20px 0 20px;
 
     .start-discussion-icon {
       height: auto;
@@ -491,19 +513,19 @@
   }
 }
 
-@media screen and (min-width: 768px) {
+@media screen and (min-width: $screen-sm-min) {
   .question-title {
     margin: $margin-section 0 $margin-section-xs;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: $screen-sm-min) {
   .question-title {
     margin: $margin-section 0 $margin-section-xs;
   }
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: $screen-sm-max) {
   .idea {
     .container-fluid {
       padding-left: 0;
@@ -517,7 +539,7 @@
 }
 
 @media screen and
-  (max-width: 767px),
+  (max-width: $screen-xs-max),
   (-webkit-min-device-pixel-ratio: 2),
   (min-resolution: 192dpi) {
   .question-title {
@@ -532,7 +554,6 @@
       display: block;
       font-size: 20px;
       line-height: 33px;
-      margin: 0 0 0 15px;
       width: calc(100% - 30px);
     }
   }

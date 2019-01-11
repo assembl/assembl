@@ -87,7 +87,7 @@ const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentim
                 const sentimentCount = get(sentimentCounts, sentiment.camelType, 0);
                 if (sentimentCount > 0) {
                   result.push(
-                    <div className="min-sentiment" key={sentiment.type} style={{ left: `${count * 6}px` }}>
+                    <div className="min-sentiment" key={sentiment.type} style={{ left: `${(count + 1.5) * 6}px` }}>
                       <sentiment.SvgComponent size={15} />
                     </div>
                   );
@@ -96,7 +96,7 @@ const FictionBodyToolbar = ({ postId, mySentiment, screenWidth, position, sentim
                 return result;
               }, [])}
             </div>
-            <div className="txt" style={{ paddingLeft: `${(count + 4) * 6}px` }}>
+            <div className="txt" style={{ paddingLeft: `${(count + 5.5) * 6}px` }}>
               {screenWidth >= MEDIUM_SCREEN_WIDTH ? (
                 totalSentimentsCount
               ) : (

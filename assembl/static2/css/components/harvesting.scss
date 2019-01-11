@@ -734,7 +734,7 @@
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: $screen-sm-min) {
   .is-harvesting-button {
     display: none;
   }
@@ -743,3 +743,4 @@
     display: none;
   }
 }
+

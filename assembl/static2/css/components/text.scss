@@ -136,11 +136,26 @@
   font-size: $font-size-m;
   margin: 0 0 $margin-section-xs 0;
   padding: 20px;
-  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  &.padding-title {
+    padding-left: 80px;
+    margin-bottom: 40px;
+
+    .title-txt {
+      display: block;
+      text-align: left;
+      width: 95%;
+    }
+  }
 
   .proposal-arrow {
-    display: inline;
-    float: right;
+    display: block;
+    text-align: center;
+    width: 5%;
 
     .assembl-icon-up-open {
       &:before {
@@ -212,24 +227,27 @@
   padding-left: 5px;
 }
 
-@media screen and (max-width: 620px) {
-  .text-column-2, .text-column-3 {
-    column-count: 1;
+@media screen and (max-width: $screen-xl-min) {
+  .collapsed-title {
+    &.padding-title {
+      padding-left: 20px;
+    }
   }
 }
 
-@media screen and (max-width: 767px) {
+@media screen and (max-width: $screen-sm-min) {
   .collapsed-title {
     font-size: $font-size-s;
     line-height: $font-size-s + 6px;
     margin: 0 -15px 30px -15px;
-    text-align: center;
+    padding: 20px 10px 20px 10px;
+
+    &.padding-title {
+      padding-left: 20px;
+      padding-right: 20px;
+    }
 
     .proposal-arrow {
-      display: block;
-      float: none;
-      margin: 10px 0 0;
-
       .assembl-icon-up-open {
         &:before {
           font-size: 8px;
@@ -243,9 +261,31 @@
       }
     }
   }
+
+  .text-column-2, .text-column-3 {
+    line-height: 25px;
+  }
+}
+
+@media screen and (max-width: $screen-xs-max) {
+  .text-column-2, .text-column-3 {
+    column-count: 1;
+  }
+
+  .collapsed-title {
+    &.padding-title {
+      padding-left: 20px;
+    }
+  }
 }
 
 @media screen and (max-width: 420px) {
+  .collapsed-title {
+    &.padding-title {
+      padding-left: 10px;
+    }
+  }
+
   .title-section {
     margin: $margin-section-xs 0 0;
 
@@ -253,6 +293,10 @@
       display: block;
       margin: -10px 0 15px 32px;
       width: calc(100% - 30px);
+
+      &.no-margin-left-xs {
+        margin-left: 0;
+      }
     }
 
     .subtitle {
@@ -266,5 +310,11 @@
 
   .text-column-2, .text-column-3 {
     margin: 0 5px;
+  }
+}
+
+@media screen and (max-width: 320px) {
+  .objectives-img {
+    background-position-x: -20px;
   }
 }

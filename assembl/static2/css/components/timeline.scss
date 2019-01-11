@@ -201,3 +201,14 @@
     }
   }
 }
+
+@media screen and (max-width: $screen-xxs-max) {
+  .timeline {
+    margin-top: 45px;
+
+    .timeline-date {
+      white-space: pre-wrap;
+      top: -20px;
+    }
+  }
+}

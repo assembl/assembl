@@ -125,7 +125,7 @@
     z-index: 10;
 
     .intermediary-container {
-      padding: 8px 0;
+      padding: 12px 0;
       display: inline-block;
       vertical-align: middle;
       width: 100%;
@@ -232,40 +232,70 @@
 @media screen and (max-width: 1019px) {
   .intermediary-container {
     .stat-container {
-      padding: 0 20px !important;
+      padding: 0 12px !important;
     }
   }
 }
 
 @media screen and (max-width: 820px) {
-  .statistic {
-    .intermediary-container {
-      .stat-container {
-        padding: 0 15px !important;
+  .header-section {
+    .statistic {
+      .intermediary-container {
+        padding: 20px 0;
 
-        .stat-label {
-          display: none;
+        .stat-container {
+          padding: 0 px !important;
+
+          .stat-box {
+            flex-direction: column;
+            justify-content: center;
+
+            [class^="assembl-icon-"]:before, [class*=" assembl-icon-"]:before {
+              //increase icon size
+              font-size: 170%;
+            }
+
+            .stat-icon {
+              padding-top: 0;
+              display: block;
+              float: none;
+            }
+
+            .stat {
+              padding-left: 0;
+              text-align: center;
+              word-break: break-word;
+            }
+
+            .stat-nb {
+              padding-top: 3px;
+            }
+          }
         }
+      }
+    }
+  }
+}
 
-        .stat-box {
-          display: block !important;
-          text-align: center;
+@media screen and (max-width: 375px) {
+  .header-section {
+    .statistic {
+      .intermediary-container {
+        padding: 20px 0;
 
-          .stat-icon {
-            padding-top: 0;
-            display: block;
-            float: none;
-          }
-
-          .stat {
-            padding-left: 0;
-            display: block;
+        .stat-container {
+          .stat-box {
+            display: block !important;
             text-align: center;
-            word-break: break-word;
-          }
 
-          .stat-nb {
-            padding-top: 3px;
+            .stat {
+              margin-left: 0;
+              text-align: center;
+            }
+
+            .stat-nb {
+              margin-left: 0;
+            }
           }
         }
       }

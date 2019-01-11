@@ -230,7 +230,7 @@ exports[`Storyshots FictionBodyToolbar default 1`] = `
             className="min-sentiment"
             style={
               Object {
-                "left": "0px",
+                "left": "9px",
               }
             }
           >
@@ -265,7 +265,7 @@ exports[`Storyshots FictionBodyToolbar default 1`] = `
           className="txt"
           style={
             Object {
-              "paddingLeft": "30px",
+              "paddingLeft": "39px",
             }
           }
         >
@@ -1092,7 +1092,7 @@ exports[`Storyshots FictionBodyToolbar playground 1`] = `
             className="min-sentiment"
             style={
               Object {
-                "left": "0px",
+                "left": "9px",
               }
             }
           >
@@ -1127,7 +1127,7 @@ exports[`Storyshots FictionBodyToolbar playground 1`] = `
           className="txt"
           style={
             Object {
-              "paddingLeft": "30px",
+              "paddingLeft": "39px",
             }
           }
         >

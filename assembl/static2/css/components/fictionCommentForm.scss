@@ -7,8 +7,12 @@
 
   .form-control {
     border: none;
-    height: 75px;
+    height: 125px;
     resize: none !important; // Set it to !important because TextareaAutosize force horizontal resize
+
+    &::placeholder {
+      font-size: $font-size-mll;
+    }
 
     &:focus {
       box-shadow: none;
@@ -49,7 +53,7 @@
     .form-control {
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
-      height: 52px;
+      height: 75px;
     }
 
     .btn {
@@ -64,5 +68,11 @@
 .tree-list {
   .comment-form {
     margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .tree-list {
+    padding-bottom: 25px;
   }
 }
