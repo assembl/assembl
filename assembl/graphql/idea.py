@@ -852,11 +852,16 @@ def update_idea(args, phase, context):
                 for column in message_columns:
                     message_classifier = column.get('message_classifier', None)
                     existing_column = [col for col in thematic.message_columns if col.message_classifier == message_classifier]
+                    body = langstring_from_input_entries(column['column_synthesis'])
+                    subject = langstring_from_input_entries(column['column_synthesis_title'])
                     if existing_column:
                         existing_column = existing_column[0]
                         update_langstring_from_input_entries(existing_column, 'name', column['name_entries'])
                         update_langstring_from_input_entries(existing_column, 'title', column['title_entries'])
                         existing_column.color = column['color']
+                        synthesis = db.query(models.ColumnSynthesisPost).filter(models.ColumnSynthesisPost.message_classifier == message_classifier).first()
+                        synthesis.subject = subject
+                        synthesis.body = body
                     else:
                         name = langstring_from_input_entries(column['name_entries'])
                         if not message_classifier:
@@ -870,6 +875,18 @@ def update_idea(args, phase, context):
                                 name=name,
                                 title=title,
                                 color=color))
+                        synthesis = models.ColumnSynthesisPost(
+                            message_classifier=message_classifier,
+                            discussion_id=discussion_id,
+                            subject=subject if subject else models.LangString.EMPTY(),
+                            body=body if body else models.LangString.EMPTY()
+                        )
+                        db.add(synthesis)
+                        db.add(models.IdeaRelatedPostLink(
+                            creator_id=user_id,
+                            content=synthesis,
+                            idea=thematic
+                        ))
 
         update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
