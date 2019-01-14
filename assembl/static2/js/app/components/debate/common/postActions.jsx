@@ -12,7 +12,7 @@ import { sharePostTooltip } from '../../common/tooltips';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import { openShareModal } from '../../../utils/utilityManager';
-import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import Permissions, { connectedUserCan, connectedUserIsModerator } from '../../../utils/permissions';
 import Sentiments from './sentiments';
 import getSentimentStats from './sentimentStats';
 import sentimentDefinitions from './sentimentDefinitions';
@@ -37,8 +37,8 @@ export type Props = {
   screenWidth: number,
   sentimentCounts: SentimentCountsFragment,
   isPending: boolean,
-  isPendingPostForModerator: boolean,
-  isMultiColumns: boolean
+  isMultiColumns: boolean,
+  isDebateModerated: boolean
 };
 
 export class PostActions extends React.Component<Props> {
@@ -63,8 +63,8 @@ export class PostActions extends React.Component<Props> {
       screenWidth,
       sentimentCounts,
       isPending,
-      isPendingPostForModerator,
-      isMultiColumns
+      isMultiColumns,
+      isDebateModerated
     } = this.props;
     let count = 0;
     const totalSentimentsCount = sentimentCounts
@@ -74,16 +74,21 @@ export class PostActions extends React.Component<Props> {
     const userCanDeleteThisMessage =
       (connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
       connectedUserCan(Permissions.DELETE_POST);
-    const userCanEditThisMessage = connectedUserId === String(creatorUserId) && connectedUserCan(Permissions.EDIT_MY_POST);
     const modalTitle = <Translate value="debate.sharePost" />;
     if (!debateData) return null;
     const useSocial = debateData.useSocialMedia;
     const tooltipPlacement = screenWidth >= MEDIUM_SCREEN_WIDTH ? 'left' : 'top';
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const shareIcon = <span className={classnames('assembl-icon-share color', { 'share-multiColumns': isMultiColumns })} />;
-    const isPendingForUser = isPending && !isPendingPostForModerator;
+    const isPendingForModerator = isPending && connectedUserIsModerator();
+    const isPendingForUser = isPending && !connectedUserIsModerator();
+    const userCanEditThisMessage =
+      connectedUserId === String(creatorUserId) &&
+      connectedUserCan(Permissions.EDIT_MY_POST) &&
+      (isPendingForUser || !isDebateModerated || connectedUserIsModerator());
+
     const showLastSeparator =
-      !isPendingForUser && ((editable && userCanEditThisMessage) || userCanDeleteThisMessage || isPendingPostForModerator);
+      !isPendingForUser && ((editable && userCanEditThisMessage) || userCanDeleteThisMessage || isPendingForModerator);
     return (
       <div className="post-actions">
         <div className="post-icons">
@@ -151,7 +156,7 @@ export class PostActions extends React.Component<Props> {
           <div className="empty-sentiments-count" />
         )}
         <div className={classnames({ 'post-actions-separator': showLastSeparator })} />
-        {isPendingPostForModerator ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
+        {isPendingForModerator ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
         {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
         {editable ? (

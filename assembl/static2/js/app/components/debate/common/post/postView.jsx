@@ -25,7 +25,8 @@ type Props = PostProps & {
   multiColumns: boolean,
   subject: string,
   timeline: Timeline,
-  connectedUserId: ?string
+  connectedUserId: ?string,
+  isDebateModerated: boolean
 };
 
 type State = {
@@ -155,7 +156,8 @@ class PostView extends React.PureComponent<Props, State> {
       modifiedSubject,
       multiColumns,
       isHarvesting,
-      isHarvestable
+      isHarvestable,
+      isDebateModerated
     } = this.props;
     const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     const isPendingPostForModerator = connectedUserIsModerator() && isPending;
@@ -274,6 +276,7 @@ class PostView extends React.PureComponent<Props, State> {
                 isPending={isPending}
                 isPendingPostForModerator={isPendingPostForModerator}
                 isMultiColumns={multiColumns}
+                isDebateModerated={isDebateModerated}
               />
             </div>
           </div>
