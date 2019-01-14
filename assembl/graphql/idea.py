@@ -79,7 +79,7 @@ class IdeaInterface(graphene.Interface):
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     children = graphene.List(lambda: IdeaUnion, description=docs.Idea.children)
     questions = graphene.List(lambda: Question, description=docs.Idea.questions)
-    multiColumns = graphene.List(lambda: IdeaMessageColumn)
+    multiColumns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.multiColumns)
     announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
 
     def resolve_title(self, args, context, info):
@@ -911,9 +911,7 @@ def update_idea(args, phase, context):
                         update_langstring_from_input_entries(existing_column, 'name', column['name_entries'])
                         update_langstring_from_input_entries(existing_column, 'title', column['title_entries'])
                         existing_column.color = column['color']
-                        synthesis = db.query(models.ColumnSynthesisPost).filter(models.ColumnSynthesisPost.message_classifier == message_classifier).first()
-                        synthesis.subject = subject
-                        synthesis.body = body
+                        existing_column.set_column_synthesis(subject, body, user_id)
                     else:
                         name = langstring_from_input_entries(column['name_entries'])
                         if not message_classifier:

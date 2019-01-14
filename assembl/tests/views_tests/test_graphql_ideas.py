@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 
-from graphql_relay.node.node import from_global_id
+from graphql_relay.node.node import from_global_id, to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
@@ -1140,6 +1140,230 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
     for idea in created_ideas:
         if not isinstance(idea, models.RootIdea):
             created_idea = idea
+    assert len(created_idea.message_columns) == 2
+    assert created_idea.message_columns[0].message_classifier == 'positive'
+    assert created_idea.message_columns[1].message_classifier == 'negative'
+    assert created_idea.message_columns[0].color == 'red'
+    assert created_idea.message_columns[1].color == 'green'
+    # Testing to add an extra neutral column
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'id': to_global_id('Idea', created_idea.id),
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"troisième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"troisième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'blue',
+                    'messageClassifier': 'neutral',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne neutre", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for neutral column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for neutral column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for neutral column", 'localeCode': u"en"}
+                    ]}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_ideas = test_session.query(models.Idea).all()
+    for idea in created_ideas:
+        if not isinstance(idea, models.RootIdea):
+            created_idea = idea
+    assert len(created_idea.message_columns) == 3
+    assert created_idea.message_columns[0].message_classifier == 'positive'
+    assert created_idea.message_columns[1].message_classifier == 'negative'
+    assert created_idea.message_columns[2].message_classifier == "neutral"
+    assert created_idea.message_columns[0].color == 'red'
+    assert created_idea.message_columns[1].color == 'green'
+    assert created_idea.message_columns[2].color == 'blue'
+    # Testing updating the multiColumns
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'id': to_global_id("Idea", created_idea.id),
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"troisième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"troisième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'blue',
+                    'messageClassifier': 'neutral',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne neutre modifié", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for neutral column modified", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for neutral column modifié", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for neutral column modified", 'localeCode': u"en"}
+                    ]}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_ideas = test_session.query(models.Idea).all()
+    assert len(created_ideas) == 2
+    for idea in created_ideas:
+        if not isinstance(idea, models.RootIdea):
+            created_idea = idea
+    assert len(created_idea.message_columns) == 3
+    assert created_idea.message_columns[0].message_classifier == 'positive'
+    assert created_idea.message_columns[1].message_classifier == 'negative'
+    assert created_idea.message_columns[2].message_classifier == "neutral"
+    assert created_idea.message_columns[0].color == 'red'
+    assert created_idea.message_columns[1].color == 'green'
+    assert created_idea.message_columns[2].color == 'blue'
+    # Testing to delete the last column
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisTitle': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesis': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_ideas = test_session.query(models.Idea).all()
+    for idea in created_ideas:
+        if not isinstance(idea, models.RootIdea):
+            created_idea = idea
+    assert len(created_idea.message_columns) == 2
     assert created_idea.message_columns[0].message_classifier == 'positive'
     assert created_idea.message_columns[1].message_classifier == 'negative'
     assert created_idea.message_columns[0].color == 'red'

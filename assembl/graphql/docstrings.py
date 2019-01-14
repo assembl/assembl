@@ -393,6 +393,7 @@ class Idea:
     ancestors = """A list of Relay.Node ID's representing the parents Ideas of the Idea."""
     vote_results = """The VoteResult object showing the status and result of a VoteSession on Idea."""
     questions = """A list of Question objects that are bound to the Thematic."""
+    multiColumns = """A list of IdeaMessageColumns related to the idea."""
 
 
 class Question:
