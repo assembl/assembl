@@ -87,25 +87,27 @@ export class PostActions extends React.Component<Props> {
     return (
       <div className="post-actions">
         <div className="post-icons">
-          <React.Fragment>
-            <div
-              className={classnames('post-action', { 'share-multiColumns': isMultiColumns })}
-              onClick={() =>
-                openShareModal({
-                  type: 'post',
-                  title: modalTitle,
-                  routerParams: routerParams,
-                  elementId: postId,
-                  social: useSocial
-                })
-              }
-            >
-              <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
-                {shareIcon}
-              </ResponsiveOverlayTrigger>
-            </div>
-            <div className={classnames('post-actions-separator', { hidden: isMultiColumns })} />
-          </React.Fragment>
+          {!isPending ? (
+            <React.Fragment>
+              <div
+                className={classnames('post-action', { 'share-multiColumns': isMultiColumns })}
+                onClick={() =>
+                  openShareModal({
+                    type: 'post',
+                    title: modalTitle,
+                    routerParams: routerParams,
+                    elementId: postId,
+                    social: useSocial
+                  })
+                }
+              >
+                <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={sharePostTooltip}>
+                  {shareIcon}
+                </ResponsiveOverlayTrigger>
+              </div>
+              <div className={classnames('post-actions-separator', { hidden: isMultiColumns })} />
+            </React.Fragment>
+          ) : null}
           {!isPendingForUser ? (
             <Sentiments
               sentimentCounts={sentimentCounts}
