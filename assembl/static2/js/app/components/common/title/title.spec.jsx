@@ -6,7 +6,6 @@ import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
 import Title from './title';
-
 import type { Props as TitleProps } from './title';
 
 configure({ adapter: new Adapter() });
