@@ -6,6 +6,7 @@ import { Checkbox, FormGroup } from 'react-bootstrap';
 import Error from './error';
 import { getValidationState } from './utils';
 import type { CheckboxListValue, CheckboxListOption } from './types.flow';
+import { capitalize } from '../../utils/globalFunctions';
 
 type Props = FieldRenderProps & {
   input: {
@@ -45,7 +46,7 @@ export default class CheckboxListFieldAdapter extends React.Component<Props> {
               title={option.label}
               value={option.value}
             >
-              {option.label}
+              {capitalize(option.label)}
             </Checkbox>
           ))}
         <Error name={input.name} />
