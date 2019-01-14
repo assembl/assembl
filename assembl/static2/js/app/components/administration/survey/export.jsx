@@ -2,18 +2,18 @@
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
 
-import ExportSection from '../exportSection';
-import { get } from '../../../utils/routeMap';
+// import ExportSection from '../exportSection';
+// import { get } from '../../../utils/routeMap';
 import DiscussionPreferences from '../../../graphql/DiscussionPreferences.graphql';
 import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 
-type Language = {
-  locale: string
-};
+// type Language = {
+//   locale: string
+// };
 
 type Props = {
-  debateId: string,
-  languages: Array<Language>
+  // debateId: string,
+  // languages: Array<Language>
 };
 
 type State = {
@@ -45,6 +45,8 @@ class Export extends React.Component<Props, State> {
   };
 
   render() {
+    return 'export disabled for now';
+    /*
     const { debateId, languages } = this.props;
     const { translate } = this.state;
     const exportLocale = this.state.exportLocale || (languages && languages[0].locale);
@@ -68,6 +70,7 @@ class Export extends React.Component<Props, State> {
         languages={languages}
       />
     );
+    */
   }
 }
 export default compose(
