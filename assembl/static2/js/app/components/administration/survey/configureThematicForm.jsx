@@ -158,7 +158,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
               editLocale={editLocale}
               name={announcementBodyName}
               label={`${I18n.t('administration.tableOfThematics.instructionLabel')} ${upperCaseLocale}`}
-              withAttachment
+              withAttachmentButton
               component={MultilingualRichTextFieldAdapter}
             />
           </React.Fragment>
