@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import { type Route } from 'react-router';
 import { compose, graphql } from 'react-apollo';
-// $FlowFixMe
 import { filter } from 'graphql-anywhere';
 
 import { get } from './utils/routeMap';
