@@ -11,7 +11,7 @@ from sqlalchemy import (
 from assembl.auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from .langstrings import LangString
 from .langstrings_helpers import langstrings_base
-from .timeline import DiscussionPhase
+# from .timeline import DiscussionPhase
 from .widgets import VotingWidget
 from .idea import Idea
 
@@ -50,29 +50,35 @@ class VoteSession(
 
     @classmethod
     def filter_started(cls, query):
-        return query.join(cls.discussion_phase).filter(
-            (DiscussionPhase.start == None) | (DiscussionPhase.start <= datetime.utcnow()))  # noqa: E711
+        return query
+# cls.discussion_phase doesn't exist anymore
+#        return query.join(cls.discussion_phase).filter(
+#            (DiscussionPhase.start == None) | (DiscussionPhase.start <= datetime.utcnow()))  # noqa: E711
 
     @classmethod
     def test_active(cls):
-        now = datetime.utcnow()
-        return ((DiscussionPhase.end == None) | (DiscussionPhase.end > now) & (DiscussionPhase.start == None) | (DiscussionPhase.start <= now))  # noqa: E711
+        return ()
+#        now = datetime.utcnow()
+#        return ((DiscussionPhase.end == None) | (DiscussionPhase.end > now) & (DiscussionPhase.start == None) | (DiscussionPhase.start <= now))  # noqa: E711
 
     @classmethod
     def filter_active(cls, query):
-        return query.join(cls.discussion_phase).filter(cls.test_active())
+        return query
+#        return query.join(cls.discussion_phase).filter(cls.test_active())
 
     def vote_session_discussion_phase(self):
         return self.idea.get_associated_phase()
 
     def is_started(self):
-        if self.vote_session_discussion_phase():
-            return self.vote_session_discussion_phase().start == None or self.vote_session_discussion_phase().start <= datetime.utcnow()  # noqa: E711
+        phase = self.vote_session_discussion_phase()
+        if phase:
+            return phase.start == None or phase.start <= datetime.utcnow()  # noqa: E711
         return False
 
     def is_ended(self):
-        if self.vote_session_discussion_phase():
-            return self.vote_session_discussion_phase().end != None and self.vote_session_discussion_phase().end < datetime.utcnow()  # noqa: E711
+        phase = self.vote_session_discussion_phase()
+        if phase:
+            return phase.end != None and phase.end < datetime.utcnow()  # noqa: E711
         return False
 
     crud_permissions = CrudPermissions(
