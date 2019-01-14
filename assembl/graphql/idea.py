@@ -31,12 +31,13 @@ from .user import AgentProfile
 from .utils import (
     abort_transaction_on_exception, get_fields, get_root_thematic_for_phase,
     create_root_thematic, create_attachment,
-    update_attachment, create_idea_announcement)
+    update_attachment, create_idea_announcement, get_attachments_with_purpose)
 import assembl.graphql.docstrings as docs
 
 
 EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
 MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
+ANNOUNCEMENT_BODY_ATTACHMENT = models.AttachmentPurpose.ANNOUNCEMENT_BODY_ATTACHMENT.value
 
 
 class TagResult(graphene.ObjectType):
@@ -211,8 +212,7 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring(self.body, args.get('lang'))
 
     def resolve_body_attachments(self, args, context, info):
-        # TODO:
-        return []
+        return get_attachments_with_purpose(self.idea.attachments, ANNOUNCEMENT_BODY_ATTACHMENT)
 
     def resolve_body_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'body')
@@ -604,6 +604,45 @@ class IdeaMessageColumnInput(graphene.InputObjectType):
     column_synthesis_title = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis_title)
 
 
+def update_announcement_body_attachments(context, idea, discussion, new_attachments, purpose):
+    """Create, update, delete announcement body attachments."""
+    original_ln_attachments = get_attachments_with_purpose(
+        idea.attachments, purpose)
+    original_attachments_doc_ids = []
+    if original_ln_attachments:
+        original_attachments_doc_ids = [
+            str(a.document_id) for a in original_ln_attachments]
+
+    for document_id in new_attachments:
+        if document_id not in original_attachments_doc_ids:
+            attachment = create_attachment(
+                discussion,
+                models.IdeaAttachment,
+                purpose,
+                context,
+                document_id=document_id
+            )
+            attachment.idea = idea
+
+    # delete attachments that has been removed
+    documents_to_delete = set(original_attachments_doc_ids) - set(new_attachments)
+    for document_id in documents_to_delete:
+        with models.Discussion.default_db.no_autoflush:
+            document = models.Document.get(document_id)
+            attachments = discussion.db.query(
+                models.IdeaAttachment
+            ).filter_by(
+                attachmentPurpose=purpose,
+                discussion_id=discussion.id,
+                document_id=document_id,
+                idea_id=idea.id
+            ).all()
+            document.delete_file()
+            discussion.db.delete(document)
+            for attachment in attachments:
+                idea.attachments.remove(attachment)
+
+
 def create_idea(parent_idea, phase, args, context):
     cls = models.Idea
     message_view_override = args.get('message_view_override')
@@ -660,6 +699,12 @@ def create_idea(parent_idea, phase, args, context):
             announcement_quote_langstring = langstring_from_input_entries(announcement.get('quote_entries', None))
             saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring, announcement_quote_langstring)
             db.add(saobj2)
+            update_announcement_body_attachments(
+                context,
+                saobj,
+                discussion,
+                announcement.get('body_attachments', []),
+                ANNOUNCEMENT_BODY_ATTACHMENT)
 
         # add uploaded image as an attachment to the idea
         image = args.get('image')
@@ -808,6 +853,13 @@ def update_idea(args, phase, context):
                 update_langstring_from_input_entries(
                     thematic.announcement, 'quote', announcement.get('quote_entries', None))
                 thematic.announcement.last_updated_by_id = user_id
+
+            update_announcement_body_attachments(
+                context,
+                thematic,
+                discussion,
+                announcement.get('body_attachments', []),
+                ANNOUNCEMENT_BODY_ATTACHMENT)
 
         existing_questions = {
             question.id: question for question in thematic.get_children() if isinstance(question, models.Question)}
