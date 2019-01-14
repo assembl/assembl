@@ -12,6 +12,31 @@ type QuestionValueFromQuery = {
   titleEntries: LangstringEntries
 };
 
+type MessageColumnValue = {
+  messageClassifier: string,
+  title: I18nValue,
+  name: I18nValue,
+  color: string
+};
+
+type RadioButtonValue = {
+  label: string,
+  isChecked: boolean,
+  size: number
+};
+
+type MultiColumnsValue = {
+  radioButtons: Array<RadioButtonValue>,
+  messageColumns: Array<MessageColumnValue>
+};
+
+type MessageColumnValueFromQuery = {
+  nameEntries: LangstringEntries,
+  titleEntries: LangstringEntries,
+  color: string,
+  messageClassifier: string
+};
+
 export type ThemeValue = {
   id: string,
   messageViewOverride: Option,
@@ -25,7 +50,8 @@ export type ThemeValue = {
   },
   questions: Array<QuestionValue>,
   children: Array<ThemeValue>,
-  order: number
+  order: number,
+  multiColumns: MultiColumnsValue
 };
 
 export type ThemeValueFromQuery = {
@@ -41,7 +67,8 @@ export type ThemeValueFromQuery = {
   },
   questions: Array<QuestionValueFromQuery>,
   children: Array<ThemeValueFromQuery>,
-  order: number
+  order: number,
+  messageColumns: Array<MessageColumnValueFromQuery>
 };
 
 export type ThemesValue = Array<ThemeValue>;

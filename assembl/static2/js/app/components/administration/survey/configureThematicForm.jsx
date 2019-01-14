@@ -16,6 +16,7 @@ import Helper from '../../common/helper';
 import type { ThemesAdminValues, ThemeValue, ThemesValue } from './types.flow';
 import { MESSAGE_VIEW, modulesTranslationKeys } from '../../../constants';
 import SurveyFields from './surveyFields';
+import MultiColumnsFields from './multiColumnsFields';
 
 type Props = {
   pristine: boolean,
@@ -91,7 +92,12 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     const messageViewOverrideName = `${name}.messageViewOverride`;
     const announcementTitleName = `${name}.announcement.title`;
     const announcementBodyName = `${name}.announcement.body`;
-
+    const checkedForm =
+      theme &&
+      theme.multiColumns &&
+      theme.multiColumns.radioButtons &&
+      theme.multiColumns.radioButtons.find(button => button.isChecked);
+    const nbColumnsInForm = checkedForm ? checkedForm.size : 2;
     return (
       <div className="form-container" key={name}>
         <Helper
@@ -160,6 +166,9 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
         {this.addVoteModuleLink(theme)}
         {theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.survey ? (
           <SurveyFields editLocale={editLocale} fieldPrefix={name} />
+        ) : null}
+        {theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.messageColumns ? (
+          <MultiColumnsFields editLocale={editLocale} fieldPrefix={name} nbColumnsInForm={nbColumnsInForm} />
         ) : null}
       </div>
     );

@@ -41,6 +41,29 @@ const getThemeData = (t: ThemeValueFromQuery): ThemeValueWithChildren => {
     body: convertEntriesToI18nRichText(t.announcement ? t.announcement.bodyEntries : []),
     quote: convertEntriesToI18nRichText(t.announcement ? t.announcement.quoteEntries : [])
   };
+  // TODO remplace mock by the data from query
+  const messageColumns = [
+    {
+      messageClassifier: 'negative',
+      nameEntries: [{ value: 'Nom de la colonne 1', localeCode: 'fr' }, { value: 'Column name 1', localeCode: 'en' }],
+      titleEntries: [{ value: 'Titre de la colonne 1', localeCode: 'fr' }, { value: 'Column title 1', localeCode: 'en' }],
+      color: '#FF0000'
+    },
+    {
+      messageClassifier: 'positive',
+      nameEntries: [{ value: 'Nom de la colonne 2', localeCode: 'fr' }, { value: 'Column name 2', localeCode: 'en' }],
+      titleEntries: [{ value: 'Titre de la colonne 2', localeCode: 'fr' }, { value: 'Column title 2', localeCode: 'en' }],
+      color: '#000000'
+    },
+    {
+      messageClassifier: 'neutral',
+      nameEntries: [{ value: 'Nom de la colonne 3', localeCode: 'fr' }, { value: 'Column name 3', localeCode: 'en' }],
+      titleEntries: [{ value: 'Titre de la colonne 3', localeCode: 'fr' }, { value: 'Column title 3', localeCode: 'en' }],
+      color: '#CCCCCC'
+    }
+  ];
+  const isChecked1 = messageColumns && messageColumns.length >= 1 ? messageColumns.length === 2 : true;
+  const isChecked2 = messageColumns && messageColumns.length >= 1 ? messageColumns.length === 3 : false;
   return {
     id: t.id,
     messageViewOverride: getMessageViewOverride(t.messageViewOverride),
@@ -56,7 +79,22 @@ const getThemeData = (t: ThemeValueFromQuery): ThemeValueWithChildren => {
     description: convertEntriesToI18nValue(t.descriptionEntries),
     announcement: announcement,
     order: t.order,
-    children: sortBy(t.children, 'order').map(t2 => getThemeData(t2))
+    children: sortBy(t.children, 'order').map(t2 => getThemeData(t2)),
+    multiColumns: {
+      radioButtons: [
+        { label: I18n.t('administration.tableOfThematics.multiColumnsFormName1'), isChecked: isChecked1, size: 2 },
+        { label: I18n.t('administration.tableOfThematics.multiColumnsFormName2'), isChecked: isChecked2, size: 3 }
+      ],
+      messageColumns:
+        (messageColumns &&
+          messageColumns.map(col => ({
+            messageClassifier: col.messageClassifier,
+            title: convertEntriesToI18nValue(col.titleEntries),
+            name: convertEntriesToI18nValue(col.nameEntries),
+            color: col.color
+          }))) ||
+        []
+    }
   };
 };
 

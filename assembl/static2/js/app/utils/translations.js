@@ -823,7 +823,13 @@ const Translations = {
         sectionTitleLabel: "Titre de la section",
         questionsHeader: "Questions",
         confirmDeletionTitle: "Supprimer la thématique %{title}",
-        confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cette thématique ?"
+        confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cette thématique ?",
+        multiColumnsFormName1: "2 colonnes",
+        multiColumnsFormName2: "3 colonnes",
+        columnsConfiguration: "Configuration des colonnes",
+        columnTitle: "Titre de la colonne",
+        columnName: "Nom de la colonne",
+        columnColor: "Couleur de la colonne"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -1771,7 +1777,13 @@ const Translations = {
         sectionTitleLabel: "Section title",
         questionsHeader: "Questions",
         confirmDeletionTitle: "Delete %{title} theme",
-        confirmDeletionBody: "Are you sure that you wish to delete this theme?"
+        confirmDeletionBody: "Are you sure that you wish to delete this theme?",
+        multiColumnsFormName1: "2 columns",
+        multiColumnsFormName2: "3 columns",
+        columnsConfiguration: "Columns configuration",
+        columnTitle: "Column title",
+        columnName: "Column name",
+        columnColor: "Column color"
       },
       resourcesCenter: {
         createResource: "Add a media",
