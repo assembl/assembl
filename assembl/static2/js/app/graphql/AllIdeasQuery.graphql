@@ -4,6 +4,7 @@ query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
       id
       title(lang: $lang)
       description(lang: $lang)
+      messageViewOverride
       numPosts
       numContributors
       numChildren(discussionPhaseId: $discussionPhaseId)

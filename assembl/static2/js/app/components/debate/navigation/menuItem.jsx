@@ -5,6 +5,8 @@ import classNames from 'classnames';
 
 import { isMobile } from '../../../utils/globalFunctions';
 import { get, goTo } from '../../../utils/routeMap';
+import { MESSAGE_VIEW } from '../../../constants';
+
 import PostsAndContributorsCount from '../../common/postsAndContributorsCount';
 
 type ItemNode = {
@@ -13,6 +15,7 @@ type ItemNode = {
   img: {
     externalUrl: string
   },
+  messageViewOverride: string,
   numContributors: number,
   numPosts: number
 };
@@ -48,7 +51,7 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
 
   render() {
     const { item, selected, hasSubItems } = this.props;
-    const { title, img, numContributors, numPosts } = item;
+    const { title, img, messageViewOverride, numContributors, numPosts } = item;
     // The first touch show the menu and the second activate the link
     const isTouchScreenDevice = isMobile.any();
     const displayArrow = selected && hasSubItems;
@@ -63,7 +66,11 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
         onMouseOver={!isTouchScreenDevice && this.showMenu}
         onMouseLeave={!isTouchScreenDevice && this.hideMenu}
       >
-        <div onClick={onLinkClick} className="menu-item">
+        <div
+          onClick={messageViewOverride !== MESSAGE_VIEW.noModule ? onLinkClick : null}
+          style={messageViewOverride === MESSAGE_VIEW.noModule ? { cursor: 'default' } : undefined}
+          className="menu-item"
+        >
           <div className="thumb-img" style={img && img.externalUrl ? { backgroundImage: `url(${img.externalUrl})` } : null}>
             <div className="thumb-img-background" />
           </div>
@@ -71,7 +78,9 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
             <div title={title} className="thumb-title">
               {title}
             </div>
-            <PostsAndContributorsCount className="menu-stats" numContributors={numContributors} numPosts={numPosts} />
+            {messageViewOverride !== MESSAGE_VIEW.noModule && messageViewOverride !== MESSAGE_VIEW.voteSession ? (
+              <PostsAndContributorsCount className="menu-stats" numContributors={numContributors} numPosts={numPosts} />
+            ) : null}
           </div>
           {displayArrow && <span className="thumb-arrow assembl-icon assembl-icon-right-dir" />}
         </div>

@@ -5,13 +5,14 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
 import Statistic from '../../common/statistic';
-import { APP_CONTAINER_PADDING } from '../../../constants';
+import { APP_CONTAINER_PADDING, MESSAGE_VIEW } from '../../../constants';
 
 type Props = {
   selectedIdeasId: Array<string>,
   imgUrl: string,
   link: string,
   title: string,
+  messageViewOverride: string,
   numPosts: number,
   numContributors: number,
   numChildren: number,
@@ -29,6 +30,7 @@ const IdeaPreview = ({
   imgUrl,
   link,
   title,
+  messageViewOverride,
   numPosts,
   numContributors,
   numChildren,
@@ -89,16 +91,20 @@ const IdeaPreview = ({
           ) : (
             <div />
           )}
-          <div className="see-discussion">
-            <Link to={link}>
-              <Translate value="debate.thread.goToIdea" />
-            </Link>
-          </div>
+          {messageViewOverride !== MESSAGE_VIEW.noModule ? (
+            <div className="see-discussion">
+              <Link to={link}>
+                <Translate value="debate.thread.goToIdea" />
+              </Link>
+            </div>
+          ) : null}
         </div>
         <div className="selected-idea-arrow">
           <span className="assembl-icon-down-open" />
         </div>
-        <Statistic numPosts={numPosts} numContributors={numContributors} />
+        {messageViewOverride !== MESSAGE_VIEW.noModule && messageViewOverride !== MESSAGE_VIEW.voteSession ? (
+          <Statistic numPosts={numPosts} numContributors={numContributors} />
+        ) : null}
       </div>
       <div className="color-box">&nbsp;</div>
       <div className="box-hyphen">&nbsp;</div>
