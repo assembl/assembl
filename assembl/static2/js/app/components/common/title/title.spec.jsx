@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16.3';
 
 import Title from './title';
 import type { Props as TitleProps } from './title';
+import { defaultTitleProps } from './title.stories';
 
 configure({ adapter: new Adapter() });
 
@@ -15,7 +16,7 @@ describe('<Title /> - with shallow', () => {
   let title: TitleProps;
 
   beforeEach(() => {
-    title = { level: 1, children: 'My Awesome Title' };
+    title = { ...defaultTitleProps };
     wrapper = shallow(<Title {...title} />);
   });
 

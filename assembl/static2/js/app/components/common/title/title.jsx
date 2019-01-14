@@ -2,7 +2,9 @@
 import React from 'react';
 
 export type Props = {
+  /** Optional level */
   level: number,
+  /** Title content */
   children: string
 };
 
