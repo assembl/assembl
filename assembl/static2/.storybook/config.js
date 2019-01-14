@@ -55,6 +55,8 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/sideComment/sideCommentAnchor.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/innerBoxView.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/innerBoxSubmit.stories.jsx');
+
+  require('../js/app/components/common/description/description.stories.jsx');
 }
 
 configure(loadStories, module);

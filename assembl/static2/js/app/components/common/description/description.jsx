@@ -2,6 +2,7 @@
 import * as React from 'react';
 
 export type Props = {
+  /** Description content */
   children: React.Node
 };
 
