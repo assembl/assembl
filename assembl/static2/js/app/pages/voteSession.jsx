@@ -452,18 +452,18 @@ export default compose(
         return {
           error: data.error,
           loading: data.loading,
-          title: '',
+          headerImageUrl: ownProps.headerImgUrl,
+          title: ownProps.title,
           seeCurrentVotes: false,
-          subTitle: '',
-          headerImageUrl: '',
-          instructionsSectionTitle: '',
-          instructionsSectionContent: '',
-          modules: [],
+          subTitle: ownProps.description,
+          instructionsSectionTitle: ownProps.announcement.title,
+          instructionsSectionContent: ownProps.announcement.body,
           propositionsSectionTitle: '',
-          proposals: []
+          modules: [],
+          proposals: [],
+          randomProposals: []
         };
       }
-
       const {
         seeCurrentVotes,
         propositionsSectionTitle,
@@ -484,7 +484,6 @@ export default compose(
         modules: modules,
         proposals: proposals,
         randomProposals: shuffle(proposals),
-        noVoteSession: false,
         refetchVoteSession: data.refetch
       };
     }
