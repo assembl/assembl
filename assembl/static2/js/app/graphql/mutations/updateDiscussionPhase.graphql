@@ -5,7 +5,6 @@ mutation updateDiscussionPhase(
   $id: ID!
   $lang: String!
   $identifier: String!
-  $isThematicsTable: Boolean!
   $titleEntries: [LangStringEntryInput]!
   $descriptionEntries: [LangStringEntryInput]
   $start: DateTime!
@@ -17,7 +16,6 @@ mutation updateDiscussionPhase(
     id: $id
     lang: $lang
     identifier: $identifier
-    isThematicsTable: $isThematicsTable
     titleEntries: $titleEntries
     descriptionEntries: $descriptionEntries
     start: $start

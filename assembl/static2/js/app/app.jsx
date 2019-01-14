@@ -160,7 +160,6 @@ export default compose(
       const phasesForStore = filteredPhases.timeline.map(phase => ({
         id: phase.id,
         identifier: phase.identifier,
-        isThematicsTable: phase.isThematicsTable,
         start: phase.start,
         end: phase.end,
         image: phase.image,

@@ -2460,8 +2460,6 @@ export type TimelineQuery = {|
     id: string,
     // Identifier of the Phase. Possible phase identifiers: "survey", "thread", "multiColumns", "voteSession", "brightMirror".
     identifier: ?string,
-    // NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!
-    isThematicsTable: ?boolean,
     // A title of the Phase. in a given language.
     title: ?string,
     // A list of possible languages of the entity as LangStringEntry objects. These are the title of the phase in various languages.
@@ -3273,7 +3271,6 @@ export type confirmExtractMutation = {|
 export type createDiscussionPhaseMutationVariables = {|
   lang: string,
   identifier: string,
-  isThematicsTable: boolean,
   titleEntries: Array<?LangStringEntryInput>,
   start: any,
   end: any,
@@ -3288,8 +3285,6 @@ export type createDiscussionPhaseMutation = {|
       id: string,
       // Identifier of the Phase. Possible phase identifiers: "survey", "thread", "multiColumns", "voteSession", "brightMirror".
       identifier: ?string,
-      // NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!
-      isThematicsTable: ?boolean,
       // A title of the Phase. in a given language.
       title: ?string,
       // A list of possible languages of the entity as LangStringEntry objects. These are the title of the phase in various languages.
@@ -4368,7 +4363,6 @@ export type updateDiscussionPhaseMutationVariables = {|
   id: string,
   lang: string,
   identifier: string,
-  isThematicsTable: boolean,
   titleEntries: Array<?LangStringEntryInput>,
   descriptionEntries?: ?Array<?LangStringEntryInput>,
   start: any,
@@ -4385,8 +4379,6 @@ export type updateDiscussionPhaseMutation = {|
       id: string,
       // Identifier of the Phase. Possible phase identifiers: "survey", "thread", "multiColumns", "voteSession", "brightMirror".
       identifier: ?string,
-      // NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!
-      isThematicsTable: ?boolean,
       // A title of the Phase. in a given language.
       title: ?string,
       // A list of possible languages of the entity as LangStringEntry objects. These are the title of the phase in various languages.
@@ -6230,8 +6222,6 @@ export type discussionPhaseFragment = {|
   id: string,
   // Identifier of the Phase. Possible phase identifiers: "survey", "thread", "multiColumns", "voteSession", "brightMirror".
   identifier: ?string,
-  // NOTE: THIS IS AN UNUSED VARIABLE CURRENTLY!
-  isThematicsTable: ?boolean,
   // A title of the Phase. in a given language.
   title: ?string,
   // A list of possible languages of the entity as LangStringEntry objects. These are the title of the phase in various languages.

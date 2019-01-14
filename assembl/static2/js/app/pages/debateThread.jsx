@@ -12,7 +12,7 @@ type Props = {
   data: {
     loading: boolean,
     error: ?Error,
-    rootIdea: Idea,
+    rootIdea: ?Idea, // rootIdea may be null if phase table of thematics wasn't saved
     ideas: Array<Idea>
   },
   params: {
@@ -46,9 +46,9 @@ const DebateThread = ({ phaseId, identifier, data, params, children }: Props) =>
   return (
     <div className="debate">
       {loading && isParentRoute && <Loader color="black" />}
-      {!loading &&
-        ideas &&
-        isParentRoute && <Ideas key={phaseId} ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} phaseId={phaseId} />}
+      {!loading && ideas && isParentRoute && rootIdea ? (
+        <Ideas key={phaseId} ideas={ideas} rootIdeaId={rootIdea.id} identifier={identifier} phaseId={phaseId} />
+      ) : null}
       {!isParentRoute && <section className="debate-section">{childrenElm}</section>}
     </div>
   );

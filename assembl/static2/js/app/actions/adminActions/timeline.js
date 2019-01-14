@@ -27,12 +27,6 @@ export const updatePhaseDescription = (id: string, locale: string, value: string
   type: actionTypes.UPDATE_PHASE_DESCRIPTION
 });
 
-export const updatePhaseIdentifier = (id: string, identifier: string): actionTypes.UpdatePhaseIdentifier => ({
-  id: id,
-  value: identifier,
-  type: actionTypes.UPDATE_PHASE_IDENTIFIER
-});
-
 export const updatePhaseImage = (id: string, value: File): actionTypes.UpdatePhaseImage => ({
   id: id,
   value: value,
@@ -54,12 +48,6 @@ export const updateEndDate = (id: string, value: moment): actionTypes.UpdatePhas
   id: id,
   value: value,
   type: actionTypes.UPDATE_PHASE_END
-});
-
-export const updateIsThematicsTable = (id: string, value: boolean): actionTypes.UpdateIsThematicsTable => ({
-  id: id,
-  value: value,
-  type: actionTypes.UPDATE_IS_THEMATICS_TABLE
 });
 
 export const movePhaseUp = (id: string): actionTypes.MovePhaseUp => ({

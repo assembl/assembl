@@ -6,7 +6,6 @@ import { PHASES } from '../constants';
 type Phase = {
   id: string,
   identifier: string,
-  isThematicsTable: boolean,
   start: string,
   end: string,
   image: File,

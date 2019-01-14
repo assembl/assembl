@@ -646,7 +646,6 @@ const Translations = {
         deletePhase: "Supprimer la phase",
         instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
         instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
-        phaseModule: "Modalité de participation pour cette phase",
         thematicsTable: "Thematics table",
         configureModule:
           "Après avoir sauvegardé, configurez le module en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
@@ -1601,7 +1600,6 @@ const Translations = {
         deletePhase: "Delete the phase",
         instruction1: "Choose the number of phases for your debate",
         instruction2: "Fill in the required fields for each phase by selecting each tab",
-        phaseModule: "Module for this phase:",
         thematicsTable: "Table des thématiques",
         configureModule:
           "Once you saved your work, configure the module by clicking on the vertical menu on the left or on the following link: ",

@@ -69,11 +69,9 @@ export const UPDATE_PHASES: 'UPDATE_PHASES' = 'UPDATE_PHASES';
 export const DELETE_PHASE: 'DELETE_PHASE' = 'DELETE_PHASE';
 export const UPDATE_PHASE_TITLE: 'UPDATE_PHASE_TITLE' = 'UPDATE_PHASE_TITLE';
 export const UPDATE_PHASE_DESCRIPTION: 'UPDATE_PHASE_DESCRIPTION' = 'UPDATE_PHASE_DESCRIPTION';
-export const UPDATE_PHASE_IDENTIFIER: 'UPDATE_PHASE_IDENTIFIER' = 'UPDATE_PHASE_IDENTIFIER';
 export const UPDATE_PHASE_IMAGE: 'UPDATE_PHASE_IMAGE' = 'UPDATE_PHASE_IMAGE';
 export const UPDATE_PHASE_START: 'UPDATE_PHASE_START' = 'UPDATE_PHASE_START';
 export const UPDATE_PHASE_END: 'UPDATE_PHASE_END' = 'UPDATE_PHASE_END';
-export const UPDATE_IS_THEMATICS_TABLE: 'UPDATE_IS_THEMATICS_TABLE' = 'UPDATE_IS_THEMATICS_TABLE';
 export const MOVE_PHASE_UP: 'MOVE_PHASE_UP' = 'MOVE_PHASE_UP';
 export const MOVE_PHASE_DOWN: 'MOVE_PHASE_DOWN' = 'MOVE_PHASE_DOWN';
 export const UPDATE_LANDING_PAGE_MODULE_TITLE: 'UPDATE_LANDING_PAGE_MODULE_TITLE' = 'UPDATE_LANDING_PAGE_MODULE_TITLE';
@@ -496,12 +494,6 @@ export type UpdatePhaseDescription = {
   type: typeof UPDATE_PHASE_DESCRIPTION
 };
 
-export type UpdatePhaseIdentifier = {
-  id: string,
-  value: string,
-  type: typeof UPDATE_PHASE_IDENTIFIER
-};
-
 export type UpdatePhaseImage = {
   id: string,
   value: File,
@@ -518,12 +510,6 @@ export type UpdatePhaseEnd = {
   id: string,
   value: moment,
   type: typeof UPDATE_PHASE_END
-};
-
-export type UpdateIsThematicsTable = {
-  id: string,
-  value: boolean,
-  type: typeof UPDATE_IS_THEMATICS_TABLE
 };
 
 export type MovePhaseUp = {
@@ -551,10 +537,8 @@ type TimelineActions =
   | UpdatePhases
   | DeletePhase
   | UpdatePhaseTitle
-  | UpdatePhaseIdentifier
   | UpdatePhaseStart
   | UpdatePhaseEnd
-  | UpdateIsThematicsTable
   | MovePhaseUp
   | MovePhaseDown;
 

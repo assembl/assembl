@@ -4,17 +4,11 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { SplitButton, MenuItem } from 'react-bootstrap';
 import { Link } from 'react-router';
 import { type moment } from 'moment';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
-import {
-  updatePhaseIdentifier,
-  updateStartDate,
-  updateEndDate,
-  updateIsThematicsTable
-} from '../../../actions/adminActions/timeline';
+import { updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
 
 type PhaseFormProps = {
   phaseId: string,
@@ -24,29 +18,23 @@ type PhaseFormProps = {
   end: moment,
   handleStartDateChange: Function,
   handleEndDateChange: Function,
-  handleIdentifierChange: Function,
   locale: string,
-  hasConflictingDates: boolean,
-  isNew: boolean
+  hasConflictingDates: boolean
 };
 
 export const DumbPhaseForm = ({
   phaseId,
   phaseNumber,
-  handleIdentifierChange,
   handleStartDateChange,
   handleEndDateChange,
   identifier,
   start,
   end,
   hasConflictingDates,
-  locale,
-  isNew
+  locale
 }: PhaseFormProps) => {
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
-
-  const splitButtonTitle = I18n.t(`administration.modules.${identifier}`);
 
   const slug = { slug: getDiscussionSlug() };
 
@@ -106,24 +94,6 @@ export const DumbPhaseForm = ({
           </div>
         )}
       </div>
-      <div className="module-selection-text">
-        <Translate value="administration.timelineAdmin.phaseModule" />
-      </div>
-      <div className="margin-m">
-        <SplitButton
-          className="admin-dropdown"
-          disabled={!isNew}
-          id={`dropdown-${phaseId}`}
-          title={splitButtonTitle}
-          onSelect={handleIdentifierChange}
-        >
-          {['survey', 'thread', 'brightMirror'].map(key => (
-            <MenuItem key={`module-${key}`} eventKey={key}>
-              {I18n.t(`administration.modules.${key}`)}
-            </MenuItem>
-          ))}
-        </SplitButton>
-      </div>
       <div className="text-xs configure-module-text">
         <Translate value="administration.timelineAdmin.configureModule" />
         <Link
@@ -144,16 +114,11 @@ const mapStateToProps = (state, { phaseId }) => {
     start: phase ? phase.get('start') : null,
     end: phase ? phase.get('end') : null,
     hasConflictingDates: phase ? phase.get('hasConflictingDates') : null,
-    locale: state.i18n.locale,
-    isNew: phase && phase.get('_isNew')
+    locale: state.i18n.locale
   };
 };
 
 const mapDispatchToProps = (dispatch, { phaseId }) => ({
-  handleIdentifierChange: (eventKey) => {
-    dispatch(updatePhaseIdentifier(phaseId, eventKey));
-    dispatch(updateIsThematicsTable(phaseId, eventKey === 'survey'));
-  },
   handleStartDateChange: date => dispatch(updateStartDate(phaseId, date)),
   handleEndDateChange: date => dispatch(updateEndDate(phaseId, date))
 });

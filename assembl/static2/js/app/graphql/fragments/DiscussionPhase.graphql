@@ -3,7 +3,6 @@
 fragment discussionPhase on DiscussionPhase {
   id
   identifier
-  isThematicsTable
   title(lang: $lang)
   titleEntries {
     ...langStringEntry
