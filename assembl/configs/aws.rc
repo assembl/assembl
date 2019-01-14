@@ -4,14 +4,21 @@ ini_files = production.ini no_sentry.ini RANDOM:random.ini.tmpl:saml_random.ini.
 hosts = localhost
 attachment_service = s3
 celery_tasks.broker = sqs://
-elasticsearch_version = 5.6.8
 rds_certificate = rds-combined-ca-bundle.pem
 aws_region = eu-west-1
-attachment_bucket = assembl-sandbox-attachments
+attachment_bucket = assembl-attachments-%(aws_client)s
+elasticsearch_index = %(aws_client)s:assembl-es
 elasticsearch_port = 80
+elasticsearch_version = 5.6.8
 supervisor__autostart_celery = false
 supervisor__autostart_celery_notify_beat = false
 supervisor__autostart_source_reader = false
 supervisor__autostart_changes_router = false
 supervisor__autostart_urlmetadata = false
 supervisor__autostart_elasticsearch = false
+db_iam_role = arn:aws:iam::%(aws_client)s:role/AssemblEC2Role
+
+# temporary
+public_port = 80
+accept_secure_connection = false
+require_secure_connection = false

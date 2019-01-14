@@ -11,13 +11,14 @@ from ..lib.config import set_config
 from ..indexing.changes import configure_indexing
 
 
-def boostrap_configuration(config):
+def boostrap_configuration(config, do_bootstrap=True):
     logging.config.fileConfig(config)
-    env = bootstrap(config)
     settings = get_appsettings(config, 'assembl')
+    if do_bootstrap:
+        env = bootstrap(config)
+        configure_model_watcher(env, 'assembl')
     set_config(settings)
     configure_zmq(settings['changes_socket'], False)
-    configure_model_watcher(env['registry'], 'assembl')
     configure_engine(settings, True)
     configure_indexing()
     session = get_session_maker()()
