@@ -25,7 +25,8 @@ type Props = {
   synthesisProps: ColumnSynthesisProps,
   title: string,
   width?: string,
-  withColumnHeader: boolean
+  withColumnHeader: boolean,
+  messageViewOverride: string
 };
 
 const PostColumn = ({
@@ -43,7 +44,8 @@ const PostColumn = ({
   synthesisProps,
   title,
   width,
-  withColumnHeader
+  withColumnHeader,
+  messageViewOverride
 }: Props) => (
   <div className="column-view" style={{ width: width }}>
     {withColumnHeader && (
@@ -63,6 +65,7 @@ const PostColumn = ({
           SeparatorComponent={Separator}
           identifier={identifier}
           phaseId={phaseId}
+          messageViewOverride={messageViewOverride}
         />
       ) : (
         noRowsRenderer()

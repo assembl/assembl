@@ -39,6 +39,7 @@ type Props = {
   debateData: DebateData,
   lang: string,
   ideaWithPostsData: IdeaWithPostsQuery,
+  messageViewOverride: string,
   identifier: string,
   phaseId: string,
   routerParams: RouterParams,
@@ -248,7 +249,17 @@ class Idea extends React.Component<Props> {
   }
 
   render() {
-    const { contentLocaleMapping, timeline, debateData, lang, ideaWithPostsData, identifier, phaseId, routerParams } = this.props;
+    const {
+      messageViewOverride,
+      contentLocaleMapping,
+      timeline,
+      debateData,
+      lang,
+      ideaWithPostsData,
+      identifier,
+      phaseId,
+      routerParams
+    } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     const { announcement, id, headerImgUrl, synthesisTitle, title, description } = this.props;
     const isMultiColumns = ideaWithPostsData.loading
@@ -270,6 +281,7 @@ class Idea extends React.Component<Props> {
       });
     const topPosts = this.getTopPosts();
     const childProps = {
+      messageViewOverride: messageViewOverride,
       identifier: identifier,
       phaseId: phaseId,
       timeline: timeline,

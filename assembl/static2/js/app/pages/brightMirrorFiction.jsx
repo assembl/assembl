@@ -238,6 +238,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     }
 
     // Define variables
+    const messageViewOverride = ideaWithCommentsData.idea.messageViewOverride;
     const { fiction } = brightMirrorFictionData;
     const getDisplayName = () => (fiction.creator && fiction.creator.displayName ? fiction.creator.displayName : EMPTY_STRING);
     const displayName = fiction.creator && fiction.creator.isDeleted ? I18n.t('deletedUser') : getDisplayName();
@@ -344,6 +345,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     };
 
     const fictionCommentListProps: FictionCommentListProps = {
+      messageViewOverride: messageViewOverride,
       comments: commentsInfo.topComments,
       contentLocale: contentLocale,
       contentLocaleMapping: contentLocaleMapping,

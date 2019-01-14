@@ -7,7 +7,7 @@ import { CellMeasurerCache, List } from 'react-virtualized';
 
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 import NuggetsManager from '../nuggetsManager';
-import { PHASES } from '../../../constants';
+import { MESSAGE_VIEW } from '../../../constants';
 import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
 import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
@@ -15,6 +15,7 @@ type BaseProps = {
   id: string,
   identifier: string,
   phaseId: string,
+  messageViewOverride: string,
   level: number,
   fullLevel?: string,
   rowIndex: number,
@@ -181,7 +182,8 @@ class Child extends React.PureComponent<Props, State> {
       nuggetsManager,
       listRef,
       cache,
-      fictionCommentExtraProps
+      fictionCommentExtraProps,
+      messageViewOverride
     } = this.props;
     const { expanded, visible } = this.state;
     const numChildren = children ? children.length : 0;
@@ -196,7 +198,7 @@ class Child extends React.PureComponent<Props, State> {
 
     // Push additional props from Tree.jsx to InnerComponent when identifier is brightMirror
     // We want to use some Tree.jsx functions to handle collapse/expand behavior for the list of fiction comments
-    if (identifier === PHASES.brightMirror) {
+    if (messageViewOverride === MESSAGE_VIEW.brightMirror) {
       forwardProps = {
         ...forwardProps,
         fictionCommentExtraProps: {
@@ -241,7 +243,7 @@ class Child extends React.PureComponent<Props, State> {
         )}
         {numChildren > 0 ? (
           <React.Fragment>
-            {identifier !== PHASES.brightMirror ? this.renderToggleLink(expanded, level < 4, id) : null}
+            {messageViewOverride !== MESSAGE_VIEW.brightMirror ? this.renderToggleLink(expanded, level < 4, id) : null}
             {children.map((child, idx) => {
               const fullLevelArray: Array<string> = fullLevel ? fullLevel.split('-') : [];
               fullLevelArray[level] = `${idx}`;
@@ -251,6 +253,7 @@ class Child extends React.PureComponent<Props, State> {
                   {...child}
                   identifier={identifier}
                   phaseId={phaseId}
+                  messageViewOverride={messageViewOverride}
                   hidden={!expanded}
                   contentLocaleMapping={contentLocaleMapping}
                   lang={lang}

@@ -12,6 +12,7 @@ type Props = {
   contentLocaleMapping: ContentLocaleMapping,
   identifier: string,
   phaseId?: string,
+  messageViewOverride: string,
   initialRowIndex: ?number,
   lang: string,
   data: Array<ChildType>,
@@ -113,6 +114,7 @@ class Tree extends React.Component<Props> {
       data,
       identifier,
       phaseId,
+      messageViewOverride,
       lang,
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
@@ -129,6 +131,7 @@ class Tree extends React.Component<Props> {
             {...childData}
             identifier={identifier}
             phaseId={phaseId}
+            messageViewOverride={messageViewOverride}
             lang={lang}
             rowIndex={index}
             contentLocaleMapping={parent.props.contentLocaleMapping}

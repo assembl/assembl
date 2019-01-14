@@ -18,6 +18,7 @@ export type FictionCommentListProps = {
   contentLocaleMapping: ContentLocaleMapping,
   /** Identifier of the idea - e.g 'brightMirror' */
   identifier: string,
+  messageViewOverride: string,
   /** Submit comment callback used in order to catch a submit event from tree.jsx */
   onSubmitHandler: Function
 };
@@ -27,6 +28,7 @@ const FictionCommentList = ({
   contentLocale,
   contentLocaleMapping,
   identifier,
+  messageViewOverride,
   onSubmitHandler
 }: FictionCommentListProps) => {
   const FIRST_ROW_INDEX = 0;
@@ -47,6 +49,7 @@ const FictionCommentList = ({
       SeparatorComponent={() => null}
       identifier={identifier}
       fictionCommentExtraProps={fictionCommentExtraProps}
+      messageViewOverride={messageViewOverride}
     />
   );
 };

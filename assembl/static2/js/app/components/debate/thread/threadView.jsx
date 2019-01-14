@@ -21,7 +21,8 @@ type Props = {
   initialRowIndex: ?number,
   identifier: string,
   phaseId: string,
-  timeline: Timeline
+  timeline: Timeline,
+  messageViewOverride: string
 };
 
 class ThreadView extends React.Component<Props> {
@@ -37,7 +38,8 @@ class ThreadView extends React.Component<Props> {
       initialRowIndex,
       identifier,
       phaseId,
-      timeline
+      timeline,
+      messageViewOverride
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     return (
@@ -59,6 +61,7 @@ class ThreadView extends React.Component<Props> {
                 SeparatorComponent={InfiniteSeparator}
                 identifier={identifier}
                 phaseId={phaseId}
+                messageViewOverride={messageViewOverride}
               />
             </div>
           </div>
