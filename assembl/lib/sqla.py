@@ -44,7 +44,7 @@ from .zmqlib import get_pub_socket, send_changes
 from ..auth import *
 from .decl_enums import EnumSymbol, DeclEnumType
 from .utils import get_global_base_url
-from ..lib.config import get_config
+from .config import get_config
 from ..indexing.reindex import reindex_content
 from . import logging
 from .read_write_session import ReadWriteSession
@@ -1823,30 +1823,21 @@ def connection_url(settings, prefix='db_'):
     db_database = db_database or settings.get('db_database')
     rds_iam_role = rds_iam_role or settings.get('db_iam_role')
     if rds_iam_role:
-        import boto3
+        from .rds_token_url import IamRoleRdsTokenUrl
         region = settings.get("aws_region", 'eu-west-1')
-        sts = boto3.client('sts', region)
-        role = sts.assume_role(RoleArn=rds_iam_role, RoleSessionName='assembl')
-        credentials = role['Credentials']
-        rds = boto3.client(
-            'rds', region, aws_access_key_id=credentials['AccessKeyId'],
-            aws_secret_access_key=credentials['SecretAccessKey'],
-            aws_session_token=credentials['SessionToken'])
-        password = rds.generate_db_auth_token(
-            DBHostname=db_host,
-            Port=5432,
-            DBUsername=db_user,
-            Region=region)
         certificate = settings.get('rds_certificate', None)
         if certificate:
             query = {'sslmode': 'verify-full', 'sslrootcert': certificate}
         else:
             query = {'sslmode': 'require'}
+        return IamRoleRdsTokenUrl(
+            'postgresql+psycopg2', rds_iam_role, region, db_user,
+            db_host, database=db_database, query=query)
     else:
         query = {'sslmode': 'disable' if db_host == 'localhost' else 'require'}
         password = settings.get(prefix + 'password', None) or settings.get('db_password')
-    return URL(
-        'postgresql+psycopg2', db_user, password, db_host, 5432, db_database, query)
+        return URL(
+            'postgresql+psycopg2', db_user, password, db_host, 5432, db_database, query)
 
 
 def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
