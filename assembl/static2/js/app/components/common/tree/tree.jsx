@@ -6,9 +6,10 @@ import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from
 import NuggetsManager from '../nuggetsManager';
 import Child from './treeItem';
 import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
+import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
 type Props = {
-  contentLocaleMapping: Map<string, any>,
+  contentLocaleMapping: ContentLocaleMapping,
   identifier: string,
   phaseId?: string,
   initialRowIndex: ?number,

@@ -1,7 +1,6 @@
 /* eslint react/no-multi-comp: "off" */
 // @flow
 import * as React from 'react';
-import { Map } from 'immutable';
 import classnames from 'classnames';
 import debounce from 'lodash/debounce';
 import { CellMeasurerCache, List } from 'react-virtualized';
@@ -10,6 +9,7 @@ import { scrollToPost } from '../../../utils/hashLinkScroll';
 import NuggetsManager from '../nuggetsManager';
 import { PHASES } from '../../../constants';
 import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
+import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
 type BaseProps = {
   id: string,
@@ -21,7 +21,7 @@ type BaseProps = {
   hidden: boolean,
   originalLocale?: string,
   lang: string,
-  contentLocaleMapping: Map<string, string>,
+  contentLocaleMapping: ContentLocaleMapping,
   listRef: List,
   nuggetsManager: NuggetsManager,
   cache: CellMeasurerCache,
@@ -185,6 +185,7 @@ class Child extends React.PureComponent<Props, State> {
     } = this.props;
     const { expanded, visible } = this.state;
     const numChildren = children ? children.length : 0;
+    // $FlowFixMe .getIn
     const contentLocale = contentLocaleMapping.getIn([id, 'contentLocale'], originalLocale);
     // Define forwarded props according to identifier value
     let forwardProps = {

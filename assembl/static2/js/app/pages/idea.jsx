@@ -20,7 +20,7 @@ import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates, FICTION_DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
-import type { ContentLocaleMapping } from '../actions/actionTypes';
+import type { ContentLocaleMapping, ContentLocaleMappingJS } from '../actions/actionTypes';
 import type { AnnouncementContent } from '../components/debate/common/announcement';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
@@ -33,8 +33,8 @@ const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
 type Props = {
   contentLocaleMapping: ContentLocaleMapping,
-  defaultContentLocaleMapping: Map,
-  updateContentLocaleMapping: ContentLocaleMapping => void,
+  defaultContentLocaleMapping: Map<string, string>,
+  updateContentLocaleMapping: ContentLocaleMappingJS => void,
   timeline: Timeline,
   debateData: DebateData,
   lang: string,

@@ -6,13 +6,14 @@ import ColumnHeader from './columnHeader';
 import FoldedPost from '../common/post/foldedPost';
 import ColumnsPost from '../../../components/debate/multiColumns/columnsPost';
 import ColumnSynthesis, { type Props as ColumnSynthesisProps } from './columnSynthesis';
+import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
 const Separator = () => <div style={{ height: '25px' }} />;
 
 type Props = {
   classifier: string,
   color: string,
-  contentLocaleMapping: Object,
+  contentLocaleMapping: ContentLocaleMapping,
   data: Array<TreeItem & Post>,
   ideaId: string,
   identifier: string,

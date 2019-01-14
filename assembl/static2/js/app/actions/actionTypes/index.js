@@ -94,13 +94,15 @@ export type ContentLocaleInfo = {
   originalLocale: string
 };
 
-export type ContentLocaleMapping = {
+export type ContentLocaleMapping = Map<string, ContentLocaleInfo>;
+
+export type ContentLocaleMappingJS = {
   [string]: ContentLocaleInfo
 };
 
 export type UpdateContentLocale = {
   type: typeof UPDATE_CONTENT_LOCALE,
-  data: ContentLocaleMapping
+  data: ContentLocaleMappingJS
 };
 
 export type SectionInfo = {

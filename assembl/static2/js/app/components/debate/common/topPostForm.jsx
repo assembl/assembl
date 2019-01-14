@@ -32,9 +32,9 @@ export type Props = {
   messageClassifier: string,
   scrollOffset: number,
   onDisplayForm: Function,
-  fillBodyLabelMsgId: string,
-  bodyPlaceholderMsgId: string,
-  postSuccessMsgId: string,
+  fillBodyLabelMsgId?: string,
+  bodyPlaceholderMsgId?: string,
+  postSuccessMsgId?: string,
   bodyMaxLength?: number,
   draftable?: boolean,
   draftSuccessMsgId?: string,
@@ -141,7 +141,6 @@ export class DumbTopPostForm extends React.Component<Props, State> {
       displayAlert('success', I18n.t('loading.wait'), false, 10000);
 
       // first, we upload each attachment
-      // $FlowFixMe we know that body is not empty
       const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
         const variables = {
@@ -169,7 +168,9 @@ export class DumbTopPostForm extends React.Component<Props, State> {
             default:
               successMessage = postSuccessMsgId;
             }
-            displayAlert('success', I18n.t(successMessage), false, 10000);
+            if (successMessage) {
+              displayAlert('success', I18n.t(successMessage), false, 10000);
+            }
             this.resetForm();
             this.setState(submittingState(false));
           })
