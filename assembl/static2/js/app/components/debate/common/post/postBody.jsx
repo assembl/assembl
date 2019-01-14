@@ -10,7 +10,7 @@ import { withRouter } from 'react-router';
 import { EMPTY_STRING } from '../../../../constants';
 import { getConnectedUserId, isHarvestable } from '../../../../utils/globalFunctions';
 import { isSpecialURL } from '../../../../utils/urlPreview';
-import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
+import { transformLinksInHtml } from '../../../../utils/linkify';
 import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations/updateHarvestingTranslationPreference.graphql';
 import PostTranslate from '../../common/translations/postTranslate';
 import Embed from '../../../common/urlPreview/embed';

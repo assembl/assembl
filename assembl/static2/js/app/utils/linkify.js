@@ -1,6 +1,8 @@
 // @flow
 import linkifyHtml from 'linkifyjs/html';
 import * as linkify from 'linkifyjs';
+import activeHtml from 'react-active-html';
+import { postBodyReplacementComponents } from '../components/debate/common/post/postBody';
 
 type LinkifyLink = {
   href: string,
@@ -22,3 +24,5 @@ export function addProtocol(url: string): string {
   const hasProtocol = /^(http|ftp)s?:\/\//.test(url);
   return hasProtocol ? url : `https://${url}`;
 }
+
+export const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());

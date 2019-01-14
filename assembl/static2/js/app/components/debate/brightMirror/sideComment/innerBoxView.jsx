@@ -2,13 +2,11 @@
 import React, { Fragment } from 'react';
 
 import moment from 'moment';
-import activeHtml from 'react-active-html';
 import { I18n } from 'react-redux-i18n';
 import { Button, OverlayTrigger, Popover, Overlay } from 'react-bootstrap';
 
 import AvatarImage from '../../../common/avatarImage';
-import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
-import { postBodyReplacementComponents } from '../../common/post/postBody';
+import { renderRichtext } from '../../../../utils/linkify';
 import { isConnectedUser } from '../../../../utils/globalFunctions';
 import { editSideCommentTooltip, deleteSideCommentTooltip } from '../../../common/tooltips';
 import Permissions, { connectedUserCan } from '../../../../utils/permissions';
@@ -26,8 +24,6 @@ export type Props = {
 export type State = {
   menuTarget: HTMLElement | null
 };
-
-const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
 
 class InnerBoxView extends React.Component<Props, State> {
   static defaultProps = {

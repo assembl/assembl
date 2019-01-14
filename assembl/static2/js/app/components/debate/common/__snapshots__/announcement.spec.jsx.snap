@@ -41,24 +41,18 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
               <div
                 className="media-description-layer media-description-top"
               >
-                <div>
-                  <div
-                    id=""
-                  >
-                    <p>
-                      Bonjour à tous
-                    </p>
-                    <p>
-                      Nous allons mettre un deuxieme paragraphe
-                    </p>
-                    <p>
-                      Et un peu de 
-                      <strong>
-                        texte en gras
-                      </strong>
-                    </p>
-                  </div>
-                </div>
+                <p>
+                  Bonjour à tous
+                </p>
+                <p>
+                  Nous allons mettre un deuxieme paragraphe
+                </p>
+                <p>
+                  Et un peu de 
+                  <strong>
+                    texte en gras
+                  </strong>
+                </p>
               </div>
             </div>
           </div>
@@ -211,24 +205,18 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
               <div
                 className="media-description-layer media-description-top"
               >
-                <div>
-                  <div
-                    id=""
-                  >
-                    <p>
-                      Bonjour à tous
-                    </p>
-                    <p>
-                      Nous allons mettre un deuxieme paragraphe
-                    </p>
-                    <p>
-                      Et un peu de 
-                      <strong>
-                        texte en gras
-                      </strong>
-                    </p>
-                  </div>
-                </div>
+                <p>
+                  Bonjour à tous
+                </p>
+                <p>
+                  Nous allons mettre un deuxieme paragraphe
+                </p>
+                <p>
+                  Et un peu de 
+                  <strong>
+                    texte en gras
+                  </strong>
+                </p>
               </div>
             </div>
           </div>

@@ -3,8 +3,7 @@ import * as React from 'react';
 import { Grid, Col } from 'react-bootstrap';
 import classnames from 'classnames';
 import type { AnnouncementContent } from '../debate/common/announcement';
-import { transformLinksInHtml } from '../../utils/linkify';
-import { Html, postBodyReplacementComponents } from '../debate/common/post/postBody';
+import { renderRichtext } from '../../utils/linkify';
 
 type DescriptionProps = {
   content: string
@@ -27,9 +26,7 @@ const Quote = ({ content }: DescriptionProps) => (
 );
 
 const Body = ({ content }: DescriptionProps) => (
-  <div className="media-description-layer media-description-top">
-    <Html rawHtml={transformLinksInHtml(content)} replacementComponents={postBodyReplacementComponents()} />
-  </div>
+  <div className="media-description-layer media-description-top">{renderRichtext(content)}</div>
 );
 
 class TextAndMedia extends React.Component<Props> {

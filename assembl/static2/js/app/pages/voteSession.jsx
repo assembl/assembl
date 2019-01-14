@@ -7,10 +7,8 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 import shuffle from 'lodash/shuffle';
 import debounce from 'lodash/debounce';
-import activeHtml from 'react-active-html';
 
-import { isSpecialURL } from '../utils/urlPreview';
-import Embed from '../components/common/urlPreview/embed';
+import { renderRichtext } from '../utils/linkify';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
 import AddGaugeVoteMutation from '../graphql/mutations/addGaugeVote.graphql';
@@ -23,7 +21,6 @@ import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
-import { transformLinksInHtml } from '../utils/linkify';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 
 export type TokenCategory = {|
@@ -126,22 +123,6 @@ export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
 type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGaugeVoteSpecification>;
 export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
-
-export const voteSessionBodyReplacementComponents = () => ({
-  a: (attributes: Object) => {
-    const { href, key, target, title, children } = attributes;
-    return (
-      <React.Fragment>
-        <a key={`url-link-${key}`} href={href} className="linkified" target={target} title={title}>
-          {children}
-        </a>
-        {isSpecialURL(href) ? <Embed key={`url-embed-${href}`} url={href} /> : null}
-      </React.Fragment>
-    );
-  }
-});
-
-const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), voteSessionBodyReplacementComponents());
 
 class DumbVoteSession extends React.Component<Props, State> {
   availableTokensContainerRef: ?HTMLDivElement;
