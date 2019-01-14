@@ -2,7 +2,7 @@
   border: none;
   left: 0;
   position: fixed;
-  top: $navbar-height;
+  bottom: 0;
   transition: opacity 1s ease-in-out;
   text-align: center;
   width: 100%;
@@ -10,7 +10,7 @@
 
 .showAlert {
   opacity: 1;
-  z-index: 1100;
+  z-index: 2000;
 }
 
 .hideAlert {
