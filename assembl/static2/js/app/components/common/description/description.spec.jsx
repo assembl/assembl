@@ -13,15 +13,18 @@ describe('<Description /> - with shallow', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<Description />);
+    wrapper = shallow(
+      <Description>
+        <p>My awesome paragraph description</p>
+      </Description>
+    );
   });
 
   it('should render a unique div which has a classname', () => {
-    expect(wrapper.find('div [className]')).toHaveLength(1);
+    expect(wrapper.find('div [className="description"]')).toHaveLength(1);
   });
 
   it('should render children props', () => {
-    wrapper.setProps({ children: <p className="my-child" /> });
-    expect(wrapper.contains(<p className="my-child" />)).toEqual(true);
+    expect(wrapper.contains(<p>My awesome paragraph description</p>)).toEqual(true);
   });
 });
