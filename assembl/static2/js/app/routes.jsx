@@ -41,7 +41,7 @@ import IntMainPage from './integration/index';
 import Int101Page from './integration/101/index';
 import Int101FormBuilderPage from './integration/101/containers/formBuilder101/formBuilder101';
 import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirrorFiction';
-import IntSemanticAnalysisSemanticAnalysis from './integration/semanticAnalysis/pages/semanticAnalysis';
+import IntSemanticAnalysis from './integration/semanticAnalysis/pages/semanticAnalysis';
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
@@ -105,10 +105,7 @@ export default [
       path={routeForRouter('integrationBrightMirrorFiction', false, { preSlash: true })}
       component={IntBrightMirrorFiction}
     />
-    <Route
-      path={routeForRouter('integrationSemanticAnalysisSemanticAnalysis', false, { preSlash: true })}
-      component={IntSemanticAnalysisSemanticAnalysis}
-    />
+    <Route path={routeForRouter('integrationSemanticAnalysis', false, { preSlash: true })} component={IntSemanticAnalysis} />
     {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}
     <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
     {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
