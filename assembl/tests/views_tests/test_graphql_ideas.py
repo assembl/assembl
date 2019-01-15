@@ -1069,10 +1069,8 @@ def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_ses
             }]
         })
     assert res.errors is None
-    created_ideas = test_session.query(models.Idea).all()
-    for idea in created_ideas:
-        if not isinstance(idea, models.RootIdea):
-            created_idea = idea
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     assert created_idea.message_columns[0].message_classifier == u'premier entrée pour le nom'
     assert created_idea.message_columns[1].message_classifier == u'deuxième entrée pour le nom'
     assert created_idea.message_columns[0].color == 'red'
@@ -1138,24 +1136,21 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
             }]
         })
     assert res.errors is None
-    created_ideas = test_session.query(models.Idea).all()
-    for idea in created_ideas:
-        if not isinstance(idea, models.RootIdea):
-            created_idea = idea
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     assert len(created_idea.message_columns) == 2
     assert created_idea.message_columns[0].message_classifier == 'positive'
     assert created_idea.message_columns[1].message_classifier == 'negative'
     assert created_idea.message_columns[0].color == 'red'
     assert created_idea.message_columns[1].color == 'green'
     # Testing to add an extra neutral column
-    test_session.commit()
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
         variable_values={
             'discussionPhaseId': phases['multiColumns'].id,
             'ideas': [{
-                'id': to_global_id('Idea', created_idea.id),
+                'id': created_idea_global_id,
                 'messageViewOverride': 'messageColumns',
                 'titleEntries': [
                     {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -1216,10 +1211,8 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
             }]
         })
     assert res.errors is None
-    created_ideas = test_session.query(models.Idea).all()
-    for idea in created_ideas:
-        if not isinstance(idea, models.RootIdea):
-            created_idea = idea
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     assert len(created_idea.message_columns) == 3
     assert created_idea.message_columns[0].message_classifier == 'positive'
     assert created_idea.message_columns[1].message_classifier == 'negative'
@@ -1228,14 +1221,13 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
     assert created_idea.message_columns[1].color == 'green'
     assert created_idea.message_columns[2].color == 'blue'
     # Testing updating the multiColumns
-    test_session.commit()
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
         variable_values={
             'discussionPhaseId': phases['multiColumns'].id,
             'ideas': [{
-                'id': to_global_id("Idea", created_idea.id),
+                'id': created_idea_global_id,
                 'messageViewOverride': 'messageColumns',
                 'titleEntries': [
                     {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -1296,11 +1288,8 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
             }]
         })
     assert res.errors is None
-    created_ideas = test_session.query(models.Idea).all()
-    assert len(created_ideas) == 2
-    for idea in created_ideas:
-        if not isinstance(idea, models.RootIdea):
-            created_idea = idea
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     assert len(created_idea.message_columns) == 3
     assert created_idea.message_columns[0].message_classifier == 'positive'
     assert created_idea.message_columns[1].message_classifier == 'negative'
@@ -1309,13 +1298,13 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
     assert created_idea.message_columns[1].color == 'green'
     assert created_idea.message_columns[2].color == 'blue'
     # Testing to delete the last column
-    test_session.commit()
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
         variable_values={
             'discussionPhaseId': phases['multiColumns'].id,
             'ideas': [{
+                'id': created_idea_global_id,
                 'messageViewOverride': 'messageColumns',
                 'titleEntries': [
                     {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -1364,10 +1353,8 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
             }]
         })
     assert res.errors is None
-    created_ideas = test_session.query(models.Idea).all()
-    for idea in created_ideas:
-        if not isinstance(idea, models.RootIdea):
-            created_idea = idea
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     assert len(created_idea.message_columns) == 2
     assert created_idea.message_columns[0].message_classifier == 'positive'
     assert created_idea.message_columns[1].message_classifier == 'negative'
