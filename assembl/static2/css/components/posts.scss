@@ -315,10 +315,6 @@ $deleted-post-border: 1px solid $grey1 !default;
     &:hover {
       transform: scale(1.2);
     }
-
-    &.share-multiColumns {
-      margin-bottom: -10px;
-    }
   }
 
   .overflow-action {
@@ -341,7 +337,7 @@ $deleted-post-border: 1px solid $grey1 !default;
   }
 
   .add-sentiment {
-    margin: 20px 0 0;
+    margin: 10px 0 0;
 
     .sentiment {
       margin-left: auto;
@@ -756,6 +752,6 @@ $deleted-post-border: 1px solid $grey1 !default;
 
 .column-post {
   .post-actions-separator {
-    margin: 10px auto 0 auto;
+    margin: 7.5px auto 0 auto;
   }
 }

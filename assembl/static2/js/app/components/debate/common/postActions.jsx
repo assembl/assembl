@@ -95,7 +95,7 @@ export class PostActions extends React.Component<Props> {
           {!isPending ? (
             <React.Fragment>
               <div
-                className={classnames('post-action', { 'share-multiColumns': isMultiColumns })}
+                className="post-action"
                 onClick={() =>
                   openShareModal({
                     type: 'post',
@@ -110,7 +110,6 @@ export class PostActions extends React.Component<Props> {
                   {shareIcon}
                 </ResponsiveOverlayTrigger>
               </div>
-              <div className={classnames('post-actions-separator', { hidden: isMultiColumns })} />
             </React.Fragment>
           ) : null}
           {!isPendingForUser ? (
