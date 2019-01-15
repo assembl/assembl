@@ -1,8 +1,5 @@
 .announcement {
   text-align: center;
-  margin-left: 4.5%;
-  margin-right: 4.5%;
-  padding-bottom: $margin-section-xxs;
 
   .announcement-title {
     .announcement-title-text {
@@ -14,10 +11,6 @@
 
   .announcement-statistics {
     display: inline-block;
-    text-align: center;
-    margin-top: $margin-section-xxxxs;
-    margin-bottom: 3em;
-    position: relative;
 
     .announcement-doughnut {
       width: 190px;
@@ -43,11 +36,7 @@
     }
 
     .announcement-numbers {
-      font-size: 12px;
-      margin-bottom: 15%;
       color: $first-color;
-      line-height: 26px;
-      margin-top: 10px;
 
       span::before {
         font-size: 17px;
@@ -56,8 +45,6 @@
   }
 
   .media-section {
-    padding-top: 11px;
-
     .container-fluid {
       margin-left: 0;
       margin-right: 0;
@@ -67,14 +54,6 @@
       .col-sm-12 {
         padding-left: 0;
         padding-right: 0;
-
-        .media-right {
-          padding-left: 0;
-        }
-
-        .media-description-top {
-          margin-bottom: $margin-section-xxxxs;
-        }
       }
     }
   }
@@ -105,27 +84,14 @@
       }
     }
 
-    .announcement-statistics {
-      margin-top: 0;
-    }
-
     .announcement-media {
       padding-left: 0;
       padding-right: 0;
 
       .media-section {
-        padding-top: 0;
-        padding-bottom: 25px;
-
         .media-description-layer {
           margin-left: 17px;
           margin-right: 17px;
-        }
-
-        .media-right {
-          .media-description-top {
-            margin-bottom: 23px;
-          }
         }
       }
     }

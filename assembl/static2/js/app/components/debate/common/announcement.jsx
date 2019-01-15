@@ -113,7 +113,7 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
 
   const instructionContent = (
     <React.Fragment>
-      <Col xs={12} md={4} className="col-md-pull-8">
+      <Col xs={12} md={2} className="col-md-pull-10">
         <div className="announcement-statistics">
           <div className="announcement-doughnut">
             <StatisticsDoughnut elements={doughnutElements} />

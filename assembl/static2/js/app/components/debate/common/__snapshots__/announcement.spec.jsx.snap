@@ -28,7 +28,7 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
         role="tabpanel"
       >
         <div
-          className="announcement-media col-md-push-4 col-md-8 col-xs-12"
+          className="announcement-media col-md-push-2 col-md-10 col-xs-12"
         >
           <div
             className="announcement-media col-md-push-4 col-md-8 col-xs-12"
@@ -199,7 +199,7 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
         role="tabpanel"
       >
         <div
-          className="announcement-media col-md-push-4 col-md-8 col-xs-12"
+          className="announcement-media col-md-push-2 col-md-10 col-xs-12"
         >
           <div
             className="announcement-media col-md-push-4 col-md-8 col-xs-12"
