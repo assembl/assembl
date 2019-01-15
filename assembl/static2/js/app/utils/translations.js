@@ -326,6 +326,9 @@ const Translations = {
           }
         }
       },
+      loader: {
+        loading: "Chargement en cours..."
+      },
       uploadButton: "Choisissez un fichier",
       goUp: "Remonter"
     },
@@ -1295,6 +1298,9 @@ const Translations = {
             title: "Edit the link"
           }
         }
+      },
+      loader: {
+        loading: "Loading..."
       },
       uploadButton: "Choose a file to upload",
       goUp: "Back to top"

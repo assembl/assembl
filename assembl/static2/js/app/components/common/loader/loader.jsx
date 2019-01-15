@@ -1,28 +1,40 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
+import { I18n } from 'react-redux-i18n';
+// Component imports
+import LoadingIcon from './icons/loadingIcon/loadingIcon';
+
+type LoaderType = {
+  loaderComponent: React.Node,
+  description: string
+};
+
+const LoaderTypeLoading: LoaderType = {
+  description: I18n.t('common.loader.loading'),
+  loaderComponent: <LoadingIcon />
+};
 
 export const LOADER_TYPE = {
   LOADING: 'LOADING'
 };
 
-// type LoaderType = {
-//   imgSrc: string,
-//   imgAlt: string,
-//   children: string
-// };
+export const LOADER_TYPE_CONTENT = {
+  LOADING: LoaderTypeLoading
+};
 
 export type Props = {
+  /** Loader type of type LOADER_TYPE (LOADING, ERROR) */
   type: $Keys<typeof LOADER_TYPE>
 };
 
-const Loader = ({ type }: Props) => {
-  // const { imgSrc, imgAlt, children } = LOADER_TYPE.loading;
-  const description = type === LOADER_TYPE.LOADING ? 'aaa' : 'bbb';
+const Loader = () => {
+  const { description, loaderComponent } = LOADER_TYPE_CONTENT.LOADING;
+
   return (
-    <React.Fragment>
-      <img src="aaa" alt="aaa" />
+    <div className="custom-loader">
+      {loaderComponent}
       <p>{description}</p>
-    </React.Fragment>
+    </div>
   );
 };
 

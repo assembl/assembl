@@ -6,6 +6,7 @@ import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
 import SemanticAnalysis from './semanticAnalysis';
+import Loader from '../../../components/common/loader/loader';
 
 configure({ adapter: new Adapter() });
 
@@ -16,7 +17,7 @@ describe('<SemanticAnalysis /> - with shallow', () => {
     wrapper = shallow(<SemanticAnalysis />);
   });
 
-  it('should render a h1', () => {
-    expect(wrapper.find('h1')).toHaveLength(1);
+  it('should render a Loader component', () => {
+    expect(wrapper.find(Loader)).toHaveLength(1);
   });
 });

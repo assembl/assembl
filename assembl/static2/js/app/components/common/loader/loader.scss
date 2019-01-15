@@ -1,0 +1,43 @@
+// Variables
+$animation-speed: 1.4s;
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 190;
+  }
+
+  50% {
+    stroke-dashoffset: 47.5;
+    transform: rotate(135deg);
+  }
+
+  100% {
+    stroke-dashoffset: 190;
+    transform: rotate(450deg);
+  }
+}
+
+.custom-loader {
+  .spinner {
+    animation: rotator infinite $animation-speed linear;
+    margin-bottom: 2rem;
+    width: 60px;
+  }
+
+  .path {
+    animation: dash infinite $animation-speed ease-in-out;
+    stroke: $purple;
+    stroke-dasharray: 190;
+    transform-origin: center;
+  }
+}
