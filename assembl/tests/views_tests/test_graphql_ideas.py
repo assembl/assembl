@@ -1078,7 +1078,7 @@ def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_ses
     test_session.rollback()
 
 
-def xtest_mutation_update_ideas_create_multicol(test_session, graphql_request, graphql_registry, phases):
+def test_mutation_update_ideas_create_multicol(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
 
     res = schema.execute(
@@ -1142,14 +1142,20 @@ def xtest_mutation_update_ideas_create_multicol(test_session, graphql_request, g
     assert created_idea.message_columns[1].message_classifier == 'negative'
     assert created_idea.message_columns[0].color == 'red'
     assert created_idea.message_columns[1].color == 'green'
-    # Testing to add an extra neutral column
+    test_session.rollback()
+
+
+# Testing to add an extra neutral column
+def xtest_mutation_update_ideas_add_extra_colomn_to_multicolumn(test_session, graphql_request, graphql_registry, phases, subidea_1_1, idea_message_column_positive_on_subidea_1_1, idea_message_column_negative_on_subidea_1_1):
+    test_session.commit()
+    idea_id = to_global_id('Idea', subidea_1_1.id)
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
         variable_values={
             'discussionPhaseId': phases['multiColumns'].id,
             'ideas': [{
-                'id': created_idea_global_id,
+                'id': idea_id,
                 'messageViewOverride': 'messageColumns',
                 'titleEntries': [
                     {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -1219,7 +1225,12 @@ def xtest_mutation_update_ideas_create_multicol(test_session, graphql_request, g
     assert created_idea.message_columns[0].color == 'red'
     assert created_idea.message_columns[1].color == 'green'
     assert created_idea.message_columns[2].color == 'blue'
-    # Testing updating the multiColumns
+    test_session.rollback()
+
+
+# Testing updating the multiColumns
+def xtest_mutation_update_ideas_add_extra_colomn_to_multicolumn(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
@@ -1296,7 +1307,11 @@ def xtest_mutation_update_ideas_create_multicol(test_session, graphql_request, g
     assert created_idea.message_columns[0].color == 'red'
     assert created_idea.message_columns[1].color == 'green'
     assert created_idea.message_columns[2].color == 'blue'
-    # Testing to delete the last column
+    test_session.rollback()
+
+# Testing to delete the last column
+def xtest_mutation_update_ideas_delete_column_from_multicolumn(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
