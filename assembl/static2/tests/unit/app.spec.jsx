@@ -30,10 +30,13 @@ describe('App component', () => {
   describe('DebateContext', () => {
     it('should pass the correct values to the Context Provider', () => {
       const wrapper = shallow(<DumbApp {...props} />);
-      expect(wrapper.find('ContextProvider').prop('value')).toEqual({
+      const contextValue = wrapper.find('ContextProvider').prop('value');
+      delete contextValue.changeIsHarvestable;
+      expect(contextValue).toEqual({
         connectedUserId: '1234',
         isDebateModerated: true,
-        isHarvesting: false
+        isHarvesting: false,
+        isHarvestable: false
       });
     });
   });

@@ -20,6 +20,7 @@ type Props = PostProps & {
   body: string,
   handleEditClick: Function,
   isHarvesting: boolean,
+  isHarvestable: boolean,
   modifiedSubject: React.Element<any>,
   multiColumns: boolean,
   subject: string,
@@ -153,7 +154,8 @@ class PostView extends React.PureComponent<Props, State> {
       subject,
       modifiedSubject,
       multiColumns,
-      isHarvesting
+      isHarvesting,
+      isHarvestable
     } = this.props;
     const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     const isPendingPostForModerator = connectedUserIsModerator() && isPending;
@@ -242,6 +244,7 @@ class PostView extends React.PureComponent<Props, State> {
                 bodyDivRef={this.recomputeTreeHeightOnImagesLoad}
                 measureTreeHeight={this.props.measureTreeHeight}
                 isHarvesting={isHarvesting}
+                isHarvestable={isHarvestable}
               />
 
               <Attachments attachments={attachments} />

@@ -93,8 +93,6 @@ export const MESSAGE_VIEW = {
   brightMirror: 'brightMirror'
 };
 
-export const HARVESTABLE_PHASES = [PHASES.thread, PHASES.multiColumns];
-
 export const COOKIE_TYPES = [
   'ACCEPT_TRACKING_ON_DISCUSSION',
   'ACCEPT_SESSION_ON_DISCUSSION',

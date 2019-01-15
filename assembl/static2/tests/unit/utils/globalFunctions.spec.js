@@ -4,7 +4,6 @@ import {
   getBasename,
   hexToRgb,
   encodeUserIdBase64,
-  isHarvestable,
   moveElementToFirstPosition,
   getPostPublicationState
 } from '../../../js/app/utils/globalFunctions';
@@ -103,29 +102,6 @@ describe('encodeUserIdBase64 function', () => {
     const expectedResult = null;
     const result = encodeUserIdBase64(userId);
     expect(result).toEqual(expectedResult);
-  });
-});
-
-describe('isHarvestable function', () => {
-  it('should return false if content is not harvestable', () => {
-    const params = {
-      phase: 'survey'
-    };
-    expect(isHarvestable(params)).toBeFalsy();
-  });
-
-  it('should return true if content is harvestable', () => {
-    const params = {
-      phase: 'thread'
-    };
-    expect(isHarvestable(params)).toBeTruthy();
-  });
-
-  it('should return true if content is harvestable', () => {
-    const params = {
-      phase: 'multiColumns'
-    };
-    expect(isHarvestable(params)).toBeTruthy();
   });
 });
 

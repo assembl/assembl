@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -28,6 +29,7 @@ import Survey from './survey';
 import VoteSession from './voteSession';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
+import { DebateContext } from '../app';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -375,15 +377,48 @@ const IdeaWithPosts = compose(
   withRouter
 )(Idea);
 
-const SwitchView = (props) => {
-  if (props.messageViewOverride === MESSAGE_VIEW.survey) {
-    return <Survey {...props} />;
-  }
-  if (props.messageViewOverride === MESSAGE_VIEW.voteSession) {
-    return <VoteSession {...props} />;
-  }
-  return <IdeaWithPosts {...props} additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror} />;
+type SwitchViewProps = {
+  messageViewOverride: string,
+  changeIsHarvestable: (isHarvestable: boolean) => void,
+  isHarvestable: boolean
 };
+
+class SwitchView extends React.Component<SwitchViewProps> {
+  componentDidMount() {
+    this.setIsHarvestable();
+  }
+
+  componentDidUpdate() {
+    this.setIsHarvestable();
+  }
+
+  setIsHarvestable = () => {
+    const { changeIsHarvestable, isHarvestable, messageViewOverride } = this.props;
+    const isHarvestableIdea = messageViewOverride === MESSAGE_VIEW.thread || messageViewOverride === MESSAGE_VIEW.messageColumns;
+    if (isHarvestableIdea !== isHarvestable) {
+      changeIsHarvestable(isHarvestableIdea);
+    }
+  };
+
+  render() {
+    const props = this.props;
+    if (props.messageViewOverride === MESSAGE_VIEW.survey) {
+      return <Survey {...props} />;
+    }
+    if (props.messageViewOverride === MESSAGE_VIEW.voteSession) {
+      return <VoteSession {...props} />;
+    }
+    return <IdeaWithPosts {...props} additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror} />;
+  }
+}
+
+const SwitchViewWithContext = props => (
+  <DebateContext.Consumer>
+    {({ changeIsHarvestable, isHarvestable }) => (
+      <SwitchView {...props} isHarvestable={isHarvestable} changeIsHarvestable={changeIsHarvestable} />
+    )}
+  </DebateContext.Consumer>
+);
 
 export default compose(
   connect(state => ({
@@ -417,4 +452,4 @@ export default compose(
     }
   }),
   manageErrorAndLoading({ displayLoader: true })
-)(SwitchView);
+)(SwitchViewWithContext);

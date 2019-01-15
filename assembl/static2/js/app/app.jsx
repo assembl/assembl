@@ -20,7 +20,13 @@ import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
 import DiscussionPreferencesQuery from './graphql/DiscussionPreferencesQuery.graphql';
 
-export const DebateContext = React.createContext({ isDebateModerated: false, isHarvesting: false, connectedUserId: null });
+export const DebateContext = React.createContext({
+  isDebateModerated: false,
+  isHarvesting: false,
+  isHarvestable: false,
+  changeIsHarvestable: (isHarvestable: boolean) => {}, // eslint-disable-line
+  connectedUserId: null
+});
 
 type Debate = {
   debateData: DebateData,
@@ -59,7 +65,13 @@ type Props = {
   connectedUserId: ?string
 };
 
-export class DumbApp extends React.Component<Props> {
+type State = {
+  isHarvestable: boolean
+};
+
+export class DumbApp extends React.Component<Props, State> {
+  state = { isHarvestable: false };
+
   componentDidMount() {
     const { route } = this.props;
     const debateId = getDiscussionId();
@@ -91,6 +103,8 @@ export class DumbApp extends React.Component<Props> {
     const { isHarvesting, children, isDebateModerated, connectedUserId } = this.props;
     const contextValues = {
       isHarvesting: isHarvesting,
+      isHarvestable: this.state.isHarvestable,
+      changeIsHarvestable: (isHarvestable: boolean) => this.setState(() => ({ isHarvestable: isHarvestable })),
       isDebateModerated: isDebateModerated,
       connectedUserId: connectedUserId
     };
