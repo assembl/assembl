@@ -80,6 +80,7 @@ class IdeaInterface(graphene.Interface):
     children = graphene.List(lambda: IdeaUnion, description=docs.Idea.children)
     questions = graphene.List(lambda: Question, description=docs.Idea.questions)
     announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
+    message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -286,7 +287,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
     posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts)  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
-    message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
     def resolve_vote_results(self, args, context, info):
