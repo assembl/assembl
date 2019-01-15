@@ -607,8 +607,8 @@ class IdeaMessageColumnInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaMessageColumnInput.title_entries)
     color = graphene.String(required=True, description=docs.IdeaMessageColumnInput.color)
     message_classifier = graphene.String(description=docs.IdeaMessageColumnInput.message_classifier)
-    column_synthesis = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis)
-    column_synthesis_title = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis_title)
+    column_synthesis_subject = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis_subject)
+    column_synthesis_body = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis_body)
 
 
 def update_announcement_body_attachments(context, idea, discussion, new_attachments, purpose):
@@ -751,8 +751,8 @@ def create_idea(parent_idea, phase, args, context):
 
                     title = langstring_from_input_entries(column['title_entries'])
                     color = column['color']
-                    body = langstring_from_input_entries(column['column_synthesis'])
-                    subject = langstring_from_input_entries(column['column_synthesis_title'])
+                    body = langstring_from_input_entries(column['column_synthesis_body'])
+                    subject = langstring_from_input_entries(column['column_synthesis_subject'])
                     saobj.message_columns.append(
                         models.IdeaMessageColumn(
                             message_classifier=message_classifier,
@@ -911,8 +911,8 @@ def update_idea(args, phase, context):
                 for column in message_columns:
                     message_classifier = column.get('message_classifier', None)
                     existing_column = [col for col in thematic.message_columns if col.message_classifier == message_classifier]
-                    body = langstring_from_input_entries(column['column_synthesis'])
-                    subject = langstring_from_input_entries(column['column_synthesis_title'])
+                    body = langstring_from_input_entries(column['column_synthesis_body'])
+                    subject = langstring_from_input_entries(column['column_synthesis_subject'])
                     if existing_column:
                         existing_column = existing_column[0]
                         update_langstring_from_input_entries(existing_column, 'name', column['name_entries'])

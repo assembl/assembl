@@ -421,8 +421,8 @@ class IdeaMessageColumnInput:
     title_entries = Default.langstring_entries % ("Title of the column.")
     color = Default.string_entry % ("The color of the column.")
     message_classifier = Default.string_entry % ("Message classifier of the column.")
-    column_synthesis = IdeaMessageColumn.column_synthesis
-    column_synthesis_title = Default.langstring_entries % ("The title of the Synthesis post associated to the column.")
+    column_synthesis_body = Default.langstring_entries % ("The body of the Synthesis post associated to the column.")
+    column_synthesis_subject = Default.langstring_entries % ("The title of the Synthesis post associated to the column.")
 
 
 class CreateThematic:

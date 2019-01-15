@@ -1034,11 +1034,11 @@ def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_ses
                     {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
                     'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'red',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ]
@@ -1046,11 +1046,11 @@ def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_ses
                     {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
                     'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'green',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ]
@@ -1102,11 +1102,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'red',
                     'messageClassifier': 'positive',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ]},
@@ -1114,11 +1114,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'green',
                     'messageClassifier': 'negative',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ]}
@@ -1165,11 +1165,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'red',
                     'messageClassifier': 'positive',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ]},
@@ -1177,11 +1177,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'green',
                     'messageClassifier': 'negative',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ]},
@@ -1189,11 +1189,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"troisième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'blue',
                     'messageClassifier': 'neutral',
-                    'columnSynthesisTitle': [
+                    'columnSynthesissubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne neutre", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for neutral column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for neutral column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for neutral column", 'localeCode': u"en"}
                     ]}
@@ -1242,11 +1242,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'red',
                     'messageClassifier': 'positive',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ]},
@@ -1254,11 +1254,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'green',
                     'messageClassifier': 'negative',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ]},
@@ -1266,11 +1266,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"troisième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'blue',
                     'messageClassifier': 'neutral',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne neutre modifié", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for neutral column modified", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for neutral column modifié", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for neutral column modified", 'localeCode': u"en"}
                     ]}
@@ -1319,11 +1319,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'red',
                     'messageClassifier': 'positive',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
                     ]},
@@ -1331,11 +1331,11 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'green',
                     'messageClassifier': 'negative',
-                    'columnSynthesisTitle': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ],
-                    'columnSynthesis': [
+                    'columnSynthesisBody': [
                         {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
                         {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
                     ]}
