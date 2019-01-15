@@ -31,20 +31,20 @@ const MultiColumnsFields = ({ editLocale, nbColumnsInForm, fieldPrefix }: Props)
           editLocale={editLocale}
           name={`${fieldPrefix}.multiColumns.messageColumns[${index}].name`}
           component={MultilingualTextFieldAdapter}
-          label={I18n.t('administration.tableOfThematics.columnTitle')}
+          label={`${I18n.t('administration.tableOfThematics.columnTitle')} ${index + 1}`}
         />
         <Field
           required
           editLocale={editLocale}
           name={`${fieldPrefix}.multiColumns.messageColumns[${index}].title`}
           component={MultilingualTextFieldAdapter}
-          label={I18n.t('administration.tableOfThematics.columnName')}
+          label={`${I18n.t('administration.tableOfThematics.columnName')} ${index + 1}`}
         />
         <Field
           required
           name={`${fieldPrefix}.multiColumns.messageColumns[${index}].color`}
           component={ColorPickerFieldAdapter}
-          label={I18n.t('administration.tableOfThematics.columnColor')}
+          label={`${I18n.t('administration.tableOfThematics.columnColor')} ${index + 1}`}
         />
       </div>
     ))}
