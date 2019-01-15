@@ -14,6 +14,7 @@ import Loader from '../../common/loader';
 import validate from './validate';
 import { save, createMutationsPromises } from './save';
 import AdminForm from '../../../components/form/adminForm';
+import CheckboxFieldAdapter from '../../../components/form/checkboxFieldAdapter';
 
 const loading = <Loader />;
 
@@ -29,6 +30,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
   const cookiesPolicyLabel = I18n.t('administration.legalContents.cookiesPolicyLabel');
   const privacyPolicyLabel = I18n.t('administration.legalContents.privacyPolicyLabel');
   const userGuidelinesLabel = I18n.t('administration.legalContents.userGuidelinesLabel');
+  const mandatoryLegalContentsModalLabel = I18n.t('administration.legalContents.mandatoryLegalContentsModal');
 
   return (
     <LoadSaveReinitializeForm
@@ -48,6 +50,13 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
           <div className="admin-content">
             <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
               <div className="form-container">
+                <Field
+                  component={CheckboxFieldAdapter}
+                  name="mandatoryLegalContentsModal"
+                  isChecked={false}
+                  label={mandatoryLegalContentsModalLabel}
+                  type="checkbox"
+                />
                 <Field
                   key={`tac-${editLocale}`}
                   editLocale={editLocale}
