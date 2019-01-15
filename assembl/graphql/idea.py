@@ -79,7 +79,6 @@ class IdeaInterface(graphene.Interface):
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     children = graphene.List(lambda: IdeaUnion, description=docs.Idea.children)
     questions = graphene.List(lambda: Question, description=docs.Idea.questions)
-    multiColumns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.multiColumns)
     announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
 
     def resolve_title(self, args, context, info):
