@@ -101,6 +101,7 @@ setup(name='assembl',
       },
       entry_points={
           "console_scripts": [
+              "assembl-check-availability = assembl.scripts.check_availability:main",
               "assembl-db-manage = assembl.scripts.db_manage:main",
               "assembl-ini-files = assembl.scripts.ini_files:main",
               "assembl-imap-test = assembl.scripts.imap_test:main",
