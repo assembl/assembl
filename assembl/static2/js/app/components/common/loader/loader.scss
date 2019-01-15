@@ -28,9 +28,15 @@ $animation-speed: 1.4s;
 }
 
 .custom-loader {
-  .spinner {
-    animation: rotator infinite $animation-speed linear;
-    margin-bottom: 2rem;
+  .description {
+    color: $brownish-grey;
+    font-size: $font-size-m;
+    line-height: $line-height-base;
+    width: 220px;
+  }
+
+  .icon {
+    margin-bottom: 20px;
     width: 60px;
   }
 
@@ -39,5 +45,35 @@ $animation-speed: 1.4s;
     stroke: $purple;
     stroke-dasharray: 190;
     transform-origin: center;
+  }
+
+  .spinner {
+    animation: rotator infinite $animation-speed linear;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .custom-loader {
+    .description {
+      font-size: $font-size-ml;
+      width: 300px;
+    }
+
+    .icon {
+      width: 90px;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-lg-min) {
+  .custom-loader {
+    .description {
+      font-size: $font-size-l;
+      width: 360px;
+    }
+
+    .icon {
+      width: 120px;
+    }
   }
 }

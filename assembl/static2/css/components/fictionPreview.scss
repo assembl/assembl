@@ -173,14 +173,14 @@
     height: 456px;
 
     h3 {
-      font-size: $font-size-l;
+      font-size: $font-size-ml;
       width: 300px;
     }
 
     .draft-label {
       width: 42%;
       top: 180px;
-      font-size: $font-size-l;
+      font-size: $font-size-ml;
     }
 
     .actions {
@@ -224,7 +224,7 @@
     border-bottom: solid 3px $theme-local-blue;
 
     h3 {
-      font-size: $font-size-l;
+      font-size: $font-size-ml;
       margin-bottom: 20px;
       width: 320px;
     }

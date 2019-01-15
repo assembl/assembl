@@ -39,9 +39,9 @@ const Loader = ({ type }: Props) => {
   const { description, loaderComponent } = type === LOADER_TYPE.LOADING ? LOADER_TYPE_CONTENT.LOADING : LOADER_TYPE_CONTENT.ERROR;
 
   return (
-    <div className="custom-loader">
+    <div className="custom-loader center">
       {loaderComponent}
-      <p>{description}</p>
+      <p className="description center">{description}</p>
     </div>
   );
 };

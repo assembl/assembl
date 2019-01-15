@@ -17,7 +17,11 @@ describe('<SemanticAnalysis /> - with shallow', () => {
     wrapper = shallow(<SemanticAnalysis />);
   });
 
+  it('should render a div with semantic-analysis as className', () => {
+    expect(wrapper.find('div [className="semantic-analysis"]')).toHaveLength(1);
+  });
+
   it('should render a Loader component', () => {
-    expect(wrapper.find(Loader)).toHaveLength(1);
+    expect(wrapper.find(Loader)).toHaveLength(2);
   });
 });

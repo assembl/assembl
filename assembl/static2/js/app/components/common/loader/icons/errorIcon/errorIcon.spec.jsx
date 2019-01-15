@@ -23,6 +23,6 @@ describe('<ErrorIcon /> - with shallow', () => {
   it('should render an error icon', () => {
     const errorIconPatch = getIconPath('error-icon.svg');
     const errorIconAlt = I18n.t('common.icons.error');
-    expect(wrapper.find(`img [src="${errorIconPatch}"] [alt="${errorIconAlt}"]`)).toHaveLength(1);
+    expect(wrapper.find(`img [src="${errorIconPatch}"] [alt="${errorIconAlt}"] [className="icon"]`)).toHaveLength(1);
   });
 });
