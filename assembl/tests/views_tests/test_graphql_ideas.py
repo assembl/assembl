@@ -1078,8 +1078,7 @@ def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_ses
     test_session.rollback()
 
 
-@pytest.mark.xfail
-def test_mutation_update_ideas_create_multicol(test_session, graphql_request, graphql_registry, phases):
+def xtest_mutation_update_ideas_create_multicol(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
 
     res = schema.execute(
