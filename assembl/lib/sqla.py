@@ -1766,6 +1766,9 @@ def before_commit_listener(session):
         for ((uri, view_def), (discussion, target)) in \
                 info['cdict'].iteritems():
             discussion = bytes(discussion or "*")
+            if uri is None:
+                # in tests, the object was created and then deleted
+                continue
             json = target.generic_json(view_def)
             if json:
                 changes[discussion].append(json)
