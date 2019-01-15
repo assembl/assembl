@@ -59,6 +59,12 @@
   }
 }
 
+.announcement-menu {
+  .md-only {
+    display: none;
+  }
+}
+
 @media screen and (max-width: $screen-sm-max) {
   .announcement {
     margin-left: 0;
@@ -93,6 +99,18 @@
           margin-left: 17px;
           margin-right: 17px;
         }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-lg-min) {
+  .announcement-menu {
+    .md-only {
+      display: inline;
+
+      &::before {
+        content: ' ';
       }
     }
   }

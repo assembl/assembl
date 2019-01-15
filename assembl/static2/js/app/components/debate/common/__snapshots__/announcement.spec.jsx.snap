@@ -4,7 +4,9 @@ exports[`Announcement component <Announcement /> on a multiColumns should render
 <div
   className="announcement"
 >
-  <div>
+  <div
+    className="announcement-menu"
+  >
     <ul
       className="nav nav-tabs"
       role="tablist"
@@ -175,7 +177,9 @@ exports[`Announcement component <Announcement/> on a thread should render an ann
 <div
   className="announcement"
 >
-  <div>
+  <div
+    className="announcement-menu"
+  >
     <ul
       className="nav nav-tabs"
       role="tablist"

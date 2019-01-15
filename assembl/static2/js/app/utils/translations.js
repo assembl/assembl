@@ -432,10 +432,10 @@ const Translations = {
         seeSubIdeas: "Voir les %{count} sous-thèmes",
         seeSubIdeas_1: "Voir le sous-thème",
         announcement: "Consigne",
-        instruction: "Consigne",
-        mindmap: "A retenir",
+        guidelines: "Consigne",
+        summary: "A retenir",
         semanticAnalysis: {
-          long: "Analyse Sémantique",
+          long: "Sémantique",
           short: "Analyse"
         }
       },
@@ -1418,11 +1418,11 @@ const Translations = {
         seeSubIdeas: "See %{count} sub-thematics",
         seeSubIdeas_1: "See sub-thematic",
         announcement: "Announcement",
-        instruction: "Instruction",
-        mindmap: "Mindmap",
+        guidelines: "Guidelines",
+        summary: "Summary",
         semanticAnalysis: {
-          long: "Semantic Analysis",
-          short: "Analysis"
+          long: "Analysis",
+          short: "Semantic"
         }
       },
       brightMirror: {

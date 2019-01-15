@@ -101,15 +101,24 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
   const columnInfos = getColumnInfos(messageColumns);
   const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
 
-  const instructionTitleKey = 'debate.thread.instruction';
-  const mindmapTitleKey = 'debate.thread.mindmap';
+  // Translation keys
+  const guidelinesTitleKey = 'debate.thread.guidelines';
+  const summaryTitleKey = 'debate.thread.summary';
   const semanticAnalysisLongTitleKey = 'debate.thread.semanticAnalysis.long';
-  // const semanticAnalysisShortTitleKey = 'debate.thread.semanticAnalysis.short';
+  const semanticAnalysisShortTitleKey = 'debate.thread.semanticAnalysis.short';
 
-  const instructionTabTitle = I18n.t(instructionTitleKey);
-  const mindmapTabTitle = I18n.t(mindmapTitleKey);
+  // Title contents
+  const instructionTabTitle = I18n.t(guidelinesTitleKey);
+  const mindmapTabTitle = I18n.t(summaryTitleKey);
   const semanticAnalysisTabLongTitle = I18n.t(semanticAnalysisLongTitleKey);
-  // const semanticAnalysisTabShortTitle = I18n.t(semanticAnalysisShortTitleKey);
+  const semanticAnalysisTabShortTitle = I18n.t(semanticAnalysisShortTitleKey);
+  // Since 'semantic analysis' is a long composed word, we only display 'analysis' on small devices
+  const semanticAnalysisTabTitle = (
+    <React.Fragment>
+      {semanticAnalysisTabShortTitle}
+      <span className="md-only">{semanticAnalysisTabLongTitle}</span>
+    </React.Fragment>
+  );
 
   const instructionContent = (
     <React.Fragment>
@@ -136,20 +145,19 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
   );
 
   const mindmapContent = <h1>A retenir</h1>;
-
   const semanticAnalysisContent = <h1>Analyse sémantique</h1>;
 
   return (
     <div className="announcement">
       {/** will need to update the overall structure to remove announcement css class */}
-      <Tabs defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION}>
+      <Tabs defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION} className="announcement-menu">
         <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION} title={instructionTabTitle}>
           {instructionContent}
         </Tab>
         <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.MINDMAP} title={mindmapTabTitle}>
           {mindmapContent}
         </Tab>
-        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabLongTitle}>
+        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
           {semanticAnalysisContent}
         </Tab>
       </Tabs>
