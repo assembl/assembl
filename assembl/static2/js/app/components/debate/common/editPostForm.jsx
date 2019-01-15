@@ -5,6 +5,8 @@ import { Row, Col, FormGroup, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 import { EditorState } from 'draft-js';
 import { PublicationStates } from '../../../constants';
+import { connectedUserIsModerator } from '../../../utils/permissions';
+import { DebateContext } from '../../../../app/app';
 
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
@@ -40,7 +42,8 @@ type EditPostFormProps = {
   childrenUpdate?: boolean,
   bodyMaxLength?: number,
   draftable?: boolean,
-  draftSuccessMsgId?: string
+  draftSuccessMsgId?: string,
+  isDebateModerated: boolean
 };
 
 type EditPostFormState = {
@@ -48,7 +51,7 @@ type EditPostFormState = {
   body: EditorState
 };
 
-class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormState> {
+class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormState> {
   static defaultProps = {
     postSuccessMsgId: 'debate.thread.postSuccess',
     editTitleLabelMsgId: 'debate.edit.title',
@@ -115,8 +118,18 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
         const oldSubject = this.props.subject;
         updatePost({ variables: variables })
           .then(() => {
-            const successMsgId = publicationState === PublicationStates.DRAFT ? draftSuccessMsgId : postSuccessMsgId;
-            displayAlert('success', I18n.t(successMsgId));
+            let successMessage;
+            switch (publicationState) {
+            case PublicationStates.DRAFT:
+              successMessage = draftSuccessMsgId;
+              break;
+            case PublicationStates.SUBMITTED_AWAITING_MODERATION:
+              successMessage = 'debate.thread.postToBeValidated';
+              break;
+            default:
+              successMessage = postSuccessMsgId;
+            }
+            displayAlert('success', I18n.t(successMessage));
             this.props.goBackToViewMode();
             this.props.onSuccess(variables.subject, variables.body, variables.publicationState);
             if (childrenUpdate && oldSubject !== subject) {
@@ -142,9 +155,12 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
   };
 
   render() {
+    const { draftable, isDebateModerated } = this.props;
     const { subject, body } = this.state;
     const { editTitleLabelMsgId, modifiedOriginalSubject, bodyDescriptionMsgId, bodyMaxLength } = this.props;
-
+    const userIsModerator = connectedUserIsModerator();
+    const publicationState =
+      !userIsModerator && isDebateModerated ? PublicationStates.SUBMITTED_AWAITING_MODERATION : PublicationStates.PUBLISHED;
     return (
       <Row>
         <Col xs={12} md={12}>
@@ -184,11 +200,11 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
                 </Button>
                 <Button
                   className="button-submit button-dark btn btn-default right"
-                  onClick={() => this.handleSubmit(PublicationStates.PUBLISHED)}
+                  onClick={() => this.handleSubmit(publicationState)}
                 >
                   <Translate value="debate.post" />
                 </Button>
-                {this.props.draftable ? (
+                {draftable ? (
                   <Button
                     className="button-submit button-dark btn btn-default right btn-draft"
                     onClick={() => this.handleSubmit(PublicationStates.DRAFT)}
@@ -205,8 +221,14 @@ class EditPostForm extends React.PureComponent<EditPostFormProps, EditPostFormSt
   }
 }
 
+const EditPostFormWithContext = props => (
+  <DebateContext.Consumer>
+    {({ isDebateModerated }) => <DumbEditPostForm {...props} isDebateModerated={isDebateModerated} />}
+  </DebateContext.Consumer>
+);
+
 export default compose(
   graphql(uploadDocumentMutation, { name: 'uploadDocument' }),
   graphql(updatePostMutation, { name: 'updatePost' }),
   withApollo
-)(EditPostForm);
+)(EditPostFormWithContext);
