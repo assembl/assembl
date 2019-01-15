@@ -3,6 +3,7 @@ import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 // Component imports
 import LoadingIcon from './icons/loadingIcon/loadingIcon';
+import ErrorIcon from './icons/errorIcon/errorIcon';
 
 type LoaderType = {
   loaderComponent: React.Node,
@@ -14,12 +15,19 @@ const LoaderTypeLoading: LoaderType = {
   loaderComponent: <LoadingIcon />
 };
 
+const LoaderTypeError: LoaderType = {
+  description: I18n.t('common.loader.error'),
+  loaderComponent: <ErrorIcon />
+};
+
 export const LOADER_TYPE = {
-  LOADING: 'LOADING'
+  LOADING: 'LOADING',
+  ERROR: 'ERROR'
 };
 
 export const LOADER_TYPE_CONTENT = {
-  LOADING: LoaderTypeLoading
+  LOADING: LoaderTypeLoading,
+  ERROR: LoaderTypeError
 };
 
 export type Props = {
@@ -27,8 +35,8 @@ export type Props = {
   type: $Keys<typeof LOADER_TYPE>
 };
 
-const Loader = () => {
-  const { description, loaderComponent } = LOADER_TYPE_CONTENT.LOADING;
+const Loader = ({ type }: Props) => {
+  const { description, loaderComponent } = type === LOADER_TYPE.LOADING ? LOADER_TYPE_CONTENT.LOADING : LOADER_TYPE_CONTENT.ERROR;
 
   return (
     <div className="custom-loader">
