@@ -5,7 +5,8 @@ import requests
 from ..lib.config import get
 from . import boostrap_configuration
 
-if __name__ == '__main__':
+
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("configuration", help="configuration file")
     args = parser.parse_args()
@@ -22,3 +23,7 @@ if __name__ == '__main__':
     assert es_data['version']['number'] == elasticsearch_version
     assert es_data['cluster_name'] == elasticsearch_index
     print "success"
+
+
+if __name__ == '__main__':
+    main()
