@@ -12,11 +12,22 @@ type QuestionValueFromQuery = {
   titleEntries: LangstringEntries
 };
 
+type ColumnSynthesisValueFromQuery = {
+  subjectEntries: LangstringEntries,
+  bodyEntries: LangstringEntries
+};
+
+type ColumnSynthesisValue = {
+  subject: I18nValue,
+  body: I18nRichTextValue
+};
+
 type MessageColumnValue = {
   messageClassifier: string,
   title: I18nValue,
   name: I18nValue,
-  color: string
+  color: string,
+  columnSynthesis: ColumnSynthesisValue
 };
 
 type RadioButtonValue = {
@@ -34,7 +45,8 @@ type MessageColumnValueFromQuery = {
   nameEntries: LangstringEntries,
   titleEntries: LangstringEntries,
   color: string,
-  messageClassifier: string
+  messageClassifier: string,
+  columnSynthesis: ColumnSynthesisValueFromQuery
 };
 
 export type ThemeValue = {

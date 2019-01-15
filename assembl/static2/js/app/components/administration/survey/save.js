@@ -7,6 +7,22 @@ import updateIdeasMutation from '../../../graphql/mutations/updateIdeas.graphql'
 import { createSave, convertToEntries, convertRichTextToVariables, getFileVariable } from '../../form/utils';
 import { MESSAGE_VIEW } from '../../../constants';
 
+const getMessageColumnsVariables = (theme, client) =>
+  (theme.multiColumns && theme.multiColumns.messageColumns
+    ? theme.multiColumns.messageColumns.map(async (col) => {
+      const bodyVars = await convertRichTextToVariables(col.columnSynthesis.body, client);
+      const { entries: bodyEntries } = bodyVars;
+      return {
+        messageClassifier: col.messageClassifier,
+        titleEntries: convertToEntries(col.title),
+        nameEntries: convertToEntries(col.name),
+        color: col.color,
+        columnSynthesisTitle: convertToEntries(col.columnSynthesis.subject),
+        columnSynthesis: bodyEntries
+      };
+    })
+    : []);
+
 const getChildrenVariables = (client, thematic, initialTheme) =>
   (thematic.children
     ? thematic.children.map(async (t, idx) => {
@@ -80,7 +96,8 @@ async function getIdeaInput(client, theme, initialTheme, order) {
         titleEntries: convertToEntries(q.title)
       })),
     order: order,
-    children: await Promise.all(getChildrenVariables(client, theme, initialTheme))
+    children: await Promise.all(getChildrenVariables(client, theme, initialTheme)),
+    messageColumns: await Promise.all(getMessageColumnsVariables(theme, client))
   };
 }
 

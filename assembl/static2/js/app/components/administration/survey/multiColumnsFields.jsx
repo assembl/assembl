@@ -7,6 +7,7 @@ import { I18n } from 'react-redux-i18n';
 import Helper from '../../common/helper';
 import RadioButtonsFieldAdapter from '../../form/radioButtonsFieldAdapter';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
+import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import ColorPickerFieldAdapter from '../../form/colorPickerFieldAdapter';
 
 type Props = {
@@ -45,6 +46,18 @@ const MultiColumnsFields = ({ editLocale, nbColumnsInForm, fieldPrefix }: Props)
           name={`${fieldPrefix}.multiColumns.messageColumns[${index}].color`}
           component={ColorPickerFieldAdapter}
           label={`${I18n.t('administration.tableOfThematics.columnColor')} ${index + 1}`}
+        />
+        <Field
+          editLocale={editLocale}
+          name={`${fieldPrefix}.multiColumns.messageColumns[${index}].columnSynthesis.subject`}
+          component={MultilingualTextFieldAdapter}
+          label={`${I18n.t('administration.tableOfThematics.columnSynthesisTitle')} ${index + 1}`}
+        />
+        <Field
+          editLocale={editLocale}
+          name={`${fieldPrefix}.multiColumns.messageColumns[${index}].columnSynthesis.body`}
+          component={MultilingualRichTextFieldAdapter}
+          label={`${I18n.t('administration.tableOfThematics.columnSynthesis')} ${index + 1}`}
         />
       </div>
     ))}
