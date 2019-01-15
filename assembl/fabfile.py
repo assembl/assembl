@@ -1643,10 +1643,11 @@ def get_aws_localrc():
     except ImportError:
         # we don't have boto3 yet
         return
-    sts = boto3.client('sts')
-    info = sts.get_caller_identity()
-    account = info['Account']
-    # instance_id = info['Arn'].split('/')[-1]
+    assert running_locally()
+    import requests
+    r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
+    assert r.ok
+    account = r.json()['InstanceProfileArn'].split(':')[4]
     s3 = boto3.client('s3')
     try:
         # This introduces a convention: local.rc files
