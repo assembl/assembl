@@ -95,7 +95,7 @@ def sudo(*args, **kwargs):
     # Generic ability for a defined user to have capabilities to run commands on machine without
     # being a sudo user
     passwords = {}
-    if env.sudo_password:
+    if env.get('sudo_password', None):
         passwords = fabpass_for(env.sudoer, env.sudo_password)
     with settings(user=sudoer, passwords=passwords):
         if sudoer in ("root",):
