@@ -235,7 +235,9 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     index = graphene.Int(description=docs.IdeaMessageColumn.index)
     idea = graphene.Field(lambda: Idea, description=docs.IdeaMessageColumn.idea)
     name = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumn.name)
+    name_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaMessageColumn.name_entries)
     title = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumn.title)
+    title_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaMessageColumn.title_entries)
     column_synthesis = graphene.Field('assembl.graphql.post.Post', description=docs.IdeaMessageColumn.column_synthesis)
     num_posts = graphene.Int(description=docs.IdeaMessageColumn.num_posts)
 
@@ -246,8 +248,14 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     def resolve_name(self, args, context, info):
         return resolve_langstring(self.name, args.get('lang'))
 
+    def resolve_name_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'name')
+
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
 
     def resolve_column_synthesis(self, args, context, info):
         return self.get_column_synthesis()

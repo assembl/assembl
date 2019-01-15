@@ -1,5 +1,5 @@
 #import "./LangString.graphql"
-#import "./IdeaMessageColumn.graphql"
+#import "./IdeaMessageColumnData.graphql"
 
 fragment ideaData on IdeaInterface {
   parentId
@@ -34,6 +34,6 @@ fragment ideaData on IdeaInterface {
     }
   }
   messageColumns {
-    ...IdeaMessageColumn
+    ...IdeaMessageColumnData
   }
 }

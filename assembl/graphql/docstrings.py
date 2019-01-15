@@ -371,7 +371,9 @@ class IdeaMessageColumn:
     index = """The order of the message column in the Idea/Thematic."""
     idea = """The Idea/Thematic that the message column is associated with."""
     name = Default.string_entry % ("The name of the column")
+    name_entries = Default.langstring_entries % ("The name of the column in multiple languages.",)
     title = Default.string_entry % ("The title of the column")
+    title_entries = Default.langstring_entries % ("The title of the column in multiple languages.",)
     column_synthesis = """A Synthesis done on the column, of type Post."""
     num_posts = """The number of posts contributed to only this column."""
 
