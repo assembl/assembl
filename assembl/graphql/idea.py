@@ -742,6 +742,7 @@ def create_idea(parent_idea, phase, args, context):
                                         order=idx + 1.0))
         if is_multicolumns:
             message_columns = args.get('message_columns')
+            previous_column = None
             if message_columns is not None:
                 for column in message_columns:
                     name = langstring_from_input_entries(column['name_entries'])
@@ -758,7 +759,8 @@ def create_idea(parent_idea, phase, args, context):
                             message_classifier=message_classifier,
                             name=name,
                             title=title,
-                            color=color))
+                            color=color,
+                            previous_column=previous_column))
                     synthesis = models.ColumnSynthesisPost(
                         message_classifier=message_classifier,
                         discussion_id=discussion_id,
@@ -771,7 +773,7 @@ def create_idea(parent_idea, phase, args, context):
                         content=synthesis,
                         idea=saobj
                     ))
-
+                    previous_column = column
         update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
     db.flush()
@@ -908,6 +910,7 @@ def update_idea(args, phase, context):
         if is_multicolumns:
             message_columns = args.get('message_columns')
             if message_columns is not None:
+                previous_column = None
                 for column in message_columns:
                     message_classifier = column.get('message_classifier', None)
                     existing_column = [col for col in thematic.message_columns if col.message_classifier == message_classifier]
@@ -931,7 +934,8 @@ def update_idea(args, phase, context):
                                 message_classifier=message_classifier,
                                 name=name,
                                 title=title,
-                                color=color))
+                                color=color,
+                                previous_column=previous_column))
                         synthesis = models.ColumnSynthesisPost(
                             message_classifier=message_classifier,
                             discussion_id=discussion_id,
@@ -944,7 +948,7 @@ def update_idea(args, phase, context):
                             content=synthesis,
                             idea=thematic
                         ))
-
+                    previous_column = column
         update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
     db.flush()
