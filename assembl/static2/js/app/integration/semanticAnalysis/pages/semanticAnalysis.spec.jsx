@@ -5,15 +5,15 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
-import ThematicPage from './thematicPage';
+import SemanticAnalysis from './semanticAnalysis';
 
 configure({ adapter: new Adapter() });
 
-describe('<ThematicPage /> - with shallow', () => {
+describe('<SemanticAnalysis /> - with shallow', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<ThematicPage />);
+    wrapper = shallow(<SemanticAnalysis />);
   });
 
   it('should render a h1', () => {

@@ -41,7 +41,7 @@ import IntMainPage from './integration/index';
 import Int101Page from './integration/101/index';
 import Int101FormBuilderPage from './integration/101/containers/formBuilder101/formBuilder101';
 import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirrorFiction';
-import IntSemanticAnalysisThematic from './integration/semanticAnalysis/pages/thematicPage';
+import IntSemanticAnalysisSemanticAnalysis from './integration/semanticAnalysis/pages/semanticAnalysis';
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
@@ -106,8 +106,8 @@ export default [
       component={IntBrightMirrorFiction}
     />
     <Route
-      path={routeForRouter('integrationSemanticAnalysisThematicPage', false, { preSlash: true })}
-      component={IntSemanticAnalysisThematic}
+      path={routeForRouter('integrationSemanticAnalysisSemanticAnalysis', false, { preSlash: true })}
+      component={IntSemanticAnalysisSemanticAnalysis}
     />
     {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}
     <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />

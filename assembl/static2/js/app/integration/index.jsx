@@ -39,7 +39,7 @@ const index = () => (
         <h2>Semantic Analysis pages</h2>
         <ListGroup componentClass="ul">
           <li>
-            <Link to={`${get('integrationSemanticAnalysisThematicPage')}`}>Thematic page (Instruction section only)</Link>
+            <Link to={`${get('integrationSemanticAnalysisSemanticAnalysis')}`}>Semantic Analysis page only</Link>
           </li>
         </ListGroup>
       </Col>
