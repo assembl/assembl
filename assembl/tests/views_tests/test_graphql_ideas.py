@@ -1189,7 +1189,7 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                     'titleEntries': [{'value': u"troisième titre pour le multicolonne", "localeCode": u"fr"}],
                     'color': 'blue',
                     'messageClassifier': 'neutral',
-                    'columnSynthesissubject': [
+                    'columnSynthesisSubject': [
                         {'value': u"Titre de Synthèse de colonne en français pour colonne neutre", 'localeCode': u"fr"},
                         {'value': u"Title of Column Synthesis in english for neutral column", 'localeCode': u"en"}
                     ],
