@@ -1666,19 +1666,26 @@ def get_aws_localrc():
 @task
 def aws_instance_startup():
     """Operations to startup a fresh aws instance from an assembl AMI"""
-    if not exists("local.rc"):
-        if not env.projectpath:
-            # Assumption: Started from project directory
-            env.projectpath = os.cwd()
-        get_aws_localrc()
-        if not exists(env.projectpath + "/local.rc"):
-            raise RuntimeError("Missing local.rc file")
-        env['rcfile'] = "local.rc"
-        load_rcfile_config()
+    if not env.projectpath:
+        # Assumption: Started from project directory
+        env.projectpath = os.cwd()
+    get_aws_localrc()
+    if not exists(env.projectpath + "/local.rc"):
+        raise RuntimeError("Missing local.rc file")
+    env['rcfile'] = "local.rc"
+    load_rcfile_config()
+    aws_server_startup_from_local()
+
+
+@task
+def aws_server_startup_from_local():
+    """Update files that depend on local.rc and restart nginx, supervisor"""
     create_local_ini()
     venvcmd('assembl-ini-files populate %s' % (env.ini_file))
     fill_template('assembl/templates/system/nginx_default.jinja2', env, 'var/share/assembl.nginx')
-    if not is_supervisord_running():
+    if is_supervisord_running():
+        supervisor_restart()
+    else:
         venvcmd('supervisord')
     webservers_reload()
 
