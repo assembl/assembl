@@ -82,6 +82,7 @@ push_to_develop_server:
   only:
     - tmp_master_for_ci_cd
     - add_deploy_job
+    - rws_connections
   variables:
     DEPLOYING: true
   before_script:
