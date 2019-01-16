@@ -16,7 +16,7 @@ export type Props = {
 };
 
 const TitleWithTooltip = ({ level, titleContent, tooltipContent }: Props) => {
-  const modalTitle = titleContent;
+  const modalTitle = titleContent.toUpperCase();
   const modalBody = tooltipContent;
 
   const iconClickHandler = () => {
@@ -25,7 +25,7 @@ const TitleWithTooltip = ({ level, titleContent, tooltipContent }: Props) => {
     }
   };
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <div className="titleWithTooltip-container">
       <Title level={level} titleContent={titleContent} />
       <div className="titleTooltip-container" onClick={iconClickHandler}>
         <TitleTooltip tooltipContent={tooltipContent} />

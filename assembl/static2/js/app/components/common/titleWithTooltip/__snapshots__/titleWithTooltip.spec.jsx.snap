@@ -11,12 +11,7 @@ exports[`Storyshots TitleWithTooltip default 1`] = `
     }
   >
     <div
-      style={
-        Object {
-          "alignItems": "center",
-          "display": "flex",
-        }
-      }
+      className="titleWithTooltip-container"
     >
       <h1>
         AN AMAZING TITLE
@@ -354,12 +349,7 @@ exports[`Storyshots TitleWithTooltip playground 1`] = `
     }
   >
     <div
-      style={
-        Object {
-          "alignItems": "center",
-          "display": "flex",
-        }
-      }
+      className="titleWithTooltip-container"
     >
       <h1>
         AN AMAZING TITLE

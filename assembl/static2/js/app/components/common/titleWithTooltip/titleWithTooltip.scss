@@ -1,0 +1,26 @@
+.titleWithTooltip-container {
+  display: flex;
+  align-items: center;
+
+  .titleTooltip-container {
+    margin-left: 5px;
+    padding-top: 5px;
+  }
+}
+
+.modal-content {
+  .modal-title {
+    font-family: $font-family3;
+    font-size: $font-size-sm;
+    line-height: 2;
+    padding-right: 20px;
+  }
+
+  .modal-body {
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+    font-size: $font-size-sm;
+    letter-spacing: 1.1px;
+  }
+}
