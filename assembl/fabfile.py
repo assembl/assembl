@@ -709,7 +709,8 @@ def app_reload():
 
 
 def as_venvcmd(cmd, chdir=False):
-    cmd = '. %s/bin/activate && %s' % (env.venvpath, cmd)
+    venvpath = env.get("venvpath", None) or "./venv"
+    cmd = 'source %s/bin/activate && %s' % (venvpath, cmd)
     if chdir:
         cmd = 'cd %s && %s' % (env.projectpath, cmd)
     return cmd
