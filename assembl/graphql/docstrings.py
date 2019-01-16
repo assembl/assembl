@@ -338,7 +338,7 @@ class IdeaInterface:
     top_keywords = "The list of top keywords found in messages associated to this idea, according to NLP engine"
     nlp_sentiment = "The aggregated sentiment analysis on the posts"
     num_posts = "The total number of active posts on that idea (excludes deleted posts)."
-    num_total_posts = "The total number of posts on that idea and on all its children ideas."
+    num_total_posts = "The total number of posts on the discussion."
     num_contributors = """The total number of users who contributed to the Idea/Thematic/Question.\n
     Contribution is counted as either as a sentiment set, a post created."""
     num_children = "The total number of children ideas (called \"subideas\") on the Idea or Thematic."
