@@ -10205,6 +10205,11 @@ react-redux@^5.0.6:
     loose-envify "^1.1.0"
     prop-types "^15.5.10"
 
+react-resize-aware@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/react-resize-aware/-/react-resize-aware-2.7.2.tgz#38a0040daaa28dfa9b88994889fbb1e2aa66df83"
+  integrity sha512-XyweQ3YTiZzNG1T5PNpCXvnpsI7mdy4A2oeySFToh8v02Yf+kOiUyWprvyp6T68fFB848w2F3RKfzH7KDk75JQ==
+
 react-router@^3.0.0:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/react-router/-/react-router-3.2.1.tgz#b9a3279962bdfbe684c8bd0482b81ef288f0f244"
