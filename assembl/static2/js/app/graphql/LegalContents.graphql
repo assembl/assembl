@@ -5,6 +5,7 @@ query LegalContents($lang: String) {
     cookiesPolicy(lang: $lang)
     privacyPolicy(lang: $lang)
     userGuidelines(lang: $lang)
+    mandatoryLegalContentsValidation
     legalNoticeEntries {
       localeCode
       value

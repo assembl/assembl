@@ -166,7 +166,9 @@ export default compose(
     name: 'updateAcceptedCookies'
   }),
   graphql(TabsConditionQuery, {
-    props: ({ data: { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, error, loading } }) => {
+    props: ({
+      data: { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, mandatoryLegalContentsValidation, error, loading }
+    }) => {
       if (error || loading) {
         return {
           error: error,
@@ -178,7 +180,8 @@ export default compose(
         loading: loading,
         hasTermsAndConditions: hasTermsAndConditions,
         hasPrivacyPolicy: hasPrivacyPolicy,
-        hasUserGuidelines: hasUserGuidelines
+        hasUserGuidelines: hasUserGuidelines,
+        mandatoryLegalContentsValidation: mandatoryLegalContentsValidation
       };
     }
   }),

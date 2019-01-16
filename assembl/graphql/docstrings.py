@@ -115,7 +115,6 @@ class DiscussionPreferences:
     languages = """A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate."""
     tab_title = """The title in the tab."""
     favicon = Default.document % ("""The site favicon.""",)
-    mandatory_legal_contents_validation = """Activate or not mandatory validation of legal contents after SSO login."""
     with_moderation = """A Boolean flag indicating whether the moderation is activated or not."""
 
 
@@ -144,6 +143,7 @@ class LegalContents:
     cookies_policy_attachments = Default.string_entry % ("Attachments for cookies policy.")
     privacy_policy_attachments = Default.string_entry % ("Attachments for privacy policy.")
     user_guidelines_attachments = Default.string_entry % ("Attachments for user guidelines.")
+    mandatory_legal_contents_validation = """Activate or not mandatory validation of legal contents after SSO login."""
 
 
 class UpdateResourcesCenter:
@@ -157,7 +157,6 @@ class UpdateDiscussionPreferences:
     languages = """The list of languages in ISO 639-1 locale code that the debate should support."""
     tab_title = DiscussionPreferences.tab_title
     favicon = DiscussionPreferences.favicon
-    mandatory_legal_contents_validation = DiscussionPreferences.mandatory_legal_contents_validation
     with_moderation = DiscussionPreferences.with_moderation
 
 
@@ -173,6 +172,7 @@ class UpdateLegalContents:
     cookies_policy_attachments = "The list of the Attachments used in cookies policy entries."
     privacy_policy_attachments = "The list of the Attachments used in privacy policy entries."
     user_guidelines_attachments = "The list of the Attachments used in user guidelines entries."
+    mandatory_legal_contents_validation = """Activate or not mandatory validation of legal contents after SSO login."""
 
 
 class VisitsAnalytics:

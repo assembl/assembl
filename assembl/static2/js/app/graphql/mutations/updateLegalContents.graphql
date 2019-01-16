@@ -11,6 +11,7 @@ mutation UpdateLegalContents(
   $privacyPolicyEntries: [LangStringEntryInput]!
   $termsAndConditionsEntries: [LangStringEntryInput]!
   $userGuidelinesEntries: [LangStringEntryInput]!
+  $mandatoryLegalContentsValidation: Boolean!
 ) {
   updateLegalContents(
     cookiesPolicyAttachments: $cookiesPolicyAttachments
@@ -23,8 +24,10 @@ mutation UpdateLegalContents(
     privacyPolicyEntries: $privacyPolicyEntries
     termsAndConditionsEntries: $termsAndConditionsEntries
     userGuidelinesEntries: $userGuidelinesEntries
+    mandatoryLegalContentsValidation: $mandatoryLegalContentsValidation
   ) {
     legalContents {
+      mandatoryLegalContentsValidation
       legalNoticeEntries {
         localeCode
         value
