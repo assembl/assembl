@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from pytz import UTC
 from sqlalchemy.engine.url import URL
 import boto3
 
@@ -46,12 +47,15 @@ class IamRoleRdsTokenUrl(RdsTokenUrl):
 
     def _needs_sts_role(self):
         role = getattr(self, 'sts_role', None)
-        if role:
-            expiry = role['Credentials']['Expiration']
-            return (datetime.now() - expiry) < timedelta(minutes=10)
+        if not role:
+            return True
+        expiry = role['Credentials']['Expiration']
+        if expiry.tzinfo:
+            expiry = expiry.astimezone(UTC).replace(tzinfo=None)
+        return (expiry - datetime.utcnow()) < timedelta(minutes=10)
 
     def get_sts_role(self):
-        if not self._needs_sts_role():
+        if self._needs_sts_role():
             self.sts_role = self.sts_client.assume_role(
                 RoleArn=self.iam_role,
                 RoleSessionName=self.sts_session_name)
