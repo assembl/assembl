@@ -17,8 +17,8 @@ const getMessageColumnsVariables = (theme, client) =>
         titleEntries: convertToEntries(col.title),
         nameEntries: convertToEntries(col.name),
         color: col.color,
-        columnSynthesisTitle: convertToEntries(col.columnSynthesis.subject),
-        columnSynthesis: bodyEntries
+        columnSynthesisSubject: convertToEntries(col.columnSynthesis.subject),
+        columnSynthesisBody: bodyEntries
       };
     })
     : []);
