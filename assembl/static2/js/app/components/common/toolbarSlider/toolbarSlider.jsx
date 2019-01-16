@@ -13,7 +13,7 @@ export type State = {
 export type Props = {
   max?: number,
   min?: number,
-  defaultValue: number,
+  defaultValue: number, // eslint-disable-line react/no-unused-prop-types
   onSliderChange: (value: number) => void,
   labelFormatter?: (value: number) => string,
   color?: string
@@ -39,11 +39,11 @@ class ToolbarSlider extends React.Component<Props, State> {
   };
 
   render() {
-    const { max, min, onSliderChange, defaultValue, labelFormatter, color } = this.props;
+    const { max, min, onSliderChange, labelFormatter, color } = this.props;
     const { currentValue } = this.state;
 
     const onSliderChangeHandler = (value: number) => {
-      this.setState({ currentValue: value || defaultValue });
+      this.setState({ currentValue: value });
       onSliderChange(value);
     };
 
