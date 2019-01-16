@@ -1665,11 +1665,22 @@ def get_aws_localrc():
 
 
 @task
+def setup_aws_default_region():
+    assert running_locally()
+    import requests
+    r = requests.get('http://169.254.169.254/latest/meta-data/placement/availability-zone')
+    assert r.ok
+    region = r.content[:-1]
+    run('aws configure set region ' + region)
+
+
+@task
 def aws_instance_startup():
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not env.projectpath:
         # Assumption: Started from project directory
         env.projectpath = os.cwd()
+    setup_aws_default_region()
     get_aws_localrc()
     if not exists(env.projectpath + "/local.rc"):
         raise RuntimeError("Missing local.rc file")
