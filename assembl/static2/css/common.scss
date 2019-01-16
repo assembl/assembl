@@ -118,10 +118,6 @@ textarea.placeholder {
   background-size: cover;
 }
 
-.content-section {
-  padding: $margin-section 0;
-}
-
 .mobile-content-section {
   padding-top: 40px !important;
 }
@@ -371,19 +367,30 @@ strong {
   cursor: wait !important;
 }
 
-@media screen and (max-width: $screen-xxs-max) {
-  .content-section {
-    padding: $margin-section-xs 0;
-  }
-
-  .max-container {
-    padding: 0 5px !important;
-  }
+.small-hyphen-padding {
+  padding: 0 0 0 5px;
 }
 
-@media screen and (max-width: $screen-sm-min) {
-  .max-container {
-    padding: 0 20px;
+.jumbotron {
+  margin-top: 50px;
+}
+
+.flex {
+  display: flex;
+}
+
+.center-flex {
+  display: flex;
+  justify-content: center;
+}
+
+.content-section {
+  padding: 25px 0;
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .content-section {
+    padding: 35px 0;
   }
 }
 
@@ -403,21 +410,4 @@ strong {
   .page-body {
     margin: 0 90px 80px 90px;
   }
-}
-
-.small-hyphen-padding {
-  padding: 0 0 0 5px;
-}
-
-.jumbotron {
-  margin-top: 50px;
-}
-
-.flex {
-  display: flex;
-}
-
-.center-flex {
-  display: flex;
-  justify-content: center;
 }

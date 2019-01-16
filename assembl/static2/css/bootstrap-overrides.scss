@@ -56,3 +56,73 @@
 .popover {
   z-index: 1050;
 }
+
+// Bootstrap tab overrides
+.nav {
+  font-size: $font-size-m;
+  letter-spacing: 1px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  & > li > a {
+    padding: 10px 5px;
+  }
+}
+
+.nav-tabs {
+  padding-bottom: 25px;
+
+  & > li > a {
+    border: none;
+
+    &:hover {
+      background-color: $nav-tabs-active-link-hover-bg;
+    }
+  }
+
+  &.nav-justified {
+    & > li > a {
+      border-bottom: 2px solid $nav-tabs-justified-link-border-color;
+      color: rgba($purple, 0.2);
+      outline: none;
+
+      &:hover {
+        color: $nav-tabs-active-link-hover-color;
+      }
+    }
+
+    & > .active {
+      & > a,
+      & > a:hover,
+      & > a:focus {
+        border: none;
+        color: $nav-tabs-active-link-hover-color;
+        border-bottom: 2px solid $nav-tabs-justified-active-link-border-color;
+        border-radius: 0;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .nav {
+    font-family: $font-family4;
+    font-size: $font-size-ml;
+    letter-spacing: 1.4px;
+  }
+
+  .nav-tabs {
+    padding-bottom: 30px;
+  }
+}
+
+@media screen and (min-width: $screen-lg-min) {
+  .nav {
+    font-size: $font-size-l;
+    letter-spacing: 1.7px;
+  }
+
+  .nav-tabs {
+    padding-bottom: 45px;
+  }
+}

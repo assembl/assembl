@@ -63,6 +63,17 @@
   .md-only {
     display: none;
   }
+
+  .nav-tabs.nav-justified {
+    & > li {
+      display: inline-block;
+      width: 33%;
+
+      & > a {
+        border-radius: 0;
+      }
+    }
+  }
 }
 
 @media screen and (max-width: $screen-sm-max) {
@@ -99,6 +110,17 @@
           margin-left: 17px;
           margin-right: 17px;
         }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .announcement-menu {
+    .nav-tabs.nav-justified {
+      & > li {
+        display: table-cell;
+        width: 1%;
       }
     }
   }

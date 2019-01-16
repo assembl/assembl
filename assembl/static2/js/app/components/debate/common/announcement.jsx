@@ -149,8 +149,7 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
 
   return (
     <div className="announcement">
-      {/** will need to update the overall structure to remove announcement css class */}
-      <Tabs defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION} className="announcement-menu">
+      <Tabs justified defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION} className="announcement-menu">
         <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION} title={instructionTabTitle}>
           {instructionContent}
         </Tab>

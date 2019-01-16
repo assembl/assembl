@@ -10,7 +10,7 @@ $error: #a94442;
 $red: #f75959;
 $lightred: #ffcfcf;
 $green: #7ed321;
-$lightgreen: #93e79d;
+$light-green: #93e79d;
 $blue: #7490ca;
 $purple: #5404d7;
 $purple-light: #e7e6f5;
@@ -224,3 +224,9 @@ $screen-xl-min: 1451px;
 // @media (max-width: $screen-xxs-max) {
 //
 // }
+
+// Tab variables
+$nav-tabs-active-link-hover-bg: transparent;
+$nav-tabs-active-link-hover-color: rgba($purple, 1);
+$nav-tabs-justified-link-border-color: $light-grey;
+$nav-tabs-justified-active-link-border-color: $light-green;
