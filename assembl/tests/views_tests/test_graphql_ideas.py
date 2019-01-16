@@ -1141,10 +1141,28 @@ def test_mutation_update_ideas_multicol_create_two_columns(test_session, graphql
     created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
     created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     assert len(created_idea.message_columns) == 2
-    assert created_idea.message_columns[0].message_classifier == 'positive'
-    assert created_idea.message_columns[1].message_classifier == 'negative'
-    assert created_idea.message_columns[0].color == 'red'
-    assert created_idea.message_columns[1].color == 'green'
+    first_column = created_idea.message_columns[0]
+    second_column = created_idea.message_columns[1]
+    assert first_column.message_classifier == 'positive'
+    assert second_column.message_classifier == 'negative'
+    assert first_column.color == 'red'
+    assert second_column.color == 'green'
+    assert first_column.get_positional_index() == 0
+    assert second_column.get_positional_index() == 1
+    assert first_column.name.entries[0].value == u"Premier entrée pour le nom"
+    assert first_column.title.entries[0].value == u"Premier titre pour le multicolonne"
+    assert second_column.name.entries[0].value == u"Deuxième entrée pour le nom"
+    assert second_column.title.entries[0].value == u"Deuxième titre pour le multicolonne"
+    first_synthesis = first_column.get_column_synthesis()
+    second_synthesis = second_column.get_column_synthesis()
+    assert first_synthesis.subject.entries[0].value == u"Titre de Synthèse de colonne en français pour colonne positive"
+    assert first_synthesis.subject.entries[1].value == u"Title of Column Synthesis in english for positive column"
+    assert first_synthesis.body.entries[0].value == u"Synthèse de colonne en français for positive column"
+    assert first_synthesis.body.entries[1].value == u"Column Synthesis in english for positive column"
+    assert second_synthesis.subject.entries[0].value == u"Titre de Synthèse de colonne en français pour colonne négative"
+    assert second_synthesis.subject.entries[1].value == u"Title of Column Synthesis in english for negative column"
+    assert second_synthesis.body.entries[0].value == u"Synthèse de colonne en français for negative column"
+    assert second_synthesis.body.entries[1].value == u"Column Synthesis in english for negative column"
     test_session.rollback()
 
 
@@ -1233,7 +1251,7 @@ def test_mutation_update_ideas_multicol_add_neutral_column(test_session, graphql
     test_session.rollback()
 
 
-def test_mutation_update_ideas_multicol_update_columns(test_session, graphql_request, graphql_registry, phases):
+def test_mutation_update_ideas_multicol_update_first_column(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
     res = create_idea(graphql_request, graphql_registry, phases)
     assert res.errors is None
@@ -1246,6 +1264,91 @@ def test_mutation_update_ideas_multicol_update_columns(test_session, graphql_req
             'discussionPhaseId': phases['multiColumns'].id,
             'ideas': [{
                 'id': created_idea_global_id,
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom modifié", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne modifié", "localeCode": u"fr"}],
+                    'color': 'orange',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive modifié", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column modified", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for positive column modifié", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column modified", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]},
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    assert len(created_idea.message_columns) == 2
+    first_column = created_idea.message_columns[0]
+    second_column = created_idea.message_columns[1]
+    assert first_column.message_classifier == 'positive'
+    assert second_column.message_classifier == 'negative'
+    assert first_column.color == 'orange'
+    assert second_column.color == 'green'
+    assert first_column.get_positional_index() == 0
+    assert second_column.get_positional_index() == 1
+    assert first_column.name.entries[0].value == u"Premier entrée pour le nom modifié"
+    assert first_column.title.entries[0].value == u"Premier titre pour le multicolonne modifié"
+    assert second_column.name.entries[0].value == u"Deuxième entrée pour le nom"
+    assert second_column.title.entries[0].value == u"Deuxième titre pour le multicolonne"
+    first_synthesis = first_column.get_column_synthesis()
+    second_synthesis = second_column.get_column_synthesis()
+    assert first_synthesis.subject.entries[0].value == u"Titre de Synthèse de colonne en français pour colonne positive modifié"
+    assert first_synthesis.subject.entries[1].value == u"Title of Column Synthesis in english for positive column modified"
+    assert first_synthesis.body.entries[0].value == u"Synthèse de colonne en français for positive column modifié"
+    assert first_synthesis.body.entries[1].value == u"Column Synthesis in english for positive column modified"
+    assert second_synthesis.subject.entries[0].value == u"Titre de Synthèse de colonne en français pour colonne négative"
+    assert second_synthesis.subject.entries[1].value == u"Title of Column Synthesis in english for negative column"
+    assert second_synthesis.body.entries[0].value == u"Synthèse de colonne en français for negative column"
+    assert second_synthesis.body.entries[1].value == u"Column Synthesis in english for negative column"
+    test_session.rollback()
+
+
+def xtest_mutation_update_ideas_multicol_delete_neutral_column(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    # idea with 3 columns
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
                 'messageViewOverride': 'messageColumns',
                 'titleEntries': [
                     {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -1285,12 +1388,12 @@ def test_mutation_update_ideas_multicol_update_columns(test_session, graphql_req
                     'color': 'blue',
                     'messageClassifier': 'neutral',
                     'columnSynthesisSubject': [
-                        {'value': u"Titre de Synthèse de colonne en français pour colonne neutre modifié", 'localeCode': u"fr"},
-                        {'value': u"Title of Column Synthesis in english for neutral column modified", 'localeCode': u"en"}
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne neutre", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for neutral column", 'localeCode': u"en"}
                     ],
                     'columnSynthesisBody': [
-                        {'value': u"Synthèse de colonne en français for neutral column modifié", 'localeCode': u"fr"},
-                        {'value': u"Column Synthesis in english for neutral column modified", 'localeCode': u"en"}
+                        {'value': u"Synthèse de colonne en français for neutral column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for neutral column", 'localeCode': u"en"}
                     ]}
                 ],
                 'announcement': {
@@ -1308,22 +1411,7 @@ def test_mutation_update_ideas_multicol_update_columns(test_session, graphql_req
     assert res.errors is None
     created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
     created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
-    assert len(created_idea.message_columns) == 3
-    assert created_idea.message_columns[0].message_classifier == 'positive'
-    assert created_idea.message_columns[1].message_classifier == 'negative'
-    assert created_idea.message_columns[2].message_classifier == "neutral"
-    assert created_idea.message_columns[0].color == 'red'
-    assert created_idea.message_columns[1].color == 'green'
-    assert created_idea.message_columns[2].color == 'blue'
-    test_session.rollback()
-
-
-def xtest_mutation_update_ideas_multicol_delete_neutral_column(test_session, graphql_request, graphql_registry, phases):
-    test_session.commit()
-    res = create_idea(graphql_request, graphql_registry, phases)
-    assert res.errors is None
-    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
-    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    # remove third column
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
@@ -1382,10 +1470,6 @@ def xtest_mutation_update_ideas_multicol_delete_neutral_column(test_session, gra
     created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
     created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     assert len(created_idea.message_columns) == 2
-    assert created_idea.message_columns[0].message_classifier == 'positive'
-    assert created_idea.message_columns[1].message_classifier == 'negative'
-    assert created_idea.message_columns[0].color == 'red'
-    assert created_idea.message_columns[1].color == 'green'
     test_session.rollback()
 
 
