@@ -159,6 +159,7 @@ uwsgitop==0.9
 venusian==1.1.0           # via pyramid
 verboselogs==1.7
 vine==1.1.4               # via amqp
+watchtower==0.5.4
 watson_developer_cloud==2.4.1
 webob==1.6.1
 websocket-client==0.47.0  # via watson-developer-cloud
