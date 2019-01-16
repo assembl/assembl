@@ -163,7 +163,7 @@ stderr_logfile_backups = %(sup_log_backups_urlmetadata_err)s
 
 [program:maintenance_uwsgi]
 directory = %(here)s
-command=uwsgi --die-on-term --ini %(code_root)/assembl/configs/maintenance.ini
+command=uwsgi --die-on-term --ini %(code_root)s/assembl/configs/maintenance.ini
 umask=002
 autostart = false
 autorestart = true
