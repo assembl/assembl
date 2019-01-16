@@ -37,7 +37,7 @@ export function getFieldData(themeId: string, values: ThemesValue, fieldName: st
     } else if (value.children) {
       const childrenResult = getFieldData(themeId, value.children, 'children');
       if (childrenResult.name) {
-        result = { name: `${fieldName}[${index}].${childrenResult.name}`, value: value[childrenResult.name] };
+        result = { name: `${fieldName}[${index}].${childrenResult.name}`, value: childrenResult.value };
       }
     }
     index += 1;
