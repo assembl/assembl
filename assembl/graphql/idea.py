@@ -754,13 +754,13 @@ def create_idea(parent_idea, phase, args, context):
                     color = column['color']
                     body = langstring_from_input_entries(column['column_synthesis_body'])
                     subject = langstring_from_input_entries(column['column_synthesis_subject'])
-                    saobj.message_columns.append(
-                        models.IdeaMessageColumn(
-                            message_classifier=message_classifier,
-                            name=name,
-                            title=title,
-                            color=color,
-                            previous_column=previous_column))
+                    sacolumn = models.IdeaMessageColumn(
+                        message_classifier=message_classifier,
+                        name=name,
+                        title=title,
+                        color=color,
+                        previous_column=previous_column)
+                    saobj.message_columns.append(sacolumn)
                     synthesis = models.ColumnSynthesisPost(
                         message_classifier=message_classifier,
                         discussion_id=discussion_id,
@@ -773,7 +773,7 @@ def create_idea(parent_idea, phase, args, context):
                         content=synthesis,
                         idea=saobj
                     ))
-                    previous_column = column
+                    previous_column = sacolumn
         update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
     db.flush()
@@ -922,6 +922,7 @@ def update_idea(args, phase, context):
                         update_langstring_from_input_entries(existing_column, 'title', column['title_entries'])
                         existing_column.color = column['color']
                         existing_column.set_column_synthesis(subject, body, user_id)
+                        previous_column = existing_column
                     else:
                         name = langstring_from_input_entries(column['name_entries'])
                         if not message_classifier:
@@ -929,13 +930,13 @@ def update_idea(args, phase, context):
 
                         title = langstring_from_input_entries(column['title_entries'])
                         color = column['color']
-                        thematic.message_columns.append(
-                            models.IdeaMessageColumn(
-                                message_classifier=message_classifier,
-                                name=name,
-                                title=title,
-                                color=color,
-                                previous_column=previous_column))
+                        sacolumn = models.IdeaMessageColumn(
+                            message_classifier=message_classifier,
+                            name=name,
+                            title=title,
+                            color=color,
+                            previous_column=previous_column)
+                        thematic.message_columns.append(sacolumn)
                         synthesis = models.ColumnSynthesisPost(
                             message_classifier=message_classifier,
                             discussion_id=discussion_id,
@@ -948,7 +949,7 @@ def update_idea(args, phase, context):
                             content=synthesis,
                             idea=thematic
                         ))
-                    previous_column = column
+                        previous_column = sacolumn
         update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
     db.flush()

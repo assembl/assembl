@@ -1012,9 +1012,8 @@ def test_graphql_bright_mirror_should_get_all_posts_of_user_draft_first(graphql_
         }
     }
 
-def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_session, graphql_request, graphql_registry, phases):
+def test_mutation_update_ideas_multicol_create_two_columns_with_empty_message_classifier(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
-
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
@@ -1078,9 +1077,7 @@ def test_mutation_update_ideas_create_multicol_empty_message_classifier(test_ses
     test_session.rollback()
 
 
-def test_mutation_update_ideas_create_multicol(test_session, graphql_request, graphql_registry, phases):
-    test_session.commit()
-
+def create_idea(graphql_request, graphql_registry, phases):
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
@@ -1134,6 +1131,12 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
                 }
             }]
         })
+    return res
+
+
+def test_mutation_update_ideas_multicol_create_two_columns(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    res = create_idea(graphql_request, graphql_registry, phases)
     assert res.errors is None
     created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
     created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
@@ -1145,17 +1148,19 @@ def test_mutation_update_ideas_create_multicol(test_session, graphql_request, gr
     test_session.rollback()
 
 
-# Testing to add an extra neutral column
-def xtest_mutation_update_ideas_add_extra_colomn_to_multicolumn(test_session, graphql_request, graphql_registry, phases, subidea_1_1, idea_message_column_positive_on_subidea_1_1, idea_message_column_negative_on_subidea_1_1):
+def test_mutation_update_ideas_multicol_add_neutral_column(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
-    idea_id = to_global_id('Idea', subidea_1_1.id)
+    res = create_idea(graphql_request, graphql_registry, phases)
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
         variable_values={
             'discussionPhaseId': phases['multiColumns'].id,
             'ideas': [{
-                'id': idea_id,
+                'id': created_idea_global_id,
                 'messageViewOverride': 'messageColumns',
                 'titleEntries': [
                     {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
@@ -1228,9 +1233,12 @@ def xtest_mutation_update_ideas_add_extra_colomn_to_multicolumn(test_session, gr
     test_session.rollback()
 
 
-# Testing updating the multiColumns
-def xtest_mutation_update_ideas_add_extra_colomn_to_multicolumn(test_session, graphql_request, graphql_registry, phases):
+def test_mutation_update_ideas_multicol_update_columns(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
+    res = create_idea(graphql_request, graphql_registry, phases)
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
@@ -1309,9 +1317,13 @@ def xtest_mutation_update_ideas_add_extra_colomn_to_multicolumn(test_session, gr
     assert created_idea.message_columns[2].color == 'blue'
     test_session.rollback()
 
-# Testing to delete the last column
-def xtest_mutation_update_ideas_delete_column_from_multicolumn(test_session, graphql_request, graphql_registry, phases):
+
+def xtest_mutation_update_ideas_multicol_delete_neutral_column(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
+    res = create_idea(graphql_request, graphql_registry, phases)
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     res = schema.execute(
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
@@ -1375,6 +1387,7 @@ def xtest_mutation_update_ideas_delete_column_from_multicolumn(test_session, gra
     assert created_idea.message_columns[0].color == 'red'
     assert created_idea.message_columns[1].color == 'green'
     test_session.rollback()
+
 
 def test_mutation_update_ideas_create(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
