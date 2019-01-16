@@ -8,6 +8,18 @@ import updateIdeasMutation from '../../../graphql/mutations/updateIdeas.graphql'
 import { createSave, convertToEntries, convertRichTextToVariables, getFileVariable } from '../../form/utils';
 import { MESSAGE_VIEW } from '../../../constants';
 
+const getQuestionsVariables = (theme) => {
+  if (theme.messageViewOverride && theme.messageViewOverride.value !== MESSAGE_VIEW.survey) {
+    return [];
+  }
+  return theme.questions
+    ? theme.questions.map(q => ({
+      id: q.id.startsWith('-') ? null : q.id,
+      titleEntries: convertToEntries(q.title)
+    }))
+    : [];
+};
+
 const getMessageColumnsVariables = (theme, client) => {
   if (!theme.multiColumns) {
     return [];
@@ -70,12 +82,7 @@ const getChildrenVariables = (client, thematic, initialTheme) =>
         descriptionEntries: t.description ? convertToEntries(t.description) : [],
         announcement: announcement,
         image: getFileVariable(t.img, initialImg),
-        questions:
-            t.questions &&
-            t.questions.map(q => ({
-              id: q.id.startsWith('-') ? null : q.id,
-              titleEntries: convertToEntries(q.title)
-            })),
+        questions: getQuestionsVariables(t),
         order: order,
         children: await Promise.all(getChildrenVariables(client, t, initialTheme)),
         messageColumns: await Promise.all(getMessageColumnsVariables(t, client))
@@ -111,12 +118,7 @@ async function getIdeaInput(client, theme, initialTheme, order) {
     descriptionEntries: theme.description ? convertToEntries(theme.description) : [],
     announcement: announcement,
     image: getFileVariable(theme.img, initialImg),
-    questions:
-      theme.questions &&
-      theme.questions.map(q => ({
-        id: q.id.startsWith('-') ? null : q.id,
-        titleEntries: convertToEntries(q.title)
-      })),
+    questions: getQuestionsVariables(theme),
     order: order,
     children: await Promise.all(getChildrenVariables(client, theme, initialTheme)),
     messageColumns: await Promise.all(getMessageColumnsVariables(theme, client))
