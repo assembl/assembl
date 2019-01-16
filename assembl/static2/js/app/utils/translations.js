@@ -830,8 +830,8 @@ const Translations = {
         columnTitle: "Titre de la colonne",
         columnName: "Nom de la colonne",
         columnColor: "Couleur de la colonne",
-        columnSynthesisTitle: "Titre de la synthèse de la colonne",
-        columnSynthesis: "Synthèse de la colonne"
+        columnSynthesisSubject: "Titre de la synthèse de la colonne",
+        columnSynthesisBody: "Synthèse de la colonne"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -1786,8 +1786,8 @@ const Translations = {
         columnTitle: "Column title",
         columnName: "Column name",
         columnColor: "Column color",
-        columnSynthesisTitle: "Column synthesis title",
-        columnSynthesis: "Column synthesis"
+        columnSynthesisSubject: "Column synthesis title",
+        columnSynthesisBody: "Column synthesis"
       },
       resourcesCenter: {
         createResource: "Add a media",

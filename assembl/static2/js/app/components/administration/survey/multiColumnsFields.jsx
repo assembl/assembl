@@ -51,13 +51,13 @@ const MultiColumnsFields = ({ editLocale, nbColumnsInForm, fieldPrefix }: Props)
           editLocale={editLocale}
           name={`${fieldPrefix}.multiColumns.messageColumns[${index}].columnSynthesis.subject`}
           component={MultilingualTextFieldAdapter}
-          label={`${I18n.t('administration.tableOfThematics.columnSynthesisTitle')} ${index + 1}`}
+          label={`${I18n.t('administration.tableOfThematics.columnSynthesisSubject')} ${index + 1}`}
         />
         <Field
           editLocale={editLocale}
           name={`${fieldPrefix}.multiColumns.messageColumns[${index}].columnSynthesis.body`}
           component={MultilingualRichTextFieldAdapter}
-          label={`${I18n.t('administration.tableOfThematics.columnSynthesis')} ${index + 1}`}
+          label={`${I18n.t('administration.tableOfThematics.columnSynthesisBody')} ${index + 1}`}
         />
       </div>
     ))}
