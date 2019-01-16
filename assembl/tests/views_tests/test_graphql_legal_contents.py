@@ -10,7 +10,7 @@ def test_default_legal_contents(test_app, discussion):
 
 
 def test_update_legal_contents(test_app, discussion, graphql_registry, graphql_request):
-    response = schema.execute(
+    res = schema.execute(
         graphql_registry['updateLegalContents'],
         context_value=graphql_request,
         variable_values={
@@ -26,4 +26,5 @@ def test_update_legal_contents(test_app, discussion, graphql_registry, graphql_r
             "termsAndConditionsEntries": [],
             "userGuidelinesEntries": [] }
     )
+    assert res.errors is None
     assert discussion.preferences['mandatory_legal_contents_validation'] == True

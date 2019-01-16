@@ -754,8 +754,7 @@ class UpdateLegalContents(graphene.Mutation):
                     purpose
                 )
 
-            if mandatory_legal_contents_validation is not None:
-                discussion.preferences['mandatory_legal_contents_validation'] = mandatory_legal_contents_validation
+            discussion.preferences['mandatory_legal_contents_validation'] = mandatory_legal_contents_validation
 
         db.flush()
         legal_contents = LegalContents()
