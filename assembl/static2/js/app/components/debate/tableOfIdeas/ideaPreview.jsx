@@ -94,7 +94,11 @@ const IdeaPreview = ({
           {messageViewOverride !== MESSAGE_VIEW.noModule ? (
             <div className="see-discussion">
               <Link to={link}>
-                <Translate value="debate.thread.goToIdea" />
+                {messageViewOverride === MESSAGE_VIEW.voteSession ? (
+                  <Translate value="debate.thread.voteForProposals" />
+                ) : (
+                  <Translate value="debate.thread.goToIdea" />
+                )}
               </Link>
             </div>
           ) : null}

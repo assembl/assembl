@@ -420,6 +420,7 @@ const Translations = {
         startDiscussion: "Je démarre une discussion",
         translate: "Traduire",
         goToIdea: "Voir tous les messages",
+        voteForProposals: "Votez pour les propositions",
         seeSubIdeas: "Voir les %{count} sous-thèmes",
         seeSubIdeas_1: "Voir le sous-thème",
         announcement: "Consigne"
@@ -1385,6 +1386,7 @@ const Translations = {
         startDiscussion: "Start a new thread",
         translate: "Translate",
         goToIdea: "View all messages",
+        voteForProposals: "Vote for the proposals",
         seeSubIdeas: "See %{count} sub-thematics",
         seeSubIdeas_1: "See sub-thematic",
         announcement: "Announcement"
