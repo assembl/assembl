@@ -1070,8 +1070,8 @@ def test_mutation_update_ideas_multicol_create_two_columns_with_empty_message_cl
     assert res.errors is None
     created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
     created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
-    assert created_idea.message_columns[0].message_classifier == u'premier entrée pour le nom'
-    assert created_idea.message_columns[1].message_classifier == u'deuxième entrée pour le nom'
+    assert created_idea.message_columns[0].message_classifier == u'column1'
+    assert created_idea.message_columns[1].message_classifier == u'column2'
     assert created_idea.message_columns[0].color == 'red'
     assert created_idea.message_columns[1].color == 'green'
     test_session.rollback()

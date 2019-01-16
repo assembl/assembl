@@ -744,11 +744,11 @@ def create_idea(parent_idea, phase, args, context):
             message_columns = args.get('message_columns')
             previous_column = None
             if message_columns is not None:
-                for column in message_columns:
+                for index, column in enumerate(message_columns):
                     name = langstring_from_input_entries(column['name_entries'])
                     message_classifier = column.get('message_classifier', None)
                     if not message_classifier:
-                        message_classifier = name.first_original().value.lower()
+                        message_classifier = u'column{}'.format(index + 1)
 
                     title = langstring_from_input_entries(column['title_entries'])
                     color = column['color']
@@ -774,6 +774,7 @@ def create_idea(parent_idea, phase, args, context):
                         idea=saobj
                     ))
                     previous_column = sacolumn
+
         update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
     db.flush()
@@ -911,7 +912,7 @@ def update_idea(args, phase, context):
             message_columns = args.get('message_columns')
             if message_columns is not None:
                 previous_column = None
-                for column in message_columns:
+                for index, column in enumerate(message_columns):
                     message_classifier = column.get('message_classifier', None)
                     existing_column = [col for col in thematic.message_columns if col.message_classifier == message_classifier]
                     if existing_column:
@@ -922,11 +923,13 @@ def update_idea(args, phase, context):
                         synthesis = existing_column.get_column_synthesis()
                         update_langstring_from_input_entries(synthesis, 'subject', column['column_synthesis_subject'])
                         update_langstring_from_input_entries(synthesis, 'body', column['column_synthesis_body'])
+                        # We don't allow changing column message_classifier, because this is used for
+                        # the relation with ColumnSynthesisPost and all posts.
                         previous_column = existing_column
                     else:
                         name = langstring_from_input_entries(column['name_entries'])
                         if not message_classifier:
-                            message_classifier = name.first_original().value.lower()
+                            message_classifier = u'column{}'.format(index + 1)
 
                         title = langstring_from_input_entries(column['title_entries'])
                         color = column['color']
@@ -952,6 +955,7 @@ def update_idea(args, phase, context):
                             idea=thematic
                         ))
                         previous_column = sacolumn
+
         update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
     db.flush()
