@@ -40,7 +40,7 @@ const getMessageColumnsVariables = (theme, client) => {
         messageClassifier: theme.multiColumns.messageColumns[index].messageClassifier,
         titleEntries: convertToEntries(theme.multiColumns.messageColumns[index].title),
         nameEntries: convertToEntries(theme.multiColumns.messageColumns[index].name),
-        color: theme.multiColumns.messageColumns[index].color,
+        color: theme.multiColumns.messageColumns[index].color || '#000000',
         columnSynthesisSubject: theme.multiColumns.messageColumns[index].columnSynthesis.subject
           ? convertToEntries(theme.multiColumns.messageColumns[index].columnSynthesis.subject)
           : [],
