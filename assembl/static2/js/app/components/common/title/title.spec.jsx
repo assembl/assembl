@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
+import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
@@ -8,6 +9,12 @@ import Adapter from 'enzyme-adapter-react-16.3';
 import Title from './title';
 import type { Props as TitleProps } from './title';
 import { defaultTitleProps } from './title.stories';
+
+// Separate the snapshots in directories next to each component
+// Name should match with the story name
+initStoryshots({
+  storyKindRegex: /^Title$/
+});
 
 configure({ adapter: new Adapter() });
 

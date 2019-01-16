@@ -376,3 +376,5 @@ export const commentHelperButtonTooltip = (
     <Translate value="debate.brightMirror.commentFiction.commentHelper" />
   </Tooltip>
 );
+
+export const titleTooltip = (content: React.Node) => <Tooltip id="titleTooltip">{content}</Tooltip>;

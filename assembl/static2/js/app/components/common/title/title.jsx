@@ -1,18 +1,22 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 export type Props = {
   /** Optional level */
   level: number,
   /** Title content */
-  children: string
+  titleContent: string
 };
 
-const Title = ({ level, children }: Props) =>
-  (level === 1 ? <h1>{children.toUpperCase()}</h1> : <h2>{children.toUpperCase()}</h2>);
+const Title = ({ level, titleContent }: Props) => {
+  const componentContent = level === 1 ? <h1>{titleContent.toUpperCase()}</h1> : <h2>{titleContent.toUpperCase()}</h2>;
+
+  return <React.Fragment>{componentContent}</React.Fragment>;
+};
 
 Title.defaultProps = {
-  level: 1
+  level: 1,
+  showtooltip: false
 };
 
 export default Title;

@@ -11,7 +11,7 @@ import type { Props as TitleProps } from './title';
 
 export const defaultTitleProps: TitleProps = {
   level: 1,
-  children: 'my awesome title'
+  titleContent: 'my awesome title'
 };
 
 const playground: TitleProps = {
@@ -23,5 +23,7 @@ storiesOf('Title', module)
   .add('default', withInfo()(() => <Title {...defaultTitleProps} />))
   .add(
     'playground',
-    withInfo()(() => <Title level={number('title level', playground.level)}>{text('title content', playground.children)}</Title>)
+    withInfo()(() => (
+      <Title level={number('title level', playground.level)} titleContent={text('title content', playground.titleContent)} />
+    ))
   );
