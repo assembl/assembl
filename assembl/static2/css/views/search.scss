@@ -1,4 +1,4 @@
-@import "../../node_modules/searchkit/theming/vars.scss";
+@import '../../node_modules/searchkit/theming/vars.scss';
 
 // The class names starting with sk- comes mainly from the searchkit library.
 // We reuse the components' styles from searchkit as is excepted for the
@@ -10,38 +10,38 @@ $sk-action-text-color: $first-color;
 $sk-selector-active-background: $first-color;
 $highlightColor: $first-color-light;
 
-@import "../../node_modules/searchkit/theming/components/arrows.scss";
-@import "../../node_modules/searchkit/theming/components/actions.scss";
-@import "../../node_modules/searchkit/theming/components/loader.scss";
+@import '../../node_modules/searchkit/theming/components/arrows.scss';
+@import '../../node_modules/searchkit/theming/components/actions.scss';
+@import '../../node_modules/searchkit/theming/components/loader.scss';
 
 // @import "../../node_modules/searchkit/theming/components/search-box.scss";
-@import "../../node_modules/searchkit/theming/components/search-icon.scss";
-@import "../../node_modules/searchkit/theming/components/hits-stats.scss";
-@import "../../node_modules/searchkit/theming/components/no-hits.scss";
-@import "../../node_modules/searchkit/theming/components/filter-group.scss";
-@import "../../node_modules/searchkit/theming/components/filter-item.scss";
-@import "../../node_modules/searchkit/theming/components/item-list.scss";
-@import "../../node_modules/searchkit/theming/components/select.scss";
-@import "../../node_modules/searchkit/theming/components/tabs.scss";
-@import "../../node_modules/searchkit/theming/components/tag-cloud.scss";
-@import "../../node_modules/searchkit/theming/components/toggle.scss";
-@import "../../node_modules/searchkit/theming/components/range-input.scss";
-@import "../../node_modules/searchkit/theming/components/range-histogram.scss";
-@import "../../node_modules/searchkit/theming/components/range-slider.scss";
-@import "../../node_modules/searchkit/theming/components/hierarchical-menu-filter.scss";
-@import "../../node_modules/searchkit/theming/components/hierarchical-refinement-filter.scss";
-@import "../../node_modules/searchkit/theming/components/input-filter.scss";
-@import "../../node_modules/searchkit/theming/components/numeric-refinement-list-filter.scss";
-@import "../../node_modules/searchkit/theming/components/refinement-list-filter.scss";
-@import "../../node_modules/searchkit/theming/components/selected-filters.scss";
+@import '../../node_modules/searchkit/theming/components/search-icon.scss';
+@import '../../node_modules/searchkit/theming/components/hits-stats.scss';
+@import '../../node_modules/searchkit/theming/components/no-hits.scss';
+@import '../../node_modules/searchkit/theming/components/filter-group.scss';
+@import '../../node_modules/searchkit/theming/components/filter-item.scss';
+@import '../../node_modules/searchkit/theming/components/item-list.scss';
+@import '../../node_modules/searchkit/theming/components/select.scss';
+@import '../../node_modules/searchkit/theming/components/tabs.scss';
+@import '../../node_modules/searchkit/theming/components/tag-cloud.scss';
+@import '../../node_modules/searchkit/theming/components/toggle.scss';
+@import '../../node_modules/searchkit/theming/components/range-input.scss';
+@import '../../node_modules/searchkit/theming/components/range-histogram.scss';
+@import '../../node_modules/searchkit/theming/components/range-slider.scss';
+@import '../../node_modules/searchkit/theming/components/hierarchical-menu-filter.scss';
+@import '../../node_modules/searchkit/theming/components/hierarchical-refinement-filter.scss';
+@import '../../node_modules/searchkit/theming/components/input-filter.scss';
+@import '../../node_modules/searchkit/theming/components/numeric-refinement-list-filter.scss';
+@import '../../node_modules/searchkit/theming/components/refinement-list-filter.scss';
+@import '../../node_modules/searchkit/theming/components/selected-filters.scss';
 //@import "../../node_modules/searchkit/theming/components/range-filter.scss";
 // range-filter.scss includes "~rc-slider/assets/index.css"
-@import "../../node_modules/searchkit/theming/components/reset-filters.scss";
-@import "../../node_modules/searchkit/theming/components/menu-filter.scss";
-@import "../../node_modules/searchkit/theming/components/tag-filter.scss";
-@import "../../node_modules/searchkit/theming/components/pagination.scss";
-@import "../../node_modules/searchkit/theming/components/table.scss";
-@import "../../node_modules/searchkit/theming/components/panel.scss";
+@import '../../node_modules/searchkit/theming/components/reset-filters.scss';
+@import '../../node_modules/searchkit/theming/components/menu-filter.scss';
+@import '../../node_modules/searchkit/theming/components/tag-filter.scss';
+@import '../../node_modules/searchkit/theming/components/pagination.scss';
+@import '../../node_modules/searchkit/theming/components/table.scss';
+@import '../../node_modules/searchkit/theming/components/panel.scss';
 
 .emoticonValue {
   display: inline-block;
@@ -114,7 +114,7 @@ $highlightColor: $first-color-light;
     left: 0;
     width: 100%;
     background-color: #fff;
-    box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.14), 0 4px 8px rgba(0, 0, 0, 0.28);
   }
 
   &__filters {
@@ -194,7 +194,7 @@ $highlightColor: $first-color-light;
 
 .sk-item-list-option__text,
 .sk-item-list-option__count {
-  color: $grey3;
+  color: $grey;
   font-family: $font-family4;
   margin-bottom: 0.5em;
 }
@@ -224,7 +224,7 @@ $highlightColor: $first-color-light;
     top: 5px;
 
     &:before {
-      content: "";
+      content: '';
 
       @include search-icon;
 
@@ -252,7 +252,8 @@ $highlightColor: $first-color-light;
   }
 }
 
-.sk-search-box, #search-expand {
+.sk-search-box,
+#search-expand {
   display: inline-block;
 }
 
@@ -343,7 +344,7 @@ $marginLeft: 80px;
   }
 
   &__info {
-    color: $grey3;
+    color: $grey;
     font-size: 12px;
     font-family: $font-family4;
     margin-left: $marginLeft;
@@ -364,7 +365,8 @@ $marginLeft: 80px;
     }
   }
 
-  &__assembl-icon-message, &__assembl-icon-avatar {
+  &__assembl-icon-message,
+  &__assembl-icon-avatar {
     margin-left: 5px;
     margin-right: 15px;
   }
@@ -381,7 +383,8 @@ $marginLeft: 80px;
 }
 
 .sk-action-bar {
-  .sk-select, .sk-toggle {
+  .sk-select,
+  .sk-toggle {
     margin-left: 15px;
   }
 }

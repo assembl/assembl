@@ -10,7 +10,7 @@
   }
 
   .bar-bkg {
-    background-color: $grey1;
+    background-color: $light-grey;
     bottom: 0;
     height: 10px;
     position: absolute;
@@ -52,7 +52,7 @@
   }
 
   .not-active {
-    background-color: $grey5;
+    background-color: $light-grey;
   }
 
   .timeline-number {
@@ -150,7 +150,7 @@
 
   .txt-not-active {
     .timeline-link {
-      color: $grey5;
+      color: $light-grey;
       font-family: $font-family4;
     }
   }

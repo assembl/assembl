@@ -3,7 +3,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   border-bottom: solid 3px $theme-local-blue;
-  box-shadow: 0 2px 3px 0 $grey-shadow;
+  box-shadow: 0 2px 3px 0 $grey;
   width: 149px;
   height: 200px;
   margin: 4px;
@@ -17,7 +17,7 @@
 
     .actions {
       li {
-        background-color: $grey5;
+        background-color: $light-grey;
       }
     }
 

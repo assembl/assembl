@@ -157,7 +157,7 @@
   }
 }
 
-$deleted-post-border: 1px solid $grey1 !default;
+$deleted-post-border: 1px solid $light-grey !default;
 
 .idea .level .deleted-post .box {
   border-left: $deleted-post-border;
@@ -262,7 +262,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     }
 
     .date {
-      color: $grey2;
+      color: $grey;
       font-size: $font-size-xs;
       padding: 0 0 0 10px;
       font-family: $font-family4;
@@ -285,7 +285,7 @@ $deleted-post-border: 1px solid $grey1 !default;
     padding: 5px 0;
 
     .label {
-      color: $grey2;
+      color: $grey;
       font-size: $font-size-xs;
       font-family: $font-family4;
     }
@@ -295,8 +295,8 @@ $deleted-post-border: 1px solid $grey1 !default;
 
       .badge {
         display: inline;
-        background-color: $grey7;
-        color: $grey3;
+        background-color: $light-grey;
+        color: $grey;
         text-align: left;
         white-space: normal;
         word-wrap: break-word;
@@ -658,8 +658,8 @@ $deleted-post-border: 1px solid $grey1 !default;
       position: relative;
 
       .post-icons {
-        border-bottom: 1px solid $grey1;
-        border-top: 1px solid $grey1;
+        border-bottom: 1px solid $light-grey;
+        border-top: 1px solid $light-grey;
         padding: 18px 0 10px;
 
         .post-action {

@@ -6,7 +6,7 @@
 .tabbed-content {
   .tab-title {
     border-bottom: $border-not-active;
-    color: $grey2;
+    color: $grey;
     cursor: pointer;
     display: block;
     padding: 0 0 5px 0;
@@ -14,7 +14,7 @@
 
   .tab-title-active {
     border-bottom: $border-active;
-    color: $grey3;
+    color: $grey;
     cursor: pointer;
     display: block;
     padding: 0 0 5px 0;
@@ -157,7 +157,7 @@
       padding: 0 0 15px;
 
       a {
-        color: $grey2;
+        color: $grey;
 
         &:hover {
           color: $first-color;
@@ -165,7 +165,7 @@
       }
 
       .arrow {
-        color: $grey2;
+        color: $grey;
         font-size: 6px;
         margin-right: 10px;
         margin-left: -19px;
@@ -236,7 +236,7 @@
 
       .language-list {
         padding-top: 20px;
-        color: $grey2;
+        color: $grey;
       }
     }
 
@@ -463,7 +463,7 @@
   }
 
   .preview-title {
-    color: $grey3;
+    color: $grey;
     font-family: $font-family6;
     font-size: $font-size-xs;
     margin: 10px 0 20px 5px;
@@ -486,7 +486,7 @@
   }
 
   .description-block {
-    color: $grey8;
+    color: $grey;
     font-size: $font-size-xxs;
     margin: 10px 0 0 5px;
     font-family: $font-family6;
@@ -498,7 +498,7 @@
     }
 
     &:hover {
-      color: $grey3;
+      color: $grey;
     }
   }
 
@@ -538,7 +538,7 @@
     .modules-preview {
       margin: 5px;
       padding: 2px;
-      background-color: $grey0;
+      background-color: $light-grey;
       min-height: 400px;
       display: flex;
       flex-direction: column;
@@ -606,7 +606,7 @@
       flex-direction: column;
       padding: 0 45px;
       font-size: $font-size-s;
-      color: $grey3;
+      color: $grey;
       font-family: $font-family4;
 
       .timeline-link {

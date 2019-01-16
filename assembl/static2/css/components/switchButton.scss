@@ -31,13 +31,13 @@
 }
 
 // React Switch Button flat-round style.
-$rsbc-transtion-delay : 0.4s;
-$rsbc-theme-flat-color-on : $grey2;
-$rsbc-theme-flat-color-on-border : darken($rsbc-theme-flat-color-on, 10%);
-$rsbc-theme-flat-color-off : $grey2;
-$rsbc-theme-flat-color-off-border : darken($rsbc-theme-flat-color-off, 10%);
-$rsbc-theme-flat-color-disabled : $grey1;
-$rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled, 10%);
+$rsbc-transtion-delay: 0.4s;
+$rsbc-theme-flat-color-on: $grey;
+$rsbc-theme-flat-color-on-border: darken($rsbc-theme-flat-color-on, 10%);
+$rsbc-theme-flat-color-off: $grey;
+$rsbc-theme-flat-color-off-border: darken($rsbc-theme-flat-color-off, 10%);
+$rsbc-theme-flat-color-disabled: $light-grey;
+$rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 10%);
 
 // Main Switch Button container
 .rsbc-switch-button {
@@ -118,7 +118,7 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
   &.rsbc-switch-button-flat-round input[type="checkbox"] + label:after {
     display: inline-block;
     position: absolute;
-    content: "";
+    content: '';
   }
 
   // inner background
@@ -204,7 +204,7 @@ $rsbc-theme-flat-color-disabled-border : darken($rsbc-theme-flat-color-disabled,
       }
 
       &:before {
-        background-color: $grey5;
+        background-color: $light-grey;
       }
     }
 

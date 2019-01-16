@@ -9,7 +9,7 @@ $small-margin: 5px;
   overflow: auto;
 
   .synthesis-stats {
-    background-color: $grey0;
+    background-color: $light-grey;
     padding: $stats-padding;
     padding-bottom: $margin;
     padding-right: $margin;
@@ -94,7 +94,8 @@ $small-margin: 5px;
         .doughnut {
           vertical-align: middle;
 
-          circle,path {
+          circle,
+          path {
             stroke-width: $doughnut-girth;
           }
         }

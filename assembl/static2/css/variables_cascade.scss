@@ -12,12 +12,12 @@ $btn-dark-border-color: $first-color !default;
 $border-title: 3px solid $second-color !default;
 $border-active: 4px solid $second-color !default;
 $border-theme: 4px solid $first-color !default;
-$border-not-active: 4px solid $grey2 !default;
+$border-not-active: 4px solid $grey !default;
 
 $page-bkg-light: $white !default;
-$page-bkg-grey: $grey0 !default;
-$page-bkg-dark-grey: $grey9 !default;
-$page-bkg-dark: $grey4 !default;
+$page-bkg-grey: $light-grey !default;
+$page-bkg-dark-grey: $light-grey !default;
+$page-bkg-dark: $black !default;
 
 $link-color: $first-color !default;
 $link-hover-color: $black !default;
@@ -31,7 +31,7 @@ $title1-dark-color: $first-color !default;
 $title2-dark-color: $first-color !default;
 $title3-dark-color: $first-color !default;
 $title4-dark-color: $first-color !default;
-$title5-dark-color: $grey4 !default;
+$title5-dark-color: $black !default;
 $title1-light-color: $white !default;
 $title2-light-color: $white !default;
 $title3-light-color: $white !default;
@@ -45,15 +45,15 @@ $title5-size: $font-size-l !default;
 $title6-size: $font-size-xxl !default;
 
 $navbar-bkg: $white !default;
-$navbar-border: 1px solid $grey1 !default;
+$navbar-border: 1px solid $light-grey !default;
 $navbar-text-color: $first-color !default;
 $navbar-active-text-color: $first-color !default;
 
 $box-shadow: none !default;
 $box-bkg: $white !default;
 $box-border: 1px solid $white !default;
-$insert-border: 1px solid $grey1 !default;
-$box-title-bkg: $grey4 !default;
+$insert-border: 1px solid $light-grey !default;
+$box-title-bkg: $black !default;
 $box-title-txt: $white !default;
 
 $input-txt-bkg-color: $white !default;

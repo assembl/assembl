@@ -24,7 +24,7 @@
 
   .rich-text-editor .DraftEditor-editorContainer {
     padding: 5px;
-    border: 1px solid $grey5;
+    border: 1px solid $light-grey;
 
     .DraftEditor-root {
       max-height: 180px;
@@ -271,7 +271,7 @@
   }
 
   .public-DraftEditorPlaceholder-root {
-    color: $grey2;
+    color: $grey;
     font-family: $font-family6;
     position: absolute;
   }
@@ -327,16 +327,16 @@ img.attachment-image {
 
   .editor-toolbar {
     float: none;
-    background-color: $grey9;
+    background-color: $light-grey;
     width: 100%;
     text-align: right;
 
     .active {
-      background-color: $grey2 !important;
+      background-color: $grey !important;
     }
 
     .btn {
-      background-color: $grey9;
+      background-color: $light-grey;
     }
   }
 
