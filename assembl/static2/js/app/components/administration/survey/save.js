@@ -1,27 +1,32 @@
 // @flow
 import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
+import range from 'lodash/range';
 
 import type { ThemesAdminValues } from './types.flow';
 import updateIdeasMutation from '../../../graphql/mutations/updateIdeas.graphql';
 import { createSave, convertToEntries, convertRichTextToVariables, getFileVariable } from '../../form/utils';
 import { MESSAGE_VIEW } from '../../../constants';
 
-const getMessageColumnsVariables = (theme, client) =>
-  (theme.multiColumns && theme.multiColumns.messageColumns
-    ? theme.multiColumns.messageColumns.map(async (col) => {
-      const bodyVars = await convertRichTextToVariables(col.columnSynthesis.body, client);
+const getMessageColumnsVariables = (theme, client) => {
+  const checkedForm =
+    theme.multiColumns && theme.multiColumns.radioButtons && theme.multiColumns.radioButtons.find(button => button.isChecked);
+  const nbColumnsInForm = checkedForm ? checkedForm.size : theme.multiColumns.messageColumns.length;
+  return theme.multiColumns && theme.multiColumns.messageColumns && theme.multiColumns.messageColumns.length > 0
+    ? range(0, nbColumnsInForm).map(async (index) => {
+      const bodyVars = await convertRichTextToVariables(theme.multiColumns.messageColumns[index].columnSynthesis.body, client);
       const { entries: bodyEntries } = bodyVars;
       return {
-        messageClassifier: col.messageClassifier,
-        titleEntries: convertToEntries(col.title),
-        nameEntries: convertToEntries(col.name),
-        color: col.color,
-        columnSynthesisSubject: convertToEntries(col.columnSynthesis.subject),
+        messageClassifier: theme.multiColumns.messageColumns[index].messageClassifier,
+        titleEntries: convertToEntries(theme.multiColumns.messageColumns[index].title),
+        nameEntries: convertToEntries(theme.multiColumns.messageColumns[index].name),
+        color: theme.multiColumns.messageColumns[index].color,
+        columnSynthesisSubject: convertToEntries(theme.multiColumns.messageColumns[index].columnSynthesis.subject),
         columnSynthesisBody: bodyEntries
       };
     })
-    : []);
+    : [];
+};
 
 const getChildrenVariables = (client, thematic, initialTheme) =>
   (thematic.children
