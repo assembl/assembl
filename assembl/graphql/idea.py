@@ -960,6 +960,12 @@ def update_idea(args, phase, context):
                     thematic.message_columns.remove(deleted_column)
                     thematic.db.delete(deleted_column.get_column_synthesis())
                     thematic.db.delete(deleted_column)
+        else:
+            # if the idea was type messageColumns before, remove all columns
+            for deleted_column in thematic.message_columns[:]:
+                thematic.message_columns.remove(deleted_column)
+                thematic.db.delete(deleted_column.get_column_synthesis())
+                thematic.db.delete(deleted_column)
 
         update_ideas_recursively(thematic, args.get('children', []), phase, context)
 

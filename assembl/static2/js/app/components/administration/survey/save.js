@@ -14,8 +14,11 @@ const getMessageColumnsVariables = (theme, client) => {
   }
   const checkedForm =
     theme.multiColumns && theme.multiColumns.radioButtons && theme.multiColumns.radioButtons.find(button => button.isChecked);
-  const nbColumnsInForm = checkedForm ? checkedForm.size : theme.multiColumns.messageColumns.length;
-  return theme.multiColumns && theme.multiColumns.messageColumns && theme.multiColumns.messageColumns.length > 0
+  let nbColumnsInForm = checkedForm ? checkedForm.size : theme.multiColumns.messageColumns.length;
+  if (theme.messageViewOverride && theme.messageViewOverride.value !== MESSAGE_VIEW.messageColumns) {
+    nbColumnsInForm = 0;
+  }
+  return theme.multiColumns.messageColumns && theme.multiColumns.messageColumns.length > 0
     ? range(0, nbColumnsInForm).map(async (index) => {
       const bodyVars = await (theme.multiColumns.messageColumns[index].columnSynthesis.body
         ? convertRichTextToVariables(theme.multiColumns.messageColumns[index].columnSynthesis.body, client)
