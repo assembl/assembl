@@ -48,6 +48,11 @@ def main(global_config, **settings):
         from assembl.lib import signals
         signals.listen()
 
+    # setup before logging
+    region = settings.get('aws_region', None)
+    if region:
+        import boto3
+        boto3.setup_default_session(region_name=region)
     import os
     if 'UWSGI_ORIGINAL_PROC_NAME' in os.environ:
         # uwsgi does not load logging properly
