@@ -1348,7 +1348,7 @@ def test_mutation_update_ideas_multicol_update_first_column(test_session, graphq
     test_session.rollback()
 
 
-def xtest_mutation_update_ideas_multicol_delete_neutral_column(test_session, graphql_request, graphql_registry, phases):
+def test_mutation_update_ideas_multicol_delete_neutral_column(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
     # idea with 3 columns
     res = schema.execute(
@@ -1478,6 +1478,10 @@ def xtest_mutation_update_ideas_multicol_delete_neutral_column(test_session, gra
     created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
     created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     assert len(created_idea.message_columns) == 2
+    first_column = created_idea.message_columns[0]
+    second_column = created_idea.message_columns[1]
+    assert first_column.message_classifier == 'positive'
+    assert second_column.message_classifier == 'negative'
     test_session.rollback()
 
 

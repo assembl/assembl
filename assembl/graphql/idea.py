@@ -956,6 +956,11 @@ def update_idea(args, phase, context):
                         ))
                         previous_column = sacolumn
 
+                for deleted_column in thematic.message_columns[index + 1:]:
+                    thematic.message_columns.remove(deleted_column)
+                    thematic.db.delete(deleted_column.get_column_synthesis())
+                    thematic.db.delete(deleted_column)
+
         update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
     db.flush()
