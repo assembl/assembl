@@ -42,7 +42,7 @@ class ToolbarSlider extends React.Component<Props, State> {
     const { max, min, onSliderChange, labelFormatter, color } = this.props;
     const { currentValue } = this.state;
 
-    const onSliderChangeHandler = (value: number) => {
+    const onSliderChangeHandler = (event, value: number) => {
       this.setState({ currentValue: value });
       onSliderChange(value);
     };
