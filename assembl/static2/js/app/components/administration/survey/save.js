@@ -9,19 +9,26 @@ import { createSave, convertToEntries, convertRichTextToVariables, getFileVariab
 import { MESSAGE_VIEW } from '../../../constants';
 
 const getMessageColumnsVariables = (theme, client) => {
+  if (!theme.multiColumns) {
+    return [];
+  }
   const checkedForm =
     theme.multiColumns && theme.multiColumns.radioButtons && theme.multiColumns.radioButtons.find(button => button.isChecked);
   const nbColumnsInForm = checkedForm ? checkedForm.size : theme.multiColumns.messageColumns.length;
   return theme.multiColumns && theme.multiColumns.messageColumns && theme.multiColumns.messageColumns.length > 0
     ? range(0, nbColumnsInForm).map(async (index) => {
-      const bodyVars = await convertRichTextToVariables(theme.multiColumns.messageColumns[index].columnSynthesis.body, client);
+      const bodyVars = await (theme.multiColumns.messageColumns[index].columnSynthesis.body
+        ? convertRichTextToVariables(theme.multiColumns.messageColumns[index].columnSynthesis.body, client)
+        : Promise.resolve({ attachments: [], entries: [] }));
       const { entries: bodyEntries } = bodyVars;
       return {
         messageClassifier: theme.multiColumns.messageColumns[index].messageClassifier,
         titleEntries: convertToEntries(theme.multiColumns.messageColumns[index].title),
         nameEntries: convertToEntries(theme.multiColumns.messageColumns[index].name),
         color: theme.multiColumns.messageColumns[index].color,
-        columnSynthesisSubject: convertToEntries(theme.multiColumns.messageColumns[index].columnSynthesis.subject),
+        columnSynthesisSubject: theme.multiColumns.messageColumns[index].columnSynthesis.subject
+          ? convertToEntries(theme.multiColumns.messageColumns[index].columnSynthesis.subject)
+          : [],
         columnSynthesisBody: bodyEntries
       };
     })
@@ -60,8 +67,15 @@ const getChildrenVariables = (client, thematic, initialTheme) =>
         descriptionEntries: t.description ? convertToEntries(t.description) : [],
         announcement: announcement,
         image: getFileVariable(t.img, initialImg),
+        questions:
+            t.questions &&
+            t.questions.map(q => ({
+              id: q.id.startsWith('-') ? null : q.id,
+              titleEntries: convertToEntries(q.title)
+            })),
         order: order,
-        children: getChildrenVariables(client, t, initialChild)
+        children: await Promise.all(getChildrenVariables(client, t, initialTheme)),
+        messageColumns: await Promise.all(getMessageColumnsVariables(t, client))
       };
     })
     : []);
