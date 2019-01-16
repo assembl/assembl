@@ -1,0 +1,414 @@
+{
+  "usage": {
+    "text_units": 1,
+    "text_characters": 2823,
+    "features": 5
+  },
+  "sentiment": {
+    "document": {
+      "score": -0.310887,
+      "label": "negative"
+    }
+  },
+  "language": "en",
+  "keywords": [
+    {
+      "text": "Lorem Ipsum",
+      "relevance": 0.944828,
+      "count": 9
+    },
+    {
+      "text": "Lorem Ipsum passages",
+      "relevance": 0.711141,
+      "count": 1
+    },
+    {
+      "text": ").</p",
+      "relevance": 0.644945,
+      "count": 1
+    },
+    {
+      "text": "versions of Lorem Ipsum",
+      "relevance": 0.630978,
+      "count": 1
+    },
+    {
+      "text": "Lorem Ipsum passage",
+      "relevance": 0.583779,
+      "count": 1
+    },
+    {
+      "text": "desktop publishing software",
+      "relevance": 0.581323,
+      "count": 1
+    },
+    {
+      "text": "piece of classical Latin literature",
+      "relevance": 0.578775,
+      "count": 1
+    },
+    {
+      "text": "obscure Latin words",
+      "relevance": 0.573072,
+      "count": 1
+    },
+    {
+      "text": "first line of Lorem Ipsum",
+      "relevance": 0.568318,
+      "count": 1
+    },
+    {
+      "text": "dummy text of the printing",
+      "relevance": 0.557455,
+      "count": 1
+    },
+    {
+      "text": "Various versions",
+      "relevance": 0.55642,
+      "count": 1
+    },
+    {
+      "text": "popular belief",
+      "relevance": 0.552718,
+      "count": 1
+    },
+    {
+      "text": "Latin words",
+      "relevance": 0.542216,
+      "count": 1
+    },
+    {
+      "text": "default model text",
+      "relevance": 0.540601,
+      "count": 1
+    },
+    {
+      "text": "1500s",
+      "relevance": 0.537697,
+      "count": 1
+    },
+    {
+      "text": "handful of model sentence structures",
+      "relevance": 0.536156,
+      "count": 1
+    },
+    {
+      "text": "Lorem ipsum dolor",
+      "relevance": 0.534849,
+      "count": 1
+    },
+    {
+      "text": "variations of passages of Lorem Ipsum",
+      "relevance": 0.529921,
+      "count": 1
+    },
+    {
+      "text": "Richard McClintock",
+      "relevance": 0.529642,
+      "count": 1
+    },
+    {
+      "text": "release of Letraset sheets",
+      "relevance": 0.52948,
+      "count": 1
+    },
+    {
+      "text": "web page editors",
+      "relevance": 0.52505,
+      "count": 1
+    },
+    {
+      "text": "desktop publishing packages",
+      "relevance": 0.52363,
+      "count": 1
+    },
+    {
+      "text": "classical literature",
+      "relevance": 0.523163,
+      "count": 1
+    },
+    {
+      "text": "normal distribution of letters",
+      "relevance": 0.519616,
+      "count": 1
+    },
+    {
+      "text": "industry's standard dummy text",
+      "relevance": 0.51917,
+      "count": 1
+    },
+    {
+      "text": "readable content of a page",
+      "relevance": 0.518985,
+      "count": 1
+    },
+    {
+      "text": "Latin professor",
+      "relevance": 0.517424,
+      "count": 1
+    },
+    {
+      "text": "Aldus PageMaker",
+      "relevance": 0.514776,
+      "count": 1
+    },
+    {
+      "text": "point",
+      "relevance": 0.512735,
+      "count": 1
+    },
+    {
+      "text": "humour",
+      "relevance": 0.510939,
+      "count": 3
+    },
+    {
+      "text": "Lorem Ipsum generators",
+      "relevance": 0.509872,
+      "count": 1
+    },
+    {
+      "text": "search",
+      "relevance": 0.509806,
+      "count": 1
+    },
+    {
+      "text": "sections",
+      "relevance": 0.509391,
+      "count": 1
+    },
+    {
+      "text": "dictionary",
+      "relevance": 0.50882,
+      "count": 1
+    },
+    {
+      "text": "Internet",
+      "relevance": 0.508715,
+      "count": 2
+    },
+    {
+      "text": "de Finibus Bonorum et Malorum",
+      "relevance": 0.508377,
+      "count": 1
+    },
+    {
+      "text": "chunks",
+      "relevance": 0.50776,
+      "count": 1
+    },
+    {
+      "text": "words",
+      "relevance": 0.507655,
+      "count": 1
+    },
+    {
+      "text": "roots",
+      "relevance": 0.507408,
+      "count": 1
+    },
+    {
+      "text": "passage of Lorem Ipsum",
+      "relevance": 0.507299,
+      "count": 1
+    },
+    {
+      "text": "type specimen book",
+      "relevance": 0.507116,
+      "count": 1
+    },
+    {
+      "text": "Virginia",
+      "relevance": 0.506927,
+      "count": 1
+    },
+    {
+      "text": "accident",
+      "relevance": 0.506903,
+      "count": 1
+    },
+    {
+      "text": "cites of the word",
+      "relevance": 0.506376,
+      "count": 1
+    },
+    {
+      "text": "majority",
+      "relevance": 0.506255,
+      "count": 1
+    },
+    {
+      "text": "treatise",
+      "relevance": 0.506169,
+      "count": 1
+    },
+    {
+      "text": "line",
+      "relevance": 0.50609,
+      "count": 1
+    },
+    {
+      "text": "Hampden-Sydney College",
+      "relevance": 0.5057,
+      "count": 1
+    },
+    {
+      "text": "purpose",
+      "relevance": 0.505694,
+      "count": 1
+    },
+    {
+      "text": "repetition",
+      "relevance": 0.50561,
+      "count": 1
+    }
+  ],
+  "entities": [
+    {
+      "type": "Company",
+      "text": "Lorem Ipsum",
+      "relevance": 0.925052,
+      "count": 15
+    },
+    {
+      "type": "Organization",
+      "text": "Hampden-Sydney College",
+      "relevance": 0.063569,
+      "disambiguation": {
+        "subtype": ["CollegeUniversity"],
+        "name": "Hampden–Sydney College",
+        "dbpedia_resource": "http://dbpedia.org/resource/Hampden–Sydney_College"
+      },
+      "count": 1
+    },
+    {
+      "type": "Company",
+      "text": "Aldus",
+      "relevance": 0.06289,
+      "disambiguation": {
+        "subtype": ["SoftwareDeveloper"],
+        "name": "Aldus",
+        "dbpedia_resource": "http://dbpedia.org/resource/Aldus"
+      },
+      "count": 1
+    },
+    {
+      "type": "Company",
+      "text": "Letraset",
+      "relevance": 0.06258,
+      "disambiguation": {
+        "subtype": [],
+        "name": "Letraset",
+        "dbpedia_resource": "http://dbpedia.org/resource/Letraset"
+      },
+      "count": 1
+    },
+    {
+      "type": "Person",
+      "text": "Richard McClintock",
+      "relevance": 0.058992,
+      "count": 1
+    },
+    {
+      "type": "Person",
+      "text": "Cicero",
+      "relevance": 0.058836,
+      "disambiguation": {
+        "subtype": ["Writer"],
+        "name": "Cicero",
+        "dbpedia_resource": "http://dbpedia.org/resource/Cicero"
+      },
+      "count": 1
+    },
+    {
+      "type": "Location",
+      "text": "Virginia",
+      "relevance": 0.057692,
+      "disambiguation": {
+        "subtype": [
+          "PoliticalDistrict",
+          "AdministrativeDivision",
+          "GovernmentalJurisdiction",
+          "USState",
+          "StateOrCounty"
+        ],
+        "name": "Virginia",
+        "dbpedia_resource": "http://dbpedia.org/resource/Virginia"
+      },
+      "count": 1
+    },
+    {
+      "type": "Person",
+      "text": "Finibus Bonorum",
+      "relevance": 0.055866,
+      "count": 1
+    },
+    {
+      "type": "JobTitle",
+      "text": "professor",
+      "relevance": 0.053751,
+      "count": 1
+    },
+    {
+      "type": "Quantity",
+      "text": "five centuries",
+      "relevance": 0.043485,
+      "count": 1
+    },
+    {
+      "type": "Quantity",
+      "text": "2000 years",
+      "relevance": 0.043485,
+      "count": 1
+    }
+  ],
+  "concepts": [
+    {
+      "text": "Lorem ipsum",
+      "relevance": 0.961583,
+      "dbpedia_resource": "http://dbpedia.org/resource/Lorem_ipsum"
+    },
+    {
+      "text": "Typeface",
+      "relevance": 0.454299,
+      "dbpedia_resource": "http://dbpedia.org/resource/Typeface"
+    },
+    {
+      "text": "Desktop publishing",
+      "relevance": 0.390136,
+      "dbpedia_resource": "http://dbpedia.org/resource/Desktop_publishing"
+    },
+    {
+      "text": "Classical Latin",
+      "relevance": 0.367886,
+      "dbpedia_resource": "http://dbpedia.org/resource/Classical_Latin"
+    },
+    {
+      "text": "Typography",
+      "relevance": 0.367091,
+      "dbpedia_resource": "http://dbpedia.org/resource/Typography"
+    },
+    {
+      "text": "Latin",
+      "relevance": 0.363516,
+      "dbpedia_resource": "http://dbpedia.org/resource/Latin"
+    },
+    {
+      "text": "The quick brown fox jumps over the lazy dog",
+      "relevance": 0.359998,
+      "dbpedia_resource":
+        "http://dbpedia.org/resource/The_quick_brown_fox_jumps_over_the_lazy_dog"
+    },
+    {
+      "text": "Greeking",
+      "relevance": 0.356761,
+      "dbpedia_resource": "http://dbpedia.org/resource/Greeking"
+    }
+  ],
+  "categories": [
+    {
+      "score": 0.999906,
+      "label": "/technology and computing/software/desktop publishing"
+    }
+  ]
+}
