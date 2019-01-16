@@ -58,6 +58,8 @@ function loadStories() {
 
   require('../js/app/components/common/description/description.stories.jsx');
   require('../js/app/components/common/loader/loader.stories.jsx');
+  require('../js/app/components/common/toolbarSlider/toolbarSliderIcon.stories.jsx');
+  require('../js/app/components/common/toolbarSlider/toolbarSlider.stories.jsx');
 }
 
 configure(loadStories, module);
