@@ -1155,14 +1155,18 @@ def test_mutation_update_ideas_multicol_create_two_columns(test_session, graphql
     assert second_column.title.entries[0].value == u"Deuxième titre pour le multicolonne"
     first_synthesis = first_column.get_column_synthesis()
     second_synthesis = second_column.get_column_synthesis()
-    assert first_synthesis.subject.entries[0].value == u"Titre de Synthèse de colonne en français pour colonne positive"
-    assert first_synthesis.subject.entries[1].value == u"Title of Column Synthesis in english for positive column"
-    assert first_synthesis.body.entries[0].value == u"Synthèse de colonne en français for positive column"
-    assert first_synthesis.body.entries[1].value == u"Column Synthesis in english for positive column"
-    assert second_synthesis.subject.entries[0].value == u"Titre de Synthèse de colonne en français pour colonne négative"
-    assert second_synthesis.subject.entries[1].value == u"Title of Column Synthesis in english for negative column"
-    assert second_synthesis.body.entries[0].value == u"Synthèse de colonne en français for negative column"
-    assert second_synthesis.body.entries[1].value == u"Column Synthesis in english for negative column"
+    assert {e.locale_code: e.value for e in first_synthesis.subject.entries} == {
+        u'fr': u'Titre de Synthèse de colonne en français pour colonne positive',
+        u'en': u'Title of Column Synthesis in english for positive column'}
+    assert {e.locale_code: e.value for e in first_synthesis.body.entries} == {
+        u'fr': u'Synthèse de colonne en français for positive column',
+        u'en': u'Column Synthesis in english for positive column'}
+    assert {e.locale_code: e.value for e in second_synthesis.subject.entries} == {
+        u'fr': u'Titre de Synthèse de colonne en français pour colonne négative',
+        u'en': u'Title of Column Synthesis in english for negative column'}
+    assert {e.locale_code: e.value for e in second_synthesis.body.entries} == {
+        u'fr': u'Synthèse de colonne en français for negative column',
+        u'en': u'Column Synthesis in english for negative column'}
     test_session.rollback()
 
 
@@ -1329,14 +1333,18 @@ def test_mutation_update_ideas_multicol_update_first_column(test_session, graphq
     assert second_column.title.entries[0].value == u"Deuxième titre pour le multicolonne"
     first_synthesis = first_column.get_column_synthesis()
     second_synthesis = second_column.get_column_synthesis()
-    assert first_synthesis.subject.entries[0].value == u"Titre de Synthèse de colonne en français pour colonne positive modifié"
-    assert first_synthesis.subject.entries[1].value == u"Title of Column Synthesis in english for positive column modified"
-    assert first_synthesis.body.entries[0].value == u"Synthèse de colonne en français for positive column modifié"
-    assert first_synthesis.body.entries[1].value == u"Column Synthesis in english for positive column modified"
-    assert second_synthesis.subject.entries[0].value == u"Titre de Synthèse de colonne en français pour colonne négative"
-    assert second_synthesis.subject.entries[1].value == u"Title of Column Synthesis in english for negative column"
-    assert second_synthesis.body.entries[0].value == u"Synthèse de colonne en français for negative column"
-    assert second_synthesis.body.entries[1].value == u"Column Synthesis in english for negative column"
+    assert {e.locale_code: e.value for e in first_synthesis.subject.entries} == {
+        u'fr': u'Titre de Synthèse de colonne en français pour colonne positive modifié',
+        u'en': u'Title of Column Synthesis in english for positive column modified'}
+    assert {e.locale_code: e.value for e in first_synthesis.body.entries} == {
+        u'fr': u'Synthèse de colonne en français for positive column modifié',
+        u'en': u'Column Synthesis in english for positive column modified'}
+    assert {e.locale_code: e.value for e in second_synthesis.subject.entries} == {
+        u'fr': u'Titre de Synthèse de colonne en français pour colonne négative',
+        u'en': u'Title of Column Synthesis in english for negative column'}
+    assert {e.locale_code: e.value for e in second_synthesis.body.entries} == {
+        u'fr': u'Synthèse de colonne en français for negative column',
+        u'en': u'Column Synthesis in english for negative column'}
     test_session.rollback()
 
 

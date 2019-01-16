@@ -914,14 +914,14 @@ def update_idea(args, phase, context):
                 for column in message_columns:
                     message_classifier = column.get('message_classifier', None)
                     existing_column = [col for col in thematic.message_columns if col.message_classifier == message_classifier]
-                    body = langstring_from_input_entries(column['column_synthesis_body'])
-                    subject = langstring_from_input_entries(column['column_synthesis_subject'])
                     if existing_column:
                         existing_column = existing_column[0]
                         update_langstring_from_input_entries(existing_column, 'name', column['name_entries'])
                         update_langstring_from_input_entries(existing_column, 'title', column['title_entries'])
                         existing_column.color = column['color']
-                        existing_column.set_column_synthesis(subject, body, user_id)
+                        synthesis = existing_column.get_column_synthesis()
+                        update_langstring_from_input_entries(synthesis, 'subject', column['column_synthesis_subject'])
+                        update_langstring_from_input_entries(synthesis, 'body', column['column_synthesis_body'])
                         previous_column = existing_column
                     else:
                         name = langstring_from_input_entries(column['name_entries'])
@@ -937,6 +937,8 @@ def update_idea(args, phase, context):
                             color=color,
                             previous_column=previous_column)
                         thematic.message_columns.append(sacolumn)
+                        body = langstring_from_input_entries(column['column_synthesis_body'])
+                        subject = langstring_from_input_entries(column['column_synthesis_subject'])
                         synthesis = models.ColumnSynthesisPost(
                             message_classifier=message_classifier,
                             discussion_id=discussion_id,
