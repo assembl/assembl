@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
+import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
@@ -10,6 +11,12 @@ import type { Props as LoaderProps } from './loader';
 import { defaultLoaderProps } from './loader.stories';
 import LoadingIcon from './icons/loadingIcon/loadingIcon';
 import ErrorIcon from './icons/errorIcon/errorIcon';
+
+// Separate the snapshots in directories next to each component
+// Name should match with the story name
+initStoryshots({
+  storyKindRegex: /^Loader$/
+});
 
 configure({ adapter: new Adapter() });
 
