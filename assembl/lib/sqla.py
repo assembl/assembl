@@ -1854,6 +1854,18 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
         return engine
     url = connection_url(settings)
     settings['sqlalchemy.url'] = url
+    if hasattr(url, 'aws_region'):
+        entrypoint = url._get_entrypoint()
+        dialect_cls = entrypoint.get_dialect_cls(url)
+        dbapi = dialect_cls.dbapi()
+        dialect = dialect_cls(dbapi=dbapi)
+
+        def creator(*args, **kwargs):
+            return dialect.connect(
+                host=url.host, user=url.username, database=url.database,
+                password=url.password, port=url.port, **url.query)
+        engine_kwargs['creator'] = creator
+
     engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
     read_url = connection_url(settings, "dbro_")
     if read_url:
