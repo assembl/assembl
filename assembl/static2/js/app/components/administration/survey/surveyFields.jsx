@@ -36,6 +36,7 @@ const SurveyFields = ({ editLocale, fieldPrefix }: Props) => {
         name={`${fieldPrefix}.questions`}
         renderFields={({ idx: qIdx, name }) => (
           <Field
+            required
             editLocale={editLocale}
             label={`${I18n.t('administration.question_label')} ${qIdx + 1} ${editLocale.toUpperCase()}`}
             name={`${name}.title`}
