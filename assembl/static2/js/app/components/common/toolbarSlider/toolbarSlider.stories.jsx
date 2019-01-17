@@ -4,23 +4,22 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
 import { action } from '@storybook/addon-actions';
-import { withKnobs, number, color } from '@storybook/addon-knobs';
+import { color, number, withKnobs } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import ToolbarSlider from './toolbarSlider';
-import type { Props as ToolbarSliderProps } from './toolbarSlider';
 
-export const defaultToolbarSliderProps: ToolbarSliderProps = {
+export const defaultToolbarSliderProps = {
   defaultValue: 50,
   onSliderChange: action('onSliderChange')
 };
 
 const playground = {
-  min: 0,
-  max: 90,
+  color: '#000',
   defaultValue: 30,
-  onSliderChange: action('onSliderChange'),
-  color: '#000'
+  max: 90,
+  min: 0,
+  onSliderChange: action('onSliderChange')
 };
 
 storiesOf('ToolbarSlider', module)
@@ -38,11 +37,11 @@ storiesOf('ToolbarSlider', module)
     'playground',
     withInfo()(() => (
       <ToolbarSlider
-        min={number('min', playground.min)}
-        max={number('max', playground.max)}
-        defaultValue={number('defaultValue', playground.defaultValue)}
-        onSliderChange={playground.onSliderChange}
         color={color('color', playground.color)}
+        defaultValue={number('defaultValue', playground.defaultValue)}
+        max={number('max', playground.max)}
+        min={number('min', playground.min)}
+        onSliderChange={playground.onSliderChange}
       />
     ))
   );

@@ -383,7 +383,7 @@ exports[`Storyshots ToolbarSlider default 1`] = `
                   <td
                     className="css-1qcb1f7 e6fp4ir0"
                   >
-                    max
+                    color
                   </td>
                   <td
                     className="css-1qcb1f7 e6fp4ir0"
@@ -403,46 +403,12 @@ exports[`Storyshots ToolbarSlider default 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#a11",
+                          "color": "#22a",
+                          "wordBreak": "break-word",
                         }
                       }
                     >
-                      100
-                    </span>
-                  </td>
-                  <td
-                    className="css-11b5gui e6fp4ir0"
-                  />
-                </tr>
-                <tr>
-                  <td
-                    className="css-1qcb1f7 e6fp4ir0"
-                  >
-                    min
-                  </td>
-                  <td
-                    className="css-1qcb1f7 e6fp4ir0"
-                  >
-                    <span>
-                      unknown
-                    </span>
-                  </td>
-                  <td
-                    className="css-11b5gui e6fp4ir0"
-                  >
-                    -
-                  </td>
-                  <td
-                    className="css-11b5gui e6fp4ir0"
-                  >
-                    <span
-                      style={
-                        Object {
-                          "color": "#a11",
-                        }
-                      }
-                    >
-                      0
+                      #000
                     </span>
                   </td>
                   <td
@@ -488,7 +454,7 @@ exports[`Storyshots ToolbarSlider default 1`] = `
                   <td
                     className="css-1qcb1f7 e6fp4ir0"
                   >
-                    color
+                    maxValue
                   </td>
                   <td
                     className="css-1qcb1f7 e6fp4ir0"
@@ -508,12 +474,46 @@ exports[`Storyshots ToolbarSlider default 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#22a",
-                          "wordBreak": "break-word",
+                          "color": "#a11",
                         }
                       }
                     >
-                      #000
+                      100
+                    </span>
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  />
+                </tr>
+                <tr>
+                  <td
+                    className="css-1qcb1f7 e6fp4ir0"
+                  >
+                    minValue
+                  </td>
+                  <td
+                    className="css-1qcb1f7 e6fp4ir0"
+                  >
+                    <span>
+                      unknown
+                    </span>
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  >
+                    -
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  >
+                    <span
+                      style={
+                        Object {
+                          "color": "#a11",
+                        }
+                      }
+                    >
+                      0
                     </span>
                   </td>
                   <td
@@ -542,7 +542,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
   >
     <div
       aria-orientation="horizontal"
-      aria-valuemax={90}
+      aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={30}
       className="MuiSlider-root-18 slider"
@@ -559,7 +559,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
           className="MuiSlider-track-20 MuiSlider-trackBefore-21"
           style={
             Object {
-              "transform": "translateY(-50%) scaleX(0.33333333333333337)",
+              "transform": "translateY(-50%) scaleX(0.3)",
             }
           }
         />
@@ -567,7 +567,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
           className="MuiSlider-thumbWrapper-23"
           style={
             Object {
-              "transform": "translateX(33.333333333333336%)",
+              "transform": "translateX(30%)",
             }
           }
         >
@@ -607,7 +607,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
           className="MuiSlider-track-20 MuiSlider-trackAfter-22"
           style={
             Object {
-              "transform": "translateY(-50%) scaleX(0.6666666666666665)",
+              "transform": "translateY(-50%) scaleX(0.7)",
             }
           }
         />
@@ -764,33 +764,10 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                 </span>
                 <span>
                   <span>
-                     
-                    <span
-                      style={Object {}}
-                    >
-                      max
-                    </span>
                     <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        {
-                        <span
-                          style={
-                            Object {
-                              "color": "#a11",
-                            }
-                          }
-                        >
-                          90
-                        </span>
-                        }
-                      </span>
+                      <br />
+                        
                     </span>
-                  </span>
-                  <span>
-                     
                     <span
                       style={Object {}}
                     >
@@ -816,7 +793,68 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      max
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#a11",
+                            }
+                          }
+                        >
+                          90
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      min
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#a11",
+                            }
+                          }
+                        >
+                          0
+                        </span>
+                        }
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -840,7 +878,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                         }
                       </span>
                     </span>
-                     
+                    <br />
                   </span>
                 </span>
                 <span
@@ -939,7 +977,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                   <td
                     className="css-1qcb1f7 e6fp4ir0"
                   >
-                    max
+                    color
                   </td>
                   <td
                     className="css-1qcb1f7 e6fp4ir0"
@@ -959,46 +997,12 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#a11",
+                          "color": "#22a",
+                          "wordBreak": "break-word",
                         }
                       }
                     >
-                      100
-                    </span>
-                  </td>
-                  <td
-                    className="css-11b5gui e6fp4ir0"
-                  />
-                </tr>
-                <tr>
-                  <td
-                    className="css-1qcb1f7 e6fp4ir0"
-                  >
-                    min
-                  </td>
-                  <td
-                    className="css-1qcb1f7 e6fp4ir0"
-                  >
-                    <span>
-                      unknown
-                    </span>
-                  </td>
-                  <td
-                    className="css-11b5gui e6fp4ir0"
-                  >
-                    -
-                  </td>
-                  <td
-                    className="css-11b5gui e6fp4ir0"
-                  >
-                    <span
-                      style={
-                        Object {
-                          "color": "#a11",
-                        }
-                      }
-                    >
-                      0
+                      #000
                     </span>
                   </td>
                   <td
@@ -1044,7 +1048,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                   <td
                     className="css-1qcb1f7 e6fp4ir0"
                   >
-                    color
+                    maxValue
                   </td>
                   <td
                     className="css-1qcb1f7 e6fp4ir0"
@@ -1064,12 +1068,46 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#22a",
-                          "wordBreak": "break-word",
+                          "color": "#a11",
                         }
                       }
                     >
-                      #000
+                      100
+                    </span>
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  />
+                </tr>
+                <tr>
+                  <td
+                    className="css-1qcb1f7 e6fp4ir0"
+                  >
+                    minValue
+                  </td>
+                  <td
+                    className="css-1qcb1f7 e6fp4ir0"
+                  >
+                    <span>
+                      unknown
+                    </span>
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  >
+                    -
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  >
+                    <span
+                      style={
+                        Object {
+                          "color": "#a11",
+                        }
+                      }
+                    >
+                      0
                     </span>
                   </td>
                   <td

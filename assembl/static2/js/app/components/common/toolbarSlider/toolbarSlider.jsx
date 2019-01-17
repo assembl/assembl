@@ -1,9 +1,11 @@
 // @flow
-import * as React from 'react';
+import React, { Component } from 'react';
 
+// Helpers imports
+import { createMuiTheme, MuiThemeProvider } from '@material-ui/core/styles';
+
+// Components imports
 import Slider from '@material-ui/lab/Slider';
-import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
 import ToolbarSliderIcon from './toolbarSliderIcon';
 
 export type State = {
@@ -11,20 +13,54 @@ export type State = {
 };
 
 export type Props = {
-  max?: number,
-  min?: number,
+  /** Optional slider color */
+  color: string,
+  /** Default value */
   defaultValue: number, // eslint-disable-line react/no-unused-prop-types
-  onSliderChange: (value: number) => void,
-  labelFormatter?: (value: number) => string,
-  color?: string
+  /** Optional function returning the cursor label from the value */
+  labelFormatter: (value: number) => string,
+  /** Optional maximum value */
+  maxValue: number,
+  /** Optional minimum value */
+  minValue: number,
+  /** Callback function called when slider value changes */
+  onSliderChange: (value: number) => void
 };
 
-class ToolbarSlider extends React.Component<Props, State> {
+const theme = (color: string) =>
+  createMuiTheme({
+    palette: {
+      primary: {
+        main: color
+      }
+    },
+    typography: {
+      useNextVariants: true
+    },
+    overrides: {
+      MuiSlider: {
+        thumb: {
+          width: '100%',
+          '&$focused, &:hover': {
+            boxShadow: 'none'
+          },
+          '&$activated': {
+            boxShadow: 'none'
+          },
+          '&$jumped': {
+            boxShadow: 'none'
+          }
+        }
+      }
+    }
+  });
+
+class ToolbarSlider extends Component<Props, State> {
   static defaultProps = {
-    max: 100,
-    min: 0,
+    color: '#000',
     labelFormatter: (value: number) => value.toString(),
-    color: '#000'
+    maxValue: 100,
+    minValue: 0
   };
 
   static getDerivedStateFromProps(nextProps: Props) {
@@ -39,7 +75,7 @@ class ToolbarSlider extends React.Component<Props, State> {
   };
 
   render() {
-    const { max, min, onSliderChange, labelFormatter, color } = this.props;
+    const { color, labelFormatter, maxValue, minValue, onSliderChange } = this.props;
     const { currentValue } = this.state;
 
     const onSliderChangeHandler = (event, value: number) => {
@@ -47,48 +83,16 @@ class ToolbarSlider extends React.Component<Props, State> {
       onSliderChange(value);
     };
 
-    const theme = createMuiTheme({
-      palette: {
-        primary: {
-          main: color
-        }
-      },
-      typography: {
-        useNextVariants: true
-      },
-      overrides: {
-        MuiSlider: {
-          thumb: {
-            width: '100%',
-            '&$focused, &:hover': {
-              boxShadow: 'none'
-            },
-            '&$activated': {
-              boxShadow: 'none'
-            },
-            '&$jumped': {
-              boxShadow: 'none'
-            }
-          }
-        }
-      }
-    });
-
     return (
-      <MuiThemeProvider theme={theme}>
+      <MuiThemeProvider theme={theme(color)}>
         <Slider
-          max={max}
-          min={min}
-          step={10}
-          value={currentValue}
           className="slider"
+          max={maxValue}
+          min={minValue}
           onChange={onSliderChangeHandler}
-          thumb={
-            <ToolbarSliderIcon
-              value={labelFormatter ? labelFormatter(currentValue) : currentValue.toString()}
-              classText="sliderText"
-            />
-          }
+          step={10}
+          thumb={<ToolbarSliderIcon value={labelFormatter(currentValue)} classText="sliderText" />}
+          value={currentValue}
         />
       </MuiThemeProvider>
     );

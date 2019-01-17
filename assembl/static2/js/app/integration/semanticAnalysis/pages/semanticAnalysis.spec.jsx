@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16.3';
 
 import SemanticAnalysis from './semanticAnalysis';
 import Loader from '../../../components/common/loader/loader';
+import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
 
 configure({ adapter: new Adapter() });
 
@@ -21,7 +22,11 @@ describe('<SemanticAnalysis /> - with shallow', () => {
     expect(wrapper.find('div [className="semantic-analysis"]')).toHaveLength(1);
   });
 
-  it('should render a Loader component', () => {
+  it('should render 2 Loader component', () => {
     expect(wrapper.find(Loader)).toHaveLength(2);
+  });
+
+  it('should render a ToolbarSlider component', () => {
+    expect(wrapper.find(ToolbarSlider)).toHaveLength(1);
   });
 });

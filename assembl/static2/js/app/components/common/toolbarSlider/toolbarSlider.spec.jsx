@@ -7,6 +7,7 @@ import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
 import ToolbarSlider from './toolbarSlider';
+import { defaultToolbarSliderProps } from './toolbarSlider.stories';
 
 initStoryshots({
   storyKindRegex: /^ToolbarSlider$/
@@ -18,10 +19,11 @@ describe('<ToolbarSlider /> - with shallow', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<ToolbarSlider defaultValue={0} onSliderChange={() => {}} />);
+    wrapper = shallow(<ToolbarSlider {...defaultToolbarSliderProps} />);
   });
 
   it('should render a <Slider /> with a cursor', () => {
+    /** expect WithStyles(Slider) and not just Slider because of father MuiThemeProvider */
     expect(wrapper.find('WithStyles(Slider) [thumb]')).toHaveLength(1);
   });
 });

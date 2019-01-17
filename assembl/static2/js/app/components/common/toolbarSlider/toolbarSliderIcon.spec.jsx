@@ -1,17 +1,11 @@
 // @flow
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
-import initStoryshots from '@storybook/addon-storyshots';
-
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
 import ToolbarSliderIcon from './toolbarSliderIcon';
-
-initStoryshots({
-  storyKindRegex: /^ToolbarSliderIcon$/
-});
 
 configure({ adapter: new Adapter() });
 
