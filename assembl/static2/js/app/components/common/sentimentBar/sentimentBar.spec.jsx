@@ -1,13 +1,17 @@
 // @flow
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
+import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
 import SentimentBar from './sentimentBar';
+import { defaultSentimentBarProps } from './sentimentBar.stories';
 
-const defaultSentimentBarProps = { value: 0.5755 };
+initStoryshots({
+  storyKindRegex: /^SentimentBar$/
+});
 
 configure({ adapter: new Adapter() });
 
