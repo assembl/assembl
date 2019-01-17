@@ -1639,30 +1639,46 @@ def setup_nginx_file(debug=False):
             os.unlink(file)
 
 
-def get_aws_localrc():
+def get_s3_file(bucket, key, destination=None):
+    import boto3
+    s3 = boto3.client('s3')
     try:
-        import boto3  # noqa
-    except ImportError:
-        # we don't have boto3 yet
-        return
+        ob = s3.get_object(Bucket=bucket, Key=key)
+        content = ob['Body'].read()
+        if destination:
+            with open(destination, 'w') as f:
+                f.write(content)
+        return content
+    except s3.exceptions.NoSuchKey:
+        return None
+
+
+@task
+def get_aws_localrc():
     assert running_locally()
     import requests
     r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
     assert r.ok
     account = r.json()['InstanceProfileArn'].split(':')[4]
-    s3 = boto3.client('s3')
-    try:
-        # This introduces a convention: local.rc files
-        # for a given amazon account will be stored in
-        # s3://bluenove-assembl-configurations/local_{account_id}.rc
-        ob = s3.get_object(
-            Bucket='bluenove-assembl-configurations',
-            Key='local_%s.rc' % account)
-        with open(env.projectpath + '/local.rc', 'w') as f:
-            f.write(ob['Body'].read())
-    except s3.exceptions.NoSuchKey as e:
-        print(red("local_%s.rc was not defined in S3" % account))
-        raise e
+    # This introduces a convention: local.rc files
+    # for a given amazon account will be stored in
+    # s3://bluenove-assembl-configurations/local_{account_id}.rc
+    content = get_s3_file(
+        'bluenove-assembl-configurations',
+        'local_%s.rc' % account,
+        env.projectpath + '/local.rc')
+    extends_re = re.compile(r'\b_extends\s*=\s*(\w+\.rc)')
+    match = extends_re.search(content)
+    while match:
+        key = match.group(1)
+        ex_content = get_s3_file('bluenove-assembl-configurations', key)
+        if not ex_content:
+            break
+        with open(key, 'w') as f:
+            f.write(ex_content)
+        match = extends_re.search(ex_content)
+    if not content:
+        raise RuntimeError("local_%s.rc was not defined in S3" % account)
 
 
 @task
