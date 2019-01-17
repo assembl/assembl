@@ -8,6 +8,7 @@ import Announcement, {
   getColumnInfos,
   getSentimentsCount
 } from './announcement';
+import { MESSAGE_VIEW } from '../../../constants';
 
 describe('Announcement component', () => {
   const announcement = {
@@ -87,7 +88,7 @@ describe('Announcement component', () => {
       const multiColumnsIdea = {
         id: '12345',
         messageColumns: messageColumns,
-        messageViewOverride: 'messageColumns',
+        messageViewOverride: MESSAGE_VIEW.messageColumns,
         numContributors: 2,
         numPosts: 2,
         posts: fakeMultiColumnsPosts
