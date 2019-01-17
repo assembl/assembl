@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 export type Props = {
-  /** Optional level */
+  /** Title level with default value set to 1 */
   level: number,
   /** Title content */
   titleContent: string
