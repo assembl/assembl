@@ -476,7 +476,7 @@ class LegalContents(graphene.ObjectType):
     def resolve_mandatory_legal_contents_validation(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return discussion.get('mandatory_legal_contents_validation', False)
+        return discussion.preferences['mandatory_legal_contents_validation']
 
 
 class UpdateResourcesCenter(graphene.Mutation):
