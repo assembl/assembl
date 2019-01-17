@@ -119,6 +119,7 @@ def get_data(content):
             data['phase_id'] = phase.id
             data['phase_identifier'] = phase.identifier
 
+        data['message_view_override'] = content.message_view_override
         return get_uid(content), data
 
     elif isinstance(content, AgentProfile):
@@ -193,6 +194,7 @@ def get_data(content):
 
             data['idea_id'] = idea_id
             related_idea = Idea.get(idea_id[0])
+            data['message_view_override'] = related_idea.message_view_override
             if isinstance(related_idea, Question):
                 related_idea = related_idea.parents[0]
             # we take the title of the first idea in the list for now (in v2, posts are attached to only one idea)
@@ -224,6 +226,7 @@ def get_data(content):
         data['idea_id'] = idea_id
         # we take the title of the first idea in the list for now (in v2, posts are attached to only one idea)
         related_idea = Idea.get(idea_id[0])
+        data['message_view_override'] = related_idea.message_view_override
         if isinstance(related_idea, Question):
             related_idea = related_idea.parents[0]
         populate_from_langstring_prop(

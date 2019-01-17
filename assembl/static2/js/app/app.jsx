@@ -19,13 +19,15 @@ import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
 import DiscussionPreferencesQuery from './graphql/DiscussionPreferencesQuery.graphql';
+import { MESSAGE_VIEW } from './constants';
 
 export const DebateContext = React.createContext({
   isDebateModerated: false,
   isHarvesting: false,
   isHarvestable: false,
-  changeIsHarvestable: (isHarvestable: boolean) => {}, // eslint-disable-line
-  connectedUserId: null
+  modifyContext: (newState: Object) => {}, // eslint-disable-line
+  connectedUserId: null,
+  messageViewOverride: MESSAGE_VIEW.noModule
 });
 
 type Debate = {
@@ -66,11 +68,12 @@ type Props = {
 };
 
 type State = {
-  isHarvestable: boolean
+  isHarvestable: boolean,
+  messageViewOverride: string
 };
 
 export class DumbApp extends React.Component<Props, State> {
-  state = { isHarvestable: false };
+  state = { isHarvestable: false, messageViewOverride: MESSAGE_VIEW.noModule };
 
   componentDidMount() {
     const { route } = this.props;
@@ -104,9 +107,10 @@ export class DumbApp extends React.Component<Props, State> {
     const contextValues = {
       isHarvesting: isHarvesting,
       isHarvestable: this.state.isHarvestable,
-      changeIsHarvestable: (isHarvestable: boolean) => this.setState(() => ({ isHarvestable: isHarvestable })),
+      modifyContext: (newState: Object) => this.setState(() => newState),
       isDebateModerated: isDebateModerated,
-      connectedUserId: connectedUserId
+      connectedUserId: connectedUserId,
+      messageViewOverride: this.state.messageViewOverride
     };
     const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
     return (

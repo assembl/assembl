@@ -14,7 +14,7 @@ import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
-import { DebateContext } from '../../../../app/app';
+import { DebateContext } from '../../../app';
 
 type Props = {
   isDebateModerated: boolean,

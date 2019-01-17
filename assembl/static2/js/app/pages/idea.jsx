@@ -379,7 +379,8 @@ const IdeaWithPosts = compose(
 
 type SwitchViewProps = {
   messageViewOverride: string,
-  changeIsHarvestable: (isHarvestable: boolean) => void,
+  contextMessageViewOverride: string,
+  modifyContext: (newState: Object) => void,
   isHarvestable: boolean
 };
 
@@ -393,10 +394,10 @@ class SwitchView extends React.Component<SwitchViewProps> {
   }
 
   setIsHarvestable = () => {
-    const { changeIsHarvestable, isHarvestable, messageViewOverride } = this.props;
+    const { modifyContext, isHarvestable, messageViewOverride, contextMessageViewOverride } = this.props;
     const isHarvestableIdea = messageViewOverride === MESSAGE_VIEW.thread || messageViewOverride === MESSAGE_VIEW.messageColumns;
-    if (isHarvestableIdea !== isHarvestable) {
-      changeIsHarvestable(isHarvestableIdea);
+    if (isHarvestableIdea !== isHarvestable || messageViewOverride !== contextMessageViewOverride) {
+      modifyContext({ isHarvestable: isHarvestableIdea, messageViewOverride: messageViewOverride });
     }
   };
 
@@ -414,8 +415,13 @@ class SwitchView extends React.Component<SwitchViewProps> {
 
 const SwitchViewWithContext = props => (
   <DebateContext.Consumer>
-    {({ changeIsHarvestable, isHarvestable }) => (
-      <SwitchView {...props} isHarvestable={isHarvestable} changeIsHarvestable={changeIsHarvestable} />
+    {({ modifyContext, isHarvestable, messageViewOverride }) => (
+      <SwitchView
+        {...props}
+        isHarvestable={isHarvestable}
+        contextMessageViewOverride={messageViewOverride}
+        modifyContext={modifyContext}
+      />
     )}
   </DebateContext.Consumer>
 );

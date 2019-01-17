@@ -7,7 +7,7 @@ import { I18n, Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 
-import { PublicationStates } from '../../../constants';
+import { PublicationStates, MESSAGE_VIEW } from '../../../constants';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
@@ -16,7 +16,7 @@ import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
 import RichTextEditor from '../../common/richTextEditor';
 import { connectedUserIsModerator } from '../../../utils/permissions';
-import { DebateContext } from '../../../../app/app';
+import { DebateContext } from '../../../app';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
@@ -38,7 +38,8 @@ export type Props = {
   bodyMaxLength?: number,
   draftable?: boolean,
   draftSuccessMsgId?: string,
-  isDebateModerated: boolean
+  isDebateModerated: boolean,
+  messageViewOverride: string
 };
 
 type State = {
@@ -129,7 +130,8 @@ export class DumbTopPostForm extends React.Component<Props, State> {
       messageClassifier,
       postSuccessMsgId,
       ideaOnColumn,
-      draftSuccessMsgId
+      draftSuccessMsgId,
+      messageViewOverride
     } = this.props;
     const { body, subject } = this.state;
     this.setState(submittingState(true));
@@ -146,7 +148,8 @@ export class DumbTopPostForm extends React.Component<Props, State> {
         const variables = {
           contentLocale: contentLocale,
           ideaId: ideaId,
-          subject: subject || I18n.t('debate.brightMirror.draftEmptyTitle'),
+          subject:
+            subject || (messageViewOverride === MESSAGE_VIEW.brightMirror ? I18n.t('debate.brightMirror.draftEmptyTitle') : null),
           messageClassifier: messageClassifier || null,
           // use the updated content state with new entities
           body: convertContentStateToHTML(result.contentState),
@@ -271,7 +274,9 @@ const mapStateToProps = state => ({
 
 const TopPostFormWithContext = props => (
   <DebateContext.Consumer>
-    {({ isDebateModerated }) => <DumbTopPostForm {...props} isDebateModerated={isDebateModerated} />}
+    {({ isDebateModerated, messageViewOverride }) => (
+      <DumbTopPostForm {...props} isDebateModerated={isDebateModerated} messageViewOverride={messageViewOverride} />
+    )}
   </DebateContext.Consumer>
 );
 

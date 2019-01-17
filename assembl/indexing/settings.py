@@ -106,6 +106,7 @@ COMMON_POST = {
         'type': KEYWORD,
         'phase_identifier': KEYWORD,
         'phase_id': KEYWORD,
+        'message_view_override': KEYWORD,
         'sentiment_tags': KEYWORD
         # 'sentiment_counts'
     }
@@ -132,6 +133,7 @@ _IDEA_MAPPING = {
         'id': LONG,
         'phase_identifier': KEYWORD,
         'phase_id': KEYWORD,
+        'message_view_override': KEYWORD,
     }
 }
 
@@ -145,6 +147,7 @@ _EXTRACT_MAPPING = {
         'idea_id': LONG,
         'phase_identifier': KEYWORD,
         'phase_id': KEYWORD,
+        'message_view_override': KEYWORD,
         'body': TEXT,
         'extract_nature': KEYWORD,
         'extract_action': KEYWORD,
