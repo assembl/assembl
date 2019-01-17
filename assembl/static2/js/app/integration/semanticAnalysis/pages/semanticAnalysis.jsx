@@ -2,6 +2,7 @@
 import React from 'react';
 // Component imports
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
+import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
 import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
 
 const SemanticAnalysis = () => {
