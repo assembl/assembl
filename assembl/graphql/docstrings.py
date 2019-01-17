@@ -118,6 +118,7 @@ class DiscussionPreferences:
     tab_title = """The title in the tab."""
     favicon = Default.document % ("""The site favicon.""",)
     with_moderation = """A Boolean flag indicating whether the moderation is activated or not."""
+    slug = Discussion.slug
 
 
 class ResourcesCenter:
@@ -160,6 +161,7 @@ class UpdateDiscussionPreferences:
     tab_title = DiscussionPreferences.tab_title
     favicon = DiscussionPreferences.favicon
     with_moderation = DiscussionPreferences.with_moderation
+    slug = DiscussionPreferences.slug
 
 
 class UpdateLegalContents:

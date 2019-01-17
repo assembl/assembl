@@ -312,6 +312,7 @@ class DiscussionPreferences(graphene.ObjectType):
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
     with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
+    slug = graphene.String(description=docs.DiscussionPreferences.slug)
 
     def resolve_tab_title(self, args, context, info):
         return self.get('tab_title', 'Assembl')
@@ -329,6 +330,11 @@ class DiscussionPreferences(graphene.ObjectType):
 
     def resolve_with_moderation(self, args, context, info):
         return self.get('with_moderation')
+
+    def resolve_slug(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.slug
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -554,6 +560,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         # this is the identifier of the part in a multipart POST
         favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
         with_moderation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_moderation)
+        slug = graphene.String(description=docs.UpdateDiscussionPreferences.slug)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
@@ -592,6 +599,9 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 
             if with_moderation is not None:
                 discussion.preferences['with_moderation'] = with_moderation
+
+            if slug is not None:
+                discussion.slug = slug
 
         db.flush()
 

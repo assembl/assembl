@@ -1,5 +1,17 @@
-mutation updateDiscussionPreference($languages: [String], $withModeration: Boolean, $tabTitle: String, $favicon: String) {
-  updateDiscussionPreferences(languages: $languages, withModeration: $withModeration, tabTitle: $tabTitle, favicon: $favicon) {
+mutation updateDiscussionPreference(
+  $languages: [String]
+  $withModeration: Boolean
+  $tabTitle: String
+  $favicon: String
+  $slug: String
+) {
+  updateDiscussionPreferences(
+    languages: $languages
+    withModeration: $withModeration
+    tabTitle: $tabTitle
+    favicon: $favicon
+    slug: $slug
+  ) {
     preferences {
       languages {
         locale
