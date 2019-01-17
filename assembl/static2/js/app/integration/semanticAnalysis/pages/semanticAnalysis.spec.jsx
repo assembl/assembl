@@ -35,7 +35,7 @@ describe('<SemanticAnalysis /> - with shallow', () => {
   it('should render a TitleWithTooltip component', () => {
     expect(wrapper.find(TitleWithTooltip)).toHaveLength(1);
   });
-  
+
   it('should render a ResponsiveWordcloud component', () => {
     expect(wrapper.find(ResponsiveWordcloud)).toHaveLength(1);
   });
