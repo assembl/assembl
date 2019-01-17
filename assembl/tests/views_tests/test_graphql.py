@@ -2631,11 +2631,11 @@ def test_get_all_posts(graphql_request, proposition_id):
             "contentLocale": "fr",
             "identifiers": ["survey"]
         })
-    assert res.data
+    assert res.errors is None
     assert len(res.data['posts']['edges']) == 1
     first_post = res.data['posts']['edges'][0]['node']
     assert proposition_id == first_post['id']
-    return res
+
 
 def test_get_parent_post_creator(
     graphql_request, graphql_registry, bright_mirror,

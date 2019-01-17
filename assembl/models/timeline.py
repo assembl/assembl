@@ -30,13 +30,6 @@ class Phases(Enum):
     brightMirror = 'brightMirror'
 
 
-PHASES_WITH_POSTS = [
-    Phases.survey.value,
-    Phases.thread.value,
-    Phases.multiColumns.value
-]
-
-
 def get_phase_by_identifier(discussion, identifier):
     filtered_phases = [phase for phase in discussion.timeline_events
                        if phase.identifier == identifier]
