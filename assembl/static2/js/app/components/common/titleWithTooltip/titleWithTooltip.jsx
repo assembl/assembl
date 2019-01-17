@@ -20,6 +20,7 @@ const TitleWithTooltip = ({ level, titleContent, tooltipContent }: Props) => {
   const modalBody = tooltipContent;
 
   const iconClickHandler = () => {
+    // We only handle click action when the device is either a mobile or a tablet
     if (isMobile.any()) {
       displayModal(modalTitle, modalBody, false);
     }

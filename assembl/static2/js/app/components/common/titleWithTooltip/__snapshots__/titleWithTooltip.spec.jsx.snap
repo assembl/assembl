@@ -24,11 +24,7 @@ exports[`Storyshots TitleWithTooltip default 1`] = `
           className="custom-overlay"
         >
           <img
-            alt={
-              <p>
-                Here comes a tooltip
-              </p>
-            }
+            alt="Icone du tooltip"
             className="tooltip-icon"
             height={20}
             src="icons/path/info"
@@ -362,11 +358,7 @@ exports[`Storyshots TitleWithTooltip playground 1`] = `
           className="custom-overlay"
         >
           <img
-            alt={
-              <p>
-                Here comes a tooltip
-              </p>
-            }
+            alt="Icone du tooltip"
             className="tooltip-icon"
             height={20}
             src="icons/path/info"

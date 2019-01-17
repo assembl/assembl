@@ -10,7 +10,6 @@ import TitleTooltip from './titleTooltip';
 import type { Props as TitleTooltipProps } from './titleTooltip';
 
 export const defaultTitleTooltipProps: TitleTooltipProps = {
-  /** Tooltip content */
   tooltipContent: <p>Wow a tooltip!</p>
 };
 

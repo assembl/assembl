@@ -34,11 +34,11 @@ describe('<TitleWithTooltip /> - with shallow', () => {
     wrapper = shallow(<TitleWithTooltip {...titleTooltipProps} />);
   });
 
-  it('should render a title', () => {
+  it('should render a title component', () => {
     expect(wrapper.find('Title')).toHaveLength(1);
   });
 
-  it('should render a tooltip', () => {
+  it('should render a tooltip component', () => {
     expect(wrapper.find('TitleTooltip')).toHaveLength(1);
   });
 

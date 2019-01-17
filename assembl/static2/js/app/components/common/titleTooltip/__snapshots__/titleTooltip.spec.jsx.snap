@@ -21,14 +21,10 @@ exports[`Storyshots TitleTooltip default 1`] = `
         onMouseOver={[Function]}
       >
         <img
-          alt={
-            <p>
-              Wow a tooltip!
-            </p>
-          }
+          alt="Icone du tooltip"
           className="tooltip-icon"
           height={20}
-          src="/static2/img/icons/info.svg"
+          src="/static2/img/icons/tooltipIcon.svg"
           width={20}
         />
       </div>
@@ -302,14 +298,10 @@ exports[`Storyshots TitleTooltip playground 1`] = `
         onMouseOver={[Function]}
       >
         <img
-          alt={
-            <p>
-              Wow a tooltip!
-            </p>
-          }
+          alt="Icone du tooltip"
           className="tooltip-icon"
           height={20}
-          src="/static2/img/icons/info.svg"
+          src="/static2/img/icons/tooltipIcon.svg"
           width={20}
         />
       </div>
