@@ -542,7 +542,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
   >
     <div
       aria-orientation="horizontal"
-      aria-valuemax={100}
+      aria-valuemax={90}
       aria-valuemin={0}
       aria-valuenow={30}
       className="MuiSlider-root-18 slider"
@@ -559,7 +559,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
           className="MuiSlider-track-20 MuiSlider-trackBefore-21"
           style={
             Object {
-              "transform": "translateY(-50%) scaleX(0.3)",
+              "transform": "translateY(-50%) scaleX(0.33333333333333337)",
             }
           }
         />
@@ -567,7 +567,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
           className="MuiSlider-thumbWrapper-23"
           style={
             Object {
-              "transform": "translateX(30%)",
+              "transform": "translateX(33.333333333333336%)",
             }
           }
         >
@@ -607,7 +607,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
           className="MuiSlider-track-20 MuiSlider-trackAfter-22"
           style={
             Object {
-              "transform": "translateY(-50%) scaleX(0.7)",
+              "transform": "translateY(-50%) scaleX(0.6666666666666665)",
             }
           }
         />
@@ -764,10 +764,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                 </span>
                 <span>
                   <span>
-                    <span>
-                      <br />
-                        
-                    </span>
+                     
                     <span
                       style={Object {}}
                     >
@@ -793,14 +790,11 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                     </span>
                   </span>
                   <span>
-                    <span>
-                      <br />
-                        
-                    </span>
+                     
                     <span
                       style={Object {}}
                     >
-                      max
+                      maxValue
                     </span>
                     <span>
                       =
@@ -822,39 +816,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                     </span>
                   </span>
                   <span>
-                    <span>
-                      <br />
-                        
-                    </span>
-                    <span
-                      style={Object {}}
-                    >
-                      min
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        {
-                        <span
-                          style={
-                            Object {
-                              "color": "#a11",
-                            }
-                          }
-                        >
-                          0
-                        </span>
-                        }
-                      </span>
-                    </span>
-                  </span>
-                  <span>
-                    <span>
-                      <br />
-                        
-                    </span>
+                     
                     <span
                       style={Object {}}
                     >
@@ -878,7 +840,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
                         }
                       </span>
                     </span>
-                    <br />
+                     
                   </span>
                 </span>
                 <span
