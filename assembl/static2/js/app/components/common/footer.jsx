@@ -68,7 +68,7 @@ const Footer = ({
           <div className="footer-links">
             <div className="copyright">
               ©{' '}
-              <Link to="http://assembl.bluenove.com/" target="_blank">
+              <Link to="https://bluenove.com/offres/assembl/" target="_blank">
                 Assembl
               </Link>{' '}
               powered by{' '}
