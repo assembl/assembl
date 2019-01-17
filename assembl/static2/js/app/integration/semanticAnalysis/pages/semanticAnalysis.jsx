@@ -6,6 +6,8 @@ import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlide
 import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
 import ResponsiveWordCloud from '../../../components/common/wordCloud/responsiveWordCloud';
 import KeywordInfo from '../../../components/common/keywordInfo/keywordInfo';
+import SentimentBar from '../../../components/common/sentimentBar/sentimentBar';
+
 import fakeData from '../data.json';
 
 const SemanticAnalysis = () => {
@@ -30,6 +32,13 @@ const SemanticAnalysis = () => {
       <TitleWithTooltip level={1} titleContent="Informations mots-clés" tooltipContent={tooltip} />
       <ResponsiveWordCloud keywords={fakeData.keywords} />
       <KeywordInfo keyword={{ text: 'test', relevance: '0.57', count: 5 }} />
+      <div
+        style={
+          { width: '200px' } // eslint-disable-line comma-dangle
+        }
+      >
+        <SentimentBar value={0.7445} />
+      </div>
     </div>
   );
 };
