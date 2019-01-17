@@ -34,7 +34,7 @@ function validateTheme(theme): Errors {
   errors.multiColumns = {
     messageColumns: []
   };
-  if (theme.multiColumns.messageColumns) {
+  if (theme.multiColumns && theme.multiColumns.messageColumns) {
     theme.multiColumns.messageColumns.forEach((col, index) => {
       errors.multiColumns.messageColumns.push({});
       if (i18nValueIsEmpty(col.title)) {
