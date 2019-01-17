@@ -686,6 +686,7 @@ def create_idea(parent_idea, phase, args, context):
         saobj = cls(
             discussion_id=discussion_id,
             discussion=discussion,
+            messages_in_parent=False,
             title=title_langstring,
             **kwargs)
         db.add(saobj)

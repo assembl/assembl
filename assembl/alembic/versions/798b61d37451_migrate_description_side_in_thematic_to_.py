@@ -43,6 +43,13 @@ def upgrade(pyramid_env):
             nullable=False, unique=True))
         op.create_unique_constraint("discussion_phase_root_idea_id_key", "discussion_phase", ["root_idea_id"])
 
+    with transaction.manager:
+        from assembl.indexing import join_transaction
+        join_transaction()
+        for idea in m.Idea.query.filter(~m.Idea.sqla_type.in_(('question', 'vote_proposal'))):
+            idea.messages_in_parent = False
+
+
 def downgrade(pyramid_env):
     from assembl import models as m
     with context.begin_transaction():
