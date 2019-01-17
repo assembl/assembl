@@ -8,7 +8,7 @@ import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { titleTooltip } from '../../common/tooltips';
 
 export type Props = {
-  /** Tooltip content */
+  /** Title level with default value set to 1 */
   tooltipContent: React.Node
 };
 

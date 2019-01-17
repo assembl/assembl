@@ -7,7 +7,7 @@ import { displayModal } from '../../../utils/utilityManager';
 import { isMobile } from '../../../utils/globalFunctions';
 
 export type Props = {
-  /** Optional level */
+  /** Title level with default value set to 1 */
   level: number,
   /** Title content */
   titleContent: string,

@@ -5,7 +5,6 @@ import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
-
 import Title from './title';
 import type { Props as TitleProps } from './title';
 import { defaultTitleProps } from './title.stories';
