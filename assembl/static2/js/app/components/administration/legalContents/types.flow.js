@@ -6,5 +6,6 @@ export type LegalContentsFormValues = {
   termsAndConditions: I18nRichTextValue,
   cookiesPolicy: I18nRichTextValue,
   privacyPolicy: I18nRichTextValue,
-  userGuidelines: I18nRichTextValue
+  userGuidelines: I18nRichTextValue,
+  mandatoryLegalContentsValidation: boolean
 };

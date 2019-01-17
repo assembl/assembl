@@ -235,6 +235,7 @@ const MockedResponses = [
     request: {
       query: UpdateLegalContents,
       variables: {
+        mandatoryLegalContentsValidation: true,
         cookiesPolicyAttachments: [],
         legalNoticeAttachments: [],
         privacyPolicyAttachments: [],
@@ -260,6 +261,7 @@ const MockedResponses = [
       data: {
         updateLegalContents: {
           legalContents: {
+            mandatoryLegalContentsValidation: true,
             cookiesPolicyAttachments: [],
             legalNoticeAttachments: [],
             privacyPolicyAttachments: [],

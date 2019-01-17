@@ -20,13 +20,15 @@ export const postLoadFormat = (data: LegalContentsQuery): LegalContentsFormValue
     termsAndConditionsEntries,
     cookiesPolicyEntries,
     privacyPolicyEntries,
-    userGuidelinesEntries
+    userGuidelinesEntries,
+    mandatoryLegalContentsValidation
   } = data.legalContents;
   return {
     legalNotice: legalNoticeEntries ? convertEntriesToI18nRichText(legalNoticeEntries) : {},
     termsAndConditions: termsAndConditionsEntries ? convertEntriesToI18nRichText(termsAndConditionsEntries) : {},
     cookiesPolicy: cookiesPolicyEntries ? convertEntriesToI18nRichText(cookiesPolicyEntries) : {},
     privacyPolicy: privacyPolicyEntries ? convertEntriesToI18nRichText(privacyPolicyEntries) : {},
-    userGuidelines: userGuidelinesEntries ? convertEntriesToI18nRichText(userGuidelinesEntries) : {}
+    userGuidelines: userGuidelinesEntries ? convertEntriesToI18nRichText(userGuidelinesEntries) : {},
+    mandatoryLegalContentsValidation: mandatoryLegalContentsValidation
   };
 };

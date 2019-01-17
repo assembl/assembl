@@ -20,7 +20,10 @@ const getVariables = async (client: ApolloClient, values: LegalContentsFormValue
   const userGuidelinesVars = await convertRichTextToVariables(values.userGuidelines, client);
   const { attachments: userGuidelinesAttachments, entries: userGuidelinesEntries } = userGuidelinesVars;
 
+  const mandatoryLegalContentsValidation = values.mandatoryLegalContentsValidation;
+
   return {
+    mandatoryLegalContentsValidation: mandatoryLegalContentsValidation,
     cookiesPolicyAttachments: cookiesPolicyAttachments,
     legalNoticeAttachments: legalNoticeAttachments,
     privacyPolicyAttachments: privacyPolicyAttachments,

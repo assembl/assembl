@@ -900,7 +900,7 @@ const Translations = {
         privacyPolicyLabel: "Politique de protection des données personnelles",
         userGuidelinesLabel: "Charte de participation",
         successSave: "Les contenus juridiques ont été enregistrés avec succès !",
-        mandatoryLegalContentsModal:
+        mandatoryLegalContentsValidation:
           "Activer la modale obligeant les utilisateurs à accepter les contenus légaux à la première visite"
       },
       landingPage: {
@@ -1879,7 +1879,7 @@ const Translations = {
         privacyPolicyLabel: "Privacy policy",
         userGuidelinesLabel: "User guidelines",
         successSave: "The legal contents have been saved with success!",
-        mandatoryLegalContentsModal: "Activate the modal to accept legal contents at the first visit."
+        mandatoryLegalContentsValidation: "Activate the modal to accept legal contents at the first visit."
       },
       landingPage: {
         manageModules: {

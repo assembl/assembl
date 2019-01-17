@@ -30,7 +30,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
   const cookiesPolicyLabel = I18n.t('administration.legalContents.cookiesPolicyLabel');
   const privacyPolicyLabel = I18n.t('administration.legalContents.privacyPolicyLabel');
   const userGuidelinesLabel = I18n.t('administration.legalContents.userGuidelinesLabel');
-  const mandatoryLegalContentsModalLabel = I18n.t('administration.legalContents.mandatoryLegalContentsModal');
+  const mandatoryLegalContentsValidationLabel = I18n.t('administration.legalContents.mandatoryLegalContentsValidation');
 
   return (
     <LoadSaveReinitializeForm
@@ -52,9 +52,9 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
               <div className="form-container">
                 <Field
                   component={CheckboxFieldAdapter}
-                  name="mandatoryLegalContentsModal"
-                  isChecked={false}
-                  label={mandatoryLegalContentsModalLabel}
+                  name="mandatoryLegalContentsValidation"
+                  isChecked={values.mandatoryLegalContentsValidation}
+                  label={mandatoryLegalContentsValidationLabel}
                   type="checkbox"
                 />
                 <Field
