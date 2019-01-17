@@ -30,6 +30,22 @@ function validateTheme(theme): Errors {
   if (theme.children) {
     errors.children = theme.children.map(validateTheme);
   }
+
+  errors.multiColumns = {
+    messageColumns: []
+  };
+  if (theme.multiColumns.messageColumns) {
+    theme.multiColumns.messageColumns.forEach((col, index) => {
+      errors.multiColumns.messageColumns.push({});
+      if (i18nValueIsEmpty(col.title)) {
+        errors.multiColumns.messageColumns[index].title = I18n.t('error.required');
+      }
+      if (i18nValueIsEmpty(col.name)) {
+        errors.multiColumns.messageColumns[index].name = I18n.t('error.required');
+      }
+    });
+  }
+
   return errors;
 }
 
