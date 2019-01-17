@@ -738,6 +738,8 @@ const Translations = {
       saveSecondStep: "Veuillez d'abord revenir à l'étape 2 et configurez puis sauvegardez les modules de vote.",
       configureVoteSessionButton: "Configurer un module de vote",
       saveBeforeConfigureVoteSession: "Veuillez sauvegarder avant de pouvoir accéder à la configuration d'un module de vote",
+      postsExistsWarning:
+        "Cette thématique contient des messages. Si vous changez de module, vous supprimerez définitivement tous les messages associés à cette thématique lors de la sauvegarde.",
       configureVoteSession: "Vous devez configurer une session de vote.",
       configureVoteModules: "Vous devez avoir configuré au moins un module de vote.",
       backToPreviousStep: "Revenir à l'étape %{number}",
@@ -1666,6 +1668,8 @@ const Translations = {
       unit: "Unit",
       configureVoteSessionButton: "Configure a vote session",
       saveBeforeConfigureVoteSession: "Please save before you can access to the vote session configuration",
+      postsExistsWarning:
+        "This thematic contains posts. If you change the module, you'll delete all messages associated to this thematic when you'll save.",
       configureVoteSession: "You need to configure a vote session.",
       configureVoteModules: "You need to configure at least one vote module.",
       saveFirstStep: "Please return to step 1 and save the instructions first.",

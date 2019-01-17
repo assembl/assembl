@@ -18,6 +18,7 @@ type Props = {
 
 const MultiColumnsFields = ({ editLocale, nbColumnsInForm, fieldPrefix }: Props) => (
   <React.Fragment>
+    <div className="margin-l" />
     <Helper
       label={I18n.t('administration.tableOfThematics.columnsConfiguration')}
       helperUrl="/static2/img/helpers/helper_multicol.png"

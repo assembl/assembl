@@ -5,6 +5,7 @@ fragment ideaData on IdeaInterface {
   parentId
   messageViewOverride
   order
+  numPosts
   titleEntries {
     ...langStringEntry
   }

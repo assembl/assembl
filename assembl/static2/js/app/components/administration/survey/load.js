@@ -46,6 +46,7 @@ const getThemeData = (t: ThemeValueFromQuery): ThemeValueWithChildren => {
   return {
     id: t.id,
     messageViewOverride: getMessageViewOverride(t.messageViewOverride),
+    numPosts: t.numPosts,
     img: t.img,
     questions:
       (t.questions &&

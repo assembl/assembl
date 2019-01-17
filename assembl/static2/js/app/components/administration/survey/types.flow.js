@@ -52,6 +52,7 @@ type MessageColumnValueFromQuery = {
 export type ThemeValue = {
   id: string,
   messageViewOverride: Option,
+  numPosts: number,
   img: ?FileValue,
   title: I18nValue,
   description: I18nValue,
@@ -69,6 +70,7 @@ export type ThemeValue = {
 export type ThemeValueFromQuery = {
   id: string,
   messageViewOverride: ?string,
+  numPosts: number,
   img: ?FileValue,
   titleEntries: LangstringEntries,
   descriptionEntries: LangstringEntries,

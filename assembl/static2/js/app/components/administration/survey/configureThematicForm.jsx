@@ -137,8 +137,15 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           // label={I18n.t('administration.tableOfThematics.moduleTypeLabel')}
           options={modulesTranslationKeys.map(key => ({ value: key, label: I18n.t(`administration.modules.${key}`) }))}
         />
+        {theme &&
+          theme.numPosts > 0 && (
+            <p className="warning-message" role="alert">
+              <Translate value="administration.postsExistsWarning" />
+            </p>
+          )}
         {theme && theme.messageViewOverride && theme.messageViewOverride.value !== MESSAGE_VIEW.noModule ? (
           <React.Fragment>
+            <div className="margin-l" />
             <Helper
               label={I18n.t('administration.instructions')}
               helperUrl="/static2/img/helpers/helper_BM_1.png"
