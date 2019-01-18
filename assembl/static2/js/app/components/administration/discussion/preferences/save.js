@@ -3,7 +3,6 @@ import type { ApolloClient } from 'react-apollo';
 import UpdateDiscussionPreference from '../../../../graphql/mutations/updateDiscussionPreference.graphql';
 import type { DiscussionPreferencesFormValues } from './types.flow';
 import { createSave, convertCheckboxListValueToVariable } from '../../../form/utils';
-import { browserHistory } from '../../../../router';
 import { get } from '../../../../utils/routeMap';
 
 const getVariables = async (client: ApolloClient, values: DiscussionPreferencesFormValues) => ({
@@ -28,7 +27,7 @@ export const createMutationsPromises = (client: ApolloClient) => (
         .then(() => {
           if (values.slug !== initialValues.slug) {
             // When the slug is changed we need to redirect the user to the updated url with the new slug
-            browserHistory.push(get('discussionPreferencesAdmin', { slug: values.slug }));
+            window.location.assign(get('discussionPreferencesAdmin', { slug: values.slug }));
           }
         })
     )
