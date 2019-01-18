@@ -46,6 +46,18 @@ def upgrade(pyramid_env):
     with transaction.manager:
         from assembl.indexing import join_transaction
         join_transaction()
+        # delete all vote proposals and phase
+        vote_session_phases = m.TimelineEvent.query.filter(m.TimelineEvent.identifier == 'voteSession').all()
+        roots = [phase.root_idea for phase in vote_session_phases if phase.root_idea is not None]
+        for root in roots:
+            for child in root.get_children():
+                child.db.delete(child)
+            root.db.delete(root)
+
+        for phase in vote_session_phases:
+            phase.db.delete(phase)
+
+        # set messages_in_parent to False for all ideas
         for idea in m.Idea.query.filter(~m.Idea.sqla_type.in_(('question', 'vote_proposal'))):
             idea.messages_in_parent = False
 
