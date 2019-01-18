@@ -899,7 +899,10 @@ const Translations = {
         cookiesPolicyLabel: "Information sur les cookies",
         privacyPolicyLabel: "Politique de protection des données personnelles",
         userGuidelinesLabel: "Charte de participation",
-        successSave: "Les contenus juridiques ont été enregistrés avec succès !"
+        successSave: "Les contenus juridiques ont été enregistrés avec succès !",
+        mandatoryLegalContentsValidation:
+          "Activer la modale obligeant les utilisateurs à accepter les contenus légaux à la première visite",
+        legalContentsValidation: "Acceptation des textes légaux pour une authentification via SSO"
       },
       landingPage: {
         manageModules: {
@@ -1876,7 +1879,9 @@ const Translations = {
         cookiesPolicyLabel: "Information on cookies",
         privacyPolicyLabel: "Privacy policy",
         userGuidelinesLabel: "User guidelines",
-        successSave: "The legal contents have been saved with success!"
+        successSave: "The legal contents have been saved with success!",
+        mandatoryLegalContentsValidation: "Activate the modal to accept legal contents at the first visit.",
+        legalContentsValidation: "Acceptation of the legal contents for users identified via SSO"
       },
       landingPage: {
         manageModules: {

@@ -2,7 +2,7 @@
 import React from 'react';
 import isEqualWith from 'lodash/isEqualWith';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { type ApolloClient, compose, withApollo } from 'react-apollo';
@@ -14,6 +14,7 @@ import Loader from '../../common/loader';
 import validate from './validate';
 import { save, createMutationsPromises } from './save';
 import AdminForm from '../../../components/form/adminForm';
+import CheckboxFieldAdapter from '../../../components/form/checkboxFieldAdapter';
 
 const loading = <Loader />;
 
@@ -29,6 +30,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
   const cookiesPolicyLabel = I18n.t('administration.legalContents.cookiesPolicyLabel');
   const privacyPolicyLabel = I18n.t('administration.legalContents.privacyPolicyLabel');
   const userGuidelinesLabel = I18n.t('administration.legalContents.userGuidelinesLabel');
+  const mandatoryLegalContentsValidationLabel = I18n.t('administration.legalContents.mandatoryLegalContentsValidation');
 
   return (
     <LoadSaveReinitializeForm
@@ -47,7 +49,18 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
         return (
           <div className="admin-content">
             <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-              <div className="form-container">
+              <div className="form-container legal-contents-administration">
+                <div className="title">
+                  <Translate value="administration.legalContents.legalContentsValidation" />
+                </div>
+                <Field
+                  component={CheckboxFieldAdapter}
+                  name="mandatoryLegalContentsValidation"
+                  isChecked={values.mandatoryLegalContentsValidation}
+                  label={mandatoryLegalContentsValidationLabel}
+                  type="checkbox"
+                />
+                <div className="separator" />
                 <Field
                   key={`tac-${editLocale}`}
                   editLocale={editLocale}

@@ -7,6 +7,7 @@ describe('createMutationsPromises function', () => {
   const { createMutationsPromises } = save;
   it('should create an array of mutation promises', async () => {
     const values = {
+      mandatoryLegalContentsValidation: true,
       legalNotice: {
         en: createEditorStateFromText('text in english'),
         fr: createEditorStateFromText('texte en français')
@@ -22,6 +23,7 @@ describe('createMutationsPromises function', () => {
       data: {
         updateLegalContents: {
           legalContents: {
+            mandatoryLegalContentsValidation: true,
             cookiesPolicyAttachments: [],
             legalNoticeAttachments: [],
             privacyPolicyAttachments: [],

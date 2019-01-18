@@ -26,7 +26,8 @@ type Props = {
   hasPrivacyPolicy: boolean,
   hasUserGuidelines: boolean,
   acceptedLegalContents: LegalContentsArray,
-  updateAcceptedCookies: Function
+  updateAcceptedCookies: Function,
+  mandatoryLegalContentsValidation: boolean
 };
 
 type State = {
@@ -49,8 +50,8 @@ export class DumbAcceptCookiesModal extends React.PureComponent<Props, State> {
   }
 
   showModal = () => {
-    const { id, pathname, acceptedLegalContents } = this.props;
-    if (id) {
+    const { id, pathname, acceptedLegalContents, mandatoryLegalContentsValidation } = this.props;
+    if (id && mandatoryLegalContentsValidation) {
       const lastRouteString = getRouteLastString(pathname);
       const isOnLegalContentPage = legalContentSlugs.includes(lastRouteString);
       // This array gathers all the legal contents to accept by their 'ACCEPT_...' formatted name
@@ -166,7 +167,7 @@ export default compose(
     name: 'updateAcceptedCookies'
   }),
   graphql(TabsConditionQuery, {
-    props: ({ data: { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, error, loading } }) => {
+    props: ({ data: { hasTermsAndConditions, hasPrivacyPolicy, hasUserGuidelines, legalContents, error, loading } }) => {
       if (error || loading) {
         return {
           error: error,
@@ -178,7 +179,8 @@ export default compose(
         loading: loading,
         hasTermsAndConditions: hasTermsAndConditions,
         hasPrivacyPolicy: hasPrivacyPolicy,
-        hasUserGuidelines: hasUserGuidelines
+        hasUserGuidelines: hasUserGuidelines,
+        mandatoryLegalContentsValidation: legalContents.mandatoryLegalContentsValidation
       };
     }
   }),

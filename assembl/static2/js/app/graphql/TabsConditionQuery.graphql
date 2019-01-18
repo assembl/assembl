@@ -9,4 +9,7 @@ query TabsCondition($lang: String!) {
   discussion {
     homepageUrl
   }
+  legalContents {
+    mandatoryLegalContentsValidation
+  }
 }

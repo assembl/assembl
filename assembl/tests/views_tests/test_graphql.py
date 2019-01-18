@@ -1874,8 +1874,7 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
         u'discussionPreferences': {
             u'favicon': None,
             u'tabTitle': '',
-            u'withModeration': False,
-            u'mandatoryLegalContentsValidation': False
+            u'withModeration': False
         }
     }
 
@@ -1888,8 +1887,7 @@ def test_query_discussion_preferences_moderation(graphql_registry, graphql_reque
         u'discussionPreferences': {
             u'favicon': None,
             u'tabTitle': '',
-            u'withModeration': True,
-            u'mandatoryLegalContentsValidation': False
+            u'withModeration': True
         }
     }
 
@@ -2352,7 +2350,8 @@ def test_update_legal_contents(graphql_registry, graphql_request, discussion, si
                 "value": u"My user guidelines",
                 "localeCode": u"en"
             }
-        ]
+        ],
+        "mandatoryLegalContentsValidation": True
     }
     res = schema.execute(
         graphql_registry['updateLegalContents'],
@@ -2391,6 +2390,8 @@ def test_update_legal_contents(graphql_registry, graphql_request, discussion, si
     user_guidelines_en = legal_contents['userGuidelinesEntries'][0]
     assert user_guidelines_en['value'] == u'My user guidelines'
     assert len(user_guidelines_attachments) == 0
+
+    assert legal_contents['mandatoryLegalContentsValidation'] == True
 
     # we have to remove documents and attachments here
     with models.Discussion.default_db.no_autoflush:

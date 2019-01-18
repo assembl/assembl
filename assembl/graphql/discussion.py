@@ -313,7 +313,6 @@ class DiscussionPreferences(graphene.ObjectType):
     languages = graphene.List(LocalePreference, description=docs.DiscussionPreferences.languages)
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
-    mandatory_legal_contents_validation = graphene.Boolean(description=docs.DiscussionPreferences.mandatory_legal_contents_validation)
     with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
 
     def resolve_tab_title(self, args, context, info):
@@ -329,9 +328,6 @@ class DiscussionPreferences(graphene.ObjectType):
         attachment = get_attachment_with_purpose(
             discussion.attachments, models.AttachmentPurpose.FAVICON.value)
         return attachment and attachment.document
-
-    def resolve_mandatory_legal_contents_validation(self, args, context, info):
-        return self.get('mandatory_legal_contents_validation', False)
 
     def resolve_with_moderation(self, args, context, info):
         return self.get('with_moderation')
@@ -380,6 +376,7 @@ class LegalContents(graphene.ObjectType):
     cookies_policy_attachments = graphene.List(Attachment, description=docs.LegalContents.cookies_policy_attachments)
     privacy_policy_attachments = graphene.List(Attachment, description=docs.LegalContents.privacy_policy_attachments)
     user_guidelines_attachments = graphene.List(Attachment, description=docs.LegalContents.user_guidelines_attachments)
+    mandatory_legal_contents_validation = graphene.Boolean(required=True, description=docs.LegalContents.mandatory_legal_contents_validation)
 
     def resolve_legal_notice(self, args, context, info):
         """Legal notice value in given locale."""
@@ -476,6 +473,11 @@ class LegalContents(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         return get_attachments_with_purpose(discussion.attachments, models.AttachmentPurpose.USER_GUIDELINES_ATTACHMENT.value)
 
+    def resolve_mandatory_legal_contents_validation(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.preferences['mandatory_legal_contents_validation']
+
 
 class UpdateResourcesCenter(graphene.Mutation):
     __doc__ = docs.UpdateResourcesCenter.__doc__
@@ -558,7 +560,6 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = graphene.String(description=docs.UpdateDiscussionPreferences.tab_title)
         # this is the identifier of the part in a multipart POST
         favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
-        mandatory_legal_contents_validation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.mandatory_legal_contents_validation)
         with_moderation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_moderation)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
@@ -581,10 +582,9 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         db = discussion.db
         prefs_to_save = args.get('languages', [])
         tab_title = args.get('tab_title', None)
-        mandatory_legal_contents_validation = args.get('mandatory_legal_contents_validation')
         favicon = args.get('favicon', None)
         with_moderation = args.get('with_moderation', None)
-        if not prefs_to_save and not tab_title and not favicon and not mandatory_legal_contents_validation and with_moderation is None:
+        if not prefs_to_save and not tab_title and not favicon and with_moderation is None:
             raise Exception("Must pass at least one preference to be saved")
 
         with cls.default_db.no_autoflush:
@@ -604,9 +604,6 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                     db,
                     context
                 )
-
-            if mandatory_legal_contents_validation:
-                discussion.preferences['mandatory_legal_contents_validation'] = mandatory_legal_contents_validation
 
             if with_moderation is not None:
                 discussion.preferences['with_moderation'] = with_moderation
@@ -667,6 +664,7 @@ class UpdateLegalContents(graphene.Mutation):
         cookies_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.cookies_policy_entries)
         privacy_policy_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.privacy_policy_entries)
         user_guidelines_entries = graphene.List(LangStringEntryInput, description=docs.UpdateLegalContents.user_guidelines_entries)
+        mandatory_legal_contents_validation = graphene.Boolean(required=True, description=docs.UpdateLegalContents.mandatory_legal_contents_validation)
 
     legal_contents = graphene.Field(lambda: LegalContents)
 
@@ -681,6 +679,7 @@ class UpdateLegalContents(graphene.Mutation):
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
+        mandatory_legal_contents_validation = args.get('mandatory_legal_contents_validation')
         user_id = context.authenticated_userid or Everyone
 
         permissions = get_permissions(user_id, discussion_id)
@@ -754,6 +753,8 @@ class UpdateLegalContents(graphene.Mutation):
                     new_attachments,
                     purpose
                 )
+
+            discussion.preferences['mandatory_legal_contents_validation'] = mandatory_legal_contents_validation
 
         db.flush()
         legal_contents = LegalContents()

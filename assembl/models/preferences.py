@@ -517,7 +517,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "description": _("Activate or not mandatory validation of legal contents after SSO login."),
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
-            "default": False
+            "default": True
         },
 
         # Discussion Video description

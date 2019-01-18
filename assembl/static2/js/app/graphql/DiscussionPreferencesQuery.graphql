@@ -6,7 +6,6 @@ query DiscussionPreferences {
       externalUrl
       mimeType
     }
-    mandatoryLegalContentsValidation
     withModeration
   }
 }
