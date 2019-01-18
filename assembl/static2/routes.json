@@ -30,17 +30,20 @@
   "community": "${slug}/community",
   "terms": "${slug}/terms",
   "theme": "theme/${themeId}",
-  "brightMirrorFiction": "${slug}/debate/${phase}/theme/${themeId}/fictions/${fictionId}",
+  "brightMirrorFiction":
+    "${slug}/debate/${phase}/theme/${themeId}/fictions/${fictionId}",
   "question": "question/${questionId}/${questionIndex}/",
   "questionModeratePosts": "question/${questionId}/${questionIndex}/pending",
-  "questionPost": "${slug}/debate/${phase}/question/${questionId}/${questionIndex}/#${element}",
+  "questionPost":
+    "${slug}/debate/${phase}/question/${questionId}/${questionIndex}/#${element}",
   "administrationRoot": "${slug}/administration",
   "administration": "${slug}/administration/${id}",
   "unauthorizedAdministration": "${slug}/unauthorizedAdministration",
   "adminPhase": "${phase}",
   "idea": "${slug}/debate/${phase}/theme/${themeId}",
   "post": "${slug}/debate/${phase}/theme/${themeId}/#${element}",
-  "extract": "${slug}/debate/${phase}/theme/${themeId}/#${element}#${extractId}",
+  "extract":
+    "${slug}/debate/${phase}/theme/${themeId}/#${element}#${extractId}",
   "resourcesCenter": "${slug}/resourcescenter",
   "semanticAnalysis": "${slug}/semantic-analysis-for-discussion",
   "legalNotice": "${slug}/legal-notice",
@@ -49,10 +52,14 @@
   "userGuidelines": "${slug}/user-guidelines",
   "voteSessionAdmin": "${slug}/administration/voteSession",
   "voteSession": "${slug}/debate/voteSession",
-  "exportSurveyData": "data/Discussion/${debateId}/phase1_csv_export${translation}${anonymous}",
-  "exportThreadMulticolumnData": "data/Discussion/${debateId}/phase2_csv_export${translation}${anonymous}",
-  "exportVoteSessionData": "data/Discussion/${debateId}/widgets/${voteSessionId}/${exportRoute}",
+  "exportSurveyData":
+    "data/Discussion/${debateId}/phase1_csv_export${translation}${anonymous}",
+  "exportThreadMulticolumnData":
+    "data/Discussion/${debateId}/phase2_csv_export${translation}${anonymous}",
+  "exportVoteSessionData":
+    "data/Discussion/${debateId}/widgets/${voteSessionId}/${exportRoute}",
   "exportTaxonomiesData": "data/Discussion/${debateId}/extract_csv_taxonomy",
+  "discussionPreferencesAdmin": "${slug}/administration/discussion?section=1",
   "integrationPage": "integration",
   "integration101Page": "integration/101/index",
   "integration101FormBuilderPage": "integration/101/form-builder",
