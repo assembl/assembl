@@ -10,14 +10,14 @@ import WordCountInformation from './wordCountInformation';
 import type { Props as WordCountInformationProps } from './wordCountInformation';
 
 export const defaultWordCountInformationProps: WordCountInformationProps = {
-  wordsCount: 50
+  wordCount: 50
 };
 
 const playground = {
-  wordsCount: 120
+  wordCount: 120
 };
 
 storiesOf('WordCountInformation', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <WordCountInformation {...defaultWordCountInformationProps} />))
-  .add('playground', withInfo()(() => <WordCountInformation wordsCount={number('words count', playground.wordsCount)} />));
+  .add('playground', withInfo()(() => <WordCountInformation wordCount={number('words count', playground.wordCount)} />));

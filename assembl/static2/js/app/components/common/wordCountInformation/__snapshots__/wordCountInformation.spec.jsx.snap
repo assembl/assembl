@@ -176,7 +176,7 @@ exports[`Storyshots WordCountInformation default 1`] = `
                     <span
                       style={Object {}}
                     >
-                      wordsCount
+                      wordCount
                     </span>
                     <span>
                       =
@@ -445,7 +445,7 @@ exports[`Storyshots WordCountInformation playground 1`] = `
                     <span
                       style={Object {}}
                     >
-                      wordsCount
+                      wordCount
                     </span>
                     <span>
                       =

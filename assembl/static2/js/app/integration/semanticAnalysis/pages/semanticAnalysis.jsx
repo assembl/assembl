@@ -40,7 +40,7 @@ const SemanticAnalysis = () => {
       >
         <SentimentBar value={0.7445} />
       </div>
-      <WordCountInformation wordsCount={23302} />
+      <WordCountInformation wordCount={23302} />
     </div>
   );
 };

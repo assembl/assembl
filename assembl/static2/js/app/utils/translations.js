@@ -336,7 +336,7 @@ const Translations = {
       },
       wordCountInformation: {
         msg: "Le résultat de l'analyse sémantique ci-dessous provient de l'analyse de %{words} dans la thématique.",
-        words: "<span class='words-watson'>%{wordsCount} mots</span>"
+        words: "<span class='words-watson'>%{wordCount} mots</span>"
       },
       uploadButton: "Choisissez un fichier",
       goUp: "Remonter"
