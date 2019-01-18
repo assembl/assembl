@@ -653,6 +653,9 @@ def update_announcement_body_attachments(context, idea, discussion, new_attachme
 def create_idea(parent_idea, phase, args, context):
     cls = models.Idea
     message_view_override = args.get('message_view_override')
+    if message_view_override is None:
+        message_view_override = MessageView.noModule.value
+
     is_survey_thematic = message_view_override == MessageView.survey.value
     is_multicolumns = message_view_override == MessageView.messageColumns.value
     discussion_id = context.matchdict['discussion_id']

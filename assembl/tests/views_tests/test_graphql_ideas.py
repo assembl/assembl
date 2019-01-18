@@ -1624,7 +1624,7 @@ def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_reg
     bright = ideas[0]
     assert bright['messageViewOverride'] == u'brightMirror'
     thread = ideas[1]
-    assert thread['messageViewOverride'] == None
+    assert thread['messageViewOverride'] == u'noModule'
 
     # and remove it
     del graphql_request.POST['variables.ideas.0.image']

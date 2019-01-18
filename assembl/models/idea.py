@@ -44,6 +44,7 @@ _ = TranslationStringFactory('assembl')
 
 
 class MessageView(Enum):
+    noModule = 'noModule'
     brightMirror = 'brightMirror'
     messageColumns = 'messageColumns'
     survey = 'survey'
