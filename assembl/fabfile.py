@@ -1343,6 +1343,7 @@ def app_fullupdate():
     """
     execute(database_dump)
     execute(updatemaincode)
+    execute(create_local_ini)
     execute(app_compile)
 
 
