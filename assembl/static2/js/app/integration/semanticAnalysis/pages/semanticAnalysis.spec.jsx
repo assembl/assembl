@@ -9,7 +9,7 @@ import SemanticAnalysis from './semanticAnalysis';
 import Loader from '../../../components/common/loader/loader';
 import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
 import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
-import ResponsiveWordcloud from '../../../components/common/wordcloud/responsiveWordcloud';
+import ResponsiveWordCloud from '../../../components/common/wordcloud/responsiveWordCloud';
 
 configure({ adapter: new Adapter() });
 
@@ -36,7 +36,7 @@ describe('<SemanticAnalysis /> - with shallow', () => {
     expect(wrapper.find(TitleWithTooltip)).toHaveLength(1);
   });
 
-  it('should render a ResponsiveWordcloud component', () => {
-    expect(wrapper.find(ResponsiveWordcloud)).toHaveLength(1);
+  it('should render a ResponsiveWordCloud component', () => {
+    expect(wrapper.find(ResponsiveWordCloud)).toHaveLength(1);
   });
 });

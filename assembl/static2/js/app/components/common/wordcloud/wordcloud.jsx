@@ -1,19 +1,18 @@
 // @flow
-import * as React from 'react';
+import React, { Component } from 'react';
 
 import ReactWordCloud from 'react-wordcloud';
 
-import type { Keyword, Keywords } from '../../../integration/semanticAnalysis/typeData';
+import type { Keyword, Keywords } from '../../../integration/semanticAnalysis/dataType';
 
+// Keys provided by Watson
 const WORD_COUNT_KEY = 'relevance';
 const WORD_KEY = 'text';
 
-export type Props = {
-  /** Optional height */
-  height: number,
+export type BaseProps = {
   /** Optional angle value in degrees */
   keywordsAngle: number,
-  /** optional color */
+  /** Optional color */
   keywordsColor: string,
   /** Array of keywords */
   keywords: Keywords,
@@ -24,20 +23,30 @@ export type Props = {
   /** Optional callback function called when a word is hovered out */
   onMouseOverWord: (word: Keyword) => void,
   /** Optional callback function called when a word is clicked */
-  onWordClick: (word: Keyword) => void,
+  onWordClick: (word: Keyword) => void
+};
+
+export type Props = BaseProps & {
+  /** Optional height */
+  height: number,
   /** Optional width */
   width: number
 };
 
-class Wordcloud extends React.Component<Props> {
+export const baseDefaultProps = {
+  keywordsAngle: 0,
+  // color = 'RED, GREEN, BLUE' (with RED, GREEN, BLUE 0-255)
+  keywordsColor: '0, 0, 0',
+  numberOfKeywordsToDisplay: 30,
+  onMouseOutWord: () => {},
+  onMouseOverWord: () => {},
+  onWordClick: () => {}
+};
+
+class WordCloud extends Component<Props> {
   static defaultProps = {
+    ...baseDefaultProps,
     height: 500,
-    keywordsAngle: 0,
-    keywordsColor: '0, 0, 0',
-    numberOfKeywordsToDisplay: 30,
-    onMouseOutWord: () => {},
-    onMouseOverWord: () => {},
-    onWordClick: () => {},
     width: 400
   };
 
@@ -95,39 +104,39 @@ class Wordcloud extends React.Component<Props> {
       min: Math.min(...Array.from(keywords, x => x.relevance))
     };
     if (interval.max === interval.min) {
-      interval.max = 1;
       interval.min = 0;
     }
 
     const colorFunction = d =>
       `rgba(${keywordsColor}, ${0.5 + 0.5 * (d.relevance - interval.min) / (interval.max - interval.min)})`;
 
+    const reactWordCloudProps = {
+      colorScale: colorFunction,
+      fontFamily: 'Lato',
+      height: height,
+      maxAngle: maxAngle,
+      maxWords: numberOfKeywordsToDisplay,
+      minAngle: minAngle,
+      onMouseOutWord: word => onMouseOutWord(word),
+      onMouseOverWord: word => onMouseOverWord(word),
+      onWordClick: word => onWordClick(word),
+      orientations: 20,
+      scale: 'linear',
+      tooltipEnabled: false,
+      transitionDuration: 1500,
+      width: width,
+      wordCountKey: WORD_COUNT_KEY,
+      wordKey: WORD_KEY,
+      words: keywords
+    };
     return noData ? (
       <h1>NO DATA</h1>
     ) : (
       <div className="wordcloud">
-        <ReactWordCloud
-          colorScale={colorFunction}
-          fontFamily="Lato"
-          height={height}
-          maxAngle={maxAngle}
-          maxWords={numberOfKeywordsToDisplay}
-          minAngle={minAngle}
-          onMouseOutWord={word => onMouseOutWord(word)}
-          onMouseOverWord={word => onMouseOverWord(word)}
-          onWordClick={word => onWordClick(word)}
-          orientations={20}
-          scale={'linear'}
-          tooltipEnabled={false}
-          transitionDuration={1500}
-          width={width}
-          wordCountKey={WORD_COUNT_KEY}
-          wordKey={WORD_KEY}
-          words={keywords}
-        />
+        <ReactWordCloud {...reactWordCloudProps} />
       </div>
     );
   }
 }
 
-export default Wordcloud;
+export default WordCloud;

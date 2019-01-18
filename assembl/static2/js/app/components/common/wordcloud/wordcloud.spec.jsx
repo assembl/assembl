@@ -5,7 +5,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
-import Wordcloud from './wordcloud';
+import WordCloud from './wordCloud';
 
 configure({ adapter: new Adapter() });
 
@@ -13,11 +13,11 @@ const propsDefault = {
   keywords: []
 };
 
-describe('<Wordcloud /> - with shallow', () => {
+describe('<WordCloud /> - with shallow', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<Wordcloud {...propsDefault} />);
+    wrapper = shallow(<WordCloud {...propsDefault} />);
   });
 
   it('should render no <ReactWordCloud /> if no data is passed', () => {

@@ -7,9 +7,9 @@ import { action } from '@storybook/addon-actions';
 import { array, number, text, withKnobs } from '@storybook/addon-knobs';
 /* eslint-enable */
 
-import ResponsiveWordcloud from './responsiveWordcloud';
+import ResponsiveWordCloud from './responsiveWordCloud';
 
-export const defaultResponsiveWordcloudProps = {
+export const defaultResponsiveWordCloudProps = {
   keywords: [{ text: 'text', relevance: 0.9, count: 5 }]
 };
 
@@ -23,13 +23,13 @@ const playground = {
   }
 };
 
-storiesOf('ResponsiveWordcloud', module)
+storiesOf('ResponsiveWordCloud', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <ResponsiveWordcloud keywords={defaultResponsiveWordcloudProps.keywords} />))
+  .add('default', withInfo()(() => <ResponsiveWordCloud keywords={defaultResponsiveWordCloudProps.keywords} />))
   .add(
     'playground',
     withInfo()(() => (
-      <ResponsiveWordcloud
+      <ResponsiveWordCloud
         keywordsAngle={number('keywordsAngle', playground.keywordsAngle)}
         keywordsColor={text('keywordsColor', playground.keywordsColor)}
         keywords={array('keywords', playground.keywords)}

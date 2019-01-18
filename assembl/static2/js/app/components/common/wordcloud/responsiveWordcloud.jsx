@@ -1,39 +1,17 @@
 // @flow
-import * as React from 'react';
+import React, { Component } from 'react';
 
+// Component imports
 import ResizeAware from 'react-resize-aware';
+import WordCloud, { baseDefaultProps } from './wordCloud';
 
-import type { Keyword, Keywords } from '../../../integration/semanticAnalysis/typeData';
-import Wordcloud from './wordcloud';
+// Type imports
+import type { BaseProps } from './wordCloud';
 
-export type Props = {
-  /** Optional angle value in degrees */
-  keywordsAngle: number,
-  /** optional color */
-  keywordsColor: string,
-  /** Array of keywords */
-  keywords: Keywords,
-  /** Optional maximum number of keywords to show */
-  numberOfKeywordsToDisplay: number,
-  /** Optional callback function called when a word is hovered in */
-  onMouseOutWord: (word: Keyword) => void,
-  /** Optional callback function called when a word is hovered out */
-  onMouseOverWord: (word: Keyword) => void,
-  /** Optional callback function called when a word is clicked */
-  onWordClick: (word: Keyword) => void
-};
+class ResponsiveWordCloud extends Component<BaseProps> {
+  static defaultProps = baseDefaultProps;
 
-class ResponsiveWordcloud extends React.Component<Props> {
-  static defaultProps = {
-    keywordsAngle: 0,
-    keywordsColor: '100, 0, 200',
-    numberOfKeywordsToDisplay: 30,
-    onMouseOutWord: () => {},
-    onMouseOverWord: () => {},
-    onWordClick: () => {}
-  };
-
-  shouldComponentUpdate(nextProps: Props) {
+  shouldComponentUpdate(nextProps: BaseProps) {
     const {
       keywordsAngle,
       keywordsColor,
@@ -68,28 +46,26 @@ class ResponsiveWordcloud extends React.Component<Props> {
       onWordClick
     } = this.props;
 
+    let wordCloudProps = {
+      keywordsAngle: keywordsAngle,
+      keywordsColor: keywordsColor,
+      keywords: keywords,
+      numberOfKeywordsToDisplay: numberOfKeywordsToDisplay,
+      onMouseOutWord: onMouseOutWord,
+      onMouseOverWord: onMouseOverWord,
+      onWordClick: onWordClick
+    };
     return (
       <ResizeAware>
         {(size) => {
           const width = size.width || 400; // default width
           const height = Math.min(width / 4 * 3, 500); // 4:3 ratio
-          return (
-            <Wordcloud
-              height={height}
-              keywordsAngle={keywordsAngle}
-              keywordsColor={keywordsColor}
-              keywords={keywords}
-              numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
-              onMouseOutWord={onMouseOutWord}
-              onMouseOverWord={onMouseOverWord}
-              onWordClick={onWordClick}
-              width={width}
-            />
-          );
+          wordCloudProps = { ...wordCloudProps, width: width, height: height };
+          return <WordCloud {...wordCloudProps} />;
         }}
       </ResizeAware>
     );
   }
 }
 
-export default ResponsiveWordcloud;
+export default ResponsiveWordCloud;
