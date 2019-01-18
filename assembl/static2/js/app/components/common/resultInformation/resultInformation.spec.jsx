@@ -8,6 +8,7 @@ import Adapter from 'enzyme-adapter-react-16.3';
 
 import ResultInformation from './resultInformation';
 import type { Props as ResultInformationProps } from './resultInformation';
+import { defaultResultInformationProps } from './resultInformation.stories';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -19,21 +20,18 @@ configure({ adapter: new Adapter() });
 
 describe('<ResultInformation /> - with shallow', () => {
   let wrapper;
-  const resultInformationProps: ResultInformationProps = {
-    wordsCount: 23
-  };
+  let resultInformationProps: ResultInformationProps;
 
-  describe('when is loading', () => {
-    beforeEach(() => {
-      wrapper = shallow(<ResultInformation {...resultInformationProps} />);
-    });
+  beforeEach(() => {
+    resultInformationProps = { ...defaultResultInformationProps };
+    wrapper = shallow(<ResultInformation {...resultInformationProps} />);
+  });
 
-    it('should use description component', () => {
-      expect(wrapper.find('Description')).toHaveLength(1);
-    });
+  it('should use description component', () => {
+    expect(wrapper.find('Description')).toHaveLength(1);
+  });
 
-    it('should use translate component', () => {
-      expect(wrapper.find('Translate')).toHaveLength(1);
-    });
+  it('should use translate component', () => {
+    expect(wrapper.find('Translate')).toHaveLength(1);
   });
 });
