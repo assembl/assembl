@@ -143,7 +143,7 @@ class LegalContents:
     cookies_policy_attachments = Default.string_entry % ("Attachments for cookies policy.")
     privacy_policy_attachments = Default.string_entry % ("Attachments for privacy policy.")
     user_guidelines_attachments = Default.string_entry % ("Attachments for user guidelines.")
-    mandatory_legal_contents_validation = """A boolean flag to activate or not mandatory validation of legal contents after SSO login."""
+    mandatory_legal_contents_validation = """A boolean flag to activate mandatory validation of legal contents after SSO login."""
 
 
 class UpdateResourcesCenter:
@@ -172,7 +172,7 @@ class UpdateLegalContents:
     cookies_policy_attachments = "The list of the Attachments used in cookies policy entries."
     privacy_policy_attachments = "The list of the Attachments used in privacy policy entries."
     user_guidelines_attachments = "The list of the Attachments used in user guidelines entries."
-    mandatory_legal_contents_validation = """A boolean flag to activate or not mandatory validation of legal contents after SSO login."""
+    mandatory_legal_contents_validation = """A boolean flag to activate mandatory validation of legal contents after SSO login."""
 
 
 class VisitsAnalytics:
