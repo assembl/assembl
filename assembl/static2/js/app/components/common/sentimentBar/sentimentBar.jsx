@@ -10,17 +10,33 @@ export type Props = {
   value: number
 };
 
+const LEVEL = {
+  error: -1,
+  veryBad: 0,
+  bad: 1,
+  good: 2,
+  excellent: 3
+};
+
+const LEVEL_MIN_VALUE = {
+  veryBad: 0,
+  bad: 0.35,
+  good: 0.5,
+  excellent: 0.65,
+  maxLimit: 1
+};
+
 const SentimentBar = ({ value }: Props) => {
-  let level = -1;
-  if (value >= 0 && value <= 1) {
-    if (value < 0.35) {
-      level = 0;
-    } else if (value < 0.5) {
-      level = 1;
-    } else if (value < 0.65) {
-      level = 2;
+  let level = LEVEL.error;
+  if (value >= LEVEL_MIN_VALUE.veryBad && value <= LEVEL_MIN_VALUE.maxLimit) {
+    if (value < LEVEL_MIN_VALUE.bad) {
+      level = LEVEL.veryBad;
+    } else if (value < LEVEL_MIN_VALUE.good) {
+      level = LEVEL.bad;
+    } else if (value < LEVEL_MIN_VALUE.excellent) {
+      level = LEVEL.good;
     } else {
-      level = 3;
+      level = LEVEL.excellent;
     }
   }
 
