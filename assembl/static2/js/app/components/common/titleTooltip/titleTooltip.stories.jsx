@@ -13,11 +13,6 @@ export const defaultTitleTooltipProps: TitleTooltipProps = {
   tooltipContent: <p>Wow a tooltip!</p>
 };
 
-const playground: TitleTooltipProps = {
-  ...defaultTitleTooltipProps
-};
-
 storiesOf('TitleTooltip', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <TitleTooltip {...defaultTitleTooltipProps} />))
-  .add('playground', withInfo()(() => <TitleTooltip tooltipContent={playground.tooltipContent} />));
+  .add('default', withInfo()(() => <TitleTooltip {...defaultTitleTooltipProps} />));

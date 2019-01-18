@@ -60,6 +60,8 @@ function loadStories() {
   require('../js/app/components/common/loader/loader.stories.jsx');
   require('../js/app/components/common/toolbarSlider/toolbarSlider.stories.jsx');
   require('../js/app/components/common/title/title.stories.jsx');
+  require('../js/app/components/common/titleTooltip/titleTooltip.stories.jsx');
+  require('../js/app/components/common/titleWithTooltip/titleWithTooltip.stories.jsx');
 }
 
 configure(loadStories, module);
