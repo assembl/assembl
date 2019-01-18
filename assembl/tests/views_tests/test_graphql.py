@@ -1874,8 +1874,7 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
         u'discussionPreferences': {
             u'favicon': None,
             u'tabTitle': '',
-            u'withModeration': False,
-            u'mandatoryLegalContentsValidation': False
+            u'withModeration': False
         }
     }
 
@@ -1888,8 +1887,7 @@ def test_query_discussion_preferences_moderation(graphql_registry, graphql_reque
         u'discussionPreferences': {
             u'favicon': None,
             u'tabTitle': '',
-            u'withModeration': True,
-            u'mandatoryLegalContentsValidation': False
+            u'withModeration': True
         }
     }
 
