@@ -20,7 +20,7 @@ configure({ adapter: new Adapter() });
 describe('<ResultInformation /> - with shallow', () => {
   let wrapper;
   const resultInformationProps: ResultInformationProps = {
-    wordsNumber: 23
+    wordsCount: 23
   };
 
   describe('when is loading', () => {

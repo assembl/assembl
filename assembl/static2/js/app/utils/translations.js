@@ -336,7 +336,7 @@ const Translations = {
       },
       resultInformation: {
         msg: "Le résultat de l'analyse sémantique ci-dessous provient de l'analyse de %{words} dans la thématique.",
-        numberWords: "<span class='words-watson'>%{numberWords} mots</span>"
+        words: "<span class='words-watson'>%{wordsCount} mots</span>"
       },
       uploadButton: "Choisissez un fichier",
       goUp: "Remonter"
@@ -1317,6 +1317,10 @@ const Translations = {
       loader: {
         error: "TO BE DEFINED",
         loading: "Loading..."
+      },
+      resultInformation: {
+        msg: "TO BE DEFINED",
+        numberWords: "<span class='words-watson'>%{numberWords} words</span>"
       },
       uploadButton: "Choose a file to upload",
       goUp: "Back to top"
