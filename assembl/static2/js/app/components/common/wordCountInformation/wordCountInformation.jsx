@@ -9,11 +9,11 @@ export type Props = {
   wordsCount: number
 };
 
-const ResultInformation = ({ wordsCount }: Props) => {
-  const words = `${I18n.t('common.resultInformation.words', { wordsCount: wordsCount })}`;
-  const information = <Translate value="common.resultInformation.msg" words={words} dangerousHTML />;
+const WordCountInformation = ({ wordsCount }: Props) => {
+  const words = `${I18n.t('common.wordCountInformation.words', { wordsCount: wordsCount })}`;
+  const information = <Translate value="common.wordCountInformation.msg" words={words} dangerousHTML />;
 
   return <Description>{information}</Description>;
 };
 
-export default ResultInformation;
+export default WordCountInformation;

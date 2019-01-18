@@ -334,7 +334,7 @@ const Translations = {
         error: "Il y a une erreur de chargement de l’analyse",
         loading: "Chargement en cours..."
       },
-      resultInformation: {
+      wordCountInformation: {
         msg: "Le résultat de l'analyse sémantique ci-dessous provient de l'analyse de %{words} dans la thématique.",
         words: "<span class='words-watson'>%{wordsCount} mots</span>"
       },
@@ -1318,7 +1318,7 @@ const Translations = {
         error: "TO BE DEFINED",
         loading: "Loading..."
       },
-      resultInformation: {
+      wordCountInformation: {
         msg: "TO BE DEFINED",
         numberWords: "<span class='words-watson'>%{numberWords} words</span>"
       },

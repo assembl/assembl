@@ -12,7 +12,7 @@ import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleW
 import ResponsiveWordCloud from '../../../components/common/wordCloud/responsiveWordCloud';
 import KeywordInfo from '../../../components/common/keywordInfo/keywordInfo';
 import SentimentBar from '../../../components/common/sentimentBar/sentimentBar';
-import ResultInformation from '../../../components/common/resultInformation/resultInformation';
+import WordCountInformation from '../../../components/common/wordCountInformation/wordCountInformation';
 
 configure({ adapter: new Adapter() });
 
@@ -51,7 +51,7 @@ describe('<SemanticAnalysis /> - with shallow', () => {
     expect(wrapper.find(SentimentBar)).toHaveLength(1);
   });
 
-  it('should render a ResultInformation component', () => {
-    expect(wrapper.find(ResultInformation)).toHaveLength(1);
+  it('should render a WordCountInformation component', () => {
+    expect(wrapper.find(WordCountInformation)).toHaveLength(1);
   });
 });

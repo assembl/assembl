@@ -7,7 +7,7 @@ import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleW
 import ResponsiveWordCloud from '../../../components/common/wordCloud/responsiveWordCloud';
 import KeywordInfo from '../../../components/common/keywordInfo/keywordInfo';
 import SentimentBar from '../../../components/common/sentimentBar/sentimentBar';
-import ResultInformation from '../../../components/common/resultInformation/resultInformation';
+import WordCountInformation from '../../../components/common/wordCountInformation/wordCountInformation';
 
 import fakeData from '../data.json';
 
@@ -40,7 +40,7 @@ const SemanticAnalysis = () => {
       >
         <SentimentBar value={0.7445} />
       </div>
-      <ResultInformation wordsCount={23302} />
+      <WordCountInformation wordsCount={23302} />
     </div>
   );
 };
