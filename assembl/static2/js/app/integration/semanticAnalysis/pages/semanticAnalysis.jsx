@@ -5,7 +5,7 @@ import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
 import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
 import ResponsiveWordCloud from '../../../components/common/wordCloud/responsiveWordCloud';
-
+import KeywordInfo from '../../../components/common/keywordInfo/keywordInfo';
 import fakeData from '../data.json';
 
 const SemanticAnalysis = () => {
@@ -29,6 +29,7 @@ const SemanticAnalysis = () => {
       <ToolbarSlider defaultValue={50} onSliderChange={() => {}} />
       <TitleWithTooltip level={1} titleContent="Informations mots-clés" tooltipContent={tooltip} />
       <ResponsiveWordCloud keywords={fakeData.keywords} />
+      <KeywordInfo keyword={{ text: 'test', relevance: '0.57', count: 5 }} />
     </div>
   );
 };
