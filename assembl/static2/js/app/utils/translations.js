@@ -764,6 +764,8 @@ const Translations = {
         sectionsTitle: "Renseigner les rubriques"
       },
       helpers: {
+        surveyQuestion:
+          "Le module de questions est composé d'une question et d'un champ de réponse dédié au participant. Vous pouvez ajouter des questions en cliquant sur l'icône + ci-dessous.",
         timelinePhases: "Choisissez une description et une image pour chaque phase du débat visible dans la page d'accueil",
         timelineTitle: "Configurez le titre et le sous-titre de la section timeline visible dans la page d'accueil",
         voteSessionProposalSection:
@@ -1727,6 +1729,8 @@ const Translations = {
         sectionsTitle: "Set sections"
       },
       helpers: {
+        surveyQuestion:
+          "The survey module is composed of one question and a response field dedicated to the participant. You can add questions by clicking on the + icon below.",
         timelinePhases: "Choose a description and an image for each phase of the debate displayed in the landing page",
         timelineTitle: "Configure the title and the sub-title of the timeline section displayed in the landing page",
         voteSessionProposalSection:

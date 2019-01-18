@@ -28,8 +28,8 @@ const SurveyFields = ({ editLocale, fieldPrefix }: Props) => {
       />
       <Helper
         label={I18n.t('administration.tableOfThematics.questionsHeader')}
-        // helperUrl="/static2/img/helpers/helper1.png"  // TODO
-        helperText="" // TODO
+        helperUrl="/static2/img/helpers/helper_survey_question.png"
+        helperText={I18n.t('administration.helpers.surveyQuestion')}
         classname="title"
       />
       <FieldArrayWithActions
