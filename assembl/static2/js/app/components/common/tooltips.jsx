@@ -377,4 +377,8 @@ export const commentHelperButtonTooltip = (
   </Tooltip>
 );
 
-export const titleTooltip = (content: React.Node) => <Tooltip id="titleTooltip">{content}</Tooltip>;
+export const titleTooltip = (content: React.Node) => (
+  <Tooltip id="titleTooltip" className="title-tooltip">
+    {content}
+  </Tooltip>
+);
