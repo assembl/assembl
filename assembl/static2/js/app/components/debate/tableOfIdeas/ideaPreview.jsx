@@ -86,7 +86,7 @@ const IdeaPreview = ({
               >
                 <Translate value="debate.thread.seeSubIdeas" count={numChildren} />
               </div>
-              <div>/</div>
+              {messageViewOverride !== MESSAGE_VIEW.noModule ? <div>/</div> : null}
             </div>
           ) : (
             <div />
