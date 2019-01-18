@@ -33,7 +33,7 @@ export type Props = BaseProps & {
   width: number
 };
 
-export const baseDefaultProps = {
+export const defaultBaseProps = {
   keywordsAngle: 0,
   // color = 'RED, GREEN, BLUE' (with RED, GREEN, BLUE 0-255)
   keywordsColor: '0, 0, 0',
@@ -45,7 +45,7 @@ export const baseDefaultProps = {
 
 class WordCloud extends Component<Props> {
   static defaultProps = {
-    ...baseDefaultProps,
+    ...defaultBaseProps,
     height: 500,
     width: 400
   };

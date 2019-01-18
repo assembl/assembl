@@ -3,15 +3,15 @@ import React, { Component } from 'react';
 
 // Component imports
 import ResizeAware from 'react-resize-aware';
-import WordCloud, { baseDefaultProps } from './wordCloud';
+import WordCloud, { defaultBaseProps as defaultWordCloudBaseProps } from './wordCloud';
 
 // Type imports
-import type { BaseProps } from './wordCloud';
+import type { BaseProps as WordCloudBaseProps } from './wordCloud';
 
-class ResponsiveWordCloud extends Component<BaseProps> {
-  static defaultProps = baseDefaultProps;
+class ResponsiveWordCloud extends Component<WordCloudBaseProps> {
+  static defaultProps = { ...defaultWordCloudBaseProps };
 
-  shouldComponentUpdate(nextProps: BaseProps) {
+  shouldComponentUpdate(nextProps: WordCloudBaseProps) {
     const {
       keywordsAngle,
       keywordsColor,
@@ -46,7 +46,7 @@ class ResponsiveWordCloud extends Component<BaseProps> {
       onWordClick
     } = this.props;
 
-    let wordCloudProps = {
+    const wordCloudProps: WordCloudBaseProps = {
       keywordsAngle: keywordsAngle,
       keywordsColor: keywordsColor,
       keywords: keywords,
@@ -60,8 +60,7 @@ class ResponsiveWordCloud extends Component<BaseProps> {
         {(size) => {
           const width = size.width || 400; // default width
           const height = Math.min(width / 4 * 3, 500); // 4:3 ratio
-          wordCloudProps = { ...wordCloudProps, width: width, height: height };
-          return <WordCloud {...wordCloudProps} />;
+          return <WordCloud {...wordCloudProps} height={height} width={width} />;
         }}
       </ResizeAware>
     );
