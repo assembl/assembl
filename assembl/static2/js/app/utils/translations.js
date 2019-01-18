@@ -434,11 +434,13 @@ const Translations = {
         seeSubIdeas_1: "Voir le sous-thème",
         announcement: "Consigne",
         guidelines: "Consigne",
-        summary: "À retenir",
-        semanticAnalysis: {
-          long: "Sémantique",
-          short: "Analyse"
-        }
+        summary: "À retenir"
+      },
+      semanticAnalysis: {
+        long: "Sémantique",
+        short: "Analyse",
+        occurence: "Occurence",
+        relevance: "Pertinence"
       },
       brightMirror: {
         deleteFiction: "Supprimez votre texte",
@@ -1421,11 +1423,13 @@ const Translations = {
         seeSubIdeas_1: "See sub-thematic",
         announcement: "Announcement",
         guidelines: "Guidelines",
-        summary: "Summary",
-        semanticAnalysis: {
-          long: "Analysis",
-          short: "Semantic"
-        }
+        summary: "Summary"
+      },
+      semanticAnalysis: {
+        long: "Analysis",
+        short: "Semantic",
+        occurence: "Occurence",
+        relevance: "Relevance"
       },
       brightMirror: {
         deleteFiction: "Delete your text",

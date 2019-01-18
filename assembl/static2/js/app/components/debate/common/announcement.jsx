@@ -104,8 +104,8 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
   // Translation keys
   const guidelinesTitleKey = 'debate.thread.guidelines';
   const summaryTitleKey = 'debate.thread.summary';
-  const semanticAnalysisLongTitleKey = 'debate.thread.semanticAnalysis.long';
-  const semanticAnalysisShortTitleKey = 'debate.thread.semanticAnalysis.short';
+  const semanticAnalysisLongTitleKey = 'debate.semanticAnalysis.long';
+  const semanticAnalysisShortTitleKey = 'debate.semanticAnalysis.short';
 
   // Title contents
   const instructionTabTitle = I18n.t(guidelinesTitleKey);
