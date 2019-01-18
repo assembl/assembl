@@ -73,8 +73,8 @@ const getThemeData = (t: ThemeValueFromQuery): ThemeValueWithChildren => {
             name: convertEntriesToI18nValue(col.nameEntries),
             color: col.color,
             columnSynthesis: {
-              subject: convertEntriesToI18nValue(col.columnSynthesis.subjectEntries),
-              body: convertEntriesToI18nRichText(col.columnSynthesis.bodyEntries)
+              subject: col.columnSynthesis ? convertEntriesToI18nValue(col.columnSynthesis.subjectEntries) : {},
+              body: col.columnSynthesis ? convertEntriesToI18nRichText(col.columnSynthesis.bodyEntries) : {}
             }
           }))) ||
         []
