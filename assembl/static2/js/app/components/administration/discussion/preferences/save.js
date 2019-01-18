@@ -6,7 +6,8 @@ import { createSave, convertCheckboxListValueToVariable } from '../../../form/ut
 
 const getVariables = async (client: ApolloClient, values: DiscussionPreferencesFormValues) => ({
   languages: convertCheckboxListValueToVariable(values.languages),
-  withModeration: values.withModeration
+  withModeration: values.withModeration,
+  slug: values.slug
 });
 
 export const createMutationsPromises = (client: ApolloClient) => (values: DiscussionPreferencesFormValues) => [

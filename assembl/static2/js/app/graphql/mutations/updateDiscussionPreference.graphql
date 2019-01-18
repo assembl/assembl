@@ -17,6 +17,7 @@ mutation updateDiscussionPreference(
         locale
       }
       withModeration
+      slug
     }
   }
 }

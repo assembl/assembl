@@ -38,6 +38,7 @@ export function postLoadFormat(data: Data): DiscussionPreferencesFormValues {
 
   return {
     languages: languages,
-    withModeration: discussionPreferences.withModeration
+    withModeration: discussionPreferences.withModeration,
+    slug: discussionPreferences.slug
   };
 }

@@ -60,7 +60,7 @@ const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesForm
               <div className="title">
                 <span>Modify the slug</span>
               </div>
-              <Field component={TextFieldAdapter} name="modifySlug" label="Modify the slug of the debate" />
+              <Field component={TextFieldAdapter} name="slug" label="Modify the slug of the debate" />
             </div>
           </AdminForm>
         </div>
