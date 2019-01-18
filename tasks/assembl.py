@@ -1,7 +1,7 @@
 from os.path import exists, isabs
 from pprint import pprint
 
-from invoke import task
+from invoke import task as base_task
 
 
 def rec_update(d1, d2):
@@ -12,7 +12,7 @@ def rec_update(d1, d2):
     return result
 
 
-@task
+@base_task
 def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
     project_prefix = getattr(c.config, '_project_home', c.config._project_prefix[:-1])
@@ -43,7 +43,13 @@ def venv(c):
     return c.prefix('source venv/bin/activate')
 
 
-@task(setup_ctx)
+def task(*args, **kwargs):
+    pre = list(kwargs.pop('pre', args))
+    pre.append(setup_ctx)
+    return base_task(pre=pre, **kwargs)
+
+
+@task()
 def print_config(c):
     pprint(c.config.__dict__)
 
