@@ -14,6 +14,7 @@ import SectionTitle from '../../../../components/administration/sectionTitle';
 import { load, postLoadFormat } from './load';
 import { save, createMutationsPromises } from './save';
 import validate from './validate';
+import TextFieldAdapter from '../../../form/textFieldAdapter';
 
 export type DiscussionPreferencesFormProps = {
   client: ApolloClient,
@@ -55,6 +56,11 @@ const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesForm
                 label={I18n.t('administration.activateModeration')}
                 type="checkbox"
               />
+              <div className="separator" />
+              <div className="title">
+                <span>Modify the slug</span>
+              </div>
+              <Field component={TextFieldAdapter} name="modifySlug" label="Modify the slug of the debate" />
             </div>
           </AdminForm>
         </div>
