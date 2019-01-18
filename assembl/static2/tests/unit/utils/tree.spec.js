@@ -96,10 +96,10 @@ describe('Tree', () => {
         { id: 'lar', parentId: 'foo' }
       ];
       const sortItems = items => sortBy(items, 'id');
-      let path = getPath({ id: 'tar', parentId: 'bar' }, nodes, sortItems);
+      let path = getPath({ id: 'tar', parentId: 'bar' }, sortItems(nodes));
       let expected = [0, 0, 0];
       expect(path).toEqual(expect.arrayContaining(expected));
-      path = getPath({ id: 'lar', parentId: 'foo' }, nodes, sortItems);
+      path = getPath({ id: 'lar', parentId: 'foo' }, sortItems(nodes));
       expected = [0, 1];
       expect(path).toEqual(expect.arrayContaining(expected));
     });
