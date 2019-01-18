@@ -4,7 +4,7 @@ import React from 'react';
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
 import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
-import ResponsiveWordCloud from '../../../components/common/wordcloud/responsiveWordCloud';
+import ResponsiveWordCloud from '../../../components/common/wordCloud/responsiveWordCloud';
 
 import fakeData from '../data.json';
 

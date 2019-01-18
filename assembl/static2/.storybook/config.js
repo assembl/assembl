@@ -62,7 +62,7 @@ function loadStories() {
   require('../js/app/components/common/title/title.stories.jsx');
   require('../js/app/components/common/titleTooltip/titleTooltip.stories.jsx');
   require('../js/app/components/common/titleWithTooltip/titleWithTooltip.stories.jsx');
-  require('../js/app/components/common/wordcloud/responsiveWordcloud.stories.jsx');
+  require('../js/app/components/common/wordCloud/responsiveWordcloud.stories.jsx');
 }
 
 configure(loadStories, module);
