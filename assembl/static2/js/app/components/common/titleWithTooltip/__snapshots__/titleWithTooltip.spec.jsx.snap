@@ -20,17 +20,13 @@ exports[`Storyshots TitleWithTooltip default 1`] = `
         className="titleTooltip-container"
         onClick={[Function]}
       >
-        <div
-          className="custom-overlay"
-        >
-          <img
-            alt="Icone du tooltip"
-            className="tooltip-icon"
-            height={20}
-            src="icons/path/info"
-            width={20}
-          />
-        </div>
+        <img
+          alt="Icone du tooltip"
+          className="tooltip-icon"
+          height={20}
+          src="icons/path/info"
+          width={20}
+        />
       </div>
     </div>
   </div>
@@ -354,17 +350,13 @@ exports[`Storyshots TitleWithTooltip playground 1`] = `
         className="titleTooltip-container"
         onClick={[Function]}
       >
-        <div
-          className="custom-overlay"
-        >
-          <img
-            alt="Icone du tooltip"
-            className="tooltip-icon"
-            height={20}
-            src="icons/path/info"
-            width={20}
-          />
-        </div>
+        <img
+          alt="Icone du tooltip"
+          className="tooltip-icon"
+          height={20}
+          src="icons/path/info"
+          width={20}
+        />
       </div>
     </div>
   </div>
