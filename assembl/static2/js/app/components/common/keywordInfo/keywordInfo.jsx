@@ -2,7 +2,6 @@
 import React from 'react';
 
 // Helpers imports
-// import type { Keyword } from '../../../utils/globalFunctions';
 import { I18n } from 'react-redux-i18n';
 
 // Components import
@@ -11,7 +10,7 @@ import Description from '../description/description';
 export type Props = {
   /** Optional color */
   color: string,
-  /** keyword informations */
+  /** Keyword information */
   keyword: any
 };
 
