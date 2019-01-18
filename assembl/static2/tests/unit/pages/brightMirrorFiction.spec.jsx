@@ -4,6 +4,7 @@ import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
 import Adapter from 'enzyme-adapter-react-16.3';
+import { Map } from 'immutable';
 // Graphql imports
 import BrightMirrorFictionQuery from '../../../js/app/graphql/BrightMirrorFictionQuery.graphql';
 import IdeaWithCommentsQuery from '../../../js/app/graphql/IdeaWithPostsQuery.graphql';
@@ -97,7 +98,7 @@ const brightMirrorFictionPropsTemplate = {
   themeId: 'nihil',
   fictionId: 'fictionId',
   contentLocale: 'en',
-  contentLocaleMapping: {},
+  contentLocaleMapping: Map(),
   // Mutation function
   createComment: undefined
 };

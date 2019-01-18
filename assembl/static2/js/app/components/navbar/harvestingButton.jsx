@@ -9,14 +9,14 @@ import PreferencesQuery from '../../graphql/UserPreferencesQuery.graphql';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import { updateContentLocaleByOriginalLocale } from '../../actions/contentLocaleActions';
 import { toggleHarvesting } from '../../actions/contextActions';
-import { isHarvestable } from '../../utils/globalFunctions';
+import { DebateContext } from '../../app';
 
 type HarvestingButtonProps = {
   data: UserPreferencesQuery,
   isActive: boolean,
   onClick: Function,
   updateByOriginalLocale: (from: string, into: string) => void,
-  params: RouterParams
+  isHarvestable: boolean
 };
 
 export class DumbHarvestingButton extends React.PureComponent<HarvestingButtonProps> {
@@ -32,8 +32,8 @@ export class DumbHarvestingButton extends React.PureComponent<HarvestingButtonPr
   };
 
   render() {
-    const { isActive, params } = this.props;
-    if (!isHarvestable(params)) {
+    const { isActive, isHarvestable } = this.props;
+    if (!isHarvestable) {
       return null;
     }
 
@@ -50,6 +50,12 @@ export class DumbHarvestingButton extends React.PureComponent<HarvestingButtonPr
     );
   }
 }
+
+const HarvestingButtonWithContext = props => (
+  <DebateContext.Consumer>
+    {({ isHarvestable }) => <DumbHarvestingButton {...props} isHarvestable={isHarvestable} />}
+  </DebateContext.Consumer>
+);
 
 const mapStateToProps = ({ context: { isHarvesting, connectedUserIdBase64 } }) => ({
   isActive: isHarvesting,
@@ -70,4 +76,4 @@ export default compose(
   }),
   manageErrorAndLoading({ displayLoader: false }),
   withRouter
-)(DumbHarvestingButton);
+)(HarvestingButtonWithContext);

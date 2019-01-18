@@ -6,47 +6,21 @@ from graphql_relay.node.node import to_global_id
 
 @pytest.fixture(scope="function")
 def vote_session(request, test_session, discussion, timeline_vote_session,
-                 simple_file, admin_user):
-    from assembl.graphql.utils import create_root_thematic
-    from assembl.models import VoteSession, VoteSessionAttachment, LangString
+                 simple_file, admin_user, subidea_1_1):
+    from assembl.models import VoteSession, LangString
     vote_session = VoteSession(
         discussion=discussion,
-        discussion_phase=timeline_vote_session,
-        title=LangString.create(u"vote session fixture", "en"),
-        sub_title=LangString.create(u"vote session sub title fixture", "en"),
-        instructions_section_title=LangString.create(u"vote session instructions title fixture", "en"),
-        instructions_section_content=LangString.create(u"vote session instructions fixture. Lorem ipsum dolor sit amet", "en"),
+        idea=subidea_1_1,
         propositions_section_title=LangString.create(u"vote session propositions section title fixture", "en")
-    )
-    attachment = VoteSessionAttachment(
-        discussion=discussion,
-        document=simple_file,
-        vote_session=vote_session,
-        title=u"vote session image fixture",
-        creator=admin_user,
-        attachmentPurpose='IMAGE'
     )
 
     test_session.add(vote_session)
-    test_session.add(attachment)
-    test_session.flush()
-
-    root_thematic = create_root_thematic(vote_session.discussion_phase)
     test_session.flush()
 
     def fin():
         print "finalizer vote_session"
-        # header_image may have been replaced by another one in a test
-        # so be sure to remove attachments, not header_image
-        with test_session.no_autoflush as db:
-            for attachment in list(vote_session.attachments):
-                if attachment.document != simple_file:
-                    attachment.document.delete()
-                attachment.delete()
-
-            db.delete(root_thematic)
-            db.delete(vote_session)
-            db.flush()
+        test_session.delete(vote_session)
+        test_session.flush()
 
     request.addfinalizer(fin)
     return vote_session
@@ -188,14 +162,11 @@ def vote_proposal(request, test_session, discussion, graphql_request, vote_sessi
         ]
     })
     assert res.errors is None
-    from assembl.graphql.utils import get_root_thematic_for_phase
-    root_thematic = get_root_thematic_for_phase(vote_session.discussion_phase)
-    proposal = root_thematic.children[0]
+    proposal = vote_session.idea.children[0]
 
     def fin():
         print "finalizer vote_proposal"
         test_session.delete(proposal)
-        test_session.delete(root_thematic)
         test_session.flush()
 
     request.addfinalizer(fin)

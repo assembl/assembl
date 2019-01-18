@@ -1,4 +1,4 @@
-#import "./fragments/VoteSession.graphql"
+#import "./fragments/LangString.graphql"
 #import "./fragments/AgentProfileInfo.graphql"
 
 fragment tokenVoteSpecification on TokenVoteSpecification {
@@ -107,15 +107,13 @@ fragment gaugeVoteSpecificationResults on GaugeVoteSpecification {
   averageResult
 }
 
-query VoteSession($discussionPhaseId: Int!, $lang: String!) {
-  voteSession(discussionPhaseId: $discussionPhaseId) {
+query VoteSession($ideaId: ID!, $lang: String!) {
+  voteSession(ideaId: $ideaId) {
     id
-    ...voteSessionGlobals
-    ...voteSessionLangstringsEntries
-    title(lang: $lang)
-    subTitle(lang: $lang)
-    instructionsSectionTitle(lang: $lang)
-    instructionsSectionContent(lang: $lang)
+    seeCurrentVotes
+    propositionsSectionTitleEntries {
+      ...langStringEntry
+    }
     propositionsSectionTitle(lang: $lang)
     proposals {
       ... on Idea {

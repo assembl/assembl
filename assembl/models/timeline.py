@@ -30,13 +30,6 @@ class Phases(Enum):
     brightMirror = 'brightMirror'
 
 
-PHASES_WITH_POSTS = [
-    Phases.survey.value,
-    Phases.thread.value,
-    Phases.multiColumns.value
-]
-
-
 def get_phase_by_identifier(discussion, identifier):
     filtered_phases = [phase for phase in discussion.timeline_events
                        if phase.identifier == identifier]
@@ -191,7 +184,11 @@ class DiscussionPhase(TimelineEvent):
     interface_v1 = Column(Boolean, server_default='false', default=False)
     root_idea_id = Column(
         Integer,
-        ForeignKey('idea.id', onupdate="CASCADE", ondelete="SET NULL"))
+        # The delete should cascade; wait until all phases have an idea.
+        # Needs to be a smart trigger, because we want to delete on TimelineEvent
+        ForeignKey('idea.id', onupdate="CASCADE", ondelete='SET NULL'),
+        unique=True,
+        nullable=True)  # This is temporary
     root_idea = relationship(
         Idea,
         backref=backref('discussion_phase', uselist=False),

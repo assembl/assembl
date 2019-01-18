@@ -3,8 +3,8 @@ from sqlalchemy import desc
 from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
-from assembl.models.timeline import (
-    Phases, PHASES_WITH_POSTS, get_phase_by_identifier)
+from assembl.models.idea import MessageView
+from assembl.models.timeline import Phases
 from assembl.graphql.utils import get_root_thematic_for_phase
 
 
@@ -47,7 +47,6 @@ def get_descendants(ideas):
 
 
 def get_ideas(phase, options=None):
-    phase_identifier = phase.identifier
     root_thematic = get_root_thematic_for_phase(phase)
     discussion = phase.discussion
     if root_thematic is None:
@@ -69,7 +68,7 @@ def get_ideas(phase, options=None):
     query = query.outerjoin(
             models.Idea.source_links
         ).filter(
-            model.sqla_type != 'question',
+            ~model.sqla_type.in_(('question', 'vote_proposal')),
             model.hidden == False,  # noqa: E712
             model.tombstone_date == None  # noqa: E711
         ).options(
@@ -80,50 +79,29 @@ def get_ideas(phase, options=None):
     if options is not None:
         query = query.options(*options)
 
-    if phase_identifier == Phases.multiColumns.value:
-        # Filter out ideas that don't have columns.
-        query = query.filter(
-            models.Idea.message_view_override == 'messageColumns')
-
     return query
 
 
 def get_posts_for_phases(
         discussion, identifiers, include_deleted=False, include_moderating=None):
-    """Return related posts for the given phases `identifiers` on `discussion`.
+    """Return related posts for the ideas with module type in `identifiers` on `discussion`.
     """
-    # Retrieve the phases with posts
-    identifiers_with_posts = [i for i in identifiers if i in PHASES_WITH_POSTS]
-    if not discussion or not identifiers_with_posts:
+    if not discussion:
         return None
 
+    module_types = identifiers[:]
+    if Phases.multiColumns.value in module_types:
+        # backward compatibility with bluenove-actionable
+        module_types.remove(Phases.multiColumns.value)
+        module_types.append(MessageView.messageColumns.value)
+
     ideas = []
-    # If survey phase, we need the root thematic
-    if Phases.survey.value in identifiers_with_posts:
-        survey_phase = get_phase_by_identifier(discussion, Phases.survey.value)
-        if survey_phase:
-            root_thematic = get_root_thematic_for_phase(survey_phase)
-            if root_thematic:
-                ideas.append(root_thematic)
-
-        identifiers_with_posts.remove(Phases.survey.value)
-
-    if identifiers_with_posts:
-        # If we have both 'thread' and 'multiColumns' in identifiers_with_posts
-        # use get_ideas with 'thread' phase to get all ideas.
-        # If only 'multiColumns' in identifiers_with_posts, use 'multiColumns' phase.
-        # Ideas from 'multiColumns' phase are a subset of the ideas
-        # from 'thread' phase
-        is_multi_columns = Phases.multiColumns.value in identifiers_with_posts and \
-            len(identifiers_with_posts) == 1
-        if is_multi_columns:
-            multi_columns_phase = get_phase_by_identifier(discussion, Phases.multiColumns.value)
-            if multi_columns_phase:
-                ideas.extend(get_ideas(multi_columns_phase).all())
-        else:
-            thread_phase = get_phase_by_identifier(discussion, Phases.thread.value)
-            if thread_phase:
-                ideas.extend(get_ideas(thread_phase).all())
+    for phase in discussion.timeline_events:
+        root_thematic = get_root_thematic_for_phase(phase)
+        if root_thematic is not None:
+            ideas_query = get_ideas(phase)
+            ideas.extend(ideas_query.filter(
+                models.Idea.message_view_override.in_(module_types)).all())
 
     if not ideas:
         return None

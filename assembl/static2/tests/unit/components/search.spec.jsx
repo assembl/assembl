@@ -64,6 +64,7 @@ describe('Hits components', () => {
             idea_id: ['fakeIdeaId', 'otherFakeIdeaId'],
             phase_id: 1,
             phase_identifier: 'thread',
+            message_view_override: 'thread',
             id: 'fakePostId',
             sentiment_counts: {
               like: 2,
@@ -111,7 +112,8 @@ describe('Hits components', () => {
             num_contributors: 42,
             id: 456,
             phase_id: 1,
-            phase_identifier: 'thread'
+            phase_identifier: 'thread',
+            message_view_override: 'thread'
           }
         }
       };
@@ -215,6 +217,7 @@ describe('Hits components', () => {
             idea_id: 'fakeIdeaId',
             phase_id: 1,
             phase_identifier: 'thread',
+            message_view_override: 'thread',
             post_id: 'fakePostId',
             idea_title_en: 'Interesting thematic'
           }

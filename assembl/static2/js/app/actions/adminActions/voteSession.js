@@ -2,39 +2,9 @@
 import * as actionTypes from '../actionTypes';
 import { createRandomId } from '../../utils/globalFunctions';
 
-export const updateVoteSessionPageTitle = (locale: string, value: string): actionTypes.UpdateVoteSessionPageTitle => ({
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_VOTE_SESSION_PAGE_TITLE
-});
-
 export const updateVoteSessionPageSeeCurrentVotes = (value: string): actionTypes.UpdateVoteSessionPageSeeCurrentVotes => ({
   value: value,
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES
-});
-
-export const updateVoteSessionPageSubtitle = (locale: string, value: string): actionTypes.UpdateVoteSessionPageSubtitle => ({
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_VOTE_SESSION_PAGE_SUBTITLE
-});
-
-export const updateVoteSessionPageInstructionsTitle = (
-  locale: string,
-  value: string
-): actionTypes.UpdateVoteSessionPageInstructionsTitle => ({
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE
-});
-
-export const updateVoteSessionPageInstructionsContent = (
-  locale: string,
-  value: string
-): actionTypes.UpdateVoteSessionPageInstructionsContent => ({
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT
 });
 
 export const updateVoteSessionPagePropositionsTitle = (
@@ -44,11 +14,6 @@ export const updateVoteSessionPagePropositionsTitle = (
   locale: locale,
   value: value,
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE
-});
-
-export const updateVoteSessionHeaderImage = (value: File): actionTypes.UpdateVoteSessionHeaderImage => ({
-  value: value,
-  type: actionTypes.UPDATE_VOTE_SESSION_PAGE_IMAGE
 });
 
 export const updateVoteModules = (voteModules: actionTypes.VoteModulesArray): actionTypes.UpdateVoteModules => ({
@@ -199,13 +164,8 @@ export const updateGaugeUnit = (id: string, value: string): actionTypes.UpdateGa
 
 export const updateVoteSessionPage = (value: Object): actionTypes.UpdateVoteSessionPage => ({
   id: value.id,
-  titleEntries: value.titleEntries,
   seeCurrentVotes: value.seeCurrentVotes,
-  subTitleEntries: value.subTitleEntries,
-  instructionsSectionTitleEntries: value.instructionsSectionTitleEntries,
-  instructionsSectionContentEntries: value.instructionsSectionContentEntries,
   propositionsSectionTitleEntries: value.propositionsSectionTitleEntries,
-  headerImage: value.headerImage,
   type: actionTypes.UPDATE_VOTE_SESSION_PAGE
 });
 

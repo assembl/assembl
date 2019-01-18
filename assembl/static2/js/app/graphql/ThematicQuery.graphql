@@ -1,25 +1,10 @@
 query ThematicQuery($lang: String!, $id: ID!) {
   thematic: node(id: $id) {
-    ... on Thematic {
-      title(lang: $lang)
-      img {
-        externalUrl
-        mimeType
-      }
+    ... on Idea {
       id
       numPosts
       numContributors
       totalSentiments
-      video(lang: $lang) {
-        title
-        descriptionTop
-        descriptionBottom
-        descriptionSide
-        htmlCode
-        mediaFile {
-          externalUrl
-        }
-      }
       questions {
         ... on Question {
           title(lang: $lang)

@@ -76,6 +76,7 @@ export const removeMenuItem = (id: string, client: ApolloClient, variables: Quer
   client.writeQuery({
     ...query,
     data: {
+      ...data,
       thematicsData: data.thematicsData.filter(t => t.id !== id)
     }
   });
@@ -102,6 +103,7 @@ export const addMenuItem = (id: string, parentId: string, index: number, client:
   client.writeQuery({
     ...query,
     data: {
+      ...data,
       thematicsData: [...data.thematicsData, newMenuItem]
     }
   });
@@ -147,13 +149,14 @@ export const swapMenuItem = (
   client.writeQuery({
     ...query,
     data: {
+      ...data,
       thematicsData: newThematics
     }
   });
 };
 
 const ThematicsMenuItems = ({ roots, descendants, slug, phase, indexes, sectionQuery, ...menuProps }: ThematicsMenuItemProps) =>
-  sortBy(roots, 'order').map((thematic, index) => {
+  roots.map((thematic, index) => {
     const subIndexes = [...indexes];
     subIndexes.push(index + 1);
     const subMenuTree = getPartialTreeByParentId(thematic.id, descendants);
@@ -201,8 +204,6 @@ ThematicsMenuItems.defaultProps = {
   indexes: []
 };
 
-const sortThematics = (items: Array<Thematic>): Array<Thematic> => sortBy(items, 'order');
-
 const ThematicsMenu = ({
   slug,
   phase,
@@ -212,11 +213,12 @@ const ThematicsMenu = ({
   location
 }: ThematicsMenuProps & Props) => {
   if (!thematicsData) return null;
+  const orderedThematicsData = sortBy(thematicsData, 'order');
   const sectionIndex = rootSectionId ? `${rootSectionId}.${menuItem.sectionId}` : menuItem.sectionId;
   const sectionQuery = { section: sectionIndex };
-  const { roots, descendants } = getPartialTreeByParentId(rootIdea && rootIdea.id, thematicsData);
+  const { roots, descendants } = getPartialTreeByParentId(rootIdea && rootIdea.id, orderedThematicsData);
   if (roots.length === 0) return null;
-  const firstThematic = sortBy(roots, 'order')[0];
+  const firstThematic = roots[0];
   const firstThematicLink = `${get(
     'administration',
     { ...slug, id: phase.identifier },
@@ -226,9 +228,9 @@ const ThematicsMenu = ({
   const openedPath = [];
   if (sectionIndex === section) {
     openedPath.push(0);
-    const requestThematic = thematicsData.find(t => t.id === thematicId) || null;
+    const requestThematic = orderedThematicsData.find(t => t.id === thematicId) || null;
     if (requestThematic) {
-      openedPath.push(...getPath(requestThematic, thematicsData, sortThematics));
+      openedPath.push(...getPath(requestThematic, orderedThematicsData));
     }
   }
   return (

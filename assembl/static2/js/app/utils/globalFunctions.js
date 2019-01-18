@@ -3,9 +3,7 @@ import moment from 'moment';
 import type Moment from 'moment';
 import { type Map } from 'immutable';
 
-import { getDisplayedPhaseIdentifier } from './timeline';
-
-import { HARVESTABLE_PHASES, ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION, PublicationStates } from '../constants';
+import { ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION, PublicationStates } from '../constants';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
@@ -286,10 +284,6 @@ export const moveItemDown = (itemsById: ItemsById, id: string): ItemsById => {
   });
   return newItemsById;
 };
-
-export function isHarvestable(params: RouterParams) {
-  return HARVESTABLE_PHASES.includes(getDisplayedPhaseIdentifier(params));
-}
 
 export function fromGlobalId(id: string): string | null {
   return id ? atob(id).split(':')[1] : null;

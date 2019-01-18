@@ -30,13 +30,14 @@ from .types import SecureObjectType, SQLAlchemyUnion
 from .user import AgentProfile
 from .utils import (
     abort_transaction_on_exception, get_fields, get_root_thematic_for_phase,
-    create_root_thematic, get_attachment_with_purpose, create_attachment,
-    update_attachment, create_idea_announcement)
+    create_root_thematic, create_attachment,
+    update_attachment, create_idea_announcement, get_attachments_with_purpose)
 import assembl.graphql.docstrings as docs
 
 
 EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
 MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
+ANNOUNCEMENT_BODY_ATTACHMENT = models.AttachmentPurpose.ANNOUNCEMENT_BODY_ATTACHMENT.value
 
 
 class TagResult(graphene.ObjectType):
@@ -50,20 +51,6 @@ class SentimentAnalysisResult(graphene.ObjectType):
     positive = graphene.Float(description=docs.SentimentAnalysisResult.positive)
     negative = graphene.Float(description=docs.SentimentAnalysisResult.negative)
     count = graphene.Int(description=docs.SentimentAnalysisResult.count)
-
-
-class Video(graphene.ObjectType):
-    __doc__ = docs.Video.__doc__
-    title = graphene.String(description=docs.Video.title)
-    description_top = graphene.String(description=docs.Video.description_top)
-    description_bottom = graphene.String(description=docs.Video.description_bottom)
-    description_side = graphene.String(description=docs.Video.description_side)
-    html_code = graphene.String(description=docs.Video.html_code)
-    title_entries = graphene.List(LangStringEntry, description=docs.Video.title_entries)
-    description_entries_top = graphene.List(LangStringEntry, description=docs.Video.description_entries_top)
-    description_entries_bottom = graphene.List(LangStringEntry, description=docs.Video.description_entries_bottom)
-    description_entries_side = graphene.List(LangStringEntry, description=docs.Video.description_entries_side)
-    media_file = graphene.Field(Document, description=docs.Video.media_file)
 
 
 class IdeaInterface(graphene.Interface):
@@ -88,8 +75,12 @@ class IdeaInterface(graphene.Interface):
         required=True, description=docs.IdeaInterface.vote_specifications)
     type = graphene.String(description=docs.IdeaInterface.type)
     parent_id = graphene.ID(description=docs.Idea.parent_id)
+    parent = graphene.Field(lambda: IdeaUnion, description=docs.Idea.parent)
     ancestors = graphene.List(graphene.ID, description=docs.Idea.ancestors)
     children = graphene.List(lambda: IdeaUnion, description=docs.Idea.children)
+    questions = graphene.List(lambda: Question, description=docs.Idea.questions)
+    announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
+    message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -136,22 +127,17 @@ class IdeaInterface(graphene.Interface):
         return self.get_order_from_first_parent()
 
     def resolve_num_children(self, args, context, info):
-        phase_id = args.get('discussion_phase_id')
-        phase = models.DiscussionPhase.get(phase_id)
-        if phase.identifier == Phases.multiColumns.value:
-            _it = models.Idea.__table__
-            _ilt = models.IdeaLink.__table__
-            _target_it = models.Idea.__table__.alias()
-            j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
-                     ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
-            num = select([func.count(_ilt.c.id)]).select_from(j).where(
-                (_ilt.c.tombstone_date == None) & (_it.c.tombstone_date == None) & (  # noqa: E711
-                    _it.c.id == self.id) & (_target_it.c.message_view_override == 'messageColumns')
+        _it = models.Idea.__table__
+        _ilt = models.IdeaLink.__table__
+        _target_it = models.Idea.__table__.alias()
+        j = join(_ilt, _it, _ilt.c.source_id == _it.c.id
+                 ).join(_target_it, _ilt.c.target_id == _target_it.c.id)
+        num = select([func.count(_ilt.c.id)]).select_from(j).where(
+            (_ilt.c.tombstone_date == None) & (_it.c.tombstone_date == None) & (  # noqa: E711
+                _it.c.id == self.id) & (_target_it.c.tombstone_date == None) & (~_target_it.c.sqla_type.in_(('question', 'vote_proposal')))
 
-            ).correlate_except(_ilt)
-            return self.db.execute(num).fetchone()[0]
-
-        return self.num_children
+        ).correlate_except(_ilt)
+        return self.db.execute(num).fetchone()[0]
 
     def resolve_vote_specifications(self, args, context, info):
         return self.criterion_for
@@ -169,6 +155,12 @@ class IdeaInterface(graphene.Interface):
         parent = self.parents[0]
         return parent.graphene_id() if parent else None
 
+    def resolve_parent(self, args, context, info):
+        if not self.parents:
+            return None
+
+        return self.parents[0]
+
     def resolve_ancestors(self, args, context, info):
         # We use id_only=True and models.Idea.get on purpose, to
         # use a simpler ancestors query and use Idea identity map.
@@ -177,7 +169,13 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_children(self, args, context, info):
         # filter on child.hidden to not include the root thematic in the children of root_idea  # noqa: E501
-        return [child for child in self.get_children() if not child.hidden]
+        return [child for child in self.get_children() if not child.hidden and not isinstance(child, (models.Question, models.VoteProposal))]
+
+    def resolve_questions(self, args, context, info):
+        return [child for child in self.get_children() if isinstance(child, models.Question)]
+
+    def resolve_announcement(self, args, context, info):
+        return self.get_applicable_announcement()
 
 
 class IdeaAnnouncementInput(graphene.InputObjectType):
@@ -185,6 +183,7 @@ class IdeaAnnouncementInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaAnnouncement.title_entries)
     body_attachments = graphene.List(graphene.String, description=docs.IdeaAnnouncement.body_attachments)
     body_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaAnnouncement.body_entries)
+    quote_entries = graphene.List(LangStringEntryInput, required=False, description=docs.IdeaAnnouncement.quote_entries)
 
 
 class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
@@ -200,6 +199,8 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
     body = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.body)
     body_attachments = graphene.List(Attachment, required=False, description=docs.IdeaAnnouncement.body_attachments)
     body_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaAnnouncement.body_entries)
+    quote = graphene.String(lang=graphene.String(), description=docs.IdeaAnnouncement.quote)
+    quote_entries = graphene.List(LangStringEntry, required=False, description=docs.IdeaAnnouncement.quote_entries)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -211,11 +212,16 @@ class IdeaAnnouncement(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring(self.body, args.get('lang'))
 
     def resolve_body_attachments(self, args, context, info):
-        # TODO:
-        return []
+        return get_attachments_with_purpose(self.idea.attachments, ANNOUNCEMENT_BODY_ATTACHMENT)
 
     def resolve_body_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'body')
+
+    def resolve_quote(self, args, context, info):
+        return resolve_langstring(self.quote, args.get('lang'))
+
+    def resolve_quote_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'quote')
 
 
 class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
@@ -229,7 +235,9 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     index = graphene.Int(description=docs.IdeaMessageColumn.index)
     idea = graphene.Field(lambda: Idea, description=docs.IdeaMessageColumn.idea)
     name = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumn.name)
+    name_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaMessageColumn.name_entries)
     title = graphene.String(lang=graphene.String(), description=docs.IdeaMessageColumn.title)
+    title_entries = graphene.List(LangStringEntry, required=True, description=docs.IdeaMessageColumn.title_entries)
     column_synthesis = graphene.Field('assembl.graphql.post.Post', description=docs.IdeaMessageColumn.column_synthesis)
     num_posts = graphene.Int(description=docs.IdeaMessageColumn.num_posts)
 
@@ -240,8 +248,14 @@ class IdeaMessageColumn(SecureObjectType, SQLAlchemyObjectType):
     def resolve_name(self, args, context, info):
         return resolve_langstring(self.name, args.get('lang'))
 
+    def resolve_name_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'name')
+
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
+
+    def resolve_title_entries(self, args, context, info):
+        return resolve_langstring_entries(self, 'title')
 
     def resolve_column_synthesis(self, args, context, info):
         return self.get_column_synthesis()
@@ -281,8 +295,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
     posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts)  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
-    announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
-    message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
     def resolve_vote_results(self, args, context, info):
@@ -311,11 +323,11 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         # will try to know the object type from the SA object.
         # It actually iterate over all registered object types and return
         # the first one where is_type_of return True.
-        # And here we have in the following order Idea, Question, Thematic.
-        # So a node query on a Thematic or Question was returning the Idea object type.  # noqa: E501
+        # And here we have in the following order Idea, Question.
+        # So a node query on a Question was returning the Idea object type.  # noqa: E501
         # Here we fix the issue by overriding the is_type_of method
         # for the Idea type to do a type comparison so that
-        # models.Question/models.Thematic which
+        # models.Question which
         # inherits from models.Idea doesn't return true
         if isinstance(root, cls):
             return True
@@ -324,7 +336,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 'Received incompatible instance "{}".'
             ).format(root))
         # return isinstance(root, cls._meta.model)  # this was the original code  # noqa: E501
-        return type(root) == cls._meta.model or type(root) == models.RootIdea
+        return type(root) == cls._meta.model or type(root) == models.VoteProposal or type(root) == models.RootIdea
 
     def resolve_synthesis_title(self, args, context, info):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
@@ -418,9 +430,6 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             cid) for cid in contributor_ids]
         return contributors
 
-    def resolve_announcement(self, args, context, info):
-        return self.get_applicable_announcement()
-
 
 class Question(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.Question.__doc__
@@ -440,15 +449,9 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         from_node=graphene.ID(),
         isModerating=graphene.Boolean(),
         description=docs.Question.posts)
-    thematic = graphene.Field(lambda: Thematic, description=docs.Question.thematic)
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
+    parent = graphene.Field(lambda: IdeaUnion, description=docs.Idea.parent)
     has_pending_posts = graphene.Boolean(description=docs.Question.has_pending_posts)
-
-    def resolve_thematic(self, args, context, info):
-        parents = self.get_parents()
-        if not parents:
-            return None
-        return parents[0]
 
     def resolve_title(self, args, context, info):
         title = resolve_langstring(self.title, args.get('lang'))
@@ -559,6 +562,12 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
     def resolve_total_sentiments(self, args, context, info):
         return self.get_total_sentiments()
 
+    def resolve_parent(self, args, context, info):
+        if not self.parents:
+            return None
+
+        return self.parents[0]
+
     def resolve_has_pending_posts(self, args, context, info):
         Post = models.Post
         related = self.get_related_posts_query(True)
@@ -571,72 +580,16 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         return pending_count > 0
 
 
-class Thematic(SecureObjectType, SQLAlchemyObjectType):
-    __doc__ = docs.Thematic.__doc__
-
-    class Meta:
-        model = models.Thematic
-        interfaces = (Node, IdeaInterface)
-        only_fields = ('id', )
-
-    questions = graphene.List(Question, description=docs.Thematic.questions)
-    video = graphene.Field(Video, lang=graphene.String(), description=docs.Thematic.video)
-
-    def resolve_questions(self, args, context, info):
-        return self.get_children()
-
-    def resolve_video(self, args, context, info):
-        title = resolve_langstring(self.video_title, args.get('lang'))
-        title_entries = resolve_langstring_entries(self, 'video_title')
-        description_top = resolve_langstring(self.video_description_top,
-                                             args.get('lang'))
-        description_bottom = resolve_langstring(self.video_description_bottom,
-                                                args.get('lang'))
-        description_side = resolve_langstring(self.video_description_side,
-                                              args.get('lang'))
-        description_entries_top = resolve_langstring_entries(
-            self, 'video_description_top')
-        description_entries_bottom = resolve_langstring_entries(
-            self, 'video_description_bottom')
-        description_entries_side = resolve_langstring_entries(
-            self, 'video_description_side')
-
-        media_file = get_attachment_with_purpose(self.attachments, MEDIA_ATTACHMENT)
-
-        if not (title_entries or
-                description_entries_top or
-                description_entries_bottom or
-                description_entries_side or
-                self.video_html_code or
-                media_file):
-            return None
-
-        return Video(
-            title=title,
-            title_entries=title_entries,
-            description_top=description_top,
-            description_bottom=description_bottom,
-            description_side=description_side,
-            description_entries_top=description_entries_top,
-            description_entries_bottom=description_entries_bottom,
-            description_entries_side=description_entries_side,
-            html_code=self.video_html_code,
-            media_file=media_file and media_file.document
-        )
-
-
 class IdeaUnion(SQLAlchemyUnion):
 
     class Meta:
-        types = (Idea, Thematic)
+        types = (Idea, )
         model = models.Idea
 
     @classmethod
     def resolve_type(cls, instance, context, info):
         if isinstance(instance, graphene.ObjectType):
             return type(instance)
-        elif isinstance(instance, models.Thematic):  # must be above Idea
-            return Thematic
         elif isinstance(instance, models.Idea):
             return Idea
 
@@ -647,27 +600,64 @@ class QuestionInput(graphene.InputObjectType):
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.QuestionInput.title_entries)
 
 
-class VideoInput(graphene.InputObjectType):
-    __doc__ = docs.VideoInput.__doc__
-    title_entries = graphene.List(LangStringEntryInput, description=docs.VideoInput.title_entries)
-    description_top_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_top_attachments)
-    description_bottom_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_bottom_attachments)
-    description_side_attachments = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_side_attachments)
-    description_entries_top = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_top)
-    description_entries_bottom = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_bottom)
-    description_entries_side = graphene.List(LangStringEntryInput, description=docs.VideoInput.description_entries_side)
-    html_code = graphene.String(description=docs.VideoInput.html_code)
-    media_file = graphene.String(description=docs.VideoInput.media_file)
+class IdeaMessageColumnInput(graphene.InputObjectType):
+    __doc__ = docs.IdeaMessageColumnInput.__doc__
+    id = graphene.ID(description=docs.IdeaMessageColumnInput.id)
+    name_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaMessageColumnInput.name_entries)
+    title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.IdeaMessageColumnInput.title_entries)
+    color = graphene.String(required=True, description=docs.IdeaMessageColumnInput.color)
+    message_classifier = graphene.String(description=docs.IdeaMessageColumnInput.message_classifier)
+    column_synthesis_subject = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis_subject)
+    column_synthesis_body = graphene.List(LangStringEntryInput, description=docs.IdeaMessageColumnInput.column_synthesis_body)
+
+
+def update_announcement_body_attachments(context, idea, discussion, new_attachments, purpose):
+    """Create, update, delete announcement body attachments."""
+    original_ln_attachments = get_attachments_with_purpose(
+        idea.attachments, purpose)
+    original_attachments_doc_ids = []
+    if original_ln_attachments:
+        original_attachments_doc_ids = [
+            str(a.document_id) for a in original_ln_attachments]
+
+    for document_id in new_attachments:
+        if document_id not in original_attachments_doc_ids:
+            attachment = create_attachment(
+                discussion,
+                models.IdeaAttachment,
+                purpose,
+                context,
+                document_id=document_id
+            )
+            attachment.idea = idea
+
+    # delete attachments that has been removed
+    documents_to_delete = set(original_attachments_doc_ids) - set(new_attachments)
+    for document_id in documents_to_delete:
+        with models.Discussion.default_db.no_autoflush:
+            document = models.Document.get(document_id)
+            attachments = discussion.db.query(
+                models.IdeaAttachment
+            ).filter_by(
+                attachmentPurpose=purpose,
+                discussion_id=discussion.id,
+                document_id=document_id,
+                idea_id=idea.id
+            ).all()
+            document.delete_file()
+            discussion.db.delete(document)
+            for attachment in attachments:
+                idea.attachments.remove(attachment)
 
 
 def create_idea(parent_idea, phase, args, context):
     cls = models.Idea
-    phase_identifier = phase.identifier
     message_view_override = args.get('message_view_override')
-    is_survey_thematic = phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value
-    if is_survey_thematic:
-        cls = models.Thematic
+    if message_view_override is None:
+        message_view_override = MessageView.noModule.value
 
+    is_survey_thematic = message_view_override == MessageView.survey.value
+    is_multicolumns = message_view_override == MessageView.messageColumns.value
     discussion_id = context.matchdict['discussion_id']
     discussion = models.Discussion.get(discussion_id)
     user_id = context.authenticated_userid or Everyone
@@ -682,7 +672,7 @@ def create_idea(parent_idea, phase, args, context):
         title_entries = args.get('title_entries')
         if len(title_entries) == 0:
             raise Exception(
-                'Thematic titleEntries needs at least one entry')
+                'Idea titleEntries needs at least one entry')
             # Better to have this message than
             # 'NoneType' object has no attribute 'owner_object'
             # when creating the saobj below if title=None
@@ -696,40 +686,10 @@ def create_idea(parent_idea, phase, args, context):
 
         kwargs['message_view_override'] = message_view_override
 
-        video = args.get('video')
-        video_media = None
-        if video is not None:
-            video_title = langstring_from_input_entries(
-                video.get('title_entries', None))
-            if video_title is not None:
-                kwargs['video_title'] = video_title
-
-            video_description_top = langstring_from_input_entries(
-                video.get('description_entries_top', None))
-            if video_description_top is not None:
-                kwargs['video_description_top'] = video_description_top
-
-            video_description_bottom = langstring_from_input_entries(
-                video.get('description_entries_bottom', None))
-            if video_description_bottom is not None:
-                kwargs[
-                    'video_description_bottom'] = video_description_bottom
-
-            video_description_side = langstring_from_input_entries(
-                video.get('description_entries_side', None))
-            if video_description_side is not None:
-                kwargs[
-                    'video_description_side'] = video_description_side
-
-            video_html_code = video.get('html_code', None)
-            if video_html_code is not None:
-                kwargs['video_html_code'] = video_html_code
-
-            video_media = video.get('media_file', None)
-
         saobj = cls(
             discussion_id=discussion_id,
             discussion=discussion,
+            messages_in_parent=False,
             title=title_langstring,
             **kwargs)
         db.add(saobj)
@@ -747,8 +707,15 @@ def create_idea(parent_idea, phase, args, context):
 
             announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
             announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
-            saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring)
+            announcement_quote_langstring = langstring_from_input_entries(announcement.get('quote_entries', None))
+            saobj2 = create_idea_announcement(user_id, discussion, saobj, announcement_title_langstring, announcement_body_langstring, announcement_quote_langstring)
             db.add(saobj2)
+            update_announcement_body_attachments(
+                context,
+                saobj,
+                discussion,
+                announcement.get('body_attachments', []),
+                ANNOUNCEMENT_BODY_ATTACHMENT)
 
         # add uploaded image as an attachment to the idea
         image = args.get('image')
@@ -759,18 +726,6 @@ def create_idea(parent_idea, phase, args, context):
                 EMBED_ATTACHMENT,
                 context,
                 new_value=image
-            )
-            new_attachment.idea = saobj
-            db.add(new_attachment)
-
-        # add uploaded image as an attachment to the idea
-        if video_media is not None:
-            new_attachment = create_attachment(
-                discussion,
-                models.IdeaAttachment,
-                MEDIA_ATTACHMENT,
-                context,
-                new_value=video_media
             )
             new_attachment.idea = saobj
             db.add(new_attachment)
@@ -789,8 +744,42 @@ def create_idea(parent_idea, phase, args, context):
                     db.add(
                         models.IdeaLink(source=saobj, target=question,
                                         order=idx + 1.0))
-        else:
-            update_ideas_recursively(saobj, args.get('children', []), phase, context)
+        if is_multicolumns:
+            message_columns = args.get('message_columns')
+            previous_column = None
+            if message_columns is not None:
+                for index, column in enumerate(message_columns):
+                    name = langstring_from_input_entries(column['name_entries'])
+                    message_classifier = column.get('message_classifier', None)
+                    if not message_classifier:
+                        message_classifier = u'column{}'.format(index + 1)
+
+                    title = langstring_from_input_entries(column['title_entries'])
+                    color = column['color']
+                    body = langstring_from_input_entries(column['column_synthesis_body'])
+                    subject = langstring_from_input_entries(column['column_synthesis_subject'])
+                    sacolumn = models.IdeaMessageColumn(
+                        message_classifier=message_classifier,
+                        name=name,
+                        title=title,
+                        color=color,
+                        previous_column=previous_column)
+                    saobj.message_columns.append(sacolumn)
+                    synthesis = models.ColumnSynthesisPost(
+                        message_classifier=message_classifier,
+                        discussion_id=discussion_id,
+                        subject=subject if subject else models.LangString.EMPTY(),
+                        body=body if body else models.LangString.EMPTY()
+                    )
+                    db.add(synthesis)
+                    db.add(models.IdeaRelatedPostLink(
+                        creator_id=user_id,
+                        content=synthesis,
+                        idea=saobj
+                    ))
+                    previous_column = sacolumn
+
+        update_ideas_recursively(saobj, args.get('children', []), phase, context)
 
     db.flush()
     return saobj
@@ -808,9 +797,9 @@ def update_idea(args, phase, context):
     if phase is None:  # UpdateThematic doesn't give phase
         phase = thematic.get_associated_phase()
 
-    phase_identifier = phase.identifier
     message_view_override = args.get('message_view_override')
-    is_survey_thematic = phase_identifier == Phases.survey.value or message_view_override == MessageView.survey.value
+    is_survey_thematic = message_view_override == MessageView.survey.value
+    is_multicolumns = message_view_override == MessageView.messageColumns.value
 
     permissions = get_permissions(user_id, discussion_id)
     allowed = thematic.user_can(
@@ -824,7 +813,7 @@ def update_idea(args, phase, context):
         title_entries = args.get('title_entries')
         if title_entries is not None and len(title_entries) == 0:
             raise Exception(
-                'Thematic titleEntries needs at least one entry')
+                'Idea titleEntries needs at least one entry')
             # Better to have this message than
             # 'NoneType' object has no attribute 'owner_object'
             # when creating the saobj below if title=None
@@ -834,33 +823,6 @@ def update_idea(args, phase, context):
         update_langstring_from_input_entries(
             thematic, 'description', args.get('description_entries'))
         kwargs = {}
-        video = args.get('video', None)
-        if video is not None:
-            update_langstring_from_input_entries(
-                thematic, 'video_title', video.get('title_entries', []))
-            update_langstring_from_input_entries(
-                thematic, 'video_description_top',
-                video.get('description_entries_top', []))
-            update_langstring_from_input_entries(
-                thematic, 'video_description_bottom',
-                video.get('description_entries_bottom', []))
-            update_langstring_from_input_entries(
-                thematic, 'video_description_side',
-                video.get('description_entries_side', []))
-            kwargs['video_html_code'] = video.get('html_code', None)
-
-            video_media = video.get('media_file', None)
-            if video_media:
-                update_attachment(
-                    discussion,
-                    models.IdeaAttachment,
-                    video_media,
-                    thematic.attachments,
-                    MEDIA_ATTACHMENT,
-                    db,
-                    context
-                )
-
         kwargs['message_view_override'] = message_view_override
 
         for attr, value in kwargs.items():
@@ -894,19 +856,29 @@ def update_idea(args, phase, context):
             if not thematic.announcement:
                 announcement_title_langstring = langstring_from_input_entries(announcement_title_entries)
                 announcement_body_langstring = langstring_from_input_entries(announcement.get('body_entries', None))
-                saobj2 = create_idea_announcement(user_id, discussion, thematic, announcement_title_langstring, announcement_body_langstring)
+                announcement_quote_langstring = langstring_from_input_entries(announcement.get('quote_entries', None))
+                saobj2 = create_idea_announcement(user_id, discussion, thematic, announcement_title_langstring, announcement_body_langstring, announcement_quote_langstring)
                 db.add(saobj2)
             else:
                 update_langstring_from_input_entries(
                     thematic.announcement, 'title', announcement_title_entries)
                 update_langstring_from_input_entries(
                     thematic.announcement, 'body', announcement.get('body_entries', None))
+                update_langstring_from_input_entries(
+                    thematic.announcement, 'quote', announcement.get('quote_entries', None))
                 thematic.announcement.last_updated_by_id = user_id
 
+            update_announcement_body_attachments(
+                context,
+                thematic,
+                discussion,
+                announcement.get('body_attachments', []),
+                ANNOUNCEMENT_BODY_ATTACHMENT)
+
+        existing_questions = {
+            question.id: question for question in thematic.get_children() if isinstance(question, models.Question)}
         if is_survey_thematic:
             questions_input = args.get('questions')
-            existing_questions = {
-                question.id: question for question in thematic.get_children()}
             updated_questions = set()
             if questions_input is not None:
                 for idx, question_input in enumerate(questions_input):
@@ -936,7 +908,70 @@ def update_idea(args, phase, context):
                                        ).difference(updated_questions):
                     existing_questions[question_id].is_tombstone = True
         else:
-            update_ideas_recursively(thematic, args.get('children', []), phase, context)
+            # if the idea was type survey before, remove all questions
+            for question_id in existing_questions:
+                existing_questions[question_id].is_tombstone = True
+
+        if is_multicolumns:
+            message_columns = args.get('message_columns')
+            if message_columns is not None:
+                previous_column = None
+                for index, column in enumerate(message_columns):
+                    message_classifier = column.get('message_classifier', None)
+                    existing_column = [col for col in thematic.message_columns if col.message_classifier == message_classifier]
+                    if existing_column:
+                        existing_column = existing_column[0]
+                        update_langstring_from_input_entries(existing_column, 'name', column['name_entries'])
+                        update_langstring_from_input_entries(existing_column, 'title', column['title_entries'])
+                        existing_column.color = column['color']
+                        synthesis = existing_column.get_column_synthesis()
+                        update_langstring_from_input_entries(synthesis, 'subject', column['column_synthesis_subject'])
+                        update_langstring_from_input_entries(synthesis, 'body', column['column_synthesis_body'])
+                        # We don't allow changing column message_classifier, because this is used for
+                        # the relation with ColumnSynthesisPost and all posts.
+                        previous_column = existing_column
+                    else:
+                        name = langstring_from_input_entries(column['name_entries'])
+                        if not message_classifier:
+                            message_classifier = u'column{}'.format(index + 1)
+
+                        title = langstring_from_input_entries(column['title_entries'])
+                        color = column['color']
+                        sacolumn = models.IdeaMessageColumn(
+                            message_classifier=message_classifier,
+                            name=name,
+                            title=title,
+                            color=color,
+                            previous_column=previous_column)
+                        thematic.message_columns.append(sacolumn)
+                        body = langstring_from_input_entries(column['column_synthesis_body'])
+                        subject = langstring_from_input_entries(column['column_synthesis_subject'])
+                        synthesis = models.ColumnSynthesisPost(
+                            message_classifier=message_classifier,
+                            discussion_id=discussion_id,
+                            subject=subject if subject else models.LangString.EMPTY(),
+                            body=body if body else models.LangString.EMPTY()
+                        )
+                        db.add(synthesis)
+                        db.add(models.IdeaRelatedPostLink(
+                            creator_id=user_id,
+                            content=synthesis,
+                            idea=thematic
+                        ))
+                        previous_column = sacolumn
+
+                for deleted_column in thematic.message_columns[index + 1:]:
+                    thematic.message_columns.remove(deleted_column)
+                    thematic.db.delete(deleted_column.get_column_synthesis())
+                    thematic.db.delete(deleted_column)
+        else:
+            # if the idea was type messageColumns before, remove all columns
+            for deleted_column in thematic.message_columns[:]:
+                thematic.message_columns.remove(deleted_column)
+                thematic.db.delete(deleted_column.get_column_synthesis())
+                thematic.db.delete(deleted_column)
+
+        update_ideas_recursively(thematic, args.get('children', []), phase, context)
 
     db.flush()
     return thematic
@@ -968,7 +1003,7 @@ def delete_idea(args, context):
 
 def update_ideas_recursively(parent_idea, children, phase, context):
     existing_ideas = {
-        idea.id: idea for idea in parent_idea.get_children()}
+        idea.id: idea for idea in parent_idea.get_children() if not isinstance(idea, (models.Question, models.VoteProposal))}
     updated_ideas = set()
     for idea in children:
         if idea.get('id', None):
@@ -1004,7 +1039,6 @@ class CreateThematic(graphene.Mutation):
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.Default.langstring_entries)
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
         discussion_phase_id = graphene.Int(required=True, description=docs.CreateThematic.discussion_phase_id)
-        video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
         announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
         questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
         image = graphene.String(description=docs.Default.image)
@@ -1053,7 +1087,6 @@ class UpdateThematic(graphene.Mutation):
         id = graphene.ID(required=True)
         title_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
         description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
-        video = graphene.Argument(VideoInput, description=docs.UpdateThematic.video)
         announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
         questions = graphene.List(QuestionInput, description=docs.UpdateThematic.questions)
         image = graphene.String(description=docs.Default.image)
@@ -1089,9 +1122,9 @@ class IdeaInput(graphene.InputObjectType):
     id = graphene.ID()  # not required, used only for update/delete
     title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.Default.langstring_entries)
     description_entries = graphene.List(LangStringEntryInput, description=docs.Default.langstring_entries)
-    video = graphene.Argument(VideoInput, description=docs.CreateThematic.video)
     announcement = graphene.Argument(IdeaAnnouncementInput, description=docs.Idea.announcement)
     questions = graphene.List(QuestionInput, description=docs.CreateThematic.questions)
+    message_columns = graphene.List(lambda: IdeaMessageColumnInput, description=docs.IdeaInput.message_columns)
     children = graphene.List(lambda: IdeaInput, description=docs.UpdateIdeas.ideas)
     image = graphene.String(description=docs.Default.image)
     order = graphene.Float(description=docs.Default.float_entry)

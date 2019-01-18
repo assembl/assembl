@@ -13,6 +13,7 @@ import { type VoteChoice } from '../components/administration/voteSession/gaugeF
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
 import ExportSection from '../components/administration/exportSection';
+import BackToThematic from '../components/administration/voteSession/backToThematic';
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import updateVoteSessionMutation from '../graphql/mutations/updateVoteSession.graphql';
@@ -30,7 +31,6 @@ import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draf
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
 import { getDiscussionSlug, snakeToCamel } from '../utils/globalFunctions';
-import { PHASES } from '../constants';
 
 type VoteModule = {
   choices?: Array<VoteChoice>,
@@ -184,7 +184,9 @@ type Props = {
   debateId: string,
   route: Route,
   router: Router,
-  discussionPhaseId: string
+  phaseIdentifier: string,
+  thematicId: string,
+  goBackPhaseIdentifier: string
 };
 
 type State = {
@@ -231,7 +233,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { section, voteSessionPage, voteModules } = nextProps;
+    const { section, thematicId, voteSessionPage, voteModules } = nextProps;
     const { firstWarningDisplayed, secondWarningDisplayed } = this.state;
     const slug = { slug: getDiscussionSlug() };
     const showModal = (message1, message2, buttonMessage, stepNumber) => {
@@ -244,7 +246,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
             <p>
               <Translate value={message2} />
             </p>
-            <Link to={`${get('voteSessionAdmin', slug)}?section=${stepNumber}`}>
+            <Link to={`${get('voteSessionAdmin', slug, { section: stepNumber, thematicId: thematicId })}`}>
               <Button key="cancel" onClick={closeModal} className="button-cancel button-dark button-modal">
                 <Translate value={buttonMessage} number={stepNumber} />
               </Button>
@@ -333,28 +335,15 @@ class VoteSessionAdmin extends React.Component<Props, State> {
       createProposal,
       updateProposal,
       deleteProposal,
-      discussionPhaseId
+      thematicId
     } = this.props;
 
     if (voteSessionPage.get('_hasChanged')) {
-      const titleEntries = voteSessionPage.get('titleEntries').toJS();
-      const subTitleEntries = voteSessionPage.get('subTitleEntries').toJS();
-      const instructionsSectionTitleEntries = voteSessionPage.get('instructionsSectionTitleEntries').toJS();
-      const instructionsSectionContentEntries = convertImmutableEntriesToJS(
-        voteSessionPage.get('instructionsSectionContentEntries')
-      );
       const propositionsSectionTitleEntries = voteSessionPage.get('propositionsSectionTitleEntries').toJS();
-      const pageHeaderImage = voteSessionPage.get('headerImage').toJS();
-      const headerImage = typeof pageHeaderImage.externalUrl === 'object' ? pageHeaderImage.externalUrl : null;
       const payload = {
         variables: {
-          discussionPhaseId: discussionPhaseId,
-          titleEntries: titleEntries,
-          subTitleEntries: subTitleEntries,
-          instructionsSectionTitleEntries: instructionsSectionTitleEntries,
-          instructionsSectionContentEntries: convertEntriesToHTML(instructionsSectionContentEntries),
+          ideaId: thematicId,
           propositionsSectionTitleEntries: propositionsSectionTitleEntries,
-          headerImage: headerImage,
           seeCurrentVotes: voteSessionPage.get('seeCurrentVotes')
         }
       };
@@ -503,7 +492,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   dataHaveChanged = (): boolean => this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
 
   render() {
-    const { editLocale, section, debateId, voteSessionId } = this.props;
+    const { editLocale, debateId, goBackPhaseIdentifier, phaseIdentifier, section, thematicId, voteSessionId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
       msgId: `vote.${snakeToCamel(option)}`,
@@ -513,14 +502,27 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         voteSessionId: voteSessionId
       })
     }));
+    const configureThematicUrl = get(
+      'administration',
+      { slug: getDiscussionSlug() || '', id: goBackPhaseIdentifier },
+      { section: 'configThematics', thematicId: thematicId }
+    );
     return (
       <div className="token-vote-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection />}
-        {section === '4' && <ExportSection exportLink={exportLinks} annotation="voteSessionAnnotation" />}
-        {section && <Navbar currentStep={section} steps={['1', '2', '3', '4']} phaseIdentifier={PHASES.voteSession} />}
+        {section === '4' && <ExportSection exportLink={exportLinks} />}
+        {section && (
+          <Navbar
+            currentStep={section}
+            steps={['1', '2', '3', '4']}
+            phaseIdentifier={phaseIdentifier}
+            queryArgs={{ thematicId: thematicId, goBackPhaseIdentifier: goBackPhaseIdentifier }}
+          />
+        )}
+        <BackToThematic url={configureThematicUrl} />
       </div>
     );
   }

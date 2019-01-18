@@ -92,10 +92,9 @@ export function getAncestors<T: TreeNodeType>(item: T | null, nodes: Array<T>): 
  * @param {T: TreeNodeType} The type of the nodes
  * @param {T | null} The item.
  * @param {Array<T>} An array of nodes.
- * @param {(items: Array<T>) => Array<T>} A sorter.
  * @returns {Array<T>} Returns the path of the item.
  */
-export function getPath<T: TreeNodeType>(item: T, nodes: Array<T>, sortItems: (items: Array<T>) => Array<T>): Array<number> {
+export function getPath<T: TreeNodeType>(item: T, nodes: Array<T>): Array<number> {
   const originalItem = nodes.find(n => n.id === item.id);
   if (!originalItem) return [];
   const ancestors: Array<T> = getAncestors(originalItem, nodes);
@@ -104,18 +103,17 @@ export function getPath<T: TreeNodeType>(item: T, nodes: Array<T>, sortItems: (i
   const roots = nodes.filter(n => !nodesIds.includes(n.parentId));
   if (ancestors.length === 0) {
     if (roots.includes(originalItem)) {
-      path.push(sortItems(roots).indexOf(originalItem));
+      path.push(roots.indexOf(originalItem));
     }
   } else {
     let node = originalItem;
     ancestors.forEach((ancestor) => {
-      let children = nodes.filter(n => n.parentId === ancestor.id);
-      children = sortItems ? sortItems(children) : children;
+      const children = nodes.filter(n => n.parentId === ancestor.id);
       path.push(children.indexOf(node));
       node = ancestor;
     });
     if (roots.includes(node)) {
-      path.push(sortItems(roots).indexOf(node));
+      path.push(roots.indexOf(node));
     }
   }
   return path.reverse();

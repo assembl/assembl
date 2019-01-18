@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Grid } from 'react-bootstrap';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
@@ -7,8 +8,24 @@ import Post from '../common/post';
 import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
+import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
-class ThreadView extends React.Component {
+type Props = {
+  isUserConnected: boolean,
+  ideaId: string,
+  contentLocaleMapping: ContentLocaleMapping,
+  refetchIdea: Function,
+  lang: string,
+  noRowsRenderer: Function,
+  posts: Array<Post>,
+  initialRowIndex: ?number,
+  identifier: string,
+  phaseId: string,
+  timeline: Timeline,
+  messageViewOverride: string
+};
+
+class ThreadView extends React.Component<Props> {
   render() {
     const {
       isUserConnected,
@@ -21,7 +38,8 @@ class ThreadView extends React.Component {
       initialRowIndex,
       identifier,
       phaseId,
-      timeline
+      timeline,
+      messageViewOverride
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     return (
@@ -43,6 +61,7 @@ class ThreadView extends React.Component {
                 SeparatorComponent={InfiniteSeparator}
                 identifier={identifier}
                 phaseId={phaseId}
+                messageViewOverride={messageViewOverride}
               />
             </div>
           </div>

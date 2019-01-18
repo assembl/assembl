@@ -5,7 +5,6 @@ import classNames from 'classnames';
 import isEqual from 'lodash/isEqual';
 import { type Route } from 'react-router';
 import { compose, graphql } from 'react-apollo';
-// $FlowFixMe
 import { filter } from 'graphql-anywhere';
 
 import { get } from './utils/routeMap';
@@ -20,8 +19,16 @@ import ChatFrame from './components/common/ChatFrame';
 import { browserHistory } from './router';
 import TimelineQuery from './graphql/Timeline.graphql';
 import DiscussionPreferencesQuery from './graphql/DiscussionPreferencesQuery.graphql';
+import { MESSAGE_VIEW } from './constants';
 
-export const DebateContext = React.createContext({ isDebateModerated: false, isHarvesting: false, connectedUserId: null });
+export const DebateContext = React.createContext({
+  isDebateModerated: false,
+  isHarvesting: false,
+  isHarvestable: false,
+  modifyContext: (newState: Object) => {}, // eslint-disable-line
+  connectedUserId: null,
+  messageViewOverride: MESSAGE_VIEW.noModule
+});
 
 type Debate = {
   debateData: DebateData,
@@ -60,7 +67,14 @@ type Props = {
   connectedUserId: ?string
 };
 
-export class DumbApp extends React.Component<Props> {
+type State = {
+  isHarvestable: boolean,
+  messageViewOverride: string
+};
+
+export class DumbApp extends React.Component<Props, State> {
+  state = { isHarvestable: false, messageViewOverride: MESSAGE_VIEW.noModule };
+
   componentDidMount() {
     const { route } = this.props;
     const debateId = getDiscussionId();
@@ -92,8 +106,11 @@ export class DumbApp extends React.Component<Props> {
     const { isHarvesting, children, isDebateModerated, connectedUserId } = this.props;
     const contextValues = {
       isHarvesting: isHarvesting,
+      isHarvestable: this.state.isHarvestable,
+      modifyContext: (newState: Object) => this.setState(() => newState),
       isDebateModerated: isDebateModerated,
-      connectedUserId: connectedUserId
+      connectedUserId: connectedUserId,
+      messageViewOverride: this.state.messageViewOverride
     };
     const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
     return (
@@ -160,7 +177,6 @@ export default compose(
       const phasesForStore = filteredPhases.timeline.map(phase => ({
         id: phase.id,
         identifier: phase.identifier,
-        isThematicsTable: phase.isThematicsTable,
         start: phase.start,
         end: phase.end,
         image: phase.image,

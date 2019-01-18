@@ -6,11 +6,13 @@ import { AutoSizer, CellMeasurer, CellMeasurerCache, List, WindowScroller } from
 import NuggetsManager from '../nuggetsManager';
 import Child from './treeItem';
 import type { FictionCommentExtraProps } from '../../../components/debate/brightMirror/fictionComment';
+import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
 type Props = {
-  contentLocaleMapping: Map<string, any>,
+  contentLocaleMapping: ContentLocaleMapping,
   identifier: string,
   phaseId?: string,
+  messageViewOverride: string,
   initialRowIndex: ?number,
   lang: string,
   data: Array<ChildType>,
@@ -112,6 +114,7 @@ class Tree extends React.Component<Props> {
       data,
       identifier,
       phaseId,
+      messageViewOverride,
       lang,
       InnerComponent, // component that will be rendered in the child
       InnerComponentFolded, // component that will be used to render the children when folded
@@ -128,6 +131,7 @@ class Tree extends React.Component<Props> {
             {...childData}
             identifier={identifier}
             phaseId={phaseId}
+            messageViewOverride={messageViewOverride}
             lang={lang}
             rowIndex={index}
             contentLocaleMapping={parent.props.contentLocaleMapping}

@@ -20,14 +20,14 @@ const Step1 = ({ discussionPhaseId, editLocale, locale, client }: Props) => {
   const queryVariables = { discussionPhaseId: discussionPhaseId, lang: locale };
   return (
     <React.Fragment>
-      <div className="form-title">{I18n.t('administration.survey.1')}</div>
+      <div className="form-title">{I18n.t('administration.survey.createTable')}</div>
       <FieldArrayWithActions
         isTree
         confirmDeletion
         name="themes"
         subFieldName="children"
         minItems={1}
-        maxLevel={1}
+        maxLevel={4}
         onRemove={id => removeMenuItem(id, client, queryVariables)}
         onAdd={(id, parentId, index) => addMenuItem(id, parentId, index, client, queryVariables)}
         onUp={(id, parentId, index, targetIndex) => swapMenuItem(id, parentId, index, targetIndex, client, queryVariables)}

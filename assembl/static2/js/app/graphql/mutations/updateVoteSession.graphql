@@ -1,28 +1,16 @@
-#import "../fragments/VoteSession.graphql"
+#import "../fragments/LangString.graphql"
 
-mutation UpdateVoteSession(
-  $discussionPhaseId: Int!
-  $headerImage: String
-  $titleEntries: [LangStringEntryInput]
-  $subTitleEntries: [LangStringEntryInput]
-  $instructionsSectionTitleEntries: [LangStringEntryInput]
-  $instructionsSectionContentEntries: [LangStringEntryInput]
-  $propositionsSectionTitleEntries: [LangStringEntryInput]
-  $seeCurrentVotes: Boolean
-) {
+mutation UpdateVoteSession($ideaId: ID!, $propositionsSectionTitleEntries: [LangStringEntryInput], $seeCurrentVotes: Boolean) {
   updateVoteSession(
-    discussionPhaseId: $discussionPhaseId
-    headerImage: $headerImage
-    titleEntries: $titleEntries
-    subTitleEntries: $subTitleEntries
-    instructionsSectionTitleEntries: $instructionsSectionTitleEntries
-    instructionsSectionContentEntries: $instructionsSectionContentEntries
+    ideaId: $ideaId
     propositionsSectionTitleEntries: $propositionsSectionTitleEntries
     seeCurrentVotes: $seeCurrentVotes
   ) {
     voteSession {
-      ...voteSessionGlobals
-      ...voteSessionLangstringsEntries
+      seeCurrentVotes
+      propositionsSectionTitleEntries {
+        ...langStringEntry
+      }
     }
   }
 }

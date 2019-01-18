@@ -1,0 +1,23 @@
+#import "./LangString.graphql"
+
+fragment IdeaMessageColumnData on IdeaMessageColumn {
+  id
+  color
+  columnSynthesis {
+    id
+    subjectEntries {
+      ...langStringEntry
+    }
+    bodyEntries {
+      ...langStringEntry
+    }
+  }
+  index
+  messageClassifier
+  nameEntries {
+    ...langStringEntry
+  }
+  titleEntries {
+    ...langStringEntry
+  }
+}

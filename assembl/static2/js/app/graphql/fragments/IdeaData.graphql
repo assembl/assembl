@@ -1,15 +1,40 @@
 #import "./LangString.graphql"
+#import "./IdeaMessageColumnData.graphql"
 
 fragment ideaData on IdeaInterface {
   parentId
   messageViewOverride
   order
+  numPosts
   titleEntries {
+    ...langStringEntry
+  }
+  descriptionEntries {
     ...langStringEntry
   }
   img {
     externalUrl
     mimeType
     title
+  }
+  announcement {
+    titleEntries {
+      ...langStringEntry
+    }
+    bodyEntries {
+      ...langStringEntry
+    }
+    quoteEntries {
+      ...langStringEntry
+    }
+  }
+  questions {
+    id
+    titleEntries {
+      ...langStringEntry
+    }
+  }
+  messageColumns {
+    ...IdeaMessageColumnData
   }
 }

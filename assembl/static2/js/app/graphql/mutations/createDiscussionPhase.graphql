@@ -3,8 +3,7 @@
 
 mutation createDiscussionPhase(
   $lang: String!
-  $identifier: String!
-  $isThematicsTable: Boolean!
+  $identifier: String
   $titleEntries: [LangStringEntryInput]!
   $start: DateTime!
   $end: DateTime!
@@ -13,7 +12,6 @@ mutation createDiscussionPhase(
   createDiscussionPhase(
     lang: $lang
     identifier: $identifier
-    isThematicsTable: $isThematicsTable
     titleEntries: $titleEntries
     start: $start
     end: $end

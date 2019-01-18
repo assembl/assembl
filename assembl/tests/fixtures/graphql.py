@@ -127,6 +127,7 @@ def idea_in_thread_phase(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
+        messageViewOverride: "survey",
         discussionPhaseId: """+unicode(phases['thread'].id)+u""",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
@@ -152,6 +153,7 @@ def another_idea_in_thread_phase(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
+        messageViewOverride: "survey",
         discussionPhaseId: """+unicode(phases['thread'].id)+u""",
         titleEntries:[
             {value:"Manger des pâtes", localeCode:"fr"},
@@ -202,6 +204,7 @@ def thematic_and_question(phases, graphql_request):
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
             {value:"Understanding the dynamics and issues", localeCode:"en"}
@@ -214,7 +217,7 @@ mutation myFirstMutation {
         discussionPhaseId: """+unicode(phases['survey'].id)+u""",
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 id,
                 titleEntries { localeCode value },
                 questions { id, titleEntries { localeCode value } }
@@ -229,11 +232,12 @@ mutation myFirstMutation {
 
 
 @pytest.fixture(scope="function")
-def thematic_with_video_and_question(phases, graphql_request):
+def thematic_with_question(phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myMutation {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
             {value:"Understanding the dynamics and issues", localeCode:"en"}
@@ -243,29 +247,10 @@ mutation myMutation {
                 {value:"Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?", localeCode:"fr"}
             ]},
         ],
-        video: {
-            titleEntries:[
-                {value:"Laurent Alexandre, chirurgien et expert en intelligence artificielle nous livre ses prédictions pour le 21e siècle.",
-                 localeCode:"fr"},
-            ]
-            descriptionEntriesTop:[
-                {value:"Personne ne veut d'un monde où on pourrait manipuler nos cerveaux et où les états pourraient les bidouiller",
-                 localeCode:"fr"},
-            ],
-            descriptionEntriesBottom:[
-                {value:"Câlisse de tabarnak",
-                 localeCode:"fr"},
-            ],
-            descriptionEntriesSide:[
-                {value:"Putain",
-                 localeCode:"fr"},
-            ],
-            htmlCode:"https://something.com"
-        },
         discussionPhaseId: """+unicode(phases['survey'].id)+u""",
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 id,
                 titleEntries { localeCode value },
                 questions { id, titleEntries { localeCode value } }
@@ -285,6 +270,7 @@ def second_thematic_with_questions(phases, graphql_request):
     res = schema.execute(u"""
 mutation myMutation {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"AI revolution", localeCode:"en"}
         ],
@@ -302,17 +288,10 @@ mutation myMutation {
                 {value:"What sectors will be the most affected by AI?", localeCode:"en"}
             ]},
         ],
-        video: {
-            titleEntries:[
-                {value:"A video to better understand the subject...",
-                 localeCode:"en"},
-            ]
-            htmlCode:"https://www.youtube.com/embed/GJM1TlHML4E?list=PL1HxVG_mcuktmbRELCxOiQlZLCFKzhBcJ"
-        },
         discussionPhaseId: """+unicode(phases['survey'].id)+u""",
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 id
                 order,
                 titleEntries { localeCode value },
@@ -343,6 +322,7 @@ def thematic_with_image(phases, graphql_request):
     res = schema.execute(u"""
 mutation createThematicWithImage($file: String!) {
     createThematic(
+        messageViewOverride: "survey",
         titleEntries:[
             {value:"You can't program the card without transmitting the wireless AGP card!", localeCode:"en"}
         ],
@@ -350,7 +330,7 @@ mutation createThematicWithImage($file: String!) {
         image: $file
     ) {
         thematic {
-            ... on Thematic {
+            ... on Idea {
                 id,
                 img { externalUrl }
             }

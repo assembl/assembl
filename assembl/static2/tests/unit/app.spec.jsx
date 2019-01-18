@@ -2,6 +2,7 @@ import * as React from 'react';
 import { shallow, configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 import { DumbApp } from '../../js/app/app';
+import { MESSAGE_VIEW } from '../../js/app/constants';
 
 configure({ adapter: new Adapter() });
 
@@ -30,10 +31,14 @@ describe('App component', () => {
   describe('DebateContext', () => {
     it('should pass the correct values to the Context Provider', () => {
       const wrapper = shallow(<DumbApp {...props} />);
-      expect(wrapper.find('ContextProvider').prop('value')).toEqual({
+      const contextValue = wrapper.find('ContextProvider').prop('value');
+      delete contextValue.modifyContext;
+      expect(contextValue).toEqual({
         connectedUserId: '1234',
         isDebateModerated: true,
-        isHarvesting: false
+        isHarvesting: false,
+        isHarvestable: false,
+        messageViewOverride: MESSAGE_VIEW.noModule
       });
     });
   });

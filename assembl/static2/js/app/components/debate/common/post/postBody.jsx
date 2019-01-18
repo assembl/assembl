@@ -8,9 +8,9 @@ import ARange from 'annotator_range'; // eslint-disable-line
 import { withRouter } from 'react-router';
 
 import { EMPTY_STRING } from '../../../../constants';
-import { getConnectedUserId, isHarvestable } from '../../../../utils/globalFunctions';
+import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { isSpecialURL } from '../../../../utils/urlPreview';
-import { transformLinksInHtml /* getUrls */ } from '../../../../utils/linkify';
+import { transformLinksInHtml } from '../../../../utils/linkify';
 import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations/updateHarvestingTranslationPreference.graphql';
 import PostTranslate from '../../common/translations/postTranslate';
 import Embed from '../../../common/urlPreview/embed';
@@ -31,7 +31,7 @@ type Props = {
   translate: boolean,
   translationEnabled: boolean,
   isHarvesting: boolean,
-  params: RouterParams,
+  isHarvestable?: boolean,
   handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
   measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
   updateHarvestingTranslation: Function
@@ -202,7 +202,7 @@ export const DumbPostBody = ({
   measureTreeHeight,
   updateHarvestingTranslation,
   isHarvesting,
-  params
+  isHarvestable
 }: Props) => {
   const divClassNames = 'post-body post-body--is-harvestable';
   const htmlClassNames = classNames('post-body-content', 'body', {
@@ -226,7 +226,7 @@ export const DumbPostBody = ({
           afterLoad={afterLoad}
           onTranslate={(from, into) => {
             const connectedUserIdBase64 = getConnectedUserId(true);
-            if (connectedUserIdBase64 && isHarvesting && isHarvestable(params)) {
+            if (connectedUserIdBase64 && isHarvesting && isHarvestable) {
               updateHarvestingTranslation({
                 variables: {
                   id: connectedUserIdBase64,
@@ -261,6 +261,10 @@ export const DumbPostBody = ({
       )}
     </div>
   );
+};
+
+DumbPostBody.defaultProps = {
+  isHarvestable: false
 };
 
 export default withRouter(

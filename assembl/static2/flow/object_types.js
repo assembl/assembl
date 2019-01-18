@@ -35,7 +35,8 @@ export type Idea = {
   order: number,
   ancestors: Array<string>,
   posts: Posts,
-  messageColumns: IdeaMessageColumns
+  messageColumns: IdeaMessageColumns,
+  messageViewOverride: string
 };
 
 type Post = { ...PostFragment } & {

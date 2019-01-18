@@ -2,15 +2,16 @@ import React from 'react';
 import renderer from 'react-test-renderer'; // eslint-disable-line
 
 import Announcement, {
+  AnnouncementCounters,
   createDoughnutElements,
   createTooltip,
   getColumnInfos,
-  getSentimentsCount,
-  dirtySplitHack
+  getSentimentsCount
 } from './announcement';
+import { MESSAGE_VIEW } from '../../../constants';
 
 describe('Announcement component', () => {
-  const announcementContent = {
+  const announcement = {
     body: '<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>'
   };
   const fakePost1 = {
@@ -49,12 +50,11 @@ describe('Announcement component', () => {
         posts: fakeThreadPosts,
         __typename: 'Idea'
       };
-      const announcementProps = {
-        announcementContent: announcementContent,
-        idea: threadIdea,
-        isMultiColumns: false
-      };
-      const component = renderer.create(<Announcement {...announcementProps} />);
+      const component = renderer.create(
+        <Announcement announcement={announcement}>
+          <AnnouncementCounters idea={threadIdea} />
+        </Announcement>
+      );
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
@@ -88,17 +88,16 @@ describe('Announcement component', () => {
       const multiColumnsIdea = {
         id: '12345',
         messageColumns: messageColumns,
-        messageViewOverride: 'messageColumns',
+        messageViewOverride: MESSAGE_VIEW.messageColumns,
         numContributors: 2,
         numPosts: 2,
         posts: fakeMultiColumnsPosts
       };
-      const announcementProps = {
-        announcementContent: announcementContent,
-        idea: multiColumnsIdea,
-        isMultiColumns: true
-      };
-      const component = renderer.create(<Announcement {...announcementProps} />);
+      const component = renderer.create(
+        <Announcement announcement={announcement}>
+          <AnnouncementCounters idea={multiColumnsIdea} />
+        </Announcement>
+      );
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
@@ -222,20 +221,6 @@ describe('Announcement component', () => {
     it('should return the counts of each sentiments given we pass it a Posts object', () => {
       const result = getSentimentsCount(fakeThreadPosts);
       expect(result).toMatchSnapshot();
-    });
-  });
-  describe('dirtySplitHack function', () => {
-    it('should return an object with descriptionBottom and desriptionTop properly set for an announcementContent', () => {
-      const result = dirtySplitHack(announcementContent);
-      const expected = {
-        descriptionTop:
-          '<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>',
-        descriptionBottom: null,
-        descriptionSide: null,
-        htmlCode: null,
-        noTitle: true
-      };
-      expect(result).toEqual(expected);
     });
   });
 });

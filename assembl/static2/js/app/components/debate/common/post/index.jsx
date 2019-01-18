@@ -43,6 +43,7 @@ export type Props = {
   ideaId: string,
   phaseId: string,
   isHarvesting: boolean,
+  isHarvestable: boolean,
   lang: string,
   measureTreeHeight: Function,
   multiColumns: boolean,
@@ -150,6 +151,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
       fullLevel,
       id,
       isHarvesting,
+      isHarvestable,
       multiColumns,
       originalLocale,
       parentId,
@@ -205,6 +207,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
             {...this.props}
             borderLeftColor={borderLeftColor}
             isHarvesting={isHarvesting}
+            isHarvestable={isHarvestable}
             body={body}
             subject={subject}
             handleEditClick={this.handleEditClick}
@@ -220,7 +223,9 @@ export class DumbPost extends React.PureComponent<Props, State> {
 
 const PostWithContext = props => (
   <DebateContext.Consumer>
-    {({ isHarvesting, connectedUserId }) => <DumbPost {...props} isHarvesting={isHarvesting} connectedUserId={connectedUserId} />}
+    {({ isHarvesting, isHarvestable, connectedUserId }) => (
+      <DumbPost {...props} isHarvesting={isHarvesting} isHarvestable={isHarvestable} connectedUserId={connectedUserId} />
+    )}
   </DebateContext.Consumer>
 );
 

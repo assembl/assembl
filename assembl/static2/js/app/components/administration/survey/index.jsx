@@ -10,17 +10,16 @@ import { compareEditorState } from '../../form/utils';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import Navbar from '../navbar';
 import Step1 from './step1';
-import Step2 from './step2';
-import Step3 from './step3';
+import Export from './export';
 import ConfigureThematicForm from './configureThematicForm';
 import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../common/loader';
-import { PHASES } from '../../../constants';
 
 type Props = {
   client: ApolloClient,
+  phaseIdentifier: string,
   section: string,
   thematicId: string,
   debateId: string,
@@ -31,9 +30,18 @@ type Props = {
 
 const loading = <Loader />;
 
-const steps = ['1', '2', '3'];
+const steps = ['1', '2'];
 
-const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, debateId, editLocale, locale }: Props) => {
+const DumbSurveyAdminForm = ({
+  client,
+  phaseIdentifier,
+  section,
+  thematicId,
+  discussionPhaseId,
+  debateId,
+  editLocale,
+  locale
+}: Props) => {
   if (!discussionPhaseId) {
     return loading;
   }
@@ -58,10 +66,15 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, d
               <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
                 {section === '1' && <Step1 editLocale={editLocale} locale={locale} discussionPhaseId={discussionPhaseId} />}
                 {section === 'configThematics' && (
-                  <ConfigureThematicForm thematicId={thematicId} editLocale={editLocale} values={values} />
+                  <ConfigureThematicForm
+                    pristine={pristine}
+                    phaseIdentifier={phaseIdentifier}
+                    thematicId={thematicId}
+                    editLocale={editLocale}
+                    values={values}
+                  />
                 )}
-                {section === '2' && <Step2 editLocale={editLocale} values={values} />}
-                {section === '3' && <Step3 debateId={debateId} locale={locale} />}
+                {section === '2' && <Export debateId={debateId} locale={locale} />}
               </AdminForm>
             </div>
             {steps.includes(section) && (
@@ -69,7 +82,7 @@ const DumbSurveyAdminForm = ({ client, section, thematicId, discussionPhaseId, d
                 steps={steps}
                 currentStep={section}
                 totalSteps={3}
-                phaseIdentifier={PHASES.survey}
+                phaseIdentifier={phaseIdentifier}
                 beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
               />
             )}

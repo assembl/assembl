@@ -7,10 +7,8 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 import shuffle from 'lodash/shuffle';
 import debounce from 'lodash/debounce';
-import activeHtml from 'react-active-html';
 
-import { isSpecialURL } from '../utils/urlPreview';
-import Embed from '../components/common/urlPreview/embed';
+import { renderRichtext } from '../utils/linkify';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import AddTokenVoteMutation from '../graphql/mutations/addTokenVote.graphql';
 import AddGaugeVoteMutation from '../graphql/mutations/addGaugeVote.graphql';
@@ -23,9 +21,7 @@ import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
-import { transformLinksInHtml } from '../utils/linkify';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
-import MessagePage from '../components/common/messagePage';
 
 export type TokenCategory = {|
   id: string,
@@ -127,22 +123,6 @@ export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
 type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGaugeVoteSpecification>;
 export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
   modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
-
-export const voteSessionBodyReplacementComponents = () => ({
-  a: (attributes: Object) => {
-    const { href, key, target, title, children } = attributes;
-    return (
-      <React.Fragment>
-        <a key={`url-link-${key}`} href={href} className="linkified" target={target} title={title}>
-          {children}
-        </a>
-        {isSpecialURL(href) ? <Embed key={`url-embed-${href}`} url={href} /> : null}
-      </React.Fragment>
-    );
-  }
-});
-
-const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), voteSessionBodyReplacementComponents());
 
 class DumbVoteSession extends React.Component<Props, State> {
   availableTokensContainerRef: ?HTMLDivElement;
@@ -349,16 +329,6 @@ class DumbVoteSession extends React.Component<Props, State> {
     } = this.props;
 
     const { availableTokensSticky, windowWidth, hasChanged } = this.state;
-
-    if (!title || title.length === 0) {
-      return (
-        <MessagePage
-          title={I18n.t('debate.voteSession.noVoteSession.title')}
-          text={I18n.t('debate.voteSession.noVoteSession.text')}
-        />
-      );
-    }
-
     const tokenVoteModule = findTokenVoteModule(modules);
     const remainingTokensByCategory = this.getRemainingTokensByCategory(tokenVoteModule);
     const subTitleToShow = !isPhaseCompleted ? subTitle : I18n.t('debate.voteSession.isCompleted');
@@ -448,12 +418,10 @@ export { DumbVoteSession };
 export default compose(
   connect(mapStateToProps),
   graphql(VoteSessionQuery, {
-    skip: ({ discussionPhaseId }) => !discussionPhaseId,
-    options: ({ lang, discussionPhaseId }) => ({
-      variables: { discussionPhaseId: discussionPhaseId, lang: lang }
+    options: ({ lang, id }) => ({
+      variables: { ideaId: id, lang: lang }
     }),
     props: ({ data, ownProps }) => {
-      const defaultHeaderImage = ownProps.debate.debateData.headerBackgroundUrl || '';
       if (data.error || data.loading) {
         return {
           error: data.error,
@@ -465,25 +433,20 @@ export default compose(
         return {
           error: data.error,
           loading: data.loading,
-          title: '',
+          headerImageUrl: ownProps.headerImgUrl,
+          title: ownProps.title,
           seeCurrentVotes: false,
-          subTitle: '',
-          headerImageUrl: '',
-          instructionsSectionTitle: '',
-          instructionsSectionContent: '',
-          modules: [],
+          subTitle: ownProps.description,
+          instructionsSectionTitle: ownProps.announcement.title,
+          instructionsSectionContent: ownProps.announcement.body,
           propositionsSectionTitle: '',
-          proposals: []
+          modules: [],
+          proposals: [],
+          randomProposals: []
         };
       }
-
       const {
-        title,
-        subTitle,
         seeCurrentVotes,
-        headerImage,
-        instructionsSectionTitle,
-        instructionsSectionContent,
         propositionsSectionTitle,
         modules, // we still need to get templates here for AvailableTokens component
         proposals
@@ -492,17 +455,16 @@ export default compose(
       return {
         error: data.error,
         loading: data.loading,
-        headerImageUrl: headerImage ? headerImage.externalUrl : defaultHeaderImage,
-        title: title,
+        headerImageUrl: ownProps.headerImgUrl,
+        title: ownProps.title,
         seeCurrentVotes: seeCurrentVotes,
-        subTitle: subTitle,
-        instructionsSectionTitle: instructionsSectionTitle,
-        instructionsSectionContent: instructionsSectionContent,
+        subTitle: ownProps.description,
+        instructionsSectionTitle: ownProps.announcement.title,
+        instructionsSectionContent: ownProps.announcement.body,
         propositionsSectionTitle: propositionsSectionTitle,
         modules: modules,
         proposals: proposals,
         randomProposals: shuffle(proposals),
-        noVoteSession: false,
         refetchVoteSession: data.refetch
       };
     }

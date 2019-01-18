@@ -1,128 +1,162 @@
 // @flow
-import difference from 'lodash/difference';
 import isEqual from 'lodash/isEqual';
 import type { ApolloClient } from 'react-apollo';
+import range from 'lodash/range';
 
-import type { SurveyAdminValues } from './types.flow';
-import createThematicMutation from '../../../graphql/mutations/createThematic.graphql';
-import deleteThematicMutation from '../../../graphql/mutations/deleteThematic.graphql';
-import updateThematicMutation from '../../../graphql/mutations/updateThematic.graphql';
+import type { ThemesAdminValues } from './types.flow';
+import updateIdeasMutation from '../../../graphql/mutations/updateIdeas.graphql';
 import { createSave, convertToEntries, convertRichTextToVariables, getFileVariable } from '../../form/utils';
+import { MESSAGE_VIEW } from '../../../constants';
 
-async function getVideoVariable(client, video, initialVideo) {
-  if (!video) {
-    // pass {} to remove all video fields on server side
-    return {};
+const getQuestionsVariables = (theme) => {
+  if (theme.messageViewOverride && theme.messageViewOverride.value !== MESSAGE_VIEW.survey) {
+    return [];
   }
+  return theme.questions
+    ? theme.questions.map(q => ({
+      id: q.id.startsWith('-') ? null : q.id,
+      titleEntries: convertToEntries(q.title)
+    }))
+    : [];
+};
 
-  const initialMediaFile = initialVideo && initialVideo.media && initialVideo.media.img;
-  const mediaImg = video.media ? video.media.img : null;
-  const mediaFile = getFileVariable(mediaImg, initialMediaFile);
+const getMessageColumnsVariables = (theme, client) => {
+  if (!theme.multiColumns) {
+    return [];
+  }
+  const checkedForm =
+    theme.multiColumns && theme.multiColumns.radioButtons && theme.multiColumns.radioButtons.find(button => button.isChecked);
+  let nbColumnsInForm = checkedForm ? checkedForm.size : theme.multiColumns.messageColumns.length;
+  if (theme.messageViewOverride && theme.messageViewOverride.value !== MESSAGE_VIEW.messageColumns) {
+    nbColumnsInForm = 0;
+  }
+  return theme.multiColumns.messageColumns && theme.multiColumns.messageColumns.length > 0
+    ? range(0, nbColumnsInForm).map(async (index) => {
+      const bodyVars = await (theme.multiColumns.messageColumns[index].columnSynthesis.body
+        ? convertRichTextToVariables(theme.multiColumns.messageColumns[index].columnSynthesis.body, client)
+        : Promise.resolve({ attachments: [], entries: [] }));
+      const { entries: bodyEntries } = bodyVars;
+      return {
+        messageClassifier: theme.multiColumns.messageColumns[index].messageClassifier,
+        titleEntries: convertToEntries(theme.multiColumns.messageColumns[index].title),
+        nameEntries: convertToEntries(theme.multiColumns.messageColumns[index].name),
+        color: theme.multiColumns.messageColumns[index].color || '#000000',
+        columnSynthesisSubject: theme.multiColumns.messageColumns[index].columnSynthesis.subject
+          ? convertToEntries(theme.multiColumns.messageColumns[index].columnSynthesis.subject)
+          : [],
+        columnSynthesisBody: bodyEntries
+      };
+    })
+    : [];
+};
 
-  const descriptionBottomVariables = await convertRichTextToVariables(video.descriptionBottom);
-  const { attachments: descriptionBottomAttachments, entries: descriptionEntriesBottom } = descriptionBottomVariables;
-  const descriptionSideVariables = await convertRichTextToVariables(video.descriptionSide);
-  const { attachments: descriptionSideAttachments, entries: descriptionEntriesSide } = descriptionSideVariables;
-  const descriptionTopVariables = await convertRichTextToVariables(video.descriptionTop);
-  const { attachments: descriptionTopAttachments, entries: descriptionEntriesTop } = descriptionTopVariables;
-
-  const videoV = {
-    htmlCode: video.media ? video.media.htmlCode : '',
-    mediaFile: mediaFile,
-    titleEntries: video.title ? convertToEntries(video.title) : null,
-    descriptionBottomAttachments: descriptionBottomAttachments,
-    descriptionSideAttachments: descriptionSideAttachments,
-    descriptionTopAttachments: descriptionTopAttachments,
-    descriptionEntriesBottom: descriptionEntriesBottom,
-    descriptionEntriesSide: descriptionEntriesSide,
-    descriptionEntriesTop: descriptionEntriesTop
-  };
-  return videoV;
-}
-
-const getChildrenVariables = (thematic, initialTheme) =>
+const getChildrenVariables = (client, thematic, initialTheme) =>
   (thematic.children
-    ? thematic.children.map((t) => {
+    ? thematic.children.map(async (t, idx) => {
+      const order = idx + 1;
       const initialChild = initialTheme && initialTheme.children.find(theme => t.id === theme.id);
       const initialImg = initialChild ? initialChild.img : null;
+      let announcement = null;
+      if (t.announcement) {
+        const bodyVars = await convertRichTextToVariables(t.announcement.body, client);
+        const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
+        const titleEntries = convertToEntries(t.announcement.title);
+        const quote = await (t.announcement.quote &&
+          t.messageViewOverride &&
+          t.messageViewOverride.value === MESSAGE_VIEW.survey
+          ? convertRichTextToVariables(t.announcement.quote, client)
+          : Promise.resolve({ attachments: [], entries: [] }));
+        if (titleEntries.length > 0) {
+          announcement = {
+            titleEntries: titleEntries,
+            bodyAttachments: bodyAttachments,
+            bodyEntries: bodyEntries,
+            quoteEntries: quote.entries
+          };
+        }
+      }
       return {
+        id: t.id.startsWith('-') ? null : t.id,
+        messageViewOverride: t.messageViewOverride ? t.messageViewOverride.value : null,
         titleEntries: convertToEntries(t.title),
+        descriptionEntries: t.description ? convertToEntries(t.description) : [],
+        announcement: announcement,
         image: getFileVariable(t.img, initialImg),
-        children: getChildrenVariables(t, initialChild)
+        questions: getQuestionsVariables(t),
+        order: order,
+        children: await Promise.all(getChildrenVariables(client, t, initialTheme)),
+        messageColumns: await Promise.all(getMessageColumnsVariables(t, client))
       };
     })
     : []);
 
-async function getVariables(client, theme, initialTheme, order, discussionPhaseId) {
+async function getIdeaInput(client, theme, initialTheme, order) {
   const initialImg = initialTheme ? initialTheme.img : null;
-  const initialVideo = initialTheme ? initialTheme.video : null;
+  let announcement = null;
+  if (theme.announcement) {
+    const bodyVars = await convertRichTextToVariables(theme.announcement.body, client);
+    const { attachments: bodyAttachments, entries: bodyEntries } = bodyVars;
+    const titleEntries = convertToEntries(theme.announcement.title);
+    const quote = await (theme.announcement.quote &&
+    theme.messageViewOverride &&
+    theme.messageViewOverride.value === MESSAGE_VIEW.survey
+      ? convertRichTextToVariables(theme.announcement.quote, client)
+      : Promise.resolve({ attachments: [], entries: [] }));
+    if (titleEntries.length > 0) {
+      announcement = {
+        titleEntries: titleEntries,
+        bodyAttachments: bodyAttachments,
+        bodyEntries: bodyEntries,
+        quoteEntries: quote.entries
+      };
+    }
+  }
   return {
-    discussionPhaseId: discussionPhaseId,
+    id: theme.id.startsWith('-') ? null : theme.id,
+    messageViewOverride: theme.messageViewOverride ? theme.messageViewOverride.value : null,
     titleEntries: convertToEntries(theme.title),
+    descriptionEntries: theme.description ? convertToEntries(theme.description) : [],
+    announcement: announcement,
     image: getFileVariable(theme.img, initialImg),
-    video: await getVideoVariable(client, theme.video, initialVideo),
-    questions:
-      theme.questions &&
-      theme.questions.map(q => ({
-        id: q.id.startsWith('-') ? null : q.id,
-        titleEntries: convertToEntries(q.title)
-      })),
+    questions: getQuestionsVariables(theme),
     order: order,
-    children: getChildrenVariables(theme, initialTheme)
+    children: await Promise.all(getChildrenVariables(client, theme, initialTheme)),
+    messageColumns: await Promise.all(getMessageColumnsVariables(theme, client))
   };
 }
 
-export const createMutationsPromises = (client: ApolloClient, discussionPhaseId: ?string) => (
-  values: SurveyAdminValues,
-  initialValues: SurveyAdminValues
-) => {
-  const initialIds = initialValues.themes.map(t => t.id);
-  const currentIds = values.themes.map(t => t.id);
-  const idsToDelete = difference(initialIds, currentIds);
-  const idsToCreate = currentIds.filter(id => parseInt(id, 10) && parseInt(id, 10) < 0);
-
-  const allMutations = [];
-
-  const deleteMutations = idsToDelete.map(id => () =>
-    client.mutate({
-      mutation: deleteThematicMutation,
-      variables: { thematicId: id }
-    })
-  );
-  allMutations.push(...deleteMutations);
-
-  const createUpdateMutations = values.themes.map((theme, idx) => {
-    const initialTheme = initialValues.themes.find(t => t.id === theme.id);
-    const order = idx !== initialIds.indexOf(theme.id) ? idx + 1 : null;
-    if (idsToCreate.indexOf(theme.id) > -1) {
-      return () =>
-        getVariables(client, theme, initialTheme, order, discussionPhaseId).then(variables =>
-          client.mutate({
-            mutation: createThematicMutation,
-            variables: variables
-          })
-        );
-    }
-
-    const orderHasChanged = initialIds.indexOf(theme.id) !== currentIds.indexOf(theme.id);
-    const hasChanged = orderHasChanged || !isEqual(initialTheme, theme);
-    if (hasChanged) {
-      return () =>
-        getVariables(client, theme, initialTheme, order, discussionPhaseId).then(variables =>
-          client.mutate({
-            mutation: updateThematicMutation,
-            variables: {
-              id: theme.id,
-              ...variables
-            }
-          })
-        );
-    }
-
-    return () => Promise.resolve();
+function getIdeas(client, themes, initialThemes) {
+  return themes.map(async (theme, idx) => {
+    const initialTheme = initialThemes.find(t => t.id === theme.id);
+    const order = idx + 1;
+    return getIdeaInput(client, theme, initialTheme, order);
   });
+}
 
-  allMutations.push(...createUpdateMutations);
+export const createMutationsPromises = (client: ApolloClient, discussionPhaseId: ?string) => (
+  values: ThemesAdminValues,
+  initialValues: ThemesAdminValues
+) => {
+  const allMutations = [];
+  let createUpdateMutation;
+  const initialThemes = initialValues.themes;
+  const hasChanged = !isEqual(initialThemes, values.themes);
+  if (hasChanged) {
+    createUpdateMutation = () =>
+      Promise.all(getIdeas(client, values.themes, initialThemes)).then(ideas =>
+        client.mutate({
+          mutation: updateIdeasMutation,
+          variables: {
+            discussionPhaseId: discussionPhaseId,
+            ideas: ideas
+          }
+        })
+      );
+  } else {
+    createUpdateMutation = () => Promise.resolve();
+  }
+
+  allMutations.push(createUpdateMutation);
   return allMutations;
 };
 

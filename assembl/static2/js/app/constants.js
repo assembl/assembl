@@ -84,7 +84,14 @@ export const PHASES = {
   brightMirror: 'brightMirror'
 };
 
-export const HARVESTABLE_PHASES = [PHASES.thread, PHASES.multiColumns];
+export const MESSAGE_VIEW = {
+  noModule: 'noModule',
+  survey: 'survey',
+  thread: 'thread',
+  messageColumns: 'messageColumns',
+  voteSession: 'voteSession',
+  brightMirror: 'brightMirror'
+};
 
 export const COOKIE_TYPES = [
   'ACCEPT_TRACKING_ON_DISCUSSION',
@@ -185,33 +192,9 @@ export const ADMIN_MENU = {
   resourcesCenter: {
     title: 'administration.resourcesCenter.menuTitle',
     sectionId: ''
-  }
-};
-
-export const PHASES_ADMIN_MENU = {
-  survey: {
-    sectionId: '1',
-    subMenu: {
-      setThemes: {
-        title: 'administration.survey.1',
-        sectionId: '1'
-      },
-      configThematics: {
-        title: 'administration.survey.configThematics',
-        sectionId: 'configThematics',
-        component: ThematicsMenu
-      },
-      setQuestions: {
-        title: 'administration.survey.2',
-        sectionId: '2'
-      },
-      exportData: {
-        title: 'administration.survey.3',
-        sectionId: '3'
-      }
-    }
   },
   voteSession: {
+    title: 'administration.voteSession.configureVoteSession',
     sectionId: '1',
     subMenu: {
       pageConfiguration: {
@@ -231,27 +214,27 @@ export const PHASES_ADMIN_MENU = {
         sectionId: '4'
       }
     }
-  },
-  thread: {
+  }
+};
+
+export const PHASES_ADMIN_MENU = {
+  survey: {
     sectionId: '1',
     subMenu: {
-      exportData: {
-        title: 'administration.thread.0',
+      setThemes: {
+        title: 'administration.survey.createTable',
         sectionId: '1'
+      },
+      configThematics: {
+        title: 'administration.survey.configThematics',
+        sectionId: 'configThematics',
+        component: ThematicsMenu
+      },
+      exportData: {
+        title: 'administration.survey.exportData',
+        sectionId: '2'
       }
     }
-  },
-  multiColumns: {
-    sectionId: '1',
-    subMenu: {
-      exportData: {
-        title: 'administration.multiColumn.0',
-        sectionId: '1'
-      }
-    }
-  },
-  brightMirror: {
-    sectionId: '1'
   }
 };
 
@@ -308,7 +291,14 @@ export const fictionBackgroundColors = [
   '#cfd8dc'
 ];
 
-export const modulesTranslationKeys = ['survey', 'thread', 'multiColumns', 'voteSession', 'brightMirror'];
+export const modulesTranslationKeys = [
+  MESSAGE_VIEW.noModule,
+  MESSAGE_VIEW.survey,
+  MESSAGE_VIEW.thread,
+  MESSAGE_VIEW.messageColumns,
+  MESSAGE_VIEW.voteSession,
+  MESSAGE_VIEW.brightMirror
+];
 
 export const BlockingPublicationStates = {};
 BlockingPublicationStates[PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE] = PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE;

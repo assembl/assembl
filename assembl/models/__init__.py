@@ -187,7 +187,6 @@ from .idea import (  # noqa: E402, F401
 )
 from .thematic import (  # noqa: E402, F401
     Question,
-    Thematic,
 )
 from .idea_msg_columns import (  # noqa: E402, F401
     IdeaMessageColumn,
@@ -371,7 +370,7 @@ from .resource import Resource  # noqa: E402, F401
 
 from .section import Section  # noqa: E402, F401
 
-from .vote_session import VoteSession  # noqa: E402, F401
+from .vote_session import VoteSession, VoteProposal  # noqa: E402, F401
 from .landing_page import LandingPageModuleType, LandingPageModule  # noqa: E402, F401
 
 

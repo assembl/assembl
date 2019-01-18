@@ -11,7 +11,9 @@ import PhaseMenu from './phaseMenu';
 import { ADMIN_MENU } from '../../constants';
 
 type Props = {
+  thematicId: ?string,
   requestedPhase: string,
+  goBackPhaseIdentifier: ?string,
   locale: string,
   timeline: Timeline
 };
@@ -22,12 +24,13 @@ class Menu extends React.PureComponent<Props> {
     menuItem: MenuItem,
     slug: { slug: string | null },
     rootSection: string = '',
-    isRoot: boolean = true
+    isRoot: boolean = true,
+    queryArgs: { thematicId?: ?string, goBackPhaseIdentifier?: ?string } = {}
   ) => {
     const { requestedPhase } = this.props;
     const { title, sectionId, subMenu } = menuItem;
     const sectionIndex = rootSection ? `${rootSection}.${sectionId}` : sectionId;
-    const sectionQuery = sectionId ? { section: sectionIndex } : {};
+    const sectionQuery = sectionId ? { section: sectionIndex, ...queryArgs } : {};
     const subMenuIds = subMenu ? Object.keys(subMenu) : [];
     const newRootSection = !isRoot ? sectionIndex : '';
     const isActive = requestedPhase === id;
@@ -40,7 +43,7 @@ class Menu extends React.PureComponent<Props> {
           <ul className={classNames('admin-menu2', { shown: isActive, hidden: !isActive })}>
             {subMenuIds.map((subKey) => {
               const subMenuItem = subMenu[subKey];
-              return this.renderMenuItem(id, subMenuItem, slug, newRootSection, false);
+              return this.renderMenuItem(id, subMenuItem, slug, newRootSection, false, queryArgs);
             })}
           </ul>
         ) : null}
@@ -51,10 +54,18 @@ class Menu extends React.PureComponent<Props> {
   render() {
     const slug = { slug: getDiscussionSlug() };
     const { timeline } = this.props;
-    const { requestedPhase, locale } = this.props;
+    const { requestedPhase, thematicId, locale, goBackPhaseIdentifier } = this.props;
     return (
       <ul className="admin-menu">
-        {Object.keys(ADMIN_MENU).map(key => this.renderMenuItem(key, ADMIN_MENU[key], slug))}
+        {Object.keys(ADMIN_MENU)
+          .filter(key => key !== 'voteSession')
+          .map(key => this.renderMenuItem(key, ADMIN_MENU[key], slug))}
+        {requestedPhase === 'voteSession'
+          ? this.renderMenuItem('voteSession', ADMIN_MENU.voteSession, slug, '', true, {
+            thematicId: thematicId,
+            goBackPhaseIdentifier: goBackPhaseIdentifier
+          })
+          : null}
         {timeline
           ? timeline.map((phase, index) => (
             <PhaseMenu

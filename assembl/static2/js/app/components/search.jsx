@@ -45,6 +45,7 @@ import { get as getRoute } from '../utils/routeMap';
 import UserMessagesTagFilter from './search/UserMessagesTagFilter';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 import RelatedIdeas from './debate/common/post/relatedIdeas';
+import { MESSAGE_VIEW } from '../constants';
 
 const FRAGMENT_SIZE = 400;
 const elasticsearchLangIndexesElement = document.getElementById('elasticsearchLangIndexes');
@@ -66,21 +67,21 @@ const highlightedTextOrTruncatedText = (hit, field) => {
   return text;
 };
 
-function getPostUrl(ideaId, postId, phaseIdentifier, slug, extractId) {
+function getPostUrl(ideaId, postId, phaseIdentifier, messageViewOverride, slug, extractId) {
   if (!ideaId || !phaseIdentifier) {
     return undefined;
   }
   const ideaBase64id = btoa(`Idea:${ideaId}`);
   const postBase64id = btoa(`Post:${postId}`);
   const extractBase64id = btoa(`Extract:${extractId}`);
-  if (phaseIdentifier === 'thread' && !extractId) {
+  if ((messageViewOverride === MESSAGE_VIEW.thread || messageViewOverride === MESSAGE_VIEW.messageColumns) && !extractId) {
     return getRoute('post', {
       slug: slug,
       phase: phaseIdentifier,
       themeId: ideaBase64id,
       element: postBase64id
     });
-  } else if (phaseIdentifier === 'survey') {
+  } else if (messageViewOverride === MESSAGE_VIEW.survey) {
     return getRoute('questionPost', {
       slug: slug,
       phase: phaseIdentifier,
@@ -161,13 +162,15 @@ if (v1Interface) {
       const ideaId = hit._source.idea_id[0];
       const postId = hit._source.post_id;
       const extractId = hit._source.id;
-      return getPostUrl(ideaId, postId, phaseIdentifier, slug, extractId);
+      const messageViewOverride = hit._source.message_view_override;
+      return getPostUrl(ideaId, postId, phaseIdentifier, messageViewOverride, slug, extractId);
     }
     default: {
       // post
       const phaseIdentifier = hit._source.phase_identifier;
       const ideaId = hit._source.idea_id[0];
-      return getPostUrl(ideaId, id, phaseIdentifier, slug);
+      const messageViewOverride = hit._source.message_view_override;
+      return getPostUrl(ideaId, id, phaseIdentifier, messageViewOverride, slug);
     }
     }
   };

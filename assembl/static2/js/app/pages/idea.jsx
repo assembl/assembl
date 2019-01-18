@@ -1,4 +1,5 @@
 // @flow
+/* eslint-disable react/no-multi-comp */
 import React from 'react';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
@@ -14,29 +15,33 @@ import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import GoUp from '../components/common/goUp';
 import Loader from '../components/common/loader';
 import { getConnectedUserId } from '../utils/globalFunctions';
-import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
+import Announcement, { getSentimentsCount, AnnouncementCounters } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
-import { DeletedPublicationStates, PHASES, FICTION_DELETE_CALLBACK } from '../constants';
+import { DeletedPublicationStates, FICTION_DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
-import type { ContentLocaleMapping } from '../actions/actionTypes';
+import type { ContentLocaleMapping, ContentLocaleMappingJS } from '../actions/actionTypes';
 import type { AnnouncementContent } from '../components/debate/common/announcement';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
+import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
+import Survey from './survey';
+import VoteSession from './voteSession';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
+import { DebateContext } from '../app';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
 type Props = {
   contentLocaleMapping: ContentLocaleMapping,
-  defaultContentLocaleMapping: Map,
-  updateContentLocaleMapping: ContentLocaleMapping => void,
+  defaultContentLocaleMapping: Map<string, string>,
+  updateContentLocaleMapping: ContentLocaleMappingJS => void,
   timeline: Timeline,
   debateData: DebateData,
   lang: string,
-  ideaLoading: boolean,
   ideaWithPostsData: IdeaWithPostsQuery,
+  messageViewOverride: string,
   identifier: string,
   phaseId: string,
   routerParams: RouterParams,
@@ -247,27 +252,24 @@ class Idea extends React.Component<Props> {
 
   render() {
     const {
+      messageViewOverride,
       contentLocaleMapping,
       timeline,
       debateData,
       lang,
-      ideaLoading,
       ideaWithPostsData,
       identifier,
       phaseId,
       routerParams
     } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
-    if (ideaLoading) {
-      return (
-        <div className="idea">
-          <Loader />
-        </div>
-      );
-    }
     const { announcement, id, headerImgUrl, synthesisTitle, title, description } = this.props;
-    const isMultiColumns = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === 'messageColumns';
-    const isBrightMirror = ideaWithPostsData.loading ? false : ideaWithPostsData.idea.messageViewOverride === PHASES.brightMirror;
+    const isMultiColumns = ideaWithPostsData.loading
+      ? false
+      : ideaWithPostsData.idea.messageViewOverride === MESSAGE_VIEW.messageColumns;
+    const isBrightMirror = ideaWithPostsData.loading
+      ? false
+      : ideaWithPostsData.idea.messageViewOverride === MESSAGE_VIEW.brightMirror;
     const messageColumns = ideaWithPostsData.loading
       ? undefined
       : [...ideaWithPostsData.idea.messageColumns].sort((a, b) => {
@@ -281,6 +283,7 @@ class Idea extends React.Component<Props> {
       });
     const topPosts = this.getTopPosts();
     const childProps = {
+      messageViewOverride: messageViewOverride,
       identifier: identifier,
       phaseId: phaseId,
       timeline: timeline,
@@ -328,8 +331,6 @@ class Idea extends React.Component<Props> {
           subtitle={description}
           imgUrl={headerImgUrl}
           phaseId={phaseId}
-          ideaId={id}
-          routerParams={routerParams}
           type="idea"
         >
           <HeaderStatistics statElements={statElements} />
@@ -341,11 +342,9 @@ class Idea extends React.Component<Props> {
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">
-                    <Announcement
-                      idea={ideaWithPostsData.idea}
-                      announcementContent={announcement}
-                      isMultiColumns={isMultiColumns}
-                    />
+                    <Announcement announcement={announcement}>
+                      <AnnouncementCounters idea={ideaWithPostsData.idea} />
+                    </Announcement>
                   </div>
                 </div>
               </Grid>
@@ -372,9 +371,65 @@ const mapDispatchToProps = dispatch => ({
   toggleHarvesting: () => dispatch(toggleHarvestingAction())
 });
 
-export default compose(
+const IdeaWithPosts = compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(IdeaWithPostsQuery, { name: 'ideaWithPostsData' }),
+  withRouter
+)(Idea);
+
+type SwitchViewProps = {
+  messageViewOverride: string,
+  contextMessageViewOverride: string,
+  modifyContext: (newState: Object) => void,
+  isHarvestable: boolean
+};
+
+class SwitchView extends React.Component<SwitchViewProps> {
+  componentDidMount() {
+    this.setIsHarvestable();
+  }
+
+  componentDidUpdate() {
+    this.setIsHarvestable();
+  }
+
+  setIsHarvestable = () => {
+    const { modifyContext, isHarvestable, messageViewOverride, contextMessageViewOverride } = this.props;
+    const isHarvestableIdea = messageViewOverride === MESSAGE_VIEW.thread || messageViewOverride === MESSAGE_VIEW.messageColumns;
+    if (isHarvestableIdea !== isHarvestable || messageViewOverride !== contextMessageViewOverride) {
+      modifyContext({ isHarvestable: isHarvestableIdea, messageViewOverride: messageViewOverride });
+    }
+  };
+
+  render() {
+    const props = this.props;
+    if (props.messageViewOverride === MESSAGE_VIEW.survey) {
+      return <Survey {...props} />;
+    }
+    if (props.messageViewOverride === MESSAGE_VIEW.voteSession) {
+      return <VoteSession {...props} />;
+    }
+    return <IdeaWithPosts {...props} additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror} />;
+  }
+}
+
+const SwitchViewWithContext = props => (
+  <DebateContext.Consumer>
+    {({ modifyContext, isHarvestable, messageViewOverride }) => (
+      <SwitchView
+        {...props}
+        isHarvestable={isHarvestable}
+        contextMessageViewOverride={messageViewOverride}
+        modifyContext={modifyContext}
+      />
+    )}
+  </DebateContext.Consumer>
+);
+
+export default compose(
+  connect(state => ({
+    lang: state.i18n.locale
+  })),
   graphql(IdeaQuery, {
     options: { notifyOnNetworkStatusChange: true },
     // ideaData.loading stays to true when switching interface language (IdeaQuery is using lang variable)
@@ -382,24 +437,25 @@ export default compose(
     // downgrading to apollo-client 1.8.1 should works too.
     // See https://github.com/apollographql/apollo-client/issues/1186#issuecomment-327161526
     props: ({ data }) => {
-      if (data.loading) {
+      if (data.error || data.loading) {
         return {
-          ideaLoading: true
+          error: data.error,
+          loading: data.loading
         };
-      }
-      if (data.error) {
-        throw new Error(data.error.message);
       }
 
       return {
-        ideaLoading: false,
+        error: data.error,
+        loading: data.loading,
         announcement: data.idea.announcement,
         id: data.idea.id,
         title: data.idea.title,
         description: data.idea.description,
         synthesisTitle: data.idea.synthesisTitle,
-        headerImgUrl: data.idea.img ? data.idea.img.externalUrl : ''
+        headerImgUrl: data.idea.img ? data.idea.img.externalUrl : '',
+        messageViewOverride: data.idea.messageViewOverride
       };
     }
-  })
-)(withRouter(Idea));
+  }),
+  manageErrorAndLoading({ displayLoader: true })
+)(SwitchViewWithContext);

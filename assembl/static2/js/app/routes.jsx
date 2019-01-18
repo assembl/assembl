@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Route, Redirect } from 'react-router';
 import Root from './root';
@@ -10,10 +11,7 @@ import RequestPasswordChange from './pages/requestPasswordChange';
 import Home from './pages/home';
 import Syntheses from './pages/syntheses';
 import Synthesis from './pages/synthesis';
-import Debate from './pages/debate';
 import DebateThread from './pages/debateThread';
-import Survey from './pages/survey';
-import VoteSession from './pages/voteSession';
 import Idea from './pages/idea';
 import Community from './pages/community';
 import Question from './pages/question';
@@ -30,16 +28,12 @@ import Administration from './pages/administration';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
 import SurveyAdmin from './pages/surveyAdmin';
-import ThreadAdmin from './pages/threadAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
-import MultiColumnsAdmin from './pages/multiColumnsAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
-import BrightMirror from './pages/brightMirror';
 import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
-import BrightMirrorAdmin from './pages/brightMirrorAdmin';
 import { routeForRouter } from './utils/routeMap';
 
 // Page that is only used to display converted mockups to static pages
@@ -50,78 +44,36 @@ import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirro
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
-  case 'survey':
-    return <Debate {...props} />;
-  case 'thread':
-    return <DebateThread {...props} />;
-  case 'multiColumns':
-    return <DebateThread {...props} />;
-  case 'voteSession':
-    return <VoteSession {...props} />;
-  case 'brightMirror':
-    return <BrightMirror {...props} />;
   default:
-    return <Debate {...props} />;
+    return <DebateThread {...props} />;
   }
 };
 
 const DebateChild = (props) => {
   switch (props.params.phase) {
-  case 'survey':
-    return <Survey id={props.id} identifier={props.identifier} phaseId={props.phaseId} />;
-  case 'thread':
-    return (
-      <Idea
-        id={props.id}
-        identifier={props.identifier}
-        phaseId={props.phaseId}
-        routerParams={props.params}
-        additionalFields={false}
-      />
-    );
-  case 'multiColumns':
-    return (
-      <Idea
-        id={props.id}
-        identifier={props.identifier}
-        phaseId={props.phaseId}
-        routerParams={props.params}
-        additionalFields={false}
-      />
-    );
-  case 'voteSession':
-    return <NotFound />;
-  case 'brightMirror':
-    return (
-      <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} additionalFields />
-    );
   default:
-    return (
-      <Idea
-        id={props.id}
-        identifier={props.identifier}
-        phaseId={props.phaseId}
-        routerParams={props.params}
-        additionalFields={false}
-      />
-    );
+    return <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} />;
   }
 };
 
-const AdminChild = (props) => {
+const AdminChild = (props: {
+  discussionPhaseId: string,
+  location: { query: { section?: string, thematicId?: string, goBackPhaseIdentifier?: string } },
+  params: { phase: string }
+}) => {
   switch (props.params.phase) {
   case 'discussion':
     return <DiscussionAdmin {...props} section={props.location.query.section} />;
-  case 'survey':
-    return <SurveyAdmin {...props} thematicId={props.location.query.thematicId} section={props.location.query.section} />;
-  case 'brightMirror':
-    return <BrightMirrorAdmin {...props} />;
-  case 'thread':
-    return <ThreadAdmin {...props} section={props.location.query.section} />;
-  case 'multiColumns':
-    return <MultiColumnsAdmin {...props} section={props.location.query.section} />;
   case 'voteSession':
-    return <VoteSessionAdmin {...props} section={props.location.query.section} />;
+    return (
+      <VoteSessionAdmin
+        {...props}
+        phaseIdentifier={props.params.phase}
+        goBackPhaseIdentifier={props.location.query.goBackPhaseIdentifier}
+        thematicId={props.location.query.thematicId}
+        section={props.location.query.section}
+      />
+    );
   case 'resourcesCenter':
     return <ResourcesCenterAdmin {...props} />;
   case 'landingPage':
@@ -129,7 +81,14 @@ const AdminChild = (props) => {
   case 'exportTaxonomies':
     return <ExportTaxonomies />;
   default:
-    return <ThreadAdmin {...props} />;
+    return (
+      <SurveyAdmin
+        {...props}
+        phaseIdentifier={props.params.phase}
+        thematicId={props.location.query.thematicId}
+        section={props.location.query.section}
+      />
+    );
   }
 };
 

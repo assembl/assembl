@@ -7,6 +7,7 @@ import { Link } from 'react-router';
 import StatisticsDoughnut from '../debate/common/statisticsDoughnut';
 import PostsAndContributorsCount from '../common/postsAndContributorsCount';
 import { getColumnInfos, getSentimentsCount, createDoughnutElements } from '../debate/common/announcement';
+import { MESSAGE_VIEW } from '../../constants';
 
 export type SynthesisIdea = {
   id: string,
@@ -91,7 +92,7 @@ const IdeaSynthesis = (props: { idea: SynthesisIdea, hasSiblings: boolean, level
       numPosts={numPosts}
       ideaLink={link}
       posts={posts}
-      isMultiColumns={messageViewOverride === 'messageColumns'}
+      isMultiColumns={messageViewOverride === MESSAGE_VIEW.messageColumns}
       messageColumns={messageColumns}
     />
   );

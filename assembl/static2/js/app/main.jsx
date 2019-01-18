@@ -11,7 +11,7 @@ import { fromGlobalId } from './utils/globalFunctions';
 
 type Props = {
   timeline: Timeline,
-  params: { phase?: string, phaseId?: string, themeId?: string },
+  params: { phase?: string, themeId?: string },
   location: { pathname: string },
   children: React.Node
 };

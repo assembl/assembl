@@ -371,7 +371,6 @@ const Translations = {
         themesTitle: "Choisissez une thématique !",
         txtAreaPh: "Ecrivez votre proposition",
         question_x_on_total: "Question %{current} sur %{total}",
-        titleVideo: "Une vidéo pour mieux comprendre le sujet...",
         proposalsTitle: "Êtes-vous d'accord avec les propositions exprimées ?",
         moderateProposalsTitle: "Modérer les propositions exprimées par les participants.",
         thematicNumerotation: "thématique %{count}",
@@ -421,6 +420,7 @@ const Translations = {
         startDiscussion: "Je démarre une discussion",
         translate: "Traduire",
         goToIdea: "Voir tous les messages",
+        voteForProposals: "Votez pour les propositions",
         seeSubIdeas: "Voir les %{count} sous-thèmes",
         seeSubIdeas_1: "Voir le sous-thème",
         announcement: "Consigne"
@@ -506,10 +506,6 @@ const Translations = {
         estimate: "Estimation moyenne",
         isCompleted: "La phase de vote est désormais terminée. Nous vous remercions d'avoir participé !",
         voteResultsPlusTitle: "Résultats des votes : %{title}",
-        noVoteSession: {
-          title: "La session de vote n'est pas configurée",
-          text: "Un administrateur doit configurer la session de vote"
-        },
         postSuccess:
           "Merci pour votre participation ! Votre vote a bien été pris en compte. Vous pouvez le modifier à tout moment jusqu’à la fermeture de la session de vote.",
         remainingTokens: "%{count} jetons disponibles",
@@ -651,7 +647,6 @@ const Translations = {
         deletePhase: "Supprimer la phase",
         instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
         instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
-        phaseModule: "Modalité de participation pour cette phase",
         thematicsTable: "Thematics table",
         configureModule:
           "Après avoir sauvegardé, configurez le module en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
@@ -664,48 +659,31 @@ const Translations = {
         warningLabel: "Les dates que vous avez configuré entrent en conflit."
       },
       modules: {
+        noModule: "Aucun module",
         survey: "Module Questions",
         thread: "Module Threads",
-        multiColumns: "Module Multi-colonnes",
+        messageColumns: "Module Multi-colonnes",
         voteSession: "Module de vote",
         brightMirror: "Module Bright Mirror"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
-        "1": "Créer la table des thématiques",
-        "2": "Renseigner les questions",
-        "3": "Exporter les données",
+        createTable: "Créer la table des thématiques",
+        exportData: "Exporter les données",
         configThematic: "Configurer la thématique",
         configThematics: "Configurer les thématiques",
         configThematicsHelperTitle: "Vous avez choisi de configurer une table de thématiques.",
         configThematicsHelperDescription: "Pour modifier votre choix, retourner au paramétrage générale du débat."
       },
-      brightMirrorSection: {
-        bannerHeader:
-          "Le bandeau de haut de page comporte le titre de la thématique que vous avez défini en amont, ainsi qu’une image de fond et éventuellement un sous-titre.",
-        bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
-        bannerImagePickerLabel: "Choisir l'image de fond du bandeau",
-        configureTitle: "Configurer Bright Mirror",
-        instructionHeader:
-          "La section Consigne comporte un titre et une consigne et un média (vidéo, slideshare ou image ) qui permettent de guider les participants dans leur contribution.",
-        instructionLabel: "Consigne",
-        sectionTitleLabel: "Titre de la section",
-        thematicTitleLabel: "Titre de la thématique"
-      },
       voteSession: {
-        "0": "Configuration de la page",
+        configureVoteSession: "Configuration de la session de vote associée à la thématique",
+        "0": "Configuration de la page session de vote",
         "1": "Configurer le ou les modules de vote",
         "2": "Configurer les propositions de vote",
         "3": "Exporter les données"
       },
-      thread: {
-        "0": "Exporter les données"
-      },
-      multiColumn: {
-        "0": "Exporter les données"
-      },
       imageRequirements:
-        "L'image doit avoir une hauteur de 480 px et une largeur de 1280 px. Le poids ne doit pas dépasser 1 Mo.",
+        "L'image doit avoir une hauteur de 300 px et une largeur de 1280 px. Le poids ne doit pas dépasser 300 ko.",
       voteWithTokens: "Vote par jetons",
       voteWithGauges: "Vote par jauge(s)",
       gauge: "Jauge %{number}",
@@ -720,14 +698,10 @@ const Translations = {
       headerTitle: "Configuration du bandeau de haut de page",
       ProposalsSectionTitle: "Configuration du titre de la section Propositions",
       instructions: "Configuration de la section Consigne",
-      voteSessionHeaderLabel: "Choisir l'image de fond du bandeau",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusif",
       tokenVoteInstructions: "Consigne du vote par jetons",
       proposalsSectionTitle: "Configuration du titre de la section Propositions",
-      voteModulesIntroText1: "Vous avez choisi le dispositif de vote.",
-      voteModulesIntroText2: "Pour modifier votre choix, modifiez la ",
-      timeline: "ligne de temps",
       notExclusive: "Non exclusif",
       voteProposals: {
         sectionTitle: "Configurer les propositions associées aux modules de vote",
@@ -763,6 +737,11 @@ const Translations = {
       unit: "Unité",
       saveFirstStep: "Veuillez d'abord revenir à l'étape 1 et sauvegarder la configuration de la page.",
       saveSecondStep: "Veuillez d'abord revenir à l'étape 2 et configurez puis sauvegardez les modules de vote.",
+      configureVoteSessionButton: "Configurer un module de vote",
+      goBackToThematic: "Retour à la thématique",
+      saveBeforeConfigureVoteSession: "Veuillez sauvegarder avant de pouvoir accéder à la configuration d'un module de vote",
+      postsExistsWarning:
+        "Cette thématique contient des messages. Si vous changez de module, vous supprimerez définitivement tous les messages associés à cette thématique lors de la sauvegarde.",
       configureVoteSession: "Vous devez configurer une session de vote.",
       configureVoteModules: "Vous devez avoir configuré au moins un module de vote.",
       backToPreviousStep: "Revenir à l'étape %{number}",
@@ -786,11 +765,10 @@ const Translations = {
         sectionsTitle: "Renseigner les rubriques"
       },
       helpers: {
+        surveyQuestion:
+          "Le module de questions est composé d'une question et d'un champ de réponse dédié au participant. Vous pouvez ajouter des questions en cliquant sur l'icône + ci-dessous.",
         timelinePhases: "Choisissez une description et une image pour chaque phase du débat visible dans la page d'accueil",
         timelineTitle: "Configurez le titre et le sous-titre de la section timeline visible dans la page d'accueil",
-        voteSessionHeader: "Le bandeau de haut de page doit contenir une image et un titre. Le sous-titre est optionnel.",
-        voteSessionInstructions:
-          "La section consigne comporte un titre et une consigne qui permettent de guider les participants dans leur contribution.",
         voteSessionProposalSection:
           "La partie qui comporte les diverses propositions est introduite par un titre. À vous de définir le titre selon qu'il s'agisse de propositions, d'idées, de projets ou autre...",
         tokenCategoryNumber: "Sélectionnez le nombre de types de jetons différents souhaité pour ce vote",
@@ -833,25 +811,33 @@ const Translations = {
       moderation: "Modération à priori",
       activateModeration: "Activer la modération",
       ph: {
-        title: "Titre",
-        quote: "Citation",
-        descriptionTop: "Texte au-dessus de la vidéo",
-        descriptionBottom: "Texte en-dessous de la vidéo",
-        mediaLink: "Lien média en ligne (vidéo, image, etc..)",
-        orAttachPicture: "Ou téléchargez une image depuis votre ordinateur",
-        headerTitle: "Titre du bandeau",
-        headerSubtitle: "Sous-titre du bandeau",
-        instructionsTitle: "Titre de la consigne",
-        instructionsContent: "Contenu de la consigne",
         propositionSectionTitle: "Titre de la section",
         propositionSectionSubtitle: "Sous-titre de la section",
         descriptionPhase: "Description de la phase"
       },
       tableOfThematics: {
+        quote: "Citation",
+        bannerHeader:
+          "Le bandeau de haut de page comporte le titre de la thématique que vous avez défini en amont, ainsi qu’une image de fond et éventuellement un sous-titre.",
         thematicTitle: "Titre de la Thématique",
-        headerLabel: "Choisir l'image de fond du bandeau",
+        bannerSubtitleLabel: "Sous-titre dans le bandeau du haut de page",
+        bannerImagePickerLabel: "Choisir l'image de fond du bandeau",
+        moduleTypeLabel: "Configuration du module de participation",
+        instructionHeader:
+          "La section Consigne comporte un titre et une consigne et un média (vidéo, slideshare ou image ) qui permettent de guider les participants dans leur contribution.",
+        instructionLabel: "Consigne",
+        sectionTitleLabel: "Titre de la section",
+        questionsHeader: "Questions",
         confirmDeletionTitle: "Supprimer la thématique %{title}",
-        confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cette thématique ?"
+        confirmDeletionBody: "Êtes-vous certain de vouloir supprimer cette thématique ?",
+        multiColumnsFormName1: "2 colonnes",
+        multiColumnsFormName2: "3 colonnes",
+        columnsConfiguration: "Configuration des colonnes",
+        columnTitle: "Titre de la colonne",
+        columnName: "Nom de la colonne",
+        columnColor: "Couleur de la colonne",
+        columnSynthesisSubject: "Titre de la synthèse de la colonne",
+        columnSynthesisBody: "Synthèse de la colonne"
       },
       resourcesCenter: {
         createResource: "Ajouter un média",
@@ -870,12 +856,6 @@ const Translations = {
       },
       export: {
         defaultAnnotation: "Vous pouvez exporter l'ensemble des données en cliquant sur le bouton exporter",
-        surveyAnnotation:
-          "Vous pouvez exporter l'ensemble des données du module de questions ouvertes en cliquant sur le bouton Exporter",
-        threadAnnotation: "Vous pouvez exporter l'ensemble des données du module de thread en cliquant sur le bouton Exporter",
-        multicolumnAnnotation:
-          "Vous pouvez exporter l'ensemble des données du module de multi-colonnes en cliquant sur le bouton Exporter",
-        voteSessionAnnotation: "Vous pouvez exporter l'ensemble des données du module de vote en cliquant sur le bouton Exporter",
         taxonomyAnnotation: "Vous pouvez exporter l'ensemble des taxonomies en cliquant sur le bouton exporter",
         link: "Exporter",
         noExportLanguage: "Conserver les messages dans leurs langues d'origine",
@@ -1360,7 +1340,6 @@ const Translations = {
         themesTitle: "Choose a theme!",
         txtAreaPh: "Write your point of view",
         question_x_on_total: "Question %{current} on %{total}",
-        titleVideo: "A video to better understand the subject...",
         proposalsTitle: "Do you agree with these points of view?",
         moderateProposalsTitle: "Moderate these points of view",
         thematicNumerotation: "Thematic %{count}",
@@ -1410,6 +1389,7 @@ const Translations = {
         startDiscussion: "Start a new thread",
         translate: "Translate",
         goToIdea: "View all messages",
+        voteForProposals: "Vote for the proposals",
         seeSubIdeas: "See %{count} sub-thematics",
         seeSubIdeas_1: "See sub-thematic",
         announcement: "Announcement"
@@ -1495,10 +1475,6 @@ const Translations = {
         estimate: "Average estimate",
         isCompleted: "This vote phase is closed. Thank you for your participation!",
         voteResultsPlusTitle: "Vote results: %{title}",
-        noVoteSession: {
-          title: "Vote session is not configured",
-          text: "An administrator must configure the vote session"
-        },
         postSuccess:
           "Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.",
         remainingTokens: "%{count} tokens remaining",
@@ -1639,7 +1615,6 @@ const Translations = {
         deletePhase: "Delete the phase",
         instruction1: "Choose the number of phases for your debate",
         instruction2: "Fill in the required fields for each phase by selecting each tab",
-        phaseModule: "Module for this phase:",
         thematicsTable: "Table des thématiques",
         configureModule:
           "Once you saved your work, configure the module by clicking on the vertical menu on the left or on the following link: ",
@@ -1652,47 +1627,30 @@ const Translations = {
         warningLabel: "The dates you have set are in conflict"
       },
       modules: {
+        noModule: "No module",
         survey: "Survey module",
         thread: "Thread module",
-        multiColumns: "Multi-columns module",
+        messageColumns: "Multi-columns module",
         voteSession: "Vote module",
         brightMirror: "Bright Mirror module"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {
-        "1": "Create the themes table ",
-        "2": "Set questions",
-        "3": "Export data",
+        createTable: "Create the themes table",
+        exportData: "Export data",
         configThematic: "Configure the theme",
         configThematics: "Configure the themes",
         configThematicsHelperTitle: "You have chosen to configure a themes table.",
         configThematicsHelperDescription: "To change your choice, return to the general setting of the debate."
       },
-      brightMirrorSection: {
-        bannerHeader:
-          "Top banner must include the thematic title defined previously, a background image and eventually a subtitle.",
-        bannerSubtitleLabel: "Top banner subtitle",
-        bannerImagePickerLabel: "Banner image",
-        configureTitle: "Configure Bright Mirror",
-        instructionLabel: "Instructions",
-        instructionHeader:
-          "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
-        sectionTitleLabel: "Section title",
-        thematicTitleLabel: "Thematic title"
-      },
       voteSession: {
-        "0": "Page configuration",
+        configureVoteSession: "Configure vote session associated to the theme",
+        "0": "Vote session page configuration",
         "1": "Configure the voting modules",
         "2": "Configure the voting proposals",
         "3": "Export data"
       },
-      thread: {
-        "0": "Export Data"
-      },
-      multiColumn: {
-        "0": "Export Data"
-      },
-      imageRequirements: "The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 MB.",
+      imageRequirements: "The image must have a height of 300 px and a width of 1280 px. Its size has to be under 300 kB.",
       voteWithTokens: "Tokens vote",
       voteWithGauges: "Gauge(s) vote",
       gauge: "Gauge %{number}",
@@ -1703,20 +1661,21 @@ const Translations = {
       headerTitle: "Top page Header configuration",
       propositionSectionTitle: "Proposals section title configuration",
       instructions: "Instructions section configuration",
-      voteSessionHeaderLabel: "Choose the header background image",
       voteSessionSuccess: "The vote session is saved with success.",
       exclusive: "Exclusive",
       tokenVoteInstructions: "Instructions for the token vote",
       gaugeVoteInstructions: "Instructions for the gauge vote",
       proposalSectionTitle: "Proposal section title configuration",
-      voteModulesIntroText1: "You chose the vote module",
-      voteModulesIntroText2: "To modify your choice, modify the ",
-      timeline: "timeline",
       gaugeNumber: "Gauge number",
       defineGaugeNumer: "Define gauges number",
       minValue: "Minimum value",
       maxValue: "Maximum value",
       unit: "Unit",
+      configureVoteSessionButton: "Configure a vote session",
+      goBackToThematic: "Go back to thematic",
+      saveBeforeConfigureVoteSession: "Please save before you can access to the vote session configuration",
+      postsExistsWarning:
+        "This thematic contains posts. If you change the module, you'll delete all messages associated to this thematic when you'll save.",
       configureVoteSession: "You need to configure a vote session.",
       configureVoteModules: "You need to configure at least one vote module.",
       saveFirstStep: "Please return to step 1 and save the instructions first.",
@@ -1772,11 +1731,10 @@ const Translations = {
         sectionsTitle: "Set sections"
       },
       helpers: {
+        surveyQuestion:
+          "The survey module is composed of one question and a response field dedicated to the participant. You can add questions by clicking on the + icon below.",
         timelinePhases: "Choose a description and an image for each phase of the debate displayed in the landing page",
         timelineTitle: "Configure the title and the sub-title of the timeline section displayed in the landing page",
-        voteSessionHeader: "The top page header must contain an image and a title. The subtitle is optional.",
-        voteSessionInstructions:
-          "The instructions section must contain a title and a description that will guide the participants for their contribution.",
         voteSessionProposalSection:
           "The proposals section is introduced by a title. You define the title based on the proposal content.",
         tokenCategoryNumber: "Select the number of different token types for this vote",
@@ -1815,25 +1773,33 @@ const Translations = {
       moderation: "Post pending for moderation",
       activateModeration: "Activate the moderation",
       ph: {
-        title: "Title",
-        quote: "Quote",
-        descriptionTop: "Comments above video",
-        descriptionBottom: "Comments below video",
-        mediaLink: "Online media link (video, picture, etc..)",
-        orAttachPicture: "Or upload an image from your computer",
-        headerTitle: "Header title",
-        headerSubtitle: "Header subtitle",
-        instructionsTitle: "Instructions title",
-        instructionsContent: "Instructions content",
         propositionSectionTitle: "Section title",
         propositionSectionSubtitle: "Section subtitle",
         descriptionPhase: "Description phase"
       },
       tableOfThematics: {
+        quote: "Quote",
+        bannerHeader:
+          "Top banner must include the thematic title defined previously, a background image and eventually a subtitle.",
         thematicTitle: "Thematic title",
-        headerLabel: "Choose the header background image",
+        bannerSubtitleLabel: "Top banner subtitle",
+        bannerImagePickerLabel: "Banner image",
+        moduleTypeLabel: "Participation module configuration",
+        instructionHeader:
+          "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
+        instructionLabel: "Instructions",
+        sectionTitleLabel: "Section title",
+        questionsHeader: "Questions",
         confirmDeletionTitle: "Delete %{title} theme",
-        confirmDeletionBody: "Are you sure that you wish to delete this theme?"
+        confirmDeletionBody: "Are you sure that you wish to delete this theme?",
+        multiColumnsFormName1: "2 columns",
+        multiColumnsFormName2: "3 columns",
+        columnsConfiguration: "Columns configuration",
+        columnTitle: "Column title",
+        columnName: "Column name",
+        columnColor: "Column color",
+        columnSynthesisSubject: "Column synthesis title",
+        columnSynthesisBody: "Column synthesis"
       },
       resourcesCenter: {
         createResource: "Add a media",
@@ -1853,10 +1819,6 @@ const Translations = {
       export: {
         defaultAnnotation: "You can export all of the data by clicking on the export button",
         taxonomyAnnotation: "You can export all of the taxonomies by clicking on the export button",
-        surveyAnnotation: "You can export all the survey module data by clicking on the Export button",
-        threadAnnotation: "You can export all the thread module data by clicking on the Export butotn",
-        multicolumnAnnotation: "You can export all the Multi Column data by clicking on the Export button",
-        voteSessionAnnotation: "You can export all the vote session data by clicking on the Export button",
         link: "Export",
         noExportLanguage: "Keep the messages in their original languages",
         title: "Export the debate data",

@@ -5,6 +5,7 @@ import Adapter from 'enzyme-adapter-react-16.3';
 
 import { DumbTopPostForm, getClassNames, submittingState } from '../../../../../js/app/components/debate/common/topPostForm';
 import type { Props } from '../../../../../js/app/components/debate/common/topPostForm';
+import { MESSAGE_VIEW } from '../../../../../js/app/constants';
 
 configure({ adapter: new Adapter() });
 
@@ -24,7 +25,8 @@ const topPostFormProps: Props = {
   onDisplayForm: jest.fn(),
   draftable: false,
   ideaOnColumn: false,
-  isDebateModerated: false
+  isDebateModerated: false,
+  messageViewOverride: MESSAGE_VIEW.thread
 };
 
 describe('<TopPostForm /> - with shallow', () => {

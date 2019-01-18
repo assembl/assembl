@@ -5,25 +5,6 @@ import * as fakeData from '../components/voteSession/fakeData';
 import { DumbVoteSession } from '../../../js/app/pages/voteSession';
 
 describe('VoteSession component', () => {
-  it('should match VoteSession snapshot when vote session is not configured', () => {
-    const props = {
-      title: '',
-      seeCurrentVotes: true,
-      subTitle: '',
-      headerImageUrl: '',
-      instructionsSectionTitle: '',
-      instructionsSectionContent: '',
-      modules: [],
-      propositionsSectionTitle: '',
-      proposals: [],
-      randomProposals: []
-    };
-    const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<DumbVoteSession {...props} />);
-    const result = shallowRenderer.getRenderOutput();
-    expect(result).toMatchSnapshot();
-  });
-
   it('should match VoteSession snapshot with empty modules and proposals', () => {
     const props = {
       title: 'Phase de vote à la majorité et estimation multicritère',

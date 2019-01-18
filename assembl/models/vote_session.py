@@ -11,14 +11,11 @@ from sqlalchemy import (
 from assembl.auth import CrudPermissions, P_READ, P_ADMIN_DISC
 from .langstrings import LangString
 from .langstrings_helpers import langstrings_base
-from .timeline import DiscussionPhase
+# from .timeline import DiscussionPhase
 from .widgets import VotingWidget
+from .idea import Idea
 
 langstrings_names = [
-    "title",
-    "sub_title",
-    "instructions_section_title",
-    "instructions_section_content",
     "propositions_section_title"
 ]
 
@@ -41,20 +38,9 @@ class VoteSession(
         onupdate='CASCADE'
     ), primary_key=True)
 
-    discussion_phase_id = Column(
-        Integer,
-        ForeignKey(DiscussionPhase.id),
-        nullable=False)
+    idea_id = Column(Integer, ForeignKey(Idea.id, onupdate="CASCADE", ondelete='CASCADE'), nullable=False, unique=True)
 
-    discussion_phase = relationship(
-        DiscussionPhase,
-        backref=backref(
-            "vote_session",
-            single_parent=True,
-            uselist=False,
-            cascade="all, delete-orphan"
-        ),
-    )
+    idea = relationship(Idea, backref=backref("vote_session", single_parent=True, uselist=False, cascade="all, delete-orphan"),)
 
     see_current_votes = Column(
         Boolean,
@@ -64,23 +50,36 @@ class VoteSession(
 
     @classmethod
     def filter_started(cls, query):
-        return query.join(cls.discussion_phase).filter(
-            (DiscussionPhase.start == None) | (DiscussionPhase.start <= datetime.utcnow()))  # noqa: E711
+        return query
+# cls.discussion_phase doesn't exist anymore
+#        return query.join(cls.discussion_phase).filter(
+#            (DiscussionPhase.start == None) | (DiscussionPhase.start <= datetime.utcnow()))  # noqa: E711
 
     @classmethod
     def test_active(cls):
-        now = datetime.utcnow()
-        return ((DiscussionPhase.end == None) | (DiscussionPhase.end > now) & (DiscussionPhase.start == None) | (DiscussionPhase.start <= now))  # noqa: E711
+        return ()
+#        now = datetime.utcnow()
+#        return ((DiscussionPhase.end == None) | (DiscussionPhase.end > now) & (DiscussionPhase.start == None) | (DiscussionPhase.start <= now))  # noqa: E711
 
     @classmethod
     def filter_active(cls, query):
-        return query.join(cls.discussion_phase).filter(cls.test_active())
+        return query
+#        return query.join(cls.discussion_phase).filter(cls.test_active())
+
+    def vote_session_discussion_phase(self):
+        return self.idea.get_associated_phase()
 
     def is_started(self):
-        return self.discussion_phase.start == None or self.discussion_phase.start <= datetime.utcnow()  # noqa: E711
+        phase = self.vote_session_discussion_phase()
+        if phase:
+            return phase.start == None or phase.start <= datetime.utcnow()  # noqa: E711
+        return False
 
     def is_ended(self):
-        return self.discussion_phase.end != None and self.discussion_phase.end < datetime.utcnow()  # noqa: E711
+        phase = self.vote_session_discussion_phase()
+        if phase:
+            return phase.end != None and phase.end < datetime.utcnow()  # noqa: E711
+        return False
 
     crud_permissions = CrudPermissions(
         create=P_ADMIN_DISC,
@@ -90,3 +89,16 @@ class VoteSession(
 
 
 LangString.setup_ownership_load_event(VoteSession, langstrings_names)
+
+
+class VoteProposal(Idea):
+    """
+    A vote proposal.
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'vote_proposal',
+    }
+
+    @classmethod
+    def graphene_type(cls):
+        return 'Idea'

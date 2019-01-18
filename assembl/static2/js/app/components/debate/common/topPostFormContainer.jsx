@@ -10,18 +10,18 @@ import { hexToRgb } from '../../../utils/globalFunctions';
 import { MIN_WIDTH_COLUMN, SMALL_SCREEN_HEIGHT } from '../../../constants';
 
 type TopPostFormContainerProps = {
-  messageColumns: Array<*>,
+  messageColumns: IdeaMessageColumns,
   isColumnViewInline: boolean,
   ideaId: string,
   refetchIdea: Function,
   topPostsCount: number,
-  instructionLabelMsgId: string,
-  fillBodyLabelMsgId: string,
-  bodyPlaceholderMsgId: string,
-  postSuccessMsgId: string,
-  bodyMaxLength: number,
+  instructionLabelMsgId?: string,
+  fillBodyLabelMsgId?: string,
+  bodyPlaceholderMsgId?: string,
+  postSuccessMsgId?: string,
+  bodyMaxLength?: number,
   draftable: boolean,
-  draftSuccessMsgId: string,
+  draftSuccessMsgId?: ?string,
   fullscreen: boolean
 };
 

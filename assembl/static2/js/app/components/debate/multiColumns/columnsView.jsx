@@ -63,6 +63,9 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
               // keep the || here, if body is empty string, we want noSynthesisYet message
               hyphenStyle: { borderTopColor: col.color }
             };
+            if (synthesisProps.synthesisBody === '<p></p>') {
+              synthesisProps.synthesisBody = I18n.t('multiColumns.synthesis.noSynthesisYet');
+            }
             return (
               <PostColumn
                 key={classifier}

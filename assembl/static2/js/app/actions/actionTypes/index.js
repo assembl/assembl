@@ -21,17 +21,10 @@ export const UPDATE_LEGAL_CONTENTS: 'UPDATE_LEGAL_CONTENTS' = 'UPDATE_LEGAL_CONT
 export const UPDATE_COOKIES_POLICY_ENTRY: 'UPDATE_COOKIES_POLICY_ENTRY' = 'UPDATE_COOKIES_POLICY_ENTRY';
 export const UPDATE_PRIVACY_POLICY_ENTRY: 'UPDATE_PRIVACY_POLICY_ENTRY' = 'UPDATE_PRIVACY_POLICY_ENTRY';
 export const UPDATE_VOTE_SESSION_PAGE: 'UPDATE_VOTE_SESSION_PAGE' = 'UPDATE_VOTE_SESSION_PAGE';
-export const UPDATE_VOTE_SESSION_PAGE_TITLE: 'UPDATE_VOTE_SESSION_PAGE_TITLE' = 'UPDATE_VOTE_SESSION_PAGE_TITLE';
 export const UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES: 'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES' =
   'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES';
-export const UPDATE_VOTE_SESSION_PAGE_SUBTITLE: 'UPDATE_VOTE_SESSION_PAGE_SUBTITLE' = 'UPDATE_VOTE_SESSION_PAGE_SUBTITLE';
-export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE' =
-  'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE';
-export const UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT: 'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT' =
-  'UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT';
 export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE' =
   'UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE';
-export const UPDATE_VOTE_SESSION_PAGE_IMAGE: 'UPDATE_VOTE_SESSION_PAGE_IMAGE' = 'UPDATE_VOTE_SESSION_PAGE_IMAGE';
 export const UPDATE_VOTE_MODULES: 'UPDATE_VOTE_MODULES' = 'UPDATE_VOTE_MODULES';
 export const CREATE_TOKEN_VOTE_MODULE: 'CREATE_TOKEN_VOTE_MODULE' = 'CREATE_TOKEN_VOTE_MODULE';
 export const DELETE_VOTE_MODULE: 'DELETE_VOTE_MODULE' = 'DELETE_VOTE_MODULE';
@@ -76,11 +69,9 @@ export const UPDATE_PHASES: 'UPDATE_PHASES' = 'UPDATE_PHASES';
 export const DELETE_PHASE: 'DELETE_PHASE' = 'DELETE_PHASE';
 export const UPDATE_PHASE_TITLE: 'UPDATE_PHASE_TITLE' = 'UPDATE_PHASE_TITLE';
 export const UPDATE_PHASE_DESCRIPTION: 'UPDATE_PHASE_DESCRIPTION' = 'UPDATE_PHASE_DESCRIPTION';
-export const UPDATE_PHASE_IDENTIFIER: 'UPDATE_PHASE_IDENTIFIER' = 'UPDATE_PHASE_IDENTIFIER';
 export const UPDATE_PHASE_IMAGE: 'UPDATE_PHASE_IMAGE' = 'UPDATE_PHASE_IMAGE';
 export const UPDATE_PHASE_START: 'UPDATE_PHASE_START' = 'UPDATE_PHASE_START';
 export const UPDATE_PHASE_END: 'UPDATE_PHASE_END' = 'UPDATE_PHASE_END';
-export const UPDATE_IS_THEMATICS_TABLE: 'UPDATE_IS_THEMATICS_TABLE' = 'UPDATE_IS_THEMATICS_TABLE';
 export const MOVE_PHASE_UP: 'MOVE_PHASE_UP' = 'MOVE_PHASE_UP';
 export const MOVE_PHASE_DOWN: 'MOVE_PHASE_DOWN' = 'MOVE_PHASE_DOWN';
 export const UPDATE_LANDING_PAGE_MODULE_TITLE: 'UPDATE_LANDING_PAGE_MODULE_TITLE' = 'UPDATE_LANDING_PAGE_MODULE_TITLE';
@@ -103,13 +94,15 @@ export type ContentLocaleInfo = {
   originalLocale: string
 };
 
-export type ContentLocaleMapping = {
+export type ContentLocaleMapping = Map<string, ContentLocaleInfo>;
+
+export type ContentLocaleMappingJS = {
   [string]: ContentLocaleInfo
 };
 
 export type UpdateContentLocale = {
   type: typeof UPDATE_CONTENT_LOCALE,
-  data: ContentLocaleMapping
+  data: ContentLocaleMappingJS
 };
 
 export type SectionInfo = {
@@ -194,33 +187,9 @@ export type UpdateLegalContents = {
   type: typeof UPDATE_LEGAL_CONTENTS
 };
 
-export type UpdateVoteSessionPageTitle = {
-  locale: string,
-  value: string,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_TITLE
-};
-
 export type UpdateVoteSessionPageSeeCurrentVotes = {
   value: string,
   type: typeof UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES
-};
-
-export type UpdateVoteSessionPageSubtitle = {
-  locale: string,
-  value: string,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_SUBTITLE
-};
-
-export type UpdateVoteSessionPageInstructionsTitle = {
-  locale: string,
-  value: string,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_TITLE
-};
-
-export type UpdateVoteSessionPageInstructionsContent = {
-  locale: string,
-  value: string,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_INSTRUCTIONS_CONTENT
 };
 
 export type UpdateVoteSessionPagePropositionsTitle = {
@@ -229,19 +198,9 @@ export type UpdateVoteSessionPagePropositionsTitle = {
   type: typeof UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE
 };
 
-export type UpdateVoteSessionHeaderImage = {
-  value: File,
-  type: typeof UPDATE_VOTE_SESSION_PAGE_IMAGE
-};
-
 export type UpdateVoteSessionPage = {
-  titleEntries: Array<LangStringEntryInput>,
   seeCurrentVotes: boolean,
-  subTitleEntries: Array<LangStringEntryInput>,
-  instructionsSectionTitleEntries: Array<LangStringEntryInput>,
-  instructionsSectionContentEntries: Array<LangStringEntryInput>,
   propositionsSectionTitleEntries: Array<LangStringEntryInput>,
-  headerImage: File | null,
   type: typeof UPDATE_VOTE_SESSION_PAGE
 };
 
@@ -537,12 +496,6 @@ export type UpdatePhaseDescription = {
   type: typeof UPDATE_PHASE_DESCRIPTION
 };
 
-export type UpdatePhaseIdentifier = {
-  id: string,
-  value: string,
-  type: typeof UPDATE_PHASE_IDENTIFIER
-};
-
 export type UpdatePhaseImage = {
   id: string,
   value: File,
@@ -559,12 +512,6 @@ export type UpdatePhaseEnd = {
   id: string,
   value: moment,
   type: typeof UPDATE_PHASE_END
-};
-
-export type UpdateIsThematicsTable = {
-  id: string,
-  value: boolean,
-  type: typeof UPDATE_IS_THEMATICS_TABLE
 };
 
 export type MovePhaseUp = {
@@ -592,21 +539,14 @@ type TimelineActions =
   | UpdatePhases
   | DeletePhase
   | UpdatePhaseTitle
-  | UpdatePhaseIdentifier
   | UpdatePhaseStart
   | UpdatePhaseEnd
-  | UpdateIsThematicsTable
   | MovePhaseUp
   | MovePhaseDown;
 
 type VoteSessionActions =
-  | UpdateVoteSessionPageTitle
   | UpdateVoteSessionPageSeeCurrentVotes
-  | UpdateVoteSessionPageSubtitle
-  | UpdateVoteSessionPageInstructionsTitle
-  | UpdateVoteSessionPageInstructionsContent
   | UpdateVoteSessionPagePropositionsTitle
-  | UpdateVoteSessionHeaderImage
   | UpdateVoteModules
   | DeleteVoteModule
   | CreateTokenVoteModule

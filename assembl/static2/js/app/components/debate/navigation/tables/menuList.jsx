@@ -60,49 +60,47 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
   render() {
     const { subMenu, items, rootItem, identifier, phaseId, className, onMenuItemClick } = this.props;
     const { selected } = this.state;
-    const rootItems = this.getItemChildren(rootItem);
+    // filter out item not having id (currently in table of thematics administration, but not saved yet)
+    const rootItems = this.getItemChildren(rootItem).filter(item => item.id);
     if (rootItems.length === 0) return null;
     const estimatedMenuHeight = rootItems.length * menuItemHeight + menuItemMargin;
-    return [
-      subMenu ? <div key="separator" className="sub-menu-separator" /> : '',
-      <div
-        key="submenu"
-        className={classNames('menu-table-col', className, { 'sub-menu': subMenu })}
-        onMouseLeave={this.onMenuleave}
-      >
-        <div className="menu-table" style={{ height: `${estimatedMenuHeight}px` }}>
-          <Scrollbars
-            // we hide the scrollbar
-            renderTrackVertical={props => <div {...props} className="hidden" />}
-            renderThumbVertical={props => <div {...props} className="hidden" />}
-          >
-            {rootItems.map(item => (
-              <MenuItem
-                key={item.id}
-                hasSubItems={items.some(listItem => listItem.parentId === item.id)}
-                selected={item.id === selected}
-                onClick={onMenuItemClick}
-                onMouseOver={this.onItemOver}
-                identifier={identifier}
-                phaseId={phaseId}
-                item={item}
-              />
-            ))}
-          </Scrollbars>
+    return (
+      <React.Fragment>
+        {subMenu ? <div className="sub-menu-separator" /> : null}
+        <div className={classNames('menu-table-col', className, { 'sub-menu': subMenu })} onMouseLeave={this.onMenuleave}>
+          <div className="menu-table" style={{ height: `${estimatedMenuHeight}px` }}>
+            <Scrollbars
+              // we hide the scrollbar
+              renderTrackVertical={props => <div {...props} className="hidden" />}
+              renderThumbVertical={props => <div {...props} className="hidden" />}
+            >
+              {rootItems.map(item => (
+                <MenuItem
+                  key={item.id}
+                  hasSubItems={items.some(listItem => listItem.parentId === item.id)}
+                  selected={item.id === selected}
+                  onClick={onMenuItemClick}
+                  onMouseOver={this.onItemOver}
+                  identifier={identifier}
+                  phaseId={phaseId}
+                  item={item}
+                />
+              ))}
+            </Scrollbars>
+          </div>
+          {selected ? (
+            <MenuList
+              subMenu
+              onMenuItemClick={onMenuItemClick}
+              items={items}
+              rootItem={selected}
+              identifier={identifier}
+              phaseId={phaseId}
+            />
+          ) : null}
         </div>
-        {selected && (
-          <MenuList
-            key="menulist"
-            subMenu
-            onMenuItemClick={onMenuItemClick}
-            items={items}
-            rootItem={selected}
-            identifier={identifier}
-            phaseId={phaseId}
-          />
-        )}
-      </div>
-    ];
+      </React.Fragment>
+    );
   }
 }
 

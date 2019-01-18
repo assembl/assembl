@@ -1,5 +1,3 @@
-import os
-
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
@@ -7,12 +5,11 @@ from sqlalchemy.sql import func
 
 from assembl import models
 from assembl.auth import CrudPermissions
-from .document import Document
 from .graphql_langstrings_helpers import (
     langstrings_interface, update_langstrings, add_langstrings_input_attrs)
 from .permissions_helpers import (
     require_cls_permission, require_instance_permission)
-from .idea import Idea
+from .idea import Idea, MessageView
 from .langstring import (
     LangStringEntry, LangStringEntryInput,
     langstring_from_input_entries,
@@ -20,36 +17,10 @@ from .langstring import (
     resolve_langstring, resolve_langstring_entries)
 from .types import SecureObjectType, SQLAlchemyUnion
 from .utils import (
-    abort_transaction_on_exception,
-    get_root_thematic_for_phase,
-    create_root_thematic)
+    abort_transaction_on_exception)
 import assembl.graphql.docstrings as docs
 
 langstrings_defs = {
-    "title": {
-        "documentation": {
-            "base": docs.VoteSession.title,
-            "entries": docs.VoteSession.title_entries
-        }
-    },
-    "sub_title": {
-        "documentation": {
-            "base": docs.VoteSession.sub_title,
-            "entries": docs.VoteSession.sub_title_entries
-        }
-    },
-    "instructions_section_title": {
-        "documentation": {
-            "base": docs.VoteSession.instructions_section_title,
-            "entries": docs.VoteSession.instructions_section_title_entries
-        }
-    },
-    "instructions_section_content": {
-        "documentation": {
-            "base": docs.VoteSession.instructions_section_content,
-            "entries": docs.VoteSession.instructions_section_content_entries
-        }
-    },
     "propositions_section_title": {
         "documentation": {
             "base": docs.VoteSession.propositions_section_title,
@@ -65,25 +36,15 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.VoteSession
         interfaces = (Node, langstrings_interface(langstrings_defs, models.VoteSession.__name__))
-        only_fields = ('id', 'discussion_phase_id')
+        only_fields = ('id', 'idea_id')
 
-    header_image = graphene.Field(Document, description=docs.VoteSession.header_image)
-    vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.header_image)
+    idea_id = graphene.ID(required=True)
+    vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.vote_specifications)
     proposals = graphene.List(lambda: Idea, required=True, description=docs.VoteSession.proposals)
     see_current_votes = graphene.Boolean(required=True, description=docs.VoteSession.see_current_votes)
 
-    def resolve_header_image(self, args, context, info):
-        ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
-        for attachment in self.attachments:
-            if attachment.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE:
-                return attachment.document
-
     def resolve_proposals(self, args, context, info):
-        root_thematic = get_root_thematic_for_phase(self.discussion_phase)
-        if root_thematic is None:
-            return []
-
-        return root_thematic.get_children()
+        return [child for child in self.idea.get_children() if isinstance(child, models.VoteProposal)]
 
     def resolve_vote_specifications(self, args, context, info):
         # return only vote specifications not associated to a proposal
@@ -94,8 +55,7 @@ class UpdateVoteSession(graphene.Mutation):
     __doc__ = docs.UpdateVoteSession.__doc__
 
     class Input:
-        discussion_phase_id = graphene.Int(required=True, description=docs.UpdateVoteSession.discussion_phase_id)
-        header_image = graphene.String(description=docs.UpdateVoteSession.header_image)
+        idea_id = graphene.ID(required=True, description=docs.UpdateVoteSession.idea_id)
         see_current_votes = graphene.Boolean(description=docs.UpdateVoteSession.see_current_votes)
 
     add_langstrings_input_attrs(Input, langstrings_defs.keys())
@@ -105,23 +65,24 @@ class UpdateVoteSession(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_phase_id = args.get('discussion_phase_id')
-        discussion_phase = models.DiscussionPhase.get(discussion_phase_id)
+        idea_id = args.get('idea_id')
+        idea_id = int(Node.from_global_id(idea_id)[1])
+        idea = models.Idea.get(idea_id)
         discussion_id = context.matchdict["discussion_id"]
         discussion = models.Discussion.get(discussion_id)
 
-        if discussion_phase is None:
+        if idea is None:
             raise Exception(
-                "A vote session requires a discussion phase, check discussionPhaseId value")
-        phase_identifier = "voteSession"
-        if discussion_phase.identifier != phase_identifier:
-            raise Exception(
-                "A vote session can only be created or edited with a '{}' discussion phase, check discussionPhaseId value".format(phase_identifier))
-
-        vote_session = discussion_phase.vote_session
+                "A vote session requires an idea associated to it, check ideaId value")
+        if idea.get_associated_phase() is not None:
+            if idea.message_view_override != MessageView.voteSession.value:
+                raise Exception(
+                    "A vote session can only be created or edited if the view of the associated idea is of type voteSession")
+        db = idea.db
+        vote_session = db.query(models.VoteSession).filter(models.VoteSession.idea_id == idea_id).first()
         if vote_session is None:
             require_cls_permission(CrudPermissions.CREATE, models.VoteSession, context)
-            vote_session = models.VoteSession(discussion=discussion, discussion_phase=discussion_phase)
+            vote_session = models.VoteSession(discussion=discussion, idea=idea)
         else:
             require_instance_permission(CrudPermissions.UPDATE, vote_session, context)
 
@@ -129,43 +90,8 @@ class UpdateVoteSession(graphene.Mutation):
             vote_session.see_current_votes = args['see_current_votes']
 
         db = vote_session.db
-
         update_langstrings(vote_session, langstrings_defs, args)
-
-        image = args.get('header_image')
-        if image is not None:
-            filename = os.path.basename(context.POST[image].filename)
-            mime_type = context.POST[image].type
-            ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
-            document = models.File(
-                discussion=discussion,
-                mime_type=mime_type,
-                title=filename)
-            document.add_file_data(context.POST[image].file)
-            images = [
-                att for att in vote_session.attachments
-                if att.attachmentPurpose == ATTACHMENT_PURPOSE_IMAGE]
-            if images:
-                image = images[0]
-                image.document.delete_file()
-                db.delete(image.document)
-                vote_session.attachments.remove(image)
-            db.add(models.VoteSessionAttachment(
-                document=document,
-                vote_session=vote_session,
-                discussion=discussion,
-                creator_id=context.authenticated_userid,
-                title=filename,
-                attachmentPurpose=ATTACHMENT_PURPOSE_IMAGE
-            ))
-
         db.add(vote_session)
-
-        # create the root thematic on which we will attach all proposals for this vote session
-        root_thematic = get_root_thematic_for_phase(discussion_phase)
-        if root_thematic is None:
-            root_thematic = create_root_thematic(discussion_phase)
-
         db.flush()
         return UpdateVoteSession(vote_session=vote_session)
 
@@ -440,7 +366,7 @@ class CreateTokenVoteSpecification(graphene.Mutation):
             proposal_id = args.get('proposal_id')
             if proposal_id:
                 proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
+                proposal = models.VoteProposal.get(proposal_id)
                 vote_spec.criterion_idea = proposal
 
             vote_spec_template_id = args.get('vote_spec_template_id')
@@ -607,7 +533,7 @@ class CreateGaugeVoteSpecification(graphene.Mutation):
             proposal_id = args.get('proposal_id')
             if proposal_id:
                 proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
+                proposal = models.VoteProposal.get(proposal_id)
                 vote_spec.criterion_idea = proposal
 
             vote_spec_template_id = args.get('vote_spec_template_id')
@@ -736,7 +662,7 @@ class CreateNumberGaugeVoteSpecification(graphene.Mutation):
             proposal_id = args.get('proposal_id')
             if proposal_id:
                 proposal_id = int(Node.from_global_id(proposal_id)[1])
-                proposal = models.Idea.get(proposal_id)
+                proposal = models.VoteProposal.get(proposal_id)
                 vote_spec.criterion_idea = proposal
 
             vote_spec_template_id = args.get('vote_spec_template_id')
@@ -806,7 +732,7 @@ class CreateProposal(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        cls = models.Idea
+        cls = models.VoteProposal
         require_cls_permission(CrudPermissions.CREATE, cls, context)
         vote_session_id = args.get('vote_session_id')
         vote_session_id = int(Node.from_global_id(vote_session_id)[1])
@@ -819,6 +745,10 @@ class CreateProposal(graphene.Mutation):
         with cls.default_db.no_autoflush as db:
             title_ls = langstring_from_input_entries(title_entries)
             description_ls = langstring_from_input_entries(description_entries)
+            if vote_session is None:
+                raise Exception(
+                    "A vote session is required before creating a proposal")
+            idea = vote_session.idea
             proposal = cls(
                 discussion_id=discussion_id,
                 discussion=discussion,
@@ -826,15 +756,9 @@ class CreateProposal(graphene.Mutation):
                 description=description_ls
             )
             db.add(proposal)
-            phase = vote_session.discussion_phase
-            root_thematic = get_root_thematic_for_phase(phase)
-            if root_thematic is None:
-                raise Exception(
-                    "There is no root thematic for this vote session.")
-
-            order = len(root_thematic.get_children()) + 1.0
+            order = len(idea.get_children()) + 1.0
             db.add(
-                models.IdeaLink(source=root_thematic, target=proposal,
+                models.IdeaLink(source=idea, target=proposal,
                                 order=args.get('order', order)))
             db.flush()
 
@@ -855,7 +779,7 @@ class UpdateProposal(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        cls = models.Idea
+        cls = models.VoteProposal
         proposal_id = args.get('id')
         proposal_id = int(Node.from_global_id(proposal_id)[1])
         title_entries = args.get('title_entries')
@@ -892,7 +816,7 @@ class DeleteProposal(graphene.Mutation):
     def mutate(root, args, context, info):
         proposal_id = args.get('id')
         proposal_id = int(Node.from_global_id(proposal_id)[1])
-        proposal = models.Idea.get(proposal_id)
+        proposal = models.VoteProposal.get(proposal_id)
         require_instance_permission(CrudPermissions.DELETE, proposal, context)
         proposal.is_tombstone = True
         proposal.db.flush()

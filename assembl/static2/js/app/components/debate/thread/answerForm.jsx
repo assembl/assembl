@@ -17,7 +17,7 @@ import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 import { getPostPublicationState } from '../../../utils/globalFunctions';
 import { connectedUserIsModerator } from '../../../utils/permissions';
-import { DebateContext } from '../../../../app/app';
+import { DebateContext } from '../../../app';
 
 type Props = {
   contentLocale: string,
@@ -88,7 +88,6 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
     const bodyIsEmpty = !body || editorStateIsEmpty(body);
     if (!bodyIsEmpty) {
       // first we upload the new documents
-      // $FlowFixMe we know that body is not null as we checked bodyIsEmpty
       const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result) => {
         if (!result.contentState) {

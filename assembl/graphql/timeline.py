@@ -31,7 +31,6 @@ class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id',)
 
     identifier = graphene.String(description=docs.DiscussionPhase.identifier)
-    is_thematics_table = graphene.Boolean(description=docs.DiscussionPhase.is_thematics_table)
     title = graphene.String(lang=graphene.String(), description=docs.DiscussionPhase.title)
     title_entries = graphene.List(LangStringEntry, description=docs.DiscussionPhase.title_entries)
     description = graphene.String(lang=graphene.String(), description=docs.DiscussionPhase.description)
@@ -63,8 +62,7 @@ class CreateDiscussionPhase(graphene.Mutation):
 
     class Input:
         lang = graphene.String(required=True, description=docs.CreateDiscussionPhase.lang)
-        identifier = graphene.String(required=True, description=docs.CreateDiscussionPhase.identifier)
-        is_thematics_table = graphene.Boolean(description=docs.CreateDiscussionPhase.is_thematics_table)
+        identifier = graphene.String(description=docs.CreateDiscussionPhase.identifier)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateDiscussionPhase.title_entries)
         start = DateTime(required=True, description=docs.CreateDiscussionPhase.start)
         end = DateTime(required=True, description=docs.CreateDiscussionPhase.end)
@@ -103,6 +101,9 @@ class CreateDiscussionPhase(graphene.Mutation):
 
             discussion.timeline_events.append(saobj)
             db.flush()
+            if identifier is None:
+                saobj.identifier = unicode(saobj.id)
+                db.flush()
 
         return CreateDiscussionPhase(discussion_phase=saobj)
 
@@ -112,7 +113,6 @@ class UpdateDiscussionPhase(graphene.Mutation):
 
     class Input:
         id = graphene.ID(required=True, description=docs.UpdateDiscussionPhase.id)
-        is_thematics_table = graphene.Boolean(description=docs.UpdateDiscussionPhase.is_thematics_table)
         lang = graphene.String(required=True, description=docs.UpdateDiscussionPhase.lang)
         identifier = graphene.String(required=True, description=docs.UpdateDiscussionPhase.identifier)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.UpdateDiscussionPhase.title_entries)
@@ -145,7 +145,6 @@ class UpdateDiscussionPhase(graphene.Mutation):
 
             identifier = args.get('identifier')
             phase.identifier = identifier
-#            phase.is_thematics_table = is_thematics_table
             # SQLAlchemy wants naive datetimes
             phase.start = args.get('start').replace(tzinfo=None)
             phase.end = args.get('end').replace(tzinfo=None)

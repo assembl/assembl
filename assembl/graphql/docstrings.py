@@ -309,20 +309,6 @@ class Locale:
     label = """The name of the locale, in a specifically given language."""
 
 
-class Video:
-    __doc__ = """The Video subsection in an Idea (or Thematic). This object describes the contents surrounding the video module."""
-    title = Default.string_entry % ("Title of the video.")
-    description_top = Default.string_entry % ("Description on top side of the video.")
-    description_bottom = Default.string_entry % ("Description on bottom side of the video.")
-    description_side = Default.string_entry % ("Description on one of the sides of the video.")
-    html_code = "HTML Code to add extra content in the video module section to be injected."
-    media_file = "File (image or video) to use in the video module section."
-    title_entries = Default.langstring_entries % ("Title of the video in various languages.")
-    description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
-    description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
-    description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
-
-
 class VoteResults:
     __doc__ = """The metadata describing the resulting votes on a Thematic or Idea."""
     num_participants = """The count of participants on the vote session."""
@@ -352,14 +338,14 @@ class IdeaInterface:
     top_keywords = "The list of top keywords found in messages associated to this idea, according to NLP engine"
     nlp_sentiment = "The aggregated sentiment analysis on the posts"
     num_posts = "The total number of active posts on that idea (excludes deleted posts)."
-    num_total_posts = "The total number of posts on that idea and on all its children ideas."
+    num_total_posts = "The total number of posts on the discussion."
     num_contributors = """The total number of users who contributed to the Idea/Thematic/Question.\n
     Contribution is counted as either as a sentiment set, a post created."""
     num_children = "The total number of children ideas (called \"subideas\") on the Idea or Thematic."
     img = Default.document % "Header image associated with the idea. "
     order = "The order of the Idea, Thematic, Question in the idea tree."
     live = """The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea."""
-    message_view_override = """Use a non-standard view for this idea.\nCurrently only supporting "messageColumns" and "brightMirror"."""
+    message_view_override = """Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror."""
     total_sentiments = "Total number of sentiments expressed by participants on posts related to that idea."
     vote_specifications = """The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession."""
     type = """The type of the idea. The class name of the idea."""
@@ -370,9 +356,11 @@ class IdeaAnnouncement:
     An announcement is visible in the header of every Idea."""
     title = Default.string_entry % ("title of announcement")
     body = Default.string_entry % ("body of announcement")
+    quote = Default.string_entry % ("quote of announcement")
     title_entries = Default.langstring_entries % ("This is the title of announcement in multiple languages.",)
     body_attachments = Default.string_entry % ("Attachments for the body of announcement in multiple languages.")
     body_entries = Default.langstring_entries % ("This is the body of announcement in multiple languages.")
+    quote_entries = Default.langstring_entries % ("This is the quote of the announcement in multiple languages.")
 
 
 class IdeaMessageColumn:
@@ -383,7 +371,9 @@ class IdeaMessageColumn:
     index = """The order of the message column in the Idea/Thematic."""
     idea = """The Idea/Thematic that the message column is associated with."""
     name = Default.string_entry % ("The name of the column")
+    name_entries = Default.langstring_entries % ("The name of the column in multiple languages.",)
     title = Default.string_entry % ("The title of the column")
+    title_entries = Default.langstring_entries % ("The title of the column in multiple languages.",)
     column_synthesis = """A Synthesis done on the column, of type Post."""
     num_posts = """The number of posts contributed to only this column."""
 
@@ -396,6 +386,7 @@ class Idea:
     children = """A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
     The subchildren of each subIdea is not shown here."""
     parent_id = Default.node_id % ("Idea",)
+    parent = "Parent Idea"
     posts = """A list of all Posts under the Idea. These include posts of the subIdeas."""
     contributors = """A list of participants who made a contribution to the idea by creating a post.
     A participant who only made a sentiment is not included."""
@@ -403,6 +394,7 @@ class Idea:
     message_columns = """A list of IdeaMessageColumn objects, if any set, on an Idea."""
     ancestors = """A list of Relay.Node ID's representing the parents Ideas of the Idea."""
     vote_results = """The VoteResult object showing the status and result of a VoteSession on Idea."""
+    questions = """A list of Question objects that are bound to the Thematic."""
 
 
 class Question:
@@ -414,7 +406,6 @@ class Question:
     title = """The Question to be asked itself, in the language given."""
     title_entries = Default.langstring_entries % ("")
     posts = """The list of all posts under the Question."""
-    thematic = """The Thematic that the Question is categorized under. A Question, in the end, is an Idea type, as well as a Thematic."""
     total_sentiments = """The count of total sentiments """
     has_pending_posts = """Whether the question has pending posts or not."""
 
@@ -424,23 +415,14 @@ class QuestionInput:
     title_entries = Default.langstring_entries % ("Title of the question in various languages.")
 
 
-class VideoInput:
-    title_entries = Default.langstring_entries % ("Title of the video in various languages.")
-    description_top_attachments = Default.string_entry % ("Attachments for description on the top of the video.")
-    description_bottom_attachments = Default.string_entry % ("Attachments for description on the bottom of the video.")
-    description_side_attachments = Default.string_entry % ("Attachments for description on the side of the video.")
-    description_entries_top = Default.langstring_entries % ("Description on the top of the video in various languages.")
-    description_entries_bottom = Default.langstring_entries % ("Description on the bottom of the video in various languages.")
-    description_entries_side = Default.langstring_entries % ("Description on the side of the video in various languages.")
-    html_code = "HTML Code to add extra content in the video module section to be injected."
-    media_file = "File (image or video) to use in the video module section."
-
-
-class Thematic:
-    __doc__ = """A Thematic is an Idea that exists under the Survey Phase of a debate.
-    Thematics differ slightly from Ideas because Thematics' subideas are Questions."""
-    questions = """A list of Question objects that are bound to the Thematic."""
-    video = """A Video objet that is often integrated to the header of a Thematic."""
+class IdeaMessageColumnInput:
+    id = """Id of the IdeaMessageColumnInput."""
+    name_entries = Default.langstring_entries % ("Name of the column.")
+    title_entries = Default.langstring_entries % ("Title of the column.")
+    color = Default.string_entry % ("The color of the column.")
+    message_classifier = Default.string_entry % ("Message classifier of the column.")
+    column_synthesis_body = Default.langstring_entries % ("The body of the Synthesis post associated to the column.")
+    column_synthesis_subject = Default.langstring_entries % ("The title of the Synthesis post associated to the column.")
 
 
 class CreateThematic:
@@ -448,8 +430,7 @@ class CreateThematic:
     title_entries = IdeaInterface.title_entries
     description_entries = IdeaInterface.description_entries
     discussion_phase_id = Default.discussion_phase_id
-    video = Thematic.video
-    questions = Thematic.questions
+    questions = Idea.questions
     image = Default.document % ("An Image to be shown in the Thematic. ")
     order = Default.float_entry % (" Order of the thematic.")
 
@@ -459,7 +440,6 @@ class UpdateThematic:
     id = Default.node_id % ("Thematic") + " The identifier of the Thematic to be updated."
     title_entries = CreateThematic.title_entries
     description_entries = CreateThematic.description_entries
-    video = CreateThematic.video
     questions = CreateThematic.questions
     image = CreateThematic.image
     order = CreateThematic.order
@@ -473,10 +453,10 @@ class DeleteThematic:
 class IdeaInput:
     title_entries = IdeaInterface.title_entries
     description_entries = IdeaInterface.description_entries
-    video = Thematic.video
-    questions = Thematic.questions
+    questions = Idea.questions
     image = Default.document % ("An Image to be shown in the Thematic. ")
     order = Default.float_entry % (" Order of the thematic.")
+    message_columns = """A list of IdeaMessageColumnInput to be associated to the idea."""
 
 
 class UpdateIdeas:
@@ -855,27 +835,17 @@ class VoteSession:
     Survey,\n
     Multicolumn,\n
     thread)."""
-    discussion_phase_id = "The database identifier of the DiscussionPhase the session is under."
-    header_image = Default.document % ("The image appearing at the header of the Vote session page.")
+    idea_id = "The database identifier of the idea the session is under."
     vote_specifications = "A list of VoteSpecifications."
     proposals = "The list of Proposals on which the Users will be allowed to vote."
     see_current_votes = "A flag allowing users to view the current votes."
-    title = """The title of the VoteSession"""
-    title_entries = Default.langstring_entries % """The title in various languages. """
-    sub_title = """The subtitle of the VoteSession."""
-    sub_title_entries = Default.langstring_entries % """The subtitle in various languages. """
-    instructions_section_title = """The instructions section title to be given for a vote session."""
-    instructions_section_title_entries = Default.langstring_entries % """The voting instruction's title in various languages. """
-    instructions_section_content = """The instructions to be given for a vote session."""
-    instructions_section_content_entries = Default.langstring_entries % """The voting instructions in various languages. """
     propositions_section_title = """The title of the section where all Propositions are given."""
     propositions_section_title_entries = Default.langstring_entries % """The Proposal section's title in various languages. """
 
 
 class UpdateVoteSession:
     __doc__ = """A mutation that allows for existing VoteSessions to be updated."""
-    discussion_phase_id = VoteSession.discussion_phase_id
-    header_image = VoteSession.header_image
+    idea_id = VoteSession.idea_id
     see_current_votes = VoteSession.see_current_votes
 
 

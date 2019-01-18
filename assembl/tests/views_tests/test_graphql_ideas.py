@@ -1,58 +1,10 @@
 # -*- coding: utf-8 -*-
 import json
-
-from graphql_relay.node.node import from_global_id
+import pytest
+from graphql_relay.node.node import from_global_id, to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
-
-
-def test_graphql_numPosts_of_sub_idea_1(phases, graphql_request, root_idea, subidea_1, subidea_1_1,
-                                             subidea_1_1_1,
-                                             idea_message_column_positive_on_subidea_1_1,
-                                             idea_message_column_negative_on_subidea_1_1,
-                                             root_post_en_under_negative_column_of_subidea_1_1,
-                                             root_post_en_under_positive_column_of_subidea_1_1,
-                                             post_related_to_sub_idea_1_1_1,
-                                             post_related_to_sub_idea_1
-                                             ):
-    subidea_1_1.message_view_override = 'messageColumns'
-    subidea_1_1.messages_in_parent = False
-    subidea_1_1.db.flush()
-    # This test verify that we don't care about messages_in_parent to count posts.
-    res = schema.execute(
-        u"""query AllIdeasQuery($discussionPhaseId: Int!){
-            ideas(discussionPhaseId: $discussionPhaseId) {
-              ... on Idea {
-                id
-                numPosts
-              }
-            }
-            rootIdea(discussionPhaseId: $discussionPhaseId) {
-              ... on Node {
-                id
-              }
-              ... on IdeaInterface {
-                numPosts
-              }
-            }
-        }
-        """, context_value=graphql_request, variable_values={"discussionPhaseId": phases['thread'].id})
-    assert res.errors is None
-    root_idea = res.data['rootIdea']
-
-    def findIdeaById(id):
-        for idea in res.data['ideas']:
-            if int(from_global_id(idea['id'])[1]) == id:
-                return idea
-
-    idea = findIdeaById(subidea_1.id)
-    child_idea = findIdeaById(subidea_1_1.id)
-    grand_child_idea = findIdeaById(subidea_1_1_1.id)
-    assert root_idea['numPosts'] == 4
-    assert idea['numPosts'] == 4
-    assert child_idea['numPosts'] == 3
-    assert grand_child_idea['numPosts'] == 1
 
 
 def test_graphql_get_all_ideas(phases, graphql_request,
@@ -114,68 +66,11 @@ def test_graphql_get_all_ideas(phases, graphql_request,
     assert res.errors is None
 
 
-def test_graphql_get_all_ideas_multiColumns_phase(phases, graphql_request,
-                                                  user_language_preference_en_cookie,
-                                                  subidea_1,
-                                                  subidea_1_1_1,
-                                                  idea_message_column_positive,
-                                                  idea_message_column_negative,
-                                                  idea_message_column_positive_on_subidea_1_1):
-    subidea_1.message_view_override = 'messageColumns'
-    subidea_1.db.flush()
-    # idea_message_column_positive/negative fixtures add columns on subidea_1
-    # the ideas query should return only subidea_1
-    # We have a column on subidea_1_1, but messageColumns is not enabled on it.
-    res = schema.execute(
-        u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
-            ideas(discussionPhaseId: $discussionPhaseId) {
-              ... on Idea {
-                id
-                title(lang: $lang)
-                titleEntries { value, localeCode }
-                messageViewOverride
-                numPosts
-                numContributors
-                numChildren(discussionPhaseId: $discussionPhaseId)
-                parentId
-                order
-                posts(first:10) {
-                  edges {
-                    node {
-                      ... on Post { subject body }
-                    }
-                  }
-                }
-              }
-            }
-            rootIdea(discussionPhaseId: $discussionPhaseId) {
-              ... on Node {
-                id
-              }
-            }
-        }
-        """, context_value=graphql_request,
-        variable_values={"discussionPhaseId": phases['multiColumns'].id, "lang": u"en"})
-    root_idea = res.data['rootIdea']
-    assert root_idea['id'] is not None
-    assert len(res.data['ideas']) == 1
-    first_idea = res.data['ideas'][0]
-    assert first_idea['title'] == u'Favor economic growth'
-    assert first_idea['parentId'] == root_idea['id']
-    assert first_idea['order'] == 0.0
-    assert first_idea['numChildren'] == 0
-    assert first_idea['messageViewOverride'] == 'messageColumns'
-    assert res.errors is None
-    # revert the changes for tests isolation
-    subidea_1.message_view_override = None
-    subidea_1.db.flush()
-
-
 def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_request,
                                user_language_preference_en_cookie,
-                               subidea_1_1_1, vote_proposal):
-    # proposals of vote session is attached to a root idea of the vote session phase, child
-    # of discussion.root_idea. Those proposals shouldn't be returned.
+                               vote_proposal):
+    # proposals of vote session are attached as children of vote_session.idea
+    # Those proposals shouldn't be returned.
     res = schema.execute(
         u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
             ideas(discussionPhaseId: $discussionPhaseId) {
@@ -194,7 +89,7 @@ def test_graphql_get_all_ideas_thread_without_vote_proposals(phases, graphql_req
         variable_values={"discussionPhaseId": phases['thread'].id, "lang": u"en"})
     root_idea = res.data['rootIdea']
     assert root_idea['id'] is not None
-    assert len(res.data['ideas']) == 3
+    assert len(res.data['ideas']) == 2
 
 
 def test_graphql_get_all_ideas_survey_phase(phases, graphql_request,
@@ -203,7 +98,7 @@ def test_graphql_get_all_ideas_survey_phase(phases, graphql_request,
     res = schema.execute(
         u"""query AllIdeasQuery($lang: String!, $discussionPhaseId: Int!) {
               ideas(discussionPhaseId: $discussionPhaseId) {
-                ... on Thematic {
+                ... on Idea {
                   id
                   title(lang: $lang)
                   parentId
@@ -211,7 +106,7 @@ def test_graphql_get_all_ideas_survey_phase(phases, graphql_request,
                 }
               }
               rootIdea(discussionPhaseId: $discussionPhaseId) {
-                ... on Thematic {
+                ... on Idea {
                   id
                 }
               }
@@ -374,7 +269,7 @@ def test_graphql_discussion_counters_survey_phase_with_proposals(graphql_request
         """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['survey'].id})
     assert res.data['rootIdea']['id']
     assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
-    assert res.data['rootIdea']['numPosts'] == 15  # phase 1 posts
+    assert res.data['rootIdea']['numPosts'] == 0  # total posts per phase is not implemented, because of propagate_message_count this is 0 instead of 15
     assert res.data['numParticipants'] == 2
 
 
@@ -684,12 +579,16 @@ query Question($lang: String!, $id: ID!) {
     ... on Question {
       title(lang: $lang)
       id
-      thematic {
-        id
-        title(lang: $lang)
-        img {
-          externalUrl
-          mimeType
+      parent {
+        ... on IdeaInterface {
+          title(lang: $lang)
+          img {
+            externalUrl
+            mimeType
+          }
+        }
+        ... on Idea {
+          id
         }
       }
     }
@@ -700,9 +599,10 @@ query Question($lang: String!, $id: ID!) {
         "lang": "en"
     })
 
+    assert res.errors is None
     assert json.loads(json.dumps(res.data)) == {
         u'question': {
-            u'thematic': {
+            u'parent': {
                 u'id': thematic_and_question[0],
                 u'img': None,
                 u'title': u'Understanding the dynamics and issues'
@@ -789,7 +689,6 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
                 ]
             }
         })
-
     assert res.errors is None
     idea = res.data['createThematic']['thematic']
     assert idea['announcement'] == {
@@ -914,6 +813,10 @@ def test_graphql_create_bright_mirror_announcement_empty_title(phases, graphql_r
                 'bodyEntries': [
                     {'value': u"Body FR announce", 'localeCode': u"fr"},
                     {'value': u"Body EN announce", 'localeCode': u"en"}
+                ],
+                'quoteEntries': [
+                    {'value': u"Body FR quote", 'localeCode': u"fr"},
+                    {'value': u"Body EN quote", 'localeCode': u"en"}
                 ]
             }
         })
@@ -1061,6 +964,478 @@ def test_graphql_bright_mirror_should_get_all_posts_of_user_draft_first(graphql_
         }
     }
 
+def test_mutation_update_ideas_multicol_create_two_columns_with_empty_message_classifier(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]
+                    },
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]
+                    }
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    assert created_idea.message_columns[0].message_classifier == u'column1'
+    assert created_idea.message_columns[1].message_classifier == u'column2'
+    assert created_idea.message_columns[0].color == 'red'
+    assert created_idea.message_columns[1].color == 'green'
+    test_session.rollback()
+
+
+def create_idea(graphql_request, graphql_registry, phases):
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    return res
+
+
+def test_mutation_update_ideas_multicol_create_two_columns(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    res = create_idea(graphql_request, graphql_registry, phases)
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    assert len(created_idea.message_columns) == 2
+    first_column = created_idea.message_columns[0]
+    second_column = created_idea.message_columns[1]
+    assert first_column.message_classifier == 'positive'
+    assert second_column.message_classifier == 'negative'
+    assert first_column.color == 'red'
+    assert second_column.color == 'green'
+    assert first_column.get_positional_index() == 0
+    assert second_column.get_positional_index() == 1
+    assert first_column.name.entries[0].value == u"Premier entrée pour le nom"
+    assert first_column.title.entries[0].value == u"Premier titre pour le multicolonne"
+    assert second_column.name.entries[0].value == u"Deuxième entrée pour le nom"
+    assert second_column.title.entries[0].value == u"Deuxième titre pour le multicolonne"
+    first_synthesis = first_column.get_column_synthesis()
+    second_synthesis = second_column.get_column_synthesis()
+    assert {e.locale_code: e.value for e in first_synthesis.subject.entries} == {
+        u'fr': u'Titre de Synthèse de colonne en français pour colonne positive',
+        u'en': u'Title of Column Synthesis in english for positive column'}
+    assert {e.locale_code: e.value for e in first_synthesis.body.entries} == {
+        u'fr': u'Synthèse de colonne en français for positive column',
+        u'en': u'Column Synthesis in english for positive column'}
+    assert {e.locale_code: e.value for e in second_synthesis.subject.entries} == {
+        u'fr': u'Titre de Synthèse de colonne en français pour colonne négative',
+        u'en': u'Title of Column Synthesis in english for negative column'}
+    assert {e.locale_code: e.value for e in second_synthesis.body.entries} == {
+        u'fr': u'Synthèse de colonne en français for negative column',
+        u'en': u'Column Synthesis in english for negative column'}
+    test_session.rollback()
+
+
+def test_mutation_update_ideas_multicol_add_neutral_column(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    res = create_idea(graphql_request, graphql_registry, phases)
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'id': created_idea_global_id,
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"troisième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"troisième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'blue',
+                    'messageClassifier': 'neutral',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne neutre", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for neutral column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for neutral column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for neutral column", 'localeCode': u"en"}
+                    ]}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    assert len(created_idea.message_columns) == 3
+    assert created_idea.message_columns[0].message_classifier == 'positive'
+    assert created_idea.message_columns[1].message_classifier == 'negative'
+    assert created_idea.message_columns[2].message_classifier == "neutral"
+    assert created_idea.message_columns[0].color == 'red'
+    assert created_idea.message_columns[1].color == 'green'
+    assert created_idea.message_columns[2].color == 'blue'
+    test_session.rollback()
+
+
+def test_mutation_update_ideas_multicol_update_first_column(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    res = create_idea(graphql_request, graphql_registry, phases)
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'id': created_idea_global_id,
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom modifié", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne modifié", "localeCode": u"fr"}],
+                    'color': 'orange',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive modifié", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column modified", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for positive column modifié", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column modified", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]},
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    assert len(created_idea.message_columns) == 2
+    first_column = created_idea.message_columns[0]
+    second_column = created_idea.message_columns[1]
+    assert first_column.message_classifier == 'positive'
+    assert second_column.message_classifier == 'negative'
+    assert first_column.color == 'orange'
+    assert second_column.color == 'green'
+    assert first_column.get_positional_index() == 0
+    assert second_column.get_positional_index() == 1
+    assert first_column.name.entries[0].value == u"Premier entrée pour le nom modifié"
+    assert first_column.title.entries[0].value == u"Premier titre pour le multicolonne modifié"
+    assert second_column.name.entries[0].value == u"Deuxième entrée pour le nom"
+    assert second_column.title.entries[0].value == u"Deuxième titre pour le multicolonne"
+    first_synthesis = first_column.get_column_synthesis()
+    second_synthesis = second_column.get_column_synthesis()
+    assert {e.locale_code: e.value for e in first_synthesis.subject.entries} == {
+        u'fr': u'Titre de Synthèse de colonne en français pour colonne positive modifié',
+        u'en': u'Title of Column Synthesis in english for positive column modified'}
+    assert {e.locale_code: e.value for e in first_synthesis.body.entries} == {
+        u'fr': u'Synthèse de colonne en français for positive column modifié',
+        u'en': u'Column Synthesis in english for positive column modified'}
+    assert {e.locale_code: e.value for e in second_synthesis.subject.entries} == {
+        u'fr': u'Titre de Synthèse de colonne en français pour colonne négative',
+        u'en': u'Title of Column Synthesis in english for negative column'}
+    assert {e.locale_code: e.value for e in second_synthesis.body.entries} == {
+        u'fr': u'Synthèse de colonne en français for negative column',
+        u'en': u'Column Synthesis in english for negative column'}
+    test_session.rollback()
+
+
+def test_mutation_update_ideas_multicol_delete_neutral_column(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    # idea with 3 columns
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"troisième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"troisième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'blue',
+                    'messageClassifier': 'neutral',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne neutre", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for neutral column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for neutral column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for neutral column", 'localeCode': u"en"}
+                    ]}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    # remove third column
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'id': created_idea_global_id,
+                'messageViewOverride': 'messageColumns',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'messageColumns': [
+                    {'nameEntries': [{'value': u"Premier entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Premier titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'red',
+                    'messageClassifier': 'positive',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne positive", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for positive column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for positive column", 'localeCode': u"en"}
+                    ]},
+                    {'nameEntries': [{'value': u"Deuxième entrée pour le nom", "localeCode": u"fr"}],
+                    'titleEntries': [{'value': u"Deuxième titre pour le multicolonne", "localeCode": u"fr"}],
+                    'color': 'green',
+                    'messageClassifier': 'negative',
+                    'columnSynthesisSubject': [
+                        {'value': u"Titre de Synthèse de colonne en français pour colonne négative", 'localeCode': u"fr"},
+                        {'value': u"Title of Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ],
+                    'columnSynthesisBody': [
+                        {'value': u"Synthèse de colonne en français for negative column", 'localeCode': u"fr"},
+                        {'value': u"Column Synthesis in english for negative column", 'localeCode': u"en"}
+                    ]}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    assert len(created_idea.message_columns) == 2
+    first_column = created_idea.message_columns[0]
+    second_column = created_idea.message_columns[1]
+    assert first_column.message_classifier == 'positive'
+    assert second_column.message_classifier == 'negative'
+    test_session.rollback()
+
 
 def test_mutation_update_ideas_create(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
@@ -1102,7 +1477,6 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
                 }
             }]
         })
-
     assert res.errors is None
     ideas = res.data['updateIdeas']['query']['thematics']
     assert len(ideas) == 1
@@ -1111,7 +1485,8 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
         u'bodyEntries': [{u'localeCode': u'en', u'value': u'Body EN announce'},
                          {u'localeCode': u'fr', u'value': u'Body FR announce'}],
         u'titleEntries': [{u'localeCode': u'en', u'value': u'Title EN announce'},
-                          {u'localeCode': u'fr', u'value': u'Title FR announce'}]}
+                          {u'localeCode': u'fr', u'value': u'Title FR announce'}],
+        u'quoteEntries': []}
     assert idea['titleEntries'] == [
         {u'localeCode': u'en', u'value': u'Understanding the dynamics and issues'},
         {u'localeCode': u'fr', u'value': u'Comprendre les dynamiques et les enjeux'}]
@@ -1162,7 +1537,8 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
         u'bodyEntries': [{u'localeCode': u'en', u'value': u'[modified] Body EN announce'},
                          {u'localeCode': u'fr', u'value': u'[modified] Body FR announce'}],
         u'titleEntries': [{u'localeCode': u'en', u'value': u'[modified] Title EN announce'},
-                          {u'localeCode': u'fr', u'value': u'[modified] Title FR announce'}]}
+                          {u'localeCode': u'fr', u'value': u'[modified] Title FR announce'}],
+        u'quoteEntries': []}
     assert idea['titleEntries'] == [
         {u'localeCode': u'en', u'value': u'[modified] Understanding the dynamics and issues'},
         {u'localeCode': u'fr', u'value': u'[modified] Comprendre les dynamiques et les enjeux'}]
@@ -1248,7 +1624,7 @@ def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_reg
     bright = ideas[0]
     assert bright['messageViewOverride'] == u'brightMirror'
     thread = ideas[1]
-    assert thread['messageViewOverride'] == None
+    assert thread['messageViewOverride'] == u'noModule'
 
     # and remove it
     del graphql_request.POST['variables.ideas.0.image']

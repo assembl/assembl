@@ -8,8 +8,9 @@ import type { Map } from 'immutable';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
-import TextAndMedia from '../components/common/textAndMedia';
 import Header from '../components/common/header';
+import Announcement from '../components/debate/common/announcement';
+import type { AnnouncementContent } from '../components/debate/common/announcement';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
@@ -36,20 +37,21 @@ type QuestionType = {
 
 type Props = {
   timeline: Timeline,
-  defaultContentLocaleMapping: Map,
+  defaultContentLocaleMapping: Map, // eslint-disable-line react/no-unused-prop-types
   imgUrl: string,
-  loading: boolean,
-  media: Object, // TODO: we should add a type for media/video and use it everywhere
   numContributors: number,
   numPosts: number,
   phaseId: string,
   questions: Array<QuestionType>,
   refetchThematic: Function,
   title: string,
+  description: string,
+  synthesisTitle: string,
   id: string,
   slug: string,
   totalSentiments: number,
-  updateContentLocaleMapping: Function
+  announcement: AnnouncementContent,
+  updateContentLocaleMapping: Function // eslint-disable-line react/no-unused-prop-types
 };
 
 type State = {
@@ -116,16 +118,18 @@ class Survey extends React.Component<Props, State> {
     const {
       id,
       imgUrl,
-      media,
       numPosts,
       numContributors,
       phaseId,
       questions,
       refetchThematic,
       title,
+      description,
+      synthesisTitle,
       slug,
       totalSentiments,
-      timeline
+      timeline,
+      announcement
     } = this.props;
 
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
@@ -136,10 +140,27 @@ class Survey extends React.Component<Props, State> {
     return (
       <div className="survey">
         <div className="relative">
-          <Header title={title} imgUrl={imgUrl} phaseId={phaseId} type="idea">
+          <Header
+            title={title}
+            synthesisTitle={synthesisTitle}
+            subtitle={description}
+            imgUrl={imgUrl}
+            phaseId={phaseId}
+            type="idea"
+          >
             <HeaderStatistics statElements={statElements} />
           </Header>
-          {media && <TextAndMedia {...media} />}
+          {announcement ? (
+            <section className="post-section">
+              <Grid fluid className="background-light">
+                <div className="max-container">
+                  <div className="content-section">
+                    <Announcement announcement={announcement} />
+                  </div>
+                </div>
+              </Grid>
+            </section>
+          ) : null}
           <div className="questions">
             {questions &&
               questions.map((question, index) => (
@@ -222,7 +243,7 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(ThematicQuery, {
-    props: ({ data }) => {
+    props: ({ data, ownProps }) => {
       if (data.error || data.loading) {
         return {
           error: data.error,
@@ -230,18 +251,20 @@ export default compose(
         };
       }
 
-      const { thematic: { img, questions, title, video: media, numContributors, numPosts, totalSentiments }, refetch } = data;
+      const { thematic: { questions, numContributors, numPosts, totalSentiments }, refetch } = data;
       return {
         error: data.error,
         loading: data.loading,
-        imgUrl: img ? img.externalUrl : '',
-        media: media,
+        imgUrl: ownProps.headerImgUrl,
         numContributors: numContributors,
         numPosts: numPosts,
         questions: questions,
         refetchThematic: refetch,
-        title: title,
-        totalSentiments: totalSentiments
+        title: ownProps.title,
+        description: ownProps.description,
+        synthesisTitle: ownProps.synthesisTitle,
+        totalSentiments: totalSentiments,
+        announcement: ownProps.announcement
       };
     }
   }),

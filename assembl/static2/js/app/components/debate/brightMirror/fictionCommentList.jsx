@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import { Map } from 'immutable';
 // Components imports
 import { Tree } from '../../../components/common/tree';
 import FictionComment from './fictionComment';
@@ -8,6 +7,7 @@ import FoldedPost from '../common/post/foldedPost';
 import { noRowsRenderer } from '../../../pages/idea';
 // Type imports
 import type { FictionCommentExtraProps } from './fictionComment';
+import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
 export type FictionCommentListProps = {
   /** Array of fiction comments */
@@ -15,9 +15,10 @@ export type FictionCommentListProps = {
   /** Content locale used by Tree */
   contentLocale: string,
   /** Content locale mapping used by Tree */
-  contentLocaleMapping: Map<string, string>,
+  contentLocaleMapping: ContentLocaleMapping,
   /** Identifier of the idea - e.g 'brightMirror' */
   identifier: string,
+  messageViewOverride: string,
   /** Submit comment callback used in order to catch a submit event from tree.jsx */
   onSubmitHandler: Function
 };
@@ -27,6 +28,7 @@ const FictionCommentList = ({
   contentLocale,
   contentLocaleMapping,
   identifier,
+  messageViewOverride,
   onSubmitHandler
 }: FictionCommentListProps) => {
   const FIRST_ROW_INDEX = 0;
@@ -47,6 +49,7 @@ const FictionCommentList = ({
       SeparatorComponent={() => null}
       identifier={identifier}
       fictionCommentExtraProps={fictionCommentExtraProps}
+      messageViewOverride={messageViewOverride}
     />
   );
 };

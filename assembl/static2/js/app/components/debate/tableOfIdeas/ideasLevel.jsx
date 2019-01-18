@@ -294,6 +294,7 @@ class IdeasLevel extends React.Component {
               >
                 <IdeaPreview
                   imgUrl={idea.img ? idea.img.externalUrl : ''}
+                  messageViewOverride={idea.messageViewOverride}
                   numPosts={idea.numPosts}
                   numContributors={idea.numContributors}
                   numChildren={idea.numChildren}

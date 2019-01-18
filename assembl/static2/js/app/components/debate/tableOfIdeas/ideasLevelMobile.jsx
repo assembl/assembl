@@ -98,6 +98,7 @@ class IdeasLevelMobile extends React.Component<Props, State> {
               <div className="left">
                 <IdeaPreview
                   imgUrl={idea.img ? idea.img.externalUrl : ''}
+                  messageViewOverride={idea.messageViewOverride}
                   numPosts={idea.numPosts}
                   numContributors={idea.numContributors}
                   numChildren={idea.numChildren}

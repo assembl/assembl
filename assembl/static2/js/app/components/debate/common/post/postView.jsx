@@ -14,12 +14,13 @@ import PostBody from './postBody';
 import HarvestingMenu from '../../../harvesting/harvestingMenu';
 import type { Props as PostProps } from './index';
 import { getExtractTagId } from '../../../../utils/extract';
-import { PublicationStates, pendingOrange } from '../../../../constants';
+import { PublicationStates, pendingOrange, MESSAGE_VIEW } from '../../../../constants';
 
 type Props = PostProps & {
   body: string,
   handleEditClick: Function,
   isHarvesting: boolean,
+  isHarvestable: boolean,
   modifiedSubject: React.Element<any>,
   multiColumns: boolean,
   subject: string,
@@ -153,7 +154,8 @@ class PostView extends React.PureComponent<Props, State> {
       subject,
       modifiedSubject,
       multiColumns,
-      isHarvesting
+      isHarvesting,
+      isHarvestable
     } = this.props;
     const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     const isPendingPostForModerator = connectedUserIsModerator() && isPending;
@@ -171,7 +173,8 @@ class PostView extends React.PureComponent<Props, State> {
     let canReply = !multiColumns;
     // If we're in thread mode, check if the first idea associated to the post is multi columns.
     if (!multiColumns && indirectIdeaContentLinks && indirectIdeaContentLinks.length > 0) {
-      canReply = indirectIdeaContentLinks[0].idea.messageViewOverride !== 'messageColumns';
+      canReply =
+        indirectIdeaContentLinks[0].idea && indirectIdeaContentLinks[0].idea.messageViewOverride !== MESSAGE_VIEW.messageColumns;
     }
 
     const { displayHarvestingAnchor, displayHarvestingBox, harvestingAnchorPosition } = this.state;
@@ -242,6 +245,7 @@ class PostView extends React.PureComponent<Props, State> {
                 bodyDivRef={this.recomputeTreeHeightOnImagesLoad}
                 measureTreeHeight={this.props.measureTreeHeight}
                 isHarvesting={isHarvesting}
+                isHarvestable={isHarvestable}
               />
 
               <Attachments attachments={attachments} />
