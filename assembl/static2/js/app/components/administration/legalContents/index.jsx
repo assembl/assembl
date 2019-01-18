@@ -2,7 +2,7 @@
 import React from 'react';
 import isEqualWith from 'lodash/isEqualWith';
 import { connect } from 'react-redux';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
 import { type ApolloClient, compose, withApollo } from 'react-apollo';
@@ -49,7 +49,10 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
         return (
           <div className="admin-content">
             <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-              <div className="form-container">
+              <div className="form-container legal-contents-administration">
+                <div className="title">
+                  <Translate value="administration.legalContents.legalContentsValidation" />
+                </div>
                 <Field
                   component={CheckboxFieldAdapter}
                   name="mandatoryLegalContentsValidation"
@@ -57,6 +60,7 @@ const DumbLegalContentsForm = ({ client, editLocale, locale }: LegalContentsForm
                   label={mandatoryLegalContentsValidationLabel}
                   type="checkbox"
                 />
+                <div className="separator" />
                 <Field
                   key={`tac-${editLocale}`}
                   editLocale={editLocale}
