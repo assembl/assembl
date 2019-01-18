@@ -29,4 +29,11 @@ describe('<SentimentBar /> - with shallow', () => {
   it('should render the value (with 2 digits)', () => {
     expect(wrapper.contains(defaultSentimentBarProps.value.toFixed(2))).toBe(true);
   });
+
+  it('should render an error message if value is incorrect (<0 or >1)', () => {
+    wrapper.setProps({ value: -1 });
+    expect(wrapper.find('p [className="error"]')).toHaveLength(1);
+    wrapper.setProps({ value: 2 });
+    expect(wrapper.find('p [className="error"]')).toHaveLength(1);
+  });
 });

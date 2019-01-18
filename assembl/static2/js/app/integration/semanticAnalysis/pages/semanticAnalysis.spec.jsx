@@ -11,6 +11,7 @@ import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlide
 import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
 import ResponsiveWordCloud from '../../../components/common/wordCloud/responsiveWordCloud';
 import KeywordInfo from '../../../components/common/keywordInfo/keywordInfo';
+import SentimentBar from '../../../components/common/sentimentBar/sentimentBar';
 
 configure({ adapter: new Adapter() });
 
@@ -43,5 +44,9 @@ describe('<SemanticAnalysis /> - with shallow', () => {
 
   it('should render a KeywordInfo component', () => {
     expect(wrapper.find(KeywordInfo)).toHaveLength(1);
+  });
+
+  it('should render a SentimentaBar component', () => {
+    expect(wrapper.find(SentimentBar)).toHaveLength(1);
   });
 });

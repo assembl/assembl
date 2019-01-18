@@ -36,6 +36,11 @@ $opacity-cyan: rgba(0, 140, 166, 0.5);
 $min-opacity-cyan: rgba(0, 140, 166, 0.1);
 $linear-gradient: linear-gradient(90deg, $light-grey, $white);
 
+$sentiment-level-0: $red;
+$sentiment-level-1: $orange4;
+$sentiment-level-2: $light-green;
+$sentiment-level-3: $green2;
+
 $first-color: $cyan;
 $first-color-light: $cyan-light;
 $second-color: $yellow;
