@@ -58,7 +58,7 @@ const DebateChild = (props) => {
 
 const AdminChild = (props: {
   discussionPhaseId: string,
-  location: { query: { section?: string, thematicId?: string } },
+  location: { query: { section?: string, thematicId?: string, goBackPhaseIdentifier?: string } },
   params: { phase: string }
 }) => {
   switch (props.params.phase) {
@@ -69,6 +69,7 @@ const AdminChild = (props: {
       <VoteSessionAdmin
         {...props}
         phaseIdentifier={props.params.phase}
+        goBackPhaseIdentifier={props.location.query.goBackPhaseIdentifier}
         thematicId={props.location.query.thematicId}
         section={props.location.query.section}
       />

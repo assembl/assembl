@@ -738,6 +738,7 @@ const Translations = {
       saveFirstStep: "Veuillez d'abord revenir à l'étape 1 et sauvegarder la configuration de la page.",
       saveSecondStep: "Veuillez d'abord revenir à l'étape 2 et configurez puis sauvegardez les modules de vote.",
       configureVoteSessionButton: "Configurer un module de vote",
+      goBackToThematic: "Retour à la thématique",
       saveBeforeConfigureVoteSession: "Veuillez sauvegarder avant de pouvoir accéder à la configuration d'un module de vote",
       postsExistsWarning:
         "Cette thématique contient des messages. Si vous changez de module, vous supprimerez définitivement tous les messages associés à cette thématique lors de la sauvegarde.",
@@ -1671,6 +1672,7 @@ const Translations = {
       maxValue: "Maximum value",
       unit: "Unit",
       configureVoteSessionButton: "Configure a vote session",
+      goBackToThematic: "Go back to thematic",
       saveBeforeConfigureVoteSession: "Please save before you can access to the vote session configuration",
       postsExistsWarning:
         "This thematic contains posts. If you change the module, you'll delete all messages associated to this thematic when you'll save.",

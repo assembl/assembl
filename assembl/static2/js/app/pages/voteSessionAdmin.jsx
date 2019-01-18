@@ -13,6 +13,7 @@ import { type VoteChoice } from '../components/administration/voteSession/gaugeF
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
 import ExportSection from '../components/administration/exportSection';
+import BackToThematic from '../components/administration/voteSession/backToThematic';
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
 import updateVoteSessionMutation from '../graphql/mutations/updateVoteSession.graphql';
@@ -184,7 +185,8 @@ type Props = {
   route: Route,
   router: Router,
   phaseIdentifier: string,
-  thematicId: string
+  thematicId: string,
+  goBackPhaseIdentifier: string
 };
 
 type State = {
@@ -490,7 +492,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   dataHaveChanged = (): boolean => this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
 
   render() {
-    const { editLocale, debateId, phaseIdentifier, section, thematicId, voteSessionId } = this.props;
+    const { editLocale, debateId, goBackPhaseIdentifier, phaseIdentifier, section, thematicId, voteSessionId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
       msgId: `vote.${snakeToCamel(option)}`,
@@ -500,6 +502,11 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         voteSessionId: voteSessionId
       })
     }));
+    const configureThematicUrl = get(
+      'administration',
+      { slug: getDiscussionSlug() || '', id: goBackPhaseIdentifier },
+      { section: 'configThematics', thematicId: thematicId }
+    );
     return (
       <div className="token-vote-admin">
         <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />
@@ -512,9 +519,10 @@ class VoteSessionAdmin extends React.Component<Props, State> {
             currentStep={section}
             steps={['1', '2', '3', '4']}
             phaseIdentifier={phaseIdentifier}
-            queryArgs={{ thematicId: thematicId }}
+            queryArgs={{ thematicId: thematicId, goBackPhaseIdentifier: goBackPhaseIdentifier }}
           />
         )}
+        <BackToThematic url={configureThematicUrl} />
       </div>
     );
   }

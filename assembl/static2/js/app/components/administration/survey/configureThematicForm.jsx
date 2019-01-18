@@ -60,12 +60,16 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     if (!(theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.voteSession)) {
       return null;
     }
-    const { thematicId } = this.props;
+    const { phaseIdentifier, thematicId } = this.props;
     const slug = getDiscussionSlug();
     const voteModuleLink = (
       <p>
         <Link
-          to={get('voteSessionAdmin', { slug: slug }, { section: '1', thematicId: thematicId })}
+          to={get(
+            'voteSessionAdmin',
+            { slug: slug },
+            { section: '1', thematicId: thematicId, goBackPhaseIdentifier: phaseIdentifier }
+          )}
           className="button-link button-dark"
         >
           <Translate value="administration.configureVoteSessionButton" />

@@ -13,6 +13,7 @@ import { ADMIN_MENU } from '../../constants';
 type Props = {
   thematicId: ?string,
   requestedPhase: string,
+  goBackPhaseIdentifier: ?string,
   locale: string,
   timeline: Timeline
 };
@@ -24,7 +25,7 @@ class Menu extends React.PureComponent<Props> {
     slug: { slug: string | null },
     rootSection: string = '',
     isRoot: boolean = true,
-    queryArgs: { thematicId?: ?string } = {}
+    queryArgs: { thematicId?: ?string, goBackPhaseIdentifier?: ?string } = {}
   ) => {
     const { requestedPhase } = this.props;
     const { title, sectionId, subMenu } = menuItem;
@@ -53,14 +54,17 @@ class Menu extends React.PureComponent<Props> {
   render() {
     const slug = { slug: getDiscussionSlug() };
     const { timeline } = this.props;
-    const { requestedPhase, thematicId, locale } = this.props;
+    const { requestedPhase, thematicId, locale, goBackPhaseIdentifier } = this.props;
     return (
       <ul className="admin-menu">
         {Object.keys(ADMIN_MENU)
           .filter(key => key !== 'voteSession')
           .map(key => this.renderMenuItem(key, ADMIN_MENU[key], slug))}
         {requestedPhase === 'voteSession'
-          ? this.renderMenuItem('voteSession', ADMIN_MENU.voteSession, slug, '', true, { thematicId: thematicId })
+          ? this.renderMenuItem('voteSession', ADMIN_MENU.voteSession, slug, '', true, {
+            thematicId: thematicId,
+            goBackPhaseIdentifier: goBackPhaseIdentifier
+          })
           : null}
         {timeline
           ? timeline.map((phase, index) => (

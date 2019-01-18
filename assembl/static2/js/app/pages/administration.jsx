@@ -36,7 +36,7 @@ type Props = {
   landingPageModules: Array<Object>,
   children: React.Node,
   locale: string,
-  location: { query: { section?: string, thematicId?: string } },
+  location: { query: { section?: string, thematicId?: string, goBackPhaseIdentifier?: string } },
   params: { phase: string },
   refetchTabsConditions: Function,
   refetchSections: Function,
@@ -221,7 +221,13 @@ class Administration extends React.Component<Props, State> {
             <Row>
               <Col xs={12} md={3}>
                 <div className="admin-menu-container">
-                  <Menu timeline={timeline} locale={locale} requestedPhase={phase} thematicId={location.query.thematicId} />
+                  <Menu
+                    timeline={timeline}
+                    locale={locale}
+                    requestedPhase={phase}
+                    thematicId={location.query.thematicId}
+                    goBackPhaseIdentifier={location.query.goBackPhaseIdentifier}
+                  />
                 </div>
               </Col>
               <Col xs={12} md={8}>
