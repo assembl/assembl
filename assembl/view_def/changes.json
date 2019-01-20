@@ -94,7 +94,6 @@
         "subject": "&get_subject:extended",
         "body": "&get_body:extended",
         "message_classifier": true,
-        "my_sentiment": ":default",
         "extracts": [":id_only"]
     },
     "Post": {
