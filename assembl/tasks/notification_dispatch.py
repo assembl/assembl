@@ -4,6 +4,7 @@
 """
 from . import celery
 from ..lib.model_watcher import BaseModelEventWatcher
+import transaction
 
 _dispatcher = None
 
@@ -11,13 +12,15 @@ _dispatcher = None
 @celery.task()
 def processPostCreatedTask(id):
     global _dispatcher
-    _dispatcher.processPostCreated(id)
+    with transaction.manager:
+        _dispatcher.processPostCreated(id)
 
 
 @celery.task()
 def processPostModifiedTask(id, state_changed):
     global _dispatcher
-    _dispatcher.processPostModified(id, state_changed)
+    with transaction.manager:
+        _dispatcher.processPostModified(id, state_changed)
 
 
 class ModelEventWatcherCelerySender(BaseModelEventWatcher):
