@@ -65,6 +65,9 @@
   }
 
   .nav-tabs.nav-justified {
+    position: sticky;
+    top: 0;
+
     & > li {
       display: inline-block;
       width: 33%;
