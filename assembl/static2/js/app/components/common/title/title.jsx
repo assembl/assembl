@@ -5,18 +5,17 @@ export type Props = {
   /** Title level with default value set to 1 */
   level: number,
   /** Title content */
-  titleContent: string
+  children: string
 };
 
-const Title = ({ level, titleContent }: Props) => {
-  const componentContent = level === 1 ? <h1>{titleContent.toUpperCase()}</h1> : <h2>{titleContent.toUpperCase()}</h2>;
+const Title = ({ level, children }: Props) => {
+  const componentContent = level === 1 ? <h1>{children.toUpperCase()}</h1> : <h2>{children.toUpperCase()}</h2>;
 
   return <React.Fragment>{componentContent}</React.Fragment>;
 };
 
 Title.defaultProps = {
-  level: 1,
-  showtooltip: false
+  level: 1
 };
 
 export default Title;

@@ -10,8 +10,8 @@ import TitleWithTooltip from './titleWithTooltip';
 import type { Props as TitleWithTooltipProps } from './titleWithTooltip';
 
 export const defaultTitleWithTooltipProps: TitleWithTooltipProps = {
+  children: 'An amazing title',
   level: 1,
-  titleContent: 'An amazing title',
   tooltipContent: <p>Here comes a tooltip</p>
 };
 
@@ -25,10 +25,8 @@ storiesOf('TitleWithTooltip', module)
   .add(
     'playground',
     withInfo()(() => (
-      <TitleWithTooltip
-        level={number('title level', playground.level)}
-        titleContent={text('title content', playground.titleContent)}
-        tooltipContent={playground.tooltipContent}
-      />
+      <TitleWithTooltip level={number('title level', playground.level)} tooltipContent={playground.tooltipContent}>
+        {text('title content', playground.children)}
+      </TitleWithTooltip>
     ))
   );

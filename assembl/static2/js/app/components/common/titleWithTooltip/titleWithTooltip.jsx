@@ -7,16 +7,16 @@ import { displayModal } from '../../../utils/utilityManager';
 import { isMobile } from '../../../utils/globalFunctions';
 
 export type Props = {
+  /** Title content */
+  children: string,
   /** Title level with default value set to 1 */
   level: number,
-  /** Title content */
-  titleContent: string,
   /** Tooltip content */
   tooltipContent: React.Node
 };
 
-const TitleWithTooltip = ({ level, titleContent, tooltipContent }: Props) => {
-  const modalTitle = titleContent.toUpperCase();
+const TitleWithTooltip = ({ level, children, tooltipContent }: Props) => {
+  const modalTitle = children;
   const modalBody = tooltipContent;
 
   const iconClickHandler = () => {
@@ -27,7 +27,7 @@ const TitleWithTooltip = ({ level, titleContent, tooltipContent }: Props) => {
   };
   return (
     <div className="titleWithTooltip-container">
-      <Title level={level} titleContent={titleContent} />
+      <Title level={level}>{children}</Title>
       <div className="titleTooltip-container" onClick={iconClickHandler}>
         <TitleTooltip tooltipContent={tooltipContent} />
       </div>

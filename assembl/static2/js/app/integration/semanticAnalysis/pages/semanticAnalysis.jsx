@@ -108,7 +108,7 @@ class SemanticAnalysis extends Component<Props, State> {
       <div className="semantic-analysis">
         {/** Description section */}
         <Col xs={12}>
-          <Title level={1} titleContent="Nuage de mots-clés" />
+          <Title level={1}>Nuage de mots-clés</Title>
           <Description>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
@@ -133,13 +133,15 @@ class SemanticAnalysis extends Component<Props, State> {
         {/** Toolbar section */}
         <Col xs={12} md={4}>
           <Col xsHidden sm={6} md={12}>
-            <TitleWithTooltip level={2} titleContent="Informations mots-clés" tooltipContent={tooltip} />
+            <TitleWithTooltip level={2} tooltipContent={tooltip}>
+              Informations mots-clés
+            </TitleWithTooltip>
 
             <KeywordInfo keyword={keywordData} />
           </Col>
 
           <Col xsHidden smHidden md={12}>
-            <Title level={2} titleContent="Nombre de mots-clés" />
+            <Title level={2}>Nombre de mots-clés</Title>
 
             <ToolbarSlider
               maxValue={fakeData.keywords.length}
@@ -150,7 +152,9 @@ class SemanticAnalysis extends Component<Props, State> {
           </Col>
 
           <Col xs={12} sm={6} md={12}>
-            <TitleWithTooltip level={2} titleContent="Analyse du sentiment" tooltipContent={tooltip} />
+            <TitleWithTooltip level={2} tooltipContent={tooltip}>
+              Analyse du sentiment
+            </TitleWithTooltip>
 
             <SentimentBar value={sentimentScore} />
           </Col>
