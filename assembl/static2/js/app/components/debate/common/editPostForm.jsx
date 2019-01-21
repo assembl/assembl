@@ -155,9 +155,8 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
   };
 
   render() {
-    const { draftable, isDebateModerated } = this.props;
     const { subject, body } = this.state;
-    const { editTitleLabelMsgId, modifiedOriginalSubject, bodyDescriptionMsgId, bodyMaxLength } = this.props;
+    const { editTitleLabelMsgId, modifiedOriginalSubject, bodyDescriptionMsgId, bodyMaxLength, draftable, isDebateModerated } = this.props;
     const userIsModerator = connectedUserIsModerator();
     const publicationState =
       !userIsModerator && isDebateModerated ? PublicationStates.SUBMITTED_AWAITING_MODERATION : PublicationStates.PUBLISHED;
