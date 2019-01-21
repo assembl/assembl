@@ -61,13 +61,12 @@ def db_tables(request, empty_db):
     assert app_settings_file
     from assembl.conftest import engine
     bootstrap_db(app_settings_file, engine)
-    transaction.commit()
 
     def fin():
         print "finalizer db_tables"
         session = empty_db()
         drop_tables(get_config(), session)
-        transaction.commit()
+        session.commit()
     request.addfinalizer(fin)
     return empty_db  # session_factory
 
@@ -128,15 +127,13 @@ def db_default_data(
         request, db_tables, base_registry):
     """An SQLAlchemy Session Maker fixture that is preloaded
     with all Assembl tables, constraints, relationships, etc."""
-
     bootstrap_db_data(db_tables)
-    transaction.commit()
 
     def fin():
         print "finalizer db_default_data"
         session = db_tables()
         clear_rows(get_config(), session)
-        transaction.commit()
+        session.commit()
         from assembl.models import Locale, LangString
         Locale.reset_cache()
         LangString.reset_cache()
