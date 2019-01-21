@@ -674,6 +674,8 @@ const Translations = {
       down: "Descendre",
       nextStep: "Étape suivante",
       previousStep: "Étape précédente",
+      nameOfTheDebate: "Nom de la discussion",
+      discussionSlug: "Slug de la discussion",
       menu: {
         phase: "Phase %{count} - %{description}",
         preferences: "Préférences de la discussion",
@@ -1688,6 +1690,8 @@ const Translations = {
       down: "Down",
       nextStep: "Next step",
       previousStep: "Previous step",
+      nameOfTheDebate: "Name of the debate",
+      discussionSlug: "Slug of the debate",
       menu: {
         phase: "Phase %{count} - %{description}",
         preferences: "Discussion preferences",

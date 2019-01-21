@@ -41,6 +41,11 @@ const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesForm
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
             <div className="form-container">
               <div className="title">
+                <Translate value="administration.nameOfTheDebate" />
+              </div>
+              <Field component={TextFieldAdapter} name="slug" label={I18n.t('administration.discussionSlug')} />
+              <div className="separator" />
+              <div className="title">
                 <Translate value="administration.languageChoice" />
               </div>
               <div className="margin-l" />
@@ -56,11 +61,6 @@ const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesForm
                 label={I18n.t('administration.activateModeration')}
                 type="checkbox"
               />
-              <div className="separator" />
-              <div className="title">
-                <span>Modify the slug</span>
-              </div>
-              <Field component={TextFieldAdapter} name="slug" label="Modify the slug of the debate" />
             </div>
           </AdminForm>
         </div>
