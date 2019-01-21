@@ -10,9 +10,9 @@ import AvatarImage from './avatarImage';
 type Props = {
   userId: ?(number | string),
   userName: ?string,
-  creationDate: string,
-  locale: string,
-  modified: boolean,
+  creationDate?: string | null,
+  locale?: string,
+  modified?: boolean,
   userNameModerationClasses?: ?string
 };
 
@@ -20,7 +20,8 @@ class ProfileLine extends React.PureComponent<Props> {
   static defaultProps = {
     modified: false,
     creationDate: null,
-    userNameModerationClasses: null
+    userNameModerationClasses: null,
+    locale: 'en'
   };
 
   render() {
