@@ -1,6 +1,6 @@
 // @flow
 import React, { Component } from 'react';
-import { Grid, Col } from 'react-bootstrap';
+import { Col } from 'react-bootstrap';
 
 // Component imports
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
@@ -98,16 +98,16 @@ class SemanticAnalysis extends Component<Props, State> {
     );
 
     return loading || errorLoading ? (
-      <Grid className="semantic-analysis">
+      <div className="semantic-analysis">
         {/** Loading section */}
-        <Col xs={12}>
+        <Col xs={12} className="no-padding">
           <Loader type={errorLoading ? LOADER_TYPE.ERROR : LOADER_TYPE.LOADING} />
         </Col>
-      </Grid>
+      </div>
     ) : (
       <div className="semantic-analysis">
         {/** Description section */}
-        <Col xs={12}>
+        <Col xs={12} className="no-padding">
           <Title level={1}>Nuage de mots-clés</Title>
           <Description>
             <p>
@@ -115,11 +115,11 @@ class SemanticAnalysis extends Component<Props, State> {
               aliqua. Ut enim ad minim veniam, quis nostrud.
             </p>
           </Description>
-          <WordCountInformation wordCount={23302} />
+          <WordCountInformation wordCount={23302} className="padding-bottom" />
         </Col>
 
         {/** WordCloud section */}
-        <Col xs={12} md={8}>
+        <Col xs={12} md={8} className="no-padding lg-wordcloud-padding margin-s">
           <ResponsiveWordCloud
             keywordsColor={keywordsColor}
             numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
@@ -131,8 +131,8 @@ class SemanticAnalysis extends Component<Props, State> {
         </Col>
 
         {/** Toolbar section */}
-        <Col xs={12} md={4}>
-          <Col xsHidden sm={6} md={12}>
+        <Col xs={12} md={4} className="no-padding margin-s">
+          <Col xsHidden sm={6} md={12} className="no-padding">
             <TitleWithTooltip level={2} tooltipContent={tooltip}>
               Informations mots-clés
             </TitleWithTooltip>
@@ -140,7 +140,7 @@ class SemanticAnalysis extends Component<Props, State> {
             <KeywordInfo keyword={keywordData} />
           </Col>
 
-          <Col xsHidden smHidden md={12}>
+          <Col xsHidden smHidden md={12} className="no-padding">
             <Title level={2}>Nombre de mots-clés</Title>
 
             <ToolbarSlider
@@ -151,7 +151,7 @@ class SemanticAnalysis extends Component<Props, State> {
             />
           </Col>
 
-          <Col xs={12} sm={6} md={12}>
+          <Col xs={12} sm={6} md={12} className="no-padding">
             <TitleWithTooltip level={2} tooltipContent={tooltip}>
               Analyse du sentiment
             </TitleWithTooltip>

@@ -1,6 +1,7 @@
 .titleWithTooltip-container {
   display: flex;
   align-items: center;
+  justify-content: center;
 
   .titleTooltip-container {
     margin-left: 5px;
@@ -22,5 +23,11 @@
     padding-right: 20px;
     font-size: $font-size-sm;
     letter-spacing: 1.1px;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .titleWithTooltip-container {
+    justify-content: left;
   }
 }
