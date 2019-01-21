@@ -4,12 +4,13 @@ import { I18n } from 'react-redux-i18n';
 import { i18nValueIsEmpty } from '../../form/utils';
 import type { ResourcesValues } from './types.flow';
 
-function validateResource(resource) {
+type Errors = { title?: string };
+
+function validateResource(resource): Errors {
   const errors = {};
   if (i18nValueIsEmpty(resource.title)) {
     errors.title = I18n.t('error.required');
   }
-
   return errors;
 }
 

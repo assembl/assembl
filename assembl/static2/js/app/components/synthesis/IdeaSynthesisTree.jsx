@@ -64,7 +64,7 @@ class IdeaSynthesisTree extends React.Component<IdeaSynthesisTreeProps, IdeaSynt
     const newParents = parents.slice();
     newParents.push(index);
     const level = parents.length + 1;
-    return roots.map((idea, subIndex) => (
+    return roots.map((idea, subIndex): React.Element<Row> => (
       <Row key={idea.id}>
         <Col sm={level === 3 && hasSiblings ? 6 : 12} xs={12}>
           <IdeaSynthesisTree

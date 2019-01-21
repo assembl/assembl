@@ -38,7 +38,7 @@ class TabbedContent extends React.Component<Props, State> {
 
   renderTabs() {
     const { tabTitleMsgId, tabs } = this.props;
-    return tabs.map((tab, idx) => (
+    return tabs.map((tab, idx): React.Element<Col> => (
       <Col xs={12} md={Math.round(12 / tabs.length)} key={tab.id}>
         <OverlayTrigger placement="top" overlay={this.renderOverlay(tab)}>
           <a
