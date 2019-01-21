@@ -63,15 +63,8 @@ class ToolbarSlider extends Component<Props, State> {
     minValue: 0
   };
 
-  static getDerivedStateFromProps(nextProps: Props) {
-    const { defaultValue } = nextProps;
-    return {
-      currentValue: defaultValue
-    };
-  }
-
   state = {
-    currentValue: 0
+    currentValue: this.props.defaultValue
   };
 
   render() {
