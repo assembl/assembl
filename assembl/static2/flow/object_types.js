@@ -59,7 +59,7 @@ type FictionPostPreview = {
   publicationState: string
 };
 
-type EditableDocument = DocumentFragment & {
+type EditableDocument = ADocumentFragment & {
   file?: File
 };
 

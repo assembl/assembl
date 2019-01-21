@@ -12,7 +12,7 @@ export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
   return data;
 };
 
-export function postLoadFormat(data: DiscussionPreferencesQuery): PersonalizeInterfaceValues {
+export function postLoadFormat(data: DiscussionPreferencesQueryQuery): PersonalizeInterfaceValues {
   const { discussionPreferences } = data;
   return {
     title: discussionPreferences && discussionPreferences.tabTitle,

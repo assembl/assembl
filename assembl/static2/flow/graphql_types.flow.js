@@ -62,26 +62,15 @@ export type QuestionInput = {|
   titleEntries: Array<?LangStringEntryInput>
 |};
 
-export type VideoInput = {|
-  // A list of possible languages of the entity as LangStringEntry objects. Title of the video in various languages.
-  titleEntries?: ?Array<?LangStringEntryInput>,
-  // A list of possible languages of the entity as LangStringEntry objects. Description on the top of the video in various languages.
-  descriptionEntriesTop?: ?Array<?LangStringEntryInput>,
-  // A list of possible languages of the entity as LangStringEntry objects. Description on the bottom of the video in various languages.
-  descriptionEntriesBottom?: ?Array<?LangStringEntryInput>,
-  // A list of possible languages of the entity as LangStringEntry objects. Description on the side of the video in various languages.
-  descriptionEntriesSide?: ?Array<?LangStringEntryInput>,
-  // HTML Code to add extra content in the video module section to be injected.
-  htmlCode?: ?string,
-  // File (image or video) to use in the video module section.
-  mediaFile?: ?string
-|};
-
 export type IdeaAnnouncementInput = {|
   // A list of possible languages of the entity as LangStringEntry objects. This is the title of announcement in multiple languages.
   titleEntries: Array<?LangStringEntryInput>,
+  // A Attachments for the body of announcement in multiple languages. in a given language.
+  bodyAttachments?: ?Array<?string>,
   // A list of possible languages of the entity as LangStringEntry objects. This is the body of announcement in multiple languages.
-  bodyEntries: Array<?LangStringEntryInput>
+  bodyEntries: Array<?LangStringEntryInput>,
+  // A list of possible languages of the entity as LangStringEntry objects. This is the quote of the announcement in multiple languages.
+  quoteEntries?: ?Array<?LangStringEntryInput>
 |};
 
 export type TokenCategorySpecificationInput = {|
@@ -103,6 +92,47 @@ export type TranslationInput = {|
   localeInto: string
 |};
 
+export type IdeaInput = {|
+  id?: ?string,
+  // A list of possible languages of the entity as LangStringEntry objects. %s
+  titleEntries: Array<?LangStringEntryInput>,
+  // A list of possible languages of the entity as LangStringEntry objects. %s
+  descriptionEntries?: ?Array<?LangStringEntryInput>,
+  // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+  announcement?: ?IdeaAnnouncementInput,
+  // A list of Question objects that are bound to the Thematic.
+  questions?: ?Array<?QuestionInput>,
+  // A list of IdeaMessageColumnInput to be associated to the idea.
+  messageColumns?: ?Array<?IdeaMessageColumnInput>,
+  // List of IdeaInput
+  children?: ?Array<?IdeaInput>,
+  // The identifier of the part containing the image in a multipart POST body.
+  image?: ?string,
+  // A %s as a float
+  order?: ?number,
+  // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+  messageViewOverride?: ?string,
+  // The Relay.Node ID type of the Idea object.
+  parentId?: ?string
+|};
+
+export type IdeaMessageColumnInput = {|
+  // Id of the IdeaMessageColumnInput.
+  id?: ?string,
+  // A list of possible languages of the entity as LangStringEntry objects. Name of the column.
+  nameEntries: Array<?LangStringEntryInput>,
+  // A list of possible languages of the entity as LangStringEntry objects. Title of the column.
+  titleEntries: Array<?LangStringEntryInput>,
+  // A The color of the column. in a given language.
+  color: string,
+  // A Message classifier of the column. in a given language.
+  messageClassifier?: ?string,
+  // A list of possible languages of the entity as LangStringEntry objects. The title of the Synthesis post associated to the column.
+  columnSynthesisSubject?: ?Array<?LangStringEntryInput>,
+  // A list of possible languages of the entity as LangStringEntry objects. The body of the Synthesis post associated to the column.
+  columnSynthesisBody?: ?Array<?LangStringEntryInput>
+|};
+
 export type FieldDataInput = {|
   // The Relay.Node ID type of the ConfigurableField object.
   configurableFieldId: string,
@@ -119,45 +149,40 @@ export type AllIdeasQueryQueryVariables = {|
 
 export type AllIdeasQueryQuery = {|
   // List of all ideas on the debate.
-  ideas: ?Array<?(
-    | {
-        // The ID of the object.
-        id: string,
-        // The title of the Idea, often shown in the Idea header itself.
-        title: ?string,
-        // The description of the Idea, often shown in the header of the Idea.
-        description: ?string,
-        // The total number of active posts on that idea (excludes deleted posts).
-        numPosts: ?number,
-        // The total number of users who contributed to the Idea/Thematic/Question.
-        //
-        // Contribution is counted as either as a sentiment set, a post created.
-        numContributors: ?number,
-        // The total number of children ideas (called "subideas") on the Idea or Thematic.
-        numChildren: ?number,
-        // Header image associated with the idea. A file metadata object, described by the Document object.
-        img: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string
-        |},
-        // The order of the Idea, Thematic, Question in the idea tree.
-        order: ?number,
-        // The Relay.Node ID type of the Idea object.
-        parentId: ?string,
-        // A list of Relay.Node ID's representing the parents Ideas of the Idea.
-        ancestors: ?Array<?string>
-      }
-    | {})>,
+  ideas: ?Array<?{
+    // The ID of the object.
+    id: string,
+    // The title of the Idea, often shown in the Idea header itself.
+    title: ?string,
+    // The description of the Idea, often shown in the header of the Idea.
+    description: ?string,
+    // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+    messageViewOverride: ?string,
+    // The total number of active posts on that idea (excludes deleted posts).
+    numPosts: ?number,
+    // The total number of users who contributed to the Idea/Thematic/Question.
+    //
+    // Contribution is counted as either as a sentiment set, a post created.
+    numContributors: ?number,
+    // The total number of children ideas (called "subideas") on the Idea or Thematic.
+    numChildren: ?number,
+    // Header image associated with the idea. A file metadata object, described by the Document object.
+    img: ?{|
+      // A url to an image or a document to be attached.
+      externalUrl: ?string
+    |},
+    // The order of the Idea, Thematic, Question in the idea tree.
+    order: ?number,
+    // The Relay.Node ID type of the Idea object.
+    parentId: ?string,
+    // A list of Relay.Node ID's representing the parents Ideas of the Idea.
+    ancestors: ?Array<?string>
+  }>,
   // An idea union between either an Idea type or a Thematic type.
-  rootIdea: ?(
-    | {
-        // The ID of the object.
-        id: string
-      }
-    | {
-        // The ID of the object.
-        id: string
-      })
+  rootIdea: ?{
+    // The ID of the object.
+    id: string
+  }
 |};
 
 export type AllLanguagePreferencesQueryVariables = {|
@@ -185,6 +210,7 @@ export type BrightMirrorFictionQueryVariables = {|
 export type BrightMirrorFictionQuery = {|
   // The ID of the object
   fiction: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -410,7 +436,7 @@ export type BrightMirrorFictionQuery = {|
             // List of attachements to the post.
             attachments: ?Array<?{|
               id: string,
-              // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+              // Any file that can be attached. A file metadata object, described by the Document object.
               document: ?{|
                 id: string,
                 // The filename title.
@@ -472,46 +498,14 @@ export type BrightMirrorFictionQuery = {|
     | {}
     | {}
     | {}
-    | {}
-    | {}
     | {})
 |};
 
-export type DebateThematicsQueryQueryVariables = {|
-  lang: string,
-  discussionPhaseId: number
-|};
-
-export type DebateThematicsQueryQuery = {|
-  // List of all ideas on the debate.
-  thematics: ?Array<?(
-    | {}
-    | {
-        // The ID of the object.
-        id: string,
-        // The title of the Idea, often shown in the Idea header itself.
-        title: ?string,
-        // The description of the Idea, often shown in the header of the Idea.
-        description: ?string,
-        // The total number of active posts on that idea (excludes deleted posts).
-        numPosts: ?number,
-        // The total number of users who contributed to the Idea/Thematic/Question.
-        //
-        // Contribution is counted as either as a sentiment set, a post created.
-        numContributors: ?number,
-        // Header image associated with the idea. A file metadata object, described by the Document object.
-        img: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string
-        |}
-      })>
-|};
-
-export type DiscussionPreferencesLanguageQueryVariables = {|
+export type DiscussionPreferencesQueryVariables = {|
   inLocale: string
 |};
 
-export type DiscussionPreferencesLanguageQuery = {|
+export type DiscussionPreferencesQuery = {|
   //
   // The dicussion preferences of the debate.
   // These are configurations that characterize how the debate will behave, look, and act under certain conditions.
@@ -524,11 +518,13 @@ export type DiscussionPreferencesLanguageQuery = {|
       name: ?string,
       // The name of the locale, in the original language. Ex Français.
       nativeName: ?string
-    |}>
+    |}>,
+    // A Boolean flag indicating whether the moderation is activated or not.
+    withModeration: ?boolean
   |}
 |};
 
-export type DiscussionPreferencesQuery = {|
+export type DiscussionPreferencesQueryQuery = {|
   //
   // The dicussion preferences of the debate.
   // These are configurations that characterize how the debate will behave, look, and act under certain conditions.
@@ -543,7 +539,9 @@ export type DiscussionPreferencesQuery = {|
       externalUrl: ?string,
       // The MIME-Type of the file uploaded.
       mimeType: ?string
-    |}
+    |},
+    // A Boolean flag indicating whether the moderation is activated or not.
+    withModeration: ?boolean
   |}
 |};
 
@@ -624,6 +622,8 @@ export type IdeaQuery = {|
     | {
         // The ID of the object.
         id: string,
+        // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+        messageViewOverride: ?string,
         // The title of the Idea, often shown in the Idea header itself.
         title: ?string,
         // A Synthesis title in a given language.
@@ -640,10 +640,11 @@ export type IdeaQuery = {|
           // A title of announcement in a given language.
           title: ?string,
           // A body of announcement in a given language.
-          body: ?string
+          body: ?string,
+          // A quote of announcement in a given language.
+          quote: ?string
         |}
       }
-    | {}
     | {}
     | {}
     | {}
@@ -740,8 +741,7 @@ export type IdeaWithPostsQuery = {|
           // A The title of the column in a given language.
           title: ?string
         |}>,
-        // Use a non-standard view for this idea.
-        // Currently only supporting "messageColumns" and "brightMirror".
+        // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
         messageViewOverride: ?string,
         // A list of all Posts under the Idea. These include posts of the subIdeas.
         posts: ?{|
@@ -750,6 +750,9 @@ export type IdeaWithPostsQuery = {|
             node: ?{|
               // The ID of the object.
               id: string,
+              // The internal database ID of the post.
+              // This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts.
+              dbId: ?number,
               // A Subject of the post in a given language.
               subject: ?string,
               // A Body of the post (the main content of the post). in a given language.
@@ -833,7 +836,6 @@ export type IdeaWithPostsQuery = {|
           |}>
         |}
       }
-    | {}
     | {}
     | {}
     | {}
@@ -1060,6 +1062,8 @@ export type LegalContentsQuery = {|
     privacyPolicy: ?string,
     // A User Guidelines in a given language.
     userGuidelines: ?string,
+    // A boolean flag to activate mandatory validation of legal contents after SSO login.
+    mandatoryLegalContentsValidation: boolean,
     // A list of possible languages of the entity as LangStringEntry objects.
     legalNoticeEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
@@ -1128,6 +1132,7 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -1182,8 +1187,7 @@ export type PostQuery = {|
             id: string,
             // The title of the Idea, often shown in the Idea header itself.
             title: ?string,
-            // Use a non-standard view for this idea.
-            // Currently only supporting "messageColumns" and "brightMirror".
+            // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
             messageViewOverride: ?string
           |}
         |}>,
@@ -1345,7 +1349,7 @@ export type PostQuery = {|
         // List of attachements to the post.
         attachments: ?Array<?{|
           id: string,
-          // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+          // Any file that can be attached. A file metadata object, described by the Document object.
           document: ?{|
             id: string,
             // The filename title.
@@ -1367,8 +1371,6 @@ export type PostQuery = {|
           |}
         |}>
       }
-    | {}
-    | {}
     | {}
     | {}
     | {}
@@ -1473,21 +1475,13 @@ export type QuestionPostsQueryVariables = {|
   id: string,
   first: number,
   after: string,
-  fromNode?: ?string
+  fromNode?: ?string,
+  isModerating?: ?boolean
 |};
 
 export type QuestionPostsQuery = {|
   // The ID of the object
   question: ?(
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
     | {}
     | {}
     | {}
@@ -1527,6 +1521,14 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -1538,15 +1540,6 @@ export type QuestionQueryVariables = {|
 export type QuestionQuery = {|
   // The ID of the object
   question: ?(
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
     | {}
     | {}
     | {}
@@ -1568,10 +1561,8 @@ export type QuestionQuery = {|
         numContributors: ?number,
         // The count of total sentiments
         totalSentiments: number,
-        // The Thematic that the Question is categorized under. A Question, in the end, is an Idea type, as well as a Thematic.
-        thematic: ?{|
-          // The ID of the object.
-          id: string,
+        // Parent Idea
+        parent: ?{
           // The title of the Idea, often shown in the Idea header itself.
           title: ?string,
           // Header image associated with the idea. A file metadata object, described by the Document object.
@@ -1580,9 +1571,19 @@ export type QuestionQuery = {|
             externalUrl: ?string,
             // The MIME-Type of the file uploaded.
             mimeType: ?string
-          |}
-        |}
+          |},
+          // The ID of the object.
+          id: string
+        }
       }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -1676,19 +1677,12 @@ export type ResourcesQueryQuery = {|
 
 export type RootIdeaStatsQuery = {|
   // An idea union between either an Idea type or a Thematic type.
-  rootIdea: ?(
-    | {
-        // The ID of the object.
-        id: string,
-        // The total number of active posts on that idea (excludes deleted posts).
-        numPosts: ?number
-      }
-    | {
-        // The ID of the object.
-        id: string,
-        // The total number of active posts on that idea (excludes deleted posts).
-        numPosts: ?number
-      }),
+  rootIdea: ?{
+    // The ID of the object.
+    id: string,
+    // The total number of active posts on that idea (excludes deleted posts).
+    numPosts: ?number
+  },
   // The total count of sentiments on the debate, regardless of chosen type. Deleted users' sentiments are not counted.
   totalSentiments: ?number,
   // The total of all participations on all the vote sessions
@@ -1817,6 +1811,10 @@ export type SynthesisQueryQuery = {|
       }
     | {
         // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
         id: string,
         // Graphene Field modeling a relationship to a published synthesis.
         publishesSynthesis: ?{|
@@ -1836,152 +1834,139 @@ export type SynthesisQueryQuery = {|
             externalUrl: ?string
           |},
           // This is the list of ideas related to the synthesis.
-          ideas: ?Array<?(
-            | {
-                // The ID of the object.
-                id: string,
-                // A list of Relay.Node ID's representing the parents Ideas of the Idea.
-                ancestors: ?Array<?string>,
-                // The title of the Idea, often shown in the Idea header itself.
-                title: ?string,
-                // A Synthesis title in a given language.
-                synthesisTitle: ?string,
-                // The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea.
-                live: ?(
-                  | {
-                      // The ID of the object.
-                      id: string,
-                      // The order of the Idea, Thematic, Question in the idea tree.
-                      order: ?number,
-                      // The total number of active posts on that idea (excludes deleted posts).
-                      numPosts: ?number,
-                      // The total number of users who contributed to the Idea/Thematic/Question.
-                      //
-                      // Contribution is counted as either as a sentiment set, a post created.
-                      numContributors: ?number,
-                      // A list of IdeaMessageColumn objects, if any set, on an Idea.
-                      messageColumns: ?Array<?{|
-                        // A CSS color that will be used to theme the column.
-                        color: ?string,
-                        // A Synthesis done on the column, of type Post.
-                        columnSynthesis: ?{|
-                          // The ID of the object.
-                          id: string,
-                          // A Subject of the post in a given language.
-                          subject: ?string,
-                          // A Body of the post (the main content of the post). in a given language.
-                          body: ?string,
-                          // The SentimentType that the API calling User has on the Post, if any.
-                          mySentiment: ?SentimentTypes,
-                          // A list of SentimentCounts which counts each sentiment expressed. These include:
-                          //
-                          // Like,
-                          //
-                          // Agree,
-                          //
-                          // Disagree,
-                          //
-                          // Like,
-                          //
-                          // Don't Understand
-                          //
-                          // More Info
-                          //
-                          sentimentCounts: ?{|
-                            // The number of Sentiments disagreeing with the post.
-                            disagree: ?number,
-                            // The number of Sentiments expressing "dont_understand" on the Post.
-                            dontUnderstand: ?number,
-                            // The number of Sentiments expressed "like" on the post.
-                            like: ?number,
-                            // The number of Sentiments requesting "more_info" on the post.
-                            moreInfo: ?number
-                          |}
-                        |},
-                        // The order of the message column in the Idea/Thematic.
-                        index: ?number,
-                        // The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer.
-                        messageClassifier: string,
-                        // A The name of the column in a given language.
-                        name: ?string,
-                        // The number of posts contributed to only this column.
-                        numPosts: ?number,
-                        // A The title of the column in a given language.
-                        title: ?string
-                      |}>,
-                      // Use a non-standard view for this idea.
-                      // Currently only supporting "messageColumns" and "brightMirror".
-                      messageViewOverride: ?string,
-                      // Header image associated with the idea. A file metadata object, described by the Document object.
-                      img: ?{|
-                        // A url to an image or a document to be attached.
-                        externalUrl: ?string
-                      |},
-                      // A list of all Posts under the Idea. These include posts of the subIdeas.
-                      posts: ?{|
-                        edges: Array<?{|
-                          // The item at the end of the edge
-                          node: ?{|
-                            // A list of SentimentCounts which counts each sentiment expressed. These include:
-                            //
-                            // Like,
-                            //
-                            // Agree,
-                            //
-                            // Disagree,
-                            //
-                            // Like,
-                            //
-                            // Don't Understand
-                            //
-                            // More Info
-                            //
-                            sentimentCounts: ?{|
-                              // The number of Sentiments expressed "like" on the post.
-                              like: ?number,
-                              // The number of Sentiments disagreeing with the post.
-                              disagree: ?number,
-                              // The number of Sentiments expressing "dont_understand" on the Post.
-                              dontUnderstand: ?number,
-                              // The number of Sentiments requesting "more_info" on the post.
-                              moreInfo: ?number
-                            |},
-                            // A graphene Field containing the state of the publication of a certain post. The options are:
-                            // DRAFT,
-                            //
-                            // SUBMITTED_IN_EDIT_GRACE_PERIOD,
-                            //
-                            // SUBMITTED_AWAITING_MODERATION,
-                            //
-                            // PUBLISHED,
-                            //
-                            // MODERATED_TEXT_ON_DEMAND,
-                            //
-                            // MODERATED_TEXT_NEVER_AVAILABLE,
-                            //
-                            // DELETED_BY_USER,
-                            //
-                            // DELETED_BY_ADMIN,
-                            //
-                            // WIDGET_SCOPED
-                            //
-                            publicationState: ?PublicationStates
-                          |}
-                        |}>
-                      |}
-                    }
-                  | {})
-              }
-            | {})>
+          ideas: ?Array<?{
+            // The ID of the object.
+            id: string,
+            // A list of Relay.Node ID's representing the parents Ideas of the Idea.
+            ancestors: ?Array<?string>,
+            // The title of the Idea, often shown in the Idea header itself.
+            title: ?string,
+            // A Synthesis title in a given language.
+            synthesisTitle: ?string,
+            // The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea.
+            live: ?{
+              // The ID of the object.
+              id: string,
+              // The order of the Idea, Thematic, Question in the idea tree.
+              order: ?number,
+              // The total number of active posts on that idea (excludes deleted posts).
+              numPosts: ?number,
+              // The total number of users who contributed to the Idea/Thematic/Question.
+              //
+              // Contribution is counted as either as a sentiment set, a post created.
+              numContributors: ?number,
+              // A list of IdeaMessageColumn objects, if any set, on an Idea.
+              messageColumns: ?Array<?{|
+                // A CSS color that will be used to theme the column.
+                color: ?string,
+                // A Synthesis done on the column, of type Post.
+                columnSynthesis: ?{|
+                  // The ID of the object.
+                  id: string,
+                  // A Subject of the post in a given language.
+                  subject: ?string,
+                  // A Body of the post (the main content of the post). in a given language.
+                  body: ?string,
+                  // The SentimentType that the API calling User has on the Post, if any.
+                  mySentiment: ?SentimentTypes,
+                  // A list of SentimentCounts which counts each sentiment expressed. These include:
+                  //
+                  // Like,
+                  //
+                  // Agree,
+                  //
+                  // Disagree,
+                  //
+                  // Like,
+                  //
+                  // Don't Understand
+                  //
+                  // More Info
+                  //
+                  sentimentCounts: ?{|
+                    // The number of Sentiments disagreeing with the post.
+                    disagree: ?number,
+                    // The number of Sentiments expressing "dont_understand" on the Post.
+                    dontUnderstand: ?number,
+                    // The number of Sentiments expressed "like" on the post.
+                    like: ?number,
+                    // The number of Sentiments requesting "more_info" on the post.
+                    moreInfo: ?number
+                  |}
+                |},
+                // The order of the message column in the Idea/Thematic.
+                index: ?number,
+                // The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer.
+                messageClassifier: string,
+                // A The name of the column in a given language.
+                name: ?string,
+                // The number of posts contributed to only this column.
+                numPosts: ?number,
+                // A The title of the column in a given language.
+                title: ?string
+              |}>,
+              // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+              messageViewOverride: ?string,
+              // Header image associated with the idea. A file metadata object, described by the Document object.
+              img: ?{|
+                // A url to an image or a document to be attached.
+                externalUrl: ?string
+              |},
+              // A list of all Posts under the Idea. These include posts of the subIdeas.
+              posts: ?{|
+                edges: Array<?{|
+                  // The item at the end of the edge
+                  node: ?{|
+                    // A list of SentimentCounts which counts each sentiment expressed. These include:
+                    //
+                    // Like,
+                    //
+                    // Agree,
+                    //
+                    // Disagree,
+                    //
+                    // Like,
+                    //
+                    // Don't Understand
+                    //
+                    // More Info
+                    //
+                    sentimentCounts: ?{|
+                      // The number of Sentiments expressed "like" on the post.
+                      like: ?number,
+                      // The number of Sentiments disagreeing with the post.
+                      disagree: ?number,
+                      // The number of Sentiments expressing "dont_understand" on the Post.
+                      dontUnderstand: ?number,
+                      // The number of Sentiments requesting "more_info" on the post.
+                      moreInfo: ?number
+                    |},
+                    // A graphene Field containing the state of the publication of a certain post. The options are:
+                    // DRAFT,
+                    //
+                    // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+                    //
+                    // SUBMITTED_AWAITING_MODERATION,
+                    //
+                    // PUBLISHED,
+                    //
+                    // MODERATED_TEXT_ON_DEMAND,
+                    //
+                    // MODERATED_TEXT_NEVER_AVAILABLE,
+                    //
+                    // DELETED_BY_USER,
+                    //
+                    // DELETED_BY_ADMIN,
+                    //
+                    // WIDGET_SCOPED
+                    //
+                    publicationState: ?PublicationStates
+                  |}
+                |}>
+              |}
+            }
+          }>
         |}
-      }
-    | {
-        // The ID of the object.
-        id: string
-      }
-    | {
-        // The ID of the object.
-        id: string
       }
     | {
         // The ID of the object.
@@ -2076,6 +2061,11 @@ export type TabsConditionQuery = {|
   discussion: ?{|
     // A URL for the homepage (optional). Often placed on the logo.
     homepageUrl: ?string
+  |},
+  // The legal contents metadata representing the data.
+  legalContents: ?{|
+    // A boolean flag to activate mandatory validation of legal contents after SSO login.
+    mandatoryLegalContentsValidation: boolean
   |}
 |};
 
@@ -2175,32 +2165,7 @@ export type ThematicQueryQueryVariables = {|
 export type ThematicQueryQuery = {|
   // The ID of the object
   thematic: ?(
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
-    | {}
     | {
-        // The title of the Idea, often shown in the Idea header itself.
-        title: ?string,
-        // Header image associated with the idea. A file metadata object, described by the Document object.
-        img: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string,
-          // The MIME-Type of the file uploaded.
-          mimeType: ?string
-        |},
         // The ID of the object.
         id: string,
         // The total number of active posts on that idea (excludes deleted posts).
@@ -2211,30 +2176,14 @@ export type ThematicQueryQuery = {|
         numContributors: ?number,
         // Total number of sentiments expressed by participants on posts related to that idea.
         totalSentiments: number,
-        // A Video objet that is often integrated to the header of a Thematic.
-        video: ?{|
-          // A Title of the video. in a given language.
-          title: ?string,
-          // A Description on top side of the video. in a given language.
-          descriptionTop: ?string,
-          // A Description on bottom side of the video. in a given language.
-          descriptionBottom: ?string,
-          // A Description on one of the sides of the video. in a given language.
-          descriptionSide: ?string,
-          // HTML Code to add extra content in the video module section to be injected.
-          htmlCode: ?string,
-          // File (image or video) to use in the video module section.
-          mediaFile: ?{|
-            // A url to an image or a document to be attached.
-            externalUrl: ?string
-          |}
-        |},
         // A list of Question objects that are bound to the Thematic.
         questions: ?Array<?{|
           // The Question to be asked itself, in the language given.
           title: ?string,
           // The ID of the object.
           id: string,
+          // Whether the question has pending posts or not.
+          hasPendingPosts: ?boolean,
           // The list of all posts under the Question.
           posts: ?{|
             edges: Array<?{|
@@ -2259,6 +2208,21 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -2269,35 +2233,21 @@ export type ThematicsDataQueryQueryVariables = {|
 
 export type ThematicsDataQueryQuery = {|
   // List of all ideas on the debate.
-  thematicsData: ?Array<?(
-    | {
-        // The order of the Idea, Thematic, Question in the idea tree.
-        order: ?number,
-        // The ID of the object.
-        id: string,
-        // The Relay.Node ID type of the Idea object.
-        parentId: ?string,
-        // The title of the Idea, often shown in the Idea header itself.
-        title: ?string
-      }
-    | {
-        // The order of the Idea, Thematic, Question in the idea tree.
-        order: ?number,
-        // The ID of the object.
-        id: string,
-        // The title of the Idea, often shown in the Idea header itself.
-        title: ?string
-      })>,
+  thematicsData: ?Array<?{
+    // The order of the Idea, Thematic, Question in the idea tree.
+    order: ?number,
+    // The ID of the object.
+    id: string,
+    // The Relay.Node ID type of the Idea object.
+    parentId: ?string,
+    // The title of the Idea, often shown in the Idea header itself.
+    title: ?string
+  }>,
   // An idea union between either an Idea type or a Thematic type.
-  rootIdea: ?(
-    | {
-        // The ID of the object.
-        id: string
-      }
-    | {
-        // The ID of the object.
-        id: string
-      })
+  rootIdea: ?{
+    // The ID of the object.
+    id: string
+  }
 |};
 
 export type ThematicsQueryQueryVariables = {|
@@ -2306,147 +2256,126 @@ export type ThematicsQueryQueryVariables = {|
 
 export type ThematicsQueryQuery = {|
   // List of all ideas on the debate.
-  thematics: ?Array<?(
-    | {
-        // Use a non-standard view for this idea.
-        // Currently only supporting "messageColumns" and "brightMirror".
-        messageViewOverride: ?string,
-        // The order of the Idea, Thematic, Question in the idea tree.
-        order: ?number,
-        // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
-        titleEntries: ?Array<?{|
-          // The ISO 639-1 locale code of the language the content represents.
-          localeCode: string,
-          // The unicode encoded string representation of the content.
-          value: ?string
-        |}>,
-        // Header image associated with the idea. A file metadata object, described by the Document object.
-        img: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string,
-          // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // The filename title.
-          title: ?string
-        |},
+  thematics: ?Array<?{
+    // The Relay.Node ID type of the Idea object.
+    parentId: ?string,
+    // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+    messageViewOverride: ?string,
+    // The order of the Idea, Thematic, Question in the idea tree.
+    order: ?number,
+    // The total number of active posts on that idea (excludes deleted posts).
+    numPosts: ?number,
+    // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
+    titleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // A list of possible languages of the entity as LangStringEntry objects. This is the description of the Idea in multiple languages.
+    descriptionEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // Header image associated with the idea. A file metadata object, described by the Document object.
+    img: ?{|
+      // A url to an image or a document to be attached.
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string,
+      // The filename title.
+      title: ?string
+    |},
+    // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+    announcement: ?{|
+      // A list of possible languages of the entity as LangStringEntry objects. This is the title of announcement in multiple languages.
+      titleEntries: Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects. This is the body of announcement in multiple languages.
+      bodyEntries: Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects. This is the quote of the announcement in multiple languages.
+      quoteEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>
+    |},
+    // A list of Question objects that are bound to the Thematic.
+    questions: ?Array<?{|
+      // The ID of the object.
+      id: string,
+      // A list of possible languages of the entity as LangStringEntry objects.
+      titleEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>
+    |}>,
+    // A list of IdeaMessageColumn objects, if any set, on an Idea.
+    messageColumns: ?Array<?{|
+      // The ID of the object.
+      id: string,
+      // A CSS color that will be used to theme the column.
+      color: ?string,
+      // A Synthesis done on the column, of type Post.
+      columnSynthesis: ?{|
         // The ID of the object.
         id: string,
-        // The Relay.Node ID type of the Idea object.
-        parentId: ?string,
-        // A list of possible languages of the entity as LangStringEntry objects. This is the description of the Idea in multiple languages.
-        descriptionEntries: ?Array<?{|
+        // A list of possible languages of the entity as LangStringEntry objects. The subject of the post in various languages.
+        subjectEntries: ?Array<?{|
           // The ISO 639-1 locale code of the language the content represents.
           localeCode: string,
           // The unicode encoded string representation of the content.
           value: ?string
         |}>,
-        // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
-        announcement: ?{|
-          // A list of possible languages of the entity as LangStringEntry objects. This is the title of announcement in multiple languages.
-          titleEntries: Array<?{|
-            // The ISO 639-1 locale code of the language the content represents.
-            localeCode: string,
-            // The unicode encoded string representation of the content.
-            value: ?string
-          |}>,
-          // A list of possible languages of the entity as LangStringEntry objects. This is the body of announcement in multiple languages.
-          bodyEntries: Array<?{|
-            // The ISO 639-1 locale code of the language the content represents.
-            localeCode: string,
-            // The unicode encoded string representation of the content.
-            value: ?string
-          |}>
-        |}
-      }
-    | {
-        // Use a non-standard view for this idea.
-        // Currently only supporting "messageColumns" and "brightMirror".
-        messageViewOverride: ?string,
-        // The order of the Idea, Thematic, Question in the idea tree.
-        order: ?number,
-        // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
-        titleEntries: ?Array<?{|
+        // A list of possible languages of the entity as LangStringEntry objects. The body of the post in various languages.
+        bodyEntries: ?Array<?{|
           // The ISO 639-1 locale code of the language the content represents.
           localeCode: string,
           // The unicode encoded string representation of the content.
           value: ?string
-        |}>,
-        // Header image associated with the idea. A file metadata object, described by the Document object.
-        img: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string,
-          // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // The filename title.
-          title: ?string
-        |},
-        // The ID of the object.
-        id: string,
-        // A Video objet that is often integrated to the header of a Thematic.
-        video: ?{|
-          // A list of possible languages of the entity as LangStringEntry objects. Title of the video in various languages.
-          titleEntries: ?Array<?{|
-            // The ISO 639-1 locale code of the language the content represents.
-            localeCode: string,
-            // The unicode encoded string representation of the content.
-            value: ?string
-          |}>,
-          // A list of possible languages of the entity as LangStringEntry objects. Description on the top of the video in various languages.
-          descriptionEntriesTop: ?Array<?{|
-            // The ISO 639-1 locale code of the language the content represents.
-            localeCode: string,
-            // The unicode encoded string representation of the content.
-            value: ?string
-          |}>,
-          // A list of possible languages of the entity as LangStringEntry objects. Description on the bottom of the video in various languages.
-          descriptionEntriesBottom: ?Array<?{|
-            // The ISO 639-1 locale code of the language the content represents.
-            localeCode: string,
-            // The unicode encoded string representation of the content.
-            value: ?string
-          |}>,
-          // A list of possible languages of the entity as LangStringEntry objects. Description on the side of the video in various languages.
-          descriptionEntriesSide: ?Array<?{|
-            // The ISO 639-1 locale code of the language the content represents.
-            localeCode: string,
-            // The unicode encoded string representation of the content.
-            value: ?string
-          |}>,
-          // HTML Code to add extra content in the video module section to be injected.
-          htmlCode: ?string,
-          // File (image or video) to use in the video module section.
-          mediaFile: ?{|
-            // A url to an image or a document to be attached.
-            externalUrl: ?string,
-            // The MIME-Type of the file uploaded.
-            mimeType: ?string,
-            // The filename title.
-            title: ?string
-          |}
-        |},
-        // A list of Question objects that are bound to the Thematic.
-        questions: ?Array<?{|
-          // The ID of the object.
-          id: string,
-          // A list of possible languages of the entity as LangStringEntry objects.
-          titleEntries: ?Array<?{|
-            // The ISO 639-1 locale code of the language the content represents.
-            localeCode: string,
-            // The unicode encoded string representation of the content.
-            value: ?string
-          |}>
         |}>
-      })>,
+      |},
+      // The order of the message column in the Idea/Thematic.
+      index: ?number,
+      // The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer.
+      messageClassifier: string,
+      // A list of possible languages of the entity as LangStringEntry objects. The name of the column in multiple languages.
+      nameEntries: Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects. The title of the column in multiple languages.
+      titleEntries: Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>
+    |}>,
+    // The ID of the object.
+    id: string
+  }>,
   // An idea union between either an Idea type or a Thematic type.
-  rootIdea: ?(
-    | {
-        // The ID of the object.
-        id: string
-      }
-    | {
-        // The ID of the object.
-        id: string
-      })
+  rootIdea: ?{
+    // The ID of the object.
+    id: string
+  }
 |};
 
 export type TimelineQueryVariables = {|
@@ -2512,6 +2441,7 @@ export type UserPreferencesQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -2541,13 +2471,11 @@ export type UserPreferencesQuery = {|
     | {}
     | {}
     | {}
-    | {}
-    | {}
     | {})
 |};
 
 export type VoteSessionQueryVariables = {|
-  discussionPhaseId: number,
+  ideaId: string,
   lang: string
 |};
 
@@ -2556,45 +2484,8 @@ export type VoteSessionQuery = {|
   voteSession: ?{|
     // The ID of the object.
     id: string,
-    // The image appearing at the header of the Vote session page.A file metadata object, described by the Document object.
-    headerImage: ?{|
-      // The filename title.
-      title: ?string,
-      // The MIME-Type of the file uploaded.
-      mimeType: ?string,
-      // A url to an image or a document to be attached.
-      externalUrl: ?string
-    |},
     // A flag allowing users to view the current votes.
     seeCurrentVotes: boolean,
-    // A list of possible languages of the entity as LangStringEntry objects. The title in various languages.
-    titleEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
-    // A list of possible languages of the entity as LangStringEntry objects. The subtitle in various languages.
-    subTitleEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
-    // A list of possible languages of the entity as LangStringEntry objects. The voting instruction's title in various languages.
-    instructionsSectionTitleEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
-    // A list of possible languages of the entity as LangStringEntry objects. The voting instructions in various languages.
-    instructionsSectionContentEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
     // A list of possible languages of the entity as LangStringEntry objects. The Proposal section's title in various languages.
     propositionsSectionTitleEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
@@ -2602,14 +2493,6 @@ export type VoteSessionQuery = {|
       // The unicode encoded string representation of the content.
       value: ?string
     |}>,
-    // The title of the VoteSession
-    title: ?string,
-    // The subtitle of the VoteSession.
-    subTitle: ?string,
-    // The instructions section title to be given for a vote session.
-    instructionsSectionTitle: ?string,
-    // The instructions to be given for a vote session.
-    instructionsSectionContent: ?string,
     // The title of the section where all Propositions are given.
     propositionsSectionTitle: ?string,
     // The list of Proposals on which the Users will be allowed to vote.
@@ -2846,7 +2729,7 @@ export type VoteSessionQuery = {|
             averageResult: ?number
           })>
     |}>,
-    // The image appearing at the header of the Vote session page.A file metadata object, described by the Document object.
+    // A list of VoteSpecifications.
     modules: Array<?(
       | {
           // The ID of the object.
@@ -3001,14 +2884,13 @@ export type AcceptedCookiesQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The list of cookies accepted by the agent.
         acceptedCookies: ?Array<?CookieTypes>,
         // The ID of the object.
         id: string
       }
-    | {}
-    | {}
     | {}
     | {}
     | {}
@@ -3270,7 +3152,7 @@ export type confirmExtractMutation = {|
 
 export type createDiscussionPhaseMutationVariables = {|
   lang: string,
-  identifier: string,
+  identifier?: ?string,
   titleEntries: Array<?LangStringEntryInput>,
   start: any,
   end: any,
@@ -3571,8 +3453,7 @@ export type createPostMutation = {|
           id: string,
           // The title of the Idea, often shown in the Idea header itself.
           title: ?string,
-          // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns" and "brightMirror".
+          // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
           messageViewOverride: ?string
         |}
       |}>,
@@ -3734,7 +3615,7 @@ export type createPostMutation = {|
       // List of attachements to the post.
       attachments: ?Array<?{|
         id: string,
-        // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+        // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
           id: string,
           // The filename title.
@@ -3968,7 +3849,6 @@ export type createThematicMutationVariables = {|
   titleEntries: Array<?LangStringEntryInput>,
   descriptionEntries?: ?Array<?LangStringEntryInput>,
   questions?: ?Array<?QuestionInput>,
-  video?: ?VideoInput,
   announcement?: ?IdeaAnnouncementInput,
   order?: ?number,
   messageViewOverride?: ?string
@@ -3977,81 +3857,39 @@ export type createThematicMutationVariables = {|
 export type createThematicMutation = {|
   // A mutation to create a new thematic.
   createThematic: ?{|
-    thematic: ?(
-      | {
-          // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns" and "brightMirror".
-          messageViewOverride: ?string,
-          // The order of the Idea, Thematic, Question in the idea tree.
-          order: ?number,
-          // The title of the Idea, often shown in the Idea header itself.
-          title: ?string,
-          // Header image associated with the idea. A file metadata object, described by the Document object.
-          img: ?{|
-            // A url to an image or a document to be attached.
-            externalUrl: ?string,
-            // The MIME-Type of the file uploaded.
-            mimeType: ?string
-          |},
-          // The ID of the object.
-          id: string,
-          // The description of the Idea, often shown in the header of the Idea.
-          description: ?string,
-          // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
-          announcement: ?{|
-            // A title of announcement in a given language.
-            title: ?string,
-            // A body of announcement in a given language.
-            body: ?string
-          |}
-        }
-      | {
-          // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns" and "brightMirror".
-          messageViewOverride: ?string,
-          // The order of the Idea, Thematic, Question in the idea tree.
-          order: ?number,
-          // The title of the Idea, often shown in the Idea header itself.
-          title: ?string,
-          // Header image associated with the idea. A file metadata object, described by the Document object.
-          img: ?{|
-            // A url to an image or a document to be attached.
-            externalUrl: ?string,
-            // The MIME-Type of the file uploaded.
-            mimeType: ?string
-          |},
-          // The ID of the object.
-          id: string,
-          // A Video objet that is often integrated to the header of a Thematic.
-          video: ?{|
-            // A Title of the video. in a given language.
-            title: ?string,
-            // A Description on top side of the video. in a given language.
-            descriptionTop: ?string,
-            // A Description on bottom side of the video. in a given language.
-            descriptionBottom: ?string,
-            // A Description on one of the sides of the video. in a given language.
-            descriptionSide: ?string,
-            // HTML Code to add extra content in the video module section to be injected.
-            htmlCode: ?string,
-            // File (image or video) to use in the video module section.
-            mediaFile: ?{|
-              // A url to an image or a document to be attached.
-              externalUrl: ?string,
-              // The MIME-Type of the file uploaded.
-              mimeType: ?string,
-              // The filename title.
-              title: ?string
-            |}
-          |},
-          // A list of Question objects that are bound to the Thematic.
-          questions: ?Array<?{|
-            // The ID of the object.
-            id: string,
-            // The Question to be asked itself, in the language given.
-            title: ?string
-          |}>
-        })
+    thematic: ?{
+      // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+      messageViewOverride: ?string,
+      // The order of the Idea, Thematic, Question in the idea tree.
+      order: ?number,
+      // The title of the Idea, often shown in the Idea header itself.
+      title: ?string,
+      // The description of the Idea, often shown in the header of the Idea.
+      description: ?string,
+      // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+      announcement: ?{|
+        // A title of announcement in a given language.
+        title: ?string,
+        // A body of announcement in a given language.
+        body: ?string
+      |},
+      // Header image associated with the idea. A file metadata object, described by the Document object.
+      img: ?{|
+        // A url to an image or a document to be attached.
+        externalUrl: ?string,
+        // The MIME-Type of the file uploaded.
+        mimeType: ?string
+      |},
+      // A list of Question objects that are bound to the Thematic.
+      questions: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The Question to be asked itself, in the language given.
+        title: ?string
+      |}>,
+      // The ID of the object.
+      id: string
+    }
   |}
 |};
 
@@ -4418,6 +4256,7 @@ export type updateDiscussionPhaseMutation = {|
 
 export type updateDiscussionPreferenceMutationVariables = {|
   languages?: ?Array<?string>,
+  withModeration?: ?boolean,
   tabTitle?: ?string,
   favicon?: ?string
 |};
@@ -4430,7 +4269,9 @@ export type updateDiscussionPreferenceMutation = {|
       languages: ?Array<?{|
         // The ISO 639-1 language string of the locale. Ex. '"fr"'.
         locale: ?string
-      |}>
+      |}>,
+      // A Boolean flag indicating whether the moderation is activated or not.
+      withModeration: ?boolean
     |}
   |}
 |};
@@ -4642,6 +4483,140 @@ export type UpdateHarvestingTranslationPreferenceMutation = {|
   |}
 |};
 
+export type updateIdeasMutationVariables = {|
+  discussionPhaseId: number,
+  ideas: Array<?IdeaInput>
+|};
+
+export type updateIdeasMutation = {|
+  // A mutation to create/update/delete ideas for a phase.
+  updateIdeas: ?{|
+    query: ?{|
+      // List of all ideas on the debate.
+      thematics: ?Array<?{
+        // The Relay.Node ID type of the Idea object.
+        parentId: ?string,
+        // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+        messageViewOverride: ?string,
+        // The order of the Idea, Thematic, Question in the idea tree.
+        order: ?number,
+        // The total number of active posts on that idea (excludes deleted posts).
+        numPosts: ?number,
+        // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
+        titleEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        // A list of possible languages of the entity as LangStringEntry objects. This is the description of the Idea in multiple languages.
+        descriptionEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        // Header image associated with the idea. A file metadata object, described by the Document object.
+        img: ?{|
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // The filename title.
+          title: ?string
+        |},
+        // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+        announcement: ?{|
+          // A list of possible languages of the entity as LangStringEntry objects. This is the title of announcement in multiple languages.
+          titleEntries: Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>,
+          // A list of possible languages of the entity as LangStringEntry objects. This is the body of announcement in multiple languages.
+          bodyEntries: Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>,
+          // A list of possible languages of the entity as LangStringEntry objects. This is the quote of the announcement in multiple languages.
+          quoteEntries: ?Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>
+        |},
+        // A list of Question objects that are bound to the Thematic.
+        questions: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // A list of possible languages of the entity as LangStringEntry objects.
+          titleEntries: ?Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>
+        |}>,
+        // A list of IdeaMessageColumn objects, if any set, on an Idea.
+        messageColumns: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // A CSS color that will be used to theme the column.
+          color: ?string,
+          // A Synthesis done on the column, of type Post.
+          columnSynthesis: ?{|
+            // The ID of the object.
+            id: string,
+            // A list of possible languages of the entity as LangStringEntry objects. The subject of the post in various languages.
+            subjectEntries: ?Array<?{|
+              // The ISO 639-1 locale code of the language the content represents.
+              localeCode: string,
+              // The unicode encoded string representation of the content.
+              value: ?string
+            |}>,
+            // A list of possible languages of the entity as LangStringEntry objects. The body of the post in various languages.
+            bodyEntries: ?Array<?{|
+              // The ISO 639-1 locale code of the language the content represents.
+              localeCode: string,
+              // The unicode encoded string representation of the content.
+              value: ?string
+            |}>
+          |},
+          // The order of the message column in the Idea/Thematic.
+          index: ?number,
+          // The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer.
+          messageClassifier: string,
+          // A list of possible languages of the entity as LangStringEntry objects. The name of the column in multiple languages.
+          nameEntries: Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>,
+          // A list of possible languages of the entity as LangStringEntry objects. The title of the column in multiple languages.
+          titleEntries: Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
+          |}>
+        |}>,
+        // The ID of the object.
+        id: string
+      }>,
+      // An idea union between either an Idea type or a Thematic type.
+      rootIdea: ?{
+        // The ID of the object.
+        id: string
+      }
+    |}
+  |}
+|};
+
 export type updateLandingPageModuleMutationVariables = {|
   id: string,
   enabled?: ?boolean,
@@ -4711,17 +4686,25 @@ export type updateLandingPageModuleMutation = {|
 |};
 
 export type UpdateLegalContentsMutationVariables = {|
-  legalNoticeEntries: Array<?LangStringEntryInput>,
-  termsAndConditionsEntries: Array<?LangStringEntryInput>,
+  cookiesPolicyAttachments?: ?Array<?string>,
+  legalNoticeAttachments?: ?Array<?string>,
+  privacyPolicyAttachments?: ?Array<?string>,
+  termsAndConditionsAttachments?: ?Array<?string>,
+  userGuidelinesAttachments?: ?Array<?string>,
   cookiesPolicyEntries: Array<?LangStringEntryInput>,
+  legalNoticeEntries: Array<?LangStringEntryInput>,
   privacyPolicyEntries: Array<?LangStringEntryInput>,
-  userGuidelinesEntries: Array<?LangStringEntryInput>
+  termsAndConditionsEntries: Array<?LangStringEntryInput>,
+  userGuidelinesEntries: Array<?LangStringEntryInput>,
+  mandatoryLegalContentsValidation: boolean
 |};
 
 export type UpdateLegalContentsMutation = {|
   // A mutation to update the Legal Contents of a debate.
   updateLegalContents: ?{|
     legalContents: ?{|
+      // A boolean flag to activate mandatory validation of legal contents after SSO login.
+      mandatoryLegalContentsValidation: boolean,
       // A list of possible languages of the entity as LangStringEntry objects.
       legalNoticeEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
@@ -4756,6 +4739,126 @@ export type UpdateLegalContentsMutation = {|
         localeCode: string,
         // The unicode encoded string representation of the content.
         value: ?string
+      |}>,
+      // A Attachments for legal notice in a given language.
+      legalNoticeAttachments: ?Array<?{|
+        id: string,
+        // Any file that can be attached. A file metadata object, described by the Document object.
+        document: ?{|
+          id: string,
+          // The filename title.
+          title: ?string,
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+          //
+          // "unchecked": The AV did not make a check on this file.
+          //
+          // "passed": The AV did a pass on this file, and it passed AV check.
+          //
+          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+          // accessed by the application.
+          //
+          avChecked: ?string
+        |}
+      |}>,
+      // A Attachments for terms and conditions. in a given language.
+      termsAndConditionsAttachments: ?Array<?{|
+        id: string,
+        // Any file that can be attached. A file metadata object, described by the Document object.
+        document: ?{|
+          id: string,
+          // The filename title.
+          title: ?string,
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+          //
+          // "unchecked": The AV did not make a check on this file.
+          //
+          // "passed": The AV did a pass on this file, and it passed AV check.
+          //
+          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+          // accessed by the application.
+          //
+          avChecked: ?string
+        |}
+      |}>,
+      // A Attachments for cookies policy. in a given language.
+      cookiesPolicyAttachments: ?Array<?{|
+        id: string,
+        // Any file that can be attached. A file metadata object, described by the Document object.
+        document: ?{|
+          id: string,
+          // The filename title.
+          title: ?string,
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+          //
+          // "unchecked": The AV did not make a check on this file.
+          //
+          // "passed": The AV did a pass on this file, and it passed AV check.
+          //
+          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+          // accessed by the application.
+          //
+          avChecked: ?string
+        |}
+      |}>,
+      // A Attachments for privacy policy. in a given language.
+      privacyPolicyAttachments: ?Array<?{|
+        id: string,
+        // Any file that can be attached. A file metadata object, described by the Document object.
+        document: ?{|
+          id: string,
+          // The filename title.
+          title: ?string,
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+          //
+          // "unchecked": The AV did not make a check on this file.
+          //
+          // "passed": The AV did a pass on this file, and it passed AV check.
+          //
+          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+          // accessed by the application.
+          //
+          avChecked: ?string
+        |}
+      |}>,
+      // A Attachments for user guidelines. in a given language.
+      userGuidelinesAttachments: ?Array<?{|
+        id: string,
+        // Any file that can be attached. A file metadata object, described by the Document object.
+        document: ?{|
+          id: string,
+          // The filename title.
+          title: ?string,
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string,
+          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+          //
+          // "unchecked": The AV did not make a check on this file.
+          //
+          // "passed": The AV did a pass on this file, and it passed AV check.
+          //
+          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+          // accessed by the application.
+          //
+          avChecked: ?string
+        |}
       |}>
     |}
   |}
@@ -4882,8 +4985,7 @@ export type updatePostMutation = {|
           id: string,
           // The title of the Idea, often shown in the Idea header itself.
           title: ?string,
-          // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns" and "brightMirror".
+          // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
           messageViewOverride: ?string
         |}
       |}>,
@@ -5045,7 +5147,7 @@ export type updatePostMutation = {|
       // List of attachements to the post.
       attachments: ?Array<?{|
         id: string,
-        // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+        // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
           id: string,
           // The filename title.
@@ -5406,7 +5508,6 @@ export type updateThematicMutationVariables = {|
   titleEntries: Array<?LangStringEntryInput>,
   descriptionEntries?: ?Array<?LangStringEntryInput>,
   questions?: ?Array<?QuestionInput>,
-  video?: ?VideoInput,
   announcement?: ?IdeaAnnouncementInput,
   order?: ?number,
   messageViewOverride?: ?string
@@ -5415,81 +5516,39 @@ export type updateThematicMutationVariables = {|
 export type updateThematicMutation = {|
   // A mutation to update a thematic.
   updateThematic: ?{|
-    thematic: ?(
-      | {
-          // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns" and "brightMirror".
-          messageViewOverride: ?string,
-          // The order of the Idea, Thematic, Question in the idea tree.
-          order: ?number,
-          // The title of the Idea, often shown in the Idea header itself.
-          title: ?string,
-          // Header image associated with the idea. A file metadata object, described by the Document object.
-          img: ?{|
-            // A url to an image or a document to be attached.
-            externalUrl: ?string,
-            // The MIME-Type of the file uploaded.
-            mimeType: ?string
-          |},
-          // The ID of the object.
-          id: string,
-          // The description of the Idea, often shown in the header of the Idea.
-          description: ?string,
-          // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
-          announcement: ?{|
-            // A title of announcement in a given language.
-            title: ?string,
-            // A body of announcement in a given language.
-            body: ?string
-          |}
-        }
-      | {
-          // Use a non-standard view for this idea.
-          // Currently only supporting "messageColumns" and "brightMirror".
-          messageViewOverride: ?string,
-          // The order of the Idea, Thematic, Question in the idea tree.
-          order: ?number,
-          // The title of the Idea, often shown in the Idea header itself.
-          title: ?string,
-          // Header image associated with the idea. A file metadata object, described by the Document object.
-          img: ?{|
-            // A url to an image or a document to be attached.
-            externalUrl: ?string,
-            // The MIME-Type of the file uploaded.
-            mimeType: ?string
-          |},
-          // The ID of the object.
-          id: string,
-          // A Video objet that is often integrated to the header of a Thematic.
-          video: ?{|
-            // A Title of the video. in a given language.
-            title: ?string,
-            // A Description on top side of the video. in a given language.
-            descriptionTop: ?string,
-            // A Description on bottom side of the video. in a given language.
-            descriptionBottom: ?string,
-            // A Description on one of the sides of the video. in a given language.
-            descriptionSide: ?string,
-            // HTML Code to add extra content in the video module section to be injected.
-            htmlCode: ?string,
-            // File (image or video) to use in the video module section.
-            mediaFile: ?{|
-              // A url to an image or a document to be attached.
-              externalUrl: ?string,
-              // The MIME-Type of the file uploaded.
-              mimeType: ?string,
-              // The filename title.
-              title: ?string
-            |}
-          |},
-          // A list of Question objects that are bound to the Thematic.
-          questions: ?Array<?{|
-            // The ID of the object.
-            id: string,
-            // The Question to be asked itself, in the language given.
-            title: ?string
-          |}>
-        })
+    thematic: ?{
+      // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+      messageViewOverride: ?string,
+      // The order of the Idea, Thematic, Question in the idea tree.
+      order: ?number,
+      // The title of the Idea, often shown in the Idea header itself.
+      title: ?string,
+      // The description of the Idea, often shown in the header of the Idea.
+      description: ?string,
+      // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+      announcement: ?{|
+        // A title of announcement in a given language.
+        title: ?string,
+        // A body of announcement in a given language.
+        body: ?string
+      |},
+      // Header image associated with the idea. A file metadata object, described by the Document object.
+      img: ?{|
+        // A url to an image or a document to be attached.
+        externalUrl: ?string,
+        // The MIME-Type of the file uploaded.
+        mimeType: ?string
+      |},
+      // A list of Question objects that are bound to the Thematic.
+      questions: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The Question to be asked itself, in the language given.
+        title: ?string
+      |}>,
+      // The ID of the object.
+      id: string
+    }
   |}
 |};
 
@@ -5577,12 +5636,7 @@ export type UpdateUserMutation = {|
 |};
 
 export type UpdateVoteSessionMutationVariables = {|
-  discussionPhaseId: number,
-  headerImage?: ?string,
-  titleEntries?: ?Array<?LangStringEntryInput>,
-  subTitleEntries?: ?Array<?LangStringEntryInput>,
-  instructionsSectionTitleEntries?: ?Array<?LangStringEntryInput>,
-  instructionsSectionContentEntries?: ?Array<?LangStringEntryInput>,
+  ideaId: string,
   propositionsSectionTitleEntries?: ?Array<?LangStringEntryInput>,
   seeCurrentVotes?: ?boolean
 |};
@@ -5591,45 +5645,8 @@ export type UpdateVoteSessionMutation = {|
   // A mutation that allows for existing VoteSessions to be updated.
   updateVoteSession: ?{|
     voteSession: ?{|
-      // The image appearing at the header of the Vote session page.A file metadata object, described by the Document object.
-      headerImage: ?{|
-        // The filename title.
-        title: ?string,
-        // The MIME-Type of the file uploaded.
-        mimeType: ?string,
-        // A url to an image or a document to be attached.
-        externalUrl: ?string
-      |},
       // A flag allowing users to view the current votes.
       seeCurrentVotes: boolean,
-      // A list of possible languages of the entity as LangStringEntry objects. The title in various languages.
-      titleEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. The subtitle in various languages.
-      subTitleEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. The voting instruction's title in various languages.
-      instructionsSectionTitleEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      // A list of possible languages of the entity as LangStringEntry objects. The voting instructions in various languages.
-      instructionsSectionContentEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
       // A list of possible languages of the entity as LangStringEntry objects. The Proposal section's title in various languages.
       propositionsSectionTitleEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
@@ -5660,6 +5677,40 @@ export type uploadDocumentMutation = {|
   |}
 |};
 
+export type validatePostMutationVariables = {|
+  postId: string
+|};
+
+export type validatePostMutation = {|
+  // A mutation to validate a submitted Post.
+  validatePost: ?{|
+    post: ?{|
+      // The ID of the object.
+      id: string,
+      // A graphene Field containing the state of the publication of a certain post. The options are:
+      // DRAFT,
+      //
+      // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+      //
+      // SUBMITTED_AWAITING_MODERATION,
+      //
+      // PUBLISHED,
+      //
+      // MODERATED_TEXT_ON_DEMAND,
+      //
+      // MODERATED_TEXT_NEVER_AVAILABLE,
+      //
+      // DELETED_BY_USER,
+      //
+      // DELETED_BY_ADMIN,
+      //
+      // WIDGET_SCOPED
+      //
+      publicationState: ?PublicationStates
+    |}
+  |}
+|};
+
 export type UserQueryVariables = {|
   id: string
 |};
@@ -5667,6 +5718,7 @@ export type UserQueryVariables = {|
 export type UserQuery = {|
   // The ID of the object
   user: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -5695,8 +5747,6 @@ export type UserQuery = {|
         // If True, the User information is cleansed from the system, and the User can no longer log in.
         isDeleted: ?boolean
       }
-    | {}
-    | {}
     | {}
     | {}
     | {}
@@ -5905,6 +5955,26 @@ export type gaugeVoteSpecificationResultsFragment = {|
   averageResult: ?number
 |};
 
+export type ADocumentFragment = {|
+  id: string,
+  // The filename title.
+  title: ?string,
+  // A url to an image or a document to be attached.
+  externalUrl: ?string,
+  // The MIME-Type of the file uploaded.
+  mimeType: ?string,
+  // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
+  //
+  // "unchecked": The AV did not make a check on this file.
+  //
+  // "passed": The AV did a pass on this file, and it passed AV check.
+  //
+  // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
+  // accessed by the application.
+  //
+  avChecked: ?string
+|};
+
 export type AgentProfileInfoFragment = {|
   // The ID of the object.
   id: string,
@@ -5931,7 +6001,7 @@ export type AgentProfileInfoFragment = {|
 
 export type AttachmentFragment = {|
   id: string,
-  // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+  // Any file that can be attached. A file metadata object, described by the Document object.
   document: ?{|
     id: string,
     // The filename title.
@@ -6170,7 +6240,7 @@ export type BrightMirrorFictionFragment = {|
       // List of attachements to the post.
       attachments: ?Array<?{|
         id: string,
-        // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+        // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
           id: string,
           // The filename title.
@@ -6255,26 +6325,6 @@ export type discussionPhaseFragment = {|
     // A url to an image or a document to be attached.
     externalUrl: ?string
   |}
-|};
-
-export type DocumentFragment = {|
-  id: string,
-  // The filename title.
-  title: ?string,
-  // A url to an image or a document to be attached.
-  externalUrl: ?string,
-  // The MIME-Type of the file uploaded.
-  mimeType: ?string,
-  // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-  //
-  // "unchecked": The AV did not make a check on this file.
-  //
-  // "passed": The AV did a pass on this file, and it passed AV check.
-  //
-  // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-  // accessed by the application.
-  //
-  avChecked: ?string
 |};
 
 export type ExtractFragment = {|
@@ -6418,7 +6468,7 @@ export type ExtractCommentFragment = {|
   // List of attachements to the post.
   attachments: ?Array<?{|
     id: string,
-    // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+    // Any file that can be attached. A file metadata object, described by the Document object.
     document: ?{|
       id: string,
       // The filename title.
@@ -6596,7 +6646,7 @@ export type FictionExtractFragment = {|
     // List of attachements to the post.
     attachments: ?Array<?{|
       id: string,
-      // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+      // Any file that can be attached. A file metadata object, described by the Document object.
       document: ?{|
         id: string,
         // The filename title.
@@ -6649,59 +6699,124 @@ export type IdeaContentLinkFragment = {|
     id: string,
     // The title of the Idea, often shown in the Idea header itself.
     title: ?string,
-    // Use a non-standard view for this idea.
-    // Currently only supporting "messageColumns" and "brightMirror".
+    // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
     messageViewOverride: ?string
   |}
 |};
 
-export type ideaDataFragment =
-  | {
-      // Use a non-standard view for this idea.
-      // Currently only supporting "messageColumns" and "brightMirror".
-      messageViewOverride: ?string,
-      // The order of the Idea, Thematic, Question in the idea tree.
-      order: ?number,
-      // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
-      titleEntries: ?Array<?{|
+export type ideaDataFragment = {
+  // The Relay.Node ID type of the Idea object.
+  parentId: ?string,
+  // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+  messageViewOverride: ?string,
+  // The order of the Idea, Thematic, Question in the idea tree.
+  order: ?number,
+  // The total number of active posts on that idea (excludes deleted posts).
+  numPosts: ?number,
+  // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
+  titleEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // A list of possible languages of the entity as LangStringEntry objects. This is the description of the Idea in multiple languages.
+  descriptionEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // Header image associated with the idea. A file metadata object, described by the Document object.
+  img: ?{|
+    // A url to an image or a document to be attached.
+    externalUrl: ?string,
+    // The MIME-Type of the file uploaded.
+    mimeType: ?string,
+    // The filename title.
+    title: ?string
+  |},
+  // An Announcement object representing a summary of an Idea. This is often included in a header display of an Idea.
+  announcement: ?{|
+    // A list of possible languages of the entity as LangStringEntry objects. This is the title of announcement in multiple languages.
+    titleEntries: Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // A list of possible languages of the entity as LangStringEntry objects. This is the body of announcement in multiple languages.
+    bodyEntries: Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // A list of possible languages of the entity as LangStringEntry objects. This is the quote of the announcement in multiple languages.
+    quoteEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>
+  |},
+  // A list of Question objects that are bound to the Thematic.
+  questions: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    // A list of possible languages of the entity as LangStringEntry objects.
+    titleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>
+  |}>,
+  // A list of IdeaMessageColumn objects, if any set, on an Idea.
+  messageColumns: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    // A CSS color that will be used to theme the column.
+    color: ?string,
+    // A Synthesis done on the column, of type Post.
+    columnSynthesis: ?{|
+      // The ID of the object.
+      id: string,
+      // A list of possible languages of the entity as LangStringEntry objects. The subject of the post in various languages.
+      subjectEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
         value: ?string
       |}>,
-      // Header image associated with the idea. A file metadata object, described by the Document object.
-      img: ?{|
-        // A url to an image or a document to be attached.
-        externalUrl: ?string,
-        // The MIME-Type of the file uploaded.
-        mimeType: ?string,
-        // The filename title.
-        title: ?string
-      |}
-    }
-  | {
-      // Use a non-standard view for this idea.
-      // Currently only supporting "messageColumns" and "brightMirror".
-      messageViewOverride: ?string,
-      // The order of the Idea, Thematic, Question in the idea tree.
-      order: ?number,
-      // A list of possible languages of the entity as LangStringEntry objects. This is the Idea title in multiple languages.
-      titleEntries: ?Array<?{|
+      // A list of possible languages of the entity as LangStringEntry objects. The body of the post in various languages.
+      bodyEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
         value: ?string
-      |}>,
-      // Header image associated with the idea. A file metadata object, described by the Document object.
-      img: ?{|
-        // A url to an image or a document to be attached.
-        externalUrl: ?string,
-        // The MIME-Type of the file uploaded.
-        mimeType: ?string,
-        // The filename title.
-        title: ?string
-      |}
-    };
+      |}>
+    |},
+    // The order of the message column in the Idea/Thematic.
+    index: ?number,
+    // The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer.
+    messageClassifier: string,
+    // A list of possible languages of the entity as LangStringEntry objects. The name of the column in multiple languages.
+    nameEntries: Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // A list of possible languages of the entity as LangStringEntry objects. The title of the column in multiple languages.
+    titleEntries: Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>
+  |}>
+};
 
 export type IdeaMessageColumnFragment = {|
   // A CSS color that will be used to theme the column.
@@ -6751,6 +6866,50 @@ export type IdeaMessageColumnFragment = {|
   numPosts: ?number,
   // A The title of the column in a given language.
   title: ?string
+|};
+
+export type IdeaMessageColumnDataFragment = {|
+  // The ID of the object.
+  id: string,
+  // A CSS color that will be used to theme the column.
+  color: ?string,
+  // A Synthesis done on the column, of type Post.
+  columnSynthesis: ?{|
+    // The ID of the object.
+    id: string,
+    // A list of possible languages of the entity as LangStringEntry objects. The subject of the post in various languages.
+    subjectEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // A list of possible languages of the entity as LangStringEntry objects. The body of the post in various languages.
+    bodyEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>
+  |},
+  // The order of the message column in the Idea/Thematic.
+  index: ?number,
+  // The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer.
+  messageClassifier: string,
+  // A list of possible languages of the entity as LangStringEntry objects. The name of the column in multiple languages.
+  nameEntries: Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // A list of possible languages of the entity as LangStringEntry objects. The title of the column in multiple languages.
+  titleEntries: Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>
 |};
 
 export type langStringEntryFragment = {|
@@ -6814,8 +6973,7 @@ export type PostFragment = {|
       id: string,
       // The title of the Idea, often shown in the Idea header itself.
       title: ?string,
-      // Use a non-standard view for this idea.
-      // Currently only supporting "messageColumns" and "brightMirror".
+      // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
       messageViewOverride: ?string
     |}
   |}>,
@@ -6977,7 +7135,7 @@ export type PostFragment = {|
   // List of attachements to the post.
   attachments: ?Array<?{|
     id: string,
-    // Any file that can be attached to a Post. A file metadata object, described by the Document object.
+    // Any file that can be attached. A file metadata object, described by the Document object.
     document: ?{|
       id: string,
       // The filename title.
@@ -7127,56 +7285,4 @@ export type translationFragment = {|
   localeFrom: string,
   // The target locale of the translation.
   localeInto: string
-|};
-
-export type voteSessionGlobalsFragment = {|
-  // The image appearing at the header of the Vote session page.A file metadata object, described by the Document object.
-  headerImage: ?{|
-    // The filename title.
-    title: ?string,
-    // The MIME-Type of the file uploaded.
-    mimeType: ?string,
-    // A url to an image or a document to be attached.
-    externalUrl: ?string
-  |},
-  // A flag allowing users to view the current votes.
-  seeCurrentVotes: boolean
-|};
-
-export type voteSessionLangstringsEntriesFragment = {|
-  // A list of possible languages of the entity as LangStringEntry objects. The title in various languages.
-  titleEntries: ?Array<?{|
-    // The ISO 639-1 locale code of the language the content represents.
-    localeCode: string,
-    // The unicode encoded string representation of the content.
-    value: ?string
-  |}>,
-  // A list of possible languages of the entity as LangStringEntry objects. The subtitle in various languages.
-  subTitleEntries: ?Array<?{|
-    // The ISO 639-1 locale code of the language the content represents.
-    localeCode: string,
-    // The unicode encoded string representation of the content.
-    value: ?string
-  |}>,
-  // A list of possible languages of the entity as LangStringEntry objects. The voting instruction's title in various languages.
-  instructionsSectionTitleEntries: ?Array<?{|
-    // The ISO 639-1 locale code of the language the content represents.
-    localeCode: string,
-    // The unicode encoded string representation of the content.
-    value: ?string
-  |}>,
-  // A list of possible languages of the entity as LangStringEntry objects. The voting instructions in various languages.
-  instructionsSectionContentEntries: ?Array<?{|
-    // The ISO 639-1 locale code of the language the content represents.
-    localeCode: string,
-    // The unicode encoded string representation of the content.
-    value: ?string
-  |}>,
-  // A list of possible languages of the entity as LangStringEntry objects. The Proposal section's title in various languages.
-  propositionsSectionTitleEntries: ?Array<?{|
-    // The ISO 639-1 locale code of the language the content represents.
-    localeCode: string,
-    // The unicode encoded string representation of the content.
-    value: ?string
-  |}>
 |};
