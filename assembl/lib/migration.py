@@ -3,49 +3,98 @@
 from __future__ import absolute_import
 
 import sys
+from contextlib import contextmanager
 
 from alembic.config import Config
 from alembic.migration import MigrationContext
+from alembic.environment import EnvironmentContext
 from alembic.script import ScriptDirectory
 
 from ..lib.sqla import (
     get_metadata, get_session_maker, mark_changed)
 
 
-def bootstrap_db(config_uri=None, with_migration=True):
+def has_tables(db):
+    (num_tables,) = db.query(
+        """COUNT(table_name) FROM information_schema.tables
+        WHERE table_schema='public'""").first()
+    # don't count alembic
+    return num_tables > 1
+
+
+@contextmanager
+def locked_transaction(db, num):
+    # use a pg_advisory_lock to make sure that the transaction is locked.
+    # Do it on another connection, so errors will not leave the lock dangling.
+    cnx = db.session_factory.kw['bind'].connect()
+    cnx.execute("select pg_advisory_lock(%d)" % num).first()
+    try:
+        session = db()
+        if db.session_factory.kw.get('extension'):
+            import transaction
+            with transaction.manager:
+                session = db()
+                yield session
+                mark_changed(session)
+        else:
+            yield session
+            mark_changed(session)
+            session.commit()
+    finally:
+        cnx.execute("select pg_advisory_unlock(%d)" % num)
+        cnx.close()
+
+
+def bootstrap_db(config_uri, with_migration=True):
     """Bring a blank database to a functional state."""
+    config = Config(config_uri)
+    script_dir = ScriptDirectory.from_config(config)
+    heads = script_dir.get_heads()
 
+    if len(heads) > 1:
+        sys.stderr.write('Error: migration scripts have more than one '
+                         'head.\nPlease resolve the situation before '
+                         'attempting to bootstrap the database.\n')
+        sys.exit(2)
+    elif len(heads) == 0:
+        sys.stderr.write('Error: migration scripts have no head.\n')
+        sys.exit(2)
+    head = heads[0]
     db = get_session_maker()
-
-    if with_migration:
+    db.flush()
+    if not has_tables(db()):
+        with locked_transaction(db, 1234) as session:
+            context = MigrationContext.configure(session.connection())
+            if not has_tables(session):
+                import assembl.models
+                get_metadata().create_all(session.connection())
+                assert has_tables(session)
+                context._ensure_version_table()
+                context.stamp(script_dir, head)
+    elif with_migration:
         context = MigrationContext.configure(db().connection())
         db_version = context.get_current_revision()
+        # artefact: in tests, db_version may be none.
+        if db_version and db_version != head:
+            def migration_fn(heads, context):
+                with locked_transaction(db, 1235) as session:
+                    context = MigrationContext.configure(session.connection())
+                    db_version = context.get_current_revision()
+                    if db_version != head:
+                        return script_dir._upgrade_revs(head, db_version)
+                    session.commit()
 
-        if db_version:
-            sys.stderr.write('Database already initialized. Bailing out.\n')
-            sys.exit(0)
-
-        config = Config(config_uri)
-        script_dir = ScriptDirectory.from_config(config)
-        heads = script_dir.get_heads()
-
-        if len(heads) > 1:
-            sys.stderr.write('Error: migration scripts have more than one '
-                             'head.\nPlease resolve the situation before '
-                             'attempting to bootstrap the database.\n')
-            sys.exit(2)
-
-    import assembl.models
-    get_metadata().create_all(db().connection())
-
-    # Clean up the sccoped session to allow a later app instantiation.
-    if with_migration and heads:
-        context = MigrationContext.configure(db().connection())
-        context._ensure_version_table()
-        # The latter step seems optional?
-        # I am unclear as to why we'd migrate after creating tables
-        # on a clean database.
-        context.stamp(script_dir, heads[0])
+            with EnvironmentContext(
+                config,
+                script_dir,
+                fn=migration_fn,
+                as_sql=False,
+                destination_rev=head
+            ):
+                script_dir.run_env()
+            context = MigrationContext.configure(db().connection())
+            db_version = context.get_current_revision()
+            assert db_version == head
     return db
 
 
@@ -55,15 +104,14 @@ def bootstrap_db_data(db, mark=True):
         Permission, Role, IdentityProvider, Locale, LandingPageModuleType,
         LocaleLabel, ExtractNatureVocabulary, ExtractActionVocabulary, User)
     from assembl.lib.database_functions import ensure_functions
-    session = db()
-    for cls in (Permission, Role, IdentityProvider, Locale, LocaleLabel,
-                LandingPageModuleType, ExtractNatureVocabulary, ExtractActionVocabulary,
-                User):
-        cls.populate_db(session)
-    ensure_functions(session)
-    if mark:
+    with locked_transaction(db, 1236) as session:
+        for cls in (Permission, Role, IdentityProvider, Locale, LocaleLabel,
+                    LandingPageModuleType, ExtractNatureVocabulary, ExtractActionVocabulary,
+                    User):
+            cls.populate_db(session)
+        ensure_functions(session)
+        # if mark:
         mark_changed(session)
-    session.flush()
 
 
 def ensure_db_version(config_uri, session_maker):

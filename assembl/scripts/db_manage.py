@@ -33,15 +33,12 @@ def main():
     configure_indexing()
     engine = configure_engine(settings, True)
     if args.command == "bootstrap":
-        with transaction.manager:
-            db = bootstrap_db(args.configuration)
-            mark_changed()
+        db = bootstrap_db(args.configuration)
         # Commit data separately; otherwise, postgres blocks on trying
         # creating the vocabularies' enums while the first creation
         # above is uncommitted. (i.e. checking that the enum already
         # exists fails.)
-        with transaction.manager:
-            bootstrap_db_data(db)
+        bootstrap_db_data(db)
 
     elif args.command == "backup":
         projectpath = dirname(dirname(dirname(__file__)))
