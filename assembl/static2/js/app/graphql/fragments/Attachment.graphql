@@ -1,7 +1,7 @@
-#import "./Document.graphql"
+#import "./ADocument.graphql"
 fragment Attachment on Attachment {
   id
   document {
-    ...Document
+    ...ADocument
   }
 }
