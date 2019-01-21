@@ -1,7 +1,6 @@
 /* eslint-disable no-param-reassign, guard-for-in, no-restricted-syntax */
 // @flow
-import React from 'react';
-import type { Node } from 'react';
+import * as React from 'react';
 
 import YoutubeEmbed from '../components/common/urlPreview/youtubeTheater';
 import SketchFabEmbed from '../components/common/urlPreview/sketchFabTheater';
@@ -50,7 +49,7 @@ export const EMBED_PROVIDERS = {
       }
       return null;
     },
-    getComponent: (url: string): Node | null => {
+    getComponent: (url: string): React.Element<typeof YoutubeEmbed> | null => {
       const result = EMBED_PROVIDERS.youtube.match(url);
       return result ? <YoutubeEmbed id={result[1]} /> : null;
     }
@@ -76,7 +75,7 @@ export const EMBED_PROVIDERS = {
       }
       return null;
     },
-    getComponent: (url: string): Node | null => {
+    getComponent: (url: string): React.Element<typeof SketchFabEmbed> | null => {
       const result = EMBED_PROVIDERS.sketchfab.match(url);
       return result ? <SketchFabEmbed url={url} /> : null;
     }
@@ -208,9 +207,9 @@ export function getURLMetadata(url: string): URLMetadataProps | null {
 
 /**
  * @param {url: string} The source URL
- * @returns {Node|null} The component to be displayed or null
+ * @returns {React.Element<any>|null} The component to be displayed or null
  */
-export function getURLComponent(url: string): Node | null {
+export function getURLComponent(url: string): React.Element<typeof SketchFabEmbed | typeof YoutubeEmbed> | null {
   for (const key in EMBED_PROVIDERS) {
     const provider = EMBED_PROVIDERS[key];
     const component = provider.getComponent(url);
