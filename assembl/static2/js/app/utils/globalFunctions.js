@@ -296,9 +296,9 @@ export function getIconPath(icon: string, color: string = '') {
 // We `pictureId + 1` because there is no image in the S3 bucket with 0 as an id
 export const getPictureUrl = (pictureId: number) => `${PICTURE_BASE_URL}${pictureId + 1}${PICTURE_EXTENSION}`;
 
-export const getRouteLastString = (location: string) => {
-  const lastLocationString = /[^/]*$/.exec(location)[0];
-  return lastLocationString;
+export const getRouteLastString = (location: string): string => {
+  const lastLocationString = /[^/]*$/.exec(location);
+  return lastLocationString ? lastLocationString[0] : '';
 };
 
 export function compareByTextPosition(extractA: ?FictionExtractFragment, extractB: ?FictionExtractFragment) {
