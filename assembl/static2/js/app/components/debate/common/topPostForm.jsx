@@ -37,7 +37,7 @@ export type Props = {
   postSuccessMsgId?: string,
   bodyMaxLength?: number,
   draftable?: boolean,
-  draftSuccessMsgId?: string,
+  draftSuccessMsgId?: ?string,
   isDebateModerated: boolean,
   messageViewOverride: string
 };
