@@ -6,9 +6,9 @@ import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
 import SemanticAnalysis from './semanticAnalysis';
+import Description from '../../../components/common/description/description';
 import Loader from '../../../components/common/loader/loader';
 import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
-import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
 import ResponsiveWordCloud from '../../../components/common/wordCloud/responsiveWordCloud';
 import KeywordInfo from '../../../components/common/keywordInfo/keywordInfo';
 import SentimentBar from '../../../components/common/sentimentBar/sentimentBar';
@@ -23,35 +23,63 @@ describe('<SemanticAnalysis /> - with shallow', () => {
     wrapper = shallow(<SemanticAnalysis />);
   });
 
-  it('should render a div with semantic-analysis as className', () => {
-    expect(wrapper.find('div [className="semantic-analysis"]')).toHaveLength(1);
+  it('should render a level-1 Title component if data loaded', () => {
+    expect(wrapper.find('Title [level=1]')).toHaveLength(1);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find('Title [level=1]')).toHaveLength(0);
   });
 
-  it('should render 2 Loader component', () => {
-    expect(wrapper.find(Loader)).toHaveLength(2);
+  it('should render a Description component if data loaded', () => {
+    expect(wrapper.find(Description)).toHaveLength(1);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find(Description)).toHaveLength(0);
   });
 
-  it('should render a ToolbarSlider component', () => {
-    expect(wrapper.find(ToolbarSlider)).toHaveLength(1);
-  });
-
-  it('should render a TitleWithTooltip component', () => {
-    expect(wrapper.find(TitleWithTooltip)).toHaveLength(1);
-  });
-
-  it('should render a ResponsiveWordCloud component', () => {
-    expect(wrapper.find(ResponsiveWordCloud)).toHaveLength(1);
-  });
-
-  it('should render a KeywordInfo component', () => {
-    expect(wrapper.find(KeywordInfo)).toHaveLength(1);
-  });
-
-  it('should render a SentimentaBar component', () => {
-    expect(wrapper.find(SentimentBar)).toHaveLength(1);
-  });
-
-  it('should render a WordCountInformation component', () => {
+  it('should render a WordCountInformation component if data loaded', () => {
     expect(wrapper.find(WordCountInformation)).toHaveLength(1);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find(WordCountInformation)).toHaveLength(0);
+  });
+
+  it('should render a ResponsiveWordCloud component if data loaded', () => {
+    expect(wrapper.find(ResponsiveWordCloud)).toHaveLength(1);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find(ResponsiveWordCloud)).toHaveLength(0);
+  });
+
+  it('should render 2 level-2 TitleWithTooltip components if data loaded', () => {
+    expect(wrapper.find('TitleWithTooltip [level=2]')).toHaveLength(2);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find('TitleWithTooltip [level=2]')).toHaveLength(0);
+  });
+
+  it('should render a level-2 Title component if data loaded', () => {
+    expect(wrapper.find('Title [level=2]')).toHaveLength(1);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find('Title [level=2]')).toHaveLength(0);
+  });
+
+  it('should render a KeywordInfo component if data loaded', () => {
+    expect(wrapper.find(KeywordInfo)).toHaveLength(1);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find(KeywordInfo)).toHaveLength(0);
+  });
+
+  it('should render a ToolbarSlider component if data loaded', () => {
+    expect(wrapper.find(ToolbarSlider)).toHaveLength(1);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find(ToolbarSlider)).toHaveLength(0);
+  });
+
+  it('should render a SentimentBar component if data loaded', () => {
+    expect(wrapper.find(SentimentBar)).toHaveLength(1);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find(SentimentBar)).toHaveLength(0);
+  });
+
+  it('should render a Loader component only if loading or loadingError', () => {
+    expect(wrapper.find(Loader)).toHaveLength(0);
+    wrapper.setState({ loading: true, errorLoading: true });
+    expect(wrapper.find(Loader)).toHaveLength(1);
   });
 });
