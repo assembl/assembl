@@ -1315,7 +1315,7 @@ const Translations = {
         tooltip: "Tooltip icon"
       },
       loader: {
-        error: "TO BE DEFINED",
+        error: "There is an error loading the analysis",
         loading: "Loading..."
       },
       wordCountInformation: {

@@ -15,7 +15,7 @@ import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import GoUp from '../components/common/goUp';
 import Loader from '../components/common/loader';
 import { getConnectedUserId } from '../utils/globalFunctions';
-import Announcement, { getSentimentsCount, AnnouncementCounters } from './../components/debate/common/announcement';
+import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates, FICTION_DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
@@ -342,9 +342,7 @@ class Idea extends React.Component<Props> {
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">
-                    <Announcement announcement={announcement}>
-                      <AnnouncementCounters idea={ideaWithPostsData.idea} />
-                    </Announcement>
+                    <Announcement announcement={announcement} idea={ideaWithPostsData.idea} />
                   </div>
                 </div>
               </Grid>

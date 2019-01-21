@@ -1,17 +1,17 @@
 // @flow
 import React from 'react';
-
 // Helpers imports
 import { I18n } from 'react-redux-i18n';
-
-// Components import
+// Component import
 import Description from '../description/description';
+// Type imports
+import type { Keyword } from '../../../integration/semanticAnalysis/dataType';
 
 export type Props = {
   /** Optional color */
   color: string,
   /** Keyword information */
-  keyword: any
+  keyword: Keyword
 };
 
 const KeywordInfo = ({ color, keyword }: Props) => {

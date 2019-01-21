@@ -42,6 +42,7 @@
   "post": "${slug}/debate/${phase}/theme/${themeId}/#${element}",
   "extract": "${slug}/debate/${phase}/theme/${themeId}/#${element}#${extractId}",
   "resourcesCenter": "${slug}/resourcescenter",
+  "semanticAnalysis": "${slug}/semantic-analysis",
   "legalNotice": "${slug}/legal-notice",
   "privacyPolicy": "${slug}/privacy-policy",
   "cookiesPolicy": "${slug}/cookies-policy",

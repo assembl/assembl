@@ -32,7 +32,7 @@ const SemanticAnalysis = () => {
       <ToolbarSlider defaultValue={50} onSliderChange={() => {}} />
       <TitleWithTooltip level={1} titleContent="Informations mots-clés" tooltipContent={tooltip} />
       <ResponsiveWordCloud keywords={fakeData.keywords} />
-      <KeywordInfo keyword={{ text: 'test', relevance: '0.57', count: 5 }} />
+      <KeywordInfo keyword={{ text: 'test', relevance: 0.57, count: 5 }} />
       <div
         style={
           { width: '200px' } // eslint-disable-line comma-dangle

@@ -9,7 +9,7 @@ import type { Map } from 'immutable';
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Header from '../components/common/header';
-import Announcement from '../components/debate/common/announcement';
+import { SurveyAnnouncement } from '../components/debate/common/announcement';
 import type { AnnouncementContent } from '../components/debate/common/announcement';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
@@ -157,7 +157,7 @@ class Survey extends React.Component<Props, State> {
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">
-                    <Announcement announcement={announcement} />
+                    <SurveyAnnouncement announcement={announcement} />
                   </div>
                 </div>
               </Grid>

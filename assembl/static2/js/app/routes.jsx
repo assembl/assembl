@@ -31,6 +31,7 @@ import SurveyAdmin from './pages/surveyAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
+import SemanticAnalysis from './pages/semanticAnalysis/semanticAnalysis';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
@@ -128,6 +129,7 @@ export default [
         <Route path={routeForRouter('syntheses')} component={Syntheses} />
         <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
         <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
+        <Route path={routeForRouter('semanticAnalysis')} component={SemanticAnalysis} />
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
         <Route path={routeForRouter('privacyPolicy')} component={PrivacyPolicy} />
         <Route path={routeForRouter('cookiesPolicy')} component={CookiesPolicy} />

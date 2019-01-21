@@ -48,7 +48,12 @@ type DoughnutElements = {
   count: number
 };
 
-type AnnouncementCountersProps = {
+type SurveyAnnouncementProps = {
+  announcement: AnnouncementContent
+};
+
+type Props = {
+  announcement: AnnouncementContent,
   idea: {
     numContributors: number,
     numPosts: number,
@@ -56,11 +61,6 @@ type AnnouncementCountersProps = {
     messageColumns: IdeaMessageColumns,
     messageViewOverride: ?string
   }
-};
-
-type Props = {
-  children?: React.Node,
-  announcement: AnnouncementContent
 };
 
 type ColumnsInfoType = { count: ?number, color: ?string, name: ?string };
@@ -94,7 +94,21 @@ export const createDoughnutElements = (sentimentCounts: SentimentsCounts): Array
     Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
   }));
 
-export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
+export const SurveyAnnouncement = ({ announcement }: SurveyAnnouncementProps) => (
+  <div className="announcement">
+    <div className="announcement-title">
+      <div className="title-hyphen">&nbsp;</div>
+      <h3 className="announcement-title-text dark-title-1">
+        {announcement.title ? announcement.title : <Translate value="debate.thread.announcement" />}
+      </h3>
+    </div>
+    <Row>
+      <TextAndMedia {...announcement} />
+    </Row>
+  </div>
+);
+
+export const Announcement = ({ announcement, idea }: Props) => {
   const { numContributors, numPosts, posts, messageColumns, messageViewOverride } = idea;
   const isMultiColumns = messageViewOverride === MESSAGE_VIEW.messageColumns;
   const sentimentsCount = getSentimentsCount(posts);
@@ -122,6 +136,14 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
 
   const instructionContent = (
     <React.Fragment>
+      <div className="announcement-title">
+        <h3 className="announcement-title-text dark-title-1">
+          {announcement.title || <Translate value="debate.thread.announcement" />}
+        </h3>
+      </div>
+      <Col xs={12} md={10} className="announcement-media col-md-push-2">
+        <TextAndMedia {...announcement} />
+      </Col>
       <Col xs={12} md={2} className="col-md-pull-10">
         <div className="announcement-statistics">
           <div className="announcement-doughnut">
@@ -149,11 +171,16 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
 
   return (
     <div className="announcement">
-      <Tabs justified defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION} className="announcement-menu">
-        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.INSTRUCTION} title={instructionTabTitle}>
+      <Tabs
+        id="announcement-tabs-id"
+        justified
+        defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES}
+        className="announcement-menu"
+      >
+        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES} title={instructionTabTitle}>
           {instructionContent}
         </Tab>
-        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.MINDMAP} title={mindmapTabTitle}>
+        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={mindmapTabTitle}>
           {mindmapContent}
         </Tab>
         <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
@@ -162,24 +189,6 @@ export const AnnouncementCounters = ({ idea }: AnnouncementCountersProps) => {
       </Tabs>
     </div>
   );
-};
-
-const Announcement = ({ children, announcement }: Props) => (
-  <div className="announcement">
-    <div className="announcement-title">
-      <div className="title-hyphen">&nbsp;</div>
-      <h3 className="announcement-title-text dark-title-1">
-        {announcement.title ? announcement.title : <Translate value="debate.thread.announcement" />}
-      </h3>
-    </div>
-    <Row>
-      <TextAndMedia {...announcement}>{children}</TextAndMedia>
-    </Row>
-  </div>
-);
-
-Announcement.defaultProps = {
-  children: null
 };
 
 export default Announcement;

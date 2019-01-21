@@ -303,7 +303,7 @@ exports[`Storyshots Loader error 1`] = `
       <p
         className="description center"
       >
-        TO BE DEFINED
+        There is an error loading the analysis
       </p>
     </div>
   </div>

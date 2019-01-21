@@ -157,6 +157,19 @@ def create_default_discussion_sections(discussion):
     )
     db.add(resources_center_section)
 
+    langstring = m.LangString.create(u'Semantic analysis', 'en')
+    langstring.add_value(u'Analyse sémantique', 'fr')
+    langstring.add_value(u"意味解析", 'ja')
+    langstring.add_value(u"Семантический анализ", 'ru')
+    langstring.add_value(u"语义分析", 'zh_CN')
+    semantic_analysis_section = m.Section(
+        discussion=discussion,
+        title=langstring,
+        section_type=SectionTypesEnum.SEMANTIC_ANALYSIS.value,
+        order=4.0
+    )
+    db.add(semantic_analysis_section)
+
     langstring = m.LangString.create(u'Administration', 'en')
     langstring.add_value(u'Administration', 'fr')
     langstring.add_value(u"管理", 'ja')

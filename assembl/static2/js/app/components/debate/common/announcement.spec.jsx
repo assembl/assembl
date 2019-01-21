@@ -7,19 +7,14 @@ import Adapter from 'enzyme-adapter-react-16.3';
 
 // Component imports
 import { Tabs, Tab } from 'react-bootstrap';
-import Announcement, {
-  AnnouncementCounters,
-  createDoughnutElements,
-  createTooltip,
-  getColumnInfos,
-  getSentimentsCount
-} from './announcement';
+import Announcement, { createDoughnutElements, createTooltip, getColumnInfos, getSentimentsCount } from './announcement';
 import { MESSAGE_VIEW } from '../../../constants';
 
 configure({ adapter: new Adapter() });
 
 describe('Announcement component', () => {
   const announcement = {
+    title: 'Super Smash Bros Ultimate Nintendo Switch',
     body: '<p>Bonjour à tous</p><p>Nous allons mettre un deuxieme paragraphe</p><p>Et un peu de <strong>texte en gras</strong>'
   };
   const fakePost1 = {
@@ -58,11 +53,7 @@ describe('Announcement component', () => {
         posts: fakeThreadPosts,
         __typename: 'Idea'
       };
-      const component = renderer.create(
-        <Announcement announcement={announcement}>
-          <AnnouncementCounters idea={threadIdea} />
-        </Announcement>
-      );
+      const component = renderer.create(<Announcement announcement={announcement} idea={threadIdea} />);
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
@@ -101,11 +92,7 @@ describe('Announcement component', () => {
         numPosts: 2,
         posts: fakeMultiColumnsPosts
       };
-      const component = renderer.create(
-        <Announcement announcement={announcement}>
-          <AnnouncementCounters idea={multiColumnsIdea} />
-        </Announcement>
-      );
+      const component = renderer.create(<Announcement announcement={announcement} idea={multiColumnsIdea} />);
       const tree = component.toJSON();
       expect(tree).toMatchSnapshot();
     });
@@ -248,9 +235,8 @@ describe('Announcement component', () => {
       };
 
       props = {
-        announcementContent: announcementContent,
-        idea: threadIdea,
-        isMultiColumns: false
+        announcement: announcement,
+        idea: threadIdea
       };
       wrapper = shallow(<Announcement {...props} />);
     });
