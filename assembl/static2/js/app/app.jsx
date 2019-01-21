@@ -21,14 +21,25 @@ import TimelineQuery from './graphql/Timeline.graphql';
 import DiscussionPreferencesQuery from './graphql/DiscussionPreferencesQuery.graphql';
 import { MESSAGE_VIEW } from './constants';
 
-export const DebateContext = React.createContext({
+type ContextValue = {
+  isHarvesting: boolean,
+  isHarvestable: boolean,
+  modifyContext: (newState: Object) => void,
+  isDebateModerated: boolean,
+  connectedUserId: ?string,
+  messageViewOverride: ?string
+};
+
+const defaultContextValue: ContextValue = {
   isDebateModerated: false,
   isHarvesting: false,
   isHarvestable: false,
-  modifyContext: (newState: Object) => {}, // eslint-disable-line
+  modifyContext: () => {},
   connectedUserId: null,
   messageViewOverride: MESSAGE_VIEW.noModule
-});
+};
+
+export const DebateContext = React.createContext(defaultContextValue);
 
 type Debate = {
   debateData: DebateData,
@@ -104,7 +115,7 @@ export class DumbApp extends React.Component<Props, State> {
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
     const { isHarvesting, children, isDebateModerated, connectedUserId } = this.props;
-    const contextValues = {
+    const contextValue: ContextValue = {
       isHarvesting: isHarvesting,
       isHarvestable: this.state.isHarvestable,
       modifyContext: (newState: Object) => this.setState(() => newState),
@@ -119,7 +130,7 @@ export class DumbApp extends React.Component<Props, State> {
         {debateLoading && <Loader />}
         {debateData && (
           <div className="app-child">
-            <DebateContext.Provider value={contextValues}>{children}</DebateContext.Provider>
+            <DebateContext.Provider value={contextValue}>{children}</DebateContext.Provider>
           </div>
         )}
         {debateError && <ErrorMessage errorMessage={debateError} />}
