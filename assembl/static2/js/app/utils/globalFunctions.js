@@ -82,9 +82,9 @@ export function getSortedArrayByKey<KeyType>(arr: Array<{ [KeyType]: number }>, 
   return arr;
 }
 
-export const isDateExpired = (date1: number, date2: number) => date1 > date2;
+export const isDateExpired = (date1: Date, date2: Date) => date1 > date2;
 
-export const getNumberOfDays = (date1: number, date2: number) => {
+export const getNumberOfDays = (date1: Date, date2: Date) => {
   const days = (date1 - date2) / (1000 * 60 * 60 * 24);
   return Math.round(days);
 };
