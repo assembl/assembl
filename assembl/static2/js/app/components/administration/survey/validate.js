@@ -10,8 +10,6 @@ type Errors = {
   children?: Array<Errors>
 };
 
-type Values = ThemesAdminValues;
-
 function validateTheme(theme): Errors {
   const errors = {};
   if (i18nValueIsEmpty(theme.title)) {
@@ -49,7 +47,7 @@ function validateTheme(theme): Errors {
   return errors;
 }
 
-export default function validate(values: Values): { themes: Array<Errors> } {
+export default function validate(values: ThemesAdminValues): { themes: Array<Errors> } {
   const themes = values.themes.map(validateTheme);
   return {
     themes: themes

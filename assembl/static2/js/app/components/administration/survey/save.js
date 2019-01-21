@@ -50,7 +50,7 @@ const getMessageColumnsVariables = (theme, client) => {
     : [];
 };
 
-const getChildrenVariables = (client, thematic, initialTheme) =>
+const getChildrenVariables = (client, thematic, initialTheme): Array<Promise<mixed>> =>
   (thematic.children
     ? thematic.children.map(async (t, idx) => {
       const order = idx + 1;
@@ -90,7 +90,7 @@ const getChildrenVariables = (client, thematic, initialTheme) =>
     })
     : []);
 
-async function getIdeaInput(client, theme, initialTheme, order) {
+async function getIdeaInput(client, theme, initialTheme, order): Promise<mixed> {
   const initialImg = initialTheme ? initialTheme.img : null;
   let announcement = null;
   if (theme.announcement) {
@@ -136,7 +136,7 @@ function getIdeas(client, themes, initialThemes) {
 export const createMutationsPromises = (client: ApolloClient, discussionPhaseId: ?string) => (
   values: ThemesAdminValues,
   initialValues: ThemesAdminValues
-) => {
+): Array<() => Promise<mixed>> => {
   const allMutations = [];
   let createUpdateMutation;
   const initialThemes = initialValues.themes;
