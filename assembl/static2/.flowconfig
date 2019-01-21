@@ -11,6 +11,7 @@
 <PROJECT_ROOT>/node_modules/babel-plugin-react-docgen
 <PROJECT_ROOT>/node_modules/radium
 <PROJECT_ROOT>/node_modules/graphql
+<PROJECT_ROOT>/node_modules/react-select
 <PROJECT_ROOT>/node_modules/react-apollo/react-apollo.umd.js.flow
 
 [include]
