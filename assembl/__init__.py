@@ -82,7 +82,7 @@ def main(global_config, **settings):
     config.include('.indexing')
     config.include('.lib.logging')
     # Tasks first, because it includes ZCA registration (for now)
-    config.include('.tasks')
+    config.include('.processes')
 
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)

@@ -20,7 +20,7 @@ from kombu.utils.debug import setup_logging
 from sqlalchemy import event, inspect
 from sqlalchemy.exc import TimeoutError
 
-from assembl.tasks import configure
+from assembl.processes import configure
 from assembl.lib.sentry import capture_exception
 from assembl.lib.config import set_config
 from assembl.lib.enum import OrderedEnum

@@ -93,7 +93,7 @@ def mail(request):
              ctx_instance_class=Notification, permission=P_READ,
              accept="text/plain", name="process_now")
 def process_now(request):
-    from ...tasks.notify import notify
+    from ...processes.notify import notify
     notify.delay(request.context._instance.id)
     return Response("Celery notified to process notification " +
                     str(request.context._instance.id),
@@ -104,7 +104,7 @@ def process_now(request):
              ctx_class=Notification, permission=P_READ,
              accept="text/plain", name="process_now")
 def process_all_now(request):
-    from ...tasks.notify import process_pending_notifications
+    from ...processes.notify import process_pending_notifications
     process_pending_notifications.delay()
     return Response("Celery notified to process all notifications",
                     content_type='text/plain')

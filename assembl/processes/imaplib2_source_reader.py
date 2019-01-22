@@ -14,7 +14,7 @@ def is_ok(response):
     return response[0] == 'OK'
 
 class IMAPReader(SourceReader):
-    """A :py:class:`assembl.tasks.source_reader.SourceReader` subclass for reading IMAP messages with imaplib2. Can wait for push."""
+    """A :py:class:`assembl.processes.source_reader.SourceReader` subclass for reading IMAP messages with imaplib2. Can wait for push."""
 
     def setup(self):
         super(IMAPReader, self).setup()
