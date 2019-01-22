@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 // Helpers imports
 import { I18n } from 'react-redux-i18n';
@@ -10,7 +10,23 @@ export type Props = {
   value: number
 };
 
-const LEVEL = {
+type LevelProps = {
+  error: number,
+  veryBad: number,
+  bad: number,
+  good: number,
+  excellent: number
+};
+
+type LevelMinValueProps = {
+  veryBad: number,
+  bad: number,
+  good: number,
+  excellent: number,
+  maxLimit: number
+};
+
+const LEVEL: LevelProps = {
   error: -1,
   veryBad: 0,
   bad: 1,
@@ -18,7 +34,7 @@ const LEVEL = {
   excellent: 3
 };
 
-const LEVEL_MIN_VALUE = {
+const LEVEL_MIN_VALUE: LevelMinValueProps = {
   veryBad: 0,
   bad: 0.35,
   good: 0.5,
