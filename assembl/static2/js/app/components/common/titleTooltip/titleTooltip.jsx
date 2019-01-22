@@ -17,11 +17,17 @@ const tooltipIcon = getIconPath('tooltipIcon.svg');
 const TitleTooltip = ({ tooltipContent }: Props) => {
   const isTouchScreenDevice = isMobile.any();
 
+  // Translation keys
+  const alternativeTextTooltipKey = 'common.icons.tooltip';
+
+  // Title contents
+  const alternativeTextTooltip: string = I18n.t(alternativeTextTooltipKey);
+
   return isTouchScreenDevice ? (
-    <img className="tooltip-icon" src={tooltipIcon} alt={I18n.t('common.icons.tooltip')} width={20} height={20} />
+    <img className="tooltip-icon" src={tooltipIcon} alt={alternativeTextTooltip} width={20} height={20} />
   ) : (
     <ResponsiveOverlayTrigger placement="bottom" tooltip={titleTooltip(tooltipContent)}>
-      <img className="tooltip-icon" src={tooltipIcon} alt={I18n.t('common.icons.tooltip')} width={20} height={20} />
+      <img className="tooltip-icon" src={tooltipIcon} alt={alternativeTextTooltip} width={20} height={20} />
     </ResponsiveOverlayTrigger>
   );
 };
