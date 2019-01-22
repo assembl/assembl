@@ -3,7 +3,8 @@ ini_files: production.ini no_sentry.ini RANDOM:random.ini.tmpl:saml_random.ini.t
 DEFAULT:
   db_user: assembl_user
 hosts: localhost
-_webmaster_user:
+_internal:
+  webmaster_user:
 attachment_service: s3
 celery_tasks.broker: sqs://
 rds_certificate: rds-combined-ca-bundle.pem
