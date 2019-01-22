@@ -1,0 +1,14 @@
+query SemanticAnalysisForDiscussionData($lang: String) {
+  discussion {
+    nlpSentiment {
+      positive
+      negative
+      count
+    }
+    title(lang: $lang)
+    topKeywords {
+      score
+      value
+    }
+  }
+}
