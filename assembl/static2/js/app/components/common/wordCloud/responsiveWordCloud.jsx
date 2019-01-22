@@ -8,6 +8,11 @@ import WordCloud, { defaultBaseProps as defaultWordCloudBaseProps } from './word
 // Type imports
 import type { BaseProps as WordCloudBaseProps } from './wordCloud';
 
+type Size = {
+  width: number,
+  height: number
+};
+
 class ResponsiveWordCloud extends Component<WordCloudBaseProps> {
   static defaultProps = { ...defaultWordCloudBaseProps };
 
@@ -61,9 +66,9 @@ class ResponsiveWordCloud extends Component<WordCloudBaseProps> {
     };
     return (
       <ResizeAware>
-        {(size) => {
-          const width = size.width || 400; // default width
-          const height = Math.min(width / 4 * 3, 500); // 4:3 ratio
+        {(size: Size) => {
+          const width: number = size.width || 400; // default width
+          const height: number = Math.min(width / 4 * 3, 500); // 4:3 ratio
           return <WordCloud {...wordCloudProps} height={height} width={width} />;
         }}
       </ResizeAware>
