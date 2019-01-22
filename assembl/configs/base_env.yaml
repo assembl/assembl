@@ -6,30 +6,32 @@ DEFAULT:
   db_database: assembl
   sentry_scheme: https
   sentry_host: localhost
-internal:
-  _postgres_db_user: postgres
-  _postgres_db_password:
-  _mac: false
+_internal:
+  postgres_db_user: postgres
+  postgres_db_password:
+  mac: false
   # We now use systemd instead of a global supervisor
-  _uses_global_supervisor: false
-  _uses_memcache: true
-  _uses_nginx: true
-  _uses_uwsgi: true
-  _uses_bluenove_actionable: false
-  _gitrepo: https://github.com/assembl/assembl.git
-  _gitbranch: master
-  _is_production_env: true
+  uses_global_supervisor: false
+  uses_memcache: true
+  uses_nginx: true
+  uses_uwsgi: true
+  uses_bluenove_actionable: false
+  gitrepo: https://github.com/assembl/assembl.git
+  gitbranch: master
+  is_production_env: true
   # Legacy: Can be prod.wsgi, staging.wsgi or dev.wsgi.
-  _wsginame: prod.wsgi
-  _ini_file: local.ini
-  _projectname: assembl
+  wsginame: prod.wsgi
+  ini_file: local.ini
+  projectname: assembl
 
   # Is assembl installed as a python package in the venv, or as a development package
-  _package_install: false
-  _sentry_db_host: localhost
+  package_install: false
+  sentry_db_host: localhost
   # _sentry_db_password:
-  _requirement_inputs: requirements.in requirements-chrouter.in
-  _hosts:
+  requirement_inputs: requirements.in requirements-chrouter.in
+  hosts:
+  webmaster_user: webmaster
+  webmaster_user_password:
 
 ini_files: production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
 # The file that will hold the generated random keys.
