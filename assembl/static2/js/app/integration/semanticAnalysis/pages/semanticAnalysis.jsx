@@ -1,6 +1,7 @@
 // @flow
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
+import { I18n } from 'react-redux-i18n';
 
 // Component imports
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
@@ -83,17 +84,45 @@ class SemanticAnalysis extends Component<Props, State> {
   render() {
     const { keywordsColor, keywordData, numberOfKeywordsToDisplay, loading, errorLoading } = this.state;
 
+    // Translation keys
+    const informationKeywordKey = 'debate.semanticAnalysis.informationKeyword';
+    const keywordCloudKey = 'debate.semanticAnalysis.keywordCloud';
+    const keywordCloudDefinitionKey = 'debate.semanticAnalysis.keywordCloudDefinition';
+    const numberKeywordKey = 'debate.semanticAnalysis.numberKeyword';
+    const occurenceKey = 'debate.semanticAnalysis.occurence';
+    const occurenceDefinitionKey = 'debate.semanticAnalysis.occurenceDefinition';
+    const relevanceKey = 'debate.semanticAnalysis.relevance';
+    const relevanceDefinitionKey = 'debate.semanticAnalysis.relevanceDefinition';
+    const sentimentAnalysisKey = 'debate.semanticAnalysis.sentimentAnalysis';
+    const sentimentAnalysisDefinitionKey = 'debate.semanticAnalysis.sentimentAnalysisDefinition';
+
+    // Title contents
+    const informationKeywordTitle = I18n.t(informationKeywordKey);
+    const keywordCloudTitle = I18n.t(keywordCloudKey);
+    const keywordCloudDefinition = I18n.t(keywordCloudDefinitionKey);
+    const numberKeywordTitle = I18n.t(numberKeywordKey);
+    const occurenceTitle = I18n.t(occurenceKey);
+    const occurenceDefinition = I18n.t(occurenceDefinitionKey);
+    const relevanceTitle = I18n.t(relevanceKey);
+    const relevanceDefinition = I18n.t(relevanceDefinitionKey);
+    const sentimentAnalysisTitle = I18n.t(sentimentAnalysisKey);
+    const sentimentAnalysisDefinition = I18n.t(sentimentAnalysisDefinitionKey);
+
     const sentimentScore = (fakeData.sentiment.document.score + 1) / 2;
-    const tooltip = (
+    const informationKeywordTooltip = (
       <div>
         <p>
-          <strong>Occurence :</strong> nombre de fois où le mot clé apparaît dans le débat ou dans les discussions relatives à la
-          thématique en question.
+          <strong>{occurenceTitle}:</strong> {occurenceDefinition}
         </p>
         <p>
-          <strong>Pertinence :</strong> qualifie l′importance du mot clé pour comprendre le sens général du texte analysé. Le
-          score varie de 0 à 1, de faible à fort.
+          <strong>{relevanceTitle}:</strong> {relevanceDefinition}
         </p>
+      </div>
+    );
+
+    const sentimentAnalysisTooltip = (
+      <div>
+        <p>{sentimentAnalysisDefinition}</p>
       </div>
     );
 
@@ -108,12 +137,9 @@ class SemanticAnalysis extends Component<Props, State> {
       <div className="semantic-analysis">
         {/** Description section */}
         <Col xs={12} className="no-padding">
-          <Title level={1}>Nuage de mots-clés</Title>
+          <Title level={1}>{keywordCloudTitle}</Title>
           <Description>
-            <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-              aliqua. Ut enim ad minim veniam, quis nostrud.
-            </p>
+            <p>{keywordCloudDefinition}</p>
           </Description>
           <WordCountInformation wordCount={23302} className="padding-bottom" />
         </Col>
@@ -133,15 +159,15 @@ class SemanticAnalysis extends Component<Props, State> {
         {/** Toolbar section */}
         <Col xs={12} md={4} className="no-padding margin-s">
           <Col xsHidden sm={6} md={12} className="no-padding">
-            <TitleWithTooltip level={2} tooltipContent={tooltip}>
-              Informations mots-clés
+            <TitleWithTooltip level={2} tooltipContent={informationKeywordTooltip}>
+              {informationKeywordTitle}
             </TitleWithTooltip>
 
             <KeywordInfo keyword={keywordData} />
           </Col>
 
           <Col xsHidden smHidden md={12} className="no-padding">
-            <Title level={2}>Nombre de mots-clés</Title>
+            <Title level={2}>{numberKeywordTitle}</Title>
 
             <ToolbarSlider
               maxValue={fakeData.keywords.length}
@@ -152,8 +178,8 @@ class SemanticAnalysis extends Component<Props, State> {
           </Col>
 
           <Col xs={12} sm={6} md={12} className="no-padding">
-            <TitleWithTooltip level={2} tooltipContent={tooltip}>
-              Analyse du sentiment
+            <TitleWithTooltip level={2} tooltipContent={sentimentAnalysisTooltip}>
+              {sentimentAnalysisTitle}
             </TitleWithTooltip>
 
             <SentimentBar value={sentimentScore} />

@@ -444,7 +444,19 @@ const Translations = {
         long: "Sémantique",
         short: "Analyse",
         occurence: "Occurence",
-        relevance: "Pertinence"
+        occurenceDefinition:
+          "nombre de fois où le mot clé apparaît dans le débat ou dans les discussions relatives à la thématique en question",
+        relevance: "Pertinence",
+        relevanceDefinition:
+          "qualifie l'importance du mot clé pour comprendre le sens général du texte analysé. Le score varie de 0 à 1, de faible à fort.",
+        keywordCloud: "Nuage de mots-clés",
+        keywordCloudDefinition:
+          "Le nuage de mots-clés ci-dessous est une représentation visuelle des mots-clefs les plus utilisés dans le débat (ou \"dans les échanges liés à la thématique en question\" lorsque le texte fait référence à une thématique particulière). Les mots s'affichent dans des tailles de caractères d'autant plus visibles qu'ils sont utilisés ou populaires.",
+        informationKeyword: "Informations mots clés",
+        numberKeyword: "Nombre de mots clés",
+        sentimentAnalysis: "Analyse du sentiment",
+        sentimentAnalysisDefinition:
+          "L'analyse du sentiment caractérise la tonalité positive ou négative des échanges du débat (ou \"des échanges relatifs à la thématique en question\")."
       },
       brightMirror: {
         deleteFiction: "Supprimez votre texte",
@@ -1437,7 +1449,17 @@ const Translations = {
         long: "Analysis",
         short: "Semantic",
         occurence: "Occurence",
-        relevance: "Relevance"
+        occurenceDefinition:
+          "frequency of keywords throughout the debate or throughout the discussions related to the theme being addressed.",
+        relevance: "Relevance",
+        relevanceDefinition:
+          "measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.",
+        keywordCloud: "Keyword cloud",
+        keywordCloudDefinition:
+          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" pour le texte à mettre en thématique). The importance of each keyword is shown with font size.",
+        informationKeyword: "Information on keywords",
+        numberKeyword: "Number of keywords",
+        sentimentAnalysis: "Sentiment analysis"
       },
       brightMirror: {
         deleteFiction: "Delete your text",

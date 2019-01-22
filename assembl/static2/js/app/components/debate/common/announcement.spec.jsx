@@ -268,7 +268,7 @@ describe('Announcement component', () => {
       };
 
       props = {
-        announcementContent: announcementContent,
+        announcement: announcement,
         idea: threadIdea,
         isMultiColumns: false
       };
