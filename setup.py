@@ -11,6 +11,7 @@ except ImportError:
 
 
 here = os.path.abspath(os.path.dirname(__file__))
+version = open(os.path.join(here, 'VERSION')).read().strip()
 README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
@@ -29,7 +30,7 @@ def parse_reqs(req_files, links=False):
 
 
 setup(name='assembl',
-      version='2.22.0',
+      version=version,
       description='Collective Intelligence platform',
       long_description=README + '\n\n' + CHANGES,
       classifiers=[
