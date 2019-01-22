@@ -6,12 +6,17 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
 import { withRouter } from 'react-router';
+// Type imports
 import type { Map } from 'immutable';
+import type { OperationComponent } from 'react-apollo';
+import type { ContentLocaleMapping, ContentLocaleMappingJS } from '../actions/actionTypes';
+import type { AnnouncementContent } from '../components/debate/common/announcement';
 
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import Header from '../components/common/header';
 import IdeaQuery from '../graphql/IdeaQuery.graphql';
 import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
+import SemanticAnalysisForThematicQuery from '../graphql/SemanticAnalysisForThematicQuery.graphql';
 import GoUp from '../components/common/goUp';
 import Loader from '../components/common/loader';
 import { getConnectedUserId } from '../utils/globalFunctions';
@@ -21,8 +26,6 @@ import ThreadView from '../components/debate/thread/threadView';
 import { DeletedPublicationStates, FICTION_DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
-import type { ContentLocaleMapping, ContentLocaleMappingJS } from '../actions/actionTypes';
-import type { AnnouncementContent } from '../components/debate/common/announcement';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Survey from './survey';
@@ -56,7 +59,7 @@ type Props = {
   description: string,
   toggleHarvesting: Function,
   isHarvesting: boolean
-};
+} & SemanticAnalysisForThematicQuery;
 
 type PostWithChildren = {
   children: Array<PostWithChildren>
@@ -252,15 +255,16 @@ class Idea extends React.Component<Props> {
 
   render() {
     const {
-      messageViewOverride,
       contentLocaleMapping,
-      timeline,
       debateData,
       lang,
       ideaWithPostsData,
       identifier,
+      messageViewOverride,
       phaseId,
-      routerParams
+      routerParams,
+      semanticAnalysisForThematicData,
+      timeline
     } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
     const { announcement, id, headerImgUrl, synthesisTitle, title, description } = this.props;
@@ -342,7 +346,11 @@ class Idea extends React.Component<Props> {
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">
-                    <Announcement announcement={announcement} idea={ideaWithPostsData.idea} />
+                    <Announcement
+                      announcement={announcement}
+                      idea={ideaWithPostsData.idea}
+                      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+                    />
                   </div>
                 </div>
               </Grid>
@@ -424,10 +432,15 @@ const SwitchViewWithContext = props => (
   </DebateContext.Consumer>
 );
 
+const semanticAnalysisForThematicQuery: OperationComponent<SemanticAnalysisForThematicQuery, IdeaQueryVariables, Props> = graphql(
+  SemanticAnalysisForThematicQuery,
+  {
+    props: ({ data }) => data
+  }
+);
+
 export default compose(
-  connect(state => ({
-    lang: state.i18n.locale
-  })),
+  connect(mapStateToProps),
   graphql(IdeaQuery, {
     options: { notifyOnNetworkStatusChange: true },
     // ideaData.loading stays to true when switching interface language (IdeaQuery is using lang variable)
@@ -455,5 +468,6 @@ export default compose(
       };
     }
   }),
+  semanticAnalysisForThematicQuery,
   manageErrorAndLoading({ displayLoader: true })
 )(SwitchViewWithContext);

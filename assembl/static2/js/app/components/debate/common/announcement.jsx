@@ -8,7 +8,10 @@ import { sentimentDefinitionsObject } from './sentimentDefinitions';
 import TextAndMedia from '../../common/textAndMedia';
 import { CountablePublicationStates, ANNOUNCEMENT_TAB_ITEM_ID, MESSAGE_VIEW } from '../../../constants';
 import PostsAndContributorsCount, { Counter } from '../../common/postsAndContributorsCount';
-
+import SemanticAnalysis from '../../../pages/semanticAnalysis/semanticAnalysis';
+// GraphQL imports
+import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
+// Type imports
 import type { SentimentDefinition } from './sentimentDefinitions';
 
 export const createTooltip = (sentiment: SentimentDefinition, count: number) => (
@@ -60,7 +63,8 @@ type Props = {
     posts: Posts,
     messageColumns: IdeaMessageColumns,
     messageViewOverride: ?string
-  }
+  },
+  semanticAnalysisForThematicData?: SemanticAnalysisForThematicQuery
 };
 
 type ColumnsInfoType = { count: ?number, color: ?string, name: ?string };
@@ -108,7 +112,7 @@ export const SurveyAnnouncement = ({ announcement }: SurveyAnnouncementProps) =>
   </div>
 );
 
-export const Announcement = ({ announcement, idea }: Props) => {
+export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData }: Props) => {
   const { numContributors, numPosts, posts, messageColumns, messageViewOverride } = idea;
   const isMultiColumns = messageViewOverride === MESSAGE_VIEW.messageColumns;
   const sentimentsCount = getSentimentsCount(posts);
@@ -117,13 +121,15 @@ export const Announcement = ({ announcement, idea }: Props) => {
 
   // Translation keys
   const guidelinesTitleKey = 'debate.thread.guidelines';
-  const summaryTitleKey = 'debate.thread.summary';
+  // Uncomment the line below when adding the summary
+  // const summaryTitleKey = 'debate.thread.summary';
   const semanticAnalysisLongTitleKey = 'debate.semanticAnalysis.long';
   const semanticAnalysisShortTitleKey = 'debate.semanticAnalysis.short';
 
   // Title contents
-  const instructionTabTitle = I18n.t(guidelinesTitleKey);
-  const mindmapTabTitle = I18n.t(summaryTitleKey);
+  const guidelinesTabTitle = I18n.t(guidelinesTitleKey);
+  // Uncomment the line below when adding the summary
+  // const summaryTabTitle = I18n.t(summaryTitleKey);
   const semanticAnalysisTabLongTitle = I18n.t(semanticAnalysisLongTitleKey);
   const semanticAnalysisTabShortTitle = I18n.t(semanticAnalysisShortTitleKey);
   // Since 'semantic analysis' is a long composed word, we only display 'analysis' on small devices
@@ -135,7 +141,7 @@ export const Announcement = ({ announcement, idea }: Props) => {
   );
 
   const instructionContent = (
-    <React.Fragment>
+    <div className="announcement">
       <div className="announcement-title">
         <h3 className="announcement-title-text dark-title-1">
           {announcement.title || <Translate value="debate.thread.announcement" />}
@@ -163,32 +169,54 @@ export const Announcement = ({ announcement, idea }: Props) => {
           )}
         </div>
       </Col>
-    </React.Fragment>
-  );
-
-  const mindmapContent = <h1>A retenir</h1>;
-  const semanticAnalysisContent = <h1>Analyse sémantique</h1>;
-
-  return (
-    <div className="announcement">
-      <Tabs
-        id="announcement-tabs-id"
-        justified
-        defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES}
-        className="announcement-menu"
-      >
-        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES} title={instructionTabTitle}>
-          {instructionContent}
-        </Tab>
-        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={mindmapTabTitle}>
-          {mindmapContent}
-        </Tab>
-        <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
-          {semanticAnalysisContent}
-        </Tab>
-      </Tabs>
     </div>
   );
+
+  const guidelinesTabAndContent = (
+    <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES} title={guidelinesTabTitle}>
+      {instructionContent}
+    </Tab>
+  );
+
+  // Uncomment those line below when adding the summary
+  // const summaryTabAndContent = (
+  //   <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={summaryTabTitle}>
+  //     {/** Summary Component and Content */}
+  //   </Tab>
+  // );
+
+  const semanticAnalysisTabAndContent = (
+    <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
+      <div id="semantic-analysis-thematic" className="semantic-analysis">
+        <SemanticAnalysis semanticAnalysisData={semanticAnalysisForThematicData} />
+      </div>
+    </Tab>
+  );
+
+  return (
+    <Tabs
+      id="announcement-tabs-id"
+      justified
+      defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES}
+      className="announcement-menu"
+    >
+      {guidelinesTabAndContent}
+      {/** summaryTabAndContent */}
+      {semanticAnalysisTabAndContent}
+    </Tabs>
+  );
+};
+
+Announcement.defaultProps = {
+  semanticAnalysisForThematicData: {
+    nlpSentiment: {
+      positive: null,
+      negative: null,
+      count: 0
+    },
+    title: '',
+    topKeywords: []
+  }
 };
 
 export default Announcement;

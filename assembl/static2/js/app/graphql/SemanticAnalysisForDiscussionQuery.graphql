@@ -1,4 +1,7 @@
 query SemanticAnalysisForDiscussionData($lang: String) {
+  # TODO: rename discusion to semanticAnalysisForDiscussionData and
+  # update SemanticAnalysis props passed in semanticAnalysisForDiscussion.jsx
+  # when done changing the loader
   discussion {
     nlpSentiment {
       positive
