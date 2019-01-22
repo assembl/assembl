@@ -1066,7 +1066,7 @@ def database_dump_aws():
 
 
 _processes_to_restart_without_backup = [
-    "dev:pserve" "celery", "changes_router",
+    "dev:pserve", "celery", "changes_router",
     "celery_notify_beat", "source_reader"]
 
 
@@ -1454,6 +1454,8 @@ def app_setup(backup=False):
     """Setup the environment so the application can run"""
     if not env.package_install:
         venvcmd('pip install -e ./')
+    else:
+        pip_install_wheel()
     execute(setup_var_directory)
     if not exists(env.ini_file):
         execute(create_local_ini)
@@ -3359,17 +3361,26 @@ def migrate_server_for_automated_deployment():
         execute(migrate_important_information, path=join(env.projectpath, v), to=private_config_path)
 
 
+def pip_install_wheel(version=None):
+    base_wheel_path = env.get('assembl_wheel_dir')
+    if not version:
+        version = open("%s/VERSION" % local_code_root).read().strip()
+        if not version:
+            version = run('ls -t %s | head -n 1' % (base_wheel_path))
+    wheel_path = os.path.join(base_wheel_path, version, 'assembl-%s-py2-none-any.whl' % version)
+    use_wheel = '' if not env.wheelhouse else '--find-links=%s' % env.wheelhouse
+    venvcmd('pip install %(wheelhouse)s %(wheel)s%(dev_mode)s' % {
+            'wheelhouse': use_wheel,
+            'wheel': wheel_path,
+            'dev_mode': '[dev]' if not is_integration_env() else ''
+            })  # To allow debugging on server
+
+
 @task
 def deploy_wheel(version=None):
     # Run by same user who will install Assembl
     # Tested on Ubuntu only
     execute(migrate_server_for_automated_deployment)
-    base_wheel_path = env.get('assembl_wheel_dir')
-    if not version:
-        version = run('ls -t %s | head -n 1' % (base_wheel_path))
-    wheel_path = os.path.join(base_wheel_path, version, 'assembl-%s-py2-none-any.whl' % version)
-    use_wheel = '' if not env.wheelhouse else '--find-links=%s' % env.wheelhouse
-    # Make this into a task
     # Remove the main code_path
     assembl_main_project_path = join(env.projectpath, 'assembl')
     fabric_path = normpath(join(code_root(), 'fabfile.py'))
@@ -3378,11 +3389,9 @@ def deploy_wheel(version=None):
     if exists(env.venvpath):
         run('rm -rf %s' % env.venvpath)
         run('rm -rf %s' % env.venvpath + 'py3')
-    # Account for venv3 as well
 
     execute(build_virtualenv, with_setuptools=True)
-    venvcmd('pip install %s %s' % (use_wheel, wheel_path))
-    venvcmd('pip install %s[dev]' % wheel_path)  # To allow debugging on server
+    pip_install_wheel(version)
     venvcmd('ln -s %s %s' % (fabric_path, env.projectpath))
     if not is_integration_env():
         if env.is_production_env:
