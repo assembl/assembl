@@ -1,0 +1,40 @@
+_extends: base_env.yaml
+ini_files: production.ini no_sentry.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
+DEFAULT:
+  db_user: assembl_user
+hosts: localhost
+_webmaster_user:
+attachment_service: s3
+celery_tasks.broker: sqs://
+rds_certificate: rds-combined-ca-bundle.pem
+aws_region: eu-west-1
+attachment_bucket: "assembl-attachments-%(aws_client)s"
+elasticsearch_index: "%(aws_client)s:assembl-es"
+elasticsearch_port: 80
+elasticsearch_version: 5.6.8
+supervisor:
+  autostart_celery: false
+  autostart_celery_notify_beat: false
+  autostart_source_reader: false
+  autostart_changes_router: false
+  autostart_urlmetadata: false
+  autostart_elasticsearch: false
+db_iam_role: "arn:aws:iam::%(aws_client)s:role/AssemblEC2Role"
+handlers:
+  keys: console, file, cloudwatch
+handler_cloudwatch:
+  class: watchtower.CloudWatchLogHandler
+  args: ('AssemblLogs', 'Log', True, 10)
+  formatter: json
+  level: INFO
+logger_root:
+  handlers: file, cloudwatch
+logger_assembl:
+  handlers: file, cloudwatch
+logger_sqlalchemy:
+  handlers: file, cloudwatch
+
+# temporary
+public_port: 80
+accept_secure_connection: false
+require_secure_connection: false
