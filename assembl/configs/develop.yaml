@@ -57,16 +57,17 @@ mail.host: localhost
 disable_notification: true
 visible_errors: true
 frozen_requirements: requirements-dev.frozen.txt
-internal:
-  _uses_nginx: false
-  _uses_uwsgi: false
-  _uses_bluenove_actionable: false
-  _is_production_env: false
-  _wsginame: dev.wsgi
-  _gitbranch: develop
-  _requirement_inputs: requirements.in requirements-chrouter.in requirements-dev.in requirements-doc.in requirements-tests.in
-  _build_docs: false
-  _can_test: true
+_internal:
+  uses_nginx: false
+  uses_uwsgi: false
+  uses_bluenove_actionable: false
+  is_production_env: false
+  wsginame: dev.wsgi
+  gitbranch: develop
+  requirement_inputs: requirements.in requirements-chrouter.in requirements-dev.in requirements-doc.in requirements-tests.in
+  build_docs: false
+  can_test: true
+  webmaster_user: webmaster
 supervisor:
   autostart_celery_notify_beat: false
   autostart_webpack: true
