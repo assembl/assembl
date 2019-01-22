@@ -15,7 +15,8 @@ export const defaultResponsiveWordCloudProps = {
 
 const playground = {
   keywordsAngle: 20,
-  keywordsColor: '200, 40, 180',
+  keywordsColor: 'rgb(200, 40, 180)',
+  keywordsColorActive: 'rgb(200, 200, 90)',
   keywords: [{ text: 'word1', relevance: 0.7, count: 3 }, { text: 'word2', relevance: 0.9, count: 5 }],
   numberOfKeywordsToDisplay: 30,
   onWordClick: () => {
@@ -32,6 +33,7 @@ storiesOf('ResponsiveWordCloud', module)
       <ResponsiveWordCloud
         keywordsAngle={number('keywordsAngle', playground.keywordsAngle)}
         keywordsColor={text('keywordsColor', playground.keywordsColor)}
+        keywordsColorActive={text('keywordsColorActive', playground.keywordsColorActive)}
         keywords={array('keywords', playground.keywords)}
         numberOfKeywordsToDisplay={number('numberOfKeywordsToDisplay', playground.numberOfKeywordsToDisplay)}
         onWordClick={playground.onWordClick}

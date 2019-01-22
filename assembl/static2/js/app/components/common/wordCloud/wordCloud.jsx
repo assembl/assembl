@@ -12,8 +12,10 @@ const WORD_KEY = 'text';
 export type BaseProps = {
   /** Optional angle value in degrees */
   keywordsAngle: number,
-  /** Optional color */
+  /** Optional color rgb(x, x, x) only */
   keywordsColor: string,
+  /** Optional color when a word is active rgb(x, x, x) only */
+  keywordsColorActive: string,
   /** Array of keywords */
   keywords: Keywords,
   /** Optional maximum number of keywords to show */
@@ -35,8 +37,8 @@ export type Props = BaseProps & {
 
 export const defaultBaseProps = {
   keywordsAngle: 0,
-  // color = 'RED, GREEN, BLUE' (with RED, GREEN, BLUE 0-255)
-  keywordsColor: '0, 0, 0',
+  keywordsColor: 'rgb(0, 0, 0)',
+  keywordsColorActive: 'rgb(0, 0, 0)',
   numberOfKeywordsToDisplay: 30,
   onMouseOutWord: () => {},
   onMouseOverWord: () => {},
@@ -55,6 +57,7 @@ class WordCloud extends Component<Props> {
       height,
       keywordsAngle,
       keywordsColor,
+      keywordsColorActive,
       keywords,
       numberOfKeywordsToDisplay,
       onMouseOutWord,
@@ -66,6 +69,7 @@ class WordCloud extends Component<Props> {
       nextProps.height !== height ||
       nextProps.keywordsAngle !== keywordsAngle ||
       nextProps.keywordsColor !== keywordsColor ||
+      nextProps.keywordsColorActive !== keywordsColorActive ||
       nextProps.keywords !== keywords ||
       nextProps.numberOfKeywordsToDisplay !== numberOfKeywordsToDisplay ||
       nextProps.onMouseOutWord !== onMouseOutWord ||
@@ -87,6 +91,7 @@ class WordCloud extends Component<Props> {
       height,
       keywordsAngle,
       keywordsColor,
+      keywordsColorActive,
       keywords,
       numberOfKeywordsToDisplay,
       onMouseOutWord,
@@ -108,10 +113,15 @@ class WordCloud extends Component<Props> {
     }
 
     const colorFunction = d =>
-      `rgba(${keywordsColor}, ${0.5 + 0.5 * (d.relevance - interval.min) / (interval.max - interval.min)})`;
+      `rgba(${keywordsColor.substring(4, keywordsColor.length - 1)}, ${0.5 +
+        0.5 * (d.relevance - interval.min) / (interval.max - interval.min)})`;
+    const colorFunctionActive = d =>
+      `rgba(${keywordsColorActive.substring(4, keywordsColor.length - 1)}, ${0.5 +
+        0.5 * (d.relevance - interval.min) / (interval.max - interval.min)})`;
 
     const reactWordCloudProps = {
       colorScale: colorFunction,
+      colorScaleActive: colorFunctionActive,
       fontFamily: 'Lato',
       height: height,
       maxAngle: maxAngle,

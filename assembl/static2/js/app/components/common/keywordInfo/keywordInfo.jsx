@@ -8,13 +8,11 @@ import Description from '../description/description';
 import type { Keyword } from '../../../integration/semanticAnalysis/dataType';
 
 export type Props = {
-  /** Optional color */
-  color: string,
   /** Keyword information */
   keyword: Keyword
 };
 
-const KeywordInfo = ({ color, keyword }: Props) => {
+const KeywordInfo = ({ keyword }: Props) => {
   // Translation keys
   const ocurrenceKey = 'debate.semanticAnalysis.occurence';
   const relevanceKey = 'debate.semanticAnalysis.relevance';
@@ -23,20 +21,13 @@ const KeywordInfo = ({ color, keyword }: Props) => {
   const occurenceTitle = I18n.t(ocurrenceKey);
   const relevanceTitle = I18n.t(relevanceKey);
 
-  const colorStyle = {
-    color: color // eslint-line-disable comma-dangle
-  };
   return (
     <Description>
-      <h3 style={colorStyle}>{keyword.text}</h3>
+      <h3 className="keyword-info">{keyword.text}</h3>
       <p className="info">{`${occurenceTitle} : ${keyword.count}`}</p>
       <p className="info">{`${relevanceTitle} : ${keyword.relevance}`}</p>
     </Description>
   );
-};
-
-KeywordInfo.defaultProps = {
-  color: '#000'
 };
 
 export default KeywordInfo;

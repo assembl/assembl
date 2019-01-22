@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { withInfo } from '@storybook/addon-info';
-import { color, withKnobs, object } from '@storybook/addon-knobs';
+import { withKnobs, object } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import KeywordInfo from './keywordInfo';
@@ -17,7 +17,6 @@ export const defaultKeywordInfoProps = {
 };
 
 const playground = {
-  color: '#000',
   keyword: {
     text: 'test',
     count: 5,
@@ -28,7 +27,4 @@ const playground = {
 storiesOf('KeywordInfo', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <KeywordInfo {...defaultKeywordInfoProps} />))
-  .add(
-    'playground',
-    withInfo()(() => <KeywordInfo color={color('color', playground.color)} keyword={object('keyword', playground.keyword)} />)
-  );
+  .add('playground', withInfo()(() => <KeywordInfo keyword={object('keyword', playground.keyword)} />));

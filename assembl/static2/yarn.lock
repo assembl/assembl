@@ -10441,7 +10441,7 @@ react-virtualized@9.18.5:
 
 "react-wordcloud@https://github.com/beyowi/react-wordcloud.git":
   version "0.1.0"
-  resolved "https://github.com/beyowi/react-wordcloud.git#c93005229affa864c56339b5c6e2e23daba9d0d1"
+  resolved "https://github.com/beyowi/react-wordcloud.git#679d57702f07bff58b586c3d43334f069f00d515"
   dependencies:
     d3-array "^1.2.1"
     d3-cloud "^1.2.4"
