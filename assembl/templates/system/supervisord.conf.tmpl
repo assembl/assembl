@@ -25,7 +25,7 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
 [program:celery]
 directory = %(here)s
-command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.tasks.celery -c %(CELERY_NUM_WORKERS)s -b %(CELERY_BROKER)s
+command = %(VIRTUAL_ENV)s/bin/celery worker -E -l info -A assembl.processes.celery -c %(CELERY_NUM_WORKERS)s -b %(CELERY_BROKER)s
 autostart = %(autostart_celery)s
 autorestart = true
 startsecs = 2
@@ -43,7 +43,7 @@ stderr_logfile_backups = %(sup_log_backups_celery_err)s
 
 [program:source_reader]
 directory = %(here)s
-command = python -m assembl.tasks.source_reader %(CONFIG_FILE)s
+command = python -m assembl.processes.source_reader %(CONFIG_FILE)s
 autostart = %(autostart_source_reader)s
 autorestart = true
 startsecs = 2
@@ -59,7 +59,7 @@ stderr_logfile_backups = %(sup_log_backups_source_reader_err)s
 
 [program:celery_notify_beat]
 directory = %(here)s
-command = %(VIRTUAL_ENV)s/bin/celery -A assembl.tasks.celery beat -b %(CELERY_BROKER)s
+command = %(VIRTUAL_ENV)s/bin/celery -A assembl.processes.celery beat -b %(CELERY_BROKER)s
 autostart = %(autostart_celery_notify_beat)s
 autorestart = true
 startsecs = 2
@@ -77,7 +77,7 @@ stderr_logfile_backups = %(sup_log_backups_celery_notify_beat_err)s
 
 [program:changes_router]
 directory = %(here)s
-command = python %(code_root)s/assembl/tasks/changes_router.py %(CONFIG_FILE)s
+command = python %(code_root)s/assembl/processes/changes_router.py %(CONFIG_FILE)s
 autostart = %(autostart_changes_router)s
 autorestart = true
 stopasgroup = false

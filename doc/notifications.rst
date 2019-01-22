@@ -39,12 +39,12 @@ The inheritence path of `SynthesisPost` is `BaseOps` > `Base` > `DiscussionBound
 `event.listen(BaseOps, 'after_insert', orm_insert_listener, propagate=True)`
 This means that when any instance of a class that derives from BaseOps is inserted into the database, the `orm_insert_listener()` function is called. This in turn calls the `send_to_changes()` method of the instance.
 
-The `models/generic.py:Content::send_to_changes()` method creates a `watcher` with `get_model_watcher()` and calls its `processPostCreated()` method. The `lib/sqla.py:get_model_watcher()` function returns an instance of a class whose name is defined in an `.ini` configuration file, under the key `{task_name}.imodeleventwatcher` ("assembl" being the default key). (The definitive value that `get_model_watcher()` will return is defined in `scripts/__init__.py` and `tasks/__init__.py`.)
+The `models/generic.py:Content::send_to_changes()` method creates a `watcher` with `get_model_watcher()` and calls its `processPostCreated()` method. The `lib/sqla.py:get_model_watcher()` function returns an instance of a class whose name is defined in an `.ini` configuration file, under the key `{task_name}.imodeleventwatcher` ("assembl" being the default key). (The definitive value that `get_model_watcher()` will return is defined in `scripts/__init__.py` and `processes/__init__.py`.)
 
 Possible values of these variables are:
 * `assembl.models.notification.ModelEventWatcherNotificationSubscriptionDispatcher`
 * `assembl.lib.model_watcher.ModelEventWatcherPrinter`
-* `assembl.tasks.notification_dispatch.ModelEventWatcherCelerySender`
+* `assembl.processes.notification_dispatch.ModelEventWatcherCelerySender`
 
 See also documentation at the top of the `lib/model_watcher.py` file for more information about theses classes.
 

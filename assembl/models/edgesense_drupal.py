@@ -23,7 +23,7 @@ from .langstrings import LangString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
-from ..tasks.source_reader import PullSourceReader
+from ..processes.source_reader import PullSourceReader
 from ..lib import config
 from ..lib.sqla_types import URLString
 from ..lib.locale import get_localizer, _
