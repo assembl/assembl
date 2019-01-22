@@ -57,7 +57,7 @@ const SentimentBar = ({ value }: Props) => {
   }
 
   const errorKey = 'common.loader.error';
-  const errorText = I18n.t(errorKey);
+  const errorText: string = I18n.t(errorKey);
 
   return level === -1 ? (
     <div className="sentimentBar">

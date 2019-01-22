@@ -27,7 +27,7 @@ export type Props = {
   onSliderChange: (value: number) => void
 };
 
-const theme = (color: string) =>
+const theme = (color: string): any =>
   createMuiTheme({
     palette: {
       primary: {
