@@ -16,7 +16,6 @@ import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAda
 import MultilingualRichTextFieldAdapter from '../../../form/multilingualRichTextFieldAdapter';
 import AdminForm from '../../../form/adminForm';
 import Loader from '../../../common/loader';
-import { type DateTime } from '../../../form/types.flow';
 import { validStartDate, validEndDate, validateDatePicker } from './validate';
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
 import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
@@ -34,8 +33,8 @@ type Props = {
 };
 
 type State = {
-  startDate: DateTime,
-  endDate: DateTime,
+  startDate: moment$Moment | null,
+  endDate: moment$Moment | null,
   startDateConflict: boolean,
   endDateConflict: boolean
 };
@@ -54,7 +53,7 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
     };
   }
 
-  onStartChange = (e: DateTime) => {
+  onStartChange = (e: moment$Moment) => {
     const { endDate } = this.state;
     let startDateConflict = false;
     if (!validStartDate(e, endDate)) {
@@ -68,7 +67,7 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
     }));
   };
 
-  onEndChange = (e: DateTime) => {
+  onEndChange = (e: moment$Moment) => {
     const { startDate } = this.state;
     let endDateConflict = false;
     if (!validEndDate(startDate, e)) {

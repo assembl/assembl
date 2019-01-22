@@ -14,7 +14,7 @@ import * as React from 'react';
 import { ControlLabel, FormGroup } from 'react-bootstrap';
 import { type FieldRenderProps } from 'react-final-form';
 import { type FormApi } from 'final-form';
-import type { DatePickerType, DateTime, DatePickerValue } from './types.flow';
+import type { DatePickerType, DatePickerValue } from './types.flow';
 import Error from './error';
 import { getValidationState } from './utils';
 
@@ -26,10 +26,10 @@ type Props = {
   hasConflictingDate: boolean,
   input: {
     name: string,
-    onChange: ({ time: DateTime }) => void,
+    onChange: ({ time: moment$Moment }) => void,
     value: DatePickerValue
   },
-  onDateChange: ?(DateTime) => void,
+  onDateChange: ?(moment$Moment) => void,
   form: FormApi,
   children?: React.Node
 } & FieldRenderProps;
@@ -48,7 +48,7 @@ const DatePickerFieldAdapter = ({
   form,
   ...rest
 }: Props) => {
-  const onLocalizedChange = (e: DateTime): void => {
+  const onLocalizedChange = (e: moment$Moment): void => {
     if (e !== value.time) {
       if (form) {
         form.mutators.setFieldTouched(name, true);

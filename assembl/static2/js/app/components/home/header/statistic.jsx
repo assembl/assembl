@@ -40,6 +40,7 @@ class Statistic extends React.PureComponent<Props> {
         const secondsAsNumber = parseInt(totalSeconds, 10);
         const momentDuration = moment.duration(secondsAsNumber, 'seconds');
         const formatValue = I18n.t('duration.format');
+        // $FlowFixMe momentDuration.format doesn't exist in flow-typed libdef
         const readableDuration = momentDuration.format(formatValue);
         statElements.push({
           iconName: 'timer',

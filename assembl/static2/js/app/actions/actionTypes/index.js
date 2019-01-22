@@ -1,6 +1,5 @@
 /* redux action types */
 // @flow
-import { type moment } from 'moment';
 import { type AdminActions } from './admin';
 
 export const UPDATE_CONTENT_LOCALE_BY_ID: 'UPDATE_CONTENT_LOCALE_BY_ID' = 'UPDATE_CONTENT_LOCALE_BY_ID';
@@ -504,13 +503,13 @@ export type UpdatePhaseImage = {
 
 export type UpdatePhaseStart = {
   id: string,
-  value: moment,
+  value: moment$Moment,
   type: typeof UPDATE_PHASE_START
 };
 
 export type UpdatePhaseEnd = {
   id: string,
-  value: moment,
+  value: moment$Moment,
   type: typeof UPDATE_PHASE_END
 };
 

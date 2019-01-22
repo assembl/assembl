@@ -262,6 +262,7 @@ describe('convertDateTimeToISO8601String function', () => {
   it('should return null from a Date object', () => {
     const s = { time: new Date() };
     const expected = null;
+    // $FlowFixMe only takes a moment$Moment
     const actual = convertDateTimeToISO8601String(s);
     expect(actual).toEqual(expected);
   });

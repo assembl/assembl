@@ -34,19 +34,20 @@ class ProfileLine extends React.PureComponent<Props> {
         </div>
         <div className="user">
           <div className={userNameClasses}>{userName}</div>
-          {creationDate && (
-            <div className="date">
-              {moment(creationDate)
-                .locale(locale)
-                .fromNow()}
-              {modified ? (
-                <span>
-                  {' - '}
-                  <Translate value="debate.thread.postEdited" />
-                </span>
-              ) : null}
-            </div>
-          )}
+          {creationDate &&
+            locale && (
+              <div className="date">
+                {moment(creationDate)
+                  .locale(locale)
+                  .fromNow()}
+                {modified ? (
+                  <span>
+                    {' - '}
+                    <Translate value="debate.thread.postEdited" />
+                  </span>
+                ) : null}
+              </div>
+            )}
         </div>
       </div>
     );
