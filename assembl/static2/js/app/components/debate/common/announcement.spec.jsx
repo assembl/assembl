@@ -45,7 +45,7 @@ describe('Announcement component', () => {
   };
   const fakeThreadPosts = { edges: [fakePost1, fakePost2] };
   describe('<Announcement/> on a thread', () => {
-    // TODO: fix because it seems to get a parsing error with the tabs component
+    // TODO: Temporary xit the test because it seems to get a conflict the ResizeAware/WordCloud component
     xit('should render an announcement with the content associated to a thread idea', () => {
       const threadIdea = {
         id: '1234',
@@ -62,7 +62,7 @@ describe('Announcement component', () => {
     });
   });
   describe('<Announcement /> on a multiColumns', () => {
-    // TODO: fix because it seems to get a parsing error with the tabs component
+    // TODO: Temporary xit the test because it seems to get a conflict the ResizeAware/WordCloud component
     xit('should render an announcement with the content associated to a multiColumns idea', () => {
       const positiveColumn = {
         color: 'green',
