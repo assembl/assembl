@@ -4,6 +4,7 @@ import re
 from pprint import pprint
 from time import sleep
 from contextlib import nested
+from ConfigParser import RawConfigParser
 
 from invoke import task as base_task
 
@@ -26,7 +27,83 @@ def print_config(c):
     pprint(c.config.__dict__)
 
 
-@task(print_config)
+_known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
+
+
+def val_to_ini(val):
+    if val is None:
+        return ''
+    if isinstance(val, bool):
+        return str(val).lower()
+    return val
+
+
+def ensureSection(config, section):
+    """Ensure that config has that section"""
+    if section.lower() != 'default' and not config.has_section(section):
+        config.add_section(section)
+
+
+def yaml_to_ini(yaml_conf, default_section='app:assembl'):
+    """Convert a .rc file to a ConfigParser (.ini-like object)
+
+    Items are assumed to be in app:assembl section,
+        unless prefixed by "{section}__" .
+    Keys prefixed with an underscore are not passed on.
+    Keys prefixed with a star are put in the global (DEFAULT) section.
+    Value of '__delete_key__' is eliminated if existing.
+    """
+    p = RawConfigParser()
+    ensureSection(p, default_section)
+    for key, val in yaml_conf.iteritems():
+        if key.startswith('_'):
+            continue
+        if isinstance(val, dict):
+            if key in _known_invoke_sections:
+                continue
+            ensureSection(p, key)
+            for subk, subv in val.iteritems():
+                p.set(key, subk, val_to_ini(subv))
+        else:
+            if val == '__delete_key__':
+                # Allow to remove a variable from rc
+                # so we can fall back to underlying ini
+                p.remove_option(default_section, key)
+            else:
+                p.set(default_section, key, val_to_ini(val))
+    return p
+
+
+@task()
+def compose(c):
+    """Compose local.ini from the given .rc file"""
+    from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
+    c.config.DEFAULT['code_root'] = c.config.code_root
+    # Special case: uwsgi does not do internal computations.
+    if 'uwsgi' not in c.config:
+        c.config.uwsgi = {}
+    c.config.uwsgi.virtualenv = c.config.projectpath + '/venv'
+    ini_sequence = c.config.get('ini_files', None)
+    assert ini_sequence, "Define ini_files"
+    ini_sequence = ini_sequence.split()
+    base = RawConfigParser()
+    random_file = c.config.get('random_file', None)
+    for overlay in ini_sequence:
+        if overlay == 'RC_DATA':
+            overlay = yaml_to_ini(c.config)
+        elif overlay.startswith('RANDOM'):
+            templates = overlay.split(':')[1:]
+            overlay = populate_random(
+                random_file, templates, extract_saml_info(c.config))
+        else:
+            overlay = find_ini_file(overlay, c.config.code_root + "/configs")
+            assert overlay, "Cannot find " + overlay
+        combine_ini(base, overlay)
+    with open('local.ini', 'w') as f:
+        base.write(f)
+
+
+@task()
 def create_venv(c):
     if not exists(c, 'venv'):
         c.run('python2 -mvirtualenv venv')
@@ -71,7 +148,7 @@ def get_s3_file(bucket, key, destination=None):
 
 
 @task()
-def get_aws_localrc(c):
+def get_aws_invoke_yaml(c):
     assert running_locally(c)
     import requests
     r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
@@ -82,9 +159,9 @@ def get_aws_localrc(c):
     # s3://bluenove-assembl-configurations/local_{account_id}.rc
     content = get_s3_file(
         'bluenove-assembl-configurations',
-        'local_%s.rc' % account,
-        c.config.projectpath + '/local.rc')
-    extends_re = re.compile(r'\b_extends\s*=\s*(\w+\.rc)')
+        'invoke_%s.yaml' % account,
+        c.config.projectpath + '/invoke.yaml')
+    extends_re = re.compile(r'\b_extends:\s*(\w+\.yaml)')
     match = extends_re.search(content)
     while match:
         key = match.group(1)
@@ -95,17 +172,16 @@ def get_aws_localrc(c):
             f.write(ex_content)
         match = extends_re.search(ex_content)
     if not content:
-        raise RuntimeError("local_%s.rc was not defined in S3" % account)
+        raise RuntimeError("invoke_%s.yaml was not defined in S3" % account)
 
 
 @task()
 def aws_instance_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
     setup_aws_default_region(c)
-    get_aws_localrc(c)
-    if not exists(c, c.config.projectpath + "/local.rc"):
-        raise RuntimeError("Missing local.rc file")
-    c.config['rcfile'] = "local.rc"
+    get_aws_invoke_yaml(c)
+    if not exists(c, c.config.projectpath + "/invoke.yaml"):
+        raise RuntimeError("Missing invoke.yaml file")
     setup_ctx(c)
     aws_server_startup_from_local(c)
 
@@ -208,7 +284,7 @@ def aws_server_startup_from_local(c):
     """Update files that depend on local.rc and restart nginx, supervisor"""
     create_local_ini(c)
     with venv(c):
-        ini_file = c.config.get('internal', {}).get('_ini_file', 'local.ini')
+        ini_file = c.config.get('_internal', {}).get('ini_file', 'local.ini')
         c.run('assembl-ini-files populate %s' % (ini_file))
     fill_template(c, 'assembl/templates/system/nginx_default.jinja2', 'var/share/assembl.nginx')
     if is_supervisord_running(c):
@@ -227,7 +303,7 @@ def create_local_ini(c):
     yamlfile = c.config.get('yamlfile', 'invoke.yaml')
     assert os.path.exists(yamlfile)
     # random_ini_path = os.path.join(c.config.projectpath, c.config.random_file)
-    ini_file_name = c.config.get('internal', {}).get('_ini_file', 'local.ini')
+    ini_file_name = c.config.get('_internal', {}).get('ini_file', 'local.ini')
     local_ini_path = os.path.join(c.config.projectpath, ini_file_name)
     if exists(c, local_ini_path):
         c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
