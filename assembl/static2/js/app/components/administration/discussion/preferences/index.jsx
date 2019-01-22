@@ -33,6 +33,9 @@ const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesForm
       createMutationsPromises={createMutationsPromises(client)}
       save={save}
       validate={validate}
+      withWarningModal
+      warningValues={['slug']}
+      warningMessageKey="administration.slugWarning"
       mutators={{
         ...arrayMutators
       }}

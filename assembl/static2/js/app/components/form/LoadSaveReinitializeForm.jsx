@@ -11,10 +11,8 @@ https://github.com/final-form/react-final-form#loading-normalizing-saving-and-re
 import * as React from 'react';
 import { type Mutator } from 'final-form';
 import { Form } from 'react-final-form';
-import { Button } from 'react-bootstrap';
-import { Translate } from 'react-redux-i18n';
-import { displayModal, closeModal } from '../../utils/utilityManager';
 import type { MutationsPromises, SaveStatus } from './types.flow';
+import { displayConfirmationModal } from '../common/displayConfirmationModal';
 
 type TOriginalValues = {| [string]: any |};
 
@@ -27,7 +25,10 @@ type Props = {
   createMutationsPromises: (TInitialValues, TInitialValues) => MutationsPromises,
   save: MutationsPromises => Promise<SaveStatus>,
   afterSave?: TInitialValues => void,
-  mutators?: { [string]: Mutator }
+  mutators?: { [string]: Mutator },
+  warningMessageKey?: string,
+  withWarningModal?: boolean,
+  warningValues?: Array<string>
 };
 
 type State = {
@@ -70,35 +71,17 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     }
   };
 
-  displayConfirmationModal = (values: TInitialValues) => {
-    const body = <Translate value="administration.slugWarning" />;
-    const footer = [
-      <Button key="cancel" id="cancel-deleting-button" onClick={closeModal} className="button-cancel button-dark">
-        <Translate value="cancel" />
-      </Button>,
-      <Button
-        key="delete"
-        id="confirm-deleting-button"
-        onClick={() => {
-          this.runMutations(values);
-          closeModal();
-        }}
-        className="button-submit button-dark"
-      >
-        <Translate value="validate" />
-      </Button>
-    ];
-    const includeFooter = true;
-    return displayModal(null, body, includeFooter, footer);
-  };
-
   save = (values: TInitialValues) => {
-    if (this.state.initialValues) {
-      const initialSlug = this.state.initialValues.slug;
-      const { slug } = values;
-      return slug && initialSlug && initialSlug !== slug ? this.displayConfirmationModal(values) : this.runMutations(values);
+    const { withWarningModal, warningValues, warningMessageKey } = this.props;
+    const { initialValues } = this.state;
+    if (initialValues) {
+      const warningValuesHaveChanged = warningValues && warningValues.some(value => values[value] !== initialValues[value]);
+      if (withWarningModal && warningValuesHaveChanged && warningMessageKey) {
+        return displayConfirmationModal(values, this.runMutations, warningMessageKey);
+      }
+      return this.runMutations(values);
     }
-    return undefined;
+    return undefined; // TODO: return an Error ?
   };
 
   render() {
