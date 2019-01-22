@@ -96,7 +96,7 @@ class LandingPageAdmin extends React.Component<Props, State> {
     const { editLocale, section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     // TODO: Remove this crap after migrating all of landing page to react-final-form
-    const showSaveButton = s => s !== '1' || s !== '3';
+    const showSaveButton = s => s !== '1' && s !== '3';
     return (
       <div className="landing-page-admin">
         {showSaveButton(section) && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
