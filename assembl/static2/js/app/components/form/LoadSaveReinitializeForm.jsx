@@ -11,7 +11,9 @@ https://github.com/final-form/react-final-form#loading-normalizing-saving-and-re
 import * as React from 'react';
 import { type Mutator } from 'final-form';
 import { Form } from 'react-final-form';
-
+import { Button } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
+import { displayModal, closeModal } from '../../utils/utilityManager';
 import type { MutationsPromises, SaveStatus } from './types.flow';
 
 type TOriginalValues = {| [string]: any |};
@@ -56,17 +58,47 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     });
   };
 
-  save = async (values: TInitialValues) => {
+  runMutations = async (values: TInitialValues) => {
     const { createMutationsPromises, save, afterSave } = this.props;
-    if (this.state.initialValues) {
-      const mutationPromises = createMutationsPromises(values, this.state.initialValues);
-      const status = await save(mutationPromises);
-      if (status === 'OK') {
-        // we really need to do a refetch to have the correct new ids in values
-        await this.load('network-only');
-        if (afterSave) afterSave(values);
-      }
+    // $FlowFixMe flow doesn't see that initialValues has already been checked
+    const mutationPromises = createMutationsPromises(values, this.state.initialValues);
+    const status = await save(mutationPromises);
+    if (status === 'OK') {
+      // we really need to do a refetch to have the correct new ids in values
+      await this.load('network-only');
+      if (afterSave) afterSave(values);
     }
+  };
+
+  displayConfirmationModal = (values: TInitialValues) => {
+    const body = <Translate value="administration.slugWarning" />;
+    const footer = [
+      <Button key="cancel" id="cancel-deleting-button" onClick={closeModal} className="button-cancel button-dark">
+        <Translate value="cancel" />
+      </Button>,
+      <Button
+        key="delete"
+        id="confirm-deleting-button"
+        onClick={() => {
+          this.runMutations(values);
+          closeModal();
+        }}
+        className="button-submit button-dark"
+      >
+        <Translate value="validate" />
+      </Button>
+    ];
+    const includeFooter = true;
+    return displayModal(null, body, includeFooter, footer);
+  };
+
+  save = (values: TInitialValues) => {
+    if (this.state.initialValues) {
+      const initialSlug = this.state.initialValues.slug;
+      const { slug } = values;
+      return slug && initialSlug && initialSlug !== slug ? this.displayConfirmationModal(values) : this.runMutations(values);
+    }
+    return undefined;
   };
 
   render() {
