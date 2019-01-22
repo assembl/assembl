@@ -1,6 +1,14 @@
 #!/bin/sh
 set -e
 
+# Compile the latest themes as well
+echo "\e[32mPulling Themes\e[0m"
+cd ${CI_PROJECT_DIR}/assembl/static/css/themes/vendor
+git clone git@github.com:bluenove/assembl-client-themes.git
+
+cd ${CI_PROJECT_DIR}/assembl/static2/css/themes/vendor
+git clone git@github.com:bluenove/assembl2-client-themes.git
+
 # compile v1 stylesheets
 echo "\e[32mCompile v1 stylesheets\e[0m"
 cd ${CI_PROJECT_DIR}/assembl/static/js
