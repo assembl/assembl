@@ -71,7 +71,7 @@ class ToolbarSlider extends Component<Props, State> {
     const { color, labelFormatter, maxValue, minValue, onSliderChange } = this.props;
     const { currentValue } = this.state;
 
-    const onSliderChangeHandler = (event, value: number) => {
+    const onSliderChangeHandler = (event: SyntheticEvent<HTMLButtonElement>, value: number): void => {
       this.setState({ currentValue: value });
       onSliderChange(value);
     };
