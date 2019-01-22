@@ -63,7 +63,7 @@
     "eslint-plugin-jsx-a11y": "^5.1.1",
     "eslint-plugin-react": "^7.3.0",
     "file-loader": "^2.0.0",
-    "flow-bin": "0.91.0",
+    "flow-bin": "0.71.0",
     "flow-typed": "^2.5.1",
     "glob": "^7.1.2",
     "graphql-tools": "^1.1.0",
