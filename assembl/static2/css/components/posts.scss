@@ -315,6 +315,11 @@ $deleted-post-border: 1px solid $grey1 !default;
     &:hover {
       transform: scale(1.2);
     }
+
+    .assembl-icon-check-box-declined {
+      font-size: 18px;
+      padding-left: 3px;
+    }
   }
 
   .overflow-action {

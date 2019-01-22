@@ -22,7 +22,9 @@ export type Props = {
   /** Modal custom message */
   modalBodyMessage?: string,
   /** callback function handled by the parent component */
-  onDeleteCallback?: Function
+  onDeleteCallback?: Function,
+  /** boolean checking if the post is pending and you are connected as a moderator */
+  isPendingForModerator?: boolean
 };
 
 type GraphQLProps = {
@@ -38,7 +40,8 @@ const DeletePostButton = ({
   postId,
   refetchQueries,
   modalBodyMessage,
-  onDeleteCallback
+  onDeleteCallback,
+  isPendingForModerator
 }: LocalProps) => {
   const displayConfirmationModal = () => {
     const title = <Translate value="debate.confirmDeletionTitle" />;
@@ -69,7 +72,7 @@ const DeletePostButton = ({
   };
   return (
     <Button bsClass={linkClassName} onClick={displayConfirmationModal}>
-      <span className="assembl-icon-delete" />
+      {isPendingForModerator ? <span className="assembl-icon-check-box-declined" /> : <span className="assembl-icon-delete" />}
     </Button>
   );
 };

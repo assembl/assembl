@@ -86,7 +86,6 @@ export class PostActions extends React.Component<Props> {
       connectedUserId === String(creatorUserId) &&
       connectedUserCan(Permissions.EDIT_MY_POST) &&
       (isPendingForUser || !isDebateModerated || connectedUserIsModerator());
-
     const showLastSeparator =
       !isPendingForUser && ((editable && userCanEditThisMessage) || userCanDeleteThisMessage || isPendingForModerator);
     return (
@@ -156,7 +155,9 @@ export class PostActions extends React.Component<Props> {
         )}
         <div className={classnames({ 'post-actions-separator': showLastSeparator })} />
         {isPendingForModerator ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
-        {userCanDeleteThisMessage ? <DeletePostButton postId={postId} linkClassName="post-action" /> : null}
+        {userCanDeleteThisMessage ? (
+          <DeletePostButton postId={postId} linkClassName="post-action" isPendingForModerator={isPendingForModerator} />
+        ) : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
         {editable ? (
           <div className="answers annotation">
