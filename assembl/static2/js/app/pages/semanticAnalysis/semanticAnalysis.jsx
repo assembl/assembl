@@ -97,16 +97,16 @@ class SemanticAnalysis extends Component<Props, State> {
     const sentimentAnalysisDefinitionKey = 'debate.semanticAnalysis.sentimentAnalysisDefinition';
 
     // Title contents
-    const informationKeywordTitle = I18n.t(informationKeywordKey);
-    const keywordCloudTitle = I18n.t(keywordCloudKey);
-    const keywordCloudDefinition = I18n.t(keywordCloudDefinitionKey);
-    const numberKeywordTitle = I18n.t(numberKeywordKey);
-    const occurenceTitle = I18n.t(occurenceKey);
-    const occurenceDefinition = I18n.t(occurenceDefinitionKey);
-    const relevanceTitle = I18n.t(relevanceKey);
-    const relevanceDefinition = I18n.t(relevanceDefinitionKey);
-    const sentimentAnalysisTitle = I18n.t(sentimentAnalysisKey);
-    const sentimentAnalysisDefinition = I18n.t(sentimentAnalysisDefinitionKey);
+    const informationKeywordTitle: string = I18n.t(informationKeywordKey);
+    const keywordCloudTitle: string = I18n.t(keywordCloudKey);
+    const keywordCloudDefinition: string = I18n.t(keywordCloudDefinitionKey);
+    const numberKeywordTitle: string = I18n.t(numberKeywordKey);
+    const occurenceTitle: string = I18n.t(occurenceKey);
+    const occurenceDefinition: string = I18n.t(occurenceDefinitionKey);
+    const relevanceTitle: string = I18n.t(relevanceKey);
+    const relevanceDefinition: string = I18n.t(relevanceDefinitionKey);
+    const sentimentAnalysisTitle: string = I18n.t(sentimentAnalysisKey);
+    const sentimentAnalysisDefinition: string = I18n.t(sentimentAnalysisDefinitionKey);
 
     const sentimentScore = (fakeData.sentiment.document.score + 1) / 2;
     const informationKeywordTooltip = (
