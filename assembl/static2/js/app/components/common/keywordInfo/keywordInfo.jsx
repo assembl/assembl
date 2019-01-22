@@ -18,8 +18,8 @@ const KeywordInfo = ({ keyword }: Props) => {
   const relevanceKey = 'debate.semanticAnalysis.relevance';
 
   // Title contents
-  const occurenceTitle = I18n.t(ocurrenceKey);
-  const relevanceTitle = I18n.t(relevanceKey);
+  const occurenceTitle: string = I18n.t(ocurrenceKey);
+  const relevanceTitle: string = I18n.t(relevanceKey);
 
   return (
     <Description>
