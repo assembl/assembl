@@ -1,7 +1,7 @@
 from os.path import exists
 
 from invoke import task
-
+from os.path import join
 # try:
 #     # invoke 0.11
 #     from invoke import ctask as task
@@ -26,6 +26,107 @@ def install_base_deps(c):
 def install_nginx(c):
     """Install Nginx on ubuntu."""
     c.sudo('apt-get install -y nginx uwsgi uwsgi-plugin-python')
+
+
+@task()
+def webservers_stop(c):
+    """Stop all webservers."""
+    c.sudo('/etc/init.d/nginx stop')
+
+
+@task()
+def webservers_start(c):
+    """Start all webservers."""
+    c.sudo("/etc/init.d/nginx start")
+
+
+@task()
+def webservers_reload(c):
+    """Reload the webserver stack."""
+    result = c.sudo('/usr/sbin/nginx -t')
+    if "Command exited with status 0" in str(result):
+        c.sudo('/etc/init.d/nginx reload')
+    else:
+        print ("Can't reload nginx, ngin test configuration not successful.")
+
+    if c.uses_bluenove_actionable:
+        restart_bluenove_actionable()
+    else:
+        stop_bluenove_actionable()
+
+
+@task()
+def install_bluenove_actionable(c):
+    """Install the bluenove_actionable app."""
+    if not exists(join(c.projectpath, '..', 'bluenove-actionable')):
+        with c.cd(c.projectpath):
+            c.run('git clone git@github.com:bluenove/bluenove-actionable.git')
+
+        with c.cd(join(c.projectpath, '..', 'bluenove-actionable')):
+            c.run('mkdir -p data && chmod o+rwx data')
+            c.run('docker-compose build', warn=True)
+
+
+def get_robot_machine(c):
+    """Returns the configured robot machine"""
+    machines = c.get('machines', '')
+    if machines:
+        robot = machines.split('/')[0]
+        robot_data = robot.split(',')
+        if len(robot_data) != 3:
+            print ("The data of the user machine are wrong! %s" % robot)
+            return None
+
+        return {
+            'identifier': robot_data[0].strip(),
+            'name': robot_data[1].strip(),
+            'password': robot_data[2].strip()
+        }
+    print "No user machine found!"
+    return None
+
+
+@task()
+def start_bluenove_actionable(c):
+    """Starts Bigdatext algorithm."""
+    path = join(c.projectpath, '..', 'bluenove-actionable')
+    robot = get_robot_machine()
+    if exists(path) and robot:
+        url_instance = c.public_hostname
+        if url_instance == 'localhost':
+            ip = c.run("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1")
+            url_instance = 'http://{}:{}'.format(ip, c.public_port)
+            with c.cd(path):
+                c.run('docker-compose up -d', warn=True, env={'URL_INSTANCE': url_instance, 'ROBOT_IDENTIFIER': robot.get('identifier'), 'ROBOT_PASSWORD': robot.get('password')})
+
+
+@task()
+def stop_bluenove_actionable(c):
+    """Stops Bigdatatext algorithm."""
+    path = join(c.projectpath, '..', 'bluenove-actionable')
+    if exists(path):
+        with c.cd(path):
+            c.run('docker-compose down', warn=True)
+
+
+@task()
+def restart_bluenove_actionable(c):
+    """Restart Bigdatext algorithm."""
+    stop_bluenove_actionable(c)
+    start_bluenove_actionable(c)
+
+
+@task()
+def update_bluenove_actionable(c):
+    """Update bluenove_actionable git repository and rebuilding tha app."""
+    path = join(c.projectpath, '..', 'bluenove-actionable')
+    if exists(path):
+        with c.cd(path):
+            c.run('git pull')
+            c.run('docker system prune --volumes -f', warn=True)
+            c.run('mkdir -p data && chmod o+rwx data')
+            c.run('docker-compose build --no-cache', warn=True)
+            restart_bluenove_actionable(c)
 
 
 @task
@@ -63,3 +164,63 @@ def assembl_tasks(c):
 @task(install_base_deps, install_nginx, install_yarn, create_assembl_user, assembl_tasks)
 def bootstrap_assembl(c):
     pass
+
+
+def add_user_to_group(c, user, group):
+    """Adds designated user to designated group."""
+    c.sudo("usermod -a -G %s %s" % (group, user))
+
+
+@task()
+def install_docker(c):
+    """Installs docker"""
+    c.sudo('apt-get update')
+    c.sudo('apt-get install apt-transport-https ca-certificates curl software-properties-common')
+    c.sudo('curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -')
+    c.sudo('add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"')
+    c.sudo('apt-get update; apt-get install -y docker-ce')
+    gitpath = 'https://github.com/docker/compose/releases/download/1.22.0/docker-compose-$(uname -s)-$(uname -m)'
+    c.run('curl -L %s -o /usr/local/bin/docker-compose' % gitpath)
+    c.sudo('chmod +x /usr/local/bin/docker-compose')
+    add_user_to_group(c.context.user, 'docker')
+
+
+@task()
+def install_fail2ban(c):
+    """Install fail2ban"""
+    c.sudo('apt-get install -y fail2ban')
+
+
+@task()
+def install_jq(c):
+    """Install jq package. jq is like sed for json data."""
+    c.sudo('apt-get install -y jq')
+
+
+@task()
+def install_mysql(c):
+    """Installs mysql on a linux server."""
+    pass
+
+
+@task()
+def install_apache(c):
+    """Installs apache on a linux server."""
+    pass
+
+
+@task()
+def install_php(c):
+    """Installs php on a linux server."""
+    pass
+
+
+@task()
+def uninstall_lamp(c):
+    """Uninstall apache2, Mysql, apache on a linux """
+    pass
+
+
+@task()
+def set_fail2ban_configurations(c):
+    """Set fail2ban configuration and pushes fail2ban configs."""
