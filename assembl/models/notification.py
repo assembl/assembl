@@ -628,7 +628,7 @@ class NotificationSubscriptionFollowSyntheses(NotificationSubscriptionGlobal):
             discussion_id == object.get_discussion_id())
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
-        from ..tasks.notify import notify
+        from ..processes.notify import notify
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
         notification = NotificationOnPostCreated(
             post=objectInstance,
@@ -663,7 +663,7 @@ class NotificationSubscriptionFollowAllMessages(NotificationSubscriptionGlobal):
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
-        from ..tasks.notify import notify
+        from ..processes.notify import notify
         notification = NotificationOnPostCreated(
             post_id=objectInstance.id,
             first_matching_subscription=self,
@@ -700,7 +700,7 @@ class NotificationSubscriptionFollowOwnMessageDirectReplies(NotificationSubscrip
 
     def process(self, discussion_id, verb, objectInstance, otherApplicableSubscriptions):
         assert self.wouldCreateNotification(discussion_id, verb, objectInstance)
-        from ..tasks.notify import notify
+        from ..processes.notify import notify
         notification = NotificationOnPostCreated(
             post=objectInstance,
             first_matching_subscription=self,

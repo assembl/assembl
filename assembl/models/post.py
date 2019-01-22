@@ -619,7 +619,7 @@ def orm_insert_listener(mapper, connection, target):
     # Eagerly translate the post
     # Actually causes DB deadlocks. TODO: Revise this.
     # Let's only do this on import.
-    # from ..tasks.translate import translate_content_task
+    # from ..processes.translate import translate_content_task
     # translate_content_task.delay(target.id)
 
 

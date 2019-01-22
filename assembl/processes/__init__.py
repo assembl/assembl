@@ -60,7 +60,7 @@ def configure(registry, task_name):
 
 CELERYBEAT_SCHEDULE = {
     'resend-every-10-minutes': {
-        'task': 'assembl.tasks.notify.process_pending_notifications',
+        'task': 'assembl.processes.notify.process_pending_notifications',
         'schedule': timedelta(seconds=600),
         'options': {
             'routing_key': 'notify',
@@ -139,12 +139,12 @@ class CeleryWithConfig(Celery):
                     continue
                 SMTP_DOMAIN_DELAYS[name[len(SETTINGS_SMTP_DELAY):]] = val
         getLogger().info("SMTP_DOMAIN_DELAYS", delays=SMTP_DOMAIN_DELAYS)
-        import assembl.tasks.imap
-        import assembl.tasks.notify
-        import assembl.tasks.notification_dispatch
-        import assembl.tasks.translate
-        import assembl.tasks.watson
-        assembl.tasks.notification_dispatch.create_dispatcher()
+        import assembl.processes.imap
+        import assembl.processes.notify
+        import assembl.processes.notification_dispatch
+        import assembl.processes.translate
+        import assembl.processes.watson
+        assembl.processes.notification_dispatch.create_dispatcher()
 
 
 celery = CeleryWithConfig('celery_tasks')
