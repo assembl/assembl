@@ -1,4 +1,4 @@
-global:
+DEFAULT:
   db_host: localhost
   db_user: assembl
   # TODO: If generated remotely, fetch in fabfile

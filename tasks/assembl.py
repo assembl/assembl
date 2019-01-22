@@ -274,8 +274,8 @@ def create_local_ini(c):
     """Replace the local.ini file with one composed from the current .rc file"""
     if not running_locally(c):
         pass  # TODO: update_vendor_config(c)
-    rcfile = c.config.get('rcfile', 'local.rc')
-    assert os.path.exists(rcfile)
+    yamlfile = c.config.get('yamlfile', 'invoke.yaml')
+    assert os.path.exists(yamlfile)
     # random_ini_path = os.path.join(c.config.projectpath, c.config.random_file)
     ini_file_name = c.config.get('internal', {}).get('_ini_file', 'local.ini')
     local_ini_path = os.path.join(c.config.projectpath, ini_file_name)
@@ -285,7 +285,7 @@ def create_local_ini(c):
         # The easy case: create a local.ini locally.
         with venv(c):
             c.run("python2 -m assembl.scripts.ini_files compose -o %s %s" % (
-                ini_file_name, rcfile))
+                ini_file_name, yamlfile))
     else:
         pass  # TODO
 
