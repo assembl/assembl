@@ -7,6 +7,7 @@ import { I18n } from 'react-redux-i18n';
 
 // import ManageModules from '../components/administration/landingPage/manageModules';
 import CustomizeHeader from '../components/administration/landingPage/header/index';
+import TextMultimedia from '../components/administration/landingPage/textMultimedia';
 import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
@@ -95,13 +96,14 @@ class LandingPageAdmin extends React.Component<Props, State> {
     const { editLocale, section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     // TODO: Remove this crap after migrating all of landing page to react-final-form
-    const showSaveButton = s => s !== '1';
+    const showSaveButton = s => s !== '1' || s !== '3';
     return (
       <div className="landing-page-admin">
         {showSaveButton(section) && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
         {section === '1' && <CustomizeHeader editLocale={editLocale} />}
+        {section === '2' && <TextMultimedia editLocale={editLocale} />}
         {/* {section === '2' && <ManageModules {...this.props} />} */}
-        {section && <Navbar currentStep={section} steps={['1']} phaseIdentifier="landingPage" />}
+        {section && <Navbar currentStep={section} steps={['1', '2']} phaseIdentifier="landingPage" />}
       </div>
     );
   }

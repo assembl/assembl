@@ -205,6 +205,14 @@ export const ADMIN_MENU = {
       header: {
         title: 'administration.landingPage.header.title',
         sectionId: '1'
+      },
+      timeline: {
+        title: 'administration.landingPage.timeline.title',
+        sectionId: '2'
+      },
+      textMultimedia: {
+        title: 'administration.landingPage.textMultimedia.title',
+        sectionId: '3'
       }
       // manageModules: {
       //   title: 'administration.landingPage.manageModules.title',

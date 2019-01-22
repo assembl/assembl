@@ -1019,6 +1019,9 @@ const Translations = {
           imageDescription: "L'image doit avoir une hauteur de 500px et une largeur de 400px.",
           sectionTitle: "Configurer le titre et sous-titre de la section"
         },
+        textMultimedia: {
+          title: "Texte & multi-média"
+        },
         successSave: "Les modules ont été enregistrés avec succès !",
         headerSuccessSave: "Le bandeau de la page d'accueil a été sauvegardé avec succès !"
       },
@@ -2087,6 +2090,9 @@ const Translations = {
           image: "Choose the image for this phase",
           sectionTitle: "Configure the title and the subtitle of the section",
           imageDescription: "The image must have a height of 500px and a width of 400px."
+        },
+        textMultimedia: {
+          title: "Text & multi-media"
         },
         successSave: "The modules have been saved with success!",
         headerSuccessSave: "The home page header have been saved with success!"
