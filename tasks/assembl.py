@@ -6,6 +6,7 @@ from time import sleep
 from contextlib import nested
 
 from invoke import task as base_task
+from os.path import join
 
 
 def exists(c, path):
@@ -299,3 +300,20 @@ def assembl_dir_permissions(c):
     c.run('find {path}/assembl/static2 -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
     c.run('chmod go+x {path}/assembl/scripts'.format(path=code_path))
     c.run('chmod go+r {path}/assembl/scripts/pypsql.py'.format(path=code_path))
+
+
+@task()
+def generate_graphql_documentation(c):
+    """Generate HTML documentation page based on graphql schema file."""
+    with venv(c):
+        with c.cd(join(c.projectpath, 'assembl/static2/')):
+            c.run('npm run documentation')
+
+
+@task()
+def updatemaincode(c):
+    """Update code and/or switch branch"""
+    with c.cd(c.projectpath):
+        c.run('git fetch')
+        c.run('git checkout %s' % c.gitbranch)
+        c.run('git pull %s %s ' % (c.gitrepo, c.gitbranch))
