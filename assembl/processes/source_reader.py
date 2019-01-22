@@ -19,12 +19,11 @@ from kombu.utils.debug import setup_logging
 from sqlalchemy import inspect
 from sqlalchemy.exc import TimeoutError
 
-from ..lib import logging
-from ..lib.sentry import capture_exception
-from ..lib.config import set_config
-from ..lib.enum import OrderedEnum
-from ..lib.sqla import configure_engine
-from . import configure
+from assembl.processes import configure
+from assembl.lib.sentry import capture_exception
+from assembl.lib.config import set_config
+from assembl.lib.enum import OrderedEnum
+from assembl.lib.sqla import configure_engine
 
 log = logging.getLogger()
 pool_counter = 0
