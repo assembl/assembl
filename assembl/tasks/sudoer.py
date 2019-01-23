@@ -1,5 +1,6 @@
 from os.path import exists
-
+import re
+from deploy import venv
 from invoke import task
 from os.path import join
 # try:
@@ -55,80 +56,6 @@ def webservers_reload(c):
         stop_bluenove_actionable()
 
 
-@task()
-def install_bluenove_actionable(c):
-    """Install the bluenove_actionable app."""
-    if not exists(join(c.projectpath, '..', 'bluenove-actionable')):
-        with c.cd(c.projectpath):
-            c.run('git clone git@github.com:bluenove/bluenove-actionable.git')
-
-        with c.cd(join(c.projectpath, '..', 'bluenove-actionable')):
-            c.run('mkdir -p data && chmod o+rwx data')
-            c.run('docker-compose build', warn=True)
-
-
-def get_robot_machine(c):
-    """Returns the configured robot machine"""
-    machines = c.get('machines', '')
-    if machines:
-        robot = machines.split('/')[0]
-        robot_data = robot.split(',')
-        if len(robot_data) != 3:
-            print ("The data of the user machine are wrong! %s" % robot)
-            return None
-
-        return {
-            'identifier': robot_data[0].strip(),
-            'name': robot_data[1].strip(),
-            'password': robot_data[2].strip()
-        }
-    print "No user machine found!"
-    return None
-
-
-@task()
-def start_bluenove_actionable(c):
-    """Starts Bigdatext algorithm."""
-    path = join(c.projectpath, '..', 'bluenove-actionable')
-    robot = get_robot_machine()
-    if exists(path) and robot:
-        url_instance = c.public_hostname
-        if url_instance == 'localhost':
-            ip = c.run("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1")
-            url_instance = 'http://{}:{}'.format(ip, c.public_port)
-            with c.cd(path):
-                c.run('docker-compose up -d', warn=True, env={'URL_INSTANCE': url_instance, 'ROBOT_IDENTIFIER': robot.get('identifier'), 'ROBOT_PASSWORD': robot.get('password')})
-
-
-@task()
-def stop_bluenove_actionable(c):
-    """Stops Bigdatatext algorithm."""
-    path = join(c.projectpath, '..', 'bluenove-actionable')
-    if exists(path):
-        with c.cd(path):
-            c.run('docker-compose down', warn=True)
-
-
-@task()
-def restart_bluenove_actionable(c):
-    """Restart Bigdatext algorithm."""
-    stop_bluenove_actionable(c)
-    start_bluenove_actionable(c)
-
-
-@task()
-def update_bluenove_actionable(c):
-    """Update bluenove_actionable git repository and rebuilding tha app."""
-    path = join(c.projectpath, '..', 'bluenove-actionable')
-    if exists(path):
-        with c.cd(path):
-            c.run('git pull')
-            c.run('docker system prune --volumes -f', warn=True)
-            c.run('mkdir -p data && chmod o+rwx data')
-            c.run('docker-compose build --no-cache', warn=True)
-            restart_bluenove_actionable(c)
-
-
 @task
 def install_yarn(c):
     """Install yarn."""
@@ -139,6 +66,41 @@ def install_yarn(c):
         c.run('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -')
         c.sudo('apt-get update')
     c.sudo('apt-get install -y yarn')
+
+
+def upgrade_yarn():
+    if env.mac:
+        c.run('brew update && brew upgrade yarn')
+    else:
+        c.sudo('apt-get update && apt-get install --only-upgrade yarn')
+
+
+@task()
+def update_node(c, force_reinstall=False):
+    """
+    Install node and nom to a know-good version.
+    """
+    node_version_cmd_regex = re.compile(r'^v10\.13\.0')
+    with venv(c):
+        node_version_cmd_result = c.run('node --version', echo=True)
+    match = node_version_cmd_regex.match(str(node_version_cmd_result))
+    if not match or force_reinstall:
+        # Stop gulp and webpack because otherwise node may be busy
+        # TODO: Implement supervisor_process_stop
+        # supervisor_process_stop('dev:gulp')
+        # supervisor_process_stop('dev:webpack')
+        with venv(c):
+            c.run("rm -rf venv/lib/node_modules/")
+            c.run("rm -f venv/bin/npm") # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
+            c.run("nodeenv --node=10.13.0 --npm=6.4.1 --python-virtualenv assembl/static/js")
+        upgrade_yarn()
+        with c.cd(get_node_base_path()):
+            with venv(c):
+                c.run("npm install reinstall -g")
+
+        update_npm_requirement(force_reinstall=True)
+    else:
+        print "Node version OK"
 
 
 @task
