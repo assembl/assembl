@@ -17,15 +17,15 @@ type Props = SemanticAnalysisForDiscussionQuery;
 
 class SemanticAnalysisForDiscussion extends Component<Props> {
   render() {
-    const { discussion } = this.props;
-    const { title } = discussion;
+    const { semanticAnalysisForThematicData } = this.props;
+    const { title } = semanticAnalysisForThematicData;
 
     return (
       <Grid id="semantic-analysis-discussion" className="semantic-analysis">
         <h1>TODO: Banner with title {title}</h1>
         <h1>TODO: Create HOC for loader</h1>
         <h1>TODO: Fix CSS issues</h1>
-        <SemanticAnalysis semanticAnalysisData={discussion} />
+        <SemanticAnalysis semanticAnalysisData={semanticAnalysisForThematicData} />
       </Grid>
     );
   }
