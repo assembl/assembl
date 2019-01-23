@@ -122,8 +122,16 @@ def get_s3_file(bucket, key, destination=None):
         return None
 
 
+CELERY_YAML = """_extends: cicd.yaml
+supervisor:
+  autostart_celery: true
+  autostart_celery_notify_beat: true
+  autostart_uwsgi: false
+"""
+
+
 @task()
-def get_aws_invoke_yaml(c):
+def get_aws_invoke_yaml(c, celery=False):
     assert running_locally(c)
     import requests
     r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
@@ -132,11 +140,15 @@ def get_aws_invoke_yaml(c):
     # This introduces a convention: yaml files
     # for a given amazon account will be stored in
     # s3://assembl-data-{account_id}/{fname}.yaml
-    invoke_path = c.config.projectpath + '/invoke.yaml'
     bucket = 'assembl-data-' + account
+    invoke_path = os.path.join(c.config.projectpath, 'invoke.yaml')
+    if celery:
+        with open(invoke_path, 'w') as f:
+            f.write(CELERY_YAML)
+        invoke_path = os.path.join(c.config.projectpath, 'cicd.yaml')
     content = get_s3_file(
         bucket,
-        'invoke.yaml',
+        'cicd.yaml',
         invoke_path)
     if not content:
         content = '_extends: terraform.yaml\n'
@@ -156,11 +168,20 @@ def get_aws_invoke_yaml(c):
         raise RuntimeError("invoke.yaml was not defined in S3" % account)
 
 
-@task()
+@task(setup_aws_default_region)
 def aws_instance_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
-    setup_aws_default_region(c)
     get_aws_invoke_yaml(c)
+    if not exists(c, c.config.projectpath + "/invoke.yaml"):
+        raise RuntimeError("Missing invoke.yaml file")
+    setup_ctx(c)
+    aws_server_startup_from_local(c)
+
+
+@task(setup_aws_default_region)
+def aws_celery_instance_startup(c):
+    """Operations to startup a fresh celery aws instance from an assembl AMI"""
+    get_aws_invoke_yaml(c, True)
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
         raise RuntimeError("Missing invoke.yaml file")
     setup_ctx(c)
