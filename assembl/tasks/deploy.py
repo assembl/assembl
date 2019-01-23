@@ -3,28 +3,9 @@ import os.path
 import re
 from pprint import pprint
 from time import sleep
-from contextlib import nested
 from ConfigParser import RawConfigParser
-from invoke import task as base_task
 
-from .common import setup_ctx, running_locally, exists
-
-
-def venv(c):
-    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
-    activate = c.config.get('_internal', {}).get('activate', 'activate')
-    return nested(c.cd(project_prefix), c.prefix('source venv/bin/' + activate))
-
-
-def venv_py3(c):
-    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
-    return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate && ' + 'py3'))
-
-
-def task(*args, **kwargs):
-    pre = list(kwargs.pop('pre', args))
-    pre.append(base_task(setup_ctx))
-    return base_task(pre=pre, **kwargs)
+from .common import setup_ctx, running_locally, exists, venv, task
 
 
 @task()
