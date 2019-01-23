@@ -50,8 +50,8 @@ def setup_ctx(c):
                 raise RuntimeError("Cannot find " + target)
         elif exists(c, config_prefix + target):
             data = c.config._load_yaml(config_prefix + target)
-        elif exists(c, project_prefix + target):
-            data = c.config._load_yaml(project_prefix + target)
+        elif exists(c, os.path.join(project_prefix, target)):
+            data = c.config._load_yaml(os.path.join(project_prefix, target))
         else:
             raise RuntimeError("Cannot find %s in either %s or %s", (
                 target, config_prefix, project_prefix))
