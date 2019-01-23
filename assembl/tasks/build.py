@@ -3,6 +3,63 @@ import re
 
 from .common import venv, task
 
+def get_node_base_path():
+    return normpath(join(
+        env.projectpath, 'assembl', 'static', 'js'))
+
+
+def get_new_node_base_path():
+    return normpath(join(
+        env.projectpath, 'assembl', 'static2'))
+
+
+def get_node_modules_path():
+    return normpath(join(
+        get_node_base_path(), 'node_modules'))
+
+
+def get_new_node_modules_path():
+    return normpath(join(
+        get_new_node_base_path(), 'node_modules'))
+
+
+def update_bower(c):
+    with c.cd(get_node_base_path()):
+        with venv(c):
+            c.run('npm update bower po2json')
+
+
+def bower_cmd(c, cmd, relative_path='.'):
+    with c.cd(c.projectpath):
+        bower_cmd = normpath(join(get_node_bin_path(), 'bower'))
+        po2json_cmd = normpath(join(get_node_bin_path(), 'po2json'))
+        if not exists(bower_cmd) or not exists(po2json_cmd):
+            print 'Bower not present, installing ...'
+            install_bower()
+        with c.cd(relative_path):
+            with venv(c):
+                c.run(' '.join(("node", bower_cmd, '--allow-root', cmd)), chdir=False)
+
+
+def _bower_foreach_do(cmd):
+    bower_cmd(cmd)
+    bower_cmd(cmd, 'assembl/static/widget/card')
+    bower_cmd(cmd, 'assembl/static/widget/session')
+    bower_cmd(cmd, 'assembl/static/widget/video')
+    bower_cmd(cmd, 'assembl/static/widget/vote')
+    bower_cmd(cmd, 'assembl/static/widget/creativity')
+    bower_cmd(cmd, 'assembl/static/widget/share')
+
+
+@task()
+def update_bower_requirements(force_reinstall=False):
+    """ Normally not called manually """
+    _bower_foreach_do('prune')
+    if force_reinstall:
+        _bower_foreach_do('install --force')
+    else:
+        _bower_foreach_do('update')
+
 
 @task()
 def update_node(c, force_reinstall=False):

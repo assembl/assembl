@@ -187,6 +187,8 @@ def fill_template(c, template, output=None, default_dir=None):
         # Jinja should interpret 'false' as False but no:
         # https://github.com/ansible/ansible/issues/14983
         for (k, v) in c.config.items():
+            if isinstance(v, dict):
+                continue
             if str(v).lower() == 'false':
                 c.config[k] = False
             if '%(' in str(v):
@@ -270,11 +272,11 @@ def aws_server_startup_from_local(c):
         c.run('assembl-ini-files populate %s' % (ini_file))
     fill_template(c, 'assembl/templates/system/nginx_default.jinja2', 'var/share/assembl.nginx')
     if is_supervisord_running(c):
-        supervisor_restart()
+        supervisor_restart(c)
     else:
         with venv(c):
             c.run('supervisord')
-    webservers_reload()
+    webservers_reload(c)
 
 
 @task()
