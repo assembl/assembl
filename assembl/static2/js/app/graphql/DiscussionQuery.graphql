@@ -2,6 +2,7 @@
 
 query DiscussionData($nextView: String, $lang: String) {
   discussion {
+    id
     logoImage {
       mimeType
       externalUrl

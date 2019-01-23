@@ -1,6 +1,7 @@
 query SemanticAnalysisForThematicData($lang: String!, $id: ID!) {
   semanticAnalysisForThematicData: node(id: $id) {
     ... on Idea {
+      id
       nlpSentiment {
         positive
         negative

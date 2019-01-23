@@ -1,5 +1,6 @@
 query SemanticAnalysisForDiscussionData($lang: String) {
   semanticAnalysisForThematicData: discussion {
+    id
     nlpSentiment {
       positive
       negative
