@@ -75,35 +75,6 @@ def yaml_to_ini(yaml_conf, default_section='app:assembl'):
 
 
 @task()
-def compose(c):
-    """Compose local.ini from the given .rc file"""
-    from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
-    c.config.DEFAULT['code_root'] = c.config.code_root
-    # Special case: uwsgi does not do internal computations.
-    if 'uwsgi' not in c.config:
-        c.config.uwsgi = {}
-    c.config.uwsgi.virtualenv = c.config.projectpath + '/venv'
-    ini_sequence = c.config.get('ini_files', None)
-    assert ini_sequence, "Define ini_files"
-    ini_sequence = ini_sequence.split()
-    base = RawConfigParser()
-    random_file = c.config.get('random_file', None)
-    for overlay in ini_sequence:
-        if overlay == 'RC_DATA':
-            overlay = yaml_to_ini(c.config)
-        elif overlay.startswith('RANDOM'):
-            templates = overlay.split(':')[1:]
-            overlay = populate_random(
-                random_file, templates, extract_saml_info(c.config))
-        else:
-            overlay = find_ini_file(overlay, c.config.code_root + "/configs")
-            assert overlay, "Cannot find " + overlay
-        combine_ini(base, overlay)
-    with open('local.ini', 'w') as f:
-        base.write(f)
-
-
-@task()
 def create_venv(c):
     if not exists(c, 'venv'):
         c.run('python2 -mvirtualenv venv')
@@ -297,23 +268,36 @@ def aws_server_startup_from_local(c):
 
 @task()
 def create_local_ini(c):
-    """Replace the local.ini file with one composed from the current .rc file"""
-    if not running_locally(c):
-        pass  # TODO: update_vendor_config(c)
-    yamlfile = c.config.get('yamlfile', 'invoke.yaml')
-    assert os.path.exists(yamlfile)
-    # random_ini_path = os.path.join(c.config.projectpath, c.config.random_file)
+    """Compose local.ini from the given .yaml file"""
+    from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
+    assert running_locally(c)
+    c.config.DEFAULT['code_root'] = c.config.code_root  # Is this used?
+    # Special case: uwsgi does not do internal computations.
+    if 'uwsgi' not in c.config:
+        c.config.uwsgi = {}
+    c.config.uwsgi.virtualenv = c.config.projectpath + '/venv'
+    ini_sequence = c.config.get('ini_files', None)
+    assert ini_sequence, "Define ini_files"
+    ini_sequence = ini_sequence.split()
+    base = RawConfigParser()
+    random_file = c.config.get('random_file', None)
+    for overlay in ini_sequence:
+        if overlay == 'RC_DATA':
+            overlay = yaml_to_ini(c.config)
+        elif overlay.startswith('RANDOM'):
+            templates = overlay.split(':')[1:]
+            overlay = populate_random(
+                random_file, templates, extract_saml_info(c.config))
+        else:
+            overlay = find_ini_file(overlay, os.path.join(c.config.code_root, 'assembl', 'configs'))
+            assert overlay, "Cannot find " + overlay
+        combine_ini(base, overlay)
     ini_file_name = c.config.get('_internal', {}).get('ini_file', 'local.ini')
     local_ini_path = os.path.join(c.config.projectpath, ini_file_name)
     if exists(c, local_ini_path):
         c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
-    if running_locally(c):
-        # The easy case: create a local.ini locally.
-        with venv(c):
-            c.run("python2 -m assembl.scripts.ini_files compose -o %s %s" % (
-                ini_file_name, yamlfile))
-    else:
-        pass  # TODO
+    with open(local_ini_path, 'w') as f:
+        base.write(f)
 
 
 @task(install_wheel)
