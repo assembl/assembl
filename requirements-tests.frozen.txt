@@ -72,6 +72,7 @@ humanfriendly==4.8        # via coloredlogs, executor, property-manager, rotate-
 idna==2.6                 # via cryptography
 imagesize==1.0.0          # via sphinx
 imaplib2==2.45.0
+invoke==1.2.0
 ipaddress==1.0.19         # via cryptography
 ipython-genutils==0.2.0   # via traitlets
 ipython==4.2.0
@@ -103,6 +104,7 @@ pastedeploy==1.5.2        # via pyramid
 pathlib2==2.3.0           # via pickleshare
 pbr==4.0.0                # via mock
 pexpect==4.4.0            # via ipython
+pg8000==1.12.2
 pickleshare==0.7.4        # via ipython
 pip-tools==3.2.0
 ply==3.11                 # via jsonpath-ng
