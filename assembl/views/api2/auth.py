@@ -425,8 +425,11 @@ def do_password_change(request):
         # V-, V+P+W-B-L-: Invalid or obsolete token (obsolete+logged in treated later.)
         # Offer to send a new token
         if validity != Validity.VALID:
-            error = localizer.translate(_(
-                "This link is not valid. Do you want us to send another?"))
+            if validity == Validity.OLD_PASSWORD:
+                error = localizer.translate(_("The chosen password has been used before. Please try again with a new token."))
+            else:
+                error = localizer.translate(_(
+                    "This link is not valid. Do you want us to send another?"))
         else:
             error = localizer.translate(_(
                 "This link has been used. Do you want us to send another?"))

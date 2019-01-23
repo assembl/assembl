@@ -29,6 +29,7 @@ class Validity(IntEnum):
     BAD_HASH = 2
     DATA_NOT_FOUND = 3
     INVALID_FORMAT = 4
+    OLD_PASSWORD = 5
 
 
 def random_string(size=12, chars=string.ascii_uppercase + string.digits + string.ascii_lowercase):
@@ -184,6 +185,15 @@ def verify_password_change_token(token, max_age=None):
             return None, Validity.DATA_NOT_FOUND
         password = user.password.decode('iso-8859-1') if user.password else 'empty'
         data, valid = verify_data_token(token, password, max_age)
+        if valid != Validity.VALID:
+            # Test against older passwords
+            for p in user.old_passwords:
+                pwd = p.decode('iso-8859-1') if p else 'empty'
+                data, valid = verify_data_token(token, pwd, max_age)
+                if valid != Validity.BAD_HASH or valid != Validity.EXPIRED:
+                    return data, Validity.OLD_PASSWORD
+                else:
+                    continue
         return user, valid
     # Try decoding legacy
     try:
