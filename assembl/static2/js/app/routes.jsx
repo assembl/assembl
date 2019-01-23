@@ -31,7 +31,7 @@ import SurveyAdmin from './pages/surveyAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
-import SemanticAnalysisForDiscussion from './pages/semanticAnalysis/semanticAnalysisForDiscussion';
+import SemanticAnalysisForDiscussion from './pages/semanticAnalysis/semanticAnalysisForDiscussion/semanticAnalysisForDiscussion';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
