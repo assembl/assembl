@@ -23,7 +23,7 @@ describe('<SentimentBar /> - with shallow', () => {
   });
 
   it('should render an image of a sentimentBar', () => {
-    expect(wrapper.find('img')).toHaveLength(1);
+    expect(wrapper.find('SentimentBarIcon')).toHaveLength(1);
   });
 
   it('should render the value (with 2 digits)', () => {

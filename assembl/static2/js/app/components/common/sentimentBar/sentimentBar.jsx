@@ -3,7 +3,7 @@ import * as React from 'react';
 
 // Helpers imports
 import { I18n } from 'react-redux-i18n';
-import { getIconPath } from '../../../utils/globalFunctions';
+import SentimentBarIcon from '../icons/sentimentBarIcon/sentimentBarIcon';
 
 export type Props = {
   /** Value between 0 and 1 */
@@ -65,7 +65,7 @@ const SentimentBar = ({ value }: Props) => {
     </div>
   ) : (
     <div className="sentimentBar">
-      <img alt="Sentiment bar" src={getIconPath(`img-sentimentBar-${level}.svg`)} />
+      <SentimentBarIcon level={level} />
       <p className={`level-${level}`}>{value.toFixed(2)}</p>
     </div>
   );
