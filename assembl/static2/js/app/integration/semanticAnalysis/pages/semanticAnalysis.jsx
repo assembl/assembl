@@ -50,7 +50,7 @@ const fullRgbToHex = (color) => {
   return `#${rgbToHex(rgbArray[0])}${rgbToHex(rgbArray[1])}${rgbToHex(rgbArray[2])}`;
 };
 
-class SemanticAnalysis extends Component<Props, State> {
+export class SemanticAnalysis extends Component<Props, State> {
   static defaultProps = {
     firstColor: 'rgb(0, 0, 0)',
     secondColor: 'rgb(0, 0, 0)'
@@ -218,4 +218,3 @@ class SemanticAnalysis extends Component<Props, State> {
 }
 
 export default manageColor(SemanticAnalysis);
-export { SemanticAnalysis };

@@ -123,7 +123,7 @@ class WordCloud extends Component<Props> {
      * Takes a color and returns a function depending on a keyword. The function returns
      * the color with an opacity depending on d data.
      *
-     * @param {string}   color           String color in the format rgb(x, x, x).
+     * @param {string} color String color in the format rgb(x, x, x).
      *
      * @return {function} Function takes a Keyword as parameter and returns a color with opacity
      * depending on the Keyword parameters.

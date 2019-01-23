@@ -13,7 +13,7 @@ export type State = {
 };
 
 export type Props = {
-  /** Optional slider color HEXA only */
+  /** Optional slider color HEX only */
   color: string,
   /** Default value */
   defaultValue: number, // eslint-disable-line react/no-unused-prop-types
