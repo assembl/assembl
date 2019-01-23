@@ -15,12 +15,6 @@ export type Props = {
 const TitleTooltip = ({ tooltipContent }: Props) => {
   const isTouchScreenDevice = isMobile.any();
 
-  // Translation keys
-  const alternativeTextTooltipKey = 'common.icons.tooltip';
-
-  // Title contents
-  const alternativeTextTooltip: string = I18n.t(alternativeTextTooltipKey);
-
   return isTouchScreenDevice ? (
     <TooltipIcon />
   ) : (
