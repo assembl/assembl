@@ -23,7 +23,6 @@ const createVariablesFromValues = async (
   const staticValues = {
     titleEntries: values.headerTitle ? convertToEntries(values.headerTitle) : null,
     buttonLabelEntries: values.headerButtonLabel ? convertToEntries(values.headerButtonLabel) : null,
-    subtitleEntries: null,
     headerImage: getFileVariable(values.headerImage, initialValues.headerImage),
     logoImage: getFileVariable(values.headerLogoImage, initialValues.headerImage),
     startDate: convertDateTimeToISO8601String(values.headerStartDate),
@@ -32,9 +31,9 @@ const createVariablesFromValues = async (
 
   if (!values.headerSubtitle) return staticValues;
 
-  const val = await convertRichTextToVariables(values.headerSubtitle, client);
+  const subtitlesEntries = await convertRichTextToVariables(values.headerSubtitle, client);
   return {
-    subtitleEntries: val || null,
+    subtitleEntries: subtitlesEntries.entries || null,
     ...staticValues
   };
 };
@@ -44,10 +43,10 @@ export const createMutationsPromises = (client: ApolloClient) => (
   initalValues: DatePickerValue
 ): Array<() => Promise<UpdateDiscussion>> => [
     () =>
-      createVariablesFromValues(values, initalValues, client).then(vars =>
+      createVariablesFromValues(values, initalValues, client).then(variables =>
         client.mutate({
           mutation: updateDiscussion,
-          variables: vars
+          variables: variables
         })
       )
   ];
