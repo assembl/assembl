@@ -1,7 +1,6 @@
 import os
 import os.path
 import re
-import sudoer
 from pprint import pprint
 from time import sleep
 from contextlib import nested
@@ -13,12 +12,13 @@ from .common import setup_ctx, running_locally, exists
 
 def venv(c):
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
-    return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate'))
+    activate = c.config.get('_internal', {}).get('activate', 'activate')
+    return nested(c.cd(project_prefix), c.prefix('source venv/bin/' + activate))
 
 
 def venv_py3(c):
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
-    return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate && '+ 'py3'))
+    return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate && ' + 'py3'))
 
 
 def task(*args, **kwargs):
@@ -98,7 +98,7 @@ def create_venv_python_3(c):
         c.run('pip3 install virtualenv')
 
     print("Creating a fresh virtual env with python 3")
-    if exists(join(v.venvpath + 'py3', "bin/activate")):
+    if exists(os.path.join(v.venvpath + 'py3', "bin/activate")):
         return
     c.run('python3 -mvirtualenv --python python3 %s' % venv3)
 
@@ -148,25 +148,31 @@ def get_aws_invoke_yaml(c):
     r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
     assert r.ok
     account = r.json()['InstanceProfileArn'].split(':')[4]
-    # This introduces a convention: local.rc files
+    # This introduces a convention: yaml files
     # for a given amazon account will be stored in
-    # s3://bluenove-assembl-configurations/local_{account_id}.rc
+    # s3://assembl-data-{account_id}/{fname}.yaml
+    invoke_path = c.config.projectpath + '/invoke.yaml'
+    bucket = 'assembl-data-' + account
     content = get_s3_file(
-        'bluenove-assembl-configurations',
-        'invoke_%s.yaml' % account,
-        c.config.projectpath + '/invoke.yaml')
+        bucket,
+        'invoke.yaml',
+        invoke_path)
+    if not content:
+        content = '_extends: terraform.yaml\n'
+        with open(invoke_path, 'w') as f:
+            f.write(content)
     extends_re = re.compile(r'\b_extends:\s*(\w+\.yaml)')
     match = extends_re.search(content)
     while match:
         key = match.group(1)
-        ex_content = get_s3_file('bluenove-assembl-configurations', key)
+        ex_content = get_s3_file(bucket, key)
         if not ex_content:
             break
         with open(key, 'w') as f:
             f.write(ex_content)
         match = extends_re.search(ex_content)
     if not content:
-        raise RuntimeError("invoke_%s.yaml was not defined in S3" % account)
+        raise RuntimeError("invoke.yaml was not defined in S3" % account)
 
 
 @task()
@@ -219,7 +225,7 @@ def fill_template(c, template, output=None, default_dir=None):
 
 def is_supervisord_running(c):
     with venv(c):
-        result = c.run('supervisorctl pid')
+        result = c.run('supervisorctl pid', echo=True)
     if 'no such file' in result.stdout:
         return False
     try:
@@ -235,15 +241,16 @@ def supervisor_shutdown(c):
     """
     Shutdown Assembl's supervisor
     """
+    if not is_supervisord_running(c):
+        return
     with venv(c):
-        if not is_supervisord_running(c):
-            return
         c.run("supervisorctl shutdown")
-        for i in range(10):
-            sleep(6)
+    for i in range(10):
+        sleep(6)
+        with venv(c):
             result = c.run("supervisorctl status", warn=True)
-            if not result.failed:
-                break
+        if not result.failed:
+            break
     # Another supervisor, upstart, etc may be watching it, give it more time
     sleep(6)
 
