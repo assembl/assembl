@@ -12,7 +12,7 @@ import * as React from 'react';
 import { type Mutator } from 'final-form';
 import { Form } from 'react-final-form';
 import type { MutationsPromises, SaveStatus } from './types.flow';
-import { displayConfirmationModal } from '../common/displayConfirmationModal';
+import { displayConfirmationModal } from '../../utils/administration/displayConfirmationModal';
 
 type TOriginalValues = {| [string]: any |};
 
