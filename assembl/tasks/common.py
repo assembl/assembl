@@ -42,6 +42,8 @@ def setup_ctx(c):
     current['code_root'] = code_root
     current['projectpath'] = project_prefix
     target = current.get('_extends', None)
+    if not target and exists(c, 'invoke.yaml'):
+        target = 'invoke.yaml'
     while target:
         if os.path.isabs(target):
             if exists(c, target):
