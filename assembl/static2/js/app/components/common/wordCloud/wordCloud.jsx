@@ -112,16 +112,24 @@ class WordCloud extends Component<Props> {
       interval.min = 0;
     }
 
-    const colorFunction = d =>
-      `rgba(${keywordsColor.substring(4, keywordsColor.length - 1)}, ${0.5 +
-        0.5 * (d.relevance - interval.min) / (interval.max - interval.min)})`;
-    const colorFunctionActive = d =>
-      `rgba(${keywordsColorActive.substring(4, keywordsColor.length - 1)}, ${0.5 +
+    /**
+     * Function to be used with ReactWordCloud which maps each keyword with a color.
+     *
+     * Takes a color and returns a function depending on a keyword. The function returns
+     * the color with an opacity depending on d data.
+     *
+     * @param {string}   color           String color in the format rgb(x, x, x).
+     *
+     * @return {function} Function takes a Keyword as parameter and returns a color with opacity
+     * depending on the Keyword parameters.
+     */
+    const convertColorFromRGBToRGBA = color => d =>
+      `rgba(${color.substring(4, color.length - 1)}, ${0.5 +
         0.5 * (d.relevance - interval.min) / (interval.max - interval.min)})`;
 
     const reactWordCloudProps = {
-      colorScale: colorFunction,
-      colorScaleActive: colorFunctionActive,
+      colorScale: convertColorFromRGBToRGBA(keywordsColor),
+      colorScaleActive: convertColorFromRGBToRGBA(keywordsColorActive),
       fontFamily: 'Lato',
       height: height,
       maxAngle: maxAngle,
