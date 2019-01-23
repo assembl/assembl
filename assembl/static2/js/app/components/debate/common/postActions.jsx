@@ -7,7 +7,7 @@ import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import classnames from 'classnames';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
-import { sharePostTooltip } from '../../common/tooltips';
+import { sharePostTooltip, validateMessageTooltip, deniedMessageTooltip } from '../../common/tooltips';
 
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -154,9 +154,15 @@ export class PostActions extends React.Component<Props> {
           <div className="empty-sentiments-count" />
         )}
         <div className={classnames({ 'post-actions-separator': showLastSeparator })} />
-        {isPendingForModerator ? <ValidatePostButton postId={postId} linkClassName="post-action" /> : null}
+        {isPendingForModerator ? (
+          <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={validateMessageTooltip}>
+            <ValidatePostButton postId={postId} linkClassName="post-action" />
+          </ResponsiveOverlayTrigger>
+        ) : null}
         {userCanDeleteThisMessage ? (
-          <DeletePostButton postId={postId} linkClassName="post-action" isPendingForModerator={isPendingForModerator} />
+          <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={deniedMessageTooltip}>
+            <DeletePostButton postId={postId} linkClassName="post-action" isPendingForModerator={isPendingForModerator} />
+          </ResponsiveOverlayTrigger>
         ) : null}
         {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
         {editable ? (
