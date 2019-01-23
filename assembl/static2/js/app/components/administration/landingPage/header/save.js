@@ -24,6 +24,7 @@ const createVariablesFromValues = async (
     titleEntries: values.headerTitle ? convertToEntries(values.headerTitle) : null,
     buttonLabelEntries: values.headerButtonLabel ? convertToEntries(values.headerButtonLabel) : null,
     headerImage: getFileVariable(values.headerImage, initialValues.headerImage),
+    subtitleEntries: null,
     logoImage: getFileVariable(values.headerLogoImage, initialValues.headerImage),
     startDate: convertDateTimeToISO8601String(values.headerStartDate),
     endDate: convertDateTimeToISO8601String(values.headerEndDate)
@@ -33,7 +34,7 @@ const createVariablesFromValues = async (
 
   const subtitlesEntries = await convertRichTextToVariables(values.headerSubtitle, client);
   return {
-    subtitleEntries: subtitlesEntries.entries || null,
+    subtitleEntries: subtitlesEntries.entries,
     ...staticValues
   };
 };
