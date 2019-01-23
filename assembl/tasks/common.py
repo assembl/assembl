@@ -1,4 +1,12 @@
 import os.path
+from contextlib import nested
+from invoke import task as base_task
+
+
+def task(*args, **kwargs):
+    pre = list(kwargs.pop('pre', args))
+    pre.append(base_task(setup_ctx))
+    return base_task(pre=pre, **kwargs)
 
 
 def exists(c, path):
@@ -52,3 +60,15 @@ def setup_ctx(c):
     if current is not c.config._project:
         c.config._project = current
     c.config.merge()
+
+
+def venv(c):
+    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
+    activate = c.config.get('_internal', {}).get('activate', 'activate')
+    return nested(c.cd(project_prefix), c.prefix('source venv/bin/' + activate))
+
+
+def venv_py3(c):
+    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
+    return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate && ' + 'py3'))
+
