@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
 
+// HOC imports
+import manageColor from '../../../components/common/manageColor';
+
 // Component imports
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
@@ -214,4 +217,5 @@ class SemanticAnalysis extends Component<Props, State> {
   }
 }
 
-export default SemanticAnalysis;
+export default manageColor(SemanticAnalysis);
+export { SemanticAnalysis };

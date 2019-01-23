@@ -5,7 +5,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
-import SemanticAnalysis from './semanticAnalysis';
+import { SemanticAnalysis } from './semanticAnalysis';
 import Description from '../../../components/common/description/description';
 import Loader from '../../../components/common/loader/loader';
 import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
