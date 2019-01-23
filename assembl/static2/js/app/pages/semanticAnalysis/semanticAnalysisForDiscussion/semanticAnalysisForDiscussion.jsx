@@ -17,16 +17,21 @@ type Props = SemanticAnalysisForDiscussionQuery;
 
 class SemanticAnalysisForDiscussion extends Component<Props> {
   render() {
-    const { semanticAnalysisForThematicData } = this.props;
-    const { title } = semanticAnalysisForThematicData;
+    const { semanticAnalysisForDiscussionData } = this.props;
+    const { topKeywords } = semanticAnalysisForDiscussionData;
+    const topKeywordsCount = topKeywords.length;
+
+    // Display content only when there are top keywords defined
+    const content =
+      topKeywordsCount > 0 ? (
+        <SemanticAnalysis semanticAnalysisData={semanticAnalysisForDiscussionData} />
+      ) : (
+        <h1>display icon not enough data</h1>
+      );
 
     return (
       <Grid id="semantic-analysis-discussion" className="semantic-analysis">
-        <h1>TODO: Banner with title {title}</h1>
-        <h1>TODO: Create HOC for loader</h1>
-        <h1>TODO: Fix CSS issues</h1>
-        <h1>TODO: Map GraphQL structure with the required structure for SemanticAnalysis</h1>
-        <SemanticAnalysis semanticAnalysisData={semanticAnalysisForThematicData} />
+        {content}
       </Grid>
     );
   }

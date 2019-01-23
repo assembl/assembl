@@ -114,10 +114,12 @@ export const SurveyAnnouncement = ({ announcement }: SurveyAnnouncementProps) =>
 
 export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData }: Props) => {
   const { numContributors, numPosts, posts, messageColumns, messageViewOverride } = idea;
+  // const { topKeywords } = semanticAnalysisForThematicData;
   const isMultiColumns = messageViewOverride === MESSAGE_VIEW.messageColumns;
   const sentimentsCount = getSentimentsCount(posts);
   const columnInfos = getColumnInfos(messageColumns);
   const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
+  // const topKeywordsCount = topKeywords.length;
 
   // Translation keys
   const guidelinesTitleKey = 'debate.thread.guidelines';
