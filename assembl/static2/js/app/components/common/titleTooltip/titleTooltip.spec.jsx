@@ -1,13 +1,10 @@
 // @flow
 import React from 'react';
 // Text import for alt image
-import { I18n } from 'react-redux-i18n';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
-// Helper imports
-import { getIconPath } from '../../../utils/globalFunctions';
 /* eslint-enable */
 
 import TitleTooltip from './titleTooltip';
@@ -32,9 +29,7 @@ describe('<TitleTooltip /> - with shallow', () => {
   });
 
   it('should render an tooltip icon', () => {
-    const tooltipIconPatch = getIconPath('tooltipIcon.svg');
-    const tooltipIconAlt = I18n.t('common.icons.tooltip');
-    expect(wrapper.find(`img [src="${tooltipIconPatch}"] [alt="${tooltipIconAlt}"] [className="tooltip-icon"]`)).toHaveLength(1);
+    expect(wrapper.find('TooltipIcon')).toHaveLength(1);
   });
 
   it('should use an ResponsiveOverlayTrigger', () => {

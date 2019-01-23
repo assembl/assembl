@@ -1,3 +1,12 @@
+.tooltip-container {
+  .custom-overlay {
+    div {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
 .title-tooltip {
   .tooltip-inner {
     background-color: $white;

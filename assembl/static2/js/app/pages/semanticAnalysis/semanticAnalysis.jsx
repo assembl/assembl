@@ -40,7 +40,7 @@ class SemanticAnalysis extends Component<Props, State> {
       relevance: 0
     },
     numberOfKeywordsToDisplay: this.NUM_WORDS_DEFAULT,
-    loading: false,
+    loading: true,
     errorLoading: false
   };
 

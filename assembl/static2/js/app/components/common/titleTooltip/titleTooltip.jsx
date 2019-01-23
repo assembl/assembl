@@ -1,18 +1,16 @@
 // @flow
 import * as React from 'react';
 // Helper imports
-import { I18n } from 'react-redux-i18n';
-import { getIconPath, isMobile } from '../../../utils/globalFunctions';
+import { isMobile } from '../../../utils/globalFunctions';
 // Import components
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { titleTooltip } from '../../common/tooltips';
+import TooltipIcon from '../icons/tooltipIcon/tootltipIcon';
 
 export type Props = {
   /** Title level with default value set to 1 */
   tooltipContent: React.Node
 };
-
-const tooltipIcon = getIconPath('tooltipIcon.svg');
 
 const TitleTooltip = ({ tooltipContent }: Props) => {
   const isTouchScreenDevice = isMobile.any();
@@ -24,11 +22,13 @@ const TitleTooltip = ({ tooltipContent }: Props) => {
   const alternativeTextTooltip: string = I18n.t(alternativeTextTooltipKey);
 
   return isTouchScreenDevice ? (
-    <img className="tooltip-icon" src={tooltipIcon} alt={alternativeTextTooltip} width={20} height={20} />
+    <TooltipIcon />
   ) : (
-    <ResponsiveOverlayTrigger placement="bottom" tooltip={titleTooltip(tooltipContent)}>
-      <img className="tooltip-icon" src={tooltipIcon} alt={alternativeTextTooltip} width={20} height={20} />
-    </ResponsiveOverlayTrigger>
+    <div className="tooltip-container">
+      <ResponsiveOverlayTrigger placement="bottom" tooltip={titleTooltip(tooltipContent)}>
+        <TooltipIcon />
+      </ResponsiveOverlayTrigger>
+    </div>
   );
 };
 

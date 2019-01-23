@@ -20,13 +20,36 @@ exports[`Storyshots TitleWithTooltip default 1`] = `
         className="titleTooltip-container"
         onClick={[Function]}
       >
-        <img
-          alt="Icone du tooltip"
-          className="tooltip-icon"
-          height={20}
-          src="icons/path/info"
-          width={20}
-        />
+        <svg
+          className="icon tooltip"
+          height="22"
+          viewBox="0 0 22 22"
+          width="22"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            fill="none"
+            fillRule="evenodd"
+            transform="translate(1 1)"
+          >
+            <text
+              className="text"
+            >
+              <tspan
+                x="7.922"
+                y="13.264"
+              >
+                i
+              </tspan>
+            </text>
+            <circle
+              className="circle"
+              cx="9.62"
+              cy="9.62"
+              r="9.62"
+            />
+          </g>
+        </svg>
       </div>
     </div>
   </div>
@@ -363,13 +386,36 @@ exports[`Storyshots TitleWithTooltip playground 1`] = `
         className="titleTooltip-container"
         onClick={[Function]}
       >
-        <img
-          alt="Icone du tooltip"
-          className="tooltip-icon"
-          height={20}
-          src="icons/path/info"
-          width={20}
-        />
+        <svg
+          className="icon tooltip"
+          height="22"
+          viewBox="0 0 22 22"
+          width="22"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <g
+            fill="none"
+            fillRule="evenodd"
+            transform="translate(1 1)"
+          >
+            <text
+              className="text"
+            >
+              <tspan
+                x="7.922"
+                y="13.264"
+              >
+                i
+              </tspan>
+            </text>
+            <circle
+              className="circle"
+              cx="9.62"
+              cy="9.62"
+              r="9.62"
+            />
+          </g>
+        </svg>
       </div>
     </div>
   </div>

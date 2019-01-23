@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 // Component imports
-import LoadingIcon from './icons/loadingIcon/loadingIcon';
-import ErrorIcon from './icons/errorIcon/errorIcon';
+import LoadingIcon from '../icons/loadingIcon/loadingIcon';
+import ErrorIcon from '../icons/errorIcon/errorIcon';
 
 type LoaderType = {
   loaderComponent: React.Node,
