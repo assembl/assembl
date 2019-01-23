@@ -127,7 +127,6 @@ ocsp_path:
 
 supervisor:
   autostart_celery: true
-  autostart_celery_notification_dispatch: true
   autostart_source_reader: true
   autostart_changes_router: true
   autostart_pserve: false
