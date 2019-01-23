@@ -1,11 +1,11 @@
 import os
 import os.path
 import re
+import sudoer
 from pprint import pprint
 from time import sleep
 from contextlib import nested
 from ConfigParser import RawConfigParser
-
 from invoke import task as base_task
 
 from .common import setup_ctx, running_locally, exists
@@ -14,6 +14,11 @@ from .common import setup_ctx, running_locally, exists
 def venv(c):
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
     return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate'))
+
+
+def venv_py3(c):
+    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
+    return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate && '+ 'py3'))
 
 
 def task(*args, **kwargs):
@@ -78,6 +83,24 @@ def yaml_to_ini(yaml_conf, default_section='app:assembl'):
 def create_venv(c):
     if not exists(c, 'venv'):
         c.run('python2 -mvirtualenv venv')
+
+
+@task(print_config)
+def create_venv_python_3(c):
+    if c.mac and not exists('/usr/local/bin/python3'):
+        if not exists('/usr/local/bin/brew'):
+                c.run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+        c.run("brew update")
+        c.run("brew upgrade")
+        c.run("brew install python@2")
+        c.run("brew install python")  # This installs python3
+        c.run("brew install libmagic")  # needed for python-magic
+        c.run('pip3 install virtualenv')
+
+    print("Creating a fresh virtual env with python 3")
+    if exists(join(v.venvpath + 'py3', "bin/activate")):
+        return
+    c.run('python3 -mvirtualenv --python python3 %s' % venv3)
 
 
 @task()
