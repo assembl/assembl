@@ -19,10 +19,14 @@ import type { Keyword } from '../dataType';
 
 import fakeData from '../data.json';
 
-type Props = {};
+type Props = {
+  /** Optional first color */
+  firstColor: string,
+  /** Optional second color */
+  secondColor: string
+};
 
 export type State = {
-  keywordsColor: string,
   keywordSelected: boolean,
   keywordData: Keyword,
   numberOfKeywordsToDisplay: number,
@@ -30,9 +34,26 @@ export type State = {
   errorLoading: boolean
 };
 
+const rgbToHex = (color) => {
+  let hex = Number(color).toString(16);
+  if (hex.length < 2) {
+    hex = `0${hex}`;
+  }
+  return hex;
+};
+
+const fullRgbToHex = (color) => {
+  const rgbArray = color.substring(4, color.length - 1).split(', ');
+  return `#${rgbToHex(rgbArray[0])}${rgbToHex(rgbArray[1])}${rgbToHex(rgbArray[2])}`;
+};
+
 class SemanticAnalysis extends Component<Props, State> {
+  static defaultProps = {
+    firstColor: 'rgb(0, 0, 0)',
+    secondColor: 'rgb(0, 0, 0)'
+  };
+
   state = {
-    keywordsColor: '84, 4, 215', // #BLUE_VIOLET
     keywordSelected: false,
     keywordData: {
       text: 'Pas de mot sélectionné',
@@ -82,7 +103,8 @@ class SemanticAnalysis extends Component<Props, State> {
   };
 
   render() {
-    const { keywordsColor, keywordData, numberOfKeywordsToDisplay, loading, errorLoading } = this.state;
+    const { keywordData, numberOfKeywordsToDisplay, loading, errorLoading } = this.state;
+    const { firstColor, secondColor } = this.props;
 
     // Translation keys
     const informationKeywordKey = 'debate.semanticAnalysis.informationKeyword';
@@ -147,12 +169,13 @@ class SemanticAnalysis extends Component<Props, State> {
         {/** WordCloud section */}
         <Col xs={12} md={8} className="no-padding lg-wordcloud-padding margin-s">
           <ResponsiveWordCloud
-            keywordsColor={keywordsColor}
+            keywordsColor={firstColor}
+            keywordsColorActive={secondColor}
+            keywords={fakeData.keywords}
             numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
             onWordClick={this.onKeywordClickHandler}
             onMouseOverWord={this.onKeywordOverHandler}
             onMouseOutWord={this.onKeywordOutHandler}
-            keywords={fakeData.keywords}
           />
         </Col>
 
@@ -170,9 +193,10 @@ class SemanticAnalysis extends Component<Props, State> {
             <Title level={2}>{numberKeywordTitle}</Title>
 
             <ToolbarSlider
+              color={fullRgbToHex(firstColor)}
+              defaultValue={this.NUM_WORDS_DEFAULT}
               maxValue={fakeData.keywords.length}
               minValue={this.MIN_WORDS}
-              defaultValue={this.NUM_WORDS_DEFAULT}
               onSliderChange={this.onNumberOfKeywordSliderChangeHandler}
             />
           </Col>

@@ -83,7 +83,12 @@ class WordCloud extends Component<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    if (this.props.keywordsColor !== prevProps.keywordsColor) this.forceUpdate();
+    if (
+      this.props.keywordsColor !== prevProps.keywordsColor ||
+      this.props.keywordsColorActive !== prevProps.keywordsColorActive
+    ) {
+      this.forceUpdate();
+    }
   }
 
   render() {
