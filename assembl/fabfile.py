@@ -2849,7 +2849,7 @@ def create_first_admin_user():
     "Create a user with admin rights, email given in env. as first_admin_email"
     email = env.get("first_admin_email", None)
     assert email, "Please set the first_admin_email in the .rc environment"
-    venvcmd("assembl-add-user -m %s -u admin -n Admin -p admin --bypass-password %s" % (
+    venvcmd("assembl-add-user -m %s -u admin -n Admin -p admin --send-password-change %s" % (
         email, env.ini_file))
 
 
