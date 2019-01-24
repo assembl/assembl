@@ -208,6 +208,12 @@ exports[`manageErrorAndLoading HOC should display a loader if data are loading a
 </div>
 `;
 
+exports[`manageErrorAndLoading HOC should render an error component if data.error or error is not null/undefined and type is watson 1`] = `
+<div>
+  My dummy component
+</div>
+`;
+
 exports[`manageErrorAndLoading HOC should render the component if everything is OK (use data prop) 1`] = `
 <div>
   My dummy component

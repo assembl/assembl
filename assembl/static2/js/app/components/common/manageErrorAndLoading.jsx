@@ -8,9 +8,12 @@
 */
 import * as React from 'react';
 import Loader, { type Props as LoaderProps } from './loader';
+import WatsonLoader, { LOADER_TYPE as LOADER_TYPE_WATSON } from './loader/loader';
 
 type Props = {
-  displayLoader: boolean
+  displayLoader: boolean,
+  /** Optional type */
+  loaderType?: string
 } & LoaderProps;
 
 type WrappedProps = {
@@ -19,24 +22,50 @@ type WrappedProps = {
   loading?: boolean
 };
 
+// Takes the type and return the right loader for error and loading
+const switchLoaderToShow = (loaderType?: string, propsToPass: Props) => {
+  const type = loaderType || '';
+  switch (type) {
+  case 'watson': {
+    return {
+      ERROR: () => <WatsonLoader type={LOADER_TYPE_WATSON.ERROR} />,
+      LOADING: () => <WatsonLoader type={LOADER_TYPE_WATSON.LOADING} />
+    };
+  }
+  default: {
+    return {
+      ERROR: () => {
+        throw new Error('GraphQL error');
+      },
+      LOADING: () => <Loader {...propsToPass} />
+    };
+  }
+  }
+};
+
 const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.ComponentType<any>) => (wrappedProps: WrappedProps) => {
   const { data, error, loading } = wrappedProps;
+  const { loaderType } = props;
+
+  const loaderToShow = switchLoaderToShow(loaderType, props);
+
+  // ERROR
   if (error || (data && data.error)) {
     const graphqlError = error || data.error;
     if (graphqlError) {
-      throw new Error(graphqlError.message);
+      loaderToShow.ERROR();
     }
   }
-
+  // LOADING
   if (loading || (data && data.loading)) {
-    if (props.displayLoader) {
-      return <Loader {...props} />;
-    }
-
-    return null;
+    return props.displayLoader ? loaderToShow.LOADING() : null;
   }
-
+  // WRAPPED COMPONENT
   return <WrappedComponent {...wrappedProps} />;
+};
+
+manageErrorAndLoading.defaultProps = {
+  loaderType: 'default'
 };
 
 export default manageErrorAndLoading;
