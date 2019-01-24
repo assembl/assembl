@@ -2,6 +2,8 @@ _extends: base_env.yaml
 ini_files: production.ini no_sentry.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
 DEFAULT:
   db_user: assembl_user
+  # temporary
+  sentry_host:
 hosts: localhost
 _internal:
   webmaster_user:
@@ -40,3 +42,4 @@ logger_sqlalchemy:
 public_port: 80
 accept_secure_connection: false
 require_secure_connection: false
+piwik_host:

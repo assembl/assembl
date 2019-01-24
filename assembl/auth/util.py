@@ -382,13 +382,15 @@ def maybe_auto_subscribe(user, discussion, check_authorization=True):
 
 def _make_fake_request(discussion):
     from pyramid.scripting import _make_request, prepare
-    request = _make_request('/debate/' + discussion.slug)
-    request.matchdict = {'discussion_slug': discussion.slug}
+    request = None
+    if discussion:
+        request = _make_request('/debate/' + discussion.slug)
+        request.matchdict = {'discussion_slug': discussion.slug}
     r = prepare(request)
-    return request, r['closer']
+    return r['request'], r['closer']
 
 
-def add_user(name, email, password, role, force=False, username=None,
+def add_user(name, email, password=None, role=R_SYSADMIN, force=False, username=None,
              localrole=None, discussion=None, change_old_password=True,
              send_password_change=False, resend_if_not_logged_in=False,
              text_message=None, html_message=None, sender_name=None,
@@ -518,7 +520,7 @@ def add_user(name, email, password, role, force=False, username=None,
         from assembl.views.auth.views import send_change_password_email
         from assembl.models import Discussion
         closer = None
-        request = request or get_current_request() or _make_fake_request(discussion)
+        request = request or get_current_request()
         if not request:
             request, closer = _make_fake_request(discussion)
 

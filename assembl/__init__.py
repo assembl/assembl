@@ -96,12 +96,6 @@ def main(global_config, **settings):
             callback=authentication_callback)
         config.set_authentication_policy(auth_policy)
         config.set_authorization_policy(ACLAuthorizationPolicy())
-    # ensure default roles and permissions at startup
-    if not settings.get('in_migration', False):
-        from .lib.migration import bootstrap_db, bootstrap_db_data
-        db = bootstrap_db(settings['config_uri'])
-        bootstrap_db_data(db, settings['config_uri'] != "testing.ini")
-
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('static2', 'static2', cache_max_age=3600)
     config.include('.graphql')  # This MUST be above views import
@@ -122,6 +116,13 @@ def main(global_config, **settings):
     config.include('.view_def')
 
     wsgi_app = config.make_wsgi_app()
+
+    # ensure default roles and permissions at startup
+    if not settings.get('in_migration', False):
+        from .lib.migration import bootstrap_db, bootstrap_db_data
+        db = bootstrap_db(settings['config_uri'])
+        bootstrap_db_data(db, settings['config_uri'] != "testing.ini")
+
     if asbool(settings.get('sqltap', False)):
         import sqltap.wsgi
         wsgi_app = sqltap.wsgi.SQLTapMiddleware(wsgi_app)
