@@ -61,12 +61,14 @@
   }
 
   .nav-tabs.nav-justified {
+    display: table;
+    width: 100%;
     position: sticky;
     top: 0;
 
     & > li {
-      display: inline-block;
-      width: 33%;
+      display: table-cell;
+      width: auto;
 
       & > a {
         border-radius: 0;
@@ -109,17 +111,6 @@
           margin-left: 17px;
           margin-right: 17px;
         }
-      }
-    }
-  }
-}
-
-@media screen and (min-width: $screen-sm-min) {
-  .announcement-menu {
-    .nav-tabs.nav-justified {
-      & > li {
-        display: table-cell;
-        width: 1%;
       }
     }
   }
