@@ -355,6 +355,86 @@ def generate_graphql_documentation(c):
 
 
 @task()
+def install_bluenove_actionable(context):
+    """Install the bluenove_actionable app."""
+    if not exists(context, "%s/bluenove-actionable/" % context.config.projectpath):
+        with context.cd(context.config.projectpath):
+            context.run('git clone git@github.com:bluenove/bluenove-actionable.git')
+
+        with context.cd(join(context.config.projectpath, '..', 'bluenove-actionable')):
+            context.run('mkdir -p data && chmod o+rwx data')
+            context.run('docker-compose build', warn=True)
+
+
+def get_robot_machine(c):
+    """Returns the configured robot machine"""
+    machines = c.get('machines', '')
+    if machines:
+        robot = machines.split('/')[0]
+        robot_data = robot.split(',')
+        if len(robot_data) != 3:
+            print ("The data of the user machine are wrong! %s" % robot)
+            return None
+
+        return {
+            'identifier': robot_data[0].strip(),
+            'name': robot_data[1].strip(),
+            'password': robot_data[2].strip()
+        }
+    print "No user machine found!"
+    return None
+
+
+@task()
+def start_bluenove_actionable(c):
+    """Starts Bigdatext algorithm."""
+    path = join(c.projectpath, '..', 'bluenove-actionable')
+    robot = get_robot_machine(c)
+    if exists(c, path) and robot:
+        url_instance = c.public_hostname
+        if url_instance == 'localhost':
+            ip = c.run("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1")
+            url_instance = 'http://{}:{}'.format(ip, c.public_port)
+            with c.cd(path):
+                c.run('docker-compose up -d', warn=True, env={'URL_INSTANCE': url_instance, 'ROBOT_IDENTIFIER': robot.get('identifier'), 'ROBOT_PASSWORD': robot.get('password')})
+
+
+@task()
+def stop_bluenove_actionable(c):
+    """Stops Bigdatatext algorithm."""
+    path = join(c.projectpath, '..', 'bluenove-actionable')
+    if exists(c, path):
+        with c.cd(path):
+            c.run('docker-compose down', warn=True)
+
+
+@task()
+def restart_bluenove_actionable(c):
+    """Restart Bigdatext algorithm."""
+    stop_bluenove_actionable(c)
+    start_bluenove_actionable(c)
+
+
+@task()
+def update_bluenove_actionable(c):
+    """Update bluenove_actionable git repository and rebuilding tha app."""
+    path = join(c.projectpath, '..', 'bluenove-actionable')
+    if exists(path):
+        with c.cd(path):
+            c.run('git pull')
+            c.run('docker system prune --volumes -f', warn=True)
+            c.run('mkdir -p data && chmod o+rwx data')
+            c.run('docker-compose build --no-cache', warn=True)
+            restart_bluenove_actionable(c)
+
+
+def is_integration_env(c):
+    if c.get('TRAVIS_COMMIT'):
+        return True
+    return False
+
+
+@task()
 def updatemaincode(c):
     """Update code and/or switch branch"""
     with c.cd(c.projectpath):
