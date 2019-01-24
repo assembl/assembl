@@ -1,21 +1,22 @@
 import os
 import re
-
+from os.path import join, normpath
 from .common import venv, task
+from fabric.contrib.files import exists
 
-def get_node_base_path():
+def get_node_base_path(c):
     return normpath(join(
-        env.projectpath, 'assembl', 'static', 'js'))
+        c.projectpath, 'assembl', 'static', 'js'))
 
 
-def get_new_node_base_path():
+def get_new_node_base_path(c):
     return normpath(join(
-        env.projectpath, 'assembl', 'static2'))
+        c.projectpath, 'assembl', 'static2'))
 
 
-def get_node_modules_path():
+def get_node_modules_path(c):
     return normpath(join(
-        get_node_base_path(), 'node_modules'))
+        get_node_base_path(c), 'node_modules'))
 
 
 def get_new_node_modules_path():
@@ -24,7 +25,7 @@ def get_new_node_modules_path():
 
 
 def update_bower(c):
-    with c.cd(get_node_base_path()):
+    with c.cd(get_node_base_path(c)):
         with venv(c):
             c.run('npm update bower po2json')
 
@@ -80,10 +81,44 @@ def update_node(c, force_reinstall=False):
             c.run("rm -f venv/bin/npm") # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
             c.run("nodeenv --node=10.13.0 --npm=6.4.1 --python-virtualenv assembl/static/js")
         upgrade_yarn()
-        with c.cd(get_node_base_path()):
+        with c.cd(get_node_base_path(c)):
             with venv(c):
                 c.run("npm install reinstall -g")
 
         update_npm_requirement(force_reinstall=True)
     else:
         print "Node version OK"
+
+
+@task()
+def update_npm_requirements(c, force_reinstall=False):
+    """Normally not called manually"""
+    with c.cd(get_node_base_path(c)):
+        if force_reinstall:
+            with venv(c):
+                c.run('reinstall')
+        else:
+            with venv(c):
+                c.run('npm update')
+
+    # if c.config._internal.mac:
+    #     yarn_path = '/usr/local/bin/yarn'
+    # else:
+    #     yarn_path = '/usr/bin/yarn'
+    yarn_path = '/usr/local/bin/yarn'
+    static2_path = get_new_node_base_path(c)
+    with c.cd(static2_path):
+        if exists(yarn_path):
+            if force_reinstall:
+                print('Removing node_modules directory...')
+                with venv(c):
+                    c.run('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
+            with venv(c):
+                c.run(yarn_path)
+        else:
+            if force_reinstall:
+                with venv(c):
+                    c.run('reinstall')
+            else:
+                with venv(c):
+                    c.run('npm update')
