@@ -13,6 +13,7 @@ import SemanticAnalysisForDiscussionQuery from '../../../graphql/SemanticAnalysi
 import manageErrorAndLoading from '../../../components/common/manageErrorAndLoading';
 import manageColor from '../../../components/common/manageColor';
 import SemanticAnalysis from '../semanticAnalysis';
+import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 
 type Props = SemanticAnalysisForDiscussionQuery;
 
@@ -27,7 +28,7 @@ class SemanticAnalysisForDiscussion extends Component<Props> {
       topKeywordsCount > 0 ? (
         <SemanticAnalysis semanticAnalysisData={semanticAnalysisForDiscussionData} />
       ) : (
-        <h1>display icon not enough data</h1>
+        <Loader type={LOADER_TYPE.NO_DATA} />
       );
 
     return (

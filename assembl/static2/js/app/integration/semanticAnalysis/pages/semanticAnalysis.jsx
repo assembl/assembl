@@ -7,7 +7,6 @@ import { I18n } from 'react-redux-i18n';
 import manageColor from '../../../components/common/manageColor';
 
 // Component imports
-import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
 import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
 import ResponsiveWordCloud from '../../../components/common/wordCloud/responsiveWordCloud';
@@ -32,9 +31,7 @@ type Props = {
 export type State = {
   keywordSelected: boolean,
   keywordData: Keyword,
-  numberOfKeywordsToDisplay: number,
-  loading: boolean,
-  errorLoading: boolean
+  numberOfKeywordsToDisplay: number
 };
 
 const rgbToHex = (color) => {
@@ -63,9 +60,7 @@ export class SemanticAnalysis extends Component<Props, State> {
       count: 0,
       relevance: 0
     },
-    numberOfKeywordsToDisplay: this.NUM_WORDS_DEFAULT,
-    loading: false,
-    errorLoading: false
+    numberOfKeywordsToDisplay: this.NUM_WORDS_DEFAULT
   };
 
   NUM_WORDS_DEFAULT = 20;
@@ -106,7 +101,7 @@ export class SemanticAnalysis extends Component<Props, State> {
   };
 
   render() {
-    const { keywordData, numberOfKeywordsToDisplay, loading, errorLoading } = this.state;
+    const { keywordData, numberOfKeywordsToDisplay } = this.state;
     const { firstColor, secondColor } = this.props;
 
     // Translation keys
@@ -151,14 +146,7 @@ export class SemanticAnalysis extends Component<Props, State> {
       </div>
     );
 
-    return loading || errorLoading ? (
-      <div className="semantic-analysis">
-        {/** Loading section */}
-        <Col xs={12} className="no-padding">
-          <Loader type={errorLoading ? LOADER_TYPE.ERROR : LOADER_TYPE.LOADING} />
-        </Col>
-      </div>
-    ) : (
+    return (
       <div className="semantic-analysis">
         {/** Description section */}
         <Col xs={12} className="no-padding">
