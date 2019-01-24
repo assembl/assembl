@@ -19,7 +19,7 @@ const loaderErrorProps: LoaderProps = {
 };
 
 const playground = {
-  type: [LOADER_TYPE.LOADING, LOADER_TYPE.ERROR]
+  type: [LOADER_TYPE.LOADING, LOADER_TYPE.ERROR, LOADER_TYPE.NO_DATA]
 };
 
 storiesOf('Loader', module)

@@ -6,11 +6,12 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
-import Loader, { LOADER_TYPE_CONTENT, LOADER_TYPE } from './loader';
+import Loader, { LOADER_TYPE } from './loader';
 import type { Props as LoaderProps } from './loader';
 import { defaultLoaderProps } from './loader.stories';
 import LoadingIcon from '../icons/loadingIcon/loadingIcon';
 import ErrorIcon from '../icons/errorIcon/errorIcon';
+import NoDataIcon from '../icons/noDataIcon/noDataIcon';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -35,8 +36,7 @@ describe('<Loader /> - with shallow', () => {
     });
 
     it('should render a loading description', () => {
-      const { description } = LOADER_TYPE_CONTENT.LOADING;
-      expect(wrapper.find('p').text()).toEqual(description);
+      expect(wrapper.find('p')).toHaveLength(1);
     });
   });
 
@@ -54,8 +54,25 @@ describe('<Loader /> - with shallow', () => {
     });
 
     it('should render a loading description', () => {
-      const { description } = LOADER_TYPE_CONTENT.ERROR;
-      expect(wrapper.find('p').text()).toEqual(description);
+      expect(wrapper.find('p')).toHaveLength(1);
+    });
+  });
+
+  describe('when is not enough data', () => {
+    beforeEach(() => {
+      loaderProps = {
+        ...defaultLoaderProps,
+        type: LOADER_TYPE.NO_DATA
+      };
+      wrapper = shallow(<Loader {...loaderProps} />);
+    });
+
+    it('should render an error icon', () => {
+      expect(wrapper.find(NoDataIcon)).toHaveLength(1);
+    });
+
+    it('should render a loading description', () => {
+      expect(wrapper.find('p')).toHaveLength(1);
     });
   });
 });

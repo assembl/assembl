@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import './errorIcon.scss';
 
 const ErrorIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="126" height="126" viewBox="0 0 126 126" className="icon error">

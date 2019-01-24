@@ -332,7 +332,8 @@ const Translations = {
       },
       loader: {
         error: "Il y a une erreur de chargement de l’analyse",
-        loading: "Chargement en cours..."
+        loading: "Chargement en cours...",
+        "no-data": "Il n'y a pas assez de contenu à analyser"
       },
       wordCountInformation: {
         msg: "Le résultat de l'analyse sémantique ci-dessous provient de l'analyse de %{words} dans la thématique.",
@@ -1328,7 +1329,8 @@ const Translations = {
       },
       loader: {
         error: "There is an error loading the analysis",
-        loading: "Loading..."
+        loading: "Loading...",
+        "no-data": "Not enough data to analyse"
       },
       wordCountInformation: {
         msg: "TO BE DEFINED",

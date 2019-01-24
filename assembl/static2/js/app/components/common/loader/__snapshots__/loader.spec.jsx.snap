@@ -30,7 +30,7 @@ exports[`Storyshots Loader default 1`] = `
       <p
         className="description center"
       >
-        Loading...
+        Chargement en cours...
       </p>
     </div>
   </div>
@@ -347,7 +347,7 @@ exports[`Storyshots Loader error 1`] = `
       <p
         className="description center"
       >
-        There is an error loading the analysis
+        Il y a une erreur de chargement de l’analyse
       </p>
     </div>
   </div>
@@ -629,7 +629,7 @@ exports[`Storyshots Loader playground 1`] = `
       <p
         className="description center"
       >
-        Loading...
+        Chargement en cours...
       </p>
     </div>
   </div>
