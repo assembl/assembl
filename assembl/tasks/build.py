@@ -101,11 +101,10 @@ def update_npm_requirements(c, force_reinstall=False):
             with venv(c):
                 c.run('npm update')
 
-    # if c.config._internal.mac:
-    #     yarn_path = '/usr/local/bin/yarn'
-    # else:
-    #     yarn_path = '/usr/bin/yarn'
-    yarn_path = '/usr/local/bin/yarn'
+    if c.config._internal.mac:
+        yarn_path = '/usr/local/bin/yarn'
+    else:
+        yarn_path = '/usr/bin/yarn'
     static2_path = get_new_node_base_path(c)
     with c.cd(static2_path):
         if exists(yarn_path):
