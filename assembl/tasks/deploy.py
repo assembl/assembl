@@ -2,6 +2,7 @@ import os
 import os.path
 import re
 from pprint import pprint
+import json
 from time import sleep
 from ConfigParser import RawConfigParser
 from os import getcwd
@@ -21,6 +22,8 @@ def val_to_ini(val):
         return ''
     if isinstance(val, bool):
         return str(val).lower()
+    if isinstance(val, (dict, list)):
+        return json.dumps(val)
     return val
 
 
@@ -193,12 +196,14 @@ def fill_template(c, template, output=None, default_dir=None):
         if not default_dir:
             default_dir = os.path.join(c.config.code_root, 'assembl', 'templates', 'system')
         template = os.path.join(default_dir, template)
+    config = dict(c.config.DEFAULT)
+    config.update(c.config)
     if not os.path.exists(template):
         raise RuntimeError("Missing template")
-    c.config['here'] = c.config.get('here', os.getcwd())
+    config['here'] = config.get('here', os.getcwd())
     if template.endswith('.tmpl'):
         with open(template) as tmpl:
-            result = tmpl.read() % c.config
+            result = tmpl.read() % config
     elif template.endswith('.jinja2'):
         from jinja2 import Environment
         env = Environment()
@@ -207,17 +212,18 @@ def fill_template(c, template, output=None, default_dir=None):
         # Boolean overloading
         # Jinja should interpret 'false' as False but no:
         # https://github.com/ansible/ansible/issues/14983
-        for (k, v) in c.config.items():
-            if isinstance(v, dict):
+        for (k, v) in config.items():
+            if getattr(v, 'update', None):
+                # dict or DataProxy
                 continue
             if str(v).lower() == 'false':
-                c.config[k] = False
+                config[k] = False
             if '%(' in str(v):
                 try:
-                    c.config[k] = v % c.config
+                    config[k] = v % config
                 except KeyError:
                     pass
-        result = tmpl.render(c.config)
+        result = tmpl.render(config)
     else:
         raise RuntimeError("Unknown template type")
     if hasattr(output, 'write'):
