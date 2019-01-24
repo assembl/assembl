@@ -1,5 +1,8 @@
 import os.path
 from contextlib import nested
+import base64
+import json
+
 from invoke import task as base_task
 
 
@@ -59,6 +62,19 @@ def setup_ctx(c):
                 target, config_prefix, project_prefix))
         target = data.get('_extends', None)
         current = rec_update(data, current)
+
+    aws_secret_id = current.get('aws_secrets_id', None)
+    if aws_secret_id:
+        import boto3
+        sm = boto3.client('secretsmanager')
+        response = sm.get_secret_value(SecretId=aws_secret_id)
+        if 'SecretString' in response:
+            info = response['SecretString']
+        else:
+            info = base64.b64decode(response['SecretBinary'])
+        info = json.loads(info)
+        current = rec_update(current, info)
+
     if current is not c.config._project:
         c.config._project = current
     c.config.merge()
