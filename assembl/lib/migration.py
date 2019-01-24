@@ -5,6 +5,7 @@ from __future__ import absolute_import
 import sys
 from contextlib import contextmanager
 
+import simplejson as json
 from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.environment import EnvironmentContext
@@ -12,6 +13,7 @@ from alembic.script import ScriptDirectory
 
 from ..lib.sqla import (
     get_metadata, get_session_maker, mark_changed)
+from ..lib import config
 
 
 def has_tables(db):
@@ -110,6 +112,19 @@ def bootstrap_db_data(db, mark=True):
                     User):
             cls.populate_db(session)
         ensure_functions(session)
+        admin_users = config.get('admin_users', None)
+        if admin_users:
+            from assembl.auth.util import add_user
+            admin_users = json.loads(admin_users)
+            for user in admin_users:
+                name = user.pop('name', None)
+                email = user.pop('email', None)
+                if not (name and email):
+                    continue
+                try:
+                    add_user(name, email, **user)
+                except AssertionError as e:
+                    print e
         # if mark:
         mark_changed(session)
 
