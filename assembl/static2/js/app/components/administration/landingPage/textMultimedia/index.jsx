@@ -15,7 +15,9 @@ import LoadSaveReinitializeForm from '../../../form/LoadSaveReinitializeForm';
 import AdminForm from '../../../form/adminForm';
 import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../../form/multilingualRichTextFieldAdapter';
+import RadioButtonsFieldAdapter from '../../../form/radioButtonsFieldAdapter';
 import SectionTitle from '../../../administration/sectionTitle';
+import Layouts from './layouts';
 import { compareEditorState } from '../../../form/utils';
 
 type Props = {
@@ -26,7 +28,7 @@ type Props = {
 
 const loading = <Loader />;
 
-// TODO remove all $FlowFixMe
+// TODO remove all $FlowFixMe when the load.js and the save.js are done
 
 const TextMultimedia = ({ client, lang, editLocale }: Props) => (
   <LoadSaveReinitializeForm
@@ -56,6 +58,11 @@ const TextMultimedia = ({ client, lang, editLocale }: Props) => (
                 component={MultilingualTextFieldAdapter}
                 label={I18n.t('administration.textMultimediaTitle')}
               />
+              <div className="dark-title-6">Agencement texte-média-image</div>
+              <div className="text-multimedia-layout margin-m">
+                <Layouts />
+                <Field required name="layoutOptions" component={RadioButtonsFieldAdapter} />
+              </div>
               <Field
                 required
                 editLocale={editLocale}

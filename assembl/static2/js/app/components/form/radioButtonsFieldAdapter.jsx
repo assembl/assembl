@@ -17,15 +17,15 @@ type Props = {
   }
 } & FieldRenderProps;
 
-const toggleIsChecked = option => ({
+const toggleIsChecked = (option, selectedOption) => ({
   ...option,
-  isChecked: !option.isChecked
+  isChecked: option === selectedOption
 });
 
 export default class RadioButtonsFieldAdapter extends React.Component<Props> {
-  onRadioButtonChange = () => {
+  onRadioButtonChange = (selectedOption: boolean) => {
     const { input } = this.props;
-    const newValue = input.value && input.value.map(option => toggleIsChecked(option));
+    const newValue = input.value && input.value.map(option => toggleIsChecked(option, selectedOption));
     if (newValue) {
       input.onChange(newValue);
     }
@@ -37,7 +37,12 @@ export default class RadioButtonsFieldAdapter extends React.Component<Props> {
       <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
         {value &&
           value.map((option, index) => (
-            <Radio key={`radio-${index}`} inline checked={option.isChecked} onChange={() => this.onRadioButtonChange()}>
+            <Radio
+              key={`radio-${index}`}
+              className={option.isChecked ? 'active' : ''}
+              checked={option.isChecked}
+              onChange={() => this.onRadioButtonChange(option)}
+            >
               {option.label}
             </Radio>
           ))}

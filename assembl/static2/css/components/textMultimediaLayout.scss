@@ -1,0 +1,154 @@
+.text-multimedia-layout {
+  text-align: center;
+
+  label {
+    width: 160px;
+    height: 90px;
+    margin: 0 0 5px -15px;
+    text-align: center;
+  }
+
+  input {
+    &[type='radio'] {
+      visibility: hidden;
+    }
+  }
+
+  .radio {
+    border: 1px solid $grey1;
+    width: 160px;
+    height: 90px;
+    display: inline-block;
+    margin: 10px;
+  }
+
+  .active.radio {
+    border: 1px solid $first-color;
+  }
+
+  .layouts {
+    position: absolute;
+    display: flex;
+    width: 400px;
+    flex-wrap: wrap;
+    padding: 10px 0 0 30px;
+  }
+
+  .layout {
+    height: 45px;
+    flex-basis: 130px;
+    background-color: $white;
+
+    &:nth-child(1) {
+      margin-left: 15px;
+      margin-top: 30px;
+
+      .layout-child {
+        width: 100%;
+      }
+    }
+
+    &:nth-child(2) {
+      margin-left: 50px;
+      margin-top: 30px;
+
+      .layout-child:nth-child(1) {
+        width: 30%;
+        float: left;
+      }
+
+      .layout-child:nth-child(2) {
+        width: 60%;
+        float: right;
+      }
+    }
+
+    &:nth-child(3) {
+      margin-left: 15px;
+      margin-top: 65px;
+
+      .layout-child:nth-child(1) {
+        width: 45%;
+        float: left;
+      }
+
+      .layout-child:nth-child(2) {
+        width: 45%;
+        float: right;
+      }
+    }
+
+    &:nth-child(4) {
+      margin-left: 50px;
+      margin-top: 65px;
+
+      .layout-child:nth-child(1) {
+        width: 45%;
+        float: left;
+      }
+
+      .layout-child:nth-child(2) {
+        width: 22.5%;
+      }
+
+      .layout-child:nth-child(3) {
+        width: 22.5%;
+        float: right;
+      }
+    }
+
+    &:nth-child(5) {
+      margin-left: 15px;
+      margin-top: 65px;
+
+      .layout-child:nth-child(1) {
+        width: 20%;
+        float: left;
+      }
+
+      .layout-child:nth-child(2) {
+        width: 20%;
+        float: left;
+        margin-left: 9px;
+      }
+
+      .layout-child:nth-child(3) {
+        width: 20%;
+        float: left;
+        margin-left: 9px;
+      }
+
+      .layout-child:nth-child(4) {
+        width: 20%;
+        float: right;
+      }
+    }
+
+    &:nth-child(6) {
+      margin-left: 50px;
+      margin-top: 65px;
+
+      .layout-child:nth-child(1) {
+        width: 22.5%;
+        float: left;
+      }
+
+      .layout-child:nth-child(2) {
+        width: 22.5%;
+      }
+
+      .layout-child:nth-child(3) {
+        width: 45%;
+        float: right;
+      }
+    }
+
+    .layout-child {
+      display: inline-block;
+      height: 45px;
+      background-color: $first-color-light;
+      padding-top: 15px;
+      font-size: 10px;
+    }
+  }
+}
