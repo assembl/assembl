@@ -1,7 +1,10 @@
 // @flow
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
+
+// HOC imports
+import manageColor from '../../components/common/manageColor';
 
 // Component imports
 import Loader, { LOADER_TYPE } from '../../components/common/loader/loader';
@@ -19,10 +22,14 @@ import type { Keyword } from './dataType'; // TODO: move somewhere else
 
 import fakeData from './data.json'; // TODO: to delete
 
-type Props = {};
+type Props = {
+  /** Optional first color */
+  firstColor: string,
+  /** Optional second color */
+  secondColor: string
+};
 
 export type State = {
-  keywordsColor: string,
   keywordSelected: boolean,
   keywordData: Keyword,
   numberOfKeywordsToDisplay: number,
@@ -30,9 +37,26 @@ export type State = {
   errorLoading: boolean
 };
 
-class SemanticAnalysis extends Component<Props, State> {
+const rgbToHex = (color) => {
+  let hex = Number(color).toString(16);
+  if (hex.length < 2) {
+    hex = `0${hex}`;
+  }
+  return hex;
+};
+
+const fullRgbToHex = (color) => {
+  const rgbArray = color.substring(4, color.length - 1).split(', ');
+  return `#${rgbToHex(rgbArray[0])}${rgbToHex(rgbArray[1])}${rgbToHex(rgbArray[2])}`;
+};
+
+export class SemanticAnalysis extends Component<Props, State> {
+  static defaultProps = {
+    firstColor: 'rgb(0, 0, 0)',
+    secondColor: 'rgb(0, 0, 0)'
+  };
+
   state = {
-    keywordsColor: '84, 4, 215', // #BLUE_VIOLET
     keywordSelected: false,
     keywordData: {
       text: 'Pas de mot sélectionné',
@@ -82,7 +106,8 @@ class SemanticAnalysis extends Component<Props, State> {
   };
 
   render() {
-    const { keywordsColor, keywordData, numberOfKeywordsToDisplay, loading, errorLoading } = this.state;
+    const { keywordData, numberOfKeywordsToDisplay, loading, errorLoading } = this.state;
+    const { firstColor, secondColor } = this.props;
 
     // Translation keys
     const informationKeywordKey = 'debate.semanticAnalysis.informationKeyword';
@@ -97,16 +122,16 @@ class SemanticAnalysis extends Component<Props, State> {
     const sentimentAnalysisDefinitionKey = 'debate.semanticAnalysis.sentimentAnalysisDefinition';
 
     // Title contents
-    const informationKeywordTitle: string = I18n.t(informationKeywordKey);
-    const keywordCloudTitle: string = I18n.t(keywordCloudKey);
-    const keywordCloudDefinition: string = I18n.t(keywordCloudDefinitionKey);
-    const numberKeywordTitle: string = I18n.t(numberKeywordKey);
-    const occurenceTitle: string = I18n.t(occurenceKey);
-    const occurenceDefinition: string = I18n.t(occurenceDefinitionKey);
-    const relevanceTitle: string = I18n.t(relevanceKey);
-    const relevanceDefinition: string = I18n.t(relevanceDefinitionKey);
-    const sentimentAnalysisTitle: string = I18n.t(sentimentAnalysisKey);
-    const sentimentAnalysisDefinition: string = I18n.t(sentimentAnalysisDefinitionKey);
+    const informationKeywordTitle = I18n.t(informationKeywordKey);
+    const keywordCloudTitle = I18n.t(keywordCloudKey);
+    const keywordCloudDefinition = I18n.t(keywordCloudDefinitionKey);
+    const numberKeywordTitle = I18n.t(numberKeywordKey);
+    const occurenceTitle = I18n.t(occurenceKey);
+    const occurenceDefinition = I18n.t(occurenceDefinitionKey);
+    const relevanceTitle = I18n.t(relevanceKey);
+    const relevanceDefinition = I18n.t(relevanceDefinitionKey);
+    const sentimentAnalysisTitle = I18n.t(sentimentAnalysisKey);
+    const sentimentAnalysisDefinition = I18n.t(sentimentAnalysisDefinitionKey);
 
     const sentimentScore = (fakeData.sentiment.document.score + 1) / 2;
     const informationKeywordTooltip = (
@@ -127,14 +152,14 @@ class SemanticAnalysis extends Component<Props, State> {
     );
 
     return loading || errorLoading ? (
-      <Fragment>
+      <div className="semantic-analysis">
         {/** Loading section */}
         <Col xs={12} className="no-padding">
           <Loader type={errorLoading ? LOADER_TYPE.ERROR : LOADER_TYPE.LOADING} />
         </Col>
-      </Fragment>
+      </div>
     ) : (
-      <Fragment>
+      <div className="semantic-analysis">
         {/** Description section */}
         <Col xs={12} className="no-padding">
           <Title level={1}>{keywordCloudTitle}</Title>
@@ -147,12 +172,13 @@ class SemanticAnalysis extends Component<Props, State> {
         {/** WordCloud section */}
         <Col xs={12} md={8} className="no-padding lg-wordcloud-padding margin-s">
           <ResponsiveWordCloud
-            keywordsColor={keywordsColor}
+            keywordsColor={firstColor}
+            keywordsColorActive={secondColor}
+            keywords={fakeData.keywords}
             numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
             onWordClick={this.onKeywordClickHandler}
             onMouseOverWord={this.onKeywordOverHandler}
             onMouseOutWord={this.onKeywordOutHandler}
-            keywords={fakeData.keywords}
           />
         </Col>
 
@@ -170,9 +196,10 @@ class SemanticAnalysis extends Component<Props, State> {
             <Title level={2}>{numberKeywordTitle}</Title>
 
             <ToolbarSlider
+              color={fullRgbToHex(firstColor)}
+              defaultValue={this.NUM_WORDS_DEFAULT}
               maxValue={fakeData.keywords.length}
               minValue={this.MIN_WORDS}
-              defaultValue={this.NUM_WORDS_DEFAULT}
               onSliderChange={this.onNumberOfKeywordSliderChangeHandler}
             />
           </Col>
@@ -185,9 +212,9 @@ class SemanticAnalysis extends Component<Props, State> {
             <SentimentBar value={sentimentScore} />
           </Col>
         </Col>
-      </Fragment>
+      </div>
     );
   }
 }
 
-export default SemanticAnalysis;
+export default manageColor(SemanticAnalysis);
