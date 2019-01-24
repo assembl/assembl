@@ -961,6 +961,17 @@ class User(AgentProfile):
             return verify_password(password, self.password)
         return False
 
+    def check_old_passwords(self, password):
+        if self.old_passwords:
+            from ..auth.password import verify_password
+            for old_password in self.old_passwords:
+                verified = verify_password(password, old_password.password)
+                if verified:
+                    return True
+                else:
+                    continue
+            return False
+
     def get_preferred_email(self, anonymous=False):
         if self.preferred_email and not anonymous:
             return self.preferred_email

@@ -434,6 +434,11 @@ def do_password_change(request):
             error = localizer.translate(_(
                 "This link has been used. Do you want us to send another?"))
         raise JSONError(error, validity)
+
+    # token is valid, check against old passwords
+    if user.check_old_passwords(password1):
+        error = localizer.translate(_("The new password has existed in the last 5 passwords"))
+        raise JSONError(error, Validity.OLD_PASSWORD)
     user.password_p = password1
     user.successful_login()
     headers = remember(request, user.id)

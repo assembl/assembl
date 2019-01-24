@@ -188,10 +188,10 @@ def verify_password_change_token(token, max_age=None):
         if valid != Validity.VALID:
             # Test against older passwords
             for p in user.old_passwords:
-                pwd = p.decode('iso-8859-1') if p else 'empty'
+                pwd = p.password.decode('iso-8859-1') if p else 'empty'
                 data, valid = verify_data_token(token, pwd, max_age)
                 if valid != Validity.BAD_HASH or valid != Validity.EXPIRED:
-                    return data, Validity.OLD_PASSWORD
+                    return user, Validity.OLD_PASSWORD
                 else:
                     continue
         return user, valid
