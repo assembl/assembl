@@ -1,4 +1,6 @@
 .icon {
+  z-index: 50;
+
   &.tooltip {
     .text {
       fill: $first-color;

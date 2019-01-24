@@ -4,7 +4,7 @@
   justify-content: center;
 
   .titleTooltip-container {
-    margin-top: 10px;
+    margin-top: -10px;
     margin-left: 5px;
   }
 }
@@ -29,5 +29,18 @@
 @media screen and (min-width: $screen-sm-min) {
   .titleWithTooltip-container {
     justify-content: left;
+
+    .titleTooltip-container {
+      margin-left: 5px;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .titleWithTooltip-container {
+    .titleTooltip-container {
+      margin-top: 10px;
+      margin-left: 5px;
+    }
   }
 }
