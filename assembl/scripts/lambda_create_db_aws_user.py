@@ -1,6 +1,7 @@
 import pg8000
 import boto3
 import os
+import base64
 import json
 
 
