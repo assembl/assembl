@@ -34,6 +34,23 @@ def participant1_user(request, test_session, discussion):
 
 
 @pytest.fixture(scope="function")
+def participant1_user_with_old_passwords(request, test_session, participant1_user):
+
+    from assembl.models.auth import OldPassword
+    from assembl.auth.password import hash_password
+    o = OldPassword(password=hash_password("oldpassword"), user=participant1_user)
+    test_session.add(o)
+    test_session.flush()
+
+    def fin():
+        print "finalizer participant1_user_with_old_passwords"
+        test_session.delete(o)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return participant1_user
+
+
+@pytest.fixture(scope="function")
 def participant1_username(request, test_session, participant1_user):
     """A username for participant1_user"""
     from assembl.models import Username

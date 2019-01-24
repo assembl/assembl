@@ -311,3 +311,16 @@ def test_change_password_token_local_user_role(test_app, participant1_user, loca
     assert response.status_code == 200
     assert old_password != participant1_user.password
     assert participant1_user.check_password("lolo")
+
+
+def test_change_password_token_old_password(test_app, participant1_user_with_old_passwords):
+
+    token = password_change_token(participant1_user_with_old_passwords)
+    payload = {
+        "token": token,
+        "password1": "oldpassword",
+        "password2": "oldpassword"
+    }
+
+    resp = test_app.post_json('/data/AgentProfile/do_password_change', payload)
+    assert resp.status_code == 520
