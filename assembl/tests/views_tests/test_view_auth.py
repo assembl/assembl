@@ -270,38 +270,44 @@ def test_autologin_override(
         backend=google_identity_provider.name
     ) == urlparse.urlparse(reply.location).path
 
+
 def test_change_password_token(test_app, participant1_user):
     # Set up
     old_password = participant1_user.password
     token = password_change_token(participant1_user)
-    my_json = {"token": token,
-                "password1": "lolo",
-                "password2": "lolo"}
+    my_json = {
+        "token": token,
+        "password1": "lolo",
+        "password2": "lolo"
+    }
 
     # Test token
     user, validity = verify_password_change_token(token)
     assert validity == Validity.VALID
-    
+
     # Test API
     response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
     assert response.status_code == 200
     assert old_password != participant1_user.password
-    assert participant1_user.check_password("lolo") == True
+    assert participant1_user.check_password("lolo")
+
 
 def test_change_password_token_local_user_role(test_app, participant1_user, local_user_role):
     # Set up
     old_password = participant1_user.password
     token = password_change_token(participant1_user)
-    my_json = {"token": token,
-                "password1": "lolo",
-                "password2": "lolo"}
+    my_json = {
+        "token": token,
+        "password1": "lolo",
+        "password2": "lolo"
+    }
 
     # Test token
     user, validity = verify_password_change_token(token)
     assert validity == Validity.VALID
-    
+
     # Test API
     response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
     assert response.status_code == 200
     assert old_password != participant1_user.password
-    assert participant1_user.check_password("lolo") == True
+    assert participant1_user.check_password("lolo")
