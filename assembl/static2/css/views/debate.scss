@@ -227,7 +227,7 @@
   }
 
   .top-post-sticky {
-    position: fixed;
+    position: sticky;
     top: 60px;
     width: 100%;
     z-index: 1000;
