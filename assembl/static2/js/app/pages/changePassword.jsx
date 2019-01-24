@@ -16,7 +16,8 @@ class ChangePassword extends React.Component {
     this.submitForm = this.submitForm.bind(this);
 
     this.state = {
-      token: getAuthorizationToken(this.props.location)
+      token: getAuthorizationToken(this.props.location),
+      disableButton: false
     };
   }
 
@@ -26,6 +27,7 @@ class ChangePassword extends React.Component {
 
   submitForm(e) {
     e.preventDefault();
+    this.setState({ disableButton: true });
     const payload = this.state;
     postChangePassword(payload)
       .then(() => {
@@ -47,6 +49,7 @@ class ChangePassword extends React.Component {
         if (error instanceof Error) {
           if (error.name === 'PasswordMismatchError') {
             msg = I18n.t('login.incorrectPassword');
+            this.setState({ disableButton: false });
             displayAlert('danger', msg, true);
           }
         } else {
@@ -62,6 +65,7 @@ class ChangePassword extends React.Component {
   }
 
   render() {
+    const { disableButton } = this.state;
     return (
       <Grid fluid className="login-grid">
         <Col xs={12} md={6} className="login-container col-centered center">
@@ -100,6 +104,7 @@ class ChangePassword extends React.Component {
                   value={I18n.t('login.changePassword')}
                   className="button-submit button-dark"
                   onClick={this.submitForm}
+                  disabled={disableButton}
                 >
                   <Translate value="login.changePassword" />
                 </Button>
