@@ -52,6 +52,13 @@ const createVariablesForDiscussionPhaseMutation = (phase) => {
   if (phase.endIsBeforeStart) {
     return displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
   }
+  if (phase.start === null || phase.end === null) {
+    return displayAlert('danger', I18n.t('administration.timelineAdmin.startOrEndDateIsEmpty'));
+  }
+  if (phase.titleEntries.length === 0) {
+    return displayAlert('danger', I18n.t('administration.timelineAdmin.titleEntriesIsEmpty'));
+  }
+
   return {
     identifier: phase.identifier,
     start: moment(phase.start, moment.ISO_8601),
