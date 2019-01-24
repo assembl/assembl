@@ -4,10 +4,10 @@ import re
 from pprint import pprint
 from time import sleep
 from ConfigParser import RawConfigParser
-
-from .common import setup_ctx, running_locally, exists, venv, task
-
-
+from os import getcwd
+from .common import setup_ctx, running_locally, exists, venv, task, local_code_root
+from os.path import join
+from getpass import getuser
 @task()
 def print_config(c):
     pprint(c.config.__dict__)
@@ -361,3 +361,123 @@ def updatemaincode(c):
         c.run('git fetch')
         c.run('git checkout %s' % c.gitbranch)
         c.run('git pull %s %s ' % (c.gitrepo, c.gitbranch))
+
+
+@task()
+def update_url_metadata(c):
+    """Update url metadata microservice."""
+    path = join(c.projectpath, '..', 'url_metadata')
+    if exists(path):
+        with c.cd(path):
+            c.run('git pull')
+        with venv_py3(c):
+            c.run('pip install -e ../url_metadata')
+
+
+@task()
+def app_setup(c):
+    """Setup the environment so the appliation can run"""
+    if not c.config.package_install:
+        with venv(c):
+            c.run('pip install -e ./')
+        setup_var_directory()
+        if not exists(c.config.ini_file):
+            create_local_ini(c)
+        with venv(c):
+            c.run('assembl-ini-files populate %s' % (c.config.ini_file))
+        # Missing part: for local environment only
+        # To be separated in a separate function.
+
+
+def code_root(context, alt_env=None):
+    alt_env = alt_env or context
+    alt_env = dict(alt_env)
+    sanitize_hosts(alt_env)
+    if running_locally(context):
+        return local_code_root
+    else:
+        if (as_bool(get_prefixed('package_install', alt_env, False))):
+            return os.path.join(venv_path(alt_env), 'lib', 'python2.7', 'site-packages')
+        else:
+            return get_prefixed('projectpath', alt_env, getcwd())
+
+
+def as_bool(b):
+    return str(b).lower() in {"1", "true", "yes", "t", "on"}
+
+
+def get_prefixed(context, key, alt_env=None, default=None):
+    alt_env = alt_env or context
+    alt_env = dict(alt_env)
+    for prefx in ('', '_', '*'):
+        val = alt_env.get(prefx + key, None)
+        if val:
+            return val
+    return default
+
+
+def sanitize_hosts(context, alt_env=None):
+    alt_env = alt_env or context
+    alt_env = dict(alt_env)
+    if not alt_env.get('hosts', None):
+        public_hostname = alt_env.get("public_hostname", "localhost")
+        alt_env['hosts'] = [public_hostname]
+    elif not isinstance(alt_env['hosts'], list):
+        alt_env['hosts'] = alt_env['hosts'].split()
+
+
+def system_db_user(context):
+    if context.config._internal.postgres_db_user:
+        return context.config._internal.postgres_db_user
+    if context.config._internal.mac:
+        return getuser()
+    return "postgres"
+
+
+def run_db_command(context, command, user=None, *args, **kwargs):
+    # I need help with this.
+    pass
+
+
+@task()
+def check_and_create_database_user(context, host=None, user=None, password=None):
+    """
+    Create a user and a DB for the project.
+    """
+    host = host or context.config.DEFAULT.db_host
+    user = user or context.config.DEFAULT.db_user
+    password = password or context.DEFAULT.db_password
+    pypsql = join(code_root(context), 'scripts', 'pypsql.py')
+    checkUser = context.run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
+        command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user),
+        pypsql=pypsql, password=password, host=host, user=user))
+    if checkUser.failed:
+        db_user = system_db_user()
+        if (running_locally(context) or context.config.host_string == host) and db_user:
+            db_password_string = ''
+            sudo_user = db_user
+        else:
+            db_password = c.config.get('postgres_db_password', None)
+            assert db_password is not None, "We need a password for postgres on " + host
+            db_password_string = "-p '%s'" % db_password
+            sudo_user = None
+        run_db_command('python2 {pypsql} -u {db_user} -n {host} {db_password_string} "{command}"'.format(
+            command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
+                user, password),
+            pypsql=pypsql, db_user=db_user, host=host, db_password_string=db_password_string),
+            sudo_user)
+    else:
+        print("User exists and can connect")
+
+
+@task()
+def build_doc(context):
+    """Build the Sphinx documentation for the backend (and front-end) as well as build GraphQL documentation"""
+    # generate_graphql_documentation(context)
+    with context.cd(context.config.projectpath):
+        context.run('rm -rf doc/autodoc doc/jsdoc')
+        with venv(context):
+            context.run('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
+            context.run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
+            context.run('python2 assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (context.ini_files))
+            context.run('sphinx-build doc assembl/static/techdocs')
