@@ -5,7 +5,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
-import TooltipIcon from './tootltipIcon';
+import TooltipIcon from './tooltipIcon';
 
 configure({ adapter: new Adapter() });
 

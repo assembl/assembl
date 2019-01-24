@@ -5,7 +5,7 @@ import { isMobile } from '../../../utils/globalFunctions';
 // Import components
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { titleTooltip } from '../../common/tooltips';
-import TooltipIcon from '../icons/tooltipIcon/tootltipIcon';
+import TooltipIcon from '../icons/tooltipIcon/tooltipIcon';
 
 export type Props = {
   /** Title level with default value set to 1 */
