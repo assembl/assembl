@@ -76,18 +76,20 @@
     border: none;
 
     &:hover {
-      background-color: $nav-tabs-active-link-hover-bg;
+      background-color: transparent;
     }
   }
 
   &.nav-justified {
     & > li > a {
-      border-bottom: 2px solid $nav-tabs-justified-link-border-color;
-      color: rgba($purple, 0.2);
+      border-bottom: 2px solid $second-color;
+      color: $first-color;
+      opacity: 0.2;
       outline: none;
 
       &:hover {
-        color: $nav-tabs-active-link-hover-color;
+        color: $first-color;
+        opacity: 1;
       }
     }
 
@@ -96,9 +98,10 @@
       & > a:hover,
       & > a:focus {
         border: none;
-        color: $nav-tabs-active-link-hover-color;
-        border-bottom: 2px solid $nav-tabs-justified-active-link-border-color;
+        color: $first-color;
+        border-bottom: 2px solid $second-color;
         border-radius: 0;
+        opacity: 1;
       }
     }
   }
