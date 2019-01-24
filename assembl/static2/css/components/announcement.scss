@@ -65,6 +65,9 @@
     width: 100%;
     position: sticky;
     top: 60px;
+    background-color: $white;
+    z-index: 1000;
+    padding-bottom: 10px;
 
     & > li {
       display: table-cell;
@@ -74,6 +77,11 @@
         border-radius: 0;
       }
     }
+  }
+
+  .tab-content {
+    margin-top: 30px;
+    overflow: hidden;
   }
 }
 
