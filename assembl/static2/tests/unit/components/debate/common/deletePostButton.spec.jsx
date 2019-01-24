@@ -53,6 +53,12 @@ describe('<DeletePostButton /> - with mount', () => {
     expect(wrapper.find('span [className="assembl-icon-delete"]')).toHaveLength(1);
   });
 
+  it('should render one Button with a declined-checkbox icon embedded if the post is pending and you are a moderator', () => {
+    wrapper.setProps({ isPendingForModerator: 'true' });
+    expect(wrapper.find(Button)).toHaveLength(1);
+    expect(wrapper.find('span [className="assembl-icon-check-box-declined"]')).toHaveLength(1);
+  });
+
   it('should render a modal when you click on the button', () => {
     wrapper.simulate('click');
     expect(displayModal).toHaveBeenCalledTimes(1);

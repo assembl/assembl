@@ -54,7 +54,8 @@ export type Props = {
   refetchIdea: Function,
   routerParams: RouterParams,
   rowIndex: number,
-  connectedUserId: string
+  connectedUserId: string,
+  isDebateModerated: boolean
 };
 
 type State = {
@@ -158,7 +159,8 @@ export class DumbPost extends React.PureComponent<Props, State> {
       refetchIdea,
       timeline,
       connectedUserId,
-      borderLeftColor
+      borderLeftColor,
+      isDebateModerated
     } = this.props;
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
@@ -214,6 +216,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
             modifiedSubject={modifiedSubject}
             timeline={timeline}
             connectedUserId={connectedUserId}
+            isDebateModerated={isDebateModerated}
           />
         )}
       </div>
@@ -223,8 +226,8 @@ export class DumbPost extends React.PureComponent<Props, State> {
 
 const PostWithContext = props => (
   <DebateContext.Consumer>
-    {({ isHarvesting, isHarvestable, connectedUserId }) => (
-      <DumbPost {...props} isHarvesting={isHarvesting} isHarvestable={isHarvestable} connectedUserId={connectedUserId} />
+    {({ isHarvesting, connectedUserId, isDebateModerated, isHarvestable }) => (
+      <DumbPost {...props} isHarvesting={isHarvesting} isHarvestable={isHarvestable} connectedUserId={connectedUserId} isDebateModerated={isDebateModerated} />
     )}
   </DebateContext.Consumer>
 );

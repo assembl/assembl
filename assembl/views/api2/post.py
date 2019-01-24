@@ -142,6 +142,18 @@ def post_put(request):
         form_data['moderated_on'] = datetime.utcnow().isoformat()+"Z"
         form_data['moderator'] = User.uri_generic(
             request.authenticated_userid)
+
+    ctx = request.context
+    user_id = request.authenticated_userid or Everyone
+    permissions = get_permissions(
+        user_id, ctx.get_discussion_id())
+    post = ctx._instance
+    discussion = post.discussion
+    if (post.publication_state == models.PublicationStates.PUBLISHED and
+            P_MODERATE not in permissions and
+            discussion.preferences['with_moderation']):
+        raise HTTPUnauthorized()
+
     # TODO: apply guess_languages
     return instance_put_form(request, form_data)
 

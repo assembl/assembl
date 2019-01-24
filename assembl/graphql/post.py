@@ -495,6 +495,10 @@ class UpdatePost(graphene.Mutation):
         allowed = post.user_can(user_id, CrudPermissions.UPDATE, permissions)
         if not allowed:
             raise HTTPUnauthorized()
+        if (post.publication_state == models.PublicationStates.PUBLISHED and
+                P_MODERATE not in permissions and
+                discussion.preferences['with_moderation']):
+            raise HTTPUnauthorized()
 
         changed = False
         subject = args.get('subject')

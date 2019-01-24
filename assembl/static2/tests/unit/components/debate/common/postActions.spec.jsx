@@ -15,6 +15,7 @@ const props: Props = {
   isPending: false,
   isMultiColumns: false,
   isPendingPostForModerator: false,
+  isDebateModerated: false,
   client: jest.fn(),
   creatorUserId: '1234567890',
   debateData: {

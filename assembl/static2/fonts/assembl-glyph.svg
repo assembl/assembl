@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="no"?>
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg xmlns="http://www.w3.org/2000/svg">
-<metadata>Copyright (C) 2018 by original authors @ fontello.com</metadata>
+<metadata>Copyright (C) 2019 by original authors @ fontello.com</metadata>
 <defs>
 <font id="assembl-glyph" horiz-adv-x="1000" >
 <font-face font-family="assembl-glyph" font-weight="400" font-stretch="normal" units-per-em="1000" ascent="850" descent="-150" />
@@ -45,6 +45,8 @@
 <glyph glyph-name="menu-on" unicode="&#xe812;" d="M38 595h924c21 0 38 17 38 38s-17 38-38 38h-924c-21 0-38-17-38-38s17-38 38-38z m0-283h924c21 0 38 17 38 38s-17 38-38 38h-924c-21 0-38-17-38-38s17-38 38-38z m0-283h924c21 0 38 17 38 38s-17 38-38 38h-924c-21 0-38-17-38-38s17-38 38-38z" horiz-adv-x="1000" />
 
 <glyph glyph-name="message" unicode="&#xe813;" d="M875 725h-750c-69 0-125-56-125-125v-500c0-69 56-125 125-125h750c69 0 125 56 125 125v500c0 69-56 125-125 125z m-206-334l265 227c2-6 4-11 4-18v-500c0-4-2-8-3-12l-266 303z m206 272c4 0 8-2 12-3l-387-331-387 331c4 1 8 3 12 3h750z m-810-575c-1 4-2 8-2 12v500c0 7 1 12 3 18l265-226-266-304z m60-50c-6 0-12 1-18 3l271 310 102-87c6-5 13-8 20-8s15 3 20 8l102 87 271-310c-6-2-12-3-18-3h-750z" horiz-adv-x="1000" />
+
+<glyph glyph-name="check-box-declined" unicode="&#xe814;" d="M654 61c0-11-8-19-18-19l-477 0c-11 0-19 8-19 19l0 479c0 10 8 18 19 18l245 0c-30 23-64 47-103 74l-142 0c-51 0-92-41-92-92l0-479c0-51 41-93 92-93l477 0c51 0 92 42 92 93l0 140c-27 39-51 74-74 105l0-245z m0 0m-55 368l7-8c60-68 114-149 190-264l107 72c-80 121-139 208-206 284l-6 7 7 6c55 48 124 99 230 172l-72 106c-112-76-190-134-251-188l-6-5-6 5c-62 54-137 111-250 188l-72-106c106-73 175-124 230-172l7-6-6-7c-68-76-126-163-207-284l108-72c75 115 130 196 189 264l7 8z m0 0m41 129l-173 132-120 67" horiz-adv-x="1000" />
 
 <glyph glyph-name="right-dir" unicode="&#xe815;" d="M321 350q0-14-10-25l-250-250q-11-11-25-11t-25 11-11 25v500q0 15 11 25t25 11 25-11l250-250q10-10 10-25z" horiz-adv-x="357.1" />
 

@@ -15,7 +15,13 @@ import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphq
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import validatePostMutation from '../../../graphql/mutations/validatePost.graphql';
 import PostQuery from '../../../graphql/PostQuery.graphql';
-import { deleteMessageTooltip, likeTooltip, disagreeTooltip, validateMessageTooltip } from '../../common/tooltips';
+import {
+  deleteMessageTooltip,
+  deniedMessageTooltip,
+  likeTooltip,
+  disagreeTooltip,
+  validateMessageTooltip
+} from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates, PublicationStates } from '../../../constants';
@@ -251,6 +257,7 @@ class Post extends React.Component<Props> {
     let creatorName = '';
     let userCanDeleteThisMessage = false;
     const userIsModerator = connectedUserIsModerator();
+    const isPendingForModerator = isPending && userIsModerator;
 
     if (post.creator) {
       const { displayName, isDeleted } = post.creator;
@@ -260,7 +267,14 @@ class Post extends React.Component<Props> {
         connectedUserCan(Permissions.DELETE_POST);
       creatorName = isDeleted ? I18n.t('deletedUser') : displayName || '';
     }
-    const deleteButton = <DeletePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />;
+    const deleteButton = (
+      <DeletePostButton
+        isPendingForModerator={isPendingForModerator}
+        postId={post.id}
+        refetchQueries={refetchQueries}
+        linkClassName="overflow-action"
+      />
+    );
     const validatePostButton = (
       <ValidatePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />
     );
@@ -302,7 +316,10 @@ class Post extends React.Component<Props> {
                 </ResponsiveOverlayTrigger>
               ) : null}
               {userCanDeleteThisMessage ? (
-                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip}>
+                <ResponsiveOverlayTrigger
+                  placement="top"
+                  tooltip={isPendingForModerator ? deniedMessageTooltip : deleteMessageTooltip}
+                >
                   {deleteButton}
                 </ResponsiveOverlayTrigger>
               ) : null}

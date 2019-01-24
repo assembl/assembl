@@ -87,7 +87,7 @@
 
   .overflow-action {
     cursor: pointer;
-    margin: 20px 0 0;
+    margin: 20px 3px 0;
     color: $first-color-opacity-70;
 
     &:hover {
@@ -316,8 +316,9 @@ $deleted-post-border: 1px solid $grey1 !default;
       transform: scale(1.2);
     }
 
-    &.share-multiColumns {
-      margin-bottom: -10px;
+    .assembl-icon-check-box-declined {
+      font-size: 18px;
+      padding-left: 3px;
     }
   }
 
@@ -341,7 +342,7 @@ $deleted-post-border: 1px solid $grey1 !default;
   }
 
   .add-sentiment {
-    margin: 20px 0 0;
+    margin: 10px 0 0;
 
     .sentiment {
       margin-left: auto;
@@ -756,6 +757,6 @@ $deleted-post-border: 1px solid $grey1 !default;
 
 .column-post {
   .post-actions-separator {
-    margin: 10px auto 0 auto;
+    margin: 7.5px auto 0 auto;
   }
 }

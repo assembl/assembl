@@ -130,6 +130,12 @@ export const deleteMessageTooltip = (
   </Tooltip>
 );
 
+export const deniedMessageTooltip = (
+  <Tooltip id="deniedMessageTooltip">
+    <Translate value="debate.deniedMessage" />
+  </Tooltip>
+);
+
 export const editMessageTooltip = (
   <Tooltip id="editMessageTooltip">
     <Translate value="debate.editMessage" />
