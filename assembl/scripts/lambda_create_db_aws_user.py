@@ -12,11 +12,11 @@ def lambda_handler(input, ctx):
     else:
         info = base64.b64decode(response['SecretBinary'])
     info = json.loads(info)
-    database = input.get('database', os.environ.get('db_database', 'assembl'))
+    database = input.get('database', os.environ.get('database', 'assembl'))
     cnx = pg8000.core.Connection(
         info['username'],
         info['host'], None,
-        info['port'],
+        int(info['port']),
         database,
         info['password'],
         False, 1000, 'assembl', 100)
