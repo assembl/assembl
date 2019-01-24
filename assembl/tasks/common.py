@@ -4,6 +4,12 @@ import base64
 import json
 
 from invoke import task as base_task
+from os.path import dirname, realpath
+DEFAULT_SECTION = "DEFAULT"
+_local_file = __file__
+if _local_file.endswith('.pyc'):
+    _local_file = _local_file[:-1]
+local_code_root = dirname(dirname(realpath(_local_file)))
 
 
 def task(*args, **kwargs):
@@ -90,3 +96,7 @@ def venv_py3(c):
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
     return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate && ' + 'py3'))
 
+
+def get_node_base_path():
+    return normpath(join(
+        env.projectpath, 'assembl', 'static', 'js'))
