@@ -318,6 +318,7 @@ class VoteResults:
 class TagResult:
     __doc__ = "A tag assigned to a post, with its scoring value"
     score = "The score associated with the tag (0-1, increasing relevance)"
+    count = "The number of times the tag was found"
     value = "The tag keyword"
 
 

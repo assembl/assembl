@@ -43,6 +43,7 @@ ANNOUNCEMENT_BODY_ATTACHMENT = models.AttachmentPurpose.ANNOUNCEMENT_BODY_ATTACH
 class TagResult(graphene.ObjectType):
     __doc__ = docs.TagResult.__doc__
     score = graphene.Float(description=docs.TagResult.score)
+    count = graphene.Int(description=docs.TagResult.count)
     value = graphene.String(description=docs.TagResult.value)
 
 
@@ -100,7 +101,7 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_top_keywords(self, args, context, info):
         result = self.top_keywords()
-        return [TagResult(score=r.score, value=r.value) for r in result]
+        return [TagResult(score=r.score, value=r.value, count=r.count) for r in result]
 
     def resolve_nlp_sentiment(self, args, context, info):
         result = self.sentiments()

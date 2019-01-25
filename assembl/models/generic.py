@@ -572,7 +572,9 @@ class Content(TombstonableMixin, DiscussionBoundBase):
         from .langstrings import LangStringEntry, Locale
 
         sq = self.db.query(
-            PostKeywordAnalysis.score.label('score'), Tag.id.label('id')
+            PostKeywordAnalysis.score.label('score'),
+            PostKeywordAnalysis.occurences.label('count'),
+            Tag.id.label('id')
         ).filter_by(
             category=None
         ).join(Tag).filter(
@@ -606,7 +608,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
                         t.ensure_translations([display_lang], translator)
 
         q = self.db.query(
-            LangStringEntry.value, sq.c.score
+            LangStringEntry.value, sq.c.score, sq.c.count
         ).join(Locale).filter(
             label_cond
         ).distinct().join(
