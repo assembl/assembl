@@ -316,7 +316,7 @@ def generate_supervisor_conf(c):
         c.run('assembl-ini-files populate %s' % (ini_file))
 
 
-@task(generate_nginx_conf, create_local_ini)
+@task(generate_nginx_conf, generate_supervisor_conf)
 def aws_server_startup_from_local(c):
     """Update files that depend on local.rc and restart nginx, supervisor"""
     if is_supervisord_running(c):
