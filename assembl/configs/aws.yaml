@@ -15,7 +15,7 @@ attachment_bucket: "assembl-data-%(aws_client)s"
 elasticsearch_index: "%(aws_client)s:assembl-es"
 elasticsearch_port: 80
 elasticsearch_version: 5.6.8
-aws_secrets_id: assembl_secrets
+aws_secrets_ids: arn:aws:secretsmanager:eu-west-1:900208097337:secret:assembl_secrets-1eqvUR
 supervisor:
   autostart_celery: false
   autostart_celery_notify_beat: false
