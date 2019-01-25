@@ -1,3 +1,23 @@
+//for semanticAnalysisiForDiscussion
+.semantic-analysis-container {
+  .banner {
+    align-items: center;
+    background: url(/static2/img/semanticAnalysis/banner-semantic.png) no-repeat;
+    background-position-x: -170px;
+    background-size: cover;
+    display: flex;
+    height: 107px;
+    width: 100%;
+
+    h1 {
+      color: $white;
+      font-family: $font-family4;
+      font-size: $font-size-xl;
+      margin: 0 0;
+    }
+  }
+}
+
 .semantic-analysis {
   color: $black;
   font-family: $font-family, sans-serif;
@@ -39,8 +59,18 @@
     letter-spacing: 1.1px;
     line-height: 1.78;
   }
+}
 
-  @media screen and (min-width: $screen-sm-min) {
+#first-color-hidden {
+  color: $first-color;
+}
+
+#second-color-hidden {
+  color: $second-color;
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .semantic-analysis {
     h1 {
       font-size: 22px;
       letter-spacing: 1.2px;
@@ -52,7 +82,20 @@
     }
   }
 
-  @media screen and (min-width: $screen-lg-min) {
+  .semantic-analysis-container {
+    .banner {
+      background-position-x: 0;
+      height: 134px;
+
+      h1 {
+        font-size: $font-size-xll;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-lg-min) {
+  .semantic-analysis {
     h4 {
       font-size: 30px;
     }
@@ -62,14 +105,17 @@
       padding-top: 20px;
     }
   }
-}
 
-#first-color-hidden {
-  color: $first-color;
-}
+  .semantic-analysis-container {
+    .banner {
+      background-position-x: 0;
+      height: 193px;
 
-#second-color-hidden {
-  color: $second-color;
+      h1 {
+        font-size: $font-size-xxl;
+      }
+    }
+  }
 }
 
 @import '../js/app/components/common/loader/loader.scss';

@@ -30,9 +30,16 @@ class SemanticAnalysisForDiscussion extends Component<Props> {
       );
 
     return (
-      <Grid id="semantic-analysis-discussion" className="semantic-analysis">
-        {content}
-      </Grid>
+      <div className="semantic-analysis-container">
+        <div className="banner">
+          <Grid>
+            <h1>Analyse sémantique</h1>
+          </Grid>
+        </div>
+        <Grid id="semantic-analysis-discussion" className="semantic-analysis">
+          {content}
+        </Grid>
+      </div>
     );
   }
 }
