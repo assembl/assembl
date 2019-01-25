@@ -1333,8 +1333,8 @@ const Translations = {
         "no-data": "Not enough data to analyse"
       },
       wordCountInformation: {
-        msg: "TO BE DEFINED",
-        numberWords: "<span class='words-watson'>%{numberWords} words</span>"
+        msg: "TO BE DEFINED %{words}",
+        words: "<span class='words-watson'>%{wordCount} words</span>"
       },
       uploadButton: "Choose a file to upload",
       goUp: "Back to top"
@@ -1461,7 +1461,9 @@ const Translations = {
           "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" pour le texte à mettre en thématique). The importance of each keyword is shown with font size.",
         informationKeyword: "Information on keywords",
         numberKeyword: "Number of keywords",
-        sentimentAnalysis: "Sentiment analysis"
+        sentimentAnalysis: "Sentiment analysis",
+        sentimentAnalysisDefinition:
+          "The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed)."
       },
       brightMirror: {
         deleteFiction: "Delete your text",
