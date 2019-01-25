@@ -328,6 +328,7 @@ class PostKeywordAnalysisMixin(object):
 class PostKeywordAnalysis(PostKeywordAnalysisMixin, DiscussionBoundBase):
     """Association table to tie Tags and Content, with a score"""
     __tablename__ = "post_keyword_analysis"
+    occurences = Column(Integer)
     value = Column(Unicode, index=True)
     tag_id = Column(Integer, ForeignKey(
         Tag.id, ondelete="CASCADE"))
