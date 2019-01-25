@@ -8,6 +8,7 @@ query SemanticAnalysisForDiscussionData($lang: String) {
     }
     title(lang: $lang)
     topKeywords {
+      count
       score
       value
     }

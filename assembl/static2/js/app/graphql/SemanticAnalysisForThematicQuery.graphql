@@ -9,6 +9,7 @@ query SemanticAnalysisForThematicData($lang: String!, $id: ID!) {
       }
       title(lang: $lang)
       topKeywords {
+        count
         score
         value
       }
