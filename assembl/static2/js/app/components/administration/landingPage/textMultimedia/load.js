@@ -2,6 +2,7 @@
 import type { TextMultimediaValue } from './types.flow';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../../form/utils';
 
+// TODO replace the mock by the query
 const mockDataFromQuery = {
   titleEntries: [
     { value: 'Titre de la section text et multimedia', localeCode: 'fr' },
@@ -21,6 +22,7 @@ export function postLoadFormat(): TextMultimediaValue {
     title: convertEntriesToI18nValue(mockDataFromQuery.titleEntries),
     layout: mockDataFromQuery.layout,
     body: convertEntriesToI18nRichText(mockDataFromQuery.bodyEntries),
+    // TODO add the I18n in the label
     layoutOptions: [
       { label: '1 zone', isChecked: mockDataFromQuery.layout === 1 },
       { label: '2 zones', isChecked: mockDataFromQuery.layout === 2 },
