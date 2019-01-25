@@ -108,7 +108,8 @@ def do_watson_computation(id):
                         tag.simplistic_unify(translator)
                         post.db.add(PostKeywordAnalysis(
                             post=post, source=computation,
-                            value=tag, score=keyword['relevance']))
+                            value=tag, score=keyword['relevance'],
+                            occurences=keyword['count']))
                     for category in result.get('categories', ()):
                         tag = Tag.getOrCreateTag(
                             category['label'], lse.locale, post.db)
