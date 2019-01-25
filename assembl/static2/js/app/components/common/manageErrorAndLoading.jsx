@@ -23,7 +23,7 @@ type WrappedProps = {
 };
 
 // Takes the type and return the right loader for error and loading
-const switchLoaderToShow = (loaderType?: string, propsToPass: Props) => {
+const getLoaderToDisplay = (loaderType?: string, propsToPass: Props) => {
   const type = loaderType || '';
   switch (type) {
   case 'watson': {
@@ -47,7 +47,7 @@ const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.Compone
   const { data, error, loading } = wrappedProps;
   const { loaderType } = props;
 
-  const loaderToShow = switchLoaderToShow(loaderType, props);
+  const loaderToShow = getLoaderToDisplay(loaderType, props);
 
   // ERROR
   if (error || (data && data.error)) {
