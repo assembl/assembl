@@ -5,7 +5,6 @@ exports[`DumbAdminForm component should render an admin form 1`] = `
   onSubmit={[MockFunction]}
 >
   <SaveButtonInPortal
-    disabled={false}
     saveAction={[MockFunction]}
     specificClasses={null}
   />

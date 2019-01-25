@@ -8,7 +8,7 @@ import classNames from 'classnames';
 import { type MutationsPromises } from '../form/types.flow';
 
 type Props = {
-  disabled: boolean,
+  disabled?: boolean,
   saveAction: () => void,
   specificClasses?: ?string
 };
@@ -115,7 +115,8 @@ export const DumbSaveButton = ({ disabled, saveAction, specificClasses }: Props)
 };
 
 DumbSaveButton.defaultProps = {
-  specificClasses: null
+  specificClasses: null,
+  disabled: false
 };
 
 class SaveButtonInPortal extends React.PureComponent<Props> {

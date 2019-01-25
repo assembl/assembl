@@ -66,7 +66,7 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
           }}
           render={({ handleSubmit, pristine, submitting, values }) => (
             <div className="admin-content">
-              <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+              <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting} disableSave={slugIsInvalid}>
                 <div className="form-container">
                   <div className="title">
                     <Translate value="administration.nameOfTheDebate" />

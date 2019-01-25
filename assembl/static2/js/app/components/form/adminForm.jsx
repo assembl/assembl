@@ -14,7 +14,8 @@ type Props = {
   pristine: boolean,
   routes: Array<Route>,
   router: Router,
-  submitting: boolean
+  submitting: boolean,
+  disableSave?: boolean
 };
 
 export class DumbAdminForm extends React.Component<Props> {
@@ -38,10 +39,10 @@ export class DumbAdminForm extends React.Component<Props> {
   };
 
   render() {
-    const { children, handleSubmit, pristine, submitting } = this.props;
+    const { children, handleSubmit, pristine, submitting, disableSave } = this.props;
     return (
       <form onSubmit={handleSubmit}>
-        <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />
+        <SaveButton disabled={pristine || submitting || disableSave} saveAction={handleSubmit} />
         {children}
       </form>
     );
