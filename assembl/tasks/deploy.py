@@ -171,26 +171,6 @@ def get_aws_invoke_yaml(c, celery=False):
         raise RuntimeError("invoke.yaml was not defined in S3" % account)
 
 
-@task(setup_aws_default_region)
-def aws_instance_startup(c):
-    """Operations to startup a fresh aws instance from an assembl AMI"""
-    get_aws_invoke_yaml(c)
-    if not exists(c, c.config.projectpath + "/invoke.yaml"):
-        raise RuntimeError("Missing invoke.yaml file")
-    setup_ctx(c)
-    aws_server_startup_from_local(c)
-
-
-@task(setup_aws_default_region)
-def aws_celery_instance_startup(c):
-    """Operations to startup a fresh celery aws instance from an assembl AMI"""
-    get_aws_invoke_yaml(c, True)
-    if not exists(c, c.config.projectpath + "/invoke.yaml"):
-        raise RuntimeError("Missing invoke.yaml file")
-    setup_ctx(c)
-    aws_server_startup_from_local(c)
-
-
 def fill_template(c, template, output=None, default_dir=None):
     if not os.path.exists(template):
         if not default_dir:
@@ -345,6 +325,23 @@ def aws_server_startup_from_local(c):
         with venv(c):
             c.run('supervisord')
     webservers_reload(c)
+
+
+@task(setup_aws_default_region, get_aws_invoke_yaml, post=[aws_server_startup_from_local])
+def aws_instance_startup(c):
+    """Operations to startup a fresh aws instance from an assembl AMI"""
+    if not exists(c, c.config.projectpath + "/invoke.yaml"):
+        raise RuntimeError("Missing invoke.yaml file")
+    setup_ctx(c)
+
+
+@task(setup_aws_default_region, post=[aws_server_startup_from_local])
+def aws_celery_instance_startup(c):
+    """Operations to startup a fresh celery aws instance from an assembl AMI"""
+    get_aws_invoke_yaml(c, True)
+    if not exists(c, c.config.projectpath + "/invoke.yaml"):
+        raise RuntimeError("Missing invoke.yaml file")
+    setup_ctx(c)
 
 
 @task(install_wheel)
