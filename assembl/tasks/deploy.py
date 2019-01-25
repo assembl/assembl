@@ -215,14 +215,14 @@ def fill_template(c, template, output=None, default_dir=None):
 
 def is_supervisord_running(c):
     with venv(c):
-        result = c.run('supervisorctl pid', echo=True)
-    if not result or 'no such file' in result.stdout:
+        result = c.run('supervisorctl pid')
+    if not result or 'no such file' in result.stdout or 'refused connection' in result.stdout:
         return False
     try:
         pid = int(result.stdout)
         if pid:
             return True
-    except RuntimeError:
+    except ValueError:
         return False
 
 
