@@ -68,10 +68,11 @@
     background-color: $white;
     z-index: 1000;
     padding-bottom: 10px;
+    table-layout: fixed;
 
     & > li {
       display: table-cell;
-      width: auto;
+      width: 100%;
 
       & > a {
         border-radius: 0;
