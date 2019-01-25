@@ -3,10 +3,11 @@
 import React from 'react';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
+import { Link } from 'react-router';
 import { getAuthorizationToken, getDiscussionSlug } from '../utils/globalFunctions';
 import { postChangePassword } from '../services/authenticationService';
 import inputHandler from '../utils/inputHandler';
-import { get } from '../utils/routeMap';
+import { get, getMaybeContextual } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
 
 class ChangePassword extends React.Component {
@@ -109,6 +110,16 @@ class ChangePassword extends React.Component {
                   <Translate value="login.changePassword" />
                 </Button>
               </FormGroup>
+              <FormControl.Static>
+                <Translate
+                  value="login.reRequestToken"
+                  here={
+                    <Link to={getMaybeContextual('requestPasswordChange')}>
+                      <Translate value="here" />
+                    </Link>
+                  }
+                />
+              </FormControl.Static>
             </form>
           </div>
         </Col>

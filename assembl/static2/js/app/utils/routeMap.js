@@ -2,7 +2,7 @@ import urljoin from 'url-join';
 import { stringify } from 'query-string';
 
 import parse from './literalStringParser';
-import { capitalize } from './globalFunctions';
+import { capitalize, getDiscussionSlug } from './globalFunctions';
 import { browserHistory } from '../router';
 /*
   A global map of routes managed by React front-end.
@@ -54,6 +54,16 @@ export const getCurrentView = () => window.location.pathname;
 export const goTo = (to) => {
   browserHistory.push(to);
 };
+
+export const getMaybeContextual = (path, args, query) => {
+  const slug = getDiscussionSlug();
+  if (slug) {
+    const newArgs = { ...args, slug: slug };
+    return get(path, newArgs, query);
+  }
+  return get(path, args, query);
+};
+
 /* Not use for the moment, but maybe later
 
 const slug = getDiscussionSlug();
