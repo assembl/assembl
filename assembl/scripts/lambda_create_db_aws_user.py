@@ -7,7 +7,7 @@ import json
 
 def lambda_handler(input, ctx):
     sm = boto3.client('secretsmanager')
-    response = sm.get_secret_value(SecretId='db_password')
+    response = sm.get_secret_value(SecretId='db_password_assembl')
     if 'SecretString' in response:
         info = response['SecretString']
     else:
