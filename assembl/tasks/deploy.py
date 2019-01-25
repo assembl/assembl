@@ -9,9 +9,6 @@ from os import getcwd
 from .common import setup_ctx, running_locally, exists, venv, task, local_code_root
 from os.path import join
 from getpass import getuser
-@task()
-def print_config(c):
-    pprint(c.config.__dict__)
 
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
@@ -64,12 +61,17 @@ def yaml_to_ini(yaml_conf, default_section='app:assembl'):
 
 
 @task()
+def print_config(c):
+    pprint(c.config.__dict__)
+
+
+@task()
 def create_venv(c):
     if not exists(c, 'venv'):
         c.run('python2 -mvirtualenv venv')
 
 
-@task(print_config)
+@task()
 def create_venv_python_3(c):
     if c.mac and not exists('/usr/local/bin/python3'):
         if not exists('/usr/local/bin/brew'):
@@ -171,6 +173,12 @@ def get_aws_invoke_yaml(c, celery=False):
         raise RuntimeError("invoke.yaml was not defined in S3" % account)
 
 
+@task()
+def ensure_aws_invoke_yaml(c):
+    if not exists(c, 'invoke.yaml'):
+        get_aws_invoke_yaml(c)
+
+
 def fill_template(c, template, output=None, default_dir=None):
     if not os.path.exists(template):
         if not default_dir:
@@ -270,11 +278,12 @@ def webservers_reload(c):
         c.sudo('killall -HUP nginx')
 
 
-@task()
+@task(ensure_aws_invoke_yaml)
 def create_local_ini(c):
     """Compose local.ini from the given .yaml file"""
     from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
     assert running_locally(c)
+    c.config.DEFAULT = c.config.get('DEFAULT', {})
     c.config.DEFAULT['code_root'] = c.config.code_root  # Is this used?
     # Special case: uwsgi does not do internal computations.
     if 'uwsgi' not in c.config:
@@ -304,7 +313,7 @@ def create_local_ini(c):
         base.write(f)
 
 
-@task()
+@task(ensure_aws_invoke_yaml)
 def generate_nginx_conf(c):
     fill_template(c, 'assembl/templates/system/nginx_default.jinja2', 'var/share/assembl.nginx')
 
@@ -327,7 +336,7 @@ def aws_server_startup_from_local(c):
     webservers_reload(c)
 
 
-@task(setup_aws_default_region, get_aws_invoke_yaml, post=[aws_server_startup_from_local])
+@task(setup_aws_default_region, ensure_aws_invoke_yaml, post=[aws_server_startup_from_local])
 def aws_instance_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
