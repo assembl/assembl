@@ -238,7 +238,7 @@ class PostInterface(SQLAlchemyInterface):
         return models.Extract.graphene_id_for(self.parent_extract_id)
 
     def resolve_keywords(self, args, context, info):
-        return [TagResult(score=r.score, value=r.value)
+        return [TagResult(score=r.score, value=r.value, count=r.count)
                 for r in self.nlp_keywords()]
 
     def resolve_nlp_sentiment(self, args, context, info):

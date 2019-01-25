@@ -153,7 +153,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_top_keywords(self, args, context, info):
         result = self.top_keywords()
-        return [TagResult(score=r.score, value=r.value) for r in result]
+        return [TagResult(score=r.score, value=r.value, count=r.count) for r in result]
 
     def resolve_nlp_sentiment(self, args, context, info):
         result = self.sentiments()
