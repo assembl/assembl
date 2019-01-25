@@ -291,22 +291,6 @@ def webservers_reload(c):
 
 
 @task()
-def aws_server_startup_from_local(c):
-    """Update files that depend on local.rc and restart nginx, supervisor"""
-    create_local_ini(c)
-    with venv(c):
-        ini_file = c.config.get('_internal', {}).get('ini_file', 'local.ini')
-        c.run('assembl-ini-files populate %s' % (ini_file))
-    fill_template(c, 'assembl/templates/system/nginx_default.jinja2', 'var/share/assembl.nginx')
-    if is_supervisord_running(c):
-        supervisor_restart(c)
-    else:
-        with venv(c):
-            c.run('supervisord')
-    webservers_reload(c)
-
-
-@task()
 def create_local_ini(c):
     """Compose local.ini from the given .yaml file"""
     from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
@@ -338,6 +322,29 @@ def create_local_ini(c):
         c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
     with open(local_ini_path, 'w') as f:
         base.write(f)
+
+
+@task()
+def generate_nginx_conf(c):
+    fill_template(c, 'assembl/templates/system/nginx_default.jinja2', 'var/share/assembl.nginx')
+
+
+@task(create_local_ini)
+def generate_supervisor_conf(c):
+    with venv(c):
+        ini_file = c.config.get('_internal', {}).get('ini_file', 'local.ini')
+        c.run('assembl-ini-files populate %s' % (ini_file))
+
+
+@task(generate_nginx_conf, create_local_ini)
+def aws_server_startup_from_local(c):
+    """Update files that depend on local.rc and restart nginx, supervisor"""
+    if is_supervisord_running(c):
+        supervisor_restart(c)
+    else:
+        with venv(c):
+            c.run('supervisord')
+    webservers_reload(c)
 
 
 @task(install_wheel)
