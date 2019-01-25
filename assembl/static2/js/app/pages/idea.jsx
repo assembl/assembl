@@ -354,7 +354,7 @@ class Idea extends React.Component<Props> {
           {!ideaWithPostsData.loading &&
             !isBrightMirror &&
             announcement && (
-              <Grid fluid className="background-light">
+              <Grid fluid className="background-light padding-left-right">
                 <div className="max-container">
                   <div className="content-section">
                     <Announcement

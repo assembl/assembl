@@ -1,6 +1,11 @@
 .idea {
   position: relative;
 
+  .padding-left-right {
+    padding-left: 85px;
+    padding-right: 85px;
+  }
+
   .subject-prefix {
     color: $first-color-opacity-70;
     font-family: 'LatoLight';
@@ -146,6 +151,11 @@
       border-left: none;
     }
 
+    .padding-left-right {
+      padding-left: 70px;
+      padding-right: 70px;
+    }
+
     .level {
       border-top: 1px solid $first-color-light;
       margin-top: 20px;
@@ -181,6 +191,11 @@
 
 @media screen and (max-width: 600px) {
   .idea {
+    .padding-left-right {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
     .level {
       width: 100%;
       padding-bottom: 0;
