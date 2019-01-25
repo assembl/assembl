@@ -38,6 +38,46 @@ def rec_update(d1, d2):
     return result
 
 
+def get_secrets_from_manager(c, aws_secret_ids, cache=True):
+    base = {}
+    if aws_secret_ids:
+        import boto3
+        sm = boto3.client('secretsmanager')
+        if not isinstance(aws_secret_ids, list):
+            aws_secret_ids = aws_secret_ids.split()
+        for aws_secret_id in aws_secret_ids:
+            response = sm.get_secret_value(SecretId=aws_secret_id)
+            if 'SecretString' in response:
+                info = response['SecretString']
+            else:
+                info = base64.b64decode(response['SecretBinary'])
+            info = json.loads(info)
+            base.update(info)
+        if cache:
+            with open("secrets.yaml", "w") as f:
+                for key, val in info.items():
+                    f.write("%s: %s\n" % (key, val))
+    elif cache and os.path.exists("secrets.yaml"):
+        os.path.unlink("secrets.yaml")
+    return base
+
+
+def get_cached_secrets(c):
+    base = {}
+    if exists(c, "secrets.yaml"):
+        with open("secrets.yaml") as f:
+            for l in f:
+                key, val = l.split(":", 1)
+                base[key.strip()] = val.strip()
+    return base
+
+
+def get_secrets(c, aws_secret_ids, cache=True, reset_cache=False):
+    if exists(c, "secrets.yaml") and not reset_cache:
+        return get_cached_secrets(c)
+    return get_secrets_from_manager(c, aws_secret_ids, cache or reset_cache)
+
+
 def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
@@ -69,20 +109,10 @@ def setup_ctx(c):
         target = data.get('_extends', None)
         current = rec_update(data, current)
 
-    aws_secret_ids = current.get('aws_secrets_ids', None)
-    if aws_secret_ids:
-        import boto3
-        sm = boto3.client('secretsmanager')
-        if not isinstance(aws_secret_ids, list):
-            aws_secret_ids = aws_secret_ids.split()
-        for aws_secret_id in aws_secret_ids:
-            response = sm.get_secret_value(SecretId=aws_secret_id)
-            if 'SecretString' in response:
-                info = response['SecretString']
-            else:
-                info = base64.b64decode(response['SecretBinary'])
-            info = json.loads(info)
-            current = rec_update(current, info)
+    aws_secrets_ids = current.get('aws_secrets_ids', None)
+    if aws_secrets_ids:
+        secrets = get_secrets(c, aws_secrets_ids)
+        current.update(secrets)
 
     if current is not c.config._project:
         c.config._project = current
