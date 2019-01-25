@@ -18,7 +18,7 @@ import type { Keyword } from './dataType'; // TODO: move somewhere else
 
 import fakeData from './data.json'; // TODO: to delete
 
-type Props = {
+export type Props = {
   /** Optional first color */
   firstColor: string,
   /** Optional second color */

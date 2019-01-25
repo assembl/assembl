@@ -21,7 +21,7 @@ import type { Keyword } from '../dataType';
 
 import fakeData from '../data.json';
 
-type Props = {
+export type Props = {
   /** Optional first color */
   firstColor: string,
   /** Optional second color */
