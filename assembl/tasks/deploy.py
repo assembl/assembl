@@ -236,7 +236,7 @@ def fill_template(c, template, output=None, default_dir=None):
 def is_supervisord_running(c):
     with venv(c):
         result = c.run('supervisorctl pid', echo=True)
-    if 'no such file' in result.stdout:
+    if not result or 'no such file' in result.stdout:
         return False
     try:
         pid = int(result.stdout)
