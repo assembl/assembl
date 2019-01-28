@@ -17,6 +17,7 @@ elasticsearch_port: 80
 elasticsearch_version: 5.6.8
 aws_secrets_ids:
   - arn:aws:secretsmanager:eu-west-1:900208097337:secret:assembl_shared_secrets-8cUP7z
+  - assembl_secrets
 supervisor:
   autostart_celery: false
   autostart_celery_notify_beat: false
