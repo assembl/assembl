@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
-import { Col, Grid, Tabs, Tab } from 'react-bootstrap';
+import { Grid, Tabs, Tab } from 'react-bootstrap';
 import { renderRichtext } from '../../../utils/linkify';
 // Component imports
 import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
@@ -44,12 +44,9 @@ const InstructionsText = ({ title, body, semanticAnalysisForThematicData, firstC
   const instructionContent = (
     <div className="announcement">
       <div className="announcement-title">
-        <div className="title-hyphen">&nbsp;</div>
         <h3 className="announcement-title-text dark-title-1">{title}</h3>
       </div>
-      <Col xs={12} md={8} className="announcement-media col-md-push-2">
-        {renderRichtext(body)}
-      </Col>
+      <div className="announcement-media">{renderRichtext(body)}</div>
     </div>
   );
 
