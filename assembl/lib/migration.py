@@ -115,16 +115,20 @@ def bootstrap_db_data(db, mark=True):
         admin_users = config.get('admin_users', None)
         if admin_users:
             from assembl.auth.util import add_user
-            admin_users = json.loads(admin_users)
-            for user in admin_users:
-                name = user.pop('name', None)
-                email = user.pop('email', None)
-                if not (name and email):
-                    continue
-                try:
-                    add_user(name, email, **user)
-                except AssertionError as e:
-                    print e
+            from pyramid.exceptions import ConfigurationError
+            try:
+                admin_users = json.loads(admin_users)
+                for user in admin_users:
+                    name = user.pop('name', None)
+                    email = user.pop('email', None)
+                    if not (name and email):
+                        continue
+                    try:
+                        add_user(name, email, **user)
+                    except AssertionError as e:
+                        print e
+            except ConfigurationError:
+                pass  # no application. It can be done later.
         # if mark:
         mark_changed(session)
 
