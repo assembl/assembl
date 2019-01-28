@@ -6,7 +6,7 @@ import json
 from time import sleep
 from ConfigParser import RawConfigParser
 from os import getcwd
-from .common import setup_ctx, running_locally, exists, venv, task, local_code_root
+from .common import setup_ctx, running_locally, exists, venv, task, local_code_root, create_venv
 from os.path import join
 from getpass import getuser
 
@@ -63,12 +63,6 @@ def yaml_to_ini(yaml_conf, default_section='app:assembl'):
 @task()
 def print_config(c):
     pprint(c.config.__dict__)
-
-
-@task()
-def create_venv(c):
-    if not exists(c, 'venv'):
-        c.run('python2 -mvirtualenv venv')
 
 
 @task()
@@ -580,3 +574,7 @@ def build_doc(context):
             context.run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
             context.run('python2 assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (context.ini_files))
             context.run('sphinx-build doc assembl/static/techdocs')
+
+
+# avoid it being defined in both modules
+del create_venv
