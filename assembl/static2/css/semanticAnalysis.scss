@@ -152,6 +152,11 @@
       margin-top: 15px;
       width: 45%;
     }
+
+    .padding-l {
+      padding-left: 0;
+      padding-right: 20px;
+    }
   }
 
   .semantic-analysis-container {
@@ -161,6 +166,24 @@
 
       h1 {
         font-size: $font-size-xxl;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .semantic-analysis {
+    h1 {
+      margin-top: 10px;
+    }
+
+    h4 {
+      font-size: 30px;
+    }
+
+    .titleWithTooltip-container {
+      h2 {
+        margin-top: 15px;
       }
     }
   }
