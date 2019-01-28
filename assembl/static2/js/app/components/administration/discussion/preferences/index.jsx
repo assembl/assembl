@@ -34,14 +34,8 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
   };
 
   checkSlugValidity = (slug: ?string) => {
-    if (slug && !slug.match(slugAllowedCharacters)) {
-      this.setState({
-        slugIsInvalid: true
-      });
-    } else {
-      this.setState({
-        slugIsInvalid: false
-      });
+    if (slug) {
+      this.setState({ slugIsInvalid: !slug.match(slugAllowedCharacters) });
     }
   };
 
