@@ -136,6 +136,54 @@ def get_node_base_path():
         env.projectpath, 'assembl', 'static', 'js'))
 
 
+def is_integration_env(c):
+    if c.get('TRAVIS_COMMIT'):
+        return True
+    return False
+
+
+def fill_template(c, template, output=None, default_dir=None):
+    if not os.path.exists(template):
+        if not default_dir:
+            default_dir = os.path.join(c.config.code_root, 'assembl', 'templates', 'system')
+        template = os.path.join(default_dir, template)
+    config = dict(c.config.DEFAULT)
+    config.update(c.config)
+    if not os.path.exists(template):
+        raise RuntimeError("Missing template")
+    config['here'] = config.get('here', os.getcwd())
+    if template.endswith('.tmpl'):
+        with open(template) as tmpl:
+            result = tmpl.read() % config
+    elif template.endswith('.jinja2'):
+        from jinja2 import Environment
+        env = Environment()
+        with open(template) as tmpl:
+            tmpl = env.from_string(tmpl.read())
+        # Boolean overloading
+        # Jinja should interpret 'false' as False but no:
+        # https://github.com/ansible/ansible/issues/14983
+        for (k, v) in config.items():
+            if getattr(v, 'update', None):
+                # dict or DataProxy
+                continue
+            if str(v).lower() == 'false':
+                config[k] = False
+            if '%(' in str(v):
+                try:
+                    config[k] = v % config
+                except KeyError:
+                    pass
+        result = tmpl.render(config)
+    else:
+        raise RuntimeError("Unknown template type")
+    if hasattr(output, 'write'):
+        output.write(result)
+    else:
+        with open(output, 'w') as out:
+            out.write(result)
+
+
 @task()
 def create_venv(c, path=None):
     # note that here, we do not depend on setup_ctx

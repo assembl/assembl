@@ -6,7 +6,9 @@ import json
 from time import sleep
 from ConfigParser import RawConfigParser
 from os import getcwd
-from .common import setup_ctx, running_locally, exists, venv, task, local_code_root, create_venv
+from .common import (
+    setup_ctx, running_locally, exists, venv, task, local_code_root,
+    create_venv, fill_template)
 from os.path import join
 from getpass import getuser
 
@@ -171,48 +173,6 @@ def get_aws_invoke_yaml(c, celery=False):
 def ensure_aws_invoke_yaml(c):
     if not exists(c, 'invoke.yaml'):
         get_aws_invoke_yaml(c)
-
-
-def fill_template(c, template, output=None, default_dir=None):
-    if not os.path.exists(template):
-        if not default_dir:
-            default_dir = os.path.join(c.config.code_root, 'assembl', 'templates', 'system')
-        template = os.path.join(default_dir, template)
-    config = dict(c.config.DEFAULT)
-    config.update(c.config)
-    if not os.path.exists(template):
-        raise RuntimeError("Missing template")
-    config['here'] = config.get('here', os.getcwd())
-    if template.endswith('.tmpl'):
-        with open(template) as tmpl:
-            result = tmpl.read() % config
-    elif template.endswith('.jinja2'):
-        from jinja2 import Environment
-        env = Environment()
-        with open(template) as tmpl:
-            tmpl = env.from_string(tmpl.read())
-        # Boolean overloading
-        # Jinja should interpret 'false' as False but no:
-        # https://github.com/ansible/ansible/issues/14983
-        for (k, v) in config.items():
-            if getattr(v, 'update', None):
-                # dict or DataProxy
-                continue
-            if str(v).lower() == 'false':
-                config[k] = False
-            if '%(' in str(v):
-                try:
-                    config[k] = v % config
-                except KeyError:
-                    pass
-        result = tmpl.render(config)
-    else:
-        raise RuntimeError("Unknown template type")
-    if hasattr(output, 'write'):
-        output.write(result)
-    else:
-        with open(output, 'w') as out:
-            out.write(result)
 
 
 def is_supervisord_running(c):
@@ -439,12 +399,6 @@ def update_bluenove_actionable(c):
             c.run('mkdir -p data && chmod o+rwx data')
             c.run('docker-compose build --no-cache', warn=True)
             restart_bluenove_actionable(c)
-
-
-def is_integration_env(c):
-    if c.get('TRAVIS_COMMIT'):
-        return True
-    return False
 
 
 @task()
