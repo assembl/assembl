@@ -1,7 +1,8 @@
 import os
+import sys
 import re
 from os.path import join, normpath
-from .common import venv, task, exists
+from .common import (venv, task, exists, is_integration_env, fill_template)
 
 
 def get_node_base_path(c):
@@ -217,3 +218,156 @@ def app_update_dependencies(c, force_reinstall=False):
     update_bower(c)
     update_bower_requirements(c, force_reinstall=force_reinstall)
     update_npm_requirements(c, force_reinstall=force_reinstall)
+
+
+@task()
+def create_wheelhouse(c, dependency_links=None):
+    if not dependency_links:
+        dependency_links = c.run('grep "git+http" %(here)s/requirements-dev.frozen.txt > %(here)s/deps.txt' % {
+                                 'here': c.config.code_root})
+    tmp_wheel_path = os.path.join(c.config.code_root, 'wheelhouse')
+    cmd = 'pip wheel --wheel-dir=%s --process-dependency-links -r %s' % (tmp_wheel_path, dependency_links)
+    if is_integration_env():
+        c.run(cmd)
+    else:
+        with venv(c):
+            c.run(cmd)
+
+
+def create_wheel_name(sha1, ref, tag):
+    """
+    Follows the recommended naming scheme of PEP 491 (https://www.python.org/dev/peps/pep-0491/#file-name-convention)
+    """
+    distribution = "assembl"
+    python_version = "py%s%s" % sys.version_info[0], sys.version_info[1]
+    platform = "any"
+    build_hash = "0" + sha1
+    if ref == tag:
+        # CI condition of a tag (which should only ever be put on master)
+        version = 'master-%s' % tag
+    else:
+        version = '%s-none' % ref
+    return "{distribution}-{version}-{build_hash}-{python_version}-none-{platform}.whl".format(
+        distribution=distribution,
+        version=version,
+        build_hash=build_hash,
+        python_version=python_version,
+        platform=platform)
+
+
+def update_wheels_json_data(c, json_data):
+    if is_integration_env():
+        # Assumption is Gitlab CI
+        commit_hash = sys.getenv('CI_COMMIT_SHORT_SHA', None)
+        tag = sys.getenv('CI_COMMIT_TAG', None)
+        ref = sys.getenv('CI_COMMIT_REF_NAME', None)
+    else:
+        # Take the latest HEAD
+        commit_hash = c.run('git rev-parse --short HEAD')
+        ref = c.run('git symbolic-ref --short HEAD')
+        tag = c.run('git describe --tags HEAD')
+        if re.match(r"[\d\.]+-\d+-.+", tag):
+            # The commit does not have a tag associated
+            tag = None
+    # Debugging purposes for Gitlab
+    print "CI_COMMIT_REF_NAME: %s" % ref
+    print "CI_COMMIT_TAG: %s" % tag
+    print "CI_COMMIT_REF_NAME: %s" % commit_hash
+    if tag and tag not in json_data:
+            json_data[tag] = {'sha1': commit_hash, 'wheel_name': create_wheel_name(commit_hash, ref, tag)}
+    else:
+        # update the links for the branches
+        json_data[ref] = {'sha1': commit_hash, 'wheel_name': create_wheel_name(commit_hash, ref, tag)}
+    return json_data
+
+
+def write_update_json_data(c, json_filepath):
+    import json
+    with open(json_filepath, 'w+') as fp:
+        json_data = fp.read()
+        if not json_data:
+            json_data = {}
+        else:
+            json_data = json.loads(json_data)
+        json_data = update_wheels_json_data(c, json_data)
+        fp.seek(0)
+        json.dump(json_data, fp)
+
+
+@task()
+def push_wheelhouse(c, house=None):
+    """
+    Push dependency links wheelhouse to either:
+    A) an S3 bucket
+    B) a remote folder via SSH
+    C) a local folder
+    """
+    import json
+    tmp_wheel_path = house if house else os.path.join(c.config.code_root, 'wheelhouse')
+    wheel_path = c.config.wheelhouse
+    json_filename = 'special-wheels.json'
+    if not wheel_path:
+        raise RuntimeError("No wheelhouse location was defined in configuration. Cannot continue...")
+    elif not tmp_wheel_path:
+        raise RuntimeError("There is no local wheelhouse to push. Quitting...")
+
+    if wheel_path.strip().startswith('s3://'):
+        # S3
+        try:
+            import botocore
+            import boto3
+        except ImportError:
+            raise RuntimeError("AWS CLI and Boto3 have to be installed to push to s3. Quitting...")
+
+        s3 = boto3.resource('s3')
+        bucket_name = 'bluenove-assembl-wheelhouse'
+        bucket = s3.Bucket(bucket_name)
+        exists = True
+        try:
+            s3.meta.client.head_bucket(Bucket=bucket_name)
+        except botocore.exceptions.ClientError as e:
+            error_code = e.response['Error']['Code']
+            if error_code == '404':
+                exists = False
+        if not exists:
+            raise RuntimeError("The Bluenove wheelhouse bucket does not exist on S3. Please create it before continuing...")
+
+        # There must exist a JSON file which holds links to the latest wheels on various branches, along with version tags
+        json_filepath = os.path.join(c.config.code_root, json_filename)
+        bucket.download_file(json_filename, json_filepath)
+
+        indexable_names = set()
+        existing_wheels = set()
+        for key in bucket:
+            if key.name == json_filename:
+                # Don't add the JSON file to the indexable list
+                continue
+            indexable_names.add(key.name)
+            existing_wheels.add(key.name)
+
+        for filename in os.listdir(tmp_wheel_path):
+            if filename in indexable_names:
+                continue
+            indexable_names.add(filename)
+
+        write_update_json_data(c, json_filepath)
+        json_data = json.load(json_filepath)
+
+        output = os.path.join(c.config.code_root, 'index.html')
+        fill_template('wheelhouse_index.jinja2', {'wheelhouse': indexable_names}, output)
+        s3.Object(bucket_name, 'index.html').put(Body=open(output, 'rb'))
+
+        for file in os.listdir(tmp_wheel_path):
+            if file not in existing_wheels:
+                s3.put_object()
+
+        # put empty objects for S3-redirections (https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html)
+        for key, value in json_data.iteritems():
+            s3.Object(bucket_name, key).put(Body='', Metadata={
+                'x-amz-website-redirect-location': '/%s' % value.wheel_name
+            })
+
+    elif wheel_path.strip().startswith('local://'):
+        c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path.split('local://')[1]))
+    else:
+        c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path))
