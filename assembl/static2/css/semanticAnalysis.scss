@@ -120,6 +120,10 @@
 
 @media screen and (min-width: $screen-lg-min) {
   .semantic-analysis {
+    h1 {
+      margin-top: 10px;
+    }
+
     h4 {
       font-size: 30px;
     }
@@ -127,6 +131,26 @@
     .lg-wordcloud-padding {
       padding-right: 60px;
       padding-top: 20px;
+    }
+
+    h2 {
+      margin-top: 30px;
+    }
+
+    .titleWithTooltip-container {
+      h2 {
+        margin-top: 30px;
+      }
+
+      .titleTooltip-container {
+        margin-bottom: 4px;
+        margin-left: 5px;
+      }
+    }
+
+    .sentimentBar {
+      margin-top: 15px;
+      width: 45%;
     }
   }
 
