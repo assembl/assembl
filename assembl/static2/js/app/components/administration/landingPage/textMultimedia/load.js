@@ -1,5 +1,5 @@
 // @flow
-import type { TextMultimediaValue } from './types.flow';
+import type { TextAndMultimediaValues } from './types.flow';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../../form/utils';
 
 // TODO replace the mock by the query
@@ -17,7 +17,7 @@ const mockDataFromQuery = {
 
 export const load = () => mockDataFromQuery;
 
-export function postLoadFormat(): TextMultimediaValue {
+export function postLoadFormat(): TextAndMultimediaValues {
   return {
     title: convertEntriesToI18nValue(mockDataFromQuery.titleEntries),
     layout: mockDataFromQuery.layout,

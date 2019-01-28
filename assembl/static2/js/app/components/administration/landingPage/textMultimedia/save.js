@@ -1,4 +1,6 @@
 // @flow
+import type { ApolloClient } from 'react-apollo';
+import type { TextAndMultimediaValues } from './types.flow';
 import { convertToEntries, convertRichTextToVariables, createSave } from '../../../form/utils';
 
 const getTextAndMultimediaVariables = async (
