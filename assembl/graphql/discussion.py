@@ -23,6 +23,9 @@ from .utils import (
     DateTime)
 from .idea import TagResult, SentimentAnalysisResult
 from .permissions_helpers import require_cls_permission, require_instance_permission
+from pyramid.i18n import TranslationStringFactory
+
+_ = TranslationStringFactory('assembl')
 
 
 class URLMeta(graphene.ObjectType):
@@ -566,8 +569,9 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = args.get('tab_title', None)
         favicon = args.get('favicon', None)
         with_moderation = args.get('with_moderation', None)
+        error = _("Must pass at least one preference to be saved")
         if not prefs_to_save and not tab_title and not favicon and with_moderation is None:
-            raise Exception("Must pass at least one preference to be saved")
+            raise Exception(context.localizer.translate(error))
 
         with cls.default_db.no_autoflush:
             if prefs_to_save:

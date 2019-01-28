@@ -18,6 +18,7 @@ from assembl.auth.util import user_has_permission
 from assembl.models.action import SentimentOfPost
 from assembl.models import Phases
 from assembl.models.idea import MessageView
+from pyramid.i18n import TranslationStringFactory
 
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .attachment import Attachment
@@ -38,6 +39,7 @@ import assembl.graphql.docstrings as docs
 EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
 MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
 ANNOUNCEMENT_BODY_ATTACHMENT = models.AttachmentPurpose.ANNOUNCEMENT_BODY_ATTACHMENT.value
+_ = TranslationStringFactory('assembl')
 
 
 class TagResult(graphene.ObjectType):
@@ -781,6 +783,21 @@ def create_idea(parent_idea, phase, args, context):
     return saobj
 
 
+def tombstone_posts_related_to_idea(idea, context):
+    error = _("Cannot delete posts related to the idea because no idea was found.")
+    if idea is None:
+        raise Exception(context.localizer.translate(error))
+    related = idea.get_related_posts_query(True, include_moderating=False)
+    query = models.Post.query.join(
+        related, models.Post.id == related.c.post_id
+        )
+    posts = query.all()
+    for post in posts:
+        post.is_tombstone = True
+        post.publication_state = models.PublicationStates.DELETED_BY_ADMIN
+        idea.db.flush()
+
+
 def update_idea(args, phase, context):
     cls = models.Idea
     discussion_id = context.matchdict['discussion_id']
@@ -800,6 +817,9 @@ def update_idea(args, phase, context):
     require_instance_permission(CrudPermissions.UPDATE, thematic, context)
 
     with cls.default_db.no_autoflush as db:
+        # If the admin changes the idea type, all posts associated to the idea must be deleted
+        if thematic.message_view_override != message_view_override:
+            tombstone_posts_related_to_idea(thematic, context)
         # introducing history at every step, including thematics + questions  # noqa: E501
         thematic.copy(tombstone=True)
         title_entries = args.get('title_entries')
