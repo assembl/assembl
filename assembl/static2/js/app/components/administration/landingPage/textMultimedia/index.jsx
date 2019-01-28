@@ -3,7 +3,7 @@ import React from 'react';
 import { type ApolloClient, compose, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Field } from 'react-final-form';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import arrayMutators from 'final-form-arrays';
 import isEqualWith from 'lodash/isEqualWith';
 
@@ -58,7 +58,9 @@ const TextMultimedia = ({ client, lang, editLocale }: Props) => (
                 component={MultilingualTextFieldAdapter}
                 label={I18n.t('administration.textMultimediaTitle')}
               />
-              <div className="dark-title-6">Agencement texte-média-image</div>
+              <div className="dark-title-6">
+                <Translate value="administration.textMultimediaLayout" />
+              </div>
               <div className="text-multimedia-layout margin-m">
                 <Layouts />
                 <Field required name="layoutOptions" component={RadioButtonsFieldAdapter} />
