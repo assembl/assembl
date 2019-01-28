@@ -12,7 +12,7 @@ import SemanticAnalysisForDiscussionQuery from '../../../graphql/SemanticAnalysi
 // Component imports
 import manageErrorAndLoading from '../../../components/common/manageErrorAndLoading';
 import manageColor from '../../../components/common/manageColor';
-import SemanticAnalysis, { type Props as SemanticAnalysisProps } from '../semanticAnalysis';
+import { SemanticAnalysis, type Props as SemanticAnalysisProps } from '../semanticAnalysis';
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 
 type Props = SemanticAnalysisForDiscussionQuery & SemanticAnalysisProps;

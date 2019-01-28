@@ -249,7 +249,29 @@ describe('Announcement component', () => {
       expect(wrapper.find(Tabs)).toHaveLength(1);
     });
 
-    it('should render a 2 Tab', () => {
+    it('should render a Tab', () => {
+      expect(wrapper.find(Tab)).toHaveLength(1);
+    });
+
+    it('should render 2 Tab if data for SemanticAnalysis is passed', () => {
+      wrapper.setProps({
+        semanticAnalysisForThematicData: {
+          id: '1234',
+          nlpSentiment: {
+            positive: 1,
+            negative: 0,
+            count: 1
+          },
+          title: 'Test',
+          topKeywords: [
+            {
+              count: null,
+              score: 11.065457,
+              value: 'Lorem'
+            }
+          ]
+        }
+      });
       expect(wrapper.find(Tab)).toHaveLength(2);
     });
   });

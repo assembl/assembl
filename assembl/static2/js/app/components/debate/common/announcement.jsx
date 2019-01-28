@@ -2,17 +2,15 @@
 import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Col, Row, Tabs, Tab, Tooltip } from 'react-bootstrap';
-
+// Components imports
 import StatisticsDoughnut from '../common/statisticsDoughnut';
-import { sentimentDefinitionsObject } from './sentimentDefinitions';
+import { sentimentDefinitionsObject, type SentimentDefinition } from './sentimentDefinitions';
 import TextAndMedia from '../../common/textAndMedia';
 import { CountablePublicationStates, ANNOUNCEMENT_TAB_ITEM_ID, MESSAGE_VIEW } from '../../../constants';
 import PostsAndContributorsCount, { Counter } from '../../common/postsAndContributorsCount';
-import SemanticAnalysis from '../../../pages/semanticAnalysis/semanticAnalysis';
+import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
-// Type imports
-import type { SentimentDefinition } from './sentimentDefinitions';
 
 export const createTooltip = (sentiment: SentimentDefinition, count: number) => (
   <Tooltip id={`${sentiment.camelType}Tooltip`} className="no-arrow-tooltip">
@@ -64,7 +62,9 @@ type Props = {
     messageColumns: IdeaMessageColumns,
     messageViewOverride: ?string
   },
-  semanticAnalysisForThematicData?: SemanticAnalysisForThematicQuery
+  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
+  firstColor?: string,
+  secondColor?: string
 };
 
 type ColumnsInfoType = { count: ?number, color: ?string, name: ?string };
@@ -112,14 +112,14 @@ export const SurveyAnnouncement = ({ announcement }: SurveyAnnouncementProps) =>
   </div>
 );
 
-export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData }: Props) => {
+export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData, firstColor, secondColor }: Props) => {
   const { numContributors, numPosts, posts, messageColumns, messageViewOverride } = idea;
-  // const { topKeywords } = semanticAnalysisForThematicData;
+  const { topKeywords } = semanticAnalysisForThematicData;
   const isMultiColumns = messageViewOverride === MESSAGE_VIEW.messageColumns;
   const sentimentsCount = getSentimentsCount(posts);
   const columnInfos = getColumnInfos(messageColumns);
   const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
-  // const topKeywordsCount = topKeywords.length;
+  const topKeywordsCount = topKeywords.length;
 
   // Translation keys
   const guidelinesTitleKey = 'debate.thread.guidelines';
@@ -190,7 +190,11 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
   const semanticAnalysisTabAndContent = (
     <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
       <div id="semantic-analysis-thematic" className="semantic-analysis">
-        <SemanticAnalysis semanticAnalysisData={semanticAnalysisForThematicData} />
+        <SemanticAnalysis
+          semanticAnalysisData={semanticAnalysisForThematicData}
+          firstColor={firstColor}
+          secondColor={secondColor}
+        />
       </div>
     </Tab>
   );
@@ -204,7 +208,7 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
     >
       {guidelinesTabAndContent}
       {/** summaryTabAndContent */}
-      {semanticAnalysisTabAndContent}
+      {topKeywordsCount > 0 ? semanticAnalysisTabAndContent : null}
     </Tabs>
   );
 };
@@ -218,7 +222,9 @@ Announcement.defaultProps = {
     },
     title: '',
     topKeywords: []
-  }
+  },
+  firstColor: 'rgb(0,0,0)',
+  secondColor: 'rgb(0,0,0)'
 };
 
 export default Announcement;
