@@ -84,11 +84,6 @@ def create_assembl_user(c):
 
 
 @task
-def create_venv(c):
-    c.sudo("-i python2 -mvirtualenv venv")
-
-
-@task
 def assembl_tasks(c):
     c.sudo("-i aws s3 cp s3://bluenove-assembl-configurations/assembl_tasks.py tasks.py", user='assembl_user')
     c.sudo("-i invoke bootstrap_assembl", user='assembl_user')

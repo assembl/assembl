@@ -144,6 +144,43 @@ def update_npm_requirements(c, force_reinstall=False):
                 with venv(c):
                     c.run('npm update')
 
+
+@task()
+def clone_repository(c, reset=False):
+    """
+    Clone repository
+    """
+    print('Cloning Git repository')
+
+    # Remove dir if necessary
+    path = c.config.projectpath
+    if exists(c, os.path.join(path, ".git")):
+        print "%s/.git already exists" % path
+        if reset:
+            c.run("rm -rf %s/.git" % path)
+        else:
+            return
+
+    # Clone
+    branch = c.config.get('gitbranch', 'master')
+    repo = c.config.get('gitrepo', 'https://github.com/assembl/assembl.git')
+    with c.cd(path):
+        c.run("git clone --branch {0} {1} {2}".format(
+            branch, repo, os.path.join(path, 'assembl')))
+
+
+@task()
+def updatemaincode(c):
+    """
+    Update code and/or switch branch
+    """
+    print('Updating Git repository')
+    with c.cd(c.config.projectpath):
+        c.run('git fetch')
+        c.run('git checkout %s' % c.config.gitbranch)
+        c.run('git pull %s %s' % (c.config.gitrepo, c.config.gitbranch))
+
+
 @task()
 def update_pip_requirements(c, force_reinstall=False):
     """
