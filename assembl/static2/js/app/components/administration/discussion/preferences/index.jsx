@@ -5,6 +5,7 @@ import { type ApolloClient, compose, withApollo } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
 import arrayMutators from 'final-form-arrays';
 import { Field } from 'react-final-form';
+import classnames from 'classnames';
 import Loader from '../../../common/loader';
 import LoadSaveReinitializeForm from '../../../form/LoadSaveReinitializeForm';
 import AdminForm from '../../../../components/form/adminForm';
@@ -70,7 +71,7 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                     component={TextFieldAdapter}
                     name="slug"
                     label={I18n.t('administration.discussionSlug')}
-                    className={slugIsInvalid ? 'warning' : ''}
+                    className={classnames({ warning: slugIsInvalid })}
                   />
                   {slugIsInvalid ? (
                     <div className="warning-label">
