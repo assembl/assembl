@@ -10,7 +10,8 @@ import WordCountInformation from './wordCountInformation';
 import type { Props as WordCountInformationProps } from './wordCountInformation';
 
 export const defaultWordCountInformationProps: WordCountInformationProps = {
-  wordCount: 50
+  wordCount: 50,
+  className: ''
 };
 
 const playground = {

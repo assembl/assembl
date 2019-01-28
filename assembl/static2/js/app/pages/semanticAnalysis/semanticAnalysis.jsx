@@ -151,11 +151,11 @@ export class SemanticAnalysis extends Component<Props, State> {
           <Description>
             <p>{keywordCloudDefinition}</p>
           </Description>
-          <WordCountInformation wordCount={23302} className="padding-bottom" />
+          <WordCountInformation wordCount={23302} className="padding-top" />
         </Col>
 
         {/** WordCloud section */}
-        <Col xs={12} md={8} className="no-padding lg-wordcloud-padding margin-s">
+        <Col xs={12} md={8} className="no-padding lg-wordcloud-padding sm-margin-m margin-s">
           <ResponsiveWordCloud
             keywordsColor={firstColor}
             keywordsColorActive={secondColor}
@@ -189,7 +189,7 @@ export class SemanticAnalysis extends Component<Props, State> {
             />
           </Col>
 
-          <Col xs={12} sm={6} md={12} className="no-padding">
+          <Col xs={12} sm={6} md={12} smPush={1} mdPush={0} className="no-padding">
             <TitleWithTooltip level={2} tooltipContent={sentimentAnalysisTooltip}>
               {sentimentAnalysisTitle}
             </TitleWithTooltip>

@@ -10,7 +10,7 @@ const SentimentBarIcon = ({ level }: Props) => {
   let svg;
   if (level === 0) {
     svg = (
-      <svg xmlns="http://www.w3.org/2000/svg" width="120" height="198" viewBox="0 0 106 198" className="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="120" height="100%" viewBox="0 0 106 198" className="icon">
         <g fill="none" fillRule="evenodd">
           <path
             stroke="#5ECC6B"

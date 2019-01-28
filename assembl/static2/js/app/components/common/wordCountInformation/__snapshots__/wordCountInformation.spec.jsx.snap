@@ -196,6 +196,33 @@ exports[`Storyshots WordCountInformation default 1`] = `
                         }
                       </span>
                     </span>
+                  </span>
+                  <span>
+                     
+                    <span
+                      style={Object {}}
+                    >
+                      className
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          
+                        </span>
+                        "
+                      </span>
+                    </span>
                      
                   </span>
                 </span>
@@ -258,9 +285,76 @@ exports[`Storyshots WordCountInformation default 1`] = `
               WordCountInformation
               " Component
             </h2>
-            <small>
-              No propTypes defined!
-            </small>
+            <table
+              className="css-1uhv8nx e1vdo5380"
+            >
+              <thead>
+                <tr>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    property
+                  </th>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    propType
+                  </th>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    required
+                  </th>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    default
+                  </th>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    description
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    className="css-1qcb1f7 e6fp4ir0"
+                  >
+                    className
+                  </td>
+                  <td
+                    className="css-1qcb1f7 e6fp4ir0"
+                  >
+                    <span>
+                      unknown
+                    </span>
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  >
+                    -
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  >
+                    <span
+                      style={
+                        Object {
+                          "color": "#444",
+                        }
+                      }
+                    >
+                      null
+                    </span>
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -527,9 +621,76 @@ exports[`Storyshots WordCountInformation playground 1`] = `
               WordCountInformation
               " Component
             </h2>
-            <small>
-              No propTypes defined!
-            </small>
+            <table
+              className="css-1uhv8nx e1vdo5380"
+            >
+              <thead>
+                <tr>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    property
+                  </th>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    propType
+                  </th>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    required
+                  </th>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    default
+                  </th>
+                  <th
+                    className="css-11b5gui e6fp4ir1"
+                  >
+                    description
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td
+                    className="css-1qcb1f7 e6fp4ir0"
+                  >
+                    className
+                  </td>
+                  <td
+                    className="css-1qcb1f7 e6fp4ir0"
+                  >
+                    <span>
+                      unknown
+                    </span>
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  >
+                    -
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  >
+                    <span
+                      style={
+                        Object {
+                          "color": "#444",
+                        }
+                      }
+                    >
+                      null
+                    </span>
+                  </td>
+                  <td
+                    className="css-11b5gui e6fp4ir0"
+                  />
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
