@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { Tabs, Tab } from 'react-bootstrap';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
@@ -22,11 +23,33 @@ describe('<InstructionsText /> - with shallow', () => {
     wrapper = shallow(<InstructionsText {...customInstructionsText} />);
   });
 
-  it('should render title', () => {
-    expect(wrapper.find('h3 [className="announcement-title-text dark-title-1"]')).toHaveLength(1);
+  it('should render a Navbar', () => {
+    expect(wrapper.find(Tabs)).toHaveLength(1);
   });
 
-  it('should render body', () => {
-    expect(wrapper.find('Col [className="announcement-media col-md-push-2"]')).toHaveLength(1);
+  it('should render a Tab', () => {
+    expect(wrapper.find(Tab)).toHaveLength(1);
+  });
+
+  it('should render 2 Tab if data for SemanticAnalysis is passed', () => {
+    wrapper.setProps({
+      semanticAnalysisForThematicData: {
+        id: '1234',
+        nlpSentiment: {
+          positive: 1,
+          negative: 0,
+          count: 1
+        },
+        title: 'Test',
+        topKeywords: [
+          {
+            count: null,
+            score: 11.065457,
+            value: 'Lorem'
+          }
+        ]
+      }
+    });
+    expect(wrapper.find(Tab)).toHaveLength(2);
   });
 });

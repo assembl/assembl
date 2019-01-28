@@ -313,7 +313,15 @@ class Idea extends React.Component<Props> {
     if (isMultiColumns) {
       view = <ColumnsView {...childProps} routerParams={routerParams} />;
     } else if (isBrightMirror) {
-      view = <InstructionView {...childProps} announcementContent={announcement} />;
+      view = (
+        <InstructionView
+          {...childProps}
+          announcementContent={announcement}
+          semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+          firstColor={firstColor}
+          secondColor={secondColor}
+        />
+      );
     } else {
       view = <ThreadView {...childProps} />;
     }

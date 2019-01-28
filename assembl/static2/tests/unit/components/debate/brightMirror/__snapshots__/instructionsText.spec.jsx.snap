@@ -20,26 +20,64 @@ exports[`Storyshots InstructionsText default 1`] = `
           className="content-section"
         >
           <div
-            className="announcement"
+            className="announcement-menu"
+            id="announcement-tabs-id"
           >
+            <ul
+              className="nav nav-tabs nav-justified"
+              role="tablist"
+            >
+              <li
+                className="active"
+                role="presentation"
+              >
+                <a
+                  aria-controls="announcement-tabs-id-pane-0"
+                  aria-selected={true}
+                  href="#"
+                  id="announcement-tabs-id-tab-0"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="tab"
+                >
+                  Consigne
+                </a>
+              </li>
+            </ul>
             <div
-              className="announcement-title"
+              className="tab-content"
             >
               <div
-                className="title-hyphen"
+                aria-hidden={false}
+                aria-labelledby="announcement-tabs-id-tab-0"
+                className="tab-pane active fade in"
+                id="announcement-tabs-id-pane-0"
+                role="tabpanel"
               >
-                 
+                <div
+                  className="announcement"
+                >
+                  <div
+                    className="announcement-title"
+                  >
+                    <div
+                      className="title-hyphen"
+                    >
+                       
+                    </div>
+                    <h3
+                      className="announcement-title-text dark-title-1"
+                    >
+                      Test
+                    </h3>
+                  </div>
+                  <div
+                    className="announcement-media col-md-push-2 col-md-8 col-xs-12"
+                  >
+                    Lorem Ipsum body
+                  </div>
+                </div>
               </div>
-              <h3
-                className="announcement-title-text dark-title-1"
-              >
-                Instructions
-              </h3>
-            </div>
-            <div
-              className="announcement-media col-md-push-2 col-md-8 col-xs-12"
-            >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.
             </div>
           </div>
         </div>
@@ -196,7 +234,10 @@ exports[`Storyshots InstructionsText default 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -216,14 +257,17 @@ exports[`Storyshots InstructionsText default 1`] = `
                             }
                           }
                         >
-                          Instructions
+                          Test
                         </span>
                         "
                       </span>
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -243,12 +287,263 @@ exports[`Storyshots InstructionsText default 1`] = `
                             }
                           }
                         >
-                          Lorem ipsum dolor sit amet, consectetur adipiscing…
+                          Lorem Ipsum body
                         </span>
                         "
                       </span>
                     </span>
-                     
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      firstColor
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          rgb(0, 0, 0)
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      secondColor
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          rgb(0, 0, 0)
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      semanticAnalysisForThematicData
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#666",
+                            }
+                          }
+                        >
+                          {
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              id
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            '1234'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              nlpSentiment
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#666",
+                              }
+                            }
+                          >
+                            {
+                            <span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                positive
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#444",
+                                }
+                              }
+                            >
+                              null
+                            </span>
+                            ,
+                            <span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                negative
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#444",
+                                }
+                              }
+                            >
+                              null
+                            </span>
+                            ,
+                            <span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                count
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#a11",
+                                }
+                              }
+                            >
+                              0
+                            </span>
+                            }
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              title
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'Bright'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            …
+                          </span>
+                          <span>
+                            <br />
+                              
+                          </span>
+                          }
+                        </span>
+                        }
+                      </span>
+                    </span>
+                    <br />
                   </span>
                 </span>
                 <span
@@ -341,26 +636,64 @@ exports[`Storyshots InstructionsText playground 1`] = `
           className="content-section"
         >
           <div
-            className="announcement"
+            className="announcement-menu"
+            id="announcement-tabs-id"
           >
+            <ul
+              className="nav nav-tabs nav-justified"
+              role="tablist"
+            >
+              <li
+                className="active"
+                role="presentation"
+              >
+                <a
+                  aria-controls="announcement-tabs-id-pane-0"
+                  aria-selected={true}
+                  href="#"
+                  id="announcement-tabs-id-tab-0"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="tab"
+                >
+                  Consigne
+                </a>
+              </li>
+            </ul>
             <div
-              className="announcement-title"
+              className="tab-content"
             >
               <div
-                className="title-hyphen"
+                aria-hidden={false}
+                aria-labelledby="announcement-tabs-id-tab-0"
+                className="tab-pane active fade in"
+                id="announcement-tabs-id-pane-0"
+                role="tabpanel"
               >
-                 
+                <div
+                  className="announcement"
+                >
+                  <div
+                    className="announcement-title"
+                  >
+                    <div
+                      className="title-hyphen"
+                    >
+                       
+                    </div>
+                    <h3
+                      className="announcement-title-text dark-title-1"
+                    >
+                      Test
+                    </h3>
+                  </div>
+                  <div
+                    className="announcement-media col-md-push-2 col-md-8 col-xs-12"
+                  >
+                    Lorem Ipsum body
+                  </div>
+                </div>
               </div>
-              <h3
-                className="announcement-title-text dark-title-1"
-              >
-                Instructions
-              </h3>
-            </div>
-            <div
-              className="announcement-media col-md-push-2 col-md-8 col-xs-12"
-            >
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.
             </div>
           </div>
         </div>
@@ -517,7 +850,10 @@ exports[`Storyshots InstructionsText playground 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -537,14 +873,17 @@ exports[`Storyshots InstructionsText playground 1`] = `
                             }
                           }
                         >
-                          Instructions
+                          Test
                         </span>
                         "
                       </span>
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -564,12 +903,263 @@ exports[`Storyshots InstructionsText playground 1`] = `
                             }
                           }
                         >
-                          Lorem ipsum dolor sit amet, consectetur adipiscing…
+                          Lorem Ipsum body
                         </span>
                         "
                       </span>
                     </span>
-                     
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      firstColor
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          rgb(0, 0, 0)
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      secondColor
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          rgb(0, 0, 0)
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      semanticAnalysisForThematicData
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        {
+                        <span
+                          style={
+                            Object {
+                              "color": "#666",
+                            }
+                          }
+                        >
+                          {
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              id
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            '1234'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              nlpSentiment
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#666",
+                              }
+                            }
+                          >
+                            {
+                            <span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                positive
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#444",
+                                }
+                              }
+                            >
+                              null
+                            </span>
+                            ,
+                            <span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                negative
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#444",
+                                }
+                              }
+                            >
+                              null
+                            </span>
+                            ,
+                            <span>
+                              <span
+                                style={
+                                  Object {
+                                    "color": "#666",
+                                  }
+                                }
+                              >
+                                count
+                              </span>
+                            </span>
+                            : 
+                            <span
+                              style={
+                                Object {
+                                  "color": "#a11",
+                                }
+                              }
+                            >
+                              0
+                            </span>
+                            }
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              title
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'Bright'
+                          </span>
+                          ,
+                          <span>
+                            <span>
+                              <br />
+                                
+                                
+                            </span>
+                            …
+                          </span>
+                          <span>
+                            <br />
+                              
+                          </span>
+                          }
+                        </span>
+                        }
+                      </span>
+                    </span>
+                    <br />
                   </span>
                 </span>
                 <span

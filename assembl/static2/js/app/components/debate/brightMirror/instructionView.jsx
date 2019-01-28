@@ -8,7 +8,10 @@ import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import FictionsList from './fictionsList';
 import InstructionsText from './instructionsText';
 import { PublicationStates } from '../../../constants';
+// Type imports
 import type { AnnouncementContent } from '../common/announcement';
+// GraphQL imports
+import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
 export type InstructionViewProps = {
   isUserConnected: boolean,
@@ -22,7 +25,10 @@ export type InstructionViewProps = {
   /** Bright Mirror identifier */
   identifier: string,
   phaseId: string,
-  lang: string
+  lang: string,
+  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
+  firstColor: string,
+  secondColor: string
 };
 
 const InstructionView = ({
@@ -34,7 +40,10 @@ const InstructionView = ({
   timeline,
   identifier,
   phaseId,
-  lang
+  lang,
+  semanticAnalysisForThematicData,
+  firstColor,
+  secondColor
 }: InstructionViewProps) => {
   // Check permission
   const canPost = isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIsPhaseCompletedById(timeline, phaseId);
@@ -63,7 +72,13 @@ const InstructionView = ({
 
   return (
     <div className="instruction-view">
-      <InstructionsText title={announcementContent.title || ''} body={announcementContent.body} />
+      <InstructionsText
+        title={announcementContent.title || ''}
+        body={announcementContent.body}
+        semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+        firstColor={firstColor}
+        secondColor={secondColor}
+      />
       <div className="overflow-x">
         {topPostFormContainer}
         {filteredPosts.length > 0 ? (
