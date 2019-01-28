@@ -322,5 +322,7 @@ def test_change_password_token_old_password(test_app, participant1_user_with_old
         "password2": "oldpassword"
     }
 
-    resp = test_app.post_json('/data/AgentProfile/do_password_change', payload)
-    assert resp.status_code == 520
+    with pytest.raises(Exception) as exec_info:
+        test_app.post_json('/data/AgentProfile/do_password_change', payload)
+
+    assert '520 Unknown Error' in exec_info.value.message
