@@ -992,7 +992,8 @@ const Translations = {
           helper: "Choisissez les modules que vous souhaitez voir apparaître dans la page d'accueil et leurs emplacements.",
           textAndMultimedia: "Texte & Multi-média",
           textAndMultimediaBtn: "Ajouter un module Texte & Multi-média",
-          confirmationModal: "Voulez-vous ajouter un module Texte & Multi-média supplémentaire à la page d'accueil ?"
+          confirmationModal: "Voulez-vous ajouter un module Texte & Multi-média supplémentaire à la page d'accueil ?",
+          successSave: "La section texte & multi-média a été mis à jour avec succès !"
         },
         header: {
           successSave: "Le contenu du header a été mis à jour avec succès !",
@@ -2069,7 +2070,8 @@ const Translations = {
           helper: "Choose the modules you want to see in the landing page and their position.",
           textAndMultimedia: "Text & Multimedia",
           textAndMultimediaBtn: "Add a Text & Multimedia module",
-          confirmationModal: "Are you sure you want to add a Text & Multimedia module to the landing page?"
+          confirmationModal: "Are you sure you want to add a Text & Multimedia module to the landing page?",
+          successSave: "The text & multimedia section has been successfuly saved"
         },
         header: {
           successSave: "The header has been updated successfully!",
