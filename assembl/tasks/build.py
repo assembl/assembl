@@ -1,8 +1,8 @@
 import os
 import re
 from os.path import join, normpath
-from .common import venv, task
-from fabric.contrib.files import exists
+from .common import venv, task, exists
+
 
 def get_node_base_path(c):
     return normpath(join(
@@ -39,7 +39,7 @@ def bower_cmd(c, cmd, relative_path='.'):
     with c.cd(c.projectpath):
         bower_cmd = normpath(join(get_node_bin_path(c), 'bower'))
         po2json_cmd = normpath(join(get_node_bin_path(c), 'po2json'))
-        if not exists(bower_cmd) or not exists(po2json_cmd):
+        if not exists(c, bower_cmd) or not exists(c, po2json_cmd):
             print 'Bower not present, installing ...'
             install_bower()
         with c.cd(relative_path):
@@ -68,7 +68,6 @@ def separate_pip_install(context, package, wrapper=None):
 
 
 def upgrade_yarn(context):
-    import pdb; pdb.set_trace()
     if context.config._internal.mac:
         context.run('brew update && brew upgrade yarn')
     else:
@@ -130,7 +129,7 @@ def update_npm_requirements(c, force_reinstall=False):
         yarn_path = '/usr/bin/yarn'
     static2_path = get_new_node_base_path(c)
     with c.cd(static2_path):
-        if exists(yarn_path):
+        if exists(c, yarn_path):
             if force_reinstall:
                 print('Removing node_modules directory...')
                 with venv(c):
