@@ -1,3 +1,4 @@
+import os
 import os.path
 from contextlib import nested
 import base64
@@ -133,3 +134,12 @@ def venv_py3(c):
 def get_node_base_path():
     return normpath(join(
         env.projectpath, 'assembl', 'static', 'js'))
+
+
+@task()
+def create_venv(c, path=None):
+    # note that here, we do not depend on setup_ctx
+    path = path or os.getcwd()
+    if not exists(c, os.path.join(path, 'venv')):
+        with c.cd(path):
+            c.run('python2 -mvirtualenv venv')
