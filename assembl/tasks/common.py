@@ -142,13 +142,15 @@ def is_integration_env(c):
     return False
 
 
-def fill_template(c, template, output=None, default_dir=None):
-    if not os.path.exists(template):
-        if not default_dir:
-            default_dir = os.path.join(c.config.code_root, 'assembl', 'templates', 'system')
-        template = os.path.join(default_dir, template)
+def fill_template(c, template, output=None, extra=None, default_dir=None):
     config = dict(c.config.DEFAULT)
     config.update(c.config)
+    if extra is not None:
+        config.update(extra)
+    if not os.path.exists(template):
+        if not default_dir:
+            default_dir = os.path.join(config['code_root'], 'assembl', 'templates', 'system')
+        template = os.path.join(default_dir, template)
     if not os.path.exists(template):
         raise RuntimeError("Missing template")
     config['here'] = config.get('here', os.getcwd())
