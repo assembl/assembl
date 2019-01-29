@@ -56,7 +56,7 @@ def get_secrets_from_manager(c, aws_secret_ids, cache=True):
             base.update(info)
         if cache:
             with open("secrets.yaml", "w") as f:
-                for key, val in info.items():
+                for key, val in base.items():
                     f.write("%s: %s\n" % (key, val))
     elif cache and os.path.exists("secrets.yaml"):
         os.path.unlink("secrets.yaml")
