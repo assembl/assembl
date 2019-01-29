@@ -454,6 +454,7 @@ def get_default_context(request, **kwargs):
         theme_relative_path=theme_relative_path,
         minified_js=config.get('minified_js') or False,
         web_analytics=analytics_settings,
+        bugherd_api_key=config.get('bugherd_api_key', None),
         analytics_url=analytics_url,
         help_url=help_url,
         socket_url=socket_url,
