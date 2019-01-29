@@ -244,9 +244,9 @@ def create_wheel_name(version, sha1, branch=None, tag=None):
         # CI condition of a tag (which should only ever be put on master)
         long_version = version
     elif branch:
-        long_version = '%sd-%s' % (version, branch)
+        long_version = '%sd-1%s' % (version, branch)
     elif tag:
-        long_version = '%sd-%s' % (version, tag)
+        long_version = '%sd-2%s' % (version, tag.split('-').join('_'))
     else:
         long_version = '%sd-0%s' % (version, sha1)
 
