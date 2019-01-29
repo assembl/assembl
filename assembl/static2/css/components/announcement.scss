@@ -79,6 +79,8 @@
       & > a {
         border-radius: 0;
         padding-top: 10px;
+        padding-left: 0;
+        padding-right: 0;
       }
     }
   }
@@ -135,14 +137,6 @@
 
     .tab-content {
       margin-top: 0;
-    }
-
-    .nav-tabs.nav-justified {
-      & > li {
-        & > a {
-          padding-top: 0;
-        }
-      }
     }
   }
 }
