@@ -180,7 +180,7 @@ def updatemaincode(c):
     with c.cd(c.config.projectpath):
         c.run('git fetch')
         c.run('git checkout %s' % c.config._internal.gitbranch)
-        c.run('git pull %s %s' % (c.config.gitrepo, c.config._internal.gitbranch))
+        c.run('git pull %s %s' % (c.config._internal.gitrepo, c.config._internal.gitbranch))
 
 
 @task()
