@@ -235,25 +235,24 @@ def create_wheelhouse(c, dependency_links=None):
             c.run(cmd)
 
 
-def create_wheel_name(sha1, ref, tag):
+def create_wheel_name(version, sha1, branch=None, tag=None):
     """
     Follows the recommended naming scheme of PEP 491 (https://www.python.org/dev/peps/pep-0491/#file-name-convention)
     """
-    distribution = "assembl"
-    python_version = "py%s%s" % (sys.version_info[0], sys.version_info[1])
-    platform = "any"
-    build_hash = "0" + sha1
-    if ref == tag:
+    python_version = "py%d%d" % (sys.version_info.major, sys.version_info.minor)
+    if version == tag:
         # CI condition of a tag (which should only ever be put on master)
-        version = 'master-%s' % tag
+        long_version = version
+    elif branch:
+        long_version = '%sd-%s' % (version, branch)
+    elif tag:
+        long_version = '%sd-%s' % (version, tag)
     else:
-        version = '%s-none' % ref
-    return "{distribution}-{version}-{build_hash}-{python_version}-none-{platform}.whl".format(
-        distribution=distribution,
-        version=version,
-        build_hash=build_hash,
-        python_version=python_version,
-        platform=platform)
+        long_version = '%sd-0%s' % (version, sha1)
+
+    return "assembl-{version}-{python_version}-none-any.whl".format(
+        version=long_version,
+        python_version=python_version)
 
 
 def update_wheels_json_data(c, json_data):
@@ -261,24 +260,33 @@ def update_wheels_json_data(c, json_data):
         # Assumption is Gitlab CI
         commit_hash = sys.getenv('CI_COMMIT_SHORT_SHA', None)
         tag = sys.getenv('CI_COMMIT_TAG', None)
-        ref = sys.getenv('CI_COMMIT_REF_NAME', None)
+        branch = sys.getenv('CI_COMMIT_REF_NAME', None)
     else:
         # Take the latest HEAD
         commit_hash = c.run('git rev-parse --short HEAD').stdout.strip()
-        ref = c.run('git symbolic-ref --short HEAD').stdout.strip()
+        branch = c.run('git symbolic-ref --short HEAD').stdout.strip()
         tag = c.run('git describe --tags HEAD').stdout.strip()
         if re.match(r"[\d\.]+-\d+-.+", tag):
             # The commit does not have a tag associated
             tag = None
     # Debugging purposes for Gitlab
-    print "CI_COMMIT_REF_NAME: %s" % ref
+    with open(os.path.join(c.config.code_root, 'VERSION')) as f:
+        version = f.read().strip()
+    print "CI_COMMIT_REF_NAME: %s" % branch
     print "CI_COMMIT_TAG: %s" % tag
     print "CI_COMMIT_REF_NAME: %s" % commit_hash
     if tag and tag not in json_data:
-            json_data[tag] = {'sha1': commit_hash, 'wheel_name': create_wheel_name(commit_hash, ref, tag)}
-    else:
-        # update the links for the branches
-        json_data[ref] = {'sha1': commit_hash, 'wheel_name': create_wheel_name(commit_hash, ref, tag)}
+        json_data[tag] = {
+            'sha1': commit_hash,
+            'link_name': create_wheel_name(version, commit_hash, tag=tag),
+            'wheel_name': create_wheel_name(version, commit_hash)
+        }
+    # update the links for the branches
+    json_data[branch] = {
+        'sha1': commit_hash,
+        'link_name': create_wheel_name(version, commit_hash, branch=branch),
+        'wheel_name': create_wheel_name(version, commit_hash)
+    }
     return json_data
 
 
@@ -369,8 +377,8 @@ def push_wheelhouse(c, house=None):
                     bucket.put_object(Body=fp, Key=file, ACL='public-read')
 
         # put empty objects for S3-redirections (https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html)
-        for key, value in json_data.iteritems():
-            bucket.put_object(Key=key, ACL='public-read', Body='',
+        for value in json_data.itervalues():
+            bucket.put_object(Key=value['link_name'], ACL='public-read', Body='',
                               WebsiteRedirectLocation='/%s' % value['wheel_name'])
 
     elif wheel_path.strip().startswith('local://'):
