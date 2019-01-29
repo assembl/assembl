@@ -41,15 +41,14 @@ class TextAndMedia extends React.Component<Props> {
     const leftSize = 4;
     return title || something ? (
       <section className="media-section background-light">
-        <div className="max-container">
+        <div>
           {something && (
             <Grid fluid>
               {somethingOnRight ? (
                 <Col
                   xs={totalSize}
-                  md={8}
-                  className={classnames('announcement-media', {
-                    'col-md-push-2': !somethingOnLeft,
+                  md={12}
+                  className={classnames('announcement-media no-padding', {
                     'col-md-push-4': somethingOnLeft
                   })}
                 >

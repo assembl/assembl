@@ -226,10 +226,10 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
           {announcement.title || <Translate value="debate.thread.announcement" />}
         </h3>
       </div>
-      <Col xs={12} md={10} className="announcement-media col-md-push-2">
+      <Col xs={12} md={10} className="announcement-media col-md-push-2 no-padding">
         <TextAndMedia {...announcement} />
       </Col>
-      <Col xs={12} md={2} className="col-md-pull-10">
+      <Col xs={12} md={2} className="col-md-pull-10 announcement-statistics-container">
         <div className="announcement-statistics">
           <div className="announcement-doughnut">
             <StatisticsDoughnut elements={doughnutElements} />
