@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
 
-// HOC imports
-import manageColor from '../../../components/common/manageColor';
-
 // Component imports
 import ToolbarSlider from '../../../components/common/toolbarSlider/toolbarSlider';
 import TitleWithTooltip from '../../../components/common/titleWithTooltip/titleWithTooltip';
@@ -56,9 +53,9 @@ export class SemanticAnalysis extends Component<Props, State> {
   state = {
     keywordSelected: false,
     keywordData: {
-      text: 'Pas de mot sélectionné',
       count: 0,
-      relevance: 0
+      score: 0,
+      value: 'Pas de mot sélectionné'
     },
     numberOfKeywordsToDisplay: this.NUM_WORDS_DEFAULT
   };
@@ -92,9 +89,9 @@ export class SemanticAnalysis extends Component<Props, State> {
     if (!keywordSelected) {
       this.setState({
         keywordData: {
-          text: 'Pas de mot sélectionné',
           count: 0,
-          relevance: 0
+          score: 0,
+          value: 'Pas de mot sélectionné'
         }
       });
     }
@@ -103,6 +100,13 @@ export class SemanticAnalysis extends Component<Props, State> {
   render() {
     const { keywordData, numberOfKeywordsToDisplay } = this.state;
     const { firstColor, secondColor } = this.props;
+
+    // Semantic analysis
+    const { nlpSentiment, topKeywords } = fakeData;
+    // Computation on sentiment score (can be moved to the backend)
+    const { count, negative, positive } = nlpSentiment;
+    const score = (positive + negative) / count;
+    const sentimentScore = (score + 1) / 2;
 
     // Translation keys
     const informationKeywordKey = 'debate.semanticAnalysis.informationKeyword';
@@ -128,7 +132,6 @@ export class SemanticAnalysis extends Component<Props, State> {
     const sentimentAnalysisTitle = I18n.t(sentimentAnalysisKey);
     const sentimentAnalysisDefinition = I18n.t(sentimentAnalysisDefinitionKey);
 
-    const sentimentScore = (fakeData.sentiment.document.score + 1) / 2;
     const informationKeywordTooltip = (
       <div>
         <p>
@@ -162,7 +165,7 @@ export class SemanticAnalysis extends Component<Props, State> {
           <ResponsiveWordCloud
             keywordsColor={firstColor}
             keywordsColorActive={secondColor}
-            keywords={fakeData.keywords}
+            keywords={topKeywords}
             numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
             onWordClick={this.onKeywordClickHandler}
             onMouseOverWord={this.onKeywordOverHandler}
@@ -186,7 +189,7 @@ export class SemanticAnalysis extends Component<Props, State> {
             <ToolbarSlider
               color={fullRgbToHex(firstColor)}
               defaultValue={this.NUM_WORDS_DEFAULT}
-              maxValue={fakeData.keywords.length}
+              maxValue={topKeywords.length}
               minValue={this.MIN_WORDS}
               onSliderChange={this.onNumberOfKeywordSliderChangeHandler}
             />
@@ -205,4 +208,4 @@ export class SemanticAnalysis extends Component<Props, State> {
   }
 }
 
-export default manageColor(SemanticAnalysis);
+export default SemanticAnalysis;

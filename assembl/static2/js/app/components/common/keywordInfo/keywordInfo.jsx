@@ -21,11 +21,13 @@ const KeywordInfo = ({ keyword }: Props) => {
   const occurenceTitle: string = I18n.t(ocurrenceKey);
   const relevanceTitle: string = I18n.t(relevanceKey);
 
+  const { count, score, value } = keyword;
+
   return (
     <Description className="keyword-info">
-      <h3>{keyword.text}</h3>
-      <p className="info">{`${occurenceTitle} : ${keyword.count}`}</p>
-      <p className="info">{`${relevanceTitle} : ${keyword.relevance}`}</p>
+      <h3>{value}</h3>
+      <p className="info">{`${occurenceTitle} : ${count}`}</p>
+      <p className="info">{`${relevanceTitle} : ${score}`}</p>
     </Description>
   );
 };

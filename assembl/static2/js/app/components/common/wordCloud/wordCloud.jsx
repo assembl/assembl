@@ -5,9 +5,9 @@ import ReactWordCloud from 'react-wordcloud';
 
 import type { Keyword, Keywords } from '../../../integration/semanticAnalysis/dataType';
 
-// Keys provided by Watson
-const WORD_COUNT_KEY = 'relevance';
-const WORD_KEY = 'text';
+// Keys used to fetch keyword data
+const WORD_COUNT_KEY = 'score';
+const WORD_KEY = 'value';
 
 export type BaseProps = {
   /** Optional angle value in degrees */
@@ -110,8 +110,8 @@ class WordCloud extends Component<Props> {
     const noData = !keywords.length;
 
     const interval = {
-      max: Math.max(...Array.from(keywords, x => x.relevance)),
-      min: Math.min(...Array.from(keywords, x => x.relevance))
+      max: Math.max(...Array.from(keywords, x => x[WORD_COUNT_KEY])),
+      min: Math.min(...Array.from(keywords, x => x[WORD_COUNT_KEY]))
     };
     if (interval.max === interval.min) {
       interval.min = 0;
@@ -130,7 +130,7 @@ class WordCloud extends Component<Props> {
      */
     const convertColorFromRGBToRGBA = color => d =>
       `rgba(${color.substring(4, color.length - 1)}, ${0.5 +
-        0.5 * (d.relevance - interval.min) / (interval.max - interval.min)})`;
+        0.5 * (d[WORD_COUNT_KEY] - interval.min) / (interval.max - interval.min)})`;
 
     const reactWordCloudProps = {
       colorScale: convertColorFromRGBToRGBA(keywordsColor),

@@ -10,18 +10,14 @@ import KeywordInfo from './keywordInfo';
 
 export const defaultKeywordInfoProps = {
   keyword: {
-    text: 'test',
     count: 5,
-    relevance: 0.85
+    score: 0.85,
+    value: 'test'
   }
 };
 
 const playground = {
-  keyword: {
-    text: 'test',
-    count: 5,
-    relevance: 0.85
-  }
+  ...defaultKeywordInfoProps
 };
 
 storiesOf('KeywordInfo', module)

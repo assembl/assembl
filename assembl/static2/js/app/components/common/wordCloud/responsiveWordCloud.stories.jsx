@@ -10,14 +10,14 @@ import { array, number, text, withKnobs } from '@storybook/addon-knobs';
 import ResponsiveWordCloud from './responsiveWordCloud';
 
 export const defaultResponsiveWordCloudProps = {
-  keywords: [{ text: 'text', relevance: 0.9, count: 5 }]
+  keywords: [{ count: 5, score: 0.9, value: 'text' }]
 };
 
 const playground = {
   keywordsAngle: 20,
   keywordsColor: 'rgb(200, 40, 180)',
   keywordsColorActive: 'rgb(200, 200, 90)',
-  keywords: [{ text: 'word1', relevance: 0.7, count: 3 }, { text: 'word2', relevance: 0.9, count: 5 }],
+  keywords: [{ count: 3, score: 0.7, value: 'word1' }, { count: 5, score: 0.9, value: 'word2' }],
   numberOfKeywordsToDisplay: 30,
   onWordClick: () => {
     action('word clicked');

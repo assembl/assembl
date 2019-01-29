@@ -206,29 +206,6 @@ exports[`Storyshots KeywordInfo default 1`] = `
                                 }
                               }
                             >
-                              text
-                            </span>
-                          </span>
-                          : 
-                          <span
-                            style={
-                              Object {
-                                "color": "#22a",
-                                "wordBreak": "break-word",
-                              }
-                            }
-                          >
-                            'test'
-                          </span>
-                          ,
-                          <span>
-                            <span
-                              style={
-                                Object {
-                                  "color": "#666",
-                                }
-                              }
-                            >
                               count
                             </span>
                           </span>
@@ -251,7 +228,7 @@ exports[`Storyshots KeywordInfo default 1`] = `
                                 }
                               }
                             >
-                              relevance
+                              score
                             </span>
                           </span>
                           : 
@@ -263,6 +240,29 @@ exports[`Storyshots KeywordInfo default 1`] = `
                             }
                           >
                             0.85
+                          </span>
+                          ,
+                          <span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              value
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'test'
                           </span>
                           }
                         </span>
@@ -548,29 +548,6 @@ exports[`Storyshots KeywordInfo playground 1`] = `
                                 }
                               }
                             >
-                              text
-                            </span>
-                          </span>
-                          : 
-                          <span
-                            style={
-                              Object {
-                                "color": "#22a",
-                                "wordBreak": "break-word",
-                              }
-                            }
-                          >
-                            'test'
-                          </span>
-                          ,
-                          <span>
-                            <span
-                              style={
-                                Object {
-                                  "color": "#666",
-                                }
-                              }
-                            >
                               count
                             </span>
                           </span>
@@ -593,7 +570,7 @@ exports[`Storyshots KeywordInfo playground 1`] = `
                                 }
                               }
                             >
-                              relevance
+                              score
                             </span>
                           </span>
                           : 
@@ -605,6 +582,29 @@ exports[`Storyshots KeywordInfo playground 1`] = `
                             }
                           >
                             0.85
+                          </span>
+                          ,
+                          <span>
+                            <span
+                              style={
+                                Object {
+                                  "color": "#666",
+                                }
+                              }
+                            >
+                              value
+                            </span>
+                          </span>
+                          : 
+                          <span
+                            style={
+                              Object {
+                                "color": "#22a",
+                                "wordBreak": "break-word",
+                              }
+                            }
+                          >
+                            'test'
                           </span>
                           }
                         </span>
