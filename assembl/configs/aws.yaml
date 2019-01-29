@@ -45,3 +45,4 @@ public_port: 80
 accept_secure_connection: false
 require_secure_connection: false
 piwik_host:
+wheelhouse: s3://bluenove-assembl-wheelhouse
