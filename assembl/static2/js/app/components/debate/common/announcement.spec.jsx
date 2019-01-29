@@ -6,9 +6,9 @@ import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
 // Component imports
-import { Tabs, Tab } from 'react-bootstrap';
 import Announcement, { createDoughnutElements, createTooltip, getColumnInfos, getSentimentsCount } from './announcement';
 import { MESSAGE_VIEW } from '../../../constants';
+import ThematicTabs from './thematicTabs';
 
 configure({ adapter: new Adapter() });
 
@@ -245,34 +245,8 @@ describe('Announcement component', () => {
       wrapper = shallow(<Announcement {...props} />);
     });
 
-    it('should render a Navbar', () => {
-      expect(wrapper.find(Tabs)).toHaveLength(1);
-    });
-
-    it('should render a Tab', () => {
-      expect(wrapper.find(Tab)).toHaveLength(1);
-    });
-
-    it('should render 2 Tab if data for SemanticAnalysis is passed', () => {
-      wrapper.setProps({
-        semanticAnalysisForThematicData: {
-          id: '1234',
-          nlpSentiment: {
-            positive: 1,
-            negative: 0,
-            count: 1
-          },
-          title: 'Test',
-          topKeywords: [
-            {
-              count: null,
-              score: 11.065457,
-              value: 'Lorem'
-            }
-          ]
-        }
-      });
-      expect(wrapper.find(Tab)).toHaveLength(2);
+    it('should render a ThematicTabs', () => {
+      expect(wrapper.find(ThematicTabs)).toHaveLength(1);
     });
   });
 });

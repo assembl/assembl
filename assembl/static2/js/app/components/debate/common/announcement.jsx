@@ -1,14 +1,14 @@
 // @flow
 import * as React from 'react';
-import { Translate, I18n } from 'react-redux-i18n';
-import { Col, Row, Tabs, Tab, Tooltip } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
+import { Col, Row, Tooltip } from 'react-bootstrap';
 // Components imports
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject, type SentimentDefinition } from './sentimentDefinitions';
 import TextAndMedia from '../../common/textAndMedia';
-import { CountablePublicationStates, ANNOUNCEMENT_TAB_ITEM_ID, MESSAGE_VIEW } from '../../../constants';
+import { CountablePublicationStates, MESSAGE_VIEW } from '../../../constants';
 import PostsAndContributorsCount, { Counter } from '../../common/postsAndContributorsCount';
-import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
+import ThematicTabs from './thematicTabs';
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
@@ -52,8 +52,8 @@ type DoughnutElements = {
 type SurveyAnnouncementProps = {
   announcement: AnnouncementContent,
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
-  firstColor?: string,
-  secondColor?: string
+  firstColor: string,
+  secondColor: string
 };
 
 type Props = {
@@ -66,8 +66,8 @@ type Props = {
     messageViewOverride: ?string
   },
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
-  firstColor?: string,
-  secondColor?: string
+  firstColor: string,
+  secondColor: string
 };
 
 type ColumnsInfoType = { count: ?number, color: ?string, name: ?string };
@@ -107,30 +107,6 @@ export const SurveyAnnouncement = ({
   firstColor,
   secondColor
 }: SurveyAnnouncementProps) => {
-  const { topKeywords } = semanticAnalysisForThematicData;
-  const topKeywordsCount = topKeywords.length;
-
-  // Translation keys
-  const guidelinesTitleKey = 'debate.thread.guidelines';
-  // Uncomment the line below when adding the summary
-  // const summaryTitleKey = 'debate.thread.summary';
-  const semanticAnalysisLongTitleKey = 'debate.semanticAnalysis.long';
-  const semanticAnalysisShortTitleKey = 'debate.semanticAnalysis.short';
-
-  // Title contents
-  const guidelinesTabTitle = I18n.t(guidelinesTitleKey);
-  // Uncomment the line below when adding the summary
-  // const summaryTabTitle = I18n.t(summaryTitleKey);
-  const semanticAnalysisTabLongTitle = I18n.t(semanticAnalysisLongTitleKey);
-  const semanticAnalysisTabShortTitle = I18n.t(semanticAnalysisShortTitleKey);
-  // Since 'semantic analysis' is a long composed word, we only display 'analysis' on small devices
-  const semanticAnalysisTabTitle = (
-    <React.Fragment>
-      {semanticAnalysisTabShortTitle}
-      <span className="md-only">{semanticAnalysisTabLongTitle}</span>
-    </React.Fragment>
-  );
-
   const instructionContent = (
     <div className="announcement">
       <div className="announcement-title">
@@ -144,45 +120,16 @@ export const SurveyAnnouncement = ({
     </div>
   );
 
-  const guidelinesTabAndContent = (
-    <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES} title={guidelinesTabTitle}>
-      {instructionContent}
-    </Tab>
-  );
-
-  // Uncomment those line below when adding the summary
-  // const summaryTabAndContent = (
-  //   <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={summaryTabTitle}>
-  //     {/** Summary Component and Content */}
-  //   </Tab>
-  // );
-
-  const semanticAnalysisTabAndContent = (
-    <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
-      <div id="semantic-analysis-thematic" className="semantic-analysis">
-        <SemanticAnalysis
-          semanticAnalysisData={semanticAnalysisForThematicData}
-          firstColor={firstColor}
-          secondColor={secondColor}
-        />
-      </div>
-    </Tab>
-  );
-
   return (
     <div fluid className="background-light instructions-text">
       <div className="max-container">
         <div className="content-section">
-          <Tabs
-            id="announcement-tabs-id"
-            justified
-            defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES}
-            className="announcement-menu"
-          >
-            {guidelinesTabAndContent}
-            {/** summaryTabAndContent */}
-            {topKeywordsCount > 0 ? semanticAnalysisTabAndContent : null}
-          </Tabs>
+          <ThematicTabs
+            instructionContent={instructionContent}
+            firstColor={firstColor}
+            secondColor={secondColor}
+            semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+          />
         </div>
       </div>
     </div>
@@ -191,33 +138,10 @@ export const SurveyAnnouncement = ({
 
 export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData, firstColor, secondColor }: Props) => {
   const { numContributors, numPosts, posts, messageColumns, messageViewOverride } = idea;
-  const { topKeywords } = semanticAnalysisForThematicData;
   const isMultiColumns = messageViewOverride === MESSAGE_VIEW.messageColumns;
   const sentimentsCount = getSentimentsCount(posts);
   const columnInfos = getColumnInfos(messageColumns);
   const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
-  const topKeywordsCount = topKeywords.length;
-
-  // Translation keys
-  const guidelinesTitleKey = 'debate.thread.guidelines';
-  // Uncomment the line below when adding the summary
-  // const summaryTitleKey = 'debate.thread.summary';
-  const semanticAnalysisLongTitleKey = 'debate.semanticAnalysis.long';
-  const semanticAnalysisShortTitleKey = 'debate.semanticAnalysis.short';
-
-  // Title contents
-  const guidelinesTabTitle = I18n.t(guidelinesTitleKey);
-  // Uncomment the line below when adding the summary
-  // const summaryTabTitle = I18n.t(summaryTitleKey);
-  const semanticAnalysisTabLongTitle = I18n.t(semanticAnalysisLongTitleKey);
-  const semanticAnalysisTabShortTitle = I18n.t(semanticAnalysisShortTitleKey);
-  // Since 'semantic analysis' is a long composed word, we only display 'analysis' on small devices
-  const semanticAnalysisTabTitle = (
-    <React.Fragment>
-      {semanticAnalysisTabShortTitle}
-      <span className="md-only">{semanticAnalysisTabLongTitle}</span>
-    </React.Fragment>
-  );
 
   const instructionContent = (
     <div className="announcement">
@@ -251,42 +175,13 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
     </div>
   );
 
-  const guidelinesTabAndContent = (
-    <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES} title={guidelinesTabTitle}>
-      {instructionContent}
-    </Tab>
-  );
-
-  // Uncomment those line below when adding the summary
-  // const summaryTabAndContent = (
-  //   <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={summaryTabTitle}>
-  //     {/** Summary Component and Content */}
-  //   </Tab>
-  // );
-
-  const semanticAnalysisTabAndContent = (
-    <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
-      <div id="semantic-analysis-thematic" className="semantic-analysis">
-        <SemanticAnalysis
-          semanticAnalysisData={semanticAnalysisForThematicData}
-          firstColor={firstColor}
-          secondColor={secondColor}
-        />
-      </div>
-    </Tab>
-  );
-
   return (
-    <Tabs
-      id="announcement-tabs-id"
-      justified
-      defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES}
-      className="announcement-menu"
-    >
-      {guidelinesTabAndContent}
-      {/** summaryTabAndContent */}
-      {topKeywordsCount > 0 ? semanticAnalysisTabAndContent : null}
-    </Tabs>
+    <ThematicTabs
+      instructionContent={instructionContent}
+      firstColor={firstColor}
+      secondColor={secondColor}
+      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+    />
   );
 };
 
