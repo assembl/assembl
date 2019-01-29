@@ -167,4 +167,10 @@ Announcement.defaultProps = {
   ...announcementDefaultProps
 };
 
+SurveyAnnouncement.defaultProps = { ...announcementDefaultProps };
+
+Announcement.defaultProps = {
+  ...announcementDefaultProps
+};
+
 export default Announcement;
