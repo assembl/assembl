@@ -1,6 +1,7 @@
 import os
 import sys
 import re
+import json
 from os.path import join, normpath
 from .common import (venv, task, exists, is_integration_env, fill_template)
 
@@ -92,7 +93,7 @@ def update_node(c, force_reinstall=False):
     """
     node_version_cmd_regex = re.compile(r'^v10\.13\.0')
     with venv(c):
-        node_version_cmd_result = c.run('node --version', echo=True)
+        node_version_cmd_result = c.run('node --version', echo=True).stdout
     match = node_version_cmd_regex.match(str(node_version_cmd_result))
     if not match or force_reinstall:
         # Stop gulp and webpack because otherwise node may be busy
@@ -224,10 +225,10 @@ def app_update_dependencies(c, force_reinstall=False):
 def create_wheelhouse(c, dependency_links=None):
     if not dependency_links:
         dependency_links = c.run('grep "git+http" %(here)s/requirements-dev.frozen.txt > %(here)s/deps.txt' % {
-                                 'here': c.config.code_root})
+                                 'here': c.config.code_root}).stdout
     tmp_wheel_path = os.path.join(c.config.code_root, 'wheelhouse')
     cmd = 'pip wheel --wheel-dir=%s --process-dependency-links -r %s' % (tmp_wheel_path, dependency_links)
-    if is_integration_env():
+    if is_integration_env(c):
         c.run(cmd)
     else:
         with venv(c):
@@ -239,7 +240,7 @@ def create_wheel_name(sha1, ref, tag):
     Follows the recommended naming scheme of PEP 491 (https://www.python.org/dev/peps/pep-0491/#file-name-convention)
     """
     distribution = "assembl"
-    python_version = "py%s%s" % sys.version_info[0], sys.version_info[1]
+    python_version = "py%s%s" % (sys.version_info[0], sys.version_info[1])
     platform = "any"
     build_hash = "0" + sha1
     if ref == tag:
@@ -256,16 +257,16 @@ def create_wheel_name(sha1, ref, tag):
 
 
 def update_wheels_json_data(c, json_data):
-    if is_integration_env():
+    if is_integration_env(c):
         # Assumption is Gitlab CI
         commit_hash = sys.getenv('CI_COMMIT_SHORT_SHA', None)
         tag = sys.getenv('CI_COMMIT_TAG', None)
         ref = sys.getenv('CI_COMMIT_REF_NAME', None)
     else:
         # Take the latest HEAD
-        commit_hash = c.run('git rev-parse --short HEAD')
-        ref = c.run('git symbolic-ref --short HEAD')
-        tag = c.run('git describe --tags HEAD')
+        commit_hash = c.run('git rev-parse --short HEAD').stdout.strip()
+        ref = c.run('git symbolic-ref --short HEAD').stdout.strip()
+        tag = c.run('git describe --tags HEAD').stdout.strip()
         if re.match(r"[\d\.]+-\d+-.+", tag):
             # The commit does not have a tag associated
             tag = None
@@ -282,16 +283,15 @@ def update_wheels_json_data(c, json_data):
 
 
 def write_update_json_data(c, json_filepath):
-    import json
+    if exists(c, json_filepath):
+        with open(json_filepath) as fp:
+            json_data = json.load(fp)
+    else:
+        json_data = {}
+    json_data = update_wheels_json_data(c, json_data)
     with open(json_filepath, 'w+') as fp:
-        json_data = fp.read()
-        if not json_data:
-            json_data = {}
-        else:
-            json_data = json.loads(json_data)
-        json_data = update_wheels_json_data(c, json_data)
-        fp.seek(0)
         json.dump(json_data, fp)
+    return json_data
 
 
 @task()
@@ -302,7 +302,6 @@ def push_wheelhouse(c, house=None):
     B) a remote folder via SSH
     C) a local folder
     """
-    import json
     tmp_wheel_path = house if house else os.path.join(c.config.code_root, 'wheelhouse')
     wheel_path = c.config.wheelhouse
     json_filename = 'special-wheels.json'
@@ -333,39 +332,46 @@ def push_wheelhouse(c, house=None):
             raise RuntimeError("The Bluenove wheelhouse bucket does not exist on S3. Please create it before continuing...")
 
         # There must exist a JSON file which holds links to the latest wheels on various branches, along with version tags
-        json_filepath = os.path.join(c.config.code_root, json_filename)
-        bucket.download_file(json_filename, json_filepath)
+        json_filepath = os.path.join(tmp_wheel_path, json_filename)
+        try:
+            bucket.download_file(json_filename, json_filepath)
+        except:
+            pass
 
-        indexable_names = set()
+        indexable_names = list()
         existing_wheels = set()
-        for key in bucket:
-            if key.name == json_filename:
+        for summary in bucket.objects.all():
+            if summary.key in (json_filename, 'error.html'):
                 # Don't add the JSON file to the indexable list
                 continue
-            indexable_names.add(key.name)
-            existing_wheels.add(key.name)
+            indexable_names.append(summary.key)
+            existing_wheels.add(summary.key)
 
         for filename in os.listdir(tmp_wheel_path):
             if filename in indexable_names:
                 continue
-            indexable_names.add(filename)
+            indexable_names.append(filename)
+        indexable_names.sort()
 
-        write_update_json_data(c, json_filepath)
-        json_data = json.load(json_filepath)
+        json_data = write_update_json_data(c, json_filepath)
 
-        output = os.path.join(c.config.code_root, 'index.html')
-        fill_template('wheelhouse_index.jinja2', {'wheelhouse': indexable_names}, output)
-        s3.Object(bucket_name, 'index.html').put(Body=open(output, 'rb'))
+        output = os.path.join(tmp_wheel_path, 'index.html')
+        fill_template(c, 'wheelhouse_index.jinja2', output, {'wheelhouse': indexable_names})
+        with open(output) as fp:
+            bucket.put_object(Body=fp, Key='index.html', ContentType='text/html', ACL='public-read')
+
+        with open(json_filepath) as fp:
+            bucket.put_object(Body=fp, Key=json_filename, ContentType='application/json', ACL='public-read')
 
         for file in os.listdir(tmp_wheel_path):
             if file not in existing_wheels:
-                s3.put_object()
+                with open(os.path.join(tmp_wheel_path, file)) as fp:
+                    bucket.put_object(Body=fp, Key=file, ACL='public-read')
 
         # put empty objects for S3-redirections (https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html)
         for key, value in json_data.iteritems():
-            s3.Object(bucket_name, key).put(Body='', Metadata={
-                'x-amz-website-redirect-location': '/%s' % value.wheel_name
-            })
+            bucket.put_object(Key=key, ACL='public-read', Body='',
+                              WebsiteRedirectLocation='/%s' % value['wheel_name'])
 
     elif wheel_path.strip().startswith('local://'):
         c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path.split('local://')[1]))
