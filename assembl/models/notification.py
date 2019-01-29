@@ -499,7 +499,7 @@ class NotificationSubscriptionOnIdea(NotificationSubscriptionOnObject):
         return self.idea
 
     def can_merge(self, other):
-        return (super(NotificationSubscriptionOnPost, self).can_merge(other) and self.idea_id == other.idea_id)
+        return (super(NotificationSubscriptionOnIdea, self).can_merge(other) and self.idea_id == other.idea_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnIdea, self).unique_query()
@@ -543,7 +543,7 @@ class NotificationSubscriptionOnExtract(NotificationSubscriptionOnObject):
         return self.extract
 
     def can_merge(self, other):
-        return (super(NotificationSubscriptionOnPost, self).can_merge(other) and self.extract_id == other.extract_id)
+        return (super(NotificationSubscriptionOnIdea, self).can_merge(other) and self.extract_id == other.extract_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnExtract, self).unique_query()
@@ -587,7 +587,7 @@ class NotificationSubscriptionOnUserAccount(NotificationSubscriptionOnObject):
         return self.user
 
     def can_merge(self, other):
-        return (super(NotificationSubscriptionOnPost, self).can_merge(other) and self.on_user_id == other.on_user_id)
+        return (super(NotificationSubscriptionOnIdea, self).can_merge(other) and self.on_user_id == other.on_user_id)
 
     def unique_query(self):
         query, _ = super(NotificationSubscriptionOnUserAccount, self).unique_query()
