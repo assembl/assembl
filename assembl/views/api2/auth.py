@@ -504,7 +504,7 @@ def assembl_register_user(request):
                     generic_error_message),
                     ErrorTypes.GENERIC,
                     HTTPConflict.code)
-                logger.error("We already have a user with this username" % username)
+                logger.error("We already have a user with username %s" % username)
         if len(username) > 20:
             errors.add_error(localizer.translate(_(
                 "The username must be less than 20 characters.")),
