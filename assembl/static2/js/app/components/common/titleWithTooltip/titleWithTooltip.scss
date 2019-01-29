@@ -40,6 +40,14 @@
 @media screen and (min-width: $screen-md-max) {
   .titleWithTooltip-container {
     .titleTooltip-container {
+      margin-top: 0;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .titleWithTooltip-container {
+    .titleTooltip-container {
       margin-top: 15px;
     }
   }

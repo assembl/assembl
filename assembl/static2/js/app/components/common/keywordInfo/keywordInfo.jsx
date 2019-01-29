@@ -22,8 +22,8 @@ const KeywordInfo = ({ keyword }: Props) => {
   const relevanceTitle: string = I18n.t(relevanceKey);
 
   return (
-    <Description>
-      <h3 className="keyword-info">{keyword.text}</h3>
+    <Description className="keyword-info">
+      <h3>{keyword.text}</h3>
       <p className="info">{`${occurenceTitle} : ${keyword.count}`}</p>
       <p className="info">{`${relevanceTitle} : ${keyword.relevance}`}</p>
     </Description>

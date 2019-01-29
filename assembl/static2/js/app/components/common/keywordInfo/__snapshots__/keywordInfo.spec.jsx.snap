@@ -11,11 +11,9 @@ exports[`Storyshots KeywordInfo default 1`] = `
     }
   >
     <div
-      className="description"
+      className="description keyword-info"
     >
-      <h3
-        className="keyword-info"
-      >
+      <h3>
         test
       </h3>
       <p
@@ -355,11 +353,9 @@ exports[`Storyshots KeywordInfo playground 1`] = `
     }
   >
     <div
-      className="description"
+      className="description keyword-info"
     >
-      <h3
-        className="keyword-info"
-      >
+      <h3>
         test
       </h3>
       <p
