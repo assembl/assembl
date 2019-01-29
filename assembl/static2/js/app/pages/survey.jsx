@@ -16,6 +16,7 @@ import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
+import SemanticAnalysisForThematicQuery from '../graphql/SemanticAnalysisForThematicQuery.graphql';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
@@ -53,7 +54,7 @@ type Props = {
   totalSentiments: number,
   announcement: AnnouncementContent,
   updateContentLocaleMapping: Function // eslint-disable-line react/no-unused-prop-types
-};
+} & SemanticAnalysisForThematicQuery;
 
 type State = {
   isScroll: boolean,
@@ -131,9 +132,11 @@ class Survey extends React.Component<Props, State> {
       slug,
       totalSentiments,
       timeline,
-      announcement
+      announcement,
+      firstColor,
+      secondColor,
+      semanticAnalysisForThematicData
     } = this.props;
-
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: identifier })}`;
     let statElements = [];
@@ -157,7 +160,12 @@ class Survey extends React.Component<Props, State> {
               <Grid fluid className="background-light">
                 <div className="max-container">
                   <div className="content-section">
-                    <SurveyAnnouncement announcement={announcement} />
+                    <SurveyAnnouncement
+                      announcement={announcement}
+                      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+                      firstColor={firstColor}
+                      secondColor={secondColor}
+                    />
                   </div>
                 </div>
               </Grid>

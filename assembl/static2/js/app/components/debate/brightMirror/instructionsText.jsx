@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
-import { Grid, Tabs, Tab } from 'react-bootstrap';
+import { Tabs, Tab } from 'react-bootstrap';
 import { renderRichtext } from '../../../utils/linkify';
 // Component imports
 import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
@@ -76,7 +76,7 @@ const InstructionsText = ({ title, body, semanticAnalysisForThematicData, firstC
   );
 
   return (
-    <Grid fluid className="background-light instructions-text">
+    <div fluid className="background-light instructions-text">
       <div className="max-container">
         <div className="content-section">
           <Tabs
@@ -91,7 +91,7 @@ const InstructionsText = ({ title, body, semanticAnalysisForThematicData, firstC
           </Tabs>
         </div>
       </div>
-    </Grid>
+    </div>
   );
 };
 
