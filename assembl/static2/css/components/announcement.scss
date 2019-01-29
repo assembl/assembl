@@ -56,6 +56,11 @@
 }
 
 .announcement-menu {
+  h1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
   .md-only {
     display: none;
   }
@@ -131,12 +136,20 @@
 
   .announcement-menu {
     h1 {
-      margin-top: 25px;
+      margin-top: 20px;
       margin-bottom: 10px;
     }
 
     .tab-content {
       margin-top: 0;
+    }
+
+    .nav-tabs.nav-justified {
+      & > li {
+        & > a {
+          padding-top: 0;
+        }
+      }
     }
   }
 }
@@ -148,6 +161,14 @@
 
       &::before {
         content: ' ';
+      }
+    }
+
+    .nav-tabs.nav-justified {
+      & > li {
+        & > a {
+          padding-top: 5px;
+        }
       }
     }
   }

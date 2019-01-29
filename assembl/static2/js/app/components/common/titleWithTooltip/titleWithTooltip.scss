@@ -4,7 +4,8 @@
   justify-content: center;
 
   .titleTooltip-container {
-    margin-bottom: 22px;
+    margin-top: 15px;
+    margin-bottom: 5px;
     margin-left: 5px;
   }
 }
@@ -31,7 +32,7 @@
     justify-content: left;
 
     .titleTooltip-container {
-      margin-left: 5px;
+      margin-top: 10px;
     }
   }
 }
@@ -39,8 +40,7 @@
 @media screen and (min-width: $screen-md-max) {
   .titleWithTooltip-container {
     .titleTooltip-container {
-      margin-top: 10px;
-      margin-left: 5px;
+      margin-top: 15px;
     }
   }
 }

@@ -9,3 +9,12 @@ p.info {
   letter-spacing: 1px;
   line-height: 1.3;
 }
+
+@media screen and (min-width: $screen-sm-min) {
+  .description {
+    h3 {
+      margin-bottom: 5px;
+      margin-top: 0;
+    }
+  }
+}

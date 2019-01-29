@@ -145,6 +145,15 @@
   }
 }
 
+@media screen and (min-width: $screen-xl-min) {
+  .idea {
+    .padding-left-right {
+      padding-left: 110px;
+      padding-right: 110px;
+    }
+  }
+}
+
 @media screen and (max-width: 992px) {
   .idea {
     .border-left {
@@ -152,8 +161,8 @@
     }
 
     .padding-left-right {
-      padding-left: 70px;
-      padding-right: 70px;
+      padding-left: 72px;
+      padding-right: 72px;
     }
 
     .level {
