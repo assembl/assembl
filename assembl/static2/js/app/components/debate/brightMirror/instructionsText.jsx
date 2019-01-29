@@ -20,7 +20,7 @@ export type InstructionsTextProps = {
 };
 
 const InstructionsText = ({ title, body, semanticAnalysisForThematicData, firstColor, secondColor }: InstructionsTextProps) => {
-  const instructionContent = (
+  const guidelinesContent = (
     <div className="announcement">
       <div className="announcement-title">
         <h3 className="announcement-title-text dark-title-1">{title}</h3>
@@ -34,7 +34,7 @@ const InstructionsText = ({ title, body, semanticAnalysisForThematicData, firstC
       <div className="max-container">
         <div className="content-section">
           <ThematicTabs
-            instructionContent={instructionContent}
+            guidelinesContent={guidelinesContent}
             firstColor={firstColor}
             secondColor={secondColor}
             semanticAnalysisForThematicData={semanticAnalysisForThematicData}

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Tabs, Tab } from 'react-bootstrap';
 // Component imports
@@ -9,13 +9,13 @@ import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalys
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
 export type Props = {
-  instructionContent?: any,
+  guidelinesContent?: React.Node,
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
   firstColor: string,
   secondColor: string
 };
 
-const ThematicTabs = ({ instructionContent, firstColor, secondColor, semanticAnalysisForThematicData }: Props) => {
+const ThematicTabs = ({ guidelinesContent, firstColor, secondColor, semanticAnalysisForThematicData }: Props) => {
   const { topKeywords } = semanticAnalysisForThematicData;
   const topKeywordsCount = topKeywords.length;
 
@@ -42,7 +42,7 @@ const ThematicTabs = ({ instructionContent, firstColor, secondColor, semanticAna
 
   const guidelinesTabAndContent = (
     <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES} title={guidelinesTabTitle}>
-      {instructionContent}
+      {guidelinesContent}
     </Tab>
   );
 
@@ -80,7 +80,7 @@ const ThematicTabs = ({ instructionContent, firstColor, secondColor, semanticAna
 };
 
 ThematicTabs.defaultProps = {
-  instructionContent: <div />
+  guidelinesContent: <div />
 };
 
 export default ThematicTabs;

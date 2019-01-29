@@ -107,7 +107,7 @@ export const SurveyAnnouncement = ({
   firstColor,
   secondColor
 }: SurveyAnnouncementProps) => {
-  const instructionContent = (
+  const guidelinesContent = (
     <div className="announcement">
       <div className="announcement-title">
         <h3 className="announcement-title-text dark-title-1">
@@ -125,7 +125,7 @@ export const SurveyAnnouncement = ({
       <div className="max-container">
         <div className="content-section">
           <ThematicTabs
-            instructionContent={instructionContent}
+            guidelinesContent={guidelinesContent}
             firstColor={firstColor}
             secondColor={secondColor}
             semanticAnalysisForThematicData={semanticAnalysisForThematicData}
@@ -143,7 +143,7 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
   const columnInfos = getColumnInfos(messageColumns);
   const doughnutElements = isMultiColumns ? columnInfos : createDoughnutElements(sentimentsCount);
 
-  const instructionContent = (
+  const guidelinesContent = (
     <div className="announcement">
       <div className="announcement-title">
         <h3 className="announcement-title-text dark-title-1">
@@ -177,7 +177,7 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
 
   return (
     <ThematicTabs
-      instructionContent={instructionContent}
+      guidelinesContent={guidelinesContent}
       firstColor={firstColor}
       secondColor={secondColor}
       semanticAnalysisForThematicData={semanticAnalysisForThematicData}
