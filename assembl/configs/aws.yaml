@@ -15,6 +15,7 @@ attachment_bucket: "assembl-data-%(aws_client)s"
 elasticsearch_index: "%(aws_client)s:assembl-es"
 elasticsearch_port: 80
 elasticsearch_version: 5.6.8
+mail.port: 587
 aws_secrets_ids:
   - arn:aws:secretsmanager:eu-west-1:900208097337:secret:assembl_shared_secrets-8cUP7z
   - assembl_secrets
