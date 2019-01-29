@@ -4,7 +4,6 @@
   justify-content: center;
 
   .titleTooltip-container {
-    margin-top: 15px;
     margin-bottom: 5px;
     margin-left: 5px;
   }
@@ -32,7 +31,8 @@
     justify-content: left;
 
     .titleTooltip-container {
-      margin-top: 10px;
+      margin-top: 0;
+      margin-bottom: 7px;
     }
   }
 }
