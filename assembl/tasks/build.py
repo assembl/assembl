@@ -25,7 +25,7 @@ def get_new_node_modules_path():
     return normpath(join(
         get_new_node_base_path(), 'node_modules'))
 
-
+@task()
 def update_bower(c):
     with c.cd(get_node_base_path(c)):
         with venv(c):
@@ -179,8 +179,8 @@ def updatemaincode(c):
     print('Updating Git repository')
     with c.cd(c.config.projectpath):
         c.run('git fetch')
-        c.run('git checkout %s' % c.config.gitbranch)
-        c.run('git pull %s %s' % (c.config.gitrepo, c.config.gitbranch))
+        c.run('git checkout %s' % c.config._internal.gitbranch)
+        c.run('git pull %s %s' % (c.config.gitrepo, c.config._internal.gitbranch))
 
 
 @task()
