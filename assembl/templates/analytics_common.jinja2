@@ -14,14 +14,3 @@
 
 {% block analytics_extra_scripts %}
 {% endblock %}
-
-{% if bugherd_api_key %}
-<script type='text/javascript'>
-(function (d, t) {
-var bh = d.createElement(t), s = d.getElementsByTagName(t)[0];
-bh.type = 'text/javascript';
-bh.src = 'https://www.bugherd.com/sidebarv2.js?apikey={{bugherd_api_key}}';
-s.parentNode.insertBefore(bh, s);
-})(document, 'script');
-</script>
-{% endif %}
