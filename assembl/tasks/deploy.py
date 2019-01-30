@@ -162,7 +162,7 @@ def get_aws_invoke_yaml(c, celery=False):
         ex_content = get_s3_file(bucket, key)
         if not ex_content:
             break
-        with open(key, 'w') as f:
+        with open(os.path.join(c.config.projectpath, key), 'w') as f:
             f.write(ex_content)
         match = extends_re.search(ex_content)
     if not content:
