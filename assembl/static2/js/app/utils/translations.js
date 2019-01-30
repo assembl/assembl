@@ -678,7 +678,7 @@ const Translations = {
       discussionSlug: "Slug de la discussion",
       slugWarning:
         "Cette modification entraine un changement de l'adresse de la consultation. Intégrez ce changement dans vos prochaines communications. Pour des assurer la continuité du service, la précédente adresse sera toujours opérationnelle.",
-      invalidSlug: "Le slug contient un ou plusieurs caractères invalides",
+      invalidSlug: "Les caractères spéciaux ne sont pas autorisés",
       menu: {
         phase: "Phase %{count} - %{description}",
         preferences: "Préférences de la discussion",
@@ -1697,7 +1697,7 @@ const Translations = {
       discussionSlug: "Slug of the debate",
       slugWarning:
         "This modification causes a change in the adress of the debate. Please take this change into account in further communications. To insure the continuity of the service, the previous address will still be operating.",
-      invalidSlug: "The slug contains one or more invalid characters",
+      invalidSlug: "Special characters are not allowed",
       menu: {
         phase: "Phase %{count} - %{description}",
         preferences: "Discussion preferences",
