@@ -1,0 +1,27 @@
+# Sample supervisord service file
+# On Ubuntu 15.10 and later you need to drop it in 
+# /etc/systemd/system/assembl.service
+# And then run
+# systemctl enable assembl
+
+[Unit]
+Description=assembl supervisord
+
+[Service]
+# These are the lines you have to modify for your environment. This assumes Assembl is running under the assembl_user user.
+Environment=ASSEMBL_PATH=/home/assembl_user/assembl
+User=assembl_user
+Group=www-data
+
+Type=simple
+Restart=on-failure
+ExecStart=/bin/bash -c 'test -f $ASSEMBL_PATH/local.ini && source $ASSEMBL_PATH/venv/bin/activate && exec supervisord -c $ASSEMBL_PATH/supervisord.conf --nodaemon'
+ExecStartPost=/bin/bash -c 'test -f $ASSEMBL_PATH/local.ini && sleep 5 && source $ASSEMBL_PATH/venv/bin/activate && supervisorctl -c $ASSEMBL_PATH/supervisord.conf start prod:uwsgi >/tmp/supervisordebug.txt'
+ExecStop=/bin/bash -c '. $ASSEMBL_PATH/venv/bin/activate; supervisorctl -c $ASSEMBL_PATH/supervisord.conf shutdown'
+
+KillMode=control-group
+TimeoutStopSec=120
+
+[Install]
+WantedBy=multi-user.target
+
