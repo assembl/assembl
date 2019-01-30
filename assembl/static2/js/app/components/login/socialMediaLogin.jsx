@@ -34,7 +34,15 @@ export class SocialMedia extends React.Component {
         </h4>
         <ul>
           {this.props.providers.map((provider) => {
-            const providerName = convertNameToCssClass(provider.name);
+            let providerName = convertNameToCssClass(provider.name);
+            let classNameIcon = providerName;
+            let socialMediaName = provider.name;
+            // to implement google social media button
+            if (providerName === 'google-oauth2') {
+              providerName = 'google';
+              classNameIcon = 'gplus-1';
+              socialMediaName = 'Google+';
+            }
             return (
               <li key={provider.name}>
                 <form id={reverseString(provider.name)} method="get" action={provider.login}>
@@ -44,8 +52,8 @@ export class SocialMedia extends React.Component {
                       <input key={provider.name + k} type="hidden" name={k} value={provider.extra[k]} />
                     ))}
                   <button className={`btn btn-block btn-social btn-${providerName}`} type="submit">
-                    <i className={`assembl-icon-${providerName}`} />
-                    {provider.name}
+                    <i className={`assembl-icon-${classNameIcon}`} />
+                    {socialMediaName}
                   </button>
                 </form>
               </li>
