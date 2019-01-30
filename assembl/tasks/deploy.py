@@ -309,7 +309,7 @@ def aws_celery_instance_startup(c):
 
 @task(install_wheel)
 def assembl_dir_permissions(c):
-    code_path = 'venv/lib/python-2.7/site-packages'
+    code_path = 'venv/lib/python2.7/site-packages'
     c.run('chgrp -R www-data {path}/assembl/static {path}/assembl/static2'.format(path=code_path))
     c.run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
     c.run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
