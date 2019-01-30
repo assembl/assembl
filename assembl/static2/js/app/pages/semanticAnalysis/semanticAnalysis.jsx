@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
 
-// HOC imports
-import manageColor from '../../components/common/manageColor';
-
 // Component imports
 import ToolbarSlider from '../../components/common/toolbarSlider/toolbarSlider';
 import TitleWithTooltip from '../../components/common/titleWithTooltip/titleWithTooltip';
@@ -20,10 +17,6 @@ import Title from '../../components/common/title/title';
 import type { Keyword, SemanticAnalysisData } from '../../integration/semanticAnalysis/dataType';
 
 export type Props = {
-  /** Optional first color */
-  firstColor: string,
-  /** Optional second color */
-  secondColor: string,
   /** Semantic analysis data */
   semanticAnalysisData: SemanticAnalysisData
 };
@@ -34,25 +27,20 @@ export type State = {
   numberOfKeywordsToDisplay: number
 };
 
-const rgbToHex = (color) => {
-  let hex = Number(color).toString(16);
-  if (hex.length < 2) {
-    hex = `0${hex}`;
-  }
-  return hex;
-};
+// const rgbToHex = (color) => {
+//   let hex = Number(color).toString(16);
+//   if (hex.length < 2) {
+//     hex = `0${hex}`;
+//   }
+//   return hex;
+// };
 
-const fullRgbToHex = (color) => {
-  const rgbArray = color.substring(4, color.length - 1).split(', ');
-  return `#${rgbToHex(rgbArray[0])}${rgbToHex(rgbArray[1])}${rgbToHex(rgbArray[2])}`;
-};
+// const fullRgbToHex = (color) => {
+//   const rgbArray = color.substring(4, color.length - 1).split(', ');
+//   return `#${rgbToHex(rgbArray[0])}${rgbToHex(rgbArray[1])}${rgbToHex(rgbArray[2])}`;
+// };
 
 export class SemanticAnalysis extends Component<Props, State> {
-  static defaultProps = {
-    firstColor: 'rgb(0, 0, 0)',
-    secondColor: 'rgb(0, 0, 0)'
-  };
-
   state = {
     keywordSelected: false,
     keywordData: {
@@ -102,7 +90,7 @@ export class SemanticAnalysis extends Component<Props, State> {
 
   render() {
     const { keywordData, numberOfKeywordsToDisplay } = this.state;
-    const { firstColor, secondColor, semanticAnalysisData } = this.props;
+    const { semanticAnalysisData } = this.props;
 
     // Semantic analysis
     const { nlpSentiment, topKeywords } = semanticAnalysisData;
@@ -173,8 +161,8 @@ export class SemanticAnalysis extends Component<Props, State> {
         {/** WordCloud section */}
         <Col xs={12} md={8} className="no-padding lg-wordcloud-padding sm-margin-m margin-s">
           <ResponsiveWordCloud
-            keywordsColor={firstColor}
-            keywordsColorActive={secondColor}
+            // keywordsColor={firstColor}
+            // keywordsColorActive={secondColor}
             keywords={keywords}
             numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
             onWordClick={this.onKeywordClickHandler}
@@ -197,7 +185,7 @@ export class SemanticAnalysis extends Component<Props, State> {
             <Title level={2}>{numberKeywordTitle}</Title>
 
             <ToolbarSlider
-              color={fullRgbToHex(firstColor)}
+              // color={fullRgbToHex(firstColor)}
               defaultValue={this.NUM_WORDS_DEFAULT}
               maxValue={keywordsLength}
               minValue={this.MIN_WORDS}
@@ -218,4 +206,4 @@ export class SemanticAnalysis extends Component<Props, State> {
   }
 }
 
-export default manageColor(SemanticAnalysis);
+export default SemanticAnalysis;

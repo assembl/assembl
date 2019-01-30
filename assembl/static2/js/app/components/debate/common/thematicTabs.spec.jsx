@@ -16,8 +16,6 @@ describe('<InstructionsText /> - with shallow', () => {
 
   beforeEach(() => {
     props = {
-      firstColor: 'rgb(0, 0, 0)',
-      secondColor: 'rgb(0, 0, 0)',
       semanticAnalysisForThematicData: {
         id: '1234',
         nlpSentiment: {

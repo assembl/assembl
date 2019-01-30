@@ -51,8 +51,6 @@ type DoughnutElements = {
 
 type SurveyAnnouncementProps = {
   announcement: AnnouncementContent,
-  firstColor: string,
-  secondColor: string,
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
@@ -65,8 +63,6 @@ type Props = {
     messageColumns: IdeaMessageColumns,
     messageViewOverride: ?string
   },
-  firstColor: string,
-  secondColor: string,
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
@@ -101,12 +97,7 @@ export const createDoughnutElements = (sentimentCounts: SentimentsCounts): Array
     Tooltip: createTooltip(sentimentCounts[key], sentimentCounts[key].count)
   }));
 
-export const SurveyAnnouncement = ({
-  announcement,
-  semanticAnalysisForThematicData,
-  firstColor,
-  secondColor
-}: SurveyAnnouncementProps) => {
+export const SurveyAnnouncement = ({ announcement, semanticAnalysisForThematicData }: SurveyAnnouncementProps) => {
   const guidelinesContent = (
     <div className="announcement">
       <div className="announcement-title">
@@ -124,19 +115,14 @@ export const SurveyAnnouncement = ({
     <div fluid className="background-light instructions-text">
       <div className="max-container">
         <div className="content-section">
-          <ThematicTabs
-            guidelinesContent={guidelinesContent}
-            firstColor={firstColor}
-            secondColor={secondColor}
-            semanticAnalysisForThematicData={semanticAnalysisForThematicData}
-          />
+          <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />
         </div>
       </div>
     </div>
   );
 };
 
-export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData, firstColor, secondColor }: Props) => {
+export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData }: Props) => {
   const { numContributors, numPosts, posts, messageColumns, messageViewOverride } = idea;
   const isMultiColumns = messageViewOverride === MESSAGE_VIEW.messageColumns;
   const sentimentsCount = getSentimentsCount(posts);
@@ -175,14 +161,7 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
     </div>
   );
 
-  return (
-    <ThematicTabs
-      guidelinesContent={guidelinesContent}
-      firstColor={firstColor}
-      secondColor={secondColor}
-      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
-    />
-  );
+  return <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />;
 };
 
 const announcementDefaultProps = {
@@ -194,9 +173,7 @@ const announcementDefaultProps = {
     },
     title: '',
     topKeywords: []
-  },
-  firstColor: 'rgb(0,0,0)',
-  secondColor: 'rgb(0,0,0)'
+  }
 };
 
 SurveyAnnouncement.defaultProps = { ...announcementDefaultProps };

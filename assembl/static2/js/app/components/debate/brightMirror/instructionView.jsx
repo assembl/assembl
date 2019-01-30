@@ -26,9 +26,7 @@ export type InstructionViewProps = {
   identifier: string,
   phaseId: string,
   lang: string,
-  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
-  firstColor: string,
-  secondColor: string
+  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
 const InstructionView = ({
@@ -41,9 +39,7 @@ const InstructionView = ({
   identifier,
   phaseId,
   lang,
-  semanticAnalysisForThematicData,
-  firstColor,
-  secondColor
+  semanticAnalysisForThematicData
 }: InstructionViewProps) => {
   // Check permission
   const canPost = isUserConnected && connectedUserCan(Permissions.ADD_POST) && !getIsPhaseCompletedById(timeline, phaseId);
@@ -76,8 +72,6 @@ const InstructionView = ({
         title={announcementContent.title || ''}
         body={announcementContent.body}
         semanticAnalysisForThematicData={semanticAnalysisForThematicData}
-        firstColor={firstColor}
-        secondColor={secondColor}
       />
       <div className="overflow-x">
         {topPostFormContainer}

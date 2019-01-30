@@ -18,12 +18,7 @@ import type { Keyword } from '../dataType';
 
 import fakeData from '../data.json';
 
-export type Props = {
-  /** Optional first color */
-  firstColor: string,
-  /** Optional second color */
-  secondColor: string
-};
+export type Props = {};
 
 export type State = {
   keywordSelected: boolean,
@@ -31,25 +26,20 @@ export type State = {
   numberOfKeywordsToDisplay: number
 };
 
-const rgbToHex = (color) => {
-  let hex = Number(color).toString(16);
-  if (hex.length < 2) {
-    hex = `0${hex}`;
-  }
-  return hex;
-};
+// const rgbToHex = (color) => {
+//   let hex = Number(color).toString(16);
+//   if (hex.length < 2) {
+//     hex = `0${hex}`;
+//   }
+//   return hex;
+// };
 
-const fullRgbToHex = (color) => {
-  const rgbArray = color.substring(4, color.length - 1).split(', ');
-  return `#${rgbToHex(rgbArray[0])}${rgbToHex(rgbArray[1])}${rgbToHex(rgbArray[2])}`;
-};
+// const fullRgbToHex = (color) => {
+//   const rgbArray = color.substring(4, color.length - 1).split(', ');
+//   return `#${rgbToHex(rgbArray[0])}${rgbToHex(rgbArray[1])}${rgbToHex(rgbArray[2])}`;
+// };
 
 export class SemanticAnalysis extends Component<Props, State> {
-  static defaultProps = {
-    firstColor: 'rgb(0, 0, 0)',
-    secondColor: 'rgb(0, 0, 0)'
-  };
-
   state = {
     keywordSelected: false,
     keywordData: {
@@ -99,7 +89,6 @@ export class SemanticAnalysis extends Component<Props, State> {
 
   render() {
     const { keywordData, numberOfKeywordsToDisplay } = this.state;
-    const { firstColor, secondColor } = this.props;
 
     // Semantic analysis
     const { nlpSentiment, topKeywords } = fakeData;
@@ -163,8 +152,8 @@ export class SemanticAnalysis extends Component<Props, State> {
         {/** WordCloud section */}
         <Col xs={12} md={8} className="no-padding lg-wordcloud-padding sm-margin-m margin-s">
           <ResponsiveWordCloud
-            keywordsColor={firstColor}
-            keywordsColorActive={secondColor}
+            // keywordsColor={firstColor}
+            // keywordsColorActive={secondColor}
             keywords={topKeywords}
             numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
             onWordClick={this.onKeywordClickHandler}
@@ -187,7 +176,7 @@ export class SemanticAnalysis extends Component<Props, State> {
             <Title level={2}>{numberKeywordTitle}</Title>
 
             <ToolbarSlider
-              color={fullRgbToHex(firstColor)}
+              // color={fullRgbToHex(firstColor)}
               defaultValue={this.NUM_WORDS_DEFAULT}
               maxValue={topKeywords.length}
               minValue={this.MIN_WORDS}

@@ -12,14 +12,10 @@ export type InstructionsTextProps = {
   /** Body */
   body: string,
   /** Data for semantic analysis */
-  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
-  /** First theme color */
-  firstColor: string,
-  /** Second theme color */
-  secondColor: string
+  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
-const InstructionsText = ({ title, body, semanticAnalysisForThematicData, firstColor, secondColor }: InstructionsTextProps) => {
+const InstructionsText = ({ title, body, semanticAnalysisForThematicData }: InstructionsTextProps) => {
   const guidelinesContent = (
     <div className="announcement">
       <div className="announcement-title">
@@ -33,12 +29,7 @@ const InstructionsText = ({ title, body, semanticAnalysisForThematicData, firstC
     <div fluid className="background-light instructions-text">
       <div className="max-container">
         <div className="content-section">
-          <ThematicTabs
-            guidelinesContent={guidelinesContent}
-            firstColor={firstColor}
-            secondColor={secondColor}
-            semanticAnalysisForThematicData={semanticAnalysisForThematicData}
-          />
+          <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />
         </div>
       </div>
     </div>

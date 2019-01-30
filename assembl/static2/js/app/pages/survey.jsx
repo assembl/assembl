@@ -133,8 +133,6 @@ class Survey extends React.Component<Props, State> {
       totalSentiments,
       timeline,
       announcement,
-      firstColor,
-      secondColor,
       semanticAnalysisForThematicData
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
@@ -163,8 +161,6 @@ class Survey extends React.Component<Props, State> {
                     <SurveyAnnouncement
                       announcement={announcement}
                       semanticAnalysisForThematicData={semanticAnalysisForThematicData}
-                      firstColor={firstColor}
-                      secondColor={secondColor}
                     />
                   </div>
                 </div>

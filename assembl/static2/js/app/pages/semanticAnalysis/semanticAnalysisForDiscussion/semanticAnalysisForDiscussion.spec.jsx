@@ -18,8 +18,6 @@ describe('<SemanticAnalysisForDiscussion /> - with shallow', () => {
 
   beforeEach(() => {
     semanticAnalysisForDiscussionProps = {
-      firstColor: 'rgb(0, 0, 0)',
-      secondColor: 'rgb(0, 0, 0)',
       semanticAnalysisForDiscussionData: {
         id: '1',
         nlpSentiment: {

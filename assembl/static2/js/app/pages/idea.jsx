@@ -28,7 +28,6 @@ import HeaderStatistics, { statContributions, statMessages, statParticipants } f
 import InstructionView from '../components/debate/brightMirror/instructionView';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
-import manageColor from '../components/common/manageColor';
 import Survey from './survey';
 import VoteSession from './voteSession';
 // Utils imports
@@ -264,8 +263,6 @@ class Idea extends React.Component<Props> {
       messageViewOverride,
       phaseId,
       routerParams,
-      firstColor,
-      secondColor,
       semanticAnalysisForThematicData,
       timeline
     } = this.props;
@@ -318,8 +315,6 @@ class Idea extends React.Component<Props> {
           {...childProps}
           announcementContent={announcement}
           semanticAnalysisForThematicData={semanticAnalysisForThematicData}
-          firstColor={firstColor}
-          secondColor={secondColor}
         />
       );
     } else {
@@ -360,8 +355,6 @@ class Idea extends React.Component<Props> {
                     <Announcement
                       announcement={announcement}
                       idea={ideaWithPostsData.idea}
-                      firstColor={firstColor}
-                      secondColor={secondColor}
                       semanticAnalysisForThematicData={semanticAnalysisForThematicData}
                     />
                   </div>
@@ -482,6 +475,5 @@ export default compose(
     }
   }),
   semanticAnalysisForThematicQuery,
-  manageColor,
   manageErrorAndLoading({ displayLoader: true })
 )(SwitchViewWithContext);

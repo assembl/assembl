@@ -10,12 +10,10 @@ import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisF
 
 export type Props = {
   guidelinesContent?: React.Node,
-  firstColor: string,
-  secondColor: string,
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
-const ThematicTabs = ({ guidelinesContent, firstColor, secondColor, semanticAnalysisForThematicData }: Props) => {
+const ThematicTabs = ({ guidelinesContent, semanticAnalysisForThematicData }: Props) => {
   const { topKeywords } = semanticAnalysisForThematicData;
   const topKeywordsLength = topKeywords.length;
 
@@ -56,11 +54,7 @@ const ThematicTabs = ({ guidelinesContent, firstColor, secondColor, semanticAnal
   const semanticAnalysisTabAndContent = (
     <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
       <div id="semantic-analysis-thematic" className="semantic-analysis">
-        <SemanticAnalysis
-          semanticAnalysisData={semanticAnalysisForThematicData}
-          firstColor={firstColor}
-          secondColor={secondColor}
-        />
+        <SemanticAnalysis semanticAnalysisData={semanticAnalysisForThematicData} />
       </div>
     </Tab>
   );

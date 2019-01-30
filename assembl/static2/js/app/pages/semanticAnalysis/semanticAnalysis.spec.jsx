@@ -23,8 +23,6 @@ describe('<SemanticAnalysis /> - with shallow', () => {
 
   beforeEach(() => {
     semanticAnalysisProps = {
-      firstColor: 'rgb(0, 0, 0)',
-      secondColor: 'rgb(0, 0, 0)',
       semanticAnalysisData: {
         id: '1',
         nlpSentiment: {
