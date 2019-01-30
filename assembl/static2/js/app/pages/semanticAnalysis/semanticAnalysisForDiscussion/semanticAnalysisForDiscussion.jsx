@@ -15,9 +15,9 @@ import manageColor from '../../../components/common/manageColor';
 import { SemanticAnalysis, type Props as SemanticAnalysisProps } from '../semanticAnalysis';
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 
-type Props = SemanticAnalysisForDiscussionQuery & SemanticAnalysisProps;
+export type Props = SemanticAnalysisForDiscussionQuery & SemanticAnalysisProps;
 
-class SemanticAnalysisForDiscussion extends Component<Props> {
+export class SemanticAnalysisForDiscussion extends Component<Props> {
   render() {
     const { firstColor, secondColor, semanticAnalysisForDiscussionData } = this.props;
     const { topKeywords } = semanticAnalysisForDiscussionData;
