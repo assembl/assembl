@@ -5,12 +5,11 @@ from pprint import pprint
 import json
 from time import sleep
 from ConfigParser import RawConfigParser
-from os import getcwd
+from getpass import getuser
+
 from .common import (
     setup_ctx, running_locally, exists, venv, task, local_code_root,
     create_venv, fill_template)
-from os.path import join
-from getpass import getuser
 
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
@@ -345,7 +344,7 @@ def install_bluenove_actionable(context):
         with context.cd(context.config.projectpath):
             context.run('git clone git@github.com:bluenove/bluenove-actionable.git')
 
-        with context.cd(join(context.config.projectpath, '..', 'bluenove-actionable')):
+        with context.cd(os.path.join(context.config.projectpath, '..', 'bluenove-actionable')):
             context.run('mkdir -p data && chmod o+rwx data')
             context.run('docker-compose build', warn=True)
 
@@ -372,7 +371,7 @@ def get_robot_machine(c):
 @task()
 def start_bluenove_actionable(c):
     """Starts Bigdatext algorithm."""
-    path = join(c.projectpath, '..', 'bluenove-actionable')
+    path = os.path.join(c.projectpath, '..', 'bluenove-actionable')
     robot = get_robot_machine(c)
     if exists(c, path) and robot:
         url_instance = c.public_hostname
@@ -386,7 +385,7 @@ def start_bluenove_actionable(c):
 @task()
 def stop_bluenove_actionable(c):
     """Stops Bigdatatext algorithm."""
-    path = join(c.projectpath, '..', 'bluenove-actionable')
+    path = os.path.join(c.projectpath, '..', 'bluenove-actionable')
     if exists(c, path):
         with c.cd(path):
             c.run('docker-compose down', warn=True)
@@ -402,7 +401,7 @@ def restart_bluenove_actionable(c):
 @task()
 def update_bluenove_actionable(c):
     """Update bluenove_actionable git repository and rebuilding tha app."""
-    path = join(c.projectpath, '..', 'bluenove-actionable')
+    path = os.path.join(c.projectpath, '..', 'bluenove-actionable')
     if exists(path):
         with c.cd(path):
             c.run('git pull')
@@ -424,7 +423,7 @@ def updatemaincode(c):
 @task()
 def update_url_metadata(c):
     """Update url metadata microservice."""
-    path = join(c.projectpath, '..', 'url_metadata')
+    path = os.path.join(c.projectpath, '..', 'url_metadata')
     if exists(path):
         with c.cd(path):
             c.run('git pull')
@@ -438,7 +437,7 @@ def app_setup(c):
     if not c.config.package_install:
         with venv(c):
             c.run('pip install -e ./')
-        setup_var_directory()
+        create_var_dir(c)
         if not exists(c.config.ini_file):
             create_local_ini(c)
         with venv(c):
@@ -457,7 +456,7 @@ def code_root(context, alt_env=None):
         if (as_bool(get_prefixed('package_install', alt_env, False))):
             return os.path.join(venv_path(alt_env), 'lib', 'python2.7', 'site-packages')
         else:
-            return get_prefixed('projectpath', alt_env, getcwd())
+            return get_prefixed('projectpath', alt_env, os.getcwd())
 
 
 def as_bool(b):
@@ -505,7 +504,7 @@ def check_and_create_database_user(context, host=None, user=None, password=None)
     host = host or context.config.DEFAULT.db_host
     user = user or context.config.DEFAULT.db_user
     password = password or context.DEFAULT.db_password
-    pypsql = join(code_root(context), 'scripts', 'pypsql.py')
+    pypsql = os.path.join(code_root(context), 'scripts', 'pypsql.py')
     checkUser = context.run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
         command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user),
         pypsql=pypsql, password=password, host=host, user=user))
