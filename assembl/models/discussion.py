@@ -41,6 +41,7 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
     """
     The old slug of a debate. Used in case the administrator changes the slug of a debate.
     """
+    __tablename__ = "old_slug"
     id = Column(Integer, primary_key=True)
     discussion_id = Column(Integer, ForeignKey(
         'discussion.id',
