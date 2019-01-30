@@ -194,8 +194,12 @@ def prepare_computation(id):
 def process_post_watson(id, celery=False):
     """Use this entry point to analyze a post from pshell"""
     if celery:
-        with transaction.manager:
+        from assembl.lib.sqla import get_session_maker
+        if get_session_maker().session_factory.kw['extension']:
             do_it = prepare_computation(id)
+        else:
+            with transaction.manager:
+                do_it = prepare_computation(id)
         if do_it:
             return do_watson_computation.delay(id)
     else:
