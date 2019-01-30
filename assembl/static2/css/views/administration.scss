@@ -222,6 +222,14 @@
     .admin-content {
       padding: 30px 40px 80px;
       text-align: center;
+
+      .block-picker {
+        &.no-border-radius {
+          > div {
+            border-radius: 0 0 0 0 !important;
+          }
+        }
+      }
     }
 
     .admin-paragraph {

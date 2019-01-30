@@ -45,7 +45,7 @@ exports[`tokenTypeForm component should render a TokenCategoryForm component 1`]
       Color of the token
     </label>
     <ColorPicker
-      className="no-box-shadow"
+      className="no-box-shadow no-border-radius"
       color="#00AA7B"
       colors={
         Array [

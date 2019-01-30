@@ -63,7 +63,7 @@ const DumbTokenCategoryForm = ({
         width="100%"
         id={`color-picker-${index}`}
         triangle="hide"
-        className="no-box-shadow"
+        className="no-box-shadow no-border-radius"
       />
     </div>
     {index + 1 !== tokenCategoryNumber && <div className="separator" />}
