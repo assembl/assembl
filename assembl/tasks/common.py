@@ -107,6 +107,8 @@ def setup_ctx(c):
         else:
             raise RuntimeError("Cannot find %s in either %s or %s", (
                 target, config_prefix, project_prefix))
+        if not data:
+            break
         target = data.get('_extends', None)
         current = rec_update(data, current)
 
