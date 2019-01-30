@@ -88,7 +88,7 @@ def setup_ctx(c):
         code_root = project_prefix + '/venv/lib/python2.7/site-packages'
         config_prefix = code_root + '/assembl/configs/'
 
-    current = c.config._project
+    current = c.config._project or {}
     current['code_root'] = code_root
     current['projectpath'] = project_prefix
     target = current.get('_extends', None)
@@ -152,7 +152,7 @@ def is_integration_env(c):
 
 
 def fill_template(c, template, output=None, extra=None, default_dir=None):
-    config = dict(c.config.DEFAULT)
+    config = dict(c.config.get('DEFAULT', {}))
     config.update(c.config)
     if extra is not None:
         config.update(extra)
