@@ -93,29 +93,55 @@ def create_var_dir(c):
 
 @task(create_venv)
 def install_wheel(c, allow_index=False):
-    wheelhouse = c.config.wheelhouse
-    wheel = c.config.get('assembl_wheel', 'assembl-*-py27-none-any.whl')
+    wheelhouse = c.config.get('wheelhouse', 's3://bluenove-assembl-wheelhouse')
+    # temporary: we will use assembl-([\d\.]*)-py27-none-any.whl
+    wheel = c.config.get('assembl_wheel', 'assembl-(.*)-py27-none-any\.whl')
     allow_index = '' if allow_index else '--no-index'
     if wheelhouse.startswith('s3://'):
         wheelhouse = wheelhouse[5:]
         with venv(c):
-            region = c.config.aws_region
-            c.run('./venv/bin/pip --trusted-host {wheelhouse}.s3-website-{region}.amazonaws.com install {allow_index} --find-links http://{wheelhouse}.s3-website-{region}.amazonaws.com/ http://bluenove-assembl-wheelhouse.s3-website-eu-west-1.amazonaws.com/{wheel}'.format(
-                region=region, wheel=wheel, wheelhouse=wheel, allow_index=allow_index))
+            region = os.getenv("AWS_DEFAULT_REGION", c.config.get('aws_region', None))
+            assert region
+            if '(' in wheel:
+                import requests
+                from semantic_version import Version
+                r = requests.get('http://{wheelhouse}.s3-website-{region}.amazonaws.com/'.format(
+                    wheelhouse=wheelhouse, region=region))
+                assert r.ok
+                exp = '>(' + wheel + ')<'
+                matches = list(re.finditer(exp, r.content))
+                # assumption: The first * follows semver, more or less.
+                matches.sort(reverse=True, key=lambda match: (
+                    Version.coerce(match.group(2)), match.groups()[2:]))
+                wheel = matches[0].group(1)
+            host = '{wheelhouse}.s3-website-{region}.amazonaws.com'.format(
+                region=region, wheelhouse=wheelhouse)
+            c.run('./venv/bin/pip --trusted-host {host} install {allow_index}'
+                  ' --find-links http://{host}/ http://{host}/{wheel}'.format(
+                      host=host, wheel=wheel, allow_index=allow_index))
     else:
         with venv(c):
             region = c.config.region
+            if '(' in wheel:
+                wheelre = re.compile('(%s)$' % wheel)
+                wheels = [wheelre.match(name) for name in os.listdir(wheelhouse)]
+                wheels = filter(None, wheels)
+                matches.sort(reverse=True, key=lambda match: (
+                    Version.coerce(match.group(2)), match.groups()[2:]))
+                wheel = matches[0].group(1)
             c.run('./venv/bin/pip install {allow_index} --find-links {wheelhouse} {wheelhouse}/{wheel}'.format(
-                wheel=wheel, wheelhouse=wheel, allow_index=allow_index))
+                wheel=wheel, wheelhouse=wheelhouse, allow_index=allow_index))
 
 
 @task()
 def setup_aws_default_region(c):
     assert running_locally(c)
-    import requests
-    r = requests.get('http://169.254.169.254/latest/meta-data/placement/availability-zone')
-    assert r.ok
-    region = r.content[:-1]
+    region = os.getenv("AWS_DEFAULT_REGION")
+    if not region:
+        import requests
+        r = requests.get('http://169.254.169.254/latest/meta-data/placement/availability-zone')
+        assert r.ok
+        region = r.content[:-1]
     c.run('aws configure set region ' + region)
 
 
@@ -144,10 +170,12 @@ supervisor:
 @task()
 def get_aws_invoke_yaml(c, celery=False):
     assert running_locally(c)
-    import requests
-    r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
-    assert r.ok
-    account = r.json()['InstanceProfileArn'].split(':')[4]
+    account = os.getenv("AWS_ACCOUNT_ID")
+    if not account:
+        import requests
+        r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
+        assert r.ok
+        account = r.json()['InstanceProfileArn'].split(':')[4]
     # This introduces a convention: yaml files
     # for a given amazon account will be stored in
     # s3://assembl-data-{account_id}/{fname}.yaml

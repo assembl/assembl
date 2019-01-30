@@ -1,6 +1,8 @@
-from os.path import exists
+import os
+from os.path import exists, join
 
 from invoke import task
+from common import fill_template
 
 # try:
 #     # invoke 0.11
@@ -13,13 +15,45 @@ from invoke import task
 def install_base_deps(c):
     """Install base tools for a Ubuntu server."""
     c.sudo('apt-get install -y apt-transport-https')
-    c.sudo('apt-get install -y python-virtualenv python-pip python-psycopg2')
+    c.sudo('apt-get install -y python-virtualenv python-pip python-psycopg2 python-semantic-version')
     c.sudo('apt-get install -y python-requests python-jinja2 python-yaml python-boto3')
     c.sudo('apt-get install -y build-essential python-dev pkg-config')
     c.sudo('apt-get install -y automake bison flex gperf gawk')
     c.sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
            'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
            'libreadline-dev libxmlsec1-dev libcurl4-openssl-dev')
+
+
+@task
+def install_assembl_systemd(c):
+    base = os.getcwd()
+    path = 'assembl/templates/system/assembl.service.jinja2'
+    if not exists(path):
+        base = '/home/assembl_user/assembl/venv/lib/python2.7/site-packages'
+    assert exists(join(base, path))
+    c.config.code_root = base
+    fill_template(c, join(base, path), '/tmp/assembl.service')
+
+    c.sudo('cp /tmp/assembl.service /etc/systemd/system/assembl.service')
+    c.sudo('sudo systemctl daemon-reload')
+    c.sudo('systemctl enable assembl')
+    c.run('rm /tmp/assembl.service')
+
+
+@task
+def install_urlmetadata_systemd(c):
+    base = os.getcwd()
+    path = 'assembl/templates/system/urlmetadata.service.jinja2'
+    if not exists(path):
+        base = '/home/assembl_user/assembl/venv/lib/python2.7/site-packages'
+    assert exists(join(base, path))
+    c.config.code_root = base
+    fill_template(c, join(base, path), '/tmp/urlmetadata.service')
+
+    c.sudo('cp /tmp/urlmetadata.service /etc/systemd/system/urlmetadata.service')
+    c.sudo('sudo systemctl daemon-reload')
+    c.sudo('systemctl enable urlmetadata')
+    c.run('rm /tmp/urlmetadata.service')
 
 
 @task
@@ -79,7 +113,7 @@ def create_assembl_user(c):
     """Create assembl user (run as sudoer ubuntu)."""
     c.sudo("addgroup assembl_group")
     c.sudo("adduser --disabled-password --gecos '' assembl_user")
-    c.sudo("usermod -G www-data -G assembl_group assembl_user")
+    c.sudo("usermod -G www-data,assembl_group assembl_user")
     c.run("echo '%assembl_group ALL = (root) NOPASSWD: /etc/init.d/nginx restart , /etc/init.d/nginx reload , /etc/init.d/nginx stop , /etc/init.d/nginx start' | sudo tee /etc/sudoers.d/assembl_group")
 
 
