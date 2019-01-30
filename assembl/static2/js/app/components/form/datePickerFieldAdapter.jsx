@@ -81,7 +81,7 @@ const DatePickerFieldAdapter = ({
             {...rest}
           />
           <div className="icon-schedule-container">
-            <span className="assembl-icon-schedule grey" />
+            <span className="assembl-icon-schedule grey no-pointer" />
           </div>
         </ControlLabel>
         <Error name={name} />
