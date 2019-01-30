@@ -2,7 +2,7 @@
 	<body>
 		<ul>
 			{% for wheel in wheelhouse %}
-				<li><a href="{{ wheel }}">{{ wheel }}</a></li>
+				<li><a href="{{ wheel }}#sha256={{ hashes[wheel] }}">{{ wheel }}</a></li>
 			{% endfor %}
 		</ul>
 	</body>

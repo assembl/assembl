@@ -2,7 +2,9 @@ import os
 import sys
 import re
 import json
+from hashlib import sha256
 from os.path import join, normpath
+
 from .common import (venv, task, exists, is_integration_env, fill_template)
 
 
@@ -246,7 +248,7 @@ def create_wheel_name(version, sha1, branch=None, tag=None):
     elif branch:
         long_version = '%sd-1%s' % (version, branch)
     elif tag:
-        long_version = '%sd-2%s' % (version, tag.split('-').join('_'))
+        long_version = '%sd-2%s' % (version, tag.split('-').join(''))
     else:
         long_version = '%sd-0%s' % (version, sha1)
 
@@ -347,24 +349,29 @@ def push_wheelhouse(c, house=None):
             pass
 
         indexable_names = list()
+        wheel_hashes = {}
         existing_wheels = set()
+        for filename in os.listdir(tmp_wheel_path):
+            indexable_names.append(filename)
+            with open(os.path.join(tmp_wheel_path, filename), 'rb') as f:
+                m = sha256()
+                m.update(f.read())
+            wheel_hashes[filename] = m.hexdigest()
         for summary in bucket.objects.all():
             if summary.key in (json_filename, 'error.html'):
                 # Don't add the JSON file to the indexable list
                 continue
-            indexable_names.append(summary.key)
             existing_wheels.add(summary.key)
+            if summary.key not in wheel_hashes:
+                indexable_names.append(summary.key)
+                wheel_hashes[summary.key] = ''  # temporary for testing
 
-        for filename in os.listdir(tmp_wheel_path):
-            if filename in indexable_names:
-                continue
-            indexable_names.append(filename)
         indexable_names.sort()
 
         json_data = write_update_json_data(c, json_filepath)
 
         output = os.path.join(tmp_wheel_path, 'index.html')
-        fill_template(c, 'wheelhouse_index.jinja2', output, {'wheelhouse': indexable_names})
+        fill_template(c, 'wheelhouse_index.jinja2', output, {'wheelhouse': indexable_names, 'hashes': wheel_hashes})
         with open(output) as fp:
             bucket.put_object(Body=fp, Key='index.html', ContentType='text/html', ACL='public-read')
 
