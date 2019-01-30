@@ -51,9 +51,9 @@ type DoughnutElements = {
 
 type SurveyAnnouncementProps = {
   announcement: AnnouncementContent,
-  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
   firstColor: string,
-  secondColor: string
+  secondColor: string,
+  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
 type Props = {
@@ -65,9 +65,9 @@ type Props = {
     messageColumns: IdeaMessageColumns,
     messageViewOverride: ?string
   },
-  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
   firstColor: string,
-  secondColor: string
+  secondColor: string,
+  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
 type ColumnsInfoType = { count: ?number, color: ?string, name: ?string };

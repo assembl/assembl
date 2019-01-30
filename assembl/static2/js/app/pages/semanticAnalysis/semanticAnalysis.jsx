@@ -17,15 +17,15 @@ import Description from '../../components/common/description/description';
 import Title from '../../components/common/title/title';
 
 // Type imports
-import type { Keyword } from '../../integration/semanticAnalysis/dataType';
-
-import fakeData from '../../integration/semanticAnalysis/data.json';
+import type { Keyword, SemanticAnalysisData } from '../../integration/semanticAnalysis/dataType';
 
 export type Props = {
   /** Optional first color */
   firstColor: string,
   /** Optional second color */
-  secondColor: string
+  secondColor: string,
+  /** Semantic analysis data */
+  semanticAnalysisData: SemanticAnalysisData
 };
 
 export type State = {
@@ -102,14 +102,19 @@ export class SemanticAnalysis extends Component<Props, State> {
 
   render() {
     const { keywordData, numberOfKeywordsToDisplay } = this.state;
-    const { firstColor, secondColor } = this.props;
+    const { firstColor, secondColor, semanticAnalysisData } = this.props;
 
     // Semantic analysis
-    const { nlpSentiment, topKeywords } = fakeData;
+    const { nlpSentiment, topKeywords } = semanticAnalysisData;
     // Computation on sentiment score (can be moved to the backend)
     const { count, negative, positive } = nlpSentiment;
     const score = (positive + negative) / count;
     const sentimentScore = (score + 1) / 2;
+    // Format keywords object structure for WordCloud
+    const keywords = topKeywords.map(k => ({ count: k.count, score: k.score, value: k.value }));
+    const keywordsLength = topKeywords.length;
+    // Get wordCount: Should be updated when value is available from the backend
+    const wordCount = 0;
 
     // Translation keys
     const informationKeywordKey = 'debate.semanticAnalysis.informationKeyword';
@@ -134,6 +139,8 @@ export class SemanticAnalysis extends Component<Props, State> {
     const relevanceDefinition = I18n.t(relevanceDefinitionKey);
     const sentimentAnalysisTitle = I18n.t(sentimentAnalysisKey);
     const sentimentAnalysisDefinition = I18n.t(sentimentAnalysisDefinitionKey);
+
+    const wordCountInformation = wordCount > 0 ? <WordCountInformation wordCount={wordCount} className="padding-top" /> : null;
 
     const informationKeywordTooltip = (
       <div>
@@ -160,7 +167,7 @@ export class SemanticAnalysis extends Component<Props, State> {
           <Description>
             <p>{keywordCloudDefinition}</p>
           </Description>
-          <WordCountInformation wordCount={23302} className="padding-top" />
+          {wordCountInformation}
         </Col>
 
         {/** WordCloud section */}
@@ -168,7 +175,7 @@ export class SemanticAnalysis extends Component<Props, State> {
           <ResponsiveWordCloud
             keywordsColor={firstColor}
             keywordsColorActive={secondColor}
-            keywords={topKeywords}
+            keywords={keywords}
             numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
             onWordClick={this.onKeywordClickHandler}
             onMouseOverWord={this.onKeywordOverHandler}
@@ -192,7 +199,7 @@ export class SemanticAnalysis extends Component<Props, State> {
             <ToolbarSlider
               color={fullRgbToHex(firstColor)}
               defaultValue={this.NUM_WORDS_DEFAULT}
-              maxValue={topKeywords.length}
+              maxValue={keywordsLength}
               minValue={this.MIN_WORDS}
               onSliderChange={this.onNumberOfKeywordSliderChangeHandler}
             />

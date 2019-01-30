@@ -152,6 +152,7 @@ class WordCloud extends Component<Props> {
       wordKey: WORD_KEY,
       words: keywords
     };
+
     return noData ? (
       <h1>NO DATA</h1>
     ) : (

@@ -20,7 +20,7 @@ describe('<SemanticAnalysisForDiscussion /> - with shallow', () => {
     semanticAnalysisForDiscussionProps = {
       firstColor: 'rgb(0, 0, 0)',
       secondColor: 'rgb(0, 0, 0)',
-      semanticAnalysisForDiscussionData: {
+      semanticAnalysisData: {
         id: '1',
         nlpSentiment: {
           positive: 0.630824,

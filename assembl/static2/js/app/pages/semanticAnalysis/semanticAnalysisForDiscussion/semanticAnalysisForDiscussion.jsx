@@ -19,18 +19,14 @@ export type Props = SemanticAnalysisForDiscussionQuery & SemanticAnalysisProps;
 
 export class SemanticAnalysisForDiscussion extends Component<Props> {
   render() {
-    const { firstColor, secondColor, semanticAnalysisForDiscussionData } = this.props;
-    const { topKeywords } = semanticAnalysisForDiscussionData;
+    const { firstColor, secondColor, semanticAnalysisData } = this.props;
+    const { topKeywords } = semanticAnalysisData;
     const topKeywordsCount = topKeywords.length;
 
     // Display content only when there are top keywords defined
     const content =
       topKeywordsCount > 0 ? (
-        <SemanticAnalysis
-          firstColor={firstColor}
-          secondColor={secondColor}
-          semanticAnalysisData={semanticAnalysisForDiscussionData}
-        />
+        <SemanticAnalysis firstColor={firstColor} secondColor={secondColor} semanticAnalysisData={semanticAnalysisData} />
       ) : (
         <Loader type={LOADER_TYPE.NO_DATA} />
       );

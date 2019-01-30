@@ -13,13 +13,41 @@ import KeywordInfo from '../../components/common/keywordInfo/keywordInfo';
 import SentimentBar from '../../components/common/sentimentBar/sentimentBar';
 import WordCountInformation from '../../components/common/wordCountInformation/wordCountInformation';
 
+import type { Props as SemanticAnalysisProps } from './semanticAnalysis';
+
 configure({ adapter: new Adapter() });
 
 describe('<SemanticAnalysis /> - with shallow', () => {
   let wrapper;
+  let semanticAnalysisProps: SemanticAnalysisProps;
 
   beforeEach(() => {
-    wrapper = shallow(<SemanticAnalysis />);
+    semanticAnalysisProps = {
+      firstColor: 'rgb(0, 0, 0)',
+      secondColor: 'rgb(0, 0, 0)',
+      semanticAnalysisData: {
+        id: '1',
+        nlpSentiment: {
+          positive: 0.630824,
+          negative: 0,
+          count: 1
+        },
+        title: 'Lorem',
+        topKeywords: [
+          {
+            count: 1,
+            score: 0.955221,
+            value: 'Donec tempor'
+          },
+          {
+            count: 1,
+            score: 0.825581,
+            value: 'quam viverra aliquam elementum'
+          }
+        ]
+      }
+    };
+    wrapper = shallow(<SemanticAnalysis {...semanticAnalysisProps} />);
   });
 
   it('should render a level-1 Title component if data loaded', () => {
@@ -30,8 +58,8 @@ describe('<SemanticAnalysis /> - with shallow', () => {
     expect(wrapper.find(Description)).toHaveLength(1);
   });
 
-  it('should render a WordCountInformation component if data loaded', () => {
-    expect(wrapper.find(WordCountInformation)).toHaveLength(1);
+  it('should not render a WordCountInformation component because it is not yet implemented on the backend side', () => {
+    expect(wrapper.find(WordCountInformation)).toHaveLength(0);
   });
 
   it('should render a ResponsiveWordCloud component if data loaded', () => {

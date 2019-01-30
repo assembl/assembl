@@ -64,6 +64,7 @@ class ResponsiveWordCloud extends Component<WordCloudBaseProps> {
       onMouseOverWord: onMouseOverWord,
       onWordClick: onWordClick
     };
+
     return (
       <ResizeAware>
         {(size: Size) => {

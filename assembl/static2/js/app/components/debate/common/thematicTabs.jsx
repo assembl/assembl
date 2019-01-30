@@ -10,14 +10,14 @@ import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisF
 
 export type Props = {
   guidelinesContent?: React.Node,
-  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery,
   firstColor: string,
-  secondColor: string
+  secondColor: string,
+  semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
 const ThematicTabs = ({ guidelinesContent, firstColor, secondColor, semanticAnalysisForThematicData }: Props) => {
   const { topKeywords } = semanticAnalysisForThematicData;
-  const topKeywordsCount = topKeywords.length;
+  const topKeywordsLength = topKeywords.length;
 
   // Translation keys
   const guidelinesTitleKey = 'debate.thread.guidelines';
@@ -74,7 +74,7 @@ const ThematicTabs = ({ guidelinesContent, firstColor, secondColor, semanticAnal
     >
       {guidelinesTabAndContent}
       {/** summaryTabAndContent */}
-      {topKeywordsCount > 0 ? semanticAnalysisTabAndContent : null}
+      {topKeywordsLength > 0 ? semanticAnalysisTabAndContent : null}
     </Tabs>
   );
 };
