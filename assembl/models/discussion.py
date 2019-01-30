@@ -37,6 +37,27 @@ log = logging.getLogger()
 visit_analytics_region = create_analytics_region()
 
 
+class OldSlug(DiscussionBoundBase, NamedClassMixin):
+    """
+    The old slug of a debate. Used in case the administrator changes the slug of a debate.
+    """
+    id = Column(Integer, primary_key=True)
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'),
+        nullable=False,
+        index=True)
+    discussion = relationship(
+        "Discussion",
+        backref=backref(
+            'oldslug',
+            cascade="all, delete-orphan"),
+    )
+    slug = Column(CoerceUnicode, nullable=False, unique=True, index=True)
+    redirection_slug = Column(CoerceUnicode, nullable=False, unique=True, index=True)
+
+
 class Discussion(DiscussionBoundBase, NamedClassMixin):
     """
     The context for a specific Assembl discussion.
