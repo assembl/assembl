@@ -123,9 +123,16 @@ def setup_ctx(c):
 
 
 def venv(c):
-    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
+    venv = c.config.get('virtualenv', None)
+    if not venv:
+        if exists(c, 'venv'):
+            project_prefix = os.getcwd()
+        else:
+            project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
+        venv = os.path.join(project_prefix, 'venv')
+    assert exists(c, venv)
     activate = c.config.get('_internal', {}).get('activate', 'activate')
-    return nested(c.cd(project_prefix), c.prefix('source venv/bin/' + activate))
+    return nested(c.cd(project_prefix), c.prefix('source %s/bin/%s' % (venv, activate)))
 
 
 def venv_py3(c):
@@ -133,9 +140,9 @@ def venv_py3(c):
     return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate && ' + 'py3'))
 
 
-def get_node_base_path():
-    return normpath(join(
-        env.projectpath, 'assembl', 'static', 'js'))
+def get_node_base_path(c):
+    return os.path.normpath(os.path.join(
+        c.config.projectpath, 'assembl', 'static', 'js'))
 
 
 def is_integration_env(c):
