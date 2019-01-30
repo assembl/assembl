@@ -93,10 +93,21 @@ def create_var_dir(c):
 
 
 @task(create_venv)
-def install_wheel(c):
-    with venv(c):
-        # TODO
-        c.run('pip install assembl.wheel')
+def install_wheel(c, allow_index=False):
+    wheelhouse = c.config.wheelhouse
+    wheel = c.config.get('assembl_wheel', 'assembl-*-py27-none-any.whl')
+    allow_index = '' if allow_index else '--no-index'
+    if wheelhouse.startswith('s3://'):
+        wheelhouse = wheelhouse[5:]
+        with venv(c):
+            region = c.config.aws_region
+            c.run('./venv/bin/pip --trusted-host {wheelhouse}.s3-website-{region}.amazonaws.com install {allow_index} --find-links http://{wheelhouse}.s3-website-{region}.amazonaws.com/ http://bluenove-assembl-wheelhouse.s3-website-eu-west-1.amazonaws.com/{wheel}'.format(
+                region=region, wheel=wheel, wheelhouse=wheel, allow_index=allow_index))
+    else:
+        with venv(c):
+            region = c.config.region
+            c.run('./venv/bin/pip install {allow_index} --find-links {wheelhouse} {wheelhouse}/{wheel}'.format(
+                wheel=wheel, wheelhouse=wheel, allow_index=allow_index))
 
 
 @task()

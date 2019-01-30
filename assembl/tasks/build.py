@@ -329,7 +329,7 @@ def push_wheelhouse(c, house=None):
             raise RuntimeError("AWS CLI and Boto3 have to be installed to push to s3. Quitting...")
 
         s3 = boto3.resource('s3')
-        bucket_name = 'bluenove-assembl-wheelhouse'
+        bucket_name = wheel_path[5:]
         bucket = s3.Bucket(bucket_name)
         exists = True
         try:
