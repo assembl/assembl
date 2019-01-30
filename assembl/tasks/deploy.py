@@ -338,15 +338,15 @@ def generate_graphql_documentation(c):
 
 
 @task()
-def install_bluenove_actionable(context):
+def install_bluenove_actionable(c):
     """Install the bluenove_actionable app."""
-    if not exists(context, "%s/bluenove-actionable/" % context.config.projectpath):
-        with context.cd(context.config.projectpath):
-            context.run('git clone git@github.com:bluenove/bluenove-actionable.git')
+    if not exists(c, "%s/bluenove-actionable/" % c.config.projectpath):
+        with c.cd(c.config.projectpath):
+            c.run('git clone git@github.com:bluenove/bluenove-actionable.git')
 
-        with context.cd(os.path.join(context.config.projectpath, '..', 'bluenove-actionable')):
-            context.run('mkdir -p data && chmod o+rwx data')
-            context.run('docker-compose build', warn=True)
+        with c.cd(os.path.join(c.config.projectpath, '..', 'bluenove-actionable')):
+            c.run('mkdir -p data && chmod o+rwx data')
+            c.run('docker-compose build', warn=True)
 
 
 def get_robot_machine(c):
@@ -446,11 +446,11 @@ def app_setup(c):
         # To be separated in a separate function.
 
 
-def code_root(context, alt_env=None):
-    alt_env = alt_env or context
+def code_root(c, alt_env=None):
+    alt_env = alt_env or c
     alt_env = dict(alt_env)
     sanitize_hosts(alt_env)
-    if running_locally(context):
+    if running_locally(c):
         return local_code_root
     else:
         if (as_bool(get_prefixed('package_install', alt_env, False))):
@@ -463,8 +463,8 @@ def as_bool(b):
     return str(b).lower() in {"1", "true", "yes", "t", "on"}
 
 
-def get_prefixed(context, key, alt_env=None, default=None):
-    alt_env = alt_env or context
+def get_prefixed(c, key, alt_env=None, default=None):
+    alt_env = alt_env or c
     alt_env = dict(alt_env)
     for prefx in ('', '_', '*'):
         val = alt_env.get(prefx + key, None)
@@ -473,8 +473,8 @@ def get_prefixed(context, key, alt_env=None, default=None):
     return default
 
 
-def sanitize_hosts(context, alt_env=None):
-    alt_env = alt_env or context
+def sanitize_hosts(c, alt_env=None):
+    alt_env = alt_env or c
     alt_env = dict(alt_env)
     if not alt_env.get('hosts', None):
         public_hostname = alt_env.get("public_hostname", "localhost")
@@ -483,34 +483,34 @@ def sanitize_hosts(context, alt_env=None):
         alt_env['hosts'] = alt_env['hosts'].split()
 
 
-def system_db_user(context):
-    if context.config._internal.postgres_db_user:
-        return context.config._internal.postgres_db_user
-    if context.config._internal.mac:
+def system_db_user(c):
+    if c.config._internal.postgres_db_user:
+        return c.config._internal.postgres_db_user
+    if c.config._internal.mac:
         return getuser()
     return "postgres"
 
 
-def run_db_command(context, command, user=None, *args, **kwargs):
+def run_db_command(c, command, user=None, *args, **kwargs):
     # I need help with this.
     pass
 
 
 @task()
-def check_and_create_database_user(context, host=None, user=None, password=None):
+def check_and_create_database_user(c, host=None, user=None, password=None):
     """
     Create a user and a DB for the project.
     """
-    host = host or context.config.DEFAULT.db_host
-    user = user or context.config.DEFAULT.db_user
-    password = password or context.DEFAULT.db_password
-    pypsql = os.path.join(code_root(context), 'scripts', 'pypsql.py')
-    checkUser = context.run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
+    host = host or c.config.DEFAULT.db_host
+    user = user or c.config.DEFAULT.db_user
+    password = password or c.DEFAULT.db_password
+    pypsql = os.path.join(code_root(c), 'scripts', 'pypsql.py')
+    checkUser = c.run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
         command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user),
         pypsql=pypsql, password=password, host=host, user=user))
     if checkUser.failed:
         db_user = system_db_user()
-        if (running_locally(context) or context.config.host_string == host) and db_user:
+        if (running_locally(c) or c.config.host_string == host) and db_user:
             db_password_string = ''
             sudo_user = db_user
         else:
@@ -528,16 +528,16 @@ def check_and_create_database_user(context, host=None, user=None, password=None)
 
 
 @task()
-def build_doc(context):
+def build_doc(c):
     """Build the Sphinx documentation for the backend (and front-end) as well as build GraphQL documentation"""
-    # generate_graphql_documentation(context)
-    with context.cd(context.config.projectpath):
-        context.run('rm -rf doc/autodoc doc/jsdoc')
-        with venv(context):
-            context.run('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
-            context.run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
-            context.run('python2 assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (context.ini_files))
-            context.run('sphinx-build doc assembl/static/techdocs')
+    # generate_graphql_documentation(c)
+    with c.cd(c.config.projectpath):
+        c.run('rm -rf doc/autodoc doc/jsdoc')
+        with venv(c):
+            c.run('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
+            c.run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
+            c.run('python2 assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (c.ini_files))
+            c.run('sphinx-build doc assembl/static/techdocs')
 
 
 # avoid it being defined in both modules
