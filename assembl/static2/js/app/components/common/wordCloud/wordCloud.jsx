@@ -12,9 +12,9 @@ const WORD_KEY = 'value';
 export type BaseProps = {
   /** Optional angle value in degrees */
   keywordsAngle: number,
-  /** Optional color rgb(x, x, x) only */
+  /** Optional color Hex 3 or 6 only */
   keywordsColor: string,
-  /** Optional color when a word is active rgb(x, x, x) only */
+  /** Optional color when a word is active Hex 3 or 6 only */
   keywordsColorActive: string,
   /** Array of keywords */
   keywords: Keywords,
@@ -37,8 +37,8 @@ export type Props = BaseProps & {
 
 export const defaultBaseProps = {
   keywordsAngle: 0,
-  keywordsColor: 'rgb(0, 0, 0)',
-  keywordsColorActive: 'rgb(0, 0, 0)',
+  keywordsColor: '#000',
+  keywordsColorActive: '#000',
   numberOfKeywordsToDisplay: 30,
   onMouseOutWord: () => {},
   onMouseOverWord: () => {},
@@ -121,18 +121,20 @@ class WordCloud extends Component<Props> {
      * Takes a color and returns a function depending on a keyword. The function returns
      * the color with an opacity depending on d data.
      *
-     * @param {string} color String color in the format rgb(x, x, x).
+     * @param {string} color String color in the format Hex 3 or 6.
      *
      * @return {function} Function takes a Keyword as parameter and returns a color with opacity
      * depending on the Keyword parameters.
      */
-    const convertColorFromRGBToRGBA = color => d =>
-      `rgba(${color.substring(4, color.length - 1)}, ${0.5 +
-        0.5 * (d[WORD_COUNT_KEY] - interval.min) / (interval.max - interval.min)})`;
+    const addOpacityToColorHEX = (color: string) => (d) => {
+      const opacity = 0.5 + 0.5 * (d[WORD_COUNT_KEY] - interval.min) / (interval.max - interval.min);
+      const stringOpacity = Math.round(15 * opacity).toString(16);
+      return `${color}${stringOpacity}${color.length === 7 ? stringOpacity : ''}`;
+    };
 
     const reactWordCloudProps = {
-      colorScale: convertColorFromRGBToRGBA(keywordsColor),
-      colorScaleActive: convertColorFromRGBToRGBA(keywordsColorActive),
+      colorScale: addOpacityToColorHEX(keywordsColor),
+      colorScaleActive: addOpacityToColorHEX(keywordsColorActive),
       fontFamily: 'Lato',
       height: height,
       maxAngle: maxAngle,

@@ -16,6 +16,7 @@ import Title from '../../../components/common/title/title';
 // Type imports
 import type { Keyword } from '../dataType';
 
+import { firstColor, secondColor } from '../../../../../css/themes/default/_theme';
 import fakeData from '../data.json';
 
 export type Props = {};
@@ -25,19 +26,6 @@ export type State = {
   keywordData: Keyword,
   numberOfKeywordsToDisplay: number
 };
-
-// const rgbToHex = (color) => {
-//   let hex = Number(color).toString(16);
-//   if (hex.length < 2) {
-//     hex = `0${hex}`;
-//   }
-//   return hex;
-// };
-
-// const fullRgbToHex = (color) => {
-//   const rgbArray = color.substring(4, color.length - 1).split(', ');
-//   return `#${rgbToHex(rgbArray[0])}${rgbToHex(rgbArray[1])}${rgbToHex(rgbArray[2])}`;
-// };
 
 export class SemanticAnalysis extends Component<Props, State> {
   state = {
@@ -152,8 +140,8 @@ export class SemanticAnalysis extends Component<Props, State> {
         {/** WordCloud section */}
         <Col xs={12} md={8} className="no-padding lg-wordcloud-padding sm-margin-m margin-s">
           <ResponsiveWordCloud
-            // keywordsColor={firstColor}
-            // keywordsColorActive={secondColor}
+            keywordsColor={firstColor}
+            keywordsColorActive={secondColor}
             keywords={topKeywords}
             numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
             onWordClick={this.onKeywordClickHandler}
@@ -176,7 +164,7 @@ export class SemanticAnalysis extends Component<Props, State> {
             <Title level={2}>{numberKeywordTitle}</Title>
 
             <ToolbarSlider
-              // color={fullRgbToHex(firstColor)}
+              color={firstColor}
               defaultValue={this.NUM_WORDS_DEFAULT}
               maxValue={topKeywords.length}
               minValue={this.MIN_WORDS}

@@ -15,8 +15,8 @@ export const defaultResponsiveWordCloudProps = {
 
 const playground = {
   keywordsAngle: 20,
-  keywordsColor: 'rgb(200, 40, 180)',
-  keywordsColorActive: 'rgb(200, 200, 90)',
+  keywordsColor: '#192882',
+  keywordsColorActive: '#0af',
   keywords: [{ count: 3, score: 0.7, value: 'word1' }, { count: 5, score: 0.9, value: 'word2' }],
   numberOfKeywordsToDisplay: 30,
   onWordClick: () => {
