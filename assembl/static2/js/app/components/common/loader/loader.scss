@@ -28,6 +28,8 @@ $animation-speed: 1.4s;
 }
 
 .custom-loader {
+  padding: 30px 0 20px 0;
+
   .description {
     color: $grey;
     font-size: $font-size-m;
@@ -36,8 +38,9 @@ $animation-speed: 1.4s;
   }
 
   .icon {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     width: 60px;
+    height: 60px;
   }
 
   .path {
@@ -54,7 +57,7 @@ $animation-speed: 1.4s;
 
 @media screen and (min-width: $screen-sm-min) {
   .custom-loader {
-    margin: 30px 0 30px 0;
+    padding: 50px 0 40px 0;
 
     .description {
       font-size: $font-size-ml;
@@ -62,7 +65,9 @@ $animation-speed: 1.4s;
     }
 
     .icon {
+      margin-bottom: 20px;
       width: 90px;
+      height: 90px;
     }
   }
 }
@@ -76,6 +81,7 @@ $animation-speed: 1.4s;
 
     .icon {
       width: 120px;
+      height: 120px;
     }
   }
 }
