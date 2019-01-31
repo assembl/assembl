@@ -66,7 +66,7 @@ const SentimentBar = ({ value }: Props) => {
   ) : (
     <div className="sentimentBar">
       <SentimentBarIcon level={level} />
-      <p className={`level-${level}`}>{value.toFixed(2)}</p>
+      <p className={`sentimentBar-level-${level}`}>{value.toFixed(2)}</p>
     </div>
   );
 };

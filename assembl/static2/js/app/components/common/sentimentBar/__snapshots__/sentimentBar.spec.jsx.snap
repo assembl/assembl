@@ -56,7 +56,7 @@ exports[`Storyshots SentimentBar default 1`] = `
           </g>
         </svg>
         <p
-          className="level-2"
+          className="sentimentBar-level-2"
         >
           0.50
         </p>
@@ -468,7 +468,7 @@ exports[`Storyshots SentimentBar playground 1`] = `
           </g>
         </svg>
         <p
-          className="level-2"
+          className="sentimentBar-level-2"
         >
           0.58
         </p>
