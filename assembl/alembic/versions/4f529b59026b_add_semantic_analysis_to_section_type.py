@@ -1,7 +1,7 @@
 """Add semantic analysis to section type
 
 Revision ID: 4f529b59026b
-Revises: d813ab110e00
+Revises: 4227dfe5456c
 Create Date: 2019-01-17 16:47:22.932933
 
 """
