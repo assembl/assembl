@@ -1,5 +1,4 @@
 import os.path
-
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
@@ -32,6 +31,27 @@ _ = TranslationStringFactory('assembl')
 class URLMeta(graphene.ObjectType):
     local = graphene.Boolean()
     url = graphene.String(required=True)
+
+
+class OldSlug(SecureObjectType, SQLAlchemyObjectType):
+    __doc__ = docs.OldSlug.__doc__
+
+    class Meta:
+        model = models.OldSlug
+        only_fields = ('id',)
+
+    slug = graphene.String(description=docs.OldSlug.slug)
+    discussion = graphene.Field(lambda: Discussion, description=docs.OldSlug.discussion)
+    redirection_slug = graphene.String(description=docs.OldSlug.redirection_slug)
+
+    def resolve_slug(self, args, context, info):
+        return self.slug
+
+    def resolve_discussion(self, args, context, info):
+        return self.discussion
+
+    def resolve_redirection_slug(self, args, context, info):
+        return self.redirection_slug
 
 
 # Mostly fields related to the discussion title and landing page
@@ -313,6 +333,7 @@ class DiscussionPreferences(graphene.ObjectType):
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
     with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
     slug = graphene.String(description=docs.DiscussionPreferences.slug)
+    old_slugs = graphene.List(OldSlug, description=docs.DiscussionPreferences.slug)
 
     def resolve_tab_title(self, args, context, info):
         return self.get('tab_title', 'Assembl')
@@ -335,6 +356,9 @@ class DiscussionPreferences(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return discussion.slug
+
+    def resolve_old_slugs(self, args, context, info):
+        return self.db.query(models.OldSlug).filter(models.OldSlug.discussion_id == context.matchdict['discussion_id']).all()
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -580,6 +604,24 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                 if not languages:
                     error = _("Must pass at least one language to be saved")
                     raise Exception(context.localizer.translate(error))
+
+        old_slugs = discussion.preferences.old_slugs
+        permissions = get_permissions(user_id, discussion_id)
+        allowed = cls.user_can_cls(
+            user_id, CrudPermissions.UPDATE, permissions)
+        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+            raise HTTPUnauthorized()
+
+        db = discussion.db
+        prefs_to_save = args.get('languages', [])
+        tab_title = args.get('tab_title', None)
+        favicon = args.get('favicon', None)
+        with_moderation = args.get('with_moderation', None)
+        slug = args.get('slug', None)
+        for old_slug in old_slugs:
+            if slug == old_slug.slug:
+                raise Exception(context.localizer.translate(_("Cannot set discussion slug to this value. This slug value has been used before")))
+
 
                 discussion.discussion_locales = languages
 
