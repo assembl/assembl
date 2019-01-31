@@ -44,14 +44,17 @@ def configure(registry, task_name):
     configure_threaded_watcher(settings)
     configure_model_watcher(registry, task_name)
     region = get('aws_region', 'eu-west-1')
+    broker = settings.get('celery_tasks.broker', '')
+
     config = {
         "CELERY_TASK_SERIALIZER": 'json',
         "CELERY_ACKS_LATE": True,
-        "CELERY_CACHE_BACKEND": settings.get('celery_tasks.broker', ''),
-        "CELERY_RESULT_BACKEND": settings.get('celery_tasks.broker', ''),
+        "CELERY_CACHE_BACKEND": broker,
         "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True,
         "BROKER_TRANSPORT_OPTIONS": {'region': region},
     }
+    if not broker.startswith('sqs'):
+        config["CELERY_RESULT_BACKEND"] = broker
     config['BROKER_URL'] = settings.get(
         '%s.broker' % (celery.main,), None
     ) or settings.get('celery_tasks.broker')
