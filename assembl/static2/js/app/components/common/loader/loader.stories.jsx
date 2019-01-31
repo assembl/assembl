@@ -18,6 +18,11 @@ const loaderErrorProps: LoaderProps = {
   type: LOADER_TYPE.ERROR
 };
 
+const loaderNoDataProps: LoaderProps = {
+  ...defaultLoaderProps,
+  type: LOADER_TYPE.NO_DATA
+};
+
 const playground = {
   type: [LOADER_TYPE.LOADING, LOADER_TYPE.ERROR, LOADER_TYPE.NO_DATA]
 };
@@ -26,4 +31,5 @@ storiesOf('Loader', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <Loader {...defaultLoaderProps} />))
   .add('error', withInfo()(() => <Loader {...loaderErrorProps} />))
+  .add('no data', withInfo()(() => <Loader {...loaderNoDataProps} />))
   .add('playground', withInfo()(() => <Loader type={select('type', playground.type, playground.type[0])} />));
