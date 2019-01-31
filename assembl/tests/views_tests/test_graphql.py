@@ -1778,6 +1778,32 @@ def test_mutation_update_discussion_preferences_slug(graphql_registry, graphql_r
     assert res.errors == None
     assert discussion.slug == "TestSlug"
 
+def test_mutation_update_discussion_preferences_change_slug(graphql_registry, graphql_request, discussion):
+    res = schema.execute(graphql_registry['updateDiscussionPreference'],
+    context_value= graphql_request,
+    variable_values = {'slug': 'TestSlug'})
+    assert res.errors == None
+    assert discussion.slug == "TestSlug"
+
+    # Setting new slug for the same discussion
+    res = schema.execute(graphql_registry['updateDiscussionPreference'],
+    context_value= graphql_request,
+    variable_values = {'slug': 'TestSlug_new'})
+    assert res.errors == None
+    assert discussion.slug == "TestSlug_new"
+    assert len(discussion.old_slugs) == 1
+    assert discussion.old_slugs[0].slug == "TestSlug"
+
+    # Testing if I can set it back to the old slug
+    # Put on standby until I am sure of this feature
+    # res = schema.execute(graphql_registry['updateDiscussionPreference'],
+    # context_value= graphql_request,
+    # variable_values = {'slug': 'TestSlug'})
+    # assert res.errors == None
+    # assert discussion.slug == "TestSlug"
+    # assert len(res.errors) == 1
+    # assert res.errors[0] == "Cannot set discussion slug to this value. This slug value has been used before"
+
 def test_query_post_message_classifier(graphql_request,
                                        root_post_1_with_positive_message_classifier):
     post_id = to_global_id('Post',
