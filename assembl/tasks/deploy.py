@@ -91,6 +91,23 @@ def create_var_dir(c):
     c.run('chmod -R g+rxs var/run var/share')
 
 
+def get_region(c):
+    region = c.config.get('aws_region', None)
+    if not region:
+        region = os.getenv("AWS_DEFAULT_REGION", None)
+    if not region:
+        import requests
+        r = requests.get('http://169.254.169.254/latest/meta-data/placement/availability-zone')
+        assert r.ok
+        region = r.content[:-1]
+    return region
+
+
+def get_and_set_region(c):
+    c.config.aws_region = get_region(c)
+    return c.config.aws_region
+
+
 @task(create_venv)
 def install_wheel(c, allow_index=False):
     wheelhouse = c.config.get('wheelhouse', 's3://bluenove-assembl-wheelhouse')
@@ -100,7 +117,7 @@ def install_wheel(c, allow_index=False):
     if wheelhouse.startswith('s3://'):
         wheelhouse = wheelhouse[5:]
         with venv(c):
-            region = os.getenv("AWS_DEFAULT_REGION", c.config.get('aws_region', None))
+            region = get_and_set_region(c)
             assert region
             if '(' in wheel:
                 import requests
@@ -136,12 +153,8 @@ def install_wheel(c, allow_index=False):
 @task()
 def setup_aws_default_region(c):
     assert running_locally(c)
-    region = os.getenv("AWS_DEFAULT_REGION")
-    if not region:
-        import requests
-        r = requests.get('http://169.254.169.254/latest/meta-data/placement/availability-zone')
-        assert r.ok
-        region = r.content[:-1]
+    region = get_and_set_region(c)
+    assert region
     c.run('aws configure set region ' + region)
 
 

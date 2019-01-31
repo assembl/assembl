@@ -267,9 +267,14 @@ def update_wheels_json_data(c, json_data):
         # Take the latest HEAD
         commit_hash = c.run('git rev-parse --short HEAD').stdout.strip()
         branch = c.run('git symbolic-ref --short HEAD').stdout.strip()
-        tag = c.run('git describe --tags HEAD').stdout.strip()
-        if re.match(r"[\d\.]+-\d+-.+", tag):
+        tag = c.run('git describe').stdout.strip()
+        annotated_tag = c.run('git describe --tags HEAD').stdout.strip()
+        if re.match(r"[\d\.]", tag):
+            pass
+        elif re.match(r"[\d\.]+-\d+-.+", tag):
             # The commit does not have a tag associated
+            tag = None
+        else:
             tag = None
     # Debugging purposes for Gitlab
     with open(os.path.join(c.config.code_root, 'VERSION')) as f:
