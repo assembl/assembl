@@ -83,7 +83,7 @@ class ToolbarSlider extends Component<Props, State> {
           max={maxValue}
           min={minValue}
           onChange={onSliderChangeHandler}
-          step={10}
+          step={2}
           thumb={<ToolbarSliderIcon value={labelFormatter(currentValue)} classText="sliderText" />}
           value={currentValue}
         />
