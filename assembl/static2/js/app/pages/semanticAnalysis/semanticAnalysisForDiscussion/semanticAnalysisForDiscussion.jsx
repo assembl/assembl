@@ -15,21 +15,23 @@ import manageColor from '../../../components/common/manageColor';
 import { SemanticAnalysis, type Props as SemanticAnalysisProps } from '../semanticAnalysis';
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 
-export type Props = SemanticAnalysisForDiscussionQuery & SemanticAnalysisProps;
+export type Props = SemanticAnalysisForDiscussionQuery;
 
 export class SemanticAnalysisForDiscussion extends Component<Props> {
   render() {
-    const { firstColor, secondColor, semanticAnalysisData } = this.props;
-    const { topKeywords } = semanticAnalysisData;
+    const { firstColor, secondColor, semanticAnalysisForDiscussionData } = this.props;
+    const { topKeywords } = semanticAnalysisForDiscussionData;
     const topKeywordsCount = topKeywords.length;
+
+    const semanticAnalysisProps: SemanticAnalysisProps = {
+      firstColor: firstColor,
+      secondColor: secondColor,
+      semanticAnalysisData: semanticAnalysisForDiscussionData
+    };
 
     // Display content only when there are top keywords defined
     const content =
-      topKeywordsCount > 0 ? (
-        <SemanticAnalysis firstColor={firstColor} secondColor={secondColor} semanticAnalysisData={semanticAnalysisData} />
-      ) : (
-        <Loader type={LOADER_TYPE.NO_DATA} />
-      );
+      topKeywordsCount > 0 ? <SemanticAnalysis {...semanticAnalysisProps} /> : <Loader type={LOADER_TYPE.NO_DATA} />;
 
     return (
       <div className="semantic-analysis-container">
