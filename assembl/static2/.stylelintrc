@@ -6,6 +6,7 @@
     "selector-pseudo-element-colon-notation": null,
     "selector-list-comma-newline-after": null,
     "number-leading-zero": null,
-    "max-line-length": 130
+    "max-line-length": 130,
+    "string-quotes": "single"
   }
 }
