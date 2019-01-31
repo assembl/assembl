@@ -8,7 +8,7 @@ import { withKnobs } from '@storybook/addon-knobs';
 
 import Description from './description';
 
-storiesOf('Description', module)
+storiesOf('Semantic Analysis|Description', module)
   .addDecorator(withKnobs)
   .add(
     'default',

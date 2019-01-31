@@ -18,7 +18,7 @@ const playground = {
   wordCount: 120
 };
 
-storiesOf('WordCountInformation', module)
+storiesOf('Semantic Analysis|WordCountInformation', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <WordCountInformation {...defaultWordCountInformationProps} />))
   .add('playground', withInfo()(() => <WordCountInformation wordCount={number('words count', playground.wordCount)} />));

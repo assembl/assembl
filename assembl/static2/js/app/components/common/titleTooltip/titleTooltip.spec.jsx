@@ -14,7 +14,7 @@ import { defaultTitleTooltipProps } from './titleTooltip.stories';
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
-  storyKindRegex: /^TitleTooltip$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|TitleTooltip$/
 });
 
 configure({ adapter: new Adapter() });

@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots TitleTooltip default 1`] = `
+exports[`Storyshots Semantic Analysis|TitleTooltip default 1`] = `
 <div>
   <div
     style={
@@ -154,7 +154,7 @@ exports[`Storyshots TitleTooltip default 1`] = `
               }
             }
           >
-            TitleTooltip
+            Semantic Analysis|TitleTooltip
           </h1>
           <h2
             style={

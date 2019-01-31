@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots WordCountInformation default 1`] = `
+exports[`Storyshots Semantic Analysis|WordCountInformation default 1`] = `
 <div>
   <div
     style={
@@ -119,7 +119,7 @@ exports[`Storyshots WordCountInformation default 1`] = `
               }
             }
           >
-            WordCountInformation
+            Semantic Analysis|WordCountInformation
           </h1>
           <h2
             style={
@@ -363,7 +363,7 @@ exports[`Storyshots WordCountInformation default 1`] = `
 </div>
 `;
 
-exports[`Storyshots WordCountInformation playground 1`] = `
+exports[`Storyshots Semantic Analysis|WordCountInformation playground 1`] = `
 <div>
   <div
     style={
@@ -482,7 +482,7 @@ exports[`Storyshots WordCountInformation playground 1`] = `
               }
             }
           >
-            WordCountInformation
+            Semantic Analysis|WordCountInformation
           </h1>
           <h2
             style={

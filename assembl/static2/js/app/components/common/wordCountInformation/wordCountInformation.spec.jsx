@@ -13,7 +13,7 @@ import { defaultWordCountInformationProps } from './wordCountInformation.stories
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
-  storyKindRegex: /^WordCountInformation$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|WordCountInformation$/
 });
 
 configure({ adapter: new Adapter() });

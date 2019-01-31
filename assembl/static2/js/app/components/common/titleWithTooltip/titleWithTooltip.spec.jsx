@@ -14,7 +14,7 @@ import { defaultTitleWithTooltipProps } from './titleWithTooltip.stories';
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
-  storyKindRegex: /^TitleWithTooltip$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|TitleWithTooltip$/
 });
 
 jest.mock('../../../utils/utilityManager', () => ({ displayModal: jest.fn() }));

@@ -9,7 +9,7 @@ import Adapter from 'enzyme-adapter-react-16.3';
 import Description from './description';
 
 initStoryshots({
-  storyKindRegex: /^Description$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|Description$/
 });
 
 configure({ adapter: new Adapter() });

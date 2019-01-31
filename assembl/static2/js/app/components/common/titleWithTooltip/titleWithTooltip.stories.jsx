@@ -19,7 +19,7 @@ const playground: TitleWithTooltipProps = {
   ...defaultTitleWithTooltipProps
 };
 
-storiesOf('TitleWithTooltip', module)
+storiesOf('Semantic Analysis|TitleWithTooltip', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <TitleWithTooltip {...defaultTitleWithTooltipProps} />))
   .add(

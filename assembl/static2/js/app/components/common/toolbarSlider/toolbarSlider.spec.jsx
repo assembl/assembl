@@ -10,7 +10,7 @@ import ToolbarSlider from './toolbarSlider';
 import { defaultToolbarSliderProps } from './toolbarSlider.stories';
 
 initStoryshots({
-  storyKindRegex: /^ToolbarSlider$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|ToolbarSlider$/
 });
 
 configure({ adapter: new Adapter() });

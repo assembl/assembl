@@ -16,7 +16,7 @@ import NoDataIcon from '../icons/noDataIcon/noDataIcon';
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
-  storyKindRegex: /^Loader$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|Loader$/
 });
 
 configure({ adapter: new Adapter() });

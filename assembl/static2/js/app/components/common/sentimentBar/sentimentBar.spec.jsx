@@ -10,7 +10,7 @@ import SentimentBar from './sentimentBar';
 import { defaultSentimentBarProps } from './sentimentBar.stories';
 
 initStoryshots({
-  storyKindRegex: /^SentimentBar$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|SentimentBar$/
 });
 
 configure({ adapter: new Adapter() });

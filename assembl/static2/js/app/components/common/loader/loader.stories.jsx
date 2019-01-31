@@ -27,7 +27,7 @@ const playground = {
   type: [LOADER_TYPE.LOADING, LOADER_TYPE.ERROR, LOADER_TYPE.NO_DATA]
 };
 
-storiesOf('Loader', module)
+storiesOf('Semantic Analysis|Loader', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <Loader {...defaultLoaderProps} />))
   .add('error', withInfo()(() => <Loader {...loaderErrorProps} />))

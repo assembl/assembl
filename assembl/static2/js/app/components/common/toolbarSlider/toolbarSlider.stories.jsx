@@ -22,7 +22,7 @@ const playground = {
   onSliderChange: action('onSliderChange')
 };
 
-storiesOf('ToolbarSlider', module)
+storiesOf('Semantic Analysis|ToolbarSlider', module)
   .addDecorator(withKnobs)
   .add(
     'default',

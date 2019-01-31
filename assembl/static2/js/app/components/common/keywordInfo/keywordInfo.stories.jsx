@@ -20,7 +20,7 @@ const playground = {
   ...defaultKeywordInfoProps
 };
 
-storiesOf('KeywordInfo', module)
+storiesOf('Semantic Analysis|KeywordInfo', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <KeywordInfo {...defaultKeywordInfoProps} />))
   .add('playground', withInfo()(() => <KeywordInfo keyword={object('keyword', playground.keyword)} />));

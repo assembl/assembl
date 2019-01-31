@@ -24,7 +24,7 @@ const playground = {
   }
 };
 
-storiesOf('ResponsiveWordCloud', module)
+storiesOf('Semantic Analysis|ResponsiveWordCloud', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <ResponsiveWordCloud keywords={defaultResponsiveWordCloudProps.keywords} />))
   .add(

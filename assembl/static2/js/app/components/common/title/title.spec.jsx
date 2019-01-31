@@ -12,7 +12,7 @@ import { defaultTitleProps } from './title.stories';
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
-  storyKindRegex: /^Title$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|Title$/
 });
 
 configure({ adapter: new Adapter() });

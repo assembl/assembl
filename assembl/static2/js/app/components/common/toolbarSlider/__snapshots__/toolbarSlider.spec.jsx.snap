@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots ToolbarSlider default 1`] = `
+exports[`Storyshots Semantic Analysis|ToolbarSlider default 1`] = `
 <div>
   <div
     style={
@@ -181,7 +181,7 @@ exports[`Storyshots ToolbarSlider default 1`] = `
               }
             }
           >
-            ToolbarSlider
+            Semantic Analysis|ToolbarSlider
           </h1>
           <h2
             style={
@@ -530,7 +530,7 @@ exports[`Storyshots ToolbarSlider default 1`] = `
 </div>
 `;
 
-exports[`Storyshots ToolbarSlider playground 1`] = `
+exports[`Storyshots Semantic Analysis|ToolbarSlider playground 1`] = `
 <div>
   <div
     style={
@@ -711,7 +711,7 @@ exports[`Storyshots ToolbarSlider playground 1`] = `
               }
             }
           >
-            ToolbarSlider
+            Semantic Analysis|ToolbarSlider
           </h1>
           <h2
             style={

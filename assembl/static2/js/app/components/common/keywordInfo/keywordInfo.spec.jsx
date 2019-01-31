@@ -10,7 +10,7 @@ import KeywordInfo from './keywordInfo';
 import { defaultKeywordInfoProps } from './keywordInfo.stories';
 
 initStoryshots({
-  storyKindRegex: /^KeywordInfo$/
+  storyKindRegex: /^Semantic\s{1}Analysis\|KeywordInfo$/
 });
 
 configure({ adapter: new Adapter() });

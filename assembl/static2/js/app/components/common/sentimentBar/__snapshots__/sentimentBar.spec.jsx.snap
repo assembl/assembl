@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots SentimentBar default 1`] = `
+exports[`Storyshots Semantic Analysis|SentimentBar default 1`] = `
 <div>
   <div
     style={
@@ -160,7 +160,7 @@ exports[`Storyshots SentimentBar default 1`] = `
               }
             }
           >
-            SentimentBar
+            Semantic Analysis|SentimentBar
           </h1>
           <h2
             style={
@@ -412,7 +412,7 @@ exports[`Storyshots SentimentBar default 1`] = `
 </div>
 `;
 
-exports[`Storyshots SentimentBar playground 1`] = `
+exports[`Storyshots Semantic Analysis|SentimentBar playground 1`] = `
 <div>
   <div
     style={
@@ -572,7 +572,7 @@ exports[`Storyshots SentimentBar playground 1`] = `
               }
             }
           >
-            SentimentBar
+            Semantic Analysis|SentimentBar
           </h1>
           <h2
             style={

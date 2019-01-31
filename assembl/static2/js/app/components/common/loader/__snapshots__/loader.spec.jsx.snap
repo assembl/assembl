@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Loader default 1`] = `
+exports[`Storyshots Semantic Analysis|Loader default 1`] = `
 <div>
   <div
     style={
@@ -131,7 +131,7 @@ exports[`Storyshots Loader default 1`] = `
               }
             }
           >
-            Loader
+            Semantic Analysis|Loader
           </h1>
           <h2
             style={
@@ -282,7 +282,7 @@ exports[`Storyshots Loader default 1`] = `
 </div>
 `;
 
-exports[`Storyshots Loader error 1`] = `
+exports[`Storyshots Semantic Analysis|Loader error 1`] = `
 <div>
   <div
     style={
@@ -448,7 +448,7 @@ exports[`Storyshots Loader error 1`] = `
               }
             }
           >
-            Loader
+            Semantic Analysis|Loader
           </h1>
           <h2
             style={
@@ -599,7 +599,7 @@ exports[`Storyshots Loader error 1`] = `
 </div>
 `;
 
-exports[`Storyshots Loader no data 1`] = `
+exports[`Storyshots Semantic Analysis|Loader no data 1`] = `
 <div>
   <div
     style={
@@ -737,7 +737,7 @@ exports[`Storyshots Loader no data 1`] = `
               }
             }
           >
-            Loader
+            Semantic Analysis|Loader
           </h1>
           <h2
             style={
@@ -888,7 +888,7 @@ exports[`Storyshots Loader no data 1`] = `
 </div>
 `;
 
-exports[`Storyshots Loader playground 1`] = `
+exports[`Storyshots Semantic Analysis|Loader playground 1`] = `
 <div>
   <div
     style={
@@ -1019,7 +1019,7 @@ exports[`Storyshots Loader playground 1`] = `
               }
             }
           >
-            Loader
+            Semantic Analysis|Loader
           </h1>
           <h2
             style={

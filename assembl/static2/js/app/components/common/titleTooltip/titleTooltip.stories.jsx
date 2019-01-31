@@ -13,6 +13,6 @@ export const defaultTitleTooltipProps: TitleTooltipProps = {
   tooltipContent: <p>Wow a tooltip!</p>
 };
 
-storiesOf('TitleTooltip', module)
+storiesOf('Semantic Analysis|TitleTooltip', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <TitleTooltip {...defaultTitleTooltipProps} />));

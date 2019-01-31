@@ -18,7 +18,7 @@ const playground: TitleProps = {
   ...defaultTitleProps
 };
 
-storiesOf('Title', module)
+storiesOf('Semantic Analysis|Title', module)
   .addDecorator(withKnobs)
   .add('default', withInfo()(() => <Title {...defaultTitleProps} />))
   .add(

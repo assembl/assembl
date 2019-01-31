@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Title default 1`] = `
+exports[`Storyshots Semantic Analysis|Title default 1`] = `
 <div>
   <div
     style={
@@ -111,7 +111,7 @@ exports[`Storyshots Title default 1`] = `
               }
             }
           >
-            Title
+            Semantic Analysis|Title
           </h1>
           <h2
             style={
@@ -340,7 +340,7 @@ exports[`Storyshots Title default 1`] = `
 </div>
 `;
 
-exports[`Storyshots Title playground 1`] = `
+exports[`Storyshots Semantic Analysis|Title playground 1`] = `
 <div>
   <div
     style={
@@ -451,7 +451,7 @@ exports[`Storyshots Title playground 1`] = `
               }
             }
           >
-            Title
+            Semantic Analysis|Title
           </h1>
           <h2
             style={

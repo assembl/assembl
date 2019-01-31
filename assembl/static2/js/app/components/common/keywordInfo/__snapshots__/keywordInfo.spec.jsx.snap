@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots KeywordInfo default 1`] = `
+exports[`Storyshots Semantic Analysis|KeywordInfo default 1`] = `
 <div>
   <div
     style={
@@ -125,7 +125,7 @@ exports[`Storyshots KeywordInfo default 1`] = `
               }
             }
           >
-            KeywordInfo
+            Semantic Analysis|KeywordInfo
           </h1>
           <h2
             style={
@@ -342,7 +342,7 @@ exports[`Storyshots KeywordInfo default 1`] = `
 </div>
 `;
 
-exports[`Storyshots KeywordInfo playground 1`] = `
+exports[`Storyshots Semantic Analysis|KeywordInfo playground 1`] = `
 <div>
   <div
     style={
@@ -467,7 +467,7 @@ exports[`Storyshots KeywordInfo playground 1`] = `
               }
             }
           >
-            KeywordInfo
+            Semantic Analysis|KeywordInfo
           </h1>
           <h2
             style={

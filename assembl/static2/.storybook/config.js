@@ -21,7 +21,9 @@ import '../css/themes/default/assembl_web.scss';
 // Option defaults:
 setOptions({
   name: 'Assembl',
-  url: '#'
+  url: '#',
+  hierarchySeparator: /\//,
+  hierarchyRootSeparator: /\|/
 });
 
 I18n.setTranslations(messages);

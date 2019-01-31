@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Description default 1`] = `
+exports[`Storyshots Semantic Analysis|Description default 1`] = `
 <div>
   <div
     style={
@@ -115,7 +115,7 @@ exports[`Storyshots Description default 1`] = `
               }
             }
           >
-            Description
+            Semantic Analysis|Description
           </h1>
           <h2
             style={

@@ -16,7 +16,7 @@ const playground = {
   value: 0.5755
 };
 
-storiesOf('SentimentBar', module)
+storiesOf('Semantic Analysis|SentimentBar', module)
   .addDecorator(withKnobs)
   .add(
     'default',
