@@ -262,8 +262,11 @@
     }
 
     .annotation {
-      margin: 0 44px 20px;
       font-family: $font-family7;
+
+      &.margin {
+        margin: 0 44px 20px;
+      }
     }
   }
 

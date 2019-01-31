@@ -14,7 +14,7 @@ exports[`ExportSection component should render an ExportSection component with l
       className="box-hyphen"
     />
     <div
-      className="annotation"
+      className="annotation margin padding-left"
     >
       You can export all of the data by clicking on the export button
     </div>
@@ -89,7 +89,7 @@ exports[`ExportSection component should render an ExportSection component withou
       className="box-hyphen"
     />
     <div
-      className="annotation"
+      className="annotation margin padding-left"
     >
       You can export all of the data by clicking on the export button
     </div>
@@ -129,7 +129,7 @@ exports[`ExportSection component should render an export section that handles di
       className="box-hyphen"
     />
     <div
-      className="annotation"
+      className="annotation margin padding-left"
     >
       You can export all of the data by clicking on the export button
     </div>

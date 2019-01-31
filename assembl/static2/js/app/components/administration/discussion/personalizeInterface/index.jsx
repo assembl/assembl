@@ -72,6 +72,7 @@ const PersonalizeInterface = ({ client }: Props) => (
                 component={FileUploaderFieldAdapter}
                 label={I18n.t('administration.personalizeInterface.favicon')}
               />
+              <p className="annotation no-margin">{I18n.t('administration.personalizeInterface.faviconInstruction')}</p>
             </form>
           </React.Fragment>
         )}

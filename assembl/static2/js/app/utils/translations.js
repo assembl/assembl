@@ -950,6 +950,7 @@ const Translations = {
         titleFormTitle: "Personnaliser l'intitulé de la page",
         title: "Titre de la page web (visuel 1)",
         favicon: "Favicon (visuel 2)",
+        faviconInstruction: "La favicon doit être au format .ico et avoir une hauteur maximum de 110px.",
         icoRequired: "Le favicon doit être un fichier .ico uniquement"
       }
     },
@@ -1911,6 +1912,7 @@ const Translations = {
         titleFormTitle: "Personalize the title of the page",
         title: "Web page Title (visual 1)",
         favicon: "Favicon (visual 2)",
+        faviconInstruction: "TO BE DEFINED",
         icoRequired: "The favicon must be an .ico file only"
       }
     },
