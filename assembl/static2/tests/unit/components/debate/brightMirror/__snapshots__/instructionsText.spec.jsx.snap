@@ -21,7 +21,7 @@ exports[`Storyshots InstructionsText default 1`] = `
           className="content-section"
         >
           <div
-            className="announcement-menu"
+            className="announcement-menu single-tab"
             id="announcement-tabs-id"
           >
             <ul
@@ -564,7 +564,7 @@ exports[`Storyshots InstructionsText playground 1`] = `
           className="content-section"
         >
           <div
-            className="announcement-menu"
+            className="announcement-menu single-tab"
             id="announcement-tabs-id"
           >
             <ul

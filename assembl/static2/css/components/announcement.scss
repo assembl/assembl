@@ -103,6 +103,18 @@
   }
 }
 
+.announcement-menu {
+  &.single-tab {
+    .nav-tabs.nav-justified {
+      & > li {
+        & > a {
+          text-align: left;
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: $screen-sm-max) {
   .announcement {
     margin-left: 0;

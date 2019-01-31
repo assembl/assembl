@@ -101,9 +101,7 @@ export const SurveyAnnouncement = ({ announcement, semanticAnalysisForThematicDa
   const guidelinesContent = (
     <div className="announcement">
       <div className="announcement-title">
-        <h3 className="announcement-title-text dark-title-1">
-          {announcement.title ? announcement.title : <Translate value="debate.thread.announcement" />}
-        </h3>
+        {announcement.title ? <h3 className="announcement-title-text dark-title-1">{announcement.title}</h3> : ''}
       </div>
       <Row>
         <TextAndMedia {...announcement} />

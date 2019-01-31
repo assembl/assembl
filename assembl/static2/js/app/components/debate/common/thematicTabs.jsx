@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Tabs, Tab } from 'react-bootstrap';
+import classnames from 'classnames';
 // Component imports
 import { ANNOUNCEMENT_TAB_ITEM_ID } from '../../../constants';
 import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
@@ -58,13 +59,14 @@ const ThematicTabs = ({ guidelinesContent, semanticAnalysisForThematicData }: Pr
       </div>
     </Tab>
   );
+  const classNameTabs = topKeywordsLength > 0 && guidelinesTabAndContent ? '' : 'single-tab';
 
   return (
     <Tabs
       id="announcement-tabs-id"
       justified
       defaultActiveKey={ANNOUNCEMENT_TAB_ITEM_ID.GUIDELINES}
-      className="announcement-menu"
+      className={classnames('announcement-menu', classNameTabs)}
     >
       {guidelinesTabAndContent}
       {/** summaryTabAndContent */}
