@@ -307,7 +307,7 @@ def create_local_ini(c):
 
 @task(ensure_aws_invoke_yaml)
 def generate_nginx_conf(c):
-    fill_template(c, 'assembl/templates/system/nginx_default.jinja2', 'var/share/assembl.nginx')
+    fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx')
 
 
 @task(create_local_ini)
