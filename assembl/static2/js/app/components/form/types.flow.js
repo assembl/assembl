@@ -1,6 +1,5 @@
 // @flow
 import { EditorState } from 'draft-js';
-import type Moment from 'moment';
 
 export type I18nValue = { [string]: string };
 export type I18nRichTextValue = { [string]: EditorState };
@@ -15,10 +14,8 @@ export type MutationsPromises = Array<() => Promise<*>>;
 
 export type SaveStatus = 'OK' | 'KO' | 'PENDING';
 
-export type DateTime = Moment;
-
 export type DatePickerInput = {
-  time: ?DateTime
+  time: ?moment$Moment
 };
 
 export type DatePickerValue = DatePickerInput;
@@ -28,7 +25,7 @@ export type DatePickerType = {
   pickerClasses?: string
 };
 
-export type DatePickerOutput = DateTime | null;
+export type DatePickerOutput = moment$Moment | null;
 
 export type CheckboxListOption = {
   isChecked: boolean,

@@ -62,7 +62,7 @@ class URLPreview extends React.Component<Props> {
             <Embed
               url={url}
               defaultEmbed={
-                thumbnailUrl && <div style={{ backgroundImage: `url("${thumbnailUrl}")` }} className="url-img-preview" />
+                thumbnailUrl ? <div style={{ backgroundImage: `url("${thumbnailUrl}")` }} className="url-img-preview" /> : null
               }
             />
           </div>

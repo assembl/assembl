@@ -19,7 +19,7 @@ type Props = {
   ideaId: string,
   ideaLevel: number,
   ideaIndex: number,
-  nbLevel?: number,
+  nbLevel?: number | null,
   isMobile: boolean,
   ideaPreviewWidth: number,
   setSelectedIdeas: Function

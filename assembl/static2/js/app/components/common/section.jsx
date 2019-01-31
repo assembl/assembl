@@ -63,7 +63,7 @@ class Section extends React.Component<SectionProps> {
     innerRef: undefined
   };
 
-  getIndexes = () => {
+  getIndexes = (): Array<number> => {
     const { index, parents } = this.props;
     const indexes = parents.slice();
     indexes.push(index);

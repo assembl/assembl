@@ -1,4 +1,4 @@
-fragment Document on Document {
+fragment ADocument on Document {
   id
   title
   externalUrl

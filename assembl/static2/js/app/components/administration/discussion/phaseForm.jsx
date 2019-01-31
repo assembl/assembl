@@ -5,7 +5,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
 import { Link } from 'react-router';
-import { type moment } from 'moment';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import { get } from '../../../utils/routeMap';
 import { updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
@@ -14,8 +13,8 @@ type PhaseFormProps = {
   phaseId: string,
   phaseNumber: number,
   identifier: string,
-  start: moment,
-  end: moment,
+  start: moment$Moment,
+  end: moment$Moment,
   handleStartDateChange: Function,
   handleEndDateChange: Function,
   locale: string,

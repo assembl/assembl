@@ -1,4 +1,4 @@
-query DiscussionPreferences {
+query DiscussionPreferencesQuery {
   discussionPreferences {
     tabTitle
     favicon {

@@ -1,12 +1,21 @@
 // @flow
 
 import { I18n } from 'react-redux-i18n';
-import { type DateTime } from '../../../form/types.flow';
 import type { DatePickerValue, DatePickerValidation } from './types.flow';
 
-export const validStartDate = (startDate: DateTime, endDate: DateTime): boolean => startDate <= endDate;
+export const validStartDate = (startDate: ?moment$Moment, endDate: ?moment$Moment): boolean => {
+  if (!startDate || !endDate) {
+    return true;
+  }
+  return startDate.isSameOrBefore(endDate);
+};
 
-export const validEndDate = (startDate: DateTime, endDate: DateTime): boolean => endDate >= startDate;
+export const validEndDate = (startDate: ?moment$Moment, endDate: ?moment$Moment): boolean => {
+  if (!startDate || !endDate) {
+    return true;
+  }
+  return endDate.isSameOrAfter(startDate);
+};
 
 export const validateDatePicker = (values: DatePickerValue): DatePickerValidation => ({
   headerTitle: undefined,

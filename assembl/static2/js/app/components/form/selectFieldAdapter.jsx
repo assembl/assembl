@@ -140,7 +140,6 @@ class SelectFieldAdapter extends React.Component<Props, State> {
       <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
         {decoratedLabel ? <ControlLabel>{decoratedLabel}</ControlLabel> : null}
         <SelectComponent
-          // $FlowFixMe select is not a StateManager
           ref={this.select}
           className={classNames('select-field', className, { 'expand-up': direction === 'up' })}
           {...otherListeners}

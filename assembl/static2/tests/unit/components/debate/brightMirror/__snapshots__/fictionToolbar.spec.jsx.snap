@@ -704,11 +704,11 @@ exports[`Storyshots FictionToolbar default 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#444",
+                          "color": "#170",
                         }
                       }
                     >
-                      null
+                      onModifyCallback
                     </span>
                   </td>
                   <td
@@ -739,11 +739,11 @@ exports[`Storyshots FictionToolbar default 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#444",
+                          "color": "#170",
                         }
                       }
                     >
-                      null
+                      onDeleteCallback
                     </span>
                   </td>
                   <td
@@ -1464,11 +1464,11 @@ exports[`Storyshots FictionToolbar playground 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#444",
+                          "color": "#170",
                         }
                       }
                     >
-                      null
+                      onModifyCallback
                     </span>
                   </td>
                   <td
@@ -1499,11 +1499,11 @@ exports[`Storyshots FictionToolbar playground 1`] = `
                     <span
                       style={
                         Object {
-                          "color": "#444",
+                          "color": "#170",
                         }
                       }
                     >
-                      null
+                      onDeleteCallback
                     </span>
                   </td>
                   <td

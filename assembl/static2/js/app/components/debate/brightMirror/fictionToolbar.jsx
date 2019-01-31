@@ -120,8 +120,8 @@ const FictionToolbar = ({
 };
 
 FictionToolbar.defaultProps = {
-  onModifyCallback: null,
-  onDeleteCallback: null
+  onModifyCallback: () => {},
+  onDeleteCallback: () => {}
 };
 
 export default FictionToolbar;

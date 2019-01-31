@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import { I18n } from 'react-redux-i18n';
@@ -25,8 +25,8 @@ type State = {
 };
 
 type SuperShareButtonProps = {
-  Component: any => void,
-  Icon: any => void,
+  Component: React.ComponentType<{ url: string, onShareWindowClose: () => void }>,
+  Icon: React.ComponentType<{ size: number, round: boolean }>,
   url: string,
   onClose: () => void
 };

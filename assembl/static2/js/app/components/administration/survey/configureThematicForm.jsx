@@ -56,7 +56,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     return fieldData;
   };
 
-  addVoteModuleLink = (theme) => {
+  addVoteModuleLink = (theme: ThemeValue) => {
     if (!(theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.voteSession)) {
       return null;
     }
@@ -174,7 +174,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
             />
           </React.Fragment>
         ) : null}
-        {this.addVoteModuleLink(theme)}
+        {theme ? this.addVoteModuleLink(theme) : null}
         {theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.survey ? (
           <SurveyFields editLocale={editLocale} fieldPrefix={name} />
         ) : null}

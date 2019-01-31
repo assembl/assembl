@@ -56,12 +56,12 @@ class Ideas extends React.Component<Props, State> {
     }
   };
 
-  getIdeaChildren = (selectedIdeaId: string) => {
+  getIdeaChildren = (selectedIdeaId: string): Array<Idea> => {
     const { ideas } = this.props;
     return ideas.filter(idea => idea.parentId === selectedIdeaId);
   };
 
-  getIdeaParents = (ideaLevel: number) => {
+  getIdeaParents = (ideaLevel: number): Array<Idea> => {
     const { ideas } = this.props;
     const { selectedIdeasId } = this.state;
     const ancestor = selectedIdeasId[ideaLevel];

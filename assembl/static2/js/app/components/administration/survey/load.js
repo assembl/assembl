@@ -24,10 +24,6 @@ export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, discu
   return data;
 };
 
-type ThemeValueWithChildren = {
-  children: Array<ThemeValueWithChildren>
-} & ThemeValue;
-
 const getMessageViewOverride = (key: ?string): Option => {
   if (key) {
     return { value: key, label: I18n.t(`administration.modules.${key}`) };
@@ -35,7 +31,7 @@ const getMessageViewOverride = (key: ?string): Option => {
   return { value: 'noModule', label: I18n.t('administration.modules.noModule') };
 };
 
-const getThemeData = (t: ThemeValueFromQuery): ThemeValueWithChildren => {
+const getThemeData = (t: ThemeValueFromQuery): ThemeValue => {
   const announcement = {
     title: convertEntriesToI18nValue(t.announcement ? t.announcement.titleEntries : []),
     body: convertEntriesToI18nRichText(t.announcement ? t.announcement.bodyEntries : []),

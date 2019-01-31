@@ -1,5 +1,4 @@
 // @flow
-import { type moment } from 'moment';
 import * as actionTypes from '../actionTypes';
 
 export const createPhase = (id: string, order: number): actionTypes.CreatePhase => ({
@@ -38,13 +37,13 @@ export const deletePhase = (id: string): actionTypes.DeletePhase => ({
   type: actionTypes.DELETE_PHASE
 });
 
-export const updateStartDate = (id: string, value: moment): actionTypes.UpdatePhaseStart => ({
+export const updateStartDate = (id: string, value: moment$Moment): actionTypes.UpdatePhaseStart => ({
   id: id,
   value: value,
   type: actionTypes.UPDATE_PHASE_START
 });
 
-export const updateEndDate = (id: string, value: moment): actionTypes.UpdatePhaseEnd => ({
+export const updateEndDate = (id: string, value: moment$Moment): actionTypes.UpdatePhaseEnd => ({
   id: id,
   value: value,
   type: actionTypes.UPDATE_PHASE_END

@@ -4,7 +4,7 @@ import { getURLComponent } from '../../../utils/urlPreview';
 
 type EmbedProps = {
   url: string,
-  defaultEmbed?: React.Node
+  defaultEmbed: React.Element<'iframe' | 'div'> | null
 };
 
 const Embed = ({ url, defaultEmbed }: EmbedProps) => getURLComponent(url) || defaultEmbed;
