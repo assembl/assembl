@@ -89,6 +89,7 @@ def create_var_dir(c):
     c.run('mkdir -p var/run var/share var/log var/db')
     c.run('chgrp www-data . var var/run var/share')
     c.run('chmod -R g+rxs var/run var/share')
+    c.run('touch var/share/assembl.nginx')
 
 
 def get_region(c):
