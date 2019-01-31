@@ -33,7 +33,7 @@ export class SemanticAnalysisForDiscussion extends Component<Props> {
     return (
       <div className="semantic-analysis-container">
         <div className="banner">
-          <Grid>
+          <Grid className="margin-lr">
             <h1>Analyse sémantique</h1>
           </Grid>
         </div>

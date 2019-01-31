@@ -9,6 +9,11 @@
     height: 107px;
     width: 100%;
 
+    .margin-lr {
+      margin-right: 0;
+      margin-left: 0;
+    }
+
     h1 {
       color: $white;
       font-family: $font-family4;
@@ -78,6 +83,14 @@
   color: $second-color;
 }
 
+@media screen and (min-width: 600px) {
+  .semantic-analysis-container {
+    .banner {
+      background-position-x: 0;
+    }
+  }
+}
+
 @media screen and (min-width: $screen-sm-min) {
   .semantic-analysis {
     h1 {
@@ -103,8 +116,12 @@
 
   .semantic-analysis-container {
     .banner {
-      background-position-x: 0;
       height: 134px;
+
+      .margin-lr {
+        margin-right: auto;
+        margin-left: auto;
+      }
 
       h1 {
         font-size: $font-size-xll;
@@ -115,17 +132,22 @@
 
 @media screen and (min-width: $screen-lg-min) {
   .semantic-analysis {
-    .keyword-info {
-      margin-bottom: 20px;
-    }
-
     h4 {
       font-size: 30px;
+    }
+
+    .keyword-info {
+      margin-bottom: 20px;
     }
 
     .lg-wordcloud-padding {
       padding-right: 60px;
       padding-top: 20px;
+    }
+
+    .padding-l {
+      padding-left: 0;
+      padding-right: 20px;
     }
 
     .sentimentBar {
@@ -135,11 +157,6 @@
 
     .slider {
       margin-top: 40px;
-    }
-
-    .padding-l {
-      padding-left: 0;
-      padding-right: 20px;
     }
   }
 
@@ -151,19 +168,11 @@
       h1 {
         font-size: $font-size-xxl;
       }
-    }
-  }
-}
 
-@media screen and (min-width: $screen-lg-min) {
-  .semantic-analysis {
-    h4 {
-      font-size: 30px;
-    }
-
-    .sentimentBar {
-      margin-top: 15px;
-      width: 45%;
+      .margin-lr {
+        margin-right: auto;
+        margin-left: auto;
+      }
     }
   }
 }
