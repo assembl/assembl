@@ -25,8 +25,8 @@ def upgrade(pyramid_env):
         sa.Column('discussion_id', sa.Integer,
                   sa.ForeignKey('discussion.id', ondelete="CASCADE",
                                 onupdate="CASCADE"),nullable=False),
-        sa.Column('slug', sa.CoerceUnicode,nullable=False, unique=True, index=True),
-        sa.Column('redirection_slug', sa.CoerceUninceode, nullable=False, unique=True, index=True))
+        sa.Column('slug', sa.Unicode,nullable=False, unique=True, index=True),
+        sa.Column('redirection_slug', sa.Unicode, nullable=False, unique=True, index=True))
 
 
 def downgrade(pyramid_env):
