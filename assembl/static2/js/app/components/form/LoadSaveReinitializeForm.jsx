@@ -61,13 +61,14 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
 
   runMutations = async (values: TInitialValues) => {
     const { createMutationsPromises, save, afterSave } = this.props;
-    // $FlowFixMe flow doesn't see that initialValues has already been checked
-    const mutationPromises = createMutationsPromises(values, this.state.initialValues);
-    const status = await save(mutationPromises);
-    if (status === 'OK') {
-      // we really need to do a refetch to have the correct new ids in values
-      await this.load('network-only');
-      if (afterSave) afterSave(values);
+    if (this.state.initialValues) {
+      const mutationPromises = createMutationsPromises(values, this.state.initialValues);
+      const status = await save(mutationPromises);
+      if (status === 'OK') {
+        // we really need to do a refetch to have the correct new ids in values
+        await this.load('network-only');
+        if (afterSave) afterSave(values);
+      }
     }
   };
 
