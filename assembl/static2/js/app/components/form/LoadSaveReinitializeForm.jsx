@@ -79,7 +79,7 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     const warningValuesHaveChanged =
       warningValues && initialValues && warningValues.some(value => values[value] !== initialValues[value]);
     if (withWarningModal && warningValuesHaveChanged && warningMessageKey) {
-      return displayConfirmationModal(values, this.runMutations, warningMessageKey);
+      return displayConfirmationModal(() => this.runMutations(values), warningMessageKey);
     }
     return this.runMutations(values);
   };
