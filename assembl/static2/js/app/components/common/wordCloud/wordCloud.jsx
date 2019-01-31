@@ -107,7 +107,7 @@ class WordCloud extends Component<Props> {
     const reactWordCloudProps = {
       colorScale: addOpacityToColorHEX(keywordsColor),
       colorScaleActive: addOpacityToColorHEX(keywordsColorActive),
-      fontFamily: 'Lato',
+      fontFamily: 'LatoMedium',
       height: height,
       maxAngle: maxAngle,
       maxWords: numberOfKeywordsToDisplay,
