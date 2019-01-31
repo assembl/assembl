@@ -70,7 +70,7 @@ class ToolbarSlider extends Component<Props, State> {
   render() {
     const { color, labelFormatter, maxValue, minValue, onSliderChange } = this.props;
     const { currentValue } = this.state;
-    const thumbComponent = <ToolbarSliderIcon value={labelFormatter(currentValue)} classText="sliderText" />;
+    const thumbComponent = <ToolbarSliderIcon value={labelFormatter(currentValue)} textClassName="sliderText" />;
 
     const onSliderChangeHandler = (event: SyntheticEvent<HTMLButtonElement>, value: number): void => {
       this.setState({ currentValue: value });
