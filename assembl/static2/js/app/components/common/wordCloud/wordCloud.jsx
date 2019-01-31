@@ -52,34 +52,6 @@ class WordCloud extends Component<Props> {
     width: 400
   };
 
-  shouldComponentUpdate(nextProps: Props) {
-    const {
-      height,
-      keywordsAngle,
-      keywordsColor,
-      keywordsColorActive,
-      numberOfKeywordsToDisplay,
-      onMouseOutWord,
-      onMouseOverWord,
-      onWordClick,
-      width
-    } = this.props;
-    if (
-      nextProps.height !== height ||
-      nextProps.keywordsAngle !== keywordsAngle ||
-      nextProps.keywordsColor !== keywordsColor ||
-      nextProps.keywordsColorActive !== keywordsColorActive ||
-      nextProps.numberOfKeywordsToDisplay !== numberOfKeywordsToDisplay ||
-      nextProps.onMouseOutWord !== onMouseOutWord ||
-      nextProps.onMouseOverWord !== onMouseOverWord ||
-      nextProps.onWordClick !== onWordClick ||
-      nextProps.width !== width
-    ) {
-      return true;
-    }
-    return false;
-  }
-
   componentDidUpdate(prevProps: Props) {
     if (
       this.props.keywordsColor !== prevProps.keywordsColor ||

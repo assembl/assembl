@@ -21,25 +21,20 @@ class ResponsiveWordCloud extends Component<WordCloudBaseProps> {
       keywordsAngle,
       keywordsColor,
       keywordsColorActive,
-      keywords,
       numberOfKeywordsToDisplay,
       onMouseOutWord,
       onMouseOverWord,
       onWordClick
     } = this.props;
-    if (
+    return (
       nextProps.keywordsAngle !== keywordsAngle ||
       nextProps.keywordsColor !== keywordsColor ||
       nextProps.keywordsColorActive !== keywordsColorActive ||
-      nextProps.keywords !== keywords ||
       nextProps.numberOfKeywordsToDisplay !== numberOfKeywordsToDisplay ||
       nextProps.onMouseOutWord !== onMouseOutWord ||
       nextProps.onMouseOverWord !== onMouseOverWord ||
       nextProps.onWordClick !== onWordClick
-    ) {
-      return true;
-    }
-    return false;
+    );
   }
 
   render() {
