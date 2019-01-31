@@ -22,7 +22,7 @@ exports[`Storyshots SentimentBar default 1`] = `
       >
         <svg
           className="icon"
-          height="198"
+          height="100%"
           viewBox="0 0 108 198"
           width="108"
           xmlns="http://www.w3.org/2000/svg"
@@ -434,7 +434,7 @@ exports[`Storyshots SentimentBar playground 1`] = `
       >
         <svg
           className="icon"
-          height="198"
+          height="100%"
           viewBox="0 0 108 198"
           width="108"
           xmlns="http://www.w3.org/2000/svg"

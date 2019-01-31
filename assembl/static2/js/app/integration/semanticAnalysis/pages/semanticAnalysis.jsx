@@ -138,7 +138,7 @@ export class SemanticAnalysis extends Component<Props, State> {
         </Col>
 
         {/** WordCloud section */}
-        <Col xs={12} md={8} className="no-padding lg-wordcloud-padding sm-margin-m margin-s">
+        <Col xs={12} md={8} className="no-padding md-wordcloud-padding sm-margin-m margin-s">
           <ResponsiveWordCloud
             keywordsColor={firstColor}
             keywordsColorActive={secondColor}

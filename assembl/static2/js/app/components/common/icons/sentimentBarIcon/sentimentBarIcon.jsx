@@ -39,7 +39,7 @@ const SentimentBarIcon = ({ level }: Props) => {
     );
   } else if (level === 1) {
     svg = (
-      <svg xmlns="http://www.w3.org/2000/svg" width="120" height="198" viewBox="0 0 120 198" className="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="120" height="100%" viewBox="0 0 120 198" className="icon">
         <g fill="none" fillRule="evenodd">
           <path
             stroke="#5ECC6B"
@@ -70,7 +70,7 @@ const SentimentBarIcon = ({ level }: Props) => {
     );
   } else if (level === 2) {
     svg = (
-      <svg xmlns="http://www.w3.org/2000/svg" width="108" height="198" viewBox="0 0 108 198" className="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="108" height="100%" viewBox="0 0 108 198" className="icon">
         <g fill="none" fillRule="evenodd">
           <path
             stroke="#5ECC6B"
@@ -96,7 +96,7 @@ const SentimentBarIcon = ({ level }: Props) => {
     );
   } else if (level === 3) {
     svg = (
-      <svg xmlns="http://www.w3.org/2000/svg" width="129" height="198" viewBox="0 0 129 198" className="icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="129" height="100%" viewBox="0 0 129 198" className="icon">
         <g fill="none" fillRule="evenodd">
           <path
             fill="#5ECC6B"

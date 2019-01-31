@@ -73,6 +73,11 @@
     margin-left: auto;
     margin-right: auto;
   }
+
+  &.container {
+    padding-top: 10px;
+    padding-bottom: 30px;
+  }
 }
 
 #first-color-hidden {
@@ -130,6 +135,20 @@
   }
 }
 
+@media screen and (min-width: $screen-md-min) {
+  .semantic-analysis {
+    .sentimentBar {
+      margin-top: 15px;
+      width: 45%;
+    }
+
+    .md-wordcloud-padding {
+      padding-right: 30px;
+      padding-top: 20px;
+    }
+  }
+}
+
 @media screen and (min-width: $screen-lg-min) {
   .semantic-analysis {
     h4 {
@@ -140,19 +159,13 @@
       margin-bottom: 20px;
     }
 
-    .lg-wordcloud-padding {
+    .md-wordcloud-padding {
       padding-right: 60px;
-      padding-top: 20px;
     }
 
     .padding-l {
       padding-left: 0;
       padding-right: 20px;
-    }
-
-    .sentimentBar {
-      margin-top: 15px;
-      width: 45%;
     }
 
     .slider {
