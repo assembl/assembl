@@ -160,7 +160,7 @@ def get_or_create_computation_on_post(post, process_name, parameters):
             return computation
     process = ComputationProcess.by_name(process_name, post.db)
     computation = ComputationOnPost(
-        post=post, process=process,
+        post=post, process=process, post_id=post.id,
         parameters=parameters)
     post.db.add(computation)
     return computation
