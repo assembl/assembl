@@ -2,7 +2,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import manageErrorAndLoading from '../../../../js/app/components/common/manageErrorAndLoading';
+import manageErrorAndLoading, { TYPE } from '../../../../js/app/components/common/manageErrorAndLoading';
 
 const DummyComponent = () => <div>My dummy component</div>;
 
@@ -28,7 +28,7 @@ describe('manageErrorAndLoading HOC', () => {
   });
 
   it('should render an error component if data.error or error is not null/undefined and type is watson', () => {
-    const props = { displayLoader: true, loaderType: 'watson' };
+    const props = { displayLoader: true, loaderType: TYPE.SEMANTIC_ANALYSIS };
     const wrappedProps = {
       data: {
         error: new Error('My graphql error')

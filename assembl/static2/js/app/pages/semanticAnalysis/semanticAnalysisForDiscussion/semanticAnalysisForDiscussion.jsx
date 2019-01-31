@@ -10,7 +10,7 @@ import type { State } from '../../../reducers/rootReducer';
 // Graphql imports
 import SemanticAnalysisForDiscussionQuery from '../../../graphql/SemanticAnalysisForDiscussionQuery.graphql';
 // Component imports
-import manageErrorAndLoading from '../../../components/common/manageErrorAndLoading';
+import manageErrorAndLoading, { TYPE } from '../../../components/common/manageErrorAndLoading';
 import { SemanticAnalysis, type Props as SemanticAnalysisProps } from '../semanticAnalysis';
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 
@@ -58,5 +58,5 @@ const semanticAnalysisForDiscussionQuery: OperationComponent<SemanticAnalysisFor
 export default compose(
   connect(mapStateToProps),
   semanticAnalysisForDiscussionQuery,
-  manageErrorAndLoading({ displayLoader: true, loaderType: 'watson' })
+  manageErrorAndLoading({ displayLoader: true, loaderType: TYPE.SEMANTIC_ANALYSIS })
 )(SemanticAnalysisForDiscussion);

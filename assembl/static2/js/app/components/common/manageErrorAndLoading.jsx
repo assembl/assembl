@@ -8,12 +8,16 @@
 */
 import * as React from 'react';
 import Loader, { type Props as LoaderProps } from './loader';
-import WatsonLoader, { LOADER_TYPE as LOADER_TYPE_WATSON } from './loader/loader';
+import SemanticAnalysisLoader, { LOADER_TYPE as LOADER_TYPE_WATSON } from './loader/loader';
+
+export const TYPE = {
+  SEMANTIC_ANALYSIS: 'SEMANTIC_ANALYSIS'
+};
 
 type Props = {
   displayLoader: boolean,
   /** Optional type */
-  loaderType?: string
+  loaderType?: $Keys<typeof TYPE>
 } & LoaderProps;
 
 type WrappedProps = {
@@ -23,13 +27,13 @@ type WrappedProps = {
 };
 
 // Takes the type and return the right loader for error and loading
-const getLoaderToDisplay = (loaderType?: string, propsToPass: Props) => {
+const getLoaderToDisplay = (loaderType?: $Keys<typeof TYPE>, propsToPass: Props) => {
   const type = loaderType || '';
   switch (type) {
-  case 'watson': {
+  case TYPE.SEMANTIC_ANALYSIS: {
     return {
-      ERROR: () => <WatsonLoader type={LOADER_TYPE_WATSON.ERROR} />,
-      LOADING: () => <WatsonLoader type={LOADER_TYPE_WATSON.LOADING} />
+      ERROR: () => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.ERROR} />,
+      LOADING: () => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.LOADING} />
     };
   }
   default: {
