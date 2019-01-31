@@ -336,6 +336,14 @@ def aws_instance_startup(c):
     setup_ctx(c)
 
 
+@task(setup_aws_default_region, ensure_aws_invoke_yaml, install_wheel, post=[aws_server_startup_from_local])
+def aws_instance_update_and_startup(c):
+    """Operations to startup a fresh aws instance from an assembl AMI"""
+    if not exists(c, c.config.projectpath + "/invoke.yaml"):
+        raise RuntimeError("Missing invoke.yaml file")
+    setup_ctx(c)
+
+
 @task(setup_aws_default_region, post=[aws_server_startup_from_local])
 def aws_celery_instance_startup(c):
     """Operations to startup a fresh celery aws instance from an assembl AMI"""
