@@ -330,6 +330,12 @@ def generate_supervisor_conf(c):
         c.run('assembl-ini-files populate %s' % (ini_file))
 
 
+@task()
+def download_rds_pem(c, reset=False):
+    if reset or not exists(c, 'rds-combined-ca-bundle.pem'):
+        c.run('wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem')
+
+
 @task(generate_nginx_conf, generate_supervisor_conf)
 def aws_server_startup_from_local(c):
     """Update files that depend on local.rc and restart nginx, supervisor"""
@@ -341,7 +347,7 @@ def aws_server_startup_from_local(c):
     webservers_reload(c)
 
 
-@task(setup_aws_default_region, ensure_aws_invoke_yaml, post=[aws_server_startup_from_local])
+@task(setup_aws_default_region, ensure_aws_invoke_yaml, download_rds_pem, post=[aws_server_startup_from_local])
 def aws_instance_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
@@ -349,7 +355,7 @@ def aws_instance_startup(c):
     setup_ctx(c)
 
 
-@task(setup_aws_default_region, ensure_aws_invoke_yaml, install_wheel, post=[aws_server_startup_from_local])
+@task(setup_aws_default_region, ensure_aws_invoke_yaml, download_rds_pem, install_wheel, post=[aws_server_startup_from_local])
 def aws_instance_update_and_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
