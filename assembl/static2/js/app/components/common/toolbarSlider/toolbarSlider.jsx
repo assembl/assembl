@@ -70,6 +70,7 @@ class ToolbarSlider extends Component<Props, State> {
   render() {
     const { color, labelFormatter, maxValue, minValue, onSliderChange } = this.props;
     const { currentValue } = this.state;
+    const thumbComponent = <ToolbarSliderIcon value={labelFormatter(currentValue)} classText="sliderText" />;
 
     const onSliderChangeHandler = (event: SyntheticEvent<HTMLButtonElement>, value: number): void => {
       this.setState({ currentValue: value });
@@ -84,7 +85,7 @@ class ToolbarSlider extends Component<Props, State> {
           min={minValue}
           onChange={onSliderChangeHandler}
           step={2}
-          thumb={<ToolbarSliderIcon value={labelFormatter(currentValue)} classText="sliderText" />}
+          thumb={thumbComponent}
           value={currentValue}
         />
       </MuiThemeProvider>
