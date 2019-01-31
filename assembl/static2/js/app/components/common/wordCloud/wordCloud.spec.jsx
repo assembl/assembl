@@ -9,7 +9,7 @@ import WordCloud from './wordCloud';
 
 configure({ adapter: new Adapter() });
 
-const props = {
+let props = {
   keywords: []
 };
 
@@ -25,7 +25,8 @@ describe('<WordCloud /> - with shallow', () => {
   });
 
   it('should render render a <ReactWordCloud /> if data is passed', () => {
-    wrapper.setProps({ keywords: [{ value: 'text', score: 0.9, count: 5 }] });
+    props = { keywords: [{ value: 'text', score: 0.9, count: 5 }] };
+    wrapper = shallow(<WordCloud {...props} />);
     expect(wrapper.find('WordCloud')).toHaveLength(1);
   });
 });
