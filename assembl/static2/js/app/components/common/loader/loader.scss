@@ -54,6 +54,8 @@ $animation-speed: 1.4s;
 
 @media screen and (min-width: $screen-sm-min) {
   .custom-loader {
+    margin: 30px 0 30px 0;
+
     .description {
       font-size: $font-size-ml;
       width: 300px;
