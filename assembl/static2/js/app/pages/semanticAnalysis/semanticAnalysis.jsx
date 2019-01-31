@@ -170,7 +170,7 @@ export class SemanticAnalysis extends Component<Props, State> {
             <KeywordInfo keyword={keywordData} />
           </Col>
 
-          <Col xsHidden smHidden md={12} className="padding-l">
+          <Col xsHidden smHidden md={12} className="no-padding">
             <Title level={2}>{numberKeywordTitle}</Title>
 
             <ToolbarSlider

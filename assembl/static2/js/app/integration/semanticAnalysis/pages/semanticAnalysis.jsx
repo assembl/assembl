@@ -172,7 +172,7 @@ export class SemanticAnalysis extends Component<Props, State> {
             />
           </Col>
 
-          <Col xs={12} sm={6} md={12} className="padding-l">
+          <Col xs={12} sm={6} md={12} className="no-padding">
             <TitleWithTooltip level={2} tooltipContent={sentimentAnalysisTooltip}>
               {sentimentAnalysisTitle}
             </TitleWithTooltip>
