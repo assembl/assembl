@@ -70,6 +70,14 @@ class SchemaTags:
     limit = "An integer to define the number of tags to retrieve"
 
 
+class OldSlug:
+    __doc__ = """If the administrator of a discussion changes the slug. The old slug is stored in an instance of this class."""
+    id = Default.objec_id % ("OldSlug")
+    discussion = """The discussion to which the slug is associated to."""
+    slug = Default.string_entry % ("The old slug to be stored.")
+    redirection_slug = Default.string_entry % ("The slug to which the user will be redirected to if he tries the old slug.")
+
+
 class Discussion:
     __doc__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     id = Default.object_id % ("Discussion",)
