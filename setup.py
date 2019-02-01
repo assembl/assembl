@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os
+from subprocess import check_output
 
 from setuptools import setup, find_packages
 try:
@@ -9,9 +10,13 @@ except ImportError:
     from pip.req import parse_requirements
     from pip.download import PipSession
 
+try:
+    from semantic_version import Version
+except ImportError as e:
+    print("Please, first 'pip install semantic-version'")
+    raise e
 
 here = os.path.abspath(os.path.dirname(__file__))
-version = open(os.path.join(here, 'VERSION')).read().strip()
 README = open(os.path.join(here, 'README.md')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
@@ -27,6 +32,19 @@ def parse_reqs(req_files, links=False):
                              for ir in parsed
                              if ir.link or not links})
     return list(requirements)
+
+
+def auto_inc_version():
+    tag = check_output('git describe --tags', shell=True).strip()
+    parts = tag.rsplit('-', 2)
+    if len(parts) == 1:
+        # We're on the tag
+        return tag
+    else:
+        return str(Version(parts[0]).next_patch())
+
+
+version = auto_inc_version()
 
 
 setup(name='assembl',
