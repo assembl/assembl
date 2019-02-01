@@ -106,7 +106,7 @@ def update_node(c, force_reinstall=False):
         # supervisor_process_stop('dev:webpack')
         with venv(c):
             c.run("rm -rf venv/lib/node_modules/")
-            c.run("rm -f venv/bin/npm") # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
+            c.run("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
             c.run("nodeenv --node=10.13.0 --npm=6.4.1 --python-virtualenv assembl/static/js")
         upgrade_yarn(c)
         with c.cd(get_node_base_path(c)):
@@ -243,7 +243,6 @@ def create_wheel_name(version, num=0, commit_hash=None, branch=None, tag=None):
     """
     Follows the recommended naming scheme of PEP 491 (https://www.python.org/dev/peps/pep-0491/#file-name-convention)
     """
-    python_version = "py%d%d" % (sys.version_info.major, sys.version_info.minor)
     if not num:
         # CI condition of a tag (which should only ever be put on master)
         long_version = version
@@ -254,9 +253,9 @@ def create_wheel_name(version, num=0, commit_hash=None, branch=None, tag=None):
     else:
         long_version = '%s-%d+%s' % (version, num, commit_hash)
 
-    return "assembl-{version}-{python_version}-none-any.whl".format(
+    return "assembl-{version}-py{python_major}-none-any.whl".format(
         version=long_version,
-        python_version=python_version)
+        python_major=sys.version_info.major)
 
 
 def git_version_data(c):
