@@ -6,7 +6,7 @@ export type Props = {
   /** Description content */
   children: React.Node,
   /** Optional added classes */
-  className: ?string
+  className?: ?string
 };
 
 const Description = ({ children, className }: Props) => <div className={classNames('description', className)}>{children}</div>;
