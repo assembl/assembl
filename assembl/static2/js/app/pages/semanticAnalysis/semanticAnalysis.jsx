@@ -14,7 +14,7 @@ import Description from '../../components/common/description/description';
 import Title from '../../components/common/title/title';
 
 // Type imports
-import type { Keyword, SemanticAnalysisData } from '../../integration/semanticAnalysis/dataType';
+import type { Keyword, SemanticAnalysisData } from '../../pages/semanticAnalysis/dataType';
 
 import { firstColor, secondColor } from '../../../../css/themes/default/_theme';
 

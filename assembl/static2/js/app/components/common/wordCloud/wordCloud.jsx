@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import ReactWordCloud from 'react-wordcloud';
 
-import type { Keyword, Keywords } from '../../../integration/semanticAnalysis/dataType';
+import type { Keyword, Keywords } from '../../../pages/semanticAnalysis/dataType';
 
 // Keys used to fetch keyword data
 const WORD_COUNT_KEY = 'score';

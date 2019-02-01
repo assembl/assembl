@@ -5,7 +5,7 @@ import { I18n } from 'react-redux-i18n';
 // Component import
 import Description from '../description/description';
 // Type imports
-import type { Keyword } from '../../../integration/semanticAnalysis/dataType';
+import type { Keyword } from '../../../pages/semanticAnalysis/dataType';
 
 export type Props = {
   /** Keyword information */
