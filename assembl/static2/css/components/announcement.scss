@@ -115,6 +115,13 @@
   }
 }
 
+@media screen and (min-width: $screen-xxs-max) {
+  .announcement-menu {
+    margin-left: 55px;
+    margin-right: 55px;
+  }
+}
+
 @media screen and (max-width: $screen-sm-max) {
   .announcement {
     margin-left: 0;
