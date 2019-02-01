@@ -455,6 +455,7 @@ const Translations = {
           "Le nuage de mots-clés ci-dessous est une représentation visuelle des mots-clefs les plus utilisés dans le débat (ou \"dans les échanges liés à la thématique en question\" lorsque le texte fait référence à une thématique particulière). Les mots s'affichent dans des tailles de caractères d'autant plus visibles qu'ils sont utilisés ou populaires.",
         informationKeyword: "Informations mots clés",
         numberKeyword: "Nombre de mots clés",
+        noKeywordSelected: "Pas de mot sélectionné",
         sentimentAnalysis: "Analyse du sentiment",
         sentimentAnalysisDefinition:
           "L'analyse du sentiment caractérise la tonalité positive ou négative des échanges du débat (ou \"des échanges relatifs à la thématique en question\")."
@@ -1461,6 +1462,7 @@ const Translations = {
           "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" pour le texte à mettre en thématique). The importance of each keyword is shown with font size.",
         informationKeyword: "Information on keywords",
         numberKeyword: "Number of keywords",
+        noKeywordSelected: "Select your keyword",
         sentimentAnalysis: "Sentiment analysis",
         sentimentAnalysisDefinition:
           "The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed)."

@@ -27,13 +27,15 @@ export type State = {
   numberOfKeywordsToDisplay: number
 };
 
+const noKeywordSelectedKey = 'debate.semanticAnalysis.noKeywordSelected';
+
 export class SemanticAnalysis extends Component<Props, State> {
   state = {
     keywordSelected: false,
     keywordData: {
       count: 0,
       score: 0,
-      value: 'Pas de mot sélectionné'
+      value: I18n.t(noKeywordSelectedKey)
     },
     numberOfKeywordsToDisplay: this.NUM_WORDS_DEFAULT
   };
@@ -69,7 +71,7 @@ export class SemanticAnalysis extends Component<Props, State> {
         keywordData: {
           count: 0,
           score: 0,
-          value: 'Pas de mot sélectionné'
+          value: I18n.t(noKeywordSelectedKey)
         }
       });
     }
