@@ -75,10 +75,6 @@
       max-width: 100%;
     }
 
-    .light-title-2 {
-      padding-left: 4px;
-    }
-
     .max-text-width {
       margin: 0 auto;
       max-width: 500px;
@@ -250,7 +246,8 @@
             flex-direction: column;
             justify-content: center;
 
-            [class^="assembl-icon-"]:before, [class*=" assembl-icon-"]:before {
+            [class^='assembl-icon-']:before,
+            [class*=' assembl-icon-']:before {
               //increase icon size
               font-size: 170%;
             }
