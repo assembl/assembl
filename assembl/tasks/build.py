@@ -369,11 +369,12 @@ def push_wheelhouse(c, house=None):
         except:
             pass
 
-        indexable_names = list()
+        indexable_names = {json_filename, 'index.html'}
         wheel_hashes = {}
         existing_wheels = set()
+        old_links = set()
         for filename in os.listdir(tmp_wheel_path):
-            indexable_names.append(filename)
+            indexable_names.add(filename)
             with open(os.path.join(tmp_wheel_path, filename), 'rb') as f:
                 m = sha256()
                 m.update(f.read())
@@ -382,14 +383,29 @@ def push_wheelhouse(c, house=None):
             if summary.key in (json_filename, 'error.html'):
                 # Don't add the JSON file to the indexable list
                 continue
+            if summary.size == 0:
+                old_links.add(summary.key)
+                continue
             existing_wheels.add(summary.key)
             if summary.key not in wheel_hashes:
-                indexable_names.append(summary.key)
+                indexable_names.add(summary.key)
                 wheel_hashes[summary.key] = ''  # temporary for testing
 
-        indexable_names.sort()
-
         json_data = write_update_json_data(c, json_filepath)
+
+        # put empty objects for S3-redirections (https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html)
+        for value in json_data.itervalues():
+            name = value['link_name']
+            if name in old_links:
+                old_links.remove(name)
+            bucket.put_object(Key=name, ACL='public-read', Body='',
+                              WebsiteRedirectLocation='/%s' % value['wheel_name'])
+            indexable_names.add(name)
+
+        if old_links:
+            bucket.delete_objects(Delete={"Objects": [{"Key": l} for l in old_links]})
+        indexable_names = list(indexable_names)
+        indexable_names.sort()
 
         output = os.path.join(tmp_wheel_path, 'index.html')
         fill_template(c, 'wheelhouse_index.jinja2', output, {'wheelhouse': indexable_names, 'hashes': wheel_hashes})
@@ -403,11 +419,6 @@ def push_wheelhouse(c, house=None):
             if file not in existing_wheels:
                 with open(os.path.join(tmp_wheel_path, file)) as fp:
                     bucket.put_object(Body=fp, Key=file, ACL='public-read')
-
-        # put empty objects for S3-redirections (https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html)
-        for value in json_data.itervalues():
-            bucket.put_object(Key=value['link_name'], ACL='public-read', Body='',
-                              WebsiteRedirectLocation='/%s' % value['wheel_name'])
 
     elif wheel_path.strip().startswith('local://'):
         c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path.split('local://')[1]))
