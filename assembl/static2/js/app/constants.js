@@ -208,10 +208,6 @@ export const ADMIN_MENU = {
       configureVotingProposals: {
         title: 'administration.voteSession.2',
         sectionId: '3'
-      },
-      exportData: {
-        title: 'administration.voteSession.3',
-        sectionId: '4'
       }
     }
   }
@@ -229,10 +225,6 @@ export const PHASES_ADMIN_MENU = {
         title: 'administration.survey.configThematics',
         sectionId: 'configThematics',
         component: ThematicsMenu
-      },
-      exportData: {
-        title: 'administration.survey.exportData',
-        sectionId: '2'
       }
     }
   }
