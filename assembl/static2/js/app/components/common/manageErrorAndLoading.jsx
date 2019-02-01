@@ -26,10 +26,11 @@ type WrappedProps = {
   loading?: boolean
 };
 
-// Takes the type and return the right loader for error and loading
-const getLoaderToDisplay = (loaderType?: $Keys<typeof TYPE>, propsToPass: Props) => {
-  const type = loaderType || '';
-  switch (type) {
+// Return the right loader to display for error and loading according
+const getLoaderToDisplay = (propsToPass: Props) => {
+  const { loaderType } = propsToPass;
+
+  switch (loaderType) {
   case TYPE.SEMANTIC_ANALYSIS: {
     return {
       // eslint-disable-next-line no-unused-vars
@@ -50,9 +51,8 @@ const getLoaderToDisplay = (loaderType?: $Keys<typeof TYPE>, propsToPass: Props)
 
 const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.ComponentType<any>) => (wrappedProps: WrappedProps) => {
   const { data, error, loading } = wrappedProps;
-  const { loaderType } = props;
 
-  const loaderToShow = getLoaderToDisplay(loaderType, props);
+  const loaderToShow = getLoaderToDisplay(props);
 
   // ERROR
   if (error || (data && data.error)) {
