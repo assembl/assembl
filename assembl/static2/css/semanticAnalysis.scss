@@ -3,7 +3,7 @@
   .banner {
     align-items: center;
     background-image: url(/static2/img/semanticAnalysis/banner-semantic.png);
-    background-position-x: -170px;
+    background-position-x: -50px;
     background-size: cover;
     display: flex;
     height: 107px;
@@ -88,14 +88,6 @@
   color: $second-color;
 }
 
-@media screen and (min-width: 600px) {
-  .semantic-analysis-container {
-    .banner {
-      background-position-x: 0;
-    }
-  }
-}
-
 @media screen and (min-width: $screen-sm-min) {
   .semantic-analysis {
     h1 {
@@ -154,6 +146,14 @@
   }
 }
 
+@media screen and (min-width: $screen-md-min) {
+  .semantic-analysis-container {
+    .banner {
+      background-position-x: 0;
+    }
+  }
+}
+
 @media screen and (min-width: $screen-lg-min) {
   .semantic-analysis {
     h4 {
@@ -180,7 +180,6 @@
 
   .semantic-analysis-container {
     .banner {
-      background-position-x: 0;
       height: 193px;
 
       h1 {
