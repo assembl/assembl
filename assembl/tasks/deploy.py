@@ -113,7 +113,7 @@ def get_and_set_region(c):
 def install_wheel(c, allow_index=False):
     wheelhouse = c.config.get('wheelhouse', 's3://bluenove-assembl-wheelhouse')
     # temporary: we will use assembl-([\d\.]*)-py27-none-any.whl
-    wheel = c.config.get('assembl_wheel', 'assembl-(.*)-py27-none-any\.whl')
+    wheel = c.config.get('assembl_wheel', 'assembl-(.*)-py2-none-any\.whl')
     allow_index = '' if allow_index else '--no-index'
     if wheelhouse.startswith('s3://'):
         wheelhouse = wheelhouse[5:]
