@@ -34,7 +34,7 @@ class ModelEventWatcherCelerySender(BaseModelEventWatcher):
 
 
 def create_dispatcher():
-    from assembl.models.notification import (
+    from ..models.notification import (
         ModelEventWatcherNotificationSubscriptionDispatcher)
     global _dispatcher
     _dispatcher = ModelEventWatcherNotificationSubscriptionDispatcher()
