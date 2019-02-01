@@ -179,9 +179,19 @@ export const ADMIN_MENU = {
       }
     }
   },
-  exportTaxonomies: {
-    title: 'administration.menu.exportTaxonomies',
-    sectionId: ''
+  exportDebateData: {
+    title: 'administration.menu.exportDebateData',
+    sectionId: '1',
+    subMenu: {
+      contributions: {
+        title: 'administration.exportData.contributions',
+        sectionId: '1'
+      },
+      taxonomies: {
+        title: 'administration.menu.exportTaxonomies',
+        sectionId: '2'
+      }
+    }
   },
   landingPage: {
     title: 'administration.landingpage',

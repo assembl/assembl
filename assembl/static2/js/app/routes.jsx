@@ -33,8 +33,8 @@ import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
 import SemanticAnalysisForDiscussion from './pages/semanticAnalysis/semanticAnalysisForDiscussion/semanticAnalysisForDiscussion';
 import LandingPageAdmin from './pages/landingPageAdmin';
-import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
+import ExportData from './pages/exportData';
 import { routeForRouter } from './utils/routeMap';
 
 // Page that is only used to display converted mockups to static pages
@@ -81,8 +81,9 @@ const AdminChild = (props: {
     return <ResourcesCenterAdmin {...props} />;
   case 'landingPage':
     return <LandingPageAdmin {...props} section={props.location.query.section} />;
-  case 'exportTaxonomies':
-    return <ExportTaxonomies />;
+
+  case 'exportDebateData':
+    return <ExportData {...props} section={props.location.query.section} />;
   default:
     return (
       <SurveyAdmin
