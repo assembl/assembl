@@ -32,14 +32,15 @@ const getLoaderToDisplay = (loaderType?: $Keys<typeof TYPE>, propsToPass: Props)
   switch (type) {
   case TYPE.SEMANTIC_ANALYSIS: {
     return {
-      ERROR: () => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.ERROR} />,
+      // eslint-disable-next-line no-unused-vars
+      ERROR: graphqlError => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.ERROR} />,
       LOADING: () => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.LOADING} />
     };
   }
   default: {
     return {
-      ERROR: () => {
-        throw new Error('GraphQL error');
+      ERROR: (graphqlError) => {
+        throw new Error(`GraphQL error: ${graphqlError.message}`);
       },
       LOADING: () => <Loader {...propsToPass} />
     };
@@ -57,7 +58,7 @@ const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.Compone
   if (error || (data && data.error)) {
     const graphqlError = error || data.error;
     if (graphqlError) {
-      loaderToShow.ERROR();
+      loaderToShow.ERROR(graphqlError);
     }
   }
   // LOADING
