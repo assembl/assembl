@@ -5,6 +5,8 @@ import json
 from hashlib import sha256
 from os.path import join, normpath
 
+from semantic_version import Version
+
 from .common import (venv, task, exists, is_integration_env, fill_template)
 
 
@@ -237,64 +239,79 @@ def create_wheelhouse(c, dependency_links=None):
             c.run(cmd)
 
 
-def create_wheel_name(version, sha1, branch=None, tag=None):
+def create_wheel_name(version, num=0, commit_hash=None, branch=None, tag=None):
     """
     Follows the recommended naming scheme of PEP 491 (https://www.python.org/dev/peps/pep-0491/#file-name-convention)
     """
     python_version = "py%d%d" % (sys.version_info.major, sys.version_info.minor)
-    if version == tag:
+    if not num:
         # CI condition of a tag (which should only ever be put on master)
         long_version = version
     elif branch:
-        long_version = '%sd-1%s' % (version, branch)
+        long_version = '%s-%d+%s' % (version, num, branch)
     elif tag:
-        long_version = '%sd-2%s' % (version, tag.split('-').join(''))
+        long_version = '%s-%d+%s' % (version, num, tag.split('-').join('_'))
     else:
-        long_version = '%sd-0%s' % (version, sha1)
+        long_version = '%s-%d+%s' % (version, num, commit_hash)
 
     return "assembl-{version}-{python_version}-none-any.whl".format(
         version=long_version,
         python_version=python_version)
 
 
-def update_wheels_json_data(c, json_data):
-    if is_integration_env(c):
-        # Assumption is Gitlab CI
-        commit_hash = sys.getenv('CI_COMMIT_SHORT_SHA', None)
-        tag = sys.getenv('CI_COMMIT_TAG', None)
-        branch = sys.getenv('CI_COMMIT_REF_NAME', None)
-    else:
-        # Take the latest HEAD
+def git_version_data(c):
+    # Take the latest HEAD
+    branch = c.run('git symbolic-ref --short HEAD').stdout.strip()
+    latest_tag_desc = c.run('git describe').stdout.strip()
+    annotated_tag_desc = c.run('git describe --tags HEAD').stdout.strip()
+    parts = re.match(r"([\d\.]+)(-(\d+)-g([0-9a-f]+))?$", annotated_tag_desc)
+    assert parts, "annotated tag %s is not a version tag" % (annotated_tag_desc.split('-')[0])
+    if not parts.group(2):
+        version = annotated_tag_desc
+        commit_tag = None
         commit_hash = c.run('git rev-parse --short HEAD').stdout.strip()
-        branch = c.run('git symbolic-ref --short HEAD').stdout.strip()
-        tag = c.run('git describe').stdout.strip()
-        annotated_tag = c.run('git describe --tags HEAD').stdout.strip()
-        if re.match(r"[\d\.]", tag):
-            pass
-        elif re.match(r"[\d\.]+-\d+-.+", tag):
-            # The commit does not have a tag associated
-            tag = None
+        num = 0
+    else:
+        # The commit is not an official tagged version
+        (version_tag, _, num, commit_hash) = parts.groups()
+        num = int(num)
+        version = str(Version(version_tag).next_patch())
+        if not re.match(r".+-\d+-g[0-9a-f]+$", latest_tag_desc):
+            commit_tag = latest_tag_desc.rsplit('-', 2)[0]
         else:
-            tag = None
-    # Debugging purposes for Gitlab
-    with open(os.path.join(c.config.code_root, 'VERSION')) as f:
-        version = f.read().strip()
-    print "CI_COMMIT_REF_NAME: %s" % branch
-    print "CI_COMMIT_TAG: %s" % tag
-    print "CI_COMMIT_REF_NAME: %s" % commit_hash
-    if tag and tag not in json_data:
-        json_data[tag] = {
+            commit_tag = None
+    return (version, num, commit_hash, commit_tag, branch)
+
+
+def update_wheels_json_data(c, json_data):
+    (version, num, commit_hash, commit_tag, branch) = git_version_data(c)
+    base_name = create_wheel_name(version, num, commit_hash=commit_hash)
+    if commit_tag and commit_tag not in json_data:
+        json_data[commit_tag] = {
             'sha1': commit_hash,
-            'link_name': create_wheel_name(version, commit_hash, tag=tag),
-            'wheel_name': create_wheel_name(version, commit_hash)
+            'link_name': create_wheel_name(version, num, commit_hash, tag=commit_tag),
+            'wheel_name': base_name
         }
     # update the links for the branches
     json_data[branch] = {
         'sha1': commit_hash,
-        'link_name': create_wheel_name(version, commit_hash, branch=branch),
-        'wheel_name': create_wheel_name(version, commit_hash)
+        'link_name': create_wheel_name(version, num, commit_hash, branch=branch),
+        'wheel_name': base_name
     }
     return json_data
+
+
+@task()
+def create_wheel(c, house=None):
+    tmp_wheel_path = house if house else os.path.join(c.config.code_root, 'wheelhouse')
+    (version, num, commit_hash, commit_tag, branch) = git_version_data(c)
+    if num:
+        wheel_name = create_wheel_name(version, num, commit_hash)
+        build_number = wheel_name.split('-')[2]
+        c.run("python setup.py bdist_wheel -d %s --build-number %s" % (
+            tmp_wheel_path, build_number))
+    else:
+        c.run("python setup.py bdist_wheel -d " + tmp_wheel_path)
 
 
 def write_update_json_data(c, json_filepath):
