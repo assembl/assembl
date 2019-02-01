@@ -445,8 +445,12 @@ const semanticAnalysisForThematicQuery: OperationComponent<SemanticAnalysisForTh
   }
 );
 
+const mapStateToPropsForIdeaQuery = state => ({
+  lang: state.i18n.locale
+});
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToPropsForIdeaQuery),
   graphql(IdeaQuery, {
     options: { notifyOnNetworkStatusChange: true },
     // ideaData.loading stays to true when switching interface language (IdeaQuery is using lang variable)
