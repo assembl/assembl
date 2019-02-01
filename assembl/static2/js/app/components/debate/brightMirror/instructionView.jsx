@@ -73,7 +73,7 @@ const InstructionView = ({
         body={announcementContent.body}
         semanticAnalysisForThematicData={semanticAnalysisForThematicData}
       />
-      <div className="overflow-x">
+      <div>
         {topPostFormContainer}
         {filteredPosts.length > 0 ? (
           <FictionsList posts={filteredPosts} identifier={identifier} themeId={ideaId} refetchIdea={refetchIdea} lang={lang} />
