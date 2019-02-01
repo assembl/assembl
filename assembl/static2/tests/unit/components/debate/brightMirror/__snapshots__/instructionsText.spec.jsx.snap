@@ -18,7 +18,7 @@ exports[`Storyshots InstructionsText default 1`] = `
         className="max-container"
       >
         <div
-          className="content-section"
+          className="content-section section-margin-top"
         >
           <div
             className="announcement-menu single-tab"
@@ -561,7 +561,7 @@ exports[`Storyshots InstructionsText playground 1`] = `
         className="max-container"
       >
         <div
-          className="content-section"
+          className="content-section section-margin-top"
         >
           <div
             className="announcement-menu single-tab"

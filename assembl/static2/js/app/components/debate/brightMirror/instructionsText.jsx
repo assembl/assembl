@@ -28,7 +28,7 @@ const InstructionsText = ({ title, body, semanticAnalysisForThematicData }: Inst
   return (
     <div fluid className="background-light instructions-text">
       <div className="max-container">
-        <div className="content-section">
+        <div className="content-section section-margin-top">
           <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />
         </div>
       </div>
