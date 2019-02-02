@@ -59,4 +59,11 @@ describe('<InstructionsText /> - with shallow', () => {
     });
     expect(wrapper.find(Tab)).toHaveLength(2);
   });
+
+  it('should render Summary tab if summary is passed', () => {
+    wrapper.setProps({
+      summary: 'A summary'
+    });
+    expect(wrapper.find(Tab)).toHaveLength(2);
+  });
 });

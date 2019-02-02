@@ -66,12 +66,16 @@ const getChildrenVariables = (client, thematic, initialTheme): Array<Promise<mix
           t.messageViewOverride.value === MESSAGE_VIEW.survey
           ? convertRichTextToVariables(t.announcement.quote, client)
           : Promise.resolve({ attachments: [], entries: [] }));
+        const summary = await (t.announcement.summary
+          ? convertRichTextToVariables(t.announcement.summary, client)
+          : Promise.resolve({ attachments: [], entries: [] }));
         if (titleEntries.length > 0) {
           announcement = {
             titleEntries: titleEntries,
             bodyAttachments: bodyAttachments,
             bodyEntries: bodyEntries,
-            quoteEntries: quote.entries
+            quoteEntries: quote.entries,
+            summaryEntries: summary.entries
           };
         }
       }
@@ -102,12 +106,16 @@ async function getIdeaInput(client, theme, initialTheme, order): Promise<mixed> 
     theme.messageViewOverride.value === MESSAGE_VIEW.survey
       ? convertRichTextToVariables(theme.announcement.quote, client)
       : Promise.resolve({ attachments: [], entries: [] }));
+    const summary = await (theme.announcement.summary
+      ? convertRichTextToVariables(theme.announcement.summary, client)
+      : Promise.resolve({ attachments: [], entries: [] }));
     if (titleEntries.length > 0) {
       announcement = {
         titleEntries: titleEntries,
         bodyAttachments: bodyAttachments,
         bodyEntries: bodyEntries,
-        quoteEntries: quote.entries
+        quoteEntries: quote.entries,
+        summaryEntries: summary.entries
       };
     }
   }

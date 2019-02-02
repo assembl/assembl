@@ -6,29 +6,29 @@ import classnames from 'classnames';
 // Component imports
 import { ANNOUNCEMENT_TAB_ITEM_ID } from '../../../constants';
 import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
+import { renderRichtext } from '../../../utils/linkify';
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
 export type Props = {
   guidelinesContent?: React.Node,
+  summary: string,
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
-const ThematicTabs = ({ guidelinesContent, semanticAnalysisForThematicData }: Props) => {
+const ThematicTabs = ({ guidelinesContent, summary, semanticAnalysisForThematicData }: Props) => {
   const { topKeywords } = semanticAnalysisForThematicData;
   const topKeywordsLength = topKeywords.length;
 
   // Translation keys
   const guidelinesTitleKey = 'debate.thread.guidelines';
-  // Uncomment the line below when adding the summary
-  // const summaryTitleKey = 'debate.thread.summary';
+  const summaryTitleKey = 'administration.tableOfThematics.summaryLabel';
   const semanticAnalysisLongTitleKey = 'debate.semanticAnalysis.long';
   const semanticAnalysisShortTitleKey = 'debate.semanticAnalysis.short';
 
   // Title contents
   const guidelinesTabTitle = I18n.t(guidelinesTitleKey);
-  // Uncomment the line below when adding the summary
-  // const summaryTabTitle = I18n.t(summaryTitleKey);
+  const summaryTabTitle = I18n.t(summaryTitleKey);
   const semanticAnalysisTabLongTitle = I18n.t(semanticAnalysisLongTitleKey);
   const semanticAnalysisTabShortTitle = I18n.t(semanticAnalysisShortTitleKey);
   // Since 'semantic analysis' is a long composed word, we only display 'analysis' on small devices
@@ -45,12 +45,11 @@ const ThematicTabs = ({ guidelinesContent, semanticAnalysisForThematicData }: Pr
     </Tab>
   );
 
-  // Uncomment those line below when adding the summary
-  // const summaryTabAndContent = (
-  //   <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={summaryTabTitle}>
-  //     {/** Summary Component and Content */}
-  //   </Tab>
-  // );
+  const summaryTabAndContent = (
+    <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={summaryTabTitle}>
+      {summary ? <div className="summary">{renderRichtext(summary)}</div> : null}
+    </Tab>
+  );
 
   const semanticAnalysisTabAndContent = (
     <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SEMANTIC_ANALYSIS} title={semanticAnalysisTabTitle}>
@@ -69,14 +68,15 @@ const ThematicTabs = ({ guidelinesContent, semanticAnalysisForThematicData }: Pr
       className={classnames('announcement-menu', classNameTabs)}
     >
       {guidelinesTabAndContent}
-      {/** summaryTabAndContent */}
+      {summary ? summaryTabAndContent : null}
       {topKeywordsLength > 0 ? semanticAnalysisTabAndContent : null}
     </Tabs>
   );
 };
 
 ThematicTabs.defaultProps = {
-  guidelinesContent: <div />
+  guidelinesContent: <div />,
+  summary: null
 };
 
 export default ThematicTabs;

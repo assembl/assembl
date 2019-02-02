@@ -41,7 +41,8 @@ type Posts = {
 export type AnnouncementContent = {
   body: string,
   title: ?string,
-  quote?: ?string
+  quote?: ?string,
+  summary?: ?string
 };
 
 type DoughnutElements = {
@@ -146,7 +147,13 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
     </div>
   );
 
-  return <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />;
+  return (
+    <ThematicTabs
+      guidelinesContent={guidelinesContent}
+      summary={announcement.summary}
+      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+    />
+  );
 };
 
 const announcementDefaultProps = {

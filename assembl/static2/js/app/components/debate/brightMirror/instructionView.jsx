@@ -71,6 +71,7 @@ const InstructionView = ({
       <InstructionsText
         title={announcementContent.title || ''}
         body={announcementContent.body}
+        summary={announcementContent.summary}
         semanticAnalysisForThematicData={semanticAnalysisForThematicData}
       />
       <div>

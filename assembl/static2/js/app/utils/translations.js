@@ -737,6 +737,7 @@ const Translations = {
       headerTitle: "Configuration du bandeau de haut de page",
       ProposalsSectionTitle: "Configuration du titre de la section Propositions",
       instructions: "Configuration de la section Consigne",
+      summary: "Configuration de la section 'À retenir",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusif",
       tokenVoteInstructions: "Consigne du vote par jetons",
@@ -865,6 +866,9 @@ const Translations = {
         instructionHeader:
           "La section Consigne comporte un titre et une consigne et un média (vidéo, slideshare ou image ) qui permettent de guider les participants dans leur contribution.",
         instructionLabel: "Consigne",
+        summaryHeader:
+          "La section 'À retenir' comporte une résumé succinct de la thématique et elle peut être enrichie de différents média.",
+        summaryLabel: "À retenir",
         sectionTitleLabel: "Titre de la section",
         questionsHeader: "Questions",
         confirmDeletionTitle: "Supprimer la thématique %{title}",
@@ -1741,6 +1745,7 @@ const Translations = {
       headerTitle: "Top page Header configuration",
       propositionSectionTitle: "Proposals section title configuration",
       instructions: "Instructions section configuration",
+      summary: "Summary section configuration",
       voteSessionSuccess: "The vote session is saved with success.",
       exclusive: "Exclusive",
       tokenVoteInstructions: "Instructions for the token vote",
@@ -1868,6 +1873,8 @@ const Translations = {
         instructionHeader:
           "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
         instructionLabel: "Instructions",
+        summaryHeader: "The 'Summary' section contains a brief abstract of the thematic and can be enriched with various medias.",
+        summaryLabel: "Summary",
         sectionTitleLabel: "Section title",
         questionsHeader: "Questions",
         confirmDeletionTitle: "Delete %{title} theme",

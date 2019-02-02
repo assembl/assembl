@@ -362,6 +362,8 @@ class IdeaAnnouncement:
     body_attachments = Default.string_entry % ("Attachments for the body of announcement in multiple languages.")
     body_entries = Default.langstring_entries % ("This is the body of announcement in multiple languages.")
     quote_entries = Default.langstring_entries % ("This is the quote of the announcement in multiple languages.")
+    summary = Default.string_entry % ("summary of announcement")
+    summary_entries = Default.langstring_entries % ("This is the summry of the announcement in multiple languages.",)
 
 
 class IdeaMessageColumn:

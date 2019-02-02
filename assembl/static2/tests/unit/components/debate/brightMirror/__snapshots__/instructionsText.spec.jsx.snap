@@ -43,6 +43,23 @@ exports[`Storyshots InstructionsText default 1`] = `
                   Consigne
                 </a>
               </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  aria-controls="announcement-tabs-id-pane-1"
+                  aria-selected={false}
+                  href="#"
+                  id="announcement-tabs-id-tab-1"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="tab"
+                  tabIndex={-1}
+                >
+                  À retenir
+                </a>
+              </li>
             </ul>
             <div
               className="tab-content"
@@ -71,6 +88,19 @@ exports[`Storyshots InstructionsText default 1`] = `
                   >
                     Lorem Ipsum body
                   </div>
+                </div>
+              </div>
+              <div
+                aria-hidden={true}
+                aria-labelledby="announcement-tabs-id-tab-1"
+                className="tab-pane fade"
+                id="announcement-tabs-id-pane-1"
+                role="tabpanel"
+              >
+                <div
+                  className="summary"
+                >
+                  To remember
                 </div>
               </div>
             </div>
@@ -585,6 +615,23 @@ exports[`Storyshots InstructionsText playground 1`] = `
                   Consigne
                 </a>
               </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  aria-controls="announcement-tabs-id-pane-1"
+                  aria-selected={false}
+                  href="#"
+                  id="announcement-tabs-id-tab-1"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="tab"
+                  tabIndex={-1}
+                >
+                  À retenir
+                </a>
+              </li>
             </ul>
             <div
               className="tab-content"
@@ -613,6 +660,19 @@ exports[`Storyshots InstructionsText playground 1`] = `
                   >
                     Lorem Ipsum body
                   </div>
+                </div>
+              </div>
+              <div
+                aria-hidden={true}
+                aria-labelledby="announcement-tabs-id-tab-1"
+                className="tab-pane fade"
+                id="announcement-tabs-id-pane-1"
+                role="tabpanel"
+              >
+                <div
+                  className="summary"
+                >
+                  To remember
                 </div>
               </div>
             </div>

@@ -13,6 +13,7 @@ query Idea($lang: String!, $id: ID!) {
         title(lang: $lang)
         body(lang: $lang)
         quote(lang: $lang)
+        summary(lang: $lang)
       }
     }
   }
