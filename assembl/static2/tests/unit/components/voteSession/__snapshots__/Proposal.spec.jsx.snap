@@ -8,7 +8,7 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
     className="proposal row"
   >
     <div
-      className="margin-s col-md-5 col-xs-12"
+      className="margin-m col-md-5 col-xs-12"
     >
       <h3
         className="proposal-title dark-title-3"

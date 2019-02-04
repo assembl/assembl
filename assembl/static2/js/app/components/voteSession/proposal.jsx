@@ -67,7 +67,7 @@ class Proposal extends React.Component<Props, State> {
     return (
       <div className="theme-box">
         <Row className="proposal">
-          <Col xs={12} md={5} className="margin-s">
+          <Col xs={12} md={5} className="margin-m">
             <h3 className="proposal-title dark-title-3">{title}</h3>
             <div className="text" dangerouslySetInnerHTML={{ __html: description }} />
           </Col>
