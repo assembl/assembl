@@ -155,9 +155,9 @@ class Survey extends React.Component<Props, State> {
           </Header>
           {announcement ? (
             <section className="post-section">
-              <Grid fluid className="background-light">
+              <Grid fluid className="background-light instructions-text">
                 <div className="max-container">
-                  <div className="content-section">
+                  <div className="content-section section-margin-top">
                     <SurveyAnnouncement
                       announcement={announcement}
                       semanticAnalysisForThematicData={semanticAnalysisForThematicData}

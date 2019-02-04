@@ -109,15 +109,7 @@ export const SurveyAnnouncement = ({ announcement, semanticAnalysisForThematicDa
     </div>
   );
 
-  return (
-    <div fluid className="background-light instructions-text">
-      <div className="max-container">
-        <div className="content-section section-margin-top">
-          <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />
-        </div>
-      </div>
-    </div>
-  );
+  return <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />;
 };
 
 export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData }: Props) => {
