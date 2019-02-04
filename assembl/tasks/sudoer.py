@@ -102,10 +102,7 @@ def install_yarn(c):
 
 
 def upgrade_yarn(c):
-    if c.config.mac:
-        c.run('brew update && brew upgrade yarn')
-    else:
-        c.sudo('apt-get update && apt-get install --only-upgrade yarn')
+    c.sudo('apt-get update && apt-get install --only-upgrade yarn')
 
 
 @task
@@ -179,8 +176,11 @@ def install_php(c):
 
 @task()
 def uninstall_lamp(c):
-    """Uninstall apache2, Mysql, apache on a linux """
-    pass
+    """
+    Installs Apache2, Mysql and PHP on a Linux Environment, for dev purposes
+    """
+    c.sudo("apt-get purge apache2 mysql-server php-mysql php-curl php-cli php-gd")
+    c.sudo("apt-get autoremove")
 
 
 @task()
