@@ -2,7 +2,7 @@ import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 import React from 'react';
 import renderer from 'react-test-renderer';
-
+import 'react-dates/initialize';
 import ExportSection from '../../../../js/app/components/administration/exportSection';
 
 configure({ adapter: new Adapter() });

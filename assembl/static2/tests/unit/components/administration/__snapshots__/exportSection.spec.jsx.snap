@@ -67,16 +67,104 @@ exports[`ExportSection component should render an ExportSection component with l
         </label>
       </div>
     </div>
-    <a
-      className="button-link button-dark margin-s"
-      href="foo.com"
-      onClick={[Function]}
-      style={Object {}}
+    <br />
+    <div>
+      <div
+        className="DateRangePicker DateRangePicker_1"
+      >
+        <div>
+          <div
+            className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+          >
+            <div
+              className="DateInput DateInput_1"
+            >
+              <input
+                aria-describedby="DateInput__screen-reader-message-foo"
+                aria-label="Start Date"
+                autoComplete="off"
+                className="DateInput_input DateInput_input_1"
+                disabled={false}
+                id="foo"
+                name="foo"
+                onChange={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                placeholder="Start Date"
+                readOnly={false}
+                required={false}
+                type="text"
+                value=""
+              />
+              <p
+                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                id="DateInput__screen-reader-message-foo"
+              >
+                Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+              </p>
+            </div>
+            <div
+              aria-hidden="true"
+              className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
+              role="presentation"
+            >
+              <svg
+                className="DateRangePickerInput_arrow_svg DateRangePickerInput_arrow_svg_1"
+                focusable="false"
+                viewBox="0 0 1000 1000"
+              >
+                <path
+                  d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z"
+                />
+              </svg>
+            </div>
+            <div
+              className="DateInput DateInput_1"
+            >
+              <input
+                aria-describedby="DateInput__screen-reader-message-bar"
+                aria-label="End Date"
+                autoComplete="off"
+                className="DateInput_input DateInput_input_1"
+                disabled={false}
+                id="bar"
+                name="bar"
+                onChange={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                placeholder="End Date"
+                readOnly={false}
+                required={false}
+                type="text"
+                value=""
+              />
+              <p
+                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                id="DateInput__screen-reader-message-bar"
+              >
+                Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="center-flex"
     >
-      <span>
-        Export
-      </span>
-    </a>
+      <a
+        className="button-link button-dark margin-l"
+        href="foo.com"
+        onClick={[Function]}
+        style={Object {}}
+      >
+        <span>
+          Export
+        </span>
+      </a>
+    </div>
   </div>
 </div>
 `;
@@ -106,16 +194,104 @@ exports[`ExportSection component should render an ExportSection component withou
     <div
       className="no-margin-bottom form-group"
     />
-    <a
-      className="button-link button-dark margin-s"
-      href="foo.com"
-      onClick={[Function]}
-      style={Object {}}
+    <br />
+    <div>
+      <div
+        className="DateRangePicker DateRangePicker_1"
+      >
+        <div>
+          <div
+            className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+          >
+            <div
+              className="DateInput DateInput_1"
+            >
+              <input
+                aria-describedby="DateInput__screen-reader-message-foo"
+                aria-label="Start Date"
+                autoComplete="off"
+                className="DateInput_input DateInput_input_1"
+                disabled={false}
+                id="foo"
+                name="foo"
+                onChange={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                placeholder="Start Date"
+                readOnly={false}
+                required={false}
+                type="text"
+                value=""
+              />
+              <p
+                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                id="DateInput__screen-reader-message-foo"
+              >
+                Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+              </p>
+            </div>
+            <div
+              aria-hidden="true"
+              className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
+              role="presentation"
+            >
+              <svg
+                className="DateRangePickerInput_arrow_svg DateRangePickerInput_arrow_svg_1"
+                focusable="false"
+                viewBox="0 0 1000 1000"
+              >
+                <path
+                  d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z"
+                />
+              </svg>
+            </div>
+            <div
+              className="DateInput DateInput_1"
+            >
+              <input
+                aria-describedby="DateInput__screen-reader-message-bar"
+                aria-label="End Date"
+                autoComplete="off"
+                className="DateInput_input DateInput_input_1"
+                disabled={false}
+                id="bar"
+                name="bar"
+                onChange={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                placeholder="End Date"
+                readOnly={false}
+                required={false}
+                type="text"
+                value=""
+              />
+              <p
+                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                id="DateInput__screen-reader-message-bar"
+              >
+                Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="center-flex"
     >
-      <span>
-        Export
-      </span>
-    </a>
+      <a
+        className="button-link button-dark margin-l"
+        href="foo.com"
+        onClick={[Function]}
+        style={Object {}}
+      >
+        <span>
+          Export
+        </span>
+      </a>
+    </div>
   </div>
 </div>
 `;
@@ -184,16 +360,104 @@ exports[`ExportSection component should render an export section that handles di
         </label>
       </div>
     </div>
-    <a
-      className="button-link button-dark margin-s"
-      href="foo.com"
-      onClick={[Function]}
-      style={Object {}}
+    <br />
+    <div>
+      <div
+        className="DateRangePicker DateRangePicker_1"
+      >
+        <div>
+          <div
+            className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+          >
+            <div
+              className="DateInput DateInput_1"
+            >
+              <input
+                aria-describedby="DateInput__screen-reader-message-foo"
+                aria-label="Start Date"
+                autoComplete="off"
+                className="DateInput_input DateInput_input_1"
+                disabled={false}
+                id="foo"
+                name="foo"
+                onChange={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                placeholder="Start Date"
+                readOnly={false}
+                required={false}
+                type="text"
+                value=""
+              />
+              <p
+                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                id="DateInput__screen-reader-message-foo"
+              >
+                Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+              </p>
+            </div>
+            <div
+              aria-hidden="true"
+              className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
+              role="presentation"
+            >
+              <svg
+                className="DateRangePickerInput_arrow_svg DateRangePickerInput_arrow_svg_1"
+                focusable="false"
+                viewBox="0 0 1000 1000"
+              >
+                <path
+                  d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z"
+                />
+              </svg>
+            </div>
+            <div
+              className="DateInput DateInput_1"
+            >
+              <input
+                aria-describedby="DateInput__screen-reader-message-bar"
+                aria-label="End Date"
+                autoComplete="off"
+                className="DateInput_input DateInput_input_1"
+                disabled={false}
+                id="bar"
+                name="bar"
+                onChange={[Function]}
+                onFocus={[Function]}
+                onKeyDown={[Function]}
+                placeholder="End Date"
+                readOnly={false}
+                required={false}
+                type="text"
+                value=""
+              />
+              <p
+                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                id="DateInput__screen-reader-message-bar"
+              >
+                Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="center-flex"
     >
-      <span>
-        Export
-      </span>
-    </a>
+      <a
+        className="button-link button-dark margin-l"
+        href="foo.com"
+        onClick={[Function]}
+        style={Object {}}
+      >
+        <span>
+          Export
+        </span>
+      </a>
+    </div>
   </div>
 </div>
 `;

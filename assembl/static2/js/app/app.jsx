@@ -6,6 +6,8 @@ import isEqual from 'lodash/isEqual';
 import { type Route } from 'react-router';
 import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
+import 'react-dates/initialize';
+import 'react-dates/lib/css/_datepicker.css';
 
 import { get } from './utils/routeMap';
 import { getDiscussionId, getConnectedUserName, getConnectedUserId } from './utils/globalFunctions';
