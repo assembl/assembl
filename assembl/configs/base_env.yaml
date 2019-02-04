@@ -32,6 +32,10 @@ _internal:
   hosts:
   webmaster_user: webmaster
   webmaster_user_password:
+  github:
+    user: "Bluenove Bot"
+    email: "assembl.admin@bluenove.com"
+    repo: "git@github.com:assembl/assembl.git"
 
 ini_files: production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
 # The file that will hold the generated random keys.

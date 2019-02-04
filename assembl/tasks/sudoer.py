@@ -2,7 +2,7 @@ import os
 from os.path import exists, join
 
 from invoke import task
-from common import fill_template
+from common import fill_template, is_integration_env
 
 # try:
 #     # invoke 0.11
@@ -10,18 +10,48 @@ from common import fill_template
 # except ImportError:
 #     from invoke import task
 
+core_dependencies = [
+    'apt-transport-https',
+    'automake',
+    'bison',
+    'build-essential',
+    'flex',
+    'gawk',
+    'rsync',
+    'gperf',
+    'graphviz',
+    'libffi-dev',
+    'libgraphviz-dev',
+    'libhiredis-dev',
+    'libmemcached-dev',
+    'libpq-dev',
+    'libreadline-dev',
+    'libssl-dev',
+    'libxml2-dev',
+    'libxmlsec1-dev',
+    'libxslt1-dev',
+    'libzmq3-dev',
+    'libcurl4-openssl-dev',
+    'pkg-config',
+    'python-dev'
+]
+
 
 @task
 def install_base_deps(c):
     """Install base tools for a Ubuntu server."""
-    c.sudo('apt-get install -y apt-transport-https')
-    c.sudo('apt-get install -y python-virtualenv python-pip python-psycopg2 python-semantic-version')
-    c.sudo('apt-get install -y python-requests python-jinja2 python-yaml python-boto3')
-    c.sudo('apt-get install -y build-essential python-dev pkg-config')
-    c.sudo('apt-get install -y automake bison flex gperf gawk')
-    c.sudo('apt-get install -y libpq-dev libmemcached-dev libzmq3-dev '
-           'libxslt1-dev libffi-dev libhiredis-dev libxml2-dev libssl-dev '
-           'libreadline-dev libxmlsec1-dev libcurl4-openssl-dev')
+    python_essentials = [
+        'python-virtualenv',
+        'python-pip',
+        'python-psycopg2',
+        'python-semantic-version',
+        'python-requests',
+        'python-jinja2',
+        'python-yaml',
+        'python-boto3'
+    ]
+    total_dependencies = core_dependencies + python_essentials
+    c.sudo('apt-get install -y %s' % ','.join(total_dependencies))
 
 
 @task
@@ -159,3 +189,24 @@ def uninstall_lamp(c):
 @task()
 def set_fail2ban_configurations(c):
     """Set fail2ban configuration and pushes fail2ban configs."""
+
+
+@task()
+def install_build_dependencies(c):
+    """Build the necessary packages in order for CI/CD machines to build an Assembl wheel"""
+    c.sudo('apt-get update -qq')
+    c.sudo('apt-get install -yqq %s' % ','.join(core_dependencies))
+    c.run('pip install -r requirements-build.txt')
+
+
+@task()
+def install_node_and_yarn(c):
+    """Compiles the necessary packages in order for transpilers to build static asset code. It will often
+    be used in the CI/CD context."""
+    c.sudo('apt-get update -qq')
+    if is_integration_env():
+        c.sudo('apt-get remove -yqq cmdtest')
+    c.sudo('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -')
+    c.sudo('echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list')
+    c.sudo('wget -qO- https://deb.nodesource.com/setup_8.x | bash -')
+    c.sudo('apt-get install -yqq nodejs yarn')
