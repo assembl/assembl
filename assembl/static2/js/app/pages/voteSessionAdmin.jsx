@@ -515,7 +515,7 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         {section && (
           <Navbar
             currentStep={section}
-            steps={['1', '2', '3', '4']}
+            steps={['1', '2', '3']}
             phaseIdentifier={phaseIdentifier}
             queryArgs={{ thematicId: thematicId, goBackPhaseIdentifier: goBackPhaseIdentifier }}
           />
