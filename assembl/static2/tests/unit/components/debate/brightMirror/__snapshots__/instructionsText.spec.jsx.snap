@@ -12,7 +12,6 @@ exports[`Storyshots InstructionsText default 1`] = `
   >
     <div
       className="background-light instructions-text"
-      fluid={true}
     >
       <div
         className="max-container"
@@ -553,7 +552,6 @@ exports[`Storyshots InstructionsText playground 1`] = `
   >
     <div
       className="background-light instructions-text"
-      fluid={true}
     >
       <div
         className="max-container"
