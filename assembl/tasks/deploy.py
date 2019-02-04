@@ -67,24 +67,6 @@ def print_config(c):
 
 
 @task()
-def create_venv_python_3(c):
-    if c._internal.mac and not exists(c, '/usr/local/bin/python3'):
-        if not exists(c, '/usr/local/bin/brew'):
-                c.run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
-        c.run("brew update")
-        c.run("brew upgrade")
-        c.run("brew install python@2")
-        c.run("brew install python")  # This installs python3
-        c.run("brew install libmagic")  # needed for python-magic
-        c.run('pip3 install virtualenv')
-    venv3 = c.virtualenv + 'py3'
-    print("Creating a fresh virtual env with python 3")
-    if exists(c, os.path.join(venv3, "bin/activate")):
-        return
-    c.run('python3 -mvirtualenv --python python3 %s' % venv3)
-
-
-@task()
 def create_var_dir(c):
     c.run('mkdir -p var/run var/share var/log var/db')
     c.run('chgrp www-data . var var/run var/share')
