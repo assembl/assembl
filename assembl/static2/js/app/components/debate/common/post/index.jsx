@@ -202,6 +202,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
               readOnly={!!parentId}
               modifiedOriginalSubject={modifiedOriginalSubject}
               originalLocale={originalLocale}
+              multiColumns={multiColumns}
             />
           </div>
         ) : (
@@ -227,7 +228,13 @@ export class DumbPost extends React.PureComponent<Props, State> {
 const PostWithContext = props => (
   <DebateContext.Consumer>
     {({ isHarvesting, connectedUserId, isDebateModerated, isHarvestable }) => (
-      <DumbPost {...props} isHarvesting={isHarvesting} isHarvestable={isHarvestable} connectedUserId={connectedUserId} isDebateModerated={isDebateModerated} />
+      <DumbPost
+        {...props}
+        isHarvesting={isHarvesting}
+        isHarvestable={isHarvestable}
+        connectedUserId={connectedUserId}
+        isDebateModerated={isDebateModerated}
+      />
     )}
   </DebateContext.Consumer>
 );

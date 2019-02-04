@@ -43,7 +43,8 @@ type EditPostFormProps = {
   bodyMaxLength?: number,
   draftable?: boolean,
   draftSuccessMsgId?: string,
-  isDebateModerated: boolean
+  isDebateModerated: boolean,
+  multiColumns?: boolean
 };
 
 type EditPostFormState = {
@@ -156,10 +157,28 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
 
   render() {
     const { subject, body } = this.state;
-    const { editTitleLabelMsgId, modifiedOriginalSubject, bodyDescriptionMsgId, bodyMaxLength, draftable, isDebateModerated } = this.props;
+    const {
+      editTitleLabelMsgId,
+      modifiedOriginalSubject,
+      bodyDescriptionMsgId,
+      bodyMaxLength,
+      draftable,
+      isDebateModerated,
+      multiColumns
+    } = this.props;
     const userIsModerator = connectedUserIsModerator();
     const publicationState =
       !userIsModerator && isDebateModerated ? PublicationStates.SUBMITTED_AWAITING_MODERATION : PublicationStates.PUBLISHED;
+    const titleInputForThreadPost = !multiColumns ? (
+      <TextInputWithRemainingChars
+        alwaysDisplayLabel
+        label={I18n.t('debate.edit.subject')}
+        value={subject}
+        handleTxtChange={this.updateSubject}
+        maxLength={TEXT_INPUT_MAX_LENGTH}
+        name="top-post-title"
+      />
+    ) : null;
     return (
       <Row>
         <Col xs={12} md={12}>
@@ -175,14 +194,7 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
                 <div className="margin-m" />
               </div>
             ) : (
-              <TextInputWithRemainingChars
-                alwaysDisplayLabel
-                label={I18n.t('debate.edit.subject')}
-                value={subject}
-                handleTxtChange={this.updateSubject}
-                maxLength={TEXT_INPUT_MAX_LENGTH}
-                name="top-post-title"
-              />
+              titleInputForThreadPost
             )}
             <FormGroup>
               <RichTextEditor
@@ -219,6 +231,10 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
     );
   }
 }
+
+DumbEditPostForm.defaultProps = {
+  multiColumns: false
+};
 
 const EditPostFormWithContext = props => (
   <DebateContext.Consumer>
