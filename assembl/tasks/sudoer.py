@@ -165,13 +165,13 @@ def install_mysql(c):
 @task()
 def install_apache(c):
     """Installs apache on a linux server."""
-    pass
+    c.sudo("apt-get install apache2")
 
 
 @task()
 def install_php(c):
     """Installs php on a linux server."""
-    pass
+    c.sudo("apt-get -y install php php-mysql php-curl php-cli php-gd")
 
 
 @task()
