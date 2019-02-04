@@ -112,7 +112,7 @@ exports[`PhaseForm component should render a form to update the dates and module
     className="text-xs configure-module-text"
   >
     <Translate
-      value="administration.timelineAdmin.configureModule"
+      value="administration.timelineAdmin.configureThematicsTable"
     />
     <Link
       className="configure-module-link"
@@ -122,7 +122,7 @@ exports[`PhaseForm component should render a form to update the dates and module
     >
       <Translate
         count={1}
-        value="administration.timelineAdmin.configureModuleLink"
+        value="administration.timelineAdmin.configureThematicsTableLink"
       />
     </Link>
   </div>

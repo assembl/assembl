@@ -648,10 +648,9 @@ const Translations = {
         deletePhase: "Supprimer la phase",
         instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
         instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
-        thematicsTable: "Thematics table",
-        configureModule:
-          "Après avoir sauvegardé, configurez le module en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
-        configureModuleLink: "Configurer Phase %{count}",
+        configureThematicsTable:
+          "Après avoir sauvegardé, configurez la table des thématiques en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
+        configureThematicsTableLink: "Configurer Phase %{count}",
         successSave: "La ligne de temps a été sauvegardée avec succès",
         startOrEndDateIsEmpty: "Veuillez sélectionner une date de début et une date de fin pour toutes les phases",
         titleEntriesIsEmpty: "Un titre pour votre phase est requis",
@@ -1619,10 +1618,9 @@ const Translations = {
         deletePhase: "Delete the phase",
         instruction1: "Choose the number of phases for your debate",
         instruction2: "Fill in the required fields for each phase by selecting each tab",
-        thematicsTable: "Table des thématiques",
-        configureModule:
-          "Once you saved your work, configure the module by clicking on the vertical menu on the left or on the following link: ",
-        configureModuleLink: "Configure Phase %{count}",
+        configureThematicsTable:
+          "Once you saved your work, configure the thematics table by clicking on the vertical menu on the left or on the following link: ",
+        configureThematicsTableLink: "Configure Phase %{count}",
         successSave: "The timeline has been sucessfully saved",
         titleEntriesIsEmpty: "The phase title is required",
         startOrEndDateIsEmpty: "Please select a start date and an end date for all your phases",
