@@ -78,16 +78,25 @@ def get_theme_base_path(frontend_version=1):
     return theme_base_path
 
 
+def find_theme_bucket():
+    # TODO: Use this method to determine list of themes available per debate
+    bucket_path = config.get('theme_bucket', None)
+    if bucket_path.trim().startswith('s3://'):
+        return None
+
+
 def find_theme(theme_name, frontend_version=1):
     """
     Recursively looks for a theme with the provided name in the theme path folder
     @returns the theme path fragment relative to the theme base_path, or
     None if not found
     """
+
     current_theme = THEMES.get(frontend_version, {}).get(theme_name, None)
     if current_theme:
         return current_theme
 
+    # TODO: When V1 is completley deprecated, remove the logic of basepath for themes
     theme_base_path = get_theme_base_path(frontend_version)
     walk_results = os.walk(theme_base_path, followlinks=True)
     for (dirpath, dirnames, filenames) in walk_results:
