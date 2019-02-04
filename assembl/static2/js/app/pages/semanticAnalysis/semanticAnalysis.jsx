@@ -90,7 +90,7 @@ export class SemanticAnalysis extends Component<Props, State> {
     const score = (positive + negative) / count;
     const sentimentScore = (score + 1) / 2;
     // Format keywords object structure for WordCloud
-    const keywords = topKeywords.map(k => ({ count: k.count, score: k.score, value: k.value }));
+    const keywords = topKeywords.map(k => ({ count: k.count, score: k.score, value: k.value.toLowerCase() }));
     const keywordsLength = topKeywords.length;
     // Get wordCount: Should be updated when value is available from the backend
     const wordCount = 0;
