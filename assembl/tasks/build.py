@@ -244,11 +244,11 @@ def create_wheel_name(version, num=0, commit_hash=None, branch=None, tag=None):
         # CI condition of a tag (which should only ever be put on master)
         long_version = version
     elif branch:
-        long_version = '%s-%d+%s' % (version, num, branch)
+        long_version = '%s.dev%d+%s' % (version, num, branch)
     elif tag:
-        long_version = '%s-%d+%s' % (version, num, tag.split('-').join('_'))
+        long_version = '%s.dev%d+%s' % (version, num, tag.split('-').join('_'))
     else:
-        long_version = '%s-%d+%s' % (version, num, commit_hash)
+        long_version = '%s.dev%d+%s' % (version, num, commit_hash)
 
     return "assembl-{version}-py{python_major}-none-any.whl".format(
         version=long_version,
