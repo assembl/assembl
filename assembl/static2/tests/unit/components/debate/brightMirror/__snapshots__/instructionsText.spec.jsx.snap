@@ -61,11 +61,9 @@ exports[`Storyshots InstructionsText default 1`] = `
                   <div
                     className="announcement-title"
                   >
-                    <h3
-                      className="announcement-title-text dark-title-1"
-                    >
+                    <h1>
                       Test
-                    </h3>
+                    </h1>
                   </div>
                   <div
                     className="announcement-media"
@@ -604,11 +602,9 @@ exports[`Storyshots InstructionsText playground 1`] = `
                   <div
                     className="announcement-title"
                   >
-                    <h3
-                      className="announcement-title-text dark-title-1"
-                    >
+                    <h1>
                       Test
-                    </h3>
+                    </h1>
                   </div>
                   <div
                     className="announcement-media"

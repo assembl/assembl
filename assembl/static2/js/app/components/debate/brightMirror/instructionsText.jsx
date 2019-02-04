@@ -3,6 +3,7 @@ import React from 'react';
 import { renderRichtext } from '../../../utils/linkify';
 // Component imports
 import ThematicTabs from '../common/thematicTabs';
+import Title from '../../common/title/title';
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
@@ -19,7 +20,7 @@ const InstructionsText = ({ title, body, semanticAnalysisForThematicData }: Inst
   const guidelinesContent = (
     <div className="announcement">
       <div className="announcement-title">
-        <h3 className="announcement-title-text dark-title-1">{title}</h3>
+        <Title level={1}>{title}</Title>
       </div>
       <div className="announcement-media">{renderRichtext(body)}</div>
     </div>
