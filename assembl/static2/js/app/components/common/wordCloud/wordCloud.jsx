@@ -39,7 +39,7 @@ export const defaultBaseProps = {
   keywordsAngle: 0,
   keywordsColor: '#000',
   keywordsColorActive: '#000',
-  numberOfKeywordsToDisplay: 30,
+  numberOfKeywordsToDisplay: 20,
   onMouseOutWord: () => {},
   onMouseOverWord: () => {},
   onWordClick: () => {}
