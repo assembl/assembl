@@ -79,7 +79,7 @@ exports[`TimelineForm component should render a form to create, delete and edit 
       <Link
         onlyActiveOnIndex={false}
         style={Object {}}
-        to="/\${slug}/administration/landingPage?section=3"
+        to="/\${slug}/administration/landingPage?section=2"
       >
         <Translate
           value="here"
