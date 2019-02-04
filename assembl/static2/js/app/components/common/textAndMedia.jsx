@@ -9,9 +9,7 @@ type DescriptionProps = {
   content: string
 };
 
-type Props = AnnouncementContent & {
-  children?: React.Node
-};
+type Props = AnnouncementContent;
 
 const isValidDescription = (description: ?string): boolean => (description ? description !== '<p></p>' : false);
 
@@ -31,11 +29,11 @@ const Body = ({ content }: DescriptionProps) => (
 
 class TextAndMedia extends React.Component<Props> {
   render() {
-    const { title, body, quote, children } = this.props;
+    const { title, body, quote } = this.props;
     const validQuote = isValidDescription(quote);
     const validBody = isValidDescription(body);
     const somethingOnRight = validBody;
-    const somethingOnLeft = validQuote || children;
+    const somethingOnLeft = validQuote;
     const something = !!(somethingOnLeft || somethingOnRight);
     const totalSize = 12;
     const leftSize = 4;
@@ -66,7 +64,6 @@ class TextAndMedia extends React.Component<Props> {
                   {quote && validQuote && <Quote content={quote} />}
                 </Col>
               ) : null}
-              {children}
             </Grid>
           )}
         </div>
