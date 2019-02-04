@@ -21,6 +21,7 @@ def uninstall_lamp_mac(c):
 def upgrade_yarn_mac(c):
     c.run("brew update && brew upgrade yarn")
 
+
 @task()
 def create_venv_python_3(c):
     if not exists(c, '/usr/local/bin/python3'):
@@ -37,3 +38,33 @@ def create_venv_python_3(c):
     if exists(c, os.path.join(venv3, "bin/activate")):
         return
     c.run('python3 -mvirtualenv --python python3 %s' % venv3)
+
+
+@task()
+def update_npm_requirements(c, force_reinstall=False):
+    """Normally not called manually"""
+    with c.cd(get_node_base_path(c)):
+        if force_reinstall:
+            with venv(c):
+                c.run('reinstall')
+        else:
+            with venv(c):
+                c.run('npm update')
+
+    yarn_path = '/usr/local/bin/yarn'
+    static2_path = get_new_node_base_path(c)
+    with c.cd(static2_path):
+        if exists(c, yarn_path):
+            if force_reinstall:
+                print('Removing node_modules directory...')
+                with venv(c):
+                    c.run('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
+            with venv(c):
+                c.run(yarn_path)
+        else:
+            if force_reinstall:
+                with venv(c):
+                    c.run('reinstall')
+            else:
+                with venv(c):
+                    c.run('npm update')

@@ -119,7 +119,7 @@ def update_node(c, force_reinstall=False):
 
 
 @task()
-def update_npm_requirements(c, force_reinstall=False):
+def update_npm_requirements_mac(c, force_reinstall=False):
     """Normally not called manually"""
     with c.cd(get_node_base_path(c)):
         if force_reinstall:
@@ -129,10 +129,7 @@ def update_npm_requirements(c, force_reinstall=False):
             with venv(c):
                 c.run('npm update')
 
-    if c.config._internal.mac:
-        yarn_path = '/usr/local/bin/yarn'
-    else:
-        yarn_path = '/usr/bin/yarn'
+    yarn_path = '/usr/bin/yarn'
     static2_path = get_new_node_base_path(c)
     with c.cd(static2_path):
         if exists(c, yarn_path):
