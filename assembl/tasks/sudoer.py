@@ -62,33 +62,6 @@ def install_nginx(c):
     c.sudo('apt-get install -y nginx uwsgi uwsgi-plugin-python')
 
 
-@task()
-def webservers_stop(c):
-    """Stop all webservers."""
-    c.sudo('/etc/init.d/nginx stop')
-
-
-@task()
-def webservers_start(c):
-    """Start all webservers."""
-    c.sudo("/etc/init.d/nginx start")
-
-
-@task()
-def webservers_reload(c):
-    """Reload the webserver stack."""
-    result = c.sudo('/usr/sbin/nginx -t')
-    if "Command exited with status 0" in str(result):
-        c.sudo('/etc/init.d/nginx reload')
-    else:
-        print ("Can't reload nginx, nginx test configuration not successful.")
-
-    if c.uses_bluenove_actionable:
-        restart_bluenove_actionable()
-    else:
-        stop_bluenove_actionable()
-
-
 @task
 def install_yarn(c):
     """Install yarn."""

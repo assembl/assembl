@@ -250,6 +250,17 @@ def supervisor_restart(c):
         if "no such file" in result.stdout:
             c.run("supervisord")
 
+@task()
+def webservers_stop(c):
+    """Stop all webservers."""
+    c.sudo('/etc/init.d/nginx stop')
+
+
+@task()
+def webservers_start(c):
+    """Start all webservers."""
+    c.sudo("/etc/init.d/nginx start")
+
 
 @task()
 def webservers_reload(c):
@@ -261,7 +272,11 @@ def webservers_reload(c):
     print("Reloading nginx")
     if os.path.exists('/etc/init.d/nginx'):
         user = c.config.get('webmaster_user', c.config.get('sudo_user', None))
-        c.sudo('/etc/init.d/nginx reload', user=user)
+        result = c.sudo('/usr/sbin/nginx -t', user=user)
+        if "Command exited with status 0" in str(result):
+            c.sudo('/etc/init.d/nginx reload', user=user)
+        else:
+            print("Your Nginx configuration returned an error, please check your nginx configuration.")
     elif c.config.get(c.config.mac, False):
         c.sudo('killall -HUP nginx')
 
