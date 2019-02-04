@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
-import { Col, Row, Tooltip } from 'react-bootstrap';
+import { Col, Tooltip } from 'react-bootstrap';
 // Components imports
 import StatisticsDoughnut from '../common/statisticsDoughnut';
 import { sentimentDefinitionsObject, type SentimentDefinition } from './sentimentDefinitions';
@@ -103,9 +103,7 @@ export const SurveyAnnouncement = ({ announcement, semanticAnalysisForThematicDa
       <div className="announcement-title">
         {announcement.title ? <h3 className="announcement-title-text dark-title-1">{announcement.title}</h3> : ''}
       </div>
-      <Row>
-        <TextAndMedia {...announcement} />
-      </Row>
+      <TextAndMedia {...announcement} />
     </div>
   );
 
