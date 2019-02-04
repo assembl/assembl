@@ -17,6 +17,7 @@ from __future__ import with_statement
 from os import getenv
 import sys
 import re
+import json
 from getpass import getuser
 from shutil import copyfile
 from time import sleep, strftime, time
@@ -174,12 +175,7 @@ def as_bool(b):
 
 
 def populate_secrets():
-    try:
-        import boto3  # noqa
-        import json
-    except ImportError:
-        # we don't have boto3 yet
-        return
+    import boto3  # noqa
 
     # ignore if you don't have secrets it means you are on your desktop.
     # so we don't need a AWS account to start locally
@@ -3588,7 +3584,6 @@ def push_wheelhouse(house=None):
     B) a remote folder via SSH
     C) a local folder
     """
-    import json
     tmp_wheel_path = house if house else os.path.join(local_code_root, 'wheelhouse')
     wheel_path = env.wheelhouse
     json_filename = 'special-wheels.json'
@@ -3600,13 +3595,8 @@ def push_wheelhouse(house=None):
         sys.exit(1)
 
     if wheel_path.strip().startswith('s3://'):
-        # S3
-        try:
-            import botocore
-            import boto3
-        except ImportError:
-            print(red("AWS CLI and Boto3 have to be installed to push to s3. Quitting..."))
-            return sys.exit(1)
+        import botocore
+        import boto3  # noqa
 
         s3 = boto3.resource('s3')
         bucket_name = 'bluenove-assembl-wheelhouse'
@@ -3661,3 +3651,67 @@ def push_wheelhouse(house=None):
         local('cp -r %s %s' % (tmp_wheel_path, wheel_path.split('local://')[1]))
     else:
         run('cp -r %s %s' % (tmp_wheel_path, wheel_path))
+
+
+@task
+def push_built_themes_to_remote_bucket():
+    """
+    Push webpack built themes CSS + JS files of themes into respective S3 bucket.
+    Expects boto3, zip, to be pre-installed.
+
+
+    Output:
+        - Two S3 buckets with a folder structure matching the build folder of both gulp and webpack, respectively
+        - a compressed and uncompressed versions of js + css files locally and on S3 bucket
+    """
+    import boto3  # noqa
+    s3 = boto3.resource('s3')
+    v2_build_path = os.path.join(code_root(), 'assembl/static2/build/themes')
+    v1_build_path = os.path.join(code_root(), 'assembl/static/build/')
+    v2_bucket_name = 'bluenove-client-themes'
+    v1_bucket_name = 'bluenove-deprecated-client-themes'
+    buckets = ((1, v1_bucket_name), (2, v2_bucket_name))
+
+    def determine_content_type(path):
+        ext = os.path.splitext(path)[1]
+        if ext:
+            if re.match(r'.*js$', ext):
+                return 'text/javascript'
+            elif re.match(r'.*css$', ext):
+                return 'text/css'
+        return 'application/octet-stream'
+
+    def determine_content_encoding(path):
+        basename, _ = os.path.splitext(path)
+        if 'compressed_' in basename:
+            return 'gzip'
+        return None
+
+    def compress_file(path):
+        # Only compress css + js files
+        base, ext = os.path.splitext(path)
+        basename = os.path.basename(base)
+        zip_file = os.path.join(os.path.dirname(path), 'compressed_' + basename + ext)
+        if ext:
+            if re.match(r'.*js$', ext) or re.match(r'.*css$', ext):
+                local('gzip -vkc -9 %s > %s' % (path, zip_file))
+        else:
+            print(yellow("No files of JS/CSS type to compress"))
+
+    for theme_version, bucket_name in buckets:
+        if theme_version == 1:
+            theme_path = v1_build_path
+        else:
+            theme_path = v2_build_path
+        # Push all content to S3, even if the files exist on S3, reupload them
+        for root, dirs, files in os.walk(theme_path):
+            for filename in files:
+                local_path = os.path.join(root, filename)
+                s3_path = os.path.relpath(local_path, theme_path)
+                configs = {
+                    'ACL': 'public-read',
+                    'ContentType': determine_content_type(local_path),
+                    'CacheControl': 'max-age=3600',
+                    'ContentEncoding': determine_content_encoding(local_path)
+                }
+                s3.meta.client.upload_file(local_path, bucket_name, s3_path, configs)

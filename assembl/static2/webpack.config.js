@@ -19,7 +19,8 @@ function theme_entries() {
         path = paths[i];
         parts = path.split('/');
         bucket = parts[parts.length - 3];
-        name = 'themes/' + bucket + '/theme_' + parts[parts.length - 2] + '_web';
+        theme_name = parts[parts.length - 2]
+        name = 'themes/' + bucket + '/' + theme_name + '/theme_' + theme_name + '_web';
         entries[name] = path;
     }
 //    paths = glob.sync('./css/themes/**/*_notifications.scss');
