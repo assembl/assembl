@@ -8,9 +8,7 @@ import arrayMutators from 'final-form-arrays';
 import AdminForm from '../../form/adminForm';
 import { compareEditorState } from '../../form/utils';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
-import Navbar from '../navbar';
 import Step1 from './step1';
-import Export from './export';
 import ConfigureThematicForm from './configureThematicForm';
 import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
@@ -22,7 +20,6 @@ type Props = {
   phaseIdentifier: string,
   section: string,
   thematicId: string,
-  debateId: string,
   discussionPhaseId: string,
   editLocale: string,
   locale: string
@@ -30,18 +27,7 @@ type Props = {
 
 const loading = <Loader />;
 
-const steps = ['1', '2'];
-
-const DumbSurveyAdminForm = ({
-  client,
-  phaseIdentifier,
-  section,
-  thematicId,
-  discussionPhaseId,
-  debateId,
-  editLocale,
-  locale
-}: Props) => {
+const DumbSurveyAdminForm = ({ client, phaseIdentifier, section, thematicId, discussionPhaseId, editLocale, locale }: Props) => {
   if (!discussionPhaseId) {
     return loading;
   }
@@ -74,18 +60,8 @@ const DumbSurveyAdminForm = ({
                     values={values}
                   />
                 )}
-                {section === '2' && <Export debateId={debateId} locale={locale} />}
               </AdminForm>
             </div>
-            {steps.includes(section) && (
-              <Navbar
-                steps={steps}
-                currentStep={section}
-                totalSteps={3}
-                phaseIdentifier={phaseIdentifier}
-                beforeChangeSection={() => (pristine || submitting) && handleSubmit()}
-              />
-            )}
           </React.Fragment>
         );
       }}
