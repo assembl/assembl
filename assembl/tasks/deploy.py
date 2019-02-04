@@ -68,8 +68,8 @@ def print_config(c):
 
 @task()
 def create_venv_python_3(c):
-    if c.mac and not exists('/usr/local/bin/python3'):
-        if not exists('/usr/local/bin/brew'):
+    if c._internal.mac and not exists(c, '/usr/local/bin/python3'):
+        if not exists(c, '/usr/local/bin/brew'):
                 c.run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
         c.run("brew update")
         c.run("brew upgrade")
@@ -77,9 +77,9 @@ def create_venv_python_3(c):
         c.run("brew install python")  # This installs python3
         c.run("brew install libmagic")  # needed for python-magic
         c.run('pip3 install virtualenv')
-
+    venv3 = c.venvpath + 'py3'
     print("Creating a fresh virtual env with python 3")
-    if exists(os.path.join(v.venvpath + 'py3', "bin/activate")):
+    if exists(c, os.path.join(c.venvpath + 'py3', "bin/activate")):
         return
     c.run('python3 -mvirtualenv --python python3 %s' % venv3)
 
@@ -458,7 +458,7 @@ def restart_bluenove_actionable(c):
 def update_bluenove_actionable(c):
     """Update bluenove_actionable git repository and rebuilding tha app."""
     path = os.path.join(c.projectpath, '..', 'bluenove-actionable')
-    if exists(path):
+    if exists(c, path):
         with c.cd(path):
             c.run('git pull')
             c.run('docker system prune --volumes -f', warn=True)
@@ -480,7 +480,7 @@ def updatemaincode(c):
 def update_url_metadata(c):
     """Update url metadata microservice."""
     path = os.path.join(c.projectpath, '..', 'url_metadata')
-    if exists(path):
+    if exists(c, path):
         with c.cd(path):
             c.run('git pull')
         with venv_py3(c):
@@ -494,7 +494,7 @@ def app_setup(c):
         with venv(c):
             c.run('pip install -e ./')
         create_var_dir(c)
-        if not exists(c.config.ini_file):
+        if not exists(c, c.config.ini_file):
             create_local_ini(c)
         with venv(c):
             c.run('assembl-ini-files populate %s' % (c.config.ini_file))

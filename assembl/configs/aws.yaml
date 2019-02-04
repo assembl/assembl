@@ -1,5 +1,6 @@
 _extends: base_env.yaml
 ini_files: production.ini no_sentry.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
+venvpath: /home/assembl_user/assembl/venvpath 
 DEFAULT:
   db_user: assembl_user
   # temporary
@@ -7,6 +8,7 @@ DEFAULT:
 hosts: localhost
 _internal:
   webmaster_user:
+  mac: false
 attachment_service: s3
 celery_tasks.broker: sqs://
 rds_certificate: rds-combined-ca-bundle.pem
