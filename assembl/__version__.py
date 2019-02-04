@@ -22,7 +22,7 @@ def version():
                 _cached_version = Version(parts[0])
             else:
                 base = Version(parts[0]).next_patch()
-                _cached_version = Version('%s-%s+%s' % (base, parts[1], parts[2]))
+                _cached_version = Version('%s.dev%s+%s' % (base, parts[1], parts[2][1:]))
         else:
             # from wheel
             _cached_version = Version(pkg_resources.get_distribution("assembl").version)
