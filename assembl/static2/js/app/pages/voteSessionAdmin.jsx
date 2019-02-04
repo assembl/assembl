@@ -12,7 +12,6 @@ import PageForm from '../components/administration/voteSession/pageForm';
 import { type VoteChoice } from '../components/administration/voteSession/gaugeForm';
 import ModulesSection from '../components/administration/voteSession/modulesSection';
 import VoteProposalsSection from '../components/administration/voteSession/voteProposalsSection';
-import ExportSection from '../components/administration/exportSection';
 import BackToThematic from '../components/administration/voteSession/backToThematic';
 import Navbar from '../components/administration/navbar';
 import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
@@ -30,7 +29,7 @@ import deleteProposalMutation from '../graphql/mutations/deleteProposal.graphql'
 import { convertEntriesToHTML, convertImmutableEntriesToJS } from '../utils/draftjs';
 import { get } from '../utils/routeMap';
 import { displayAlert, displayCustomModal, closeModal } from '../utils/utilityManager';
-import { getDiscussionSlug, snakeToCamel } from '../utils/globalFunctions';
+import { getDiscussionSlug } from '../utils/globalFunctions';
 
 type VoteModule = {
   choices?: Array<VoteChoice>,
@@ -180,8 +179,8 @@ type Props = {
   updateProposal: Function,
   deleteProposal: Function,
   setValidationErrors: (string, ValidationErrors) => Function,
-  voteSessionId: string,
-  debateId: string,
+  // voteSessionId: string,
+  // debateId: string,
   route: Route,
   router: Router,
   phaseIdentifier: string,
@@ -492,16 +491,16 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   dataHaveChanged = (): boolean => this.props.modulesOrProposalsHaveChanged || this.props.voteSessionPage.get('_hasChanged');
 
   render() {
-    const { editLocale, debateId, goBackPhaseIdentifier, phaseIdentifier, section, thematicId, voteSessionId } = this.props;
+    const { editLocale, goBackPhaseIdentifier, phaseIdentifier, section, thematicId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
-    const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
-      msgId: `vote.${snakeToCamel(option)}`,
-      url: get('exportVoteSessionData', {
-        debateId: debateId,
-        exportRoute: option,
-        voteSessionId: voteSessionId
-      })
-    }));
+    // const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
+    //   msgId: `vote.${snakeToCamel(option)}`,
+    //   url: get('exportVoteSessionData', {
+    //     debateId: debateId,
+    //     exportRoute: option,
+    //     voteSessionId: voteSessionId
+    //   })
+    // }));
     const configureThematicUrl = get(
       'administration',
       { slug: getDiscussionSlug() || '', id: goBackPhaseIdentifier },
@@ -513,7 +512,6 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         {section === '1' && <PageForm editLocale={editLocale} />}
         {section === '2' && <ModulesSection />}
         {section === '3' && <VoteProposalsSection />}
-        {section === '4' && <ExportSection exportLink={exportLinks} />}
         {section && (
           <Navbar
             currentStep={section}
