@@ -303,13 +303,7 @@ def update_wheels_json_data(c, json_data):
 def create_wheel(c, house=None):
     tmp_wheel_path = house if house else os.path.join(c.config.code_root, 'wheelhouse')
     (version, num, commit_hash, commit_tag, branch) = git_version_data(c)
-    if num:
-        wheel_name = create_wheel_name(version, num, commit_hash)
-        build_number = wheel_name.split('-')[2]
-        c.run("python setup.py bdist_wheel -d %s --build-number %s" % (
-            tmp_wheel_path, build_number))
-    else:
-        c.run("python setup.py bdist_wheel -d " + tmp_wheel_path)
+    c.run("python setup.py bdist_wheel -d " + tmp_wheel_path)
 
 
 def write_update_json_data(c, json_filepath):
