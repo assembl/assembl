@@ -26,6 +26,13 @@ exports[`ExportSection component should render an ExportSection component with l
       className="no-margin-bottom form-group"
     >
       <div
+        className="dark-title3"
+      >
+        <span>
+          Translation of the data
+        </span>
+      </div>
+      <div
         className="radio"
       >
         <label

@@ -7,10 +7,26 @@ type Props = {
   section: string
 };
 
+const mockLanguages = [
+  { locale: 'fr', name: 'French', nativeName: 'français', __typename: 'LocalePreference' },
+  { locale: 'en', name: 'English', nativeName: 'English', __typename: 'LocalePreference' }
+];
+
 const ExportData = ({ section }: Props) => (
   <div>
     {section === '1' && (
-      <ExportSection exportLink="" translate annotation="administration.export.contributions" sectionTitle="contributions" />
+      <ExportSection
+        exportLink=""
+        translate
+        annotation="contributions"
+        sectionTitle="contributions"
+        languages={mockLanguages}
+        handleTranslationChange={() => {}}
+        handleExportLocaleChange={() => {}}
+        handleAnonymousChange={() => {}}
+        exportLocale="fr"
+        withLanguageOptions
+      />
     )}
     {section === '2' && <ExportTaxonomies />}
   </div>

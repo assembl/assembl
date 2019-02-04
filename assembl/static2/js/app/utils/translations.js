@@ -919,6 +919,8 @@ const Translations = {
         defaultSectionTitle: "Exporter les données",
         taxonomySectionTitle: "Exporter les taxonomies",
         translateTheMessagesIn: "Traduire l'ensemble des messages en :",
+        anonymity: "Anonymat",
+        translation: "Traduction des données",
         anonymous: "Rendre les données anonymes",
         contributions: "Les contributions des participants",
         vote: {
@@ -1938,6 +1940,8 @@ const Translations = {
         defaultSectionTitle: "Export data",
         taxonomySectionTitle: "Export taxonomy",
         translateTheMessagesIn: "Translate the messages in:",
+        anonymity: "Anonymity",
+        translation: "Translation of the data",
         anonymous: "Make the data anonymous",
         contributions: "Contributions of the participants",
         vote: {

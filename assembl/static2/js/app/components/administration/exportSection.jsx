@@ -58,6 +58,9 @@ class ExportSection extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
+        <div className="dark-title3">
+          <Translate value="administration.export.anonymity" />
+        </div>
         <Checkbox onChange={handleAnonymousChange}>
           <Translate value="administration.export.anonymous" />
         </Checkbox>
@@ -104,6 +107,9 @@ class ExportSection extends React.Component<Props, State> {
     const activeLanguage = languages ? languages.filter(language => language.locale === exportLocale)[0] : null;
     return (
       <React.Fragment>
+        <div className="dark-title3">
+          <Translate value="administration.export.translation" />
+        </div>
         <Radio
           checked={!translate}
           onChange={() => {
