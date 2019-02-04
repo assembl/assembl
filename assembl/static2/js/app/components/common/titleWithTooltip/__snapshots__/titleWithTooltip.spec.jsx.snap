@@ -14,7 +14,7 @@ exports[`Storyshots Semantic Analysis|TitleWithTooltip default 1`] = `
       className="titleWithTooltip-container"
     >
       <h1>
-        AN AMAZING TITLE
+        An amazing title
       </h1>
       <div
         className="titleTooltip-container"
@@ -380,7 +380,7 @@ exports[`Storyshots Semantic Analysis|TitleWithTooltip playground 1`] = `
       className="titleWithTooltip-container"
     >
       <h1>
-        AN AMAZING TITLE
+        An amazing title
       </h1>
       <div
         className="titleTooltip-container"

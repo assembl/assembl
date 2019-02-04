@@ -27,13 +27,6 @@
   color: $black;
   font-family: $font-family, sans-serif;
 
-  h1 {
-    color: $grey;
-    font-family: $font-family4;
-    font-size: 20px;
-    letter-spacing: 1.1px;
-  }
-
   h2 {
     color: $grey;
     font-family: $font-family3;
@@ -90,11 +83,6 @@
 
 @media screen and (min-width: $screen-sm-min) {
   .semantic-analysis {
-    h1 {
-      font-size: 22px;
-      letter-spacing: 1.2px;
-    }
-
     h4 {
       font-size: 25px;
       text-align: center;
@@ -216,6 +204,7 @@
 }
 
 @import '../js/app/components/common/loader/loader.scss';
+@import '../js/app/components/common/title/title.scss';
 @import '../js/app/components/common/toolbarSlider/toolbarSlider.scss';
 @import '../js/app/components/common/titleTooltip/titleTooltip.scss';
 @import '../js/app/components/common/titleWithTooltip/titleWithTooltip.scss';

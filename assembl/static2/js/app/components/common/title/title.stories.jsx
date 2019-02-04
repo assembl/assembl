@@ -11,7 +11,7 @@ import type { Props as TitleProps } from './title';
 
 export const defaultTitleProps: TitleProps = {
   level: 1,
-  children: 'my awesome title'
+  children: 'My awesome title'
 };
 
 const playground: TitleProps = {

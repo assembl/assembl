@@ -27,15 +27,15 @@ describe('<Title /> - with shallow', () => {
   });
 
   describe('when level is set to 1 (default value)', () => {
-    it('should render a h1 with an uppercased content', () => {
-      expect(wrapper.find('h1').text()).toEqual('MY AWESOME TITLE');
+    it('should render a h1', () => {
+      expect(wrapper.find('h1').text()).toEqual('My awesome title');
     });
   });
 
   describe('when level is not set to 1', () => {
-    it('should render a h2 with an uppercased content', () => {
+    it('should render a h2', () => {
       wrapper.setProps({ level: 2 });
-      expect(wrapper.find('h2').text()).toEqual('MY AWESOME TITLE');
+      expect(wrapper.find('h2').text()).toEqual('My awesome title');
     });
   });
 });

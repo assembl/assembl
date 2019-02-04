@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Translate } from 'react-redux-i18n';
+import { Translate, I18n } from 'react-redux-i18n';
 import { Col, Tooltip } from 'react-bootstrap';
 // Components imports
 import StatisticsDoughnut from '../common/statisticsDoughnut';
@@ -9,6 +9,7 @@ import TextAndMedia from '../../common/textAndMedia';
 import { CountablePublicationStates, MESSAGE_VIEW } from '../../../constants';
 import PostsAndContributorsCount, { Counter } from '../../common/postsAndContributorsCount';
 import ThematicTabs from './thematicTabs';
+import Title from '../../common/title/title';
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
@@ -100,9 +101,7 @@ export const createDoughnutElements = (sentimentCounts: SentimentsCounts): Array
 export const SurveyAnnouncement = ({ announcement, semanticAnalysisForThematicData }: SurveyAnnouncementProps) => {
   const guidelinesContent = (
     <div className="announcement">
-      <div className="announcement-title">
-        {announcement.title ? <h3 className="announcement-title-text dark-title-1">{announcement.title}</h3> : ''}
-      </div>
+      <div className="announcement-title">{announcement.title ? <Title level={1}>{announcement.title}</Title> : ''}</div>
       <TextAndMedia {...announcement} />
     </div>
   );
@@ -120,9 +119,7 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
   const guidelinesContent = (
     <div className="announcement">
       <div className="announcement-title">
-        <h3 className="announcement-title-text dark-title-1">
-          {announcement.title || <Translate value="debate.thread.announcement" />}
-        </h3>
+        <Title level={1}>{announcement.title || I18n.t('debate.thread.announcement')}</Title>
       </div>
       <Col xs={12} md={10} className="announcement-media col-md-push-2 no-padding">
         <TextAndMedia {...announcement} />

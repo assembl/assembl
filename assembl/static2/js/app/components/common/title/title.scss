@@ -1,0 +1,22 @@
+h1 {
+  color: $grey;
+  font-family: $font-family4;
+  font-size: 20px;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+
+h2 {
+  color: $grey;
+  font-family: $font-family3;
+  font-size: 16px;
+  letter-spacing: 1px;
+  line-height: 2;
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  h1 {
+    font-size: 22px;
+    letter-spacing: 1.2px;
+  }
+}

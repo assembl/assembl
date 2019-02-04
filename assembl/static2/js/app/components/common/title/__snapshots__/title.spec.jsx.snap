@@ -11,7 +11,7 @@ exports[`Storyshots Semantic Analysis|Title default 1`] = `
     }
   >
     <h1>
-      MY AWESOME TITLE
+      My awesome title
     </h1>
   </div>
   <button
@@ -189,7 +189,7 @@ exports[`Storyshots Semantic Analysis|Title default 1`] = `
                       }
                     }
                   >
-                    my awesome title
+                    My awesome title
                   </span>
                 </div>
                 <div
@@ -351,7 +351,7 @@ exports[`Storyshots Semantic Analysis|Title playground 1`] = `
     }
   >
     <h1>
-      MY AWESOME TITLE
+      My awesome title
     </h1>
   </div>
   <button
@@ -529,7 +529,7 @@ exports[`Storyshots Semantic Analysis|Title playground 1`] = `
                       }
                     }
                   >
-                    my awesome title
+                    My awesome title
                   </span>
                 </div>
                 <div
