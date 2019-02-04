@@ -77,13 +77,13 @@ exports[`ExportSection component should render an ExportSection component with l
             className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
           >
             <div
-              className="DateInput DateInput_1"
+              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
             >
               <input
                 aria-describedby="DateInput__screen-reader-message-foo"
                 aria-label="Start Date"
                 autoComplete="off"
-                className="DateInput_input DateInput_input_1"
+                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                 disabled={false}
                 id="foo"
                 name="foo"
@@ -109,24 +109,16 @@ exports[`ExportSection component should render an ExportSection component with l
               className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
               role="presentation"
             >
-              <svg
-                className="DateRangePickerInput_arrow_svg DateRangePickerInput_arrow_svg_1"
-                focusable="false"
-                viewBox="0 0 1000 1000"
-              >
-                <path
-                  d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z"
-                />
-              </svg>
+              -
             </div>
             <div
-              className="DateInput DateInput_1"
+              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
             >
               <input
                 aria-describedby="DateInput__screen-reader-message-bar"
                 aria-label="End Date"
                 autoComplete="off"
-                className="DateInput_input DateInput_input_1"
+                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                 disabled={false}
                 id="bar"
                 name="bar"
@@ -204,13 +196,13 @@ exports[`ExportSection component should render an ExportSection component withou
             className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
           >
             <div
-              className="DateInput DateInput_1"
+              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
             >
               <input
                 aria-describedby="DateInput__screen-reader-message-foo"
                 aria-label="Start Date"
                 autoComplete="off"
-                className="DateInput_input DateInput_input_1"
+                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                 disabled={false}
                 id="foo"
                 name="foo"
@@ -236,24 +228,16 @@ exports[`ExportSection component should render an ExportSection component withou
               className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
               role="presentation"
             >
-              <svg
-                className="DateRangePickerInput_arrow_svg DateRangePickerInput_arrow_svg_1"
-                focusable="false"
-                viewBox="0 0 1000 1000"
-              >
-                <path
-                  d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z"
-                />
-              </svg>
+              -
             </div>
             <div
-              className="DateInput DateInput_1"
+              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
             >
               <input
                 aria-describedby="DateInput__screen-reader-message-bar"
                 aria-label="End Date"
                 autoComplete="off"
-                className="DateInput_input DateInput_input_1"
+                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                 disabled={false}
                 id="bar"
                 name="bar"
@@ -370,13 +354,13 @@ exports[`ExportSection component should render an export section that handles di
             className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
           >
             <div
-              className="DateInput DateInput_1"
+              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
             >
               <input
                 aria-describedby="DateInput__screen-reader-message-foo"
                 aria-label="Start Date"
                 autoComplete="off"
-                className="DateInput_input DateInput_input_1"
+                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                 disabled={false}
                 id="foo"
                 name="foo"
@@ -402,24 +386,16 @@ exports[`ExportSection component should render an export section that handles di
               className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
               role="presentation"
             >
-              <svg
-                className="DateRangePickerInput_arrow_svg DateRangePickerInput_arrow_svg_1"
-                focusable="false"
-                viewBox="0 0 1000 1000"
-              >
-                <path
-                  d="M694.4 242.4l249.1 249.1c11 11 11 21 0 32L694.4 772.7c-5 5-10 7-16 7s-11-2-16-7c-11-11-11-21 0-32l210.1-210.1H67.1c-13 0-23-10-23-23s10-23 23-23h805.4L662.4 274.5c-21-21.1 11-53.1 32-32.1z"
-                />
-              </svg>
+              -
             </div>
             <div
-              className="DateInput DateInput_1"
+              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
             >
               <input
                 aria-describedby="DateInput__screen-reader-message-bar"
                 aria-label="End Date"
                 autoComplete="off"
-                className="DateInput_input DateInput_input_1"
+                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                 disabled={false}
                 id="bar"
                 name="bar"

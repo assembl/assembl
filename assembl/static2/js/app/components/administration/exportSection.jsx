@@ -179,6 +179,8 @@ class ExportSection extends React.Component<Props, State> {
               onDatesChange={({ startDate, endDate }) => this.setState({ start: startDate, end: endDate })}
               focusedInput={focusedInput}
               onFocusChange={input => this.setState({ focusedInput: input })}
+              small
+              numberOfMonths={1}
             />
           </div>
           <div className="center-flex">
