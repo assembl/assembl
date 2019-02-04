@@ -146,7 +146,10 @@ def get_node_base_path(c):
 
 
 def is_integration_env(c):
-    if c.get('TRAVIS_COMMIT'):
+    # Centralize checking whether in CI/CD env
+    # Travis (https://docs.travis-ci.com/user/environment-variables/)
+    # Gitlab (https://docs.gitlab.com/ee/ci/variables/)
+    if c.get('CI', None):
         return True
     return False
 
@@ -202,3 +205,10 @@ def create_venv(c, path=None):
     if not exists(c, os.path.join(path, 'venv')):
         with c.cd(path):
             c.run('python2 -mvirtualenv venv')
+
+
+@task()
+def configure_github_user(c):
+    c.run('git config --global user.email "%s"' % c.config.get('github', {}).get('user', None))
+    c.run('git config --global user.name "%s"' % c.config.get('github', {}).get('email', None))
+    c.run('git remote add origin %s' % c.config.get('github', {}).get('email', None))

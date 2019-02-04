@@ -264,6 +264,8 @@ def git_version_data(c):
     latest_tag_desc = c.run('git describe').stdout.strip()
     annotated_tag_desc = c.run('git describe --tags HEAD').stdout.strip()
     parts = re.match(r"([\d\.]+)(-(\d+)-g([0-9a-f]+))?$", annotated_tag_desc)
+    # Git flow uses annotated tags based on the branch names for hotfixes, will break this.
+    # TODO: Add loop to go back in time to find the other tags
     assert parts, "annotated tag %s is not a version tag" % (annotated_tag_desc.split('-')[0])
     if not parts.group(2):
         version = annotated_tag_desc
@@ -424,3 +426,67 @@ def push_wheelhouse(c, house=None):
         c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path.split('local://')[1]))
     else:
         c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path))
+
+
+@task()
+def push_built_themes_to_remote_bucket(c):
+    """
+    Push webpack built themes CSS + JS files of themes into respective S3 bucket.
+    Expects boto3, zip, to be pre-installed.
+
+
+    Output:
+        - Two S3 buckets with a folder structure matching the build folder of both gulp and webpack, respectively
+        - a compressed and uncompressed versions of js + css files locally and on S3 bucket
+    """
+    import boto3
+    s3 = boto3.resource('s3')
+    v2_build_path = os.path.join(c.config.code_root, 'assembl/static2/build/themes')
+    v1_build_path = os.path.join(c.config.code_root, 'assembl/static/build/')
+    v2_bucket_name = 'bluenove-client-themes'
+    v1_bucket_name = 'bluenove-deprecated-client-themes'
+    buckets = ((1, v1_bucket_name), (2, v2_bucket_name))
+
+    def determine_content_type(path):
+        ext = os.path.splitext(path)[1]
+        if ext:
+            if re.match(r'.*js$', ext):
+                return 'text/javascript'
+            elif re.match(r'.*css$', ext):
+                return 'text/css'
+        return 'application/octet-stream'
+
+    def determine_content_encoding(path):
+        basename, _ = os.path.splitext(path)
+        if 'compressed_' in basename:
+            return 'gzip'
+        return None
+
+    def compress_file(path):
+        # Only compress css + js files
+        base, ext = os.path.splitext(path)
+        basename = os.path.basename(base)
+        zip_file = os.path.join(os.path.dirname(path), 'compressed_' + basename + ext)
+        if ext:
+            if re.match(r'.*js$', ext) or re.match(r'.*css$', ext):
+                c.run('gzip -vkc -9 %s > %s' % (path, zip_file))
+        else:
+            print("No files of JS/CSS type to compress")
+
+    for theme_version, bucket_name in buckets:
+        if theme_version == 1:
+            theme_path = v1_build_path
+        else:
+            theme_path = v2_build_path
+        # Push all content to S3, even if the files exist on S3, reupload them
+        for root, dirs, files in os.walk(theme_path):
+            for filename in files:
+                local_path = os.path.join(root, filename)
+                s3_path = os.path.relpath(local_path, theme_path)
+                configs = {
+                    'ACL': 'public-read',
+                    'ContentType': determine_content_type(local_path),
+                    'CacheControl': 'max-age=3600',
+                    'ContentEncoding': determine_content_encoding(local_path)
+                }
+                s3.meta.client.upload_file(local_path, bucket_name, s3_path, configs)
