@@ -81,7 +81,7 @@ def webservers_reload(c):
     if "Command exited with status 0" in str(result):
         c.sudo('/etc/init.d/nginx reload')
     else:
-        print ("Can't reload nginx, ngin test configuration not successful.")
+        print ("Can't reload nginx, nginx test configuration not successful.")
 
     if c.uses_bluenove_actionable:
         restart_bluenove_actionable()
