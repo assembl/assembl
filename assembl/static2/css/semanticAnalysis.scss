@@ -19,6 +19,7 @@
       font-family: $font-family4;
       font-size: $font-size-xl;
       margin: 0 0;
+      text-transform: initial;
     }
   }
 }
@@ -26,14 +27,6 @@
 .semantic-analysis {
   color: $black;
   font-family: $font-family, sans-serif;
-
-  h2 {
-    color: $grey;
-    font-family: $font-family3;
-    font-size: 16px;
-    letter-spacing: 1px;
-    line-height: 2;
-  }
 
   h3 {
     font-family: $font-family;
