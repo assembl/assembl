@@ -642,6 +642,15 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             if with_moderation is not None:
                 discussion.preferences['with_moderation'] = with_moderation
 
+            if slug != discussion.slug:
+                db.add(models.OldSlug(
+                    discussion=discussion,
+                    slug=discussion.slug,
+                    redirection_slug=slug))
+                # Redirecting all the old slugs to the newest slug
+                for old_slug in discussion.oldslug:
+                    old_slug.redirection_slug = slug
+
             if slug is not None:
                 discussion.slug = slug
 
