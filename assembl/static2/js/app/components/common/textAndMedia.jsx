@@ -47,8 +47,8 @@ class TextAndMedia extends React.Component<Props> {
               {somethingOnRight ? (
                 <Col
                   xs={totalSize}
-                  md={12}
-                  className={classnames('announcement-media no-padding', {
+                  md={somethingOnLeft ? 8 : 12}
+                  className={classnames('no-padding', {
                     'col-md-push-4': somethingOnLeft
                   })}
                 >
