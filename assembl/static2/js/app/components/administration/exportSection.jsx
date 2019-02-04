@@ -23,9 +23,9 @@ type Props = {
 
 type State = {
   exportLink: string,
-  startDate: ?moment,
-  endDate: ?moment,
-  focusedInput: ?any // TODO: type this
+  start: ?moment,
+  end: ?moment,
+  focusedInput: ?string
 };
 
 class ExportSection extends React.Component<Props, State> {
@@ -46,8 +46,8 @@ class ExportSection extends React.Component<Props, State> {
 
   state = {
     exportLink: '',
-    startDate: null,
-    endDate: null,
+    start: null,
+    end: null,
     focusedInput: null
   };
 
@@ -156,7 +156,7 @@ class ExportSection extends React.Component<Props, State> {
 
   render() {
     const { annotation, sectionTitle } = this.props;
-    const { startDate, endDate, focusedInput } = this.state;
+    const { start, end, focusedInput } = this.state;
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -172,11 +172,11 @@ class ExportSection extends React.Component<Props, State> {
           <br />
           <div>
             <DateRangePicker
-              startDate={startDate}
+              startDate={start}
               startDateId="foo"
-              endDate={endDate}
+              endDate={end}
               endDateId="bar"
-              onDatesChange={({ start, end }) => this.setState({ startDate: start, endDate: end })}
+              onDatesChange={({ startDate, endDate }) => this.setState({ start: startDate, end: endDate })}
               focusedInput={focusedInput}
               onFocusChange={input => this.setState({ focusedInput: input })}
             />
