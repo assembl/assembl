@@ -36,7 +36,7 @@ class TextAndMedia extends React.Component<Props> {
     const somethingOnLeft = validQuote;
     const something = !!(somethingOnLeft || somethingOnRight);
     const totalSize = 12;
-    const leftSize = 4;
+    const leftSize = 3;
     return title || something ? (
       <section className="media-section background-light">
         <div>
@@ -45,9 +45,9 @@ class TextAndMedia extends React.Component<Props> {
               {somethingOnRight ? (
                 <Col
                   xs={totalSize}
-                  md={somethingOnLeft ? 8 : 12}
+                  md={somethingOnLeft ? 9 : 12}
                   className={classnames('announcement-media no-padding', {
-                    'col-md-push-4': somethingOnLeft
+                    'col-md-push-3': somethingOnLeft
                   })}
                 >
                   <div className="media-right">{body && validBody && <Body content={body} />}</div>
@@ -58,7 +58,7 @@ class TextAndMedia extends React.Component<Props> {
                   xs={totalSize}
                   md={somethingOnRight ? leftSize : totalSize}
                   className={classnames({
-                    'col-md-pull-8': somethingOnRight
+                    'col-md-pull-9': somethingOnRight
                   })}
                 >
                   {quote && validQuote && <Quote content={quote} />}
