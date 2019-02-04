@@ -41,7 +41,7 @@ def auto_inc_version():
         # We're on the tag
         return tag
     else:
-        return str(Version(parts[0]).next_patch())
+        return "%s.dev%s+%s" % (Version(parts[0]).next_patch(), parts[1], parts[2][1:])
 
 
 version = auto_inc_version()
