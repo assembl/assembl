@@ -1,16 +1,15 @@
 import graphene
 from graphene.relay import Node
 from graphene.pyutils.enum import Enum as PyEnum
-from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 
 from assembl import models
 from .utils import abort_transaction_on_exception
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from assembl.models.action import (
-    SentimentOfPost,
-    LikeSentimentOfPost, DisagreeSentimentOfPost,
+    SentimentOfPost, LikeSentimentOfPost, DisagreeSentimentOfPost,
     DontUnderstandSentimentOfPost, MoreInfoSentimentOfPost)
 import assembl.graphql.docstrings as docs
 
@@ -55,12 +54,9 @@ class AddSentiment(graphene.Mutation):
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Content.get(post_id)
-
         permissions = get_permissions(user_id, discussion_id)
-        allowed = SentimentOfPost.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+
+        require_cls_permission(CrudPermissions.CREATE, SentimentOfPost, context)
 
         sentiment_type = args.get('type')
         if SentimentTypes.LIKE.name == sentiment_type:
@@ -94,18 +90,12 @@ class DeleteSentiment(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
 
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Content.get(post_id)
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = post.my_sentiment.user_can(
-            user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_instance_permission(CrudPermissions.DELETE, post.my_sentiment, context)
 
         post.my_sentiment.is_tombstone = True
         post.db.flush()

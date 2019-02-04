@@ -3,14 +3,12 @@ import os.path
 import graphene
 
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import Everyone
 
 import assembl.graphql.docstrings as docs
 from assembl import models
-from assembl.auth import IF_OWNED, CrudPermissions
-from assembl.auth.util import get_permissions
+from assembl.auth import CrudPermissions
 
+from .permissions_helpers import require_cls_permission
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
 
@@ -43,13 +41,9 @@ class UploadDocument(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
 
-        user_id = context.authenticated_userid or Everyone
         cls = models.Document
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
+
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
 
         uploaded_file = args.get('file')
         if uploaded_file is not None:

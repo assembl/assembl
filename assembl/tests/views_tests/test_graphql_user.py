@@ -168,7 +168,7 @@ def test_graphql_update_user_modify_password_refused_because_not_owner(graphql_r
         "newPassword2": "new_secret"
     })
     assert res.errors is not None
-    assert res.errors[0].message == u"The authenticated user can't update this user"
+    assert res.errors[0].message == u"You don't have the authorization to update this user. If you think it's an error, please reconnect to assembl."
 
 
 def test_graphql_update_user_modify_password_wrong_password(graphql_request, participant1_user, graphql_registry):

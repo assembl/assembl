@@ -8,18 +8,18 @@ import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from graphene_sqlalchemy.utils import is_mapped
-from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from sqlalchemy import desc, func, join, select, or_, and_
 from sqlalchemy.orm import joinedload
 
 from assembl import models
-from assembl.auth import P_MODERATE, IF_OWNED, CrudPermissions
-from assembl.auth.util import get_permissions, user_has_permission
+from assembl.auth import P_MODERATE, CrudPermissions
+from assembl.auth.util import user_has_permission
 from assembl.models.action import SentimentOfPost
 from assembl.models import Phases
 from assembl.models.idea import MessageView
 
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .attachment import Attachment
 from .document import Document
 from .langstring import (LangStringEntry, LangStringEntryInput,
@@ -662,11 +662,7 @@ def create_idea(parent_idea, phase, args, context):
     discussion = models.Discussion.get(discussion_id)
     user_id = context.authenticated_userid or Everyone
 
-    permissions = get_permissions(user_id, discussion_id)
-    allowed = cls.user_can_cls(
-        user_id, CrudPermissions.CREATE, permissions)
-    if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-        raise HTTPUnauthorized()
+    require_cls_permission(CrudPermissions.CREATE, cls, context)
 
     with cls.default_db.no_autoflush as db:
         title_entries = args.get('title_entries')
@@ -801,11 +797,7 @@ def update_idea(args, phase, context):
     is_survey_thematic = message_view_override == MessageView.survey.value
     is_multicolumns = message_view_override == MessageView.messageColumns.value
 
-    permissions = get_permissions(user_id, discussion_id)
-    allowed = thematic.user_can(
-        user_id, CrudPermissions.UPDATE, permissions)
-    if not allowed:
-        raise HTTPUnauthorized()
+    require_instance_permission(CrudPermissions.UPDATE, thematic, context)
 
     with cls.default_db.no_autoflush as db:
         # introducing history at every step, including thematics + questions  # noqa: E501
@@ -984,18 +976,11 @@ def tombstone_idea_recursively(idea):
 
 
 def delete_idea(args, context):
-    discussion_id = context.matchdict['discussion_id']
-    user_id = context.authenticated_userid or Everyone
-
     thematic_id = args.get('thematic_id')
     thematic_id = int(Node.from_global_id(thematic_id)[1])
     thematic = models.Idea.get(thematic_id)
 
-    permissions = get_permissions(user_id, discussion_id)
-    allowed = thematic.user_can(
-        user_id, CrudPermissions.DELETE, permissions)
-    if not allowed:
-        raise HTTPUnauthorized()
+    require_instance_permission(CrudPermissions.DELETE, thematic, context)
 
     tombstone_idea_recursively(thematic)
     thematic.db.flush()

@@ -39,7 +39,7 @@ def en_entry(value):
 
 
 def assert_graphql_unauthorized(response):
-    assert "wrong credentials" in response.errors[0].message
+    assert "It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again." in response.errors[0].message
 
 
 def assert_vote_session_not_created(vote_session, graphql_request, graphql_registry):

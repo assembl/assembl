@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2018-10-09 17:06+0200\n"
+"POT-Creation-Date: 2019-02-04 16:22+0100\n"
 "PO-Revision-Date: 2018-05-18 16:16+0200\n"
 "Last-Translator: \n"
 "Language: nl\n"
@@ -21,19 +21,29 @@ msgstr ""
 msgid "Your session has expired, you need to login again"
 msgstr "Uw sessie is verlopen, u moet opnieuw inloggen"
 
-#: assembl/auth/util.py:517
+#: assembl/auth/util.py:519
 msgid "The CSV file must have two columns"
 msgstr "Het CSV-bestand moet twee kolommen bevatten"
 
-#: assembl/auth/util.py:524
+#: assembl/auth/util.py:526
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr "Geen e-mail: <%s> at line %d"
 
-#: assembl/auth/util.py:527
+#: assembl/auth/util.py:529
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr "Naam te kort: <%s> at line %d"
+
+#: assembl/graphql/permissions_helpers.py:9
+msgid ""
+"It looks like you do not have the right to do this action. If you think "
+"it is an error, please reconnect to the platform and try again."
+msgstr ""
+
+#: assembl/graphql/post.py:362
+msgid "Proposal"
+msgstr ""
 
 #: assembl/lib/colander.py:174
 msgid "${val} cannot be serialized: ${err}"
@@ -47,7 +57,7 @@ msgstr "${val} is geen string: ${err}"
 msgid "Unknown User ${uid}"
 msgstr "Onbekende gebruiker ${uid}"
 
-#: assembl/models/idea.py:270 assembl/static/js/app/views/ideaPanel.js:211
+#: assembl/models/idea.py:274 assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr "Idee"
 
@@ -55,19 +65,19 @@ msgstr "Idee"
 msgid "A synthesis is posted"
 msgstr "Er is een synthese geplaatst"
 
-#: assembl/models/notification.py:649
+#: assembl/models/notification.py:654
 msgid "Any message is posted to the discussion"
 msgstr "Elk bericht wordt in de discussie geplaatst"
 
-#: assembl/models/notification.py:678
+#: assembl/models/notification.py:688
 msgid "Someone directly responds to one of your messages"
 msgstr "Iemand reageert direct op een van uw berichten"
 
-#: assembl/models/notification.py:1069
+#: assembl/models/notification.py:1084
 msgid "SYNTHESIS: "
 msgstr "SYNTHESE: "
 
-#: assembl/models/preferences.py:115 assembl/models/preferences.py:593
+#: assembl/models/preferences.py:115 assembl/models/preferences.py:651
 msgid "No special authentication"
 msgstr "Geen speciale authenticatie"
 
@@ -167,61 +177,109 @@ msgstr "Berichttitels"
 msgid "Title which appears on the tab, by default assembl"
 msgstr ""
 
-#: assembl/models/preferences.py:516
+#: assembl/models/preferences.py:515
+msgid "Mandatory legal contents validation"
+msgstr ""
+
+#: assembl/models/preferences.py:517
+msgid "Activate or not mandatory validation of legal contents after SSO login."
+msgstr ""
+
+#: assembl/models/preferences.py:526
 msgid "Video description"
 msgstr "Videobeschrijving"
 
-#: assembl/models/preferences.py:518
+#: assembl/models/preferences.py:528
 msgid "Description of the video presenting the discussion"
 msgstr "Beschrijving van een video over de discussie"
 
-#: assembl/models/preferences.py:527
+#: assembl/models/preferences.py:537
 msgid "Social sharing"
 msgstr "Sociaal delen"
 
-#: assembl/models/preferences.py:530
+#: assembl/models/preferences.py:540
 msgid "Show the share button on posts and ideas"
 msgstr "Toon de deelknop op berichten en ideeën"
 
-#: assembl/models/preferences.py:541
+#: assembl/models/preferences.py:551
 msgid "Private social sharing"
 msgstr "Privé sociaal delen"
 
-#: assembl/models/preferences.py:543
+#: assembl/models/preferences.py:553
 msgid "Publicizing or privatizing social sharing"
 msgstr "Sociaal delen openbaar of privé maken"
 
-#: assembl/models/preferences.py:552
+#: assembl/models/preferences.py:562
 msgid "Generic Errors"
 msgstr ""
 
-#: assembl/models/preferences.py:554
+#: assembl/models/preferences.py:564
 msgid "Display a generic error message."
 msgstr ""
 
-#: assembl/models/preferences.py:563
+#: assembl/models/preferences.py:573
 msgid "Extra data for CSV reports"
 msgstr "Extra gegevens voor CSV-rapporten"
 
-#: assembl/models/preferences.py:566
+#: assembl/models/preferences.py:576
 msgid "data taken from social_auth's extra_data to add to CSV reports"
 msgstr ""
 "gegevens die zijn overgenomen van social_auth's extra_data om aan CSV-"
 "rapporten toe te voegen"
 
-#: assembl/models/preferences.py:578
+#: assembl/models/preferences.py:588
 msgid "Require anti-virus check"
 msgstr "Verzoek om antiviruscontrole"
 
-#: assembl/models/preferences.py:581
+#: assembl/models/preferences.py:591
 msgid "Run an anti-virus on file attachments"
 msgstr "Voer een antivirusscan uit op bestandsbijlagen"
 
-#: assembl/models/preferences.py:595
+#: assembl/models/preferences.py:602
+msgid "Get keywords from Watson"
+msgstr ""
+
+#: assembl/models/preferences.py:604
+msgid "Use Watson to identify keywords"
+msgstr ""
+
+#: assembl/models/preferences.py:611
+msgid "Get concepts from Watson"
+msgstr ""
+
+#: assembl/models/preferences.py:613
+msgid "Use Watson to identify concepts"
+msgstr ""
+
+#: assembl/models/preferences.py:620
+msgid "Get categories from Watson"
+msgstr ""
+
+#: assembl/models/preferences.py:622
+msgid "Use Watson to identify categories"
+msgstr ""
+
+#: assembl/models/preferences.py:629
+msgid "Get sentiments from Watson"
+msgstr ""
+
+#: assembl/models/preferences.py:631
+msgid "Use Watson to identify sentiments"
+msgstr ""
+
+#: assembl/models/preferences.py:638
+msgid "Get emotions from Watson"
+msgstr ""
+
+#: assembl/models/preferences.py:640
+msgid "Use Watson to identify emotions"
+msgstr ""
+
+#: assembl/models/preferences.py:653
 msgid "Authentication service type"
 msgstr "Soort authenticatiedienst"
 
-#: assembl/models/preferences.py:597
+#: assembl/models/preferences.py:655
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -233,21 +291,21 @@ msgstr ""
 "bij die server en voor een automatisch abonnement op de discussie is een "
 "account van deze backend vereist."
 
-#: assembl/models/preferences.py:612
+#: assembl/models/preferences.py:670
 msgid "Allow access to moderated text"
 msgstr "Toegang tot gemodereerde tekst toestaan"
 
-#: assembl/models/preferences.py:615
+#: assembl/models/preferences.py:673
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr ""
 "Worden gemodereerde berichten gewoon verborgen of standaard "
 "ontoegankelijk gemaakt?"
 
-#: assembl/models/preferences.py:628
+#: assembl/models/preferences.py:686
 msgid "Idea panel opens automatically"
 msgstr "Ideeënpaneel wordt automatisch geopend"
 
-#: assembl/models/preferences.py:631
+#: assembl/models/preferences.py:689
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
@@ -255,29 +313,29 @@ msgstr ""
 "Gaat het ideeënpaneel automatisch open wanneer een idee wordt aangeklikt?"
 " (en dicht wanneer een speciale sectie wordt aangeklikt?)"
 
-#: assembl/models/preferences.py:643
+#: assembl/models/preferences.py:701
 msgid "Ids of columns in column view"
 msgstr "Id’s van kolommen in kolomweergave"
 
-#: assembl/models/preferences.py:645
+#: assembl/models/preferences.py:703
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "Wat zijn (geordende) id’s van kolommen in weergaven met meerdere kolommen?"
 
-#: assembl/models/preferences.py:658
+#: assembl/models/preferences.py:716
 msgid "Default colors of columns in column view"
 msgstr "Standaardkleuren van kolommen in kolomweergave"
 
-#: assembl/models/preferences.py:660
+#: assembl/models/preferences.py:718
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr ""
 "Wat zijn (standaard) themakleuren van kolommen in weergaven met meerdere "
 "kolommen?"
 
-#: assembl/models/preferences.py:672
+#: assembl/models/preferences.py:730
 msgid "Names of columns in column view"
 msgstr "Namen van kolommen in kolomweergave"
 
-#: assembl/models/preferences.py:674
+#: assembl/models/preferences.py:732
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
@@ -285,19 +343,19 @@ msgstr ""
 "Wat zijn (standaard)namen van kolommen in weergaven met meerdere "
 "kolommen, in elke discussietaal?"
 
-#: assembl/models/preferences.py:687
+#: assembl/models/preferences.py:745
 msgid "Default permissions"
 msgstr "Standaardrechten"
 
-#: assembl/models/preferences.py:690
+#: assembl/models/preferences.py:748
 msgid "The basic permissions for a new discussion"
 msgstr "De basisrechten voor een nieuwe discussie"
 
-#: assembl/models/preferences.py:772
+#: assembl/models/preferences.py:830
 msgid "Require Email Domain"
 msgstr "Verzoek om e-maildomein"
 
-#: assembl/models/preferences.py:775
+#: assembl/models/preferences.py:833
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -309,61 +367,61 @@ msgstr ""
 " kunnen zichzelf registreren voor deze discussie. Anyone can self-"
 "register if this is empty."
 
-#: assembl/models/preferences.py:791
+#: assembl/models/preferences.py:849
 msgid "Whitelist on authentication service"
 msgstr "Soort authenticatiedienst"
 
-#: assembl/models/preferences.py:794
+#: assembl/models/preferences.py:852
 msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
-#: assembl/models/preferences.py:806
+#: assembl/models/preferences.py:864
 msgid "Whitelist on standard registration"
 msgstr ""
 
-#: assembl/models/preferences.py:809
+#: assembl/models/preferences.py:867
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:821
+#: assembl/models/preferences.py:879
 msgid "Discussion administrators"
 msgstr "Discussie statistieken"
 
-#: assembl/models/preferences.py:824
+#: assembl/models/preferences.py:882
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
 
-#: assembl/models/preferences.py:837
+#: assembl/models/preferences.py:895
 msgid "Show CI Dashboard"
 msgstr "Toon het CI-dashboard"
 
-#: assembl/models/preferences.py:840
+#: assembl/models/preferences.py:898
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "Toon het CI-dashboard in het paneelgroepvenster"
 
-#: assembl/models/preferences.py:852
+#: assembl/models/preferences.py:910
 msgid "URL of CI Dashboard"
 msgstr "URL van het CI-dashboard"
 
-#: assembl/models/preferences.py:854
+#: assembl/models/preferences.py:912
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "Configuratie van de visualisaties getoond in het CI-dashboard"
 
-#: assembl/models/preferences.py:872
+#: assembl/models/preferences.py:930
 msgid "Catalyst Visualizations"
 msgstr "Catalyst-visualisaties"
 
-#: assembl/models/preferences.py:875
+#: assembl/models/preferences.py:933
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "Een JSON-beschrijving van beschikbare Catalyst-visualisaties"
 
-#: assembl/models/preferences.py:887
+#: assembl/models/preferences.py:945
 msgid "Navigation sections"
 msgstr "Navigatiesecties"
 
-#: assembl/models/preferences.py:890
+#: assembl/models/preferences.py:948
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
@@ -371,21 +429,21 @@ msgstr ""
 "Een JSON-specificatie van Catalyst-visualisaties om in de navigatiesectie"
 " te tonen"
 
-#: assembl/models/preferences.py:903
+#: assembl/models/preferences.py:961
 msgid "Catalyst translations"
 msgstr "Catalyst-vertalingen"
 
-#: assembl/models/preferences.py:906
+#: assembl/models/preferences.py:964
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
 "Vertalingen van toepassing op Catalyst-visualisaties, in Jed (JSON) "
 "formaat"
 
-#: assembl/models/preferences.py:923
+#: assembl/models/preferences.py:981
 msgid "Default Table of Ideas Collapsed state"
 msgstr "Standaard ideeëntabel samengevouwen status"
 
-#: assembl/models/preferences.py:926
+#: assembl/models/preferences.py:984
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
@@ -394,54 +452,64 @@ msgstr ""
 "ideeëntabel. Een gebruiker kan dit overschrijven door een idee te "
 "openen/sluiten"
 
-#: assembl/models/preferences.py:941
+#: assembl/models/preferences.py:999
 msgid "Preference data"
 msgstr "Voorkeursgegevens"
 
-#: assembl/models/preferences.py:944
+#: assembl/models/preferences.py:1002
 msgid "The preference configuration; override only with care"
 msgstr "De voorkeursconfiguratie; alleen zorgvuldig overschrijven"
 
-#: assembl/models/preferences.py:956
+#: assembl/models/preferences.py:1014
 msgid "Cookies banner"
 msgstr "Cookiebanner"
 
-#: assembl/models/preferences.py:959
+#: assembl/models/preferences.py:1017
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "Toon de banner om Piwik-cookies uit te schakelen"
 
-#: assembl/models/preferences.py:971
+#: assembl/models/preferences.py:1029
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:974
+#: assembl/models/preferences.py:1032
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:984
+#: assembl/models/preferences.py:1042
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:987
+#: assembl/models/preferences.py:1045
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:997 assembl/models/preferences.py:1000
+#: assembl/models/preferences.py:1055 assembl/models/preferences.py:1058
 msgid "Harvesting translation"
 msgstr "Catalyst-vertalingen"
 
-#: assembl/models/preferences.py:1008
+#: assembl/models/preferences.py:1066
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr ""
 
-#: assembl/models/preferences.py:1011
+#: assembl/models/preferences.py:1069
 msgid ""
 "A list of valid domain names or IP addresses that are allowed to make "
 "CORS api calls to the GraphQL API"
+msgstr ""
+
+#: assembl/models/preferences.py:1079
+#, fuzzy
+#| msgid "Published without moderation"
+msgid "Use moderation"
+msgstr "Gepubliceerd zonder moderatie"
+
+#: assembl/models/preferences.py:1080
+msgid "Is the moderation activated or not"
 msgstr ""
 
 #: assembl/static/js/app/routeManager.js:416
@@ -2195,8 +2263,8 @@ msgstr "Opgeslagen kolommen"
 msgid "Define columns"
 msgstr "Definieer kolommen"
 
-#: assembl/static/js/app/views/admin/adminTimelineEvents.js:247
-#: assembl/static/js/app/views/admin/adminTimelineEvents.js:257
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:253
+#: assembl/static/js/app/views/admin/adminTimelineEvents.js:263
 msgid "Invalid date and time"
 msgstr "Ongeldige datum en tijdstip"
 
@@ -2652,7 +2720,7 @@ msgid "Subject:"
 msgstr "Discussiepunt:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:125
-#: assembl/views/auth/views.py:1021
+#: assembl/views/auth/views.py:1015
 msgid "Welcome to {discussion_topic}."
 msgstr "Welkom bij {discussion_topic}."
 
@@ -4722,21 +4790,21 @@ msgstr "Afmelden"
 msgid "unsubscribed"
 msgstr "afgemeld"
 
-#: assembl/views/__init__.py:655
+#: assembl/views/__init__.py:755
 msgid "error"
 msgstr ""
 
-#: assembl/views/__init__.py:656
+#: assembl/views/__init__.py:756
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
 "accessible."
 msgstr ""
 
-#: assembl/views/__init__.py:657
+#: assembl/views/__init__.py:757
 msgid "We apologize for the inconvenience"
 msgstr ""
 
-#: assembl/views/__init__.py:658
+#: assembl/views/__init__.py:758
 msgid "Homepage"
 msgstr ""
 
@@ -4795,26 +4863,26 @@ msgstr "Dit is geen gebruiker"
 msgid "The passwords that were entered are mismatched!"
 msgstr "De ingevoerde wachtwoorden komen niet overeen!"
 
-#: assembl/views/api2/auth.py:428 assembl/views/auth/views.py:974
-#: assembl/views/auth/views.py:1042
+#: assembl/views/api2/auth.py:428 assembl/views/auth/views.py:968
+#: assembl/views/auth/views.py:1036
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "Deze link is niet geldig. Wilt u dat we een andere sturen?"
 
-#: assembl/views/api2/auth.py:431 assembl/views/auth/views.py:977
-#: assembl/views/auth/views.py:1045
+#: assembl/views/api2/auth.py:431 assembl/views/auth/views.py:971
+#: assembl/views/auth/views.py:1039
 msgid "This link has been used. Do you want us to send another?"
 msgstr "Deze link is al gebruikt. Wilt u dat we een andere sturen?"
 
-#: assembl/views/api2/auth.py:461 assembl/views/auth/views.py:398
+#: assembl/views/api2/auth.py:461 assembl/views/auth/views.py:392
 msgid "Please use a name of at least 3 characters"
 msgstr "Gebruik een naam met minstens 3 tekens"
 
-#: assembl/views/api2/auth.py:470 assembl/views/auth/views.py:331
-#: assembl/views/auth/views.py:405
+#: assembl/views/api2/auth.py:470 assembl/views/auth/views.py:325
+#: assembl/views/auth/views.py:399
 msgid "This is not a valid email"
 msgstr "Dit is geen geldige e-mail"
 
-#: assembl/views/api2/auth.py:479 assembl/views/auth/views.py:412
+#: assembl/views/api2/auth.py:479 assembl/views/auth/views.py:406
 msgid "We already have a user with this email."
 msgstr "We hebben al een gebruiker met deze e-mail."
 
@@ -4842,20 +4910,20 @@ msgid ""
 "one of ${emails} for support."
 msgstr ""
 
-#: assembl/views/auth/views.py:304
+#: assembl/views/auth/views.py:298
 #, python-format
 msgid "The username %s is already used"
 msgstr "De gebruikersnaam %s is al gebruikt"
 
-#: assembl/views/auth/views.py:323 assembl/views/auth/views.py:1056
+#: assembl/views/auth/views.py:317 assembl/views/auth/views.py:1050
 msgid "The passwords are not identical"
 msgstr "De wachtwoorden zijn niet identiek"
 
-#: assembl/views/auth/views.py:416
+#: assembl/views/auth/views.py:410
 msgid "The passwords should be identical"
 msgstr "De wachtwoorden moeten identiek zijn"
 
-#: assembl/views/auth/views.py:472
+#: assembl/views/auth/views.py:466
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email"
 " that does not exist."
@@ -4863,28 +4931,28 @@ msgstr ""
 "Uw e-mail werd geweigerd door de SMTP-server. U hebt waarschijnlijk een "
 "e-mailadres ingevoerd dat niet bestaat."
 
-#: assembl/views/auth/views.py:529 assembl/views/auth/views.py:854
-#: assembl/views/auth/views.py:860
+#: assembl/views/auth/views.py:523 assembl/views/auth/views.py:848
+#: assembl/views/auth/views.py:854
 msgid "This user cannot be found"
 msgstr "Deze gebruiker is onvindbaar"
 
-#: assembl/views/auth/views.py:547
+#: assembl/views/auth/views.py:541
 msgid "Invalid user and password"
 msgstr "Ongeldige gebruiker en wachtwoord"
 
-#: assembl/views/auth/views.py:611
+#: assembl/views/auth/views.py:605
 msgid "This email address is already confirmed"
 msgstr "Dit e-mailadres is al bevestigd"
 
-#: assembl/views/auth/views.py:612
+#: assembl/views/auth/views.py:606
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr "U hoeft dit e-mailadres niet te bevestigen, het is al bevestigd."
 
-#: assembl/views/auth/views.py:620 assembl/views/auth/views.py:819
+#: assembl/views/auth/views.py:614 assembl/views/auth/views.py:813
 msgid "Confirmation requested"
 msgstr "Bevestiging aangevraagd"
 
-#: assembl/views/auth/views.py:621 assembl/views/auth/views.py:820
+#: assembl/views/auth/views.py:615 assembl/views/auth/views.py:814
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. It contains a confirmation link, please click on"
@@ -4895,27 +4963,27 @@ msgstr ""
 " op de link in deze e-mail om uw e-mailadres te bevestigen. Als u geen "
 "bevestigingsmail hebt ontvangen (controleer uw spam), klik dan hier."
 
-#: assembl/views/auth/views.py:669 assembl/views/auth/views.py:693
-#: assembl/views/auth/views.py:715
+#: assembl/views/auth/views.py:663 assembl/views/auth/views.py:687
+#: assembl/views/auth/views.py:709
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "E-mail <%s> is al bevestigd"
 
-#: assembl/views/auth/views.py:681
+#: assembl/views/auth/views.py:675
 msgid "This link was not valid. We sent another."
 msgstr "Deze link was niet geldig. U ontvangt een andere."
 
-#: assembl/views/auth/views.py:684
+#: assembl/views/auth/views.py:678
 msgid "This link has been used. We sent another."
 msgstr "Deze link is gebruikt. U ontvangt een andere."
 
-#: assembl/views/auth/views.py:697
+#: assembl/views/auth/views.py:691
 msgid "This link is not valid. Please attempt to login to get another one."
 msgstr ""
 "Deze link is niet geldig. Probeer in te loggen om een andere link aan te "
 "vragen."
 
-#: assembl/views/auth/views.py:736
+#: assembl/views/auth/views.py:730
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
@@ -4924,28 +4992,28 @@ msgstr ""
 "Uw e-mailadres %s is bevestigd en u bent nu geabonneerd op de "
 "standaardmeldingen van de discussie."
 
-#: assembl/views/auth/views.py:741
+#: assembl/views/auth/views.py:735
 #, python-format
 msgid "Your email address %s has been confirmed."
 msgstr "Uw e-mailadres %s is bevestigd."
 
-#: assembl/views/auth/views.py:766
+#: assembl/views/auth/views.py:760
 msgid "Login failed, try again"
 msgstr "Inloggen mislukt, probeer het opnieuw"
 
-#: assembl/views/auth/views.py:807
+#: assembl/views/auth/views.py:801
 msgid "This email is already confirmed."
 msgstr "Deze e-mail is al bevestigd."
 
-#: assembl/views/auth/views.py:828
+#: assembl/views/auth/views.py:822
 msgid "We do not know about this email."
 msgstr "Deze e-mail kennen we niet."
 
-#: assembl/views/auth/views.py:907
+#: assembl/views/auth/views.py:901
 msgid "Password change requested"
 msgstr "Wachtwoord wijzigen aangevraagd"
 
-#: assembl/views/auth/views.py:908
+#: assembl/views/auth/views.py:902
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
@@ -4953,39 +5021,39 @@ msgstr ""
 "We hebben u een e-mail gestuurd met een tijdelijke verbindingslink. "
 "Gebruik deze link om in te loggen en uw wachtwoord te wijzigen."
 
-#: assembl/views/auth/views.py:989
+#: assembl/views/auth/views.py:983
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr "U gaat de discussie in als <b>{name}</b>."
 
-#: assembl/views/auth/views.py:993
+#: assembl/views/auth/views.py:987
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr "U gaat Assembl in als <b>{name}</b>."
 
-#: assembl/views/auth/views.py:996
+#: assembl/views/auth/views.py:990
 msgid "Please choose your password for security reasons."
 msgstr "Kies uw wachtwoord om veiligheidsredenen."
 
-#: assembl/views/auth/views.py:1025
+#: assembl/views/auth/views.py:1019
 msgid "Change your password"
 msgstr "Wijzig uw wachtwoord"
 
-#: assembl/views/auth/views.py:1064
+#: assembl/views/auth/views.py:1058
 msgid "Password changed"
 msgstr "Wachtwoord gewijzigd"
 
-#: assembl/views/auth/views.py:1078
+#: assembl/views/auth/views.py:1072
 msgid "email"
 msgstr "e-mail"
 
-#: assembl/views/auth/views.py:1079
+#: assembl/views/auth/views.py:1073
 msgid "Please confirm your {confirm_what} with {assembl}"
 msgstr "Bevestig uw {confirm_what} met {assembl}"
 
-#: assembl/views/auth/views.py:1081
+#: assembl/views/auth/views.py:1075
 msgid "account"
 msgstr "account"
 
-#: assembl/views/auth/views.py:1082
+#: assembl/views/auth/views.py:1076
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
@@ -5005,7 +5073,7 @@ msgstr ""
 "Met vriendelijke groet,\n"
 "Het {assembl}-team"
 
-#: assembl/views/auth/views.py:1089
+#: assembl/views/auth/views.py:1083
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
@@ -5019,7 +5087,7 @@ msgstr ""
 "en uw registratie te voltooien.</p>\n"
 "<p>Met vriendelijke groet,<br />Het {assembl}-team</p>"
 
-#: assembl/views/auth/views.py:1094
+#: assembl/views/auth/views.py:1088
 msgid ""
 "Hello, {name}!\n"
 "\n"
@@ -5039,7 +5107,7 @@ msgstr ""
 "Met vriendelijke groet,\n"
 "Het {assembl}-team"
 
-#: assembl/views/auth/views.py:1101
+#: assembl/views/auth/views.py:1095
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
@@ -5053,11 +5121,11 @@ msgstr ""
 "in uw {assembl} account.</p>\n"
 "<p>Met vriendelijke groet,<br />Het {assembl}-team</p>"
 
-#: assembl/views/auth/views.py:1155
+#: assembl/views/auth/views.py:1149
 msgid "Request for password change"
 msgstr "Verzoek om wachtwoordwijziging"
 
-#: assembl/views/auth/views.py:1159
+#: assembl/views/auth/views.py:1153
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -5077,7 +5145,7 @@ msgstr ""
 "e-mail.</p>\n"
 "<p>Met vriendelijke groet<br />Het {assembl}-team</p>\n"
 
-#: assembl/views/auth/views.py:1165
+#: assembl/views/auth/views.py:1159
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
@@ -5101,10 +5169,11 @@ msgstr ""
 "Met vriendelijke groet,\n"
 "Het {assembl}-team\n"
 
-#: assembl/views/discussion/views.py:55
+#: assembl/views/discussion/views.py:56
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "Geen discussie gevonden voor slug=%s"
 
 #~ msgid ""
 #~ msgstr ""
+

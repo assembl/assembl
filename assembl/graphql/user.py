@@ -5,7 +5,6 @@ from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene.pyutils.enum import Enum as PyEnum
 from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.i18n import TranslationStringFactory
 
 import assembl.graphql.docstrings as docs
 from assembl import models
@@ -20,8 +19,6 @@ from datetime import datetime
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .preferences import Preferences
 from assembl.models.cookie_types import CookieTypes as PyCookieTypes
-
-_ = TranslationStringFactory('assembl')
 
 cookie_type_enum = PyEnum(
     'CookieTypes', [(k, k) for k in PyCookieTypes.values()])
@@ -142,7 +139,7 @@ class UpdateUser(graphene.Mutation):
         allowed = user.user_can(
             user_id, CrudPermissions.UPDATE, permissions)
         if not allowed:
-            raise HTTPUnauthorized("The authenticated user can't update this user")
+            raise HTTPUnauthorized("You don't have the authorization to update this user. If you think it's an error, please reconnect to assembl.")
 
         with cls.default_db.no_autoflush as db:
             username = args.get('username')

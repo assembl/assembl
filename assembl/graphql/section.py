@@ -1,19 +1,17 @@
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import Everyone
 from graphene.relay import Node
 
 import assembl.graphql.docstrings as docs
 from assembl import models
-from assembl.auth import IF_OWNED, CrudPermissions
-from assembl.auth.util import get_permissions
+from assembl.auth import CrudPermissions
 from assembl.models.section import SectionTypesEnum
 
 from .langstring import (LangStringEntry, LangStringEntryInput,
                          langstring_from_input_entries, resolve_langstring,
                          resolve_langstring_entries,
                          update_langstring_from_input_entries)
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
 
@@ -57,12 +55,8 @@ class CreateSection(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.Section
         discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
+
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
 
         with cls.default_db.no_autoflush as db:
             title_entries = args.get('title_entries')
@@ -99,20 +93,13 @@ class DeleteSection(graphene.Mutation):
 
     @staticmethod
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
-
         section_id = args.get('section_id')
         section_id = int(Node.from_global_id(section_id)[1])
         section = models.Section.get(section_id)
         if section.section_type != SectionTypesEnum.CUSTOM.value:
             return DeleteSection(success=False)
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = section.user_can(
-            user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_instance_permission(CrudPermissions.DELETE, section, context)
 
         section.db.delete(section)
         section.db.flush()
@@ -133,17 +120,11 @@ class UpdateSection(graphene.Mutation):
     @staticmethod
     def mutate(root, args, context, info):
         cls = models.Section
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
         section_id = args.get('id')
         section_id = int(Node.from_global_id(section_id)[1])
         section = cls.get(section_id)
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = section.user_can(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_instance_permission(CrudPermissions.UPDATE, section, context)
 
         with cls.default_db.no_autoflush as db:
             title_entries = args.get('title_entries')

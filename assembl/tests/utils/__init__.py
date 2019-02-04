@@ -22,6 +22,11 @@ from assembl.auth import R_PARTICIPANT
 log = logging.getLogger()
 
 
+class FakeLocalizer(object):
+    def translate(self, message):
+        return message
+
+
 class PyramidWebTestRequest(TestRequest):
     """
     A mock Pyramid web request this pushes itself onto the threadlocal stack
@@ -58,6 +63,7 @@ class PyramidWebTestRequest(TestRequest):
     # How come this is missing in TestRequest?
     # TODO: Use the negotiator
     locale_name = 'en'
+    localizer = FakeLocalizer()
 
 
 def committing_session_tween_factory(handler, registry):

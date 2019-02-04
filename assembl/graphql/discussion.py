@@ -2,13 +2,10 @@ import os.path
 
 import graphene
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import Everyone
 from urlparse import urljoin
 
 from assembl import models
-from assembl.auth import IF_OWNED, CrudPermissions
-from assembl.auth.util import get_permissions
+from assembl.auth import CrudPermissions
 
 import assembl.graphql.docstrings as docs
 from .attachment import Attachment
@@ -25,6 +22,7 @@ from .utils import (
     get_attachment_with_purpose,
     DateTime)
 from .idea import TagResult, SentimentAnalysisResult
+from .permissions_helpers import require_cls_permission, require_instance_permission
 
 
 class URLMeta(graphene.ObjectType):
@@ -202,13 +200,8 @@ class UpdateDiscussion(graphene.Mutation):
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
         discussion = cls.get(discussion_id)
-        user_id = context.authenticated_userid or Everyone
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = discussion.user_can(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_instance_permission(CrudPermissions.UPDATE, discussion, context)
 
         with cls.default_db.no_autoflush as db:
             title_entries = args.get('title_entries')
@@ -495,13 +488,8 @@ class UpdateResourcesCenter(graphene.Mutation):
         cls = models.Discussion
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        user_id = context.authenticated_userid or Everyone
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = discussion.user_can(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_instance_permission(CrudPermissions.UPDATE, discussion, context)
 
         with cls.default_db.no_autoflush:
             db = discussion.db
@@ -569,15 +557,9 @@ class UpdateDiscussionPreferences(graphene.Mutation):
     def mutate(root, args, context, info):
         cls = models.Preferences
         discussion_id = context.matchdict['discussion_id']
-
-        user_id = context.authenticated_userid or Everyone
         discussion = models.Discussion.get(discussion_id)
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
+        require_cls_permission(CrudPermissions.UPDATE, cls, context)
 
         db = discussion.db
         prefs_to_save = args.get('languages', [])
@@ -680,13 +662,8 @@ class UpdateLegalContents(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         mandatory_legal_contents_validation = args.get('mandatory_legal_contents_validation')
-        user_id = context.authenticated_userid or Everyone
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = discussion.user_can(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_instance_permission(CrudPermissions.UPDATE, discussion, context)
 
         with cls.default_db.no_autoflush as db:
             legal_notice_entries = args.get('legal_notice_entries')

@@ -61,7 +61,7 @@ class UpdateHarvestingTranslationPreference(graphene.Mutation):
         allowed = user.user_can(
             user_id, CrudPermissions.UPDATE, permissions)
         if not allowed:
-            raise HTTPUnauthorized("The authenticated user can't update this harvesting locale")
+            raise HTTPUnauthorized("You don't have the authorization to update this haversting locale. If you think it's an error, please reconnect to assembl.")
 
         with model.default_db.no_autoflush as db:
             preferences = user.get_preferences_for_discussion(discussion)

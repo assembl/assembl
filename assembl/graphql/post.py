@@ -20,7 +20,7 @@ from assembl.models.auth import (LanguagePreferenceCollection,
 from jwzthreading import restrip_pat
 
 import assembl.graphql.docstrings as docs
-from .permissions_helpers import require_cls_permission
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .attachment import Attachment
 from .idea import Idea, TagResult
 from .langstring import (LangStringEntry, resolve_best_langstring_entries,
@@ -342,11 +342,7 @@ class CreatePost(graphene.Mutation):
                 if in_reply_to_post_id:
                     in_reply_to_post = models.Post.get(in_reply_to_post_id)
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
 
         with cls.default_db.no_autoflush:
             subject = args.get('subject')
@@ -481,11 +477,9 @@ class UpdatePost(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
-        discussion_id = context.matchdict['discussion_id']
-
         user_id = context.authenticated_userid or Everyone
+        discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
@@ -620,17 +614,14 @@ class DeletePost(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-
         user_id = context.authenticated_userid or Everyone
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
-
+        discussion_id = context.matchdict['discussion_id']
         permissions = get_permissions(user_id, discussion_id)
-        allowed = post.user_can(user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+
+        require_instance_permission(CrudPermissions.DELETE, post, context)
 
         # Same logic as in assembl/views/api2/post.py:delete_post_instance
         # Remove extracts associated to this post
@@ -660,15 +651,11 @@ class UndeletePost(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = post.user_can(user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+
+        require_instance_permission(CrudPermissions.DELETE, post, context)
 
         post.undelete_post()
         post.db.flush()
@@ -692,19 +679,13 @@ class AddPostAttachment(graphene.Mutation):
         EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-
-        user_id = context.authenticated_userid or Everyone
-
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
 
         cls = models.PostAttachment
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
 
         # add uploaded file as an attachment to the post
         attachment = args.get('file')
@@ -743,18 +724,13 @@ class DeletePostAttachment(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
-        permissions = get_permissions(user_id, discussion_id)
         post_attachment_id = args.get('attachment_id')
         post_attachment = models.PostAttachment.get(post_attachment_id)
-        allowed = post_attachment.user_can(
-            user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+
+        require_instance_permission(CrudPermissions.DELETE, post_attachment, context)
 
         cls = models.Post
         with cls.default_db.no_autoflush:

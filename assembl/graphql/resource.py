@@ -1,13 +1,10 @@
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from pyramid.httpexceptions import HTTPUnauthorized
-from pyramid.security import Everyone
 
 import assembl.graphql.docstrings as docs
 from assembl import models
-from assembl.auth import IF_OWNED, CrudPermissions
-from assembl.auth.util import get_permissions
+from assembl.auth import CrudPermissions
 
 from .document import Document
 from .langstring import (
@@ -17,6 +14,7 @@ from .langstring import (
 from .types import SecureObjectType
 from .utils import (
     abort_transaction_on_exception, get_attachment_with_purpose, create_attachment, update_attachment)
+from .permissions_helpers import require_cls_permission, require_instance_permission
 
 
 class Resource(SecureObjectType, SQLAlchemyObjectType):
@@ -92,13 +90,8 @@ class CreateResource(graphene.Mutation):
         cls = models.Resource
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        user_id = context.authenticated_userid or Everyone
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.CREATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
+        require_cls_permission(CrudPermissions.CREATE, cls, context)
 
         with cls.default_db.no_autoflush:
             title_entries = args.get('title_entries')
@@ -165,18 +158,11 @@ class DeleteResource(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        discussion_id = context.matchdict['discussion_id']
-        user_id = context.authenticated_userid or Everyone
-
         resource_id = args.get('resource_id')
         resource_id = int(Node.from_global_id(resource_id)[1])
         resource = models.Resource.get(resource_id)
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = resource.user_can(
-            user_id, CrudPermissions.DELETE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_instance_permission(CrudPermissions.DELETE, resource, context)
 
         resource.db.delete(resource)
         resource.db.flush()
@@ -206,17 +192,12 @@ class UpdateResource(graphene.Mutation):
         cls = models.Resource
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        user_id = context.authenticated_userid or Everyone
 
         resource_id = args.get('id')
         resource_id = int(Node.from_global_id(resource_id)[1])
         resource = cls.get(resource_id)
 
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = resource.user_can(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
+        require_instance_permission(CrudPermissions.UPDATE, resource, context)
 
         with cls.default_db.no_autoflush:
             title_entries = args.get('title_entries')
