@@ -68,9 +68,3 @@ def update_npm_requirements_mac(c, force_reinstall=False):
             else:
                 with venv(c):
                     c.run('npm update')
-
-
-@task()
-def update_yarn_mac(c):
-    """Upgrades yarn for mac."""
-    c.run('brew update && brew upgrade yarn')
