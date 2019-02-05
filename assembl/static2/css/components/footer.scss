@@ -5,6 +5,19 @@
   position: relative;
   text-align: center;
 
+  .legal-pages {
+    display: flex;
+    width: 50%;
+    margin: auto;
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .legal-pages > * {
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
   .footer-links {
     width: 100%;
     padding-bottom: 30px;
@@ -19,7 +32,8 @@
     }
   }
 
-  .copyright, .assembl-version {
+  .copyright,
+  .assembl-version {
     bottom: 10px;
     font-size: $font-size-xxs;
     position: absolute;
@@ -48,17 +62,14 @@
   }
 }
 
-@media screen and (min-width: 768px) {
-  .footer {
-    .terms {
-      display: flex;
-      justify-content: center;
-    }
-  }
-}
-
 @media screen and (max-width: 767px) {
   .footer {
+    .legal-pages {
+      width: 100%;
+      flex-direction: column;
+      margin-bottom: 30px;
+    }
+
     .copyright {
       font-size: $font-size-xxs;
     }
@@ -69,10 +80,6 @@
       }
 
       min-height: 85px;
-    }
-
-    .terms {
-      margin-bottom: 30px;
     }
   }
 }

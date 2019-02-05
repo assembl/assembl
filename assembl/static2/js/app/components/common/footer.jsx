@@ -15,7 +15,6 @@ type Props = {
   slug: string,
   hasLegalNotice: boolean,
   hasTermsAndConditions: boolean,
-  hasCookiesPolicy: boolean,
   hasPrivacyPolicy: boolean,
   hasUserGuidelines: boolean,
   lang: string,
@@ -30,11 +29,17 @@ const Footer = ({
   footerLinks,
   hasLegalNotice,
   hasTermsAndConditions,
-  hasCookiesPolicy,
   hasPrivacyPolicy,
   hasUserGuidelines,
   lang
 }: Props) => {
+  const legalPages = {
+    terms: hasTermsAndConditions,
+    legalNotice: hasLegalNotice,
+    cookiesPolicy: true,
+    privacyPolicy: hasPrivacyPolicy,
+    userGuidelines: hasUserGuidelines
+  };
   const debateSlug = { slug: slug };
   return (
     <Grid fluid className="background-dark relative" id="footer">
@@ -76,46 +81,14 @@ const Footer = ({
                 bluenove
               </Link>
             </div>
-            <div className="terms">
-              {hasTermsAndConditions && (
-                <div className="terms-of-use">
-                  <Link to={`${get('terms', debateSlug)}`}>
-                    <Translate value="footer.terms" />
-                  </Link>
-                </div>
-              )}
-              {hasLegalNotice && (
-                <div className="legal-notice">
-                  {hasTermsAndConditions ? <span className="small-hyphen-padding"> &mdash; </span> : null}
-                  <Link to={`${get('legalNotice', debateSlug)}`}>
-                    <Translate value="footer.legalNotice" />
-                  </Link>
-                </div>
-              )}
-            </div>
-            <div className="terms">
-              {hasCookiesPolicy && (
-                <div className="cookie-policy">
-                  <Link to={`${get('cookiesPolicy', debateSlug)}`}>
-                    <Translate value="footer.cookiePolicy" />
-                  </Link>
-                </div>
-              )}
-              {hasPrivacyPolicy && (
-                <div className="privacy-policy">
-                  {hasCookiesPolicy ? <span className="small-hyphen-padding"> &mdash; </span> : null}
-                  <Link to={`${get('privacyPolicy', debateSlug)}`}>
-                    <Translate value="footer.privacyPolicy" />
-                  </Link>
-                </div>
-              )}
-              {hasUserGuidelines && (
-                <div className="user-guidelines">
-                  {hasPrivacyPolicy || hasCookiesPolicy ? <span className="small-hyphen-padding"> &mdash; </span> : null}
-                  <Link to={`${get('userGuidelines', debateSlug)}`}>
-                    <Translate value="footer.userGuidelines" />
-                  </Link>
-                </div>
+            <div className="legal-pages">
+              {Object.keys(legalPages).map(
+                key =>
+                  (legalPages[key] ? (
+                    <Link to={`${get(key, debateSlug)}`}>
+                      <Translate value={`footer.${key}`} />
+                    </Link>
+                  ) : null)
               )}
             </div>
             {assemblVersion && <div className="assembl-version">v{assemblVersion}</div>}

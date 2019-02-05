@@ -207,7 +207,7 @@ const Translations = {
     footer: {
       terms: "Conditions générales d'utilisation",
       legalNotice: "Mentions légales",
-      cookiePolicy: "Information sur les cookies",
+      cookiesPolicy: "Information sur les cookies",
       privacyPolicy: "Politique de protection des données personnelles",
       socialMedias: "Suivez-nous sur",
       userGuidelines: "Charte de participation"
@@ -1179,7 +1179,7 @@ const Translations = {
     footer: {
       terms: "Terms & Conditions",
       legalNotice: "Legal Notice",
-      cookiePolicy: "Cookies",
+      cookiesPolicy: "Cookies",
       privacyPolicy: "Privacy Policy",
       socialMedias: "Follow us",
       userGuidelines: "User guidelines"
