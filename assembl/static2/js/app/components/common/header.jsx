@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { getIsPhaseCompletedById, getPhaseName } from '../../utils/timeline';
-import WhatYouNeedToKnow from '../debate/common/whatYouNeedToKnow';
 import HeaderActions from '../debate/common/headerActions';
 import { type DebateType } from '../debate/navigation/timelineSegment';
 
@@ -15,7 +14,6 @@ type Props = {
   subtitle?: string,
   phaseId?: string,
   imgUrl: ?string,
-  synthesisTitle?: string,
   additionalHeaderClasses?: string,
   type?: string,
   debate: DebateType,
@@ -24,7 +22,7 @@ type Props = {
 
 class Header extends React.Component<Props> {
   render() {
-    const { children, title, subtitle, imgUrl, phaseId, synthesisTitle, additionalHeaderClasses, type, timeline } = this.props;
+    const { children, title, subtitle, imgUrl, phaseId, additionalHeaderClasses, type, timeline } = this.props;
     const { debateData } = this.props.debate;
     let isPhaseCompleted = false;
     let closedPhaseName = '';
@@ -61,7 +59,6 @@ class Header extends React.Component<Props> {
             </Row>
           </Grid>
         </section>
-        {synthesisTitle && <WhatYouNeedToKnow synthesisTitle={synthesisTitle} />}
       </div>
     );
   }

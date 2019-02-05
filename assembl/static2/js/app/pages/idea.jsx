@@ -54,7 +54,6 @@ type Props = {
   announcement: AnnouncementContent,
   id: string,
   headerImgUrl: string,
-  synthesisTitle: string,
   title: string,
   description: string,
   toggleHarvesting: Function,
@@ -267,7 +266,7 @@ class Idea extends React.Component<Props> {
       timeline
     } = this.props;
     const refetchIdea = ideaWithPostsData.refetch;
-    const { announcement, id, headerImgUrl, synthesisTitle, title, description } = this.props;
+    const { announcement, id, headerImgUrl, title, description } = this.props;
     const isMultiColumns = ideaWithPostsData.loading
       ? false
       : ideaWithPostsData.idea.messageViewOverride === MESSAGE_VIEW.messageColumns;
@@ -335,14 +334,7 @@ class Idea extends React.Component<Props> {
     }
     return (
       <div className="idea">
-        <Header
-          title={title}
-          synthesisTitle={synthesisTitle}
-          subtitle={description}
-          imgUrl={headerImgUrl}
-          phaseId={phaseId}
-          type="idea"
-        >
+        <Header title={title} subtitle={description} imgUrl={headerImgUrl} phaseId={phaseId} type="idea">
           <HeaderStatistics statElements={statElements} />
         </Header>
         <section className="post-section">
@@ -472,7 +464,6 @@ export default compose(
         id: data.idea.id,
         title: data.idea.title,
         description: data.idea.description,
-        synthesisTitle: data.idea.synthesisTitle,
         headerImgUrl: data.idea.img ? data.idea.img.externalUrl : '',
         messageViewOverride: data.idea.messageViewOverride
       };
