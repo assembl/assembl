@@ -4,7 +4,6 @@ import { I18n, Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
-import range from 'lodash/range';
 
 import { addPhaseTooltip, phaseTooltip } from '../../common/tooltips';
 import TabbedContent from '../../common/tabbedContent';
@@ -29,9 +28,7 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
   componentDidUpdate() {
     const { length } = this.props.phases;
     if (length === 0) {
-      range(4).forEach((number) => {
-        this.props.handleCreatePhase(number + 1);
-      });
+      this.props.handleCreatePhase(1);
     }
   }
 
