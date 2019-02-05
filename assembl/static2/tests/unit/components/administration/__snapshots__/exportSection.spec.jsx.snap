@@ -23,7 +23,7 @@ exports[`ExportSection component should render an ExportSection component with l
     className="admin-content"
   >
     <div
-      className="form-group"
+      className="no-margin-bottom form-group"
     >
       <div
         className="radio"
@@ -60,9 +60,8 @@ exports[`ExportSection component should render an ExportSection component with l
         </label>
       </div>
     </div>
-    <br />
     <a
-      className="button-link button-dark margin-l"
+      className="button-link button-dark margin-s"
       href="foo.com"
       onClick={[Function]}
       style={Object {}}
@@ -98,11 +97,10 @@ exports[`ExportSection component should render an ExportSection component withou
     className="admin-content"
   >
     <div
-      className="form-group"
+      className="no-margin-bottom form-group"
     />
-    <br />
     <a
-      className="button-link button-dark margin-l"
+      className="button-link button-dark margin-s"
       href="foo.com"
       onClick={[Function]}
       style={Object {}}
@@ -138,7 +136,7 @@ exports[`ExportSection component should render an export section that handles di
     className="admin-content"
   >
     <div
-      className="form-group"
+      className="no-margin-bottom form-group"
     >
       <div
         className="radio"
@@ -179,9 +177,8 @@ exports[`ExportSection component should render an export section that handles di
         </label>
       </div>
     </div>
-    <br />
     <a
-      className="button-link button-dark margin-l"
+      className="button-link button-dark margin-s"
       href="foo.com"
       onClick={[Function]}
       style={Object {}}

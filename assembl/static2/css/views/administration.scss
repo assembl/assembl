@@ -220,8 +220,14 @@
     }
 
     .admin-content {
-      padding: 30px 40px 80px;
+      padding: 10px 40px 40px;
       text-align: center;
+
+      .form-group {
+        &.no-margin-bottom {
+          margin-bottom: 0;
+        }
+      }
 
       .block-picker {
         &.no-border-radius {
