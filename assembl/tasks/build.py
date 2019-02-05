@@ -117,7 +117,7 @@ def update_node(c, force_reinstall=False):
 
 
 @task()
-def update_npm_requirements_mac(c, force_reinstall=False):
+def update_npm_requirements(c, force_reinstall=False):
     """Normally not called manually"""
     with c.cd(get_node_base_path(c)):
         if force_reinstall:
@@ -195,13 +195,12 @@ def update_pip_requirements(c, force_reinstall=False):
     else:
         specials = [
             # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
-            ("lxml", None, None),
+            ("lxml", None),
             # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
-            ("dm.xmlsec.binding", "%s --install-option='-q'", "%s --install-option='-q'"),
-            ("pycurl", None, 'env PYCURL_SSL_LIBRARY=openssl MACOSX_DEPLOYMENT_TARGET="10.13" LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include" %s'),
+            ("dm.xmlsec.binding", "%s --install-option='-q'"),
+            ("pycurl", None),
         ]
-        for package, wrapper, mac_wrapper in specials:
-            wrapper = mac_wrapper if c.config._internal.mac else wrapper
+        for package, wrapper in specials:
             separate_pip_install(c, package, wrapper)
         cmd = "%s/bin/pip install -r %s/requirements.txt" % (c.config.venvpath, c.config.projectpath)
         c.run("yes w | %s" % cmd)
