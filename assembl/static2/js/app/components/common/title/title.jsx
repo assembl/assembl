@@ -9,7 +9,8 @@ export type Props = {
 };
 
 const Title = ({ level, children }: Props) => {
-  const componentContent = level === 1 ? <h1>{children}</h1> : <h2>{children}</h2>;
+  const componentContent =
+    level === 1 ? <h1 className="grey-title1">{children}</h1> : <h2 className="grey-title2">{children}</h2>;
 
   return <React.Fragment>{componentContent}</React.Fragment>;
 };

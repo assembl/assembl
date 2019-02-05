@@ -1,4 +1,4 @@
-h1 {
+.grey-title1 {
   color: $grey;
   font-family: $font-family4;
   font-size: 20px;
@@ -6,7 +6,7 @@ h1 {
   text-transform: uppercase;
 }
 
-h2 {
+.grey-title2 {
   color: $grey;
   font-family: $font-family3;
   font-size: 16px;
@@ -16,7 +16,7 @@ h2 {
 }
 
 @media screen and (min-width: $screen-sm-min) {
-  h1 {
+  .grey-title1 {
     font-size: 22px;
     letter-spacing: 1.2px;
   }

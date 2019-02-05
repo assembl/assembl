@@ -60,7 +60,9 @@ exports[`Storyshots InstructionsText default 1`] = `
                   <div
                     className="announcement-title"
                   >
-                    <h1>
+                    <h1
+                      className="grey-title1"
+                    >
                       Test
                     </h1>
                   </div>
@@ -600,7 +602,9 @@ exports[`Storyshots InstructionsText playground 1`] = `
                   <div
                     className="announcement-title"
                   >
-                    <h1>
+                    <h1
+                      className="grey-title1"
+                    >
                       Test
                     </h1>
                   </div>

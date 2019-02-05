@@ -10,7 +10,9 @@ exports[`Storyshots Semantic Analysis|Title default 1`] = `
       }
     }
   >
-    <h1>
+    <h1
+      className="grey-title1"
+    >
       My awesome title
     </h1>
   </div>
@@ -350,7 +352,9 @@ exports[`Storyshots Semantic Analysis|Title playground 1`] = `
       }
     }
   >
-    <h1>
+    <h1
+      className="grey-title1"
+    >
       My awesome title
     </h1>
   </div>

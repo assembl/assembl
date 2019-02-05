@@ -26,16 +26,16 @@ describe('<Title /> - with shallow', () => {
     wrapper = shallow(<Title {...title} />);
   });
 
-  describe('when level is set to 1 (default value)', () => {
+  describe('when level is set to 1 (default value) with grey-title1 class', () => {
     it('should render a h1', () => {
-      expect(wrapper.find('h1').text()).toEqual('My awesome title');
+      expect(wrapper.find('h1 [className="grey-title1"]').text()).toEqual('My awesome title');
     });
   });
 
   describe('when level is not set to 1', () => {
-    it('should render a h2', () => {
+    it('should render a h2 with grey-title2 class', () => {
       wrapper.setProps({ level: 2 });
-      expect(wrapper.find('h2').text()).toEqual('My awesome title');
+      expect(wrapper.find('h2 [className="grey-title2"]').text()).toEqual('My awesome title');
     });
   });
 });
