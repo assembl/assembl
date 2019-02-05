@@ -36,6 +36,7 @@ type QuestionType = {
 };
 
 type Props = {
+  identifier: string,
   timeline: Timeline,
   defaultContentLocaleMapping: Map, // eslint-disable-line react/no-unused-prop-types
   imgUrl: string,
@@ -117,6 +118,7 @@ class Survey extends React.Component<Props, State> {
   render() {
     const {
       id,
+      identifier,
       imgUrl,
       numPosts,
       numContributors,
@@ -133,7 +135,7 @@ class Survey extends React.Component<Props, State> {
     } = this.props;
 
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
-    const phaseUrl = `${getRoute('debate', { slug: slug, phase: 'survey' })}`;
+    const phaseUrl = `${getRoute('debate', { slug: slug, phase: identifier })}`;
     let statElements = [];
     const numContributions = numPosts + totalSentiments;
     statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];

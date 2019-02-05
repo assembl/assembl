@@ -17,6 +17,7 @@ import { getIsPhaseCompletedById } from '../utils/timeline';
 type NavigationParams = {
   questionIndex: string,
   questionId: string,
+  phase: string,
   slug: string
 };
 
@@ -46,10 +47,10 @@ export function DumbQuestion(props: Props) {
     thematicTitle,
     thematicId,
     params,
-    params: { slug },
+    params: { phase, slug },
     totalSentiments
   } = props;
-  const link = `${getRoute('idea', { slug: slug, phase: 'survey', phaseId: phaseId, themeId: thematicId })}`;
+  const link = `${getRoute('idea', { slug: slug, phase: phase, phaseId: phaseId, themeId: thematicId })}`;
   let statElements = [];
   const numContributions = numPosts + totalSentiments;
   statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];

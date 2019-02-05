@@ -25,6 +25,7 @@ describe('Question page', () => {
     params: {
       questionIndex: 'Index',
       questionId: 'FooInd',
+      phase: 'survey',
       slug: 'FooSlug'
     },
     phaseId: 'phaseFoo'
