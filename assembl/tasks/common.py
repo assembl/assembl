@@ -209,6 +209,6 @@ def create_venv(c, path=None):
 
 @task()
 def configure_github_user(c):
-    c.run('git config --global user.email "%s"' % c.config.get('github', {}).get('user', None))
-    c.run('git config --global user.name "%s"' % c.config.get('github', {}).get('email', None))
-    c.run('git remote add origin %s' % c.config.get('github', {}).get('email', None))
+    c.run('git config --global user.email "%s"' % c.config._internal.github.user)
+    c.run('git config --global user.name "%s"' % c.config._internal.github.email)
+    c.run('git remote add origin %s' % c.config._internal.github.repo)
