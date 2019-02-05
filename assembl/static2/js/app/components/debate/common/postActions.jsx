@@ -7,7 +7,13 @@ import { Translate } from 'react-redux-i18n';
 import { OverlayTrigger } from 'react-bootstrap';
 import classnames from 'classnames';
 import { MEDIUM_SCREEN_WIDTH } from '../../../constants';
-import { sharePostTooltip, validateMessageTooltip, deniedMessageTooltip } from '../../common/tooltips';
+import {
+  sharePostTooltip,
+  validateMessageTooltip,
+  deniedMessageTooltip,
+  editMessageTooltip,
+  deleteMessageTooltip
+} from '../../common/tooltips';
 
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
@@ -160,11 +166,18 @@ export class PostActions extends React.Component<Props> {
           </ResponsiveOverlayTrigger>
         ) : null}
         {userCanDeleteThisMessage ? (
-          <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={deniedMessageTooltip}>
+          <ResponsiveOverlayTrigger
+            placement={tooltipPlacement}
+            tooltip={isPendingForModerator ? deniedMessageTooltip : deleteMessageTooltip}
+          >
             <DeletePostButton postId={postId} linkClassName="post-action" isPendingForModerator={isPendingForModerator} />
           </ResponsiveOverlayTrigger>
         ) : null}
-        {editable && userCanEditThisMessage ? <EditPostButton handleClick={handleEditClick} linkClassName="post-action" /> : null}
+        {editable && userCanEditThisMessage ? (
+          <ResponsiveOverlayTrigger placement={tooltipPlacement} tooltip={editMessageTooltip}>
+            <EditPostButton handleClick={handleEditClick} linkClassName="post-action" />
+          </ResponsiveOverlayTrigger>
+        ) : null}
         {editable ? (
           <div className="answers annotation">
             <Translate value="debate.thread.numberOfResponses" count={numChildren} />
