@@ -73,11 +73,9 @@ def separate_pip_install(context, package, wrapper=None):
     context.run(cmd)
 
 
-def upgrade_yarn(context):
-    if context.config._internal.mac:
-        context.run('brew update && brew upgrade yarn')
-    else:
-        context.sudo('apt-get update && apt-get install --only-upgrade yarn')
+def upgrade_yarn(c):
+    """Upgrades yarn for linux."""
+    c.sudo('apt-get update && apt-get install --only-upgrade yarn')
 
 
 @task()
