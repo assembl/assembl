@@ -7,8 +7,8 @@ from os.path import join, normpath
 
 from semantic_version import Version
 
-from .common import (venv, task, exists, is_integration_env, fill_template)
-from .sudoer import upgrade_yarn, node_version
+from .common import venv, task, exists, is_integration_env, fill_template, configure_github_user
+from .sudoer import upgrade_yarn, install_build_dependencies, install_node_and_yarn, clear_aptitude_cache
 
 
 def get_node_base_path(c):
@@ -29,6 +29,14 @@ def get_node_modules_path(c):
 def get_new_node_modules_path():
     return normpath(join(
         get_new_node_base_path(), 'node_modules'))
+
+
+@task()
+def install_bower(c):
+    with c.cd(get_node_base_path(c)):
+        with venv(c):
+            c.run('npm install bower po2json requirejs')
+
 
 @task()
 def update_bower(c):
@@ -126,7 +134,7 @@ def update_npm_requirements(c, force_reinstall=False):
             with venv(c):
                 c.run('npm update')
 
-    yarn_path = '/usr/bin/yarn'
+    yarn_path = c.run('which yarn')
     static2_path = get_new_node_base_path(c)
     with c.cd(static2_path):
         if exists(c, yarn_path):
@@ -477,3 +485,22 @@ def push_built_themes_to_remote_bucket(c):
                     'ContentEncoding': determine_content_encoding(local_path)
                 }
                 s3.meta.client.upload_file(local_path, bucket_name, s3_path, configs)
+
+
+@task(
+    install_build_dependencies,
+    install_node_and_yarn,
+    configure_github_user,
+    clear_aptitude_cache)
+def prepare_cicd_build(c):
+    """
+    There is full assumption of being in CI/CD environment when calling this function
+    """
+    project_path = os.gettenv('CI_PROJECT_DIR', c.config.code_root)
+    with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
+        c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
+
+    with c.cd(os.path.join(project_path, 'assembl/static2/css/themes/vendor')):
+        c.run('git clone git@github.com:bluenove/assembl2-client-themes.git')
+
+    # Build functions for V1 and V2
