@@ -41,7 +41,7 @@ def create_venv_python_3(c):
 
 
 @task()
-def update_npm_requirements(c, force_reinstall=False):
+def update_npm_requirements_mac(c, force_reinstall=False):
     """Normally not called manually"""
     with c.cd(get_node_base_path(c)):
         if force_reinstall:
@@ -68,3 +68,9 @@ def update_npm_requirements(c, force_reinstall=False):
             else:
                 with venv(c):
                     c.run('npm update')
+
+
+@task()
+def update_yarn_mac(c):
+    """Upgrades yarn for mac."""
+    c.run('brew update && brew upgrade yarn')
