@@ -208,11 +208,14 @@ export class DumbTopPostForm extends React.Component<Props, State> {
   };
 
   render() {
-    const { bodyMaxLength, ideaOnColumn, bodyPlaceholderMsgId, draftable, isDebateModerated } = this.props;
+    const { bodyMaxLength, ideaOnColumn, bodyPlaceholderMsgId, draftable, isDebateModerated, messageViewOverride } = this.props;
     const { subject, body, isActive, submitting } = this.state;
     const userIsModerator = connectedUserIsModerator();
+    const isBrightMirror = messageViewOverride === MESSAGE_VIEW.brightMirror;
     const publicationState =
-      !userIsModerator && isDebateModerated ? PublicationStates.SUBMITTED_AWAITING_MODERATION : PublicationStates.PUBLISHED;
+      !userIsModerator && isDebateModerated && !isBrightMirror
+        ? PublicationStates.SUBMITTED_AWAITING_MODERATION
+        : PublicationStates.PUBLISHED;
     return (
       <div className="form-container" ref={this.setFormContainerRef}>
         <FormGroup>
