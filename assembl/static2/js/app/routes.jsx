@@ -156,7 +156,7 @@ export default [
         />
         <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
         <Route path={routeForRouter('administrationRoot')} component={Administration}>
-          <Route path={routeForRouter('adminPhase', false, { phase: ':phase', phaseId: ':phaseId' })} component={AdminChild} />
+          <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />
         </Route>
       </Route>
     </Route>
