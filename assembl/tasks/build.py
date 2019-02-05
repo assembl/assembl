@@ -8,6 +8,7 @@ from os.path import join, normpath
 from semantic_version import Version
 
 from .common import (venv, task, exists, is_integration_env, fill_template)
+from .sudoer import upgrade_yarn, node_version
 
 
 def get_node_base_path(c):
@@ -64,18 +65,14 @@ def _bower_foreach_do(c, cmd):
 
 
 def separate_pip_install(context, package, wrapper=None):
-    cmd = '%s/bin/pip install' % context.config.projectpath+"/venv"
+    cmd = '%s/bin/pip install' % context.config.projectpath + "/venv"
     if wrapper:
         cmd = wrapper % (cmd,)
     context_dict = dict(context)
     cmd = cmd % context_dict
-    cmd = "egrep '^%(package)s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(cmd)s" % dict(cmd=cmd, package=package, **context_dict)
+    cmd = "egrep '^%(package)s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(cmd)s" % dict(
+        cmd=cmd, package=package, **context_dict)
     context.run(cmd)
-
-
-def upgrade_yarn(c):
-    """Upgrades yarn for linux."""
-    c.sudo('apt-get update && apt-get install --only-upgrade yarn')
 
 
 @task()
@@ -91,9 +88,12 @@ def update_bower_requirements(c, force_reinstall=False):
 @task()
 def update_node(c, force_reinstall=False):
     """
-    Install node and nom to a know-good version.
+    Install node and npm to latest version specified. This is done inside of a virtual environment.
     """
-    node_version_cmd_regex = re.compile(r'^v10\.13\.0')
+    n_version = node_version.node
+    node_version_re = node_version.node_re
+    npm_version = node_version.npm
+    node_version_cmd_regex = re.compile(node_version_re)
     with venv(c):
         node_version_cmd_result = c.run('node --version', echo=True).stdout
     match = node_version_cmd_regex.match(str(node_version_cmd_result))
@@ -105,13 +105,13 @@ def update_node(c, force_reinstall=False):
         with venv(c):
             c.run("rm -rf venv/lib/node_modules/")
             c.run("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
-            c.run("nodeenv --node=10.13.0 --npm=6.4.1 --python-virtualenv assembl/static/js")
+            c.run("nodeenv --node=%s --npm=%s --python-virtualenv assembl/static/js" % (n_version, npm_version))
         upgrade_yarn(c)
         with c.cd(get_node_base_path(c)):
             with venv(c):
                 c.run("npm install reinstall -g")
 
-        update_npm_requirement(force_reinstall=True)
+        update_npm_requirements(force_reinstall=True)
     else:
         print "Node version OK"
 
