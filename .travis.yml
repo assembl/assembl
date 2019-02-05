@@ -75,6 +75,7 @@ install:
  - sudo -E su $USER -c 'fab -f assembl/fabfile.py -c travis.rc set_file_permissions'
  # TODO: fix fabfile's check_and_create_database_user command which produces an error when run by travis. For now we instead run the following command
  - pip install psycopg2
+ - pip install boto3==1.9.73
  - python2 $PWD/assembl/scripts/pypsql.py -u postgres -n localhost  "CREATE USER assembl_test WITH CREATEDB ENCRYPTED PASSWORD 'assembl_test'; COMMIT;"
  # we need to uninstall pytest from travis venv to ensure we use our version
  - pip uninstall -y pytest
