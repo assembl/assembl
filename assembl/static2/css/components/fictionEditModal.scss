@@ -14,6 +14,7 @@
   }
 
   .fiction-edit-modal-inner {
+    height: 100%;
     padding: 40px;
 
     .assembl-icon-back-arrow {
@@ -32,7 +33,7 @@
 
     .button-container {
       width: 100%;
-      margin: 25px 0 0;
+      margin: 10px 0 0;
 
       .button-cancel {
         width: 100%;
@@ -83,5 +84,23 @@
         height: 600px;
       }
     }
+  }
+}
+
+@media screen and (min-width: $screen-md-max) {
+  .fiction-edit-modal {
+    width: 70%;
+    height: 750px;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .fiction-edit-modal {
+    height: 950px;
   }
 }

@@ -40,9 +40,7 @@ export const TextInputWithRemainingChars = ({
       <div className="annotation margin-xs">
         {isActive ? (
           <Translate value="debate.remaining_x_characters" nbCharacters={remainingChars < 10000 ? remainingChars : maxLength} />
-        ) : (
-          <span>&nbsp;</span>
-        )}
+        ) : null}
       </div>
     </div>
   );
