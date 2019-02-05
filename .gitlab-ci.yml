@@ -60,12 +60,11 @@ build_wheel:
   variables:
     DEPLOYING: true
   before_script:
-    - sh scripts/install_build_dependencies.sh
-    - sh scripts/install_node_and_yarn.sh
-    - sh scripts/configure_assembl_remote.sh
-    - sh scripts/configure_ssh.sh
-    - sh scripts/clear_apt_cache.sh
-    - pip install fabric==1.14
+    - pip install $(grep invoke requirements.in)
+    - echo '_extends: aws.yaml' > $CI_PROJECT_DIR/invoke.yaml
+    - touch $CI_PROJECT_DIR/secrets.yamls
+    - ln -s $CI_PROJECT_DIR/assembl/tasks .
+    - inv build.prepare_cicd_build
   script:
     # create the wheel and upload to pypi
     - sh scripts/create_assembl_wheel.sh
