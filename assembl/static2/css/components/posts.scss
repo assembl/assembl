@@ -519,17 +519,25 @@ $deleted-post-border: 1px solid $light-grey !default;
       margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
 
       .sentiments {
         border-top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         padding: 0;
         padding-top: 12px;
         margin-left: 10px;
+        width: 30%;
+
+        .custom-overlay {
+          text-align: center;
+          margin-top: 20px;
+          margin-bottom: 20px;
+        }
 
         .sentiment {
-          margin-left: 25px;
-          vertical-align: middle;
-
           svg {
             vertical-align: middle;
           }
@@ -553,7 +561,6 @@ $deleted-post-border: 1px solid $light-grey !default;
 
       .stat-sentiment {
         margin: 0;
-        margin-right: 10px;
         padding: 0;
         vertical-align: middle;
         display: inline-block;
