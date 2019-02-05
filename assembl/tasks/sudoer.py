@@ -36,12 +36,8 @@ core_dependencies = [
     'python-dev'
 ]
 
-
-node_version = {
-    'node': '10.13.0',
-    'node_re': r'v10\.13\.0',
-    'npm': '6.4.1',
-}
+# Ensure that this is matching the node version set in base_env.yaml for Assembl's node
+node_version = '10.13.0'
 
 
 @task
@@ -215,7 +211,7 @@ def install_node_and_yarn(c):
     the node version's MUST be mactching.
     """
 
-    node_major_version = node_version.node.split('.')[0]
+    node_major_version = node_version.split('.')[0]
     c.sudo('apt-get update -qq')
     if is_integration_env():
         c.sudo('apt-get remove -yqq cmdtest')

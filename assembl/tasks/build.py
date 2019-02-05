@@ -90,10 +90,9 @@ def update_node(c, force_reinstall=False):
     """
     Install node and npm to latest version specified. This is done inside of a virtual environment.
     """
-    n_version = node_version.node
-    node_version_re = node_version.node_re
-    npm_version = node_version.npm
-    node_version_cmd_regex = re.compile(node_version_re)
+    n_version = c.config._internal.node.version
+    npm_version = c.config._internal.node.npm
+    node_version_cmd_regex = re.compile(r'v' + n_version.replace('.', r'\.'))
     with venv(c):
         node_version_cmd_result = c.run('node --version', echo=True).stdout
     match = node_version_cmd_regex.match(str(node_version_cmd_result))
