@@ -31,7 +31,7 @@ from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
 from .langstrings import LangString
 from .preferences import Preferences
 from assembl.lib.caching import create_analytics_region
-
+from assembl.graphql import docstrings as docs
 resolver = DottedNameResolver(__package__)
 log = logging.getLogger()
 visit_analytics_region = create_analytics_region()
@@ -55,8 +55,8 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
             'oldslug',
             cascade="all, delete-orphan"),
     )
-    slug = Column(CoerceUnicode, nullable=False, unique=False, index=True)
-    redirection_slug = Column(CoerceUnicode, nullable=False, unique=False, index=True)
+    slug = Column(CoerceUnicode, nullable=False, doc=docs.OldSlug.slug)
+    redirection_slug = Column(CoerceUnicode, nullable=False, doc=docs.OldSlug.redirection_slug)
 
     @classmethod
     def get_discussion_id(self):

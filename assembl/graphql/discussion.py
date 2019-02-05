@@ -38,20 +38,10 @@ class OldSlug(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
         model = models.OldSlug
-        only_fields = ('id',)
 
-    slug = graphene.String(description=docs.OldSlug.slug)
-    discussion = graphene.Field(lambda: Discussion, description=docs.OldSlug.discussion)
-    redirection_slug = graphene.String(description=docs.OldSlug.redirection_slug)
-
-    def resolve_slug(self, args, context, info):
-        return self.slug
-
-    def resolve_discussion(self, args, context, info):
-        return self.discussion
-
-    def resolve_redirection_slug(self, args, context, info):
-        return self.redirection_slug
+    slug = graphene.String()
+    discussion = graphene.Field(lambda: Discussion)
+    redirection_slug = graphene.String()
 
 
 # Mostly fields related to the discussion title and landing page
@@ -358,7 +348,9 @@ class DiscussionPreferences(graphene.ObjectType):
         return discussion.slug
 
     def resolve_old_slugs(self, args, context, info):
-        return self.db.query(models.OldSlug).filter(models.OldSlug.discussion_id == context.matchdict['discussion_id']).all()
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.old_slugs
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -647,9 +639,6 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                     discussion=discussion,
                     slug=discussion.slug,
                     redirection_slug=slug))
-                # Redirecting all the old slugs to the newest slug
-                for old_slug in discussion.oldslug:
-                    old_slug.redirection_slug = slug
 
             if slug is not None:
                 discussion.slug = slug

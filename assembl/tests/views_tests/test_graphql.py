@@ -1804,9 +1804,6 @@ def test_mutation_update_discussion_preferences_change_slug(graphql_registry, gr
     assert discussion.slug == "TestSlug"
     assert res.errors == None
 
-    # Testing if all old slugs redirect ot the newest
-    for slug in discussion.oldslug:
-        assert slug.redirection_slug == discussion.slug
 
 def test_query_post_message_classifier(graphql_request,
                                        root_post_1_with_positive_message_classifier):
