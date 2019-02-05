@@ -195,6 +195,11 @@ def set_fail2ban_configurations(c):
 
 
 @task()
+def clear_aptitude_cache(c):
+    c.sudo('apt-get autoclean -qq && apt-get autoremove -qq && rm -rf /var/lib/apt/lists/*')
+
+
+@task()
 def install_build_dependencies(c):
     """Build the necessary packages in order for CI/CD machines to build an Assembl wheel"""
     c.sudo('apt-get update -qq')
