@@ -37,6 +37,13 @@ core_dependencies = [
 ]
 
 
+node_version = {
+    'node': '10.13.0',
+    'node_re': r'v10\.13\.0',
+    'npm': '6.4.1',
+}
+
+
 @task
 def install_base_deps(c):
     """Install base tools for a Ubuntu server."""
@@ -202,11 +209,17 @@ def install_build_dependencies(c):
 @task()
 def install_node_and_yarn(c):
     """Compiles the necessary packages in order for transpilers to build static asset code. It will often
-    be used in the CI/CD context."""
+    be used in the CI/CD context.
+
+    This is different than updating node inside of a virtual environment, and nodeenv is not used. However,
+    the node version's MUST be mactching.
+    """
+
+    node_major_version = node_version.node.split('.')[0]
     c.sudo('apt-get update -qq')
     if is_integration_env():
         c.sudo('apt-get remove -yqq cmdtest')
     c.sudo('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -')
     c.sudo('echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list')
-    c.sudo('wget -qO- https://deb.nodesource.com/setup_8.x | bash -')
+    c.sudo('wget -qO- https://deb.nodesource.com/setup_%s.x | bash -' % node_major_version)
     c.sudo('apt-get install -yqq nodejs yarn')
