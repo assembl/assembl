@@ -68,3 +68,28 @@ def update_npm_requirements_mac(c, force_reinstall=False):
             else:
                 with venv(c):
                     c.run('npm update')
+
+
+@task()
+def update_pip_requirements_mac(c, force_reinstall=False):
+    """
+    Update external dependencies on remote host.
+    """
+    with venv(c):
+        c.run('pip install -U setuptools "pip<10" ')
+
+    if force_reinstall:
+        c.run("%s/bin/pip install --ignore-installed -r %s/requirements.txt" % (c.config.venvpath, c.config.projectpath))
+    else:
+        specials = [
+            # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
+            ("lxml", None, None),
+            # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
+            ("dm.xmlsec.binding", "%s --install-option='-q'", "%s --install-option='-q'"),
+            ("pycurl", None, 'env PYCURL_SSL_LIBRARY=openssl MACOSX_DEPLOYMENT_TARGET="10.13" LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include" %s'),
+        ]
+        for package, wrapper, mac_wrapper in specials:
+            wrapper = mac_wrapper
+            separate_pip_install(c, package, wrapper)
+        cmd = "%s/bin/pip install -r %s/requirements.txt" % (c.config.venvpath, c.config.projectpath)
+        c.run("yes w | %s" % cmd)
