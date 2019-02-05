@@ -162,7 +162,7 @@ def install_jq(c):
 @task()
 def install_mysql(c):
     """Installs mysql on a linux server."""
-    pass
+    c.run("apt-get -y install mysql-server")
 
 
 @task()
