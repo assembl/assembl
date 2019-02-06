@@ -100,7 +100,7 @@ def install_wheel(c, allow_index=False):
 
     def as_semantic(match):
         version = match.group(2)
-        version = '.d'.join(version.split('.dev'))
+        version = '.alpha-'.join(version.split('.dev'))
         return Version.coerce(version)
     if wheelhouse.startswith('s3://'):
         wheelhouse = wheelhouse[5:]
