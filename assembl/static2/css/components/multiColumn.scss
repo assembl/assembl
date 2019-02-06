@@ -101,6 +101,10 @@ $column-synthesis-height: 320px;
 
 .tab-selector > .tab-selector-buttons {
   display: flex;
+  position: sticky;
+  top: 60px;
+  width: 100%;
+  z-index: 1000;
 
   .button-container {
     padding: 0 1px;
