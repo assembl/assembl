@@ -97,6 +97,11 @@ def install_wheel(c, allow_index=False):
     # temporary: we will use assembl-([\d\.]*)-py27-none-any.whl
     wheel = c.config.get('assembl_wheel', 'assembl-(.*)-py2-none-any\.whl')
     allow_index = '' if allow_index else '--no-index'
+
+    def as_semantic(match):
+        version = match.group(2)
+        version = '.d'.join(version.split('.dev'))
+        return Version.coerce(version)
     if wheelhouse.startswith('s3://'):
         wheelhouse = wheelhouse[5:]
         with venv(c):
@@ -111,8 +116,7 @@ def install_wheel(c, allow_index=False):
                 exp = '>(' + wheel + ')<'
                 matches = list(re.finditer(exp, r.content))
                 # assumption: The first * follows semver, more or less.
-                matches.sort(reverse=True, key=lambda match: (
-                    Version.coerce(match.group(2)), match.groups()[2:]))
+                matches.sort(reverse=True, key=as_semantic)
                 wheel = matches[0].group(1)
             host = '{wheelhouse}.s3-website-{region}.amazonaws.com'.format(
                 region=region, wheelhouse=wheelhouse)
@@ -126,8 +130,7 @@ def install_wheel(c, allow_index=False):
                 wheelre = re.compile('(%s)$' % wheel)
                 wheels = [wheelre.match(name) for name in os.listdir(wheelhouse)]
                 wheels = filter(None, wheels)
-                matches.sort(reverse=True, key=lambda match: (
-                    Version.coerce(match.group(2)), match.groups()[2:]))
+                matches.sort(reverse=True, key=as_semantic)
                 wheel = matches[0].group(1)
             c.run('./venv/bin/pip install {allow_index} --find-links {wheelhouse} {wheelhouse}/{wheel}'.format(
                 wheel=wheel, wheelhouse=wheelhouse, allow_index=allow_index))
