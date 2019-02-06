@@ -64,16 +64,18 @@ build_wheel:
     - echo '_extends: aws.yaml' > $CI_PROJECT_DIR/invoke.yaml
     - touch $CI_PROJECT_DIR/secrets.yamls
     - ln -s $CI_PROJECT_DIR/assembl/tasks .
-    - inv build.prepare_cicd_build
+    - inv build.prepare-cicd-build
   script:
     # create the wheel and upload to pypi
-    - sh scripts/create_assembl_wheel.sh
-    # - twine upload -u bluenove --skip-existing dist/*
-    - fab -f $CI_PROJECT_DIR/assembl/configs/local_prod.rc create_wheelhouse
-    - fab -f $CI_PROJECT_DIR/assembl/configs/aws.rc push_wheelhouse:house="s3://bluenove-assembl-wheelhouse"
-    - fab -f $CI_PROJECT_DIR/assembl/configs/aws.rc push_client_themes:house="s3//bluenove-client-themes"
+    - inv build.create-wheel
+    - inv build.push-wheelhouse
+    - inv build.push-built-themes-to-remote-bucket
+    # # - twine upload -u bluenove --skip-existing dist/*
+    # - fab -f $CI_PROJECT_DIR/assembl/configs/local_prod.rc create_wheelhouse
+    # - fab -f $CI_PROJECT_DIR/assembl/configs/aws.rc push_wheelhouse:house="s3://bluenove-assembl-wheelhouse"
+    # - fab -f $CI_PROJECT_DIR/assembl/configs/aws.rc push_client_themes:house="s3//bluenove-client-themes"
     # Remove ssh files so that the keys are not kept on image prior to travis removal
-    - rm -rf ~/.ssh
+    # - rm -rf ~/.ssh
 
 
 push_to_develop_server:
