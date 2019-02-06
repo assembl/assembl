@@ -72,11 +72,13 @@ export const DumbPhaseTitleForm = ({
               </Button>
             </OverlayTrigger>
           ) : null}
-          <OverlayTrigger placement="top" overlay={deletePhaseTooltip}>
-            <Button onClick={handleDeleteClick} className={deleteButtonClassNames}>
-              <span className="assembl-icon-delete grey" />
-            </Button>
-          </OverlayTrigger>
+          {numberOfPhases > 1 ? (
+            <OverlayTrigger placement="top" overlay={deletePhaseTooltip}>
+              <Button onClick={handleDeleteClick} className={deleteButtonClassNames}>
+                <span className="assembl-icon-delete grey" />
+              </Button>
+            </OverlayTrigger>
+          ) : null}
         </div>
       </div>
       <div className="warning-label">

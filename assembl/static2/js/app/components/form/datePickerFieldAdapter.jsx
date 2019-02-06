@@ -31,7 +31,8 @@ type Props = {
   },
   onDateChange: ?(moment$Moment) => void,
   form: FormApi,
-  children?: React.Node
+  children?: React.Node,
+  dateFormat?: 'string'
 } & FieldRenderProps;
 
 const DatePickerFieldAdapter = ({
@@ -46,6 +47,7 @@ const DatePickerFieldAdapter = ({
   onDateChange,
   children,
   form,
+  dateFormat,
   ...rest
 }: Props) => {
   const onLocalizedChange = (e: moment$Moment): void => {
@@ -71,8 +73,8 @@ const DatePickerFieldAdapter = ({
             selected={value.time}
             id={`date-picker-${name}`}
             onChange={onLocalizedChange}
-            showTimeSelect={showTime || false}
-            dateFormat={rest.dateFormat}
+            showTimeSelect={showTime}
+            dateFormat={dateFormat}
             locale={editLocale}
             shouldCloseOnSelect
             className={hasConflictingDate ? 'warning' : ''}

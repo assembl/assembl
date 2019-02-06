@@ -20,22 +20,15 @@ const createVariablesFromValues = async (
   initialValues: DatePickerValue,
   client: ApolloClient
 ): Promise<UpdateDiscussion> => {
-  const staticValues = {
+  const subTitlesVariables = values.headerSubtitle ? await convertRichTextToVariables(values.headerSubtitle, client) : null;
+  return {
     titleEntries: values.headerTitle ? convertToEntries(values.headerTitle) : null,
     buttonLabelEntries: values.headerButtonLabel ? convertToEntries(values.headerButtonLabel) : null,
     headerImage: getFileVariable(values.headerImage, initialValues.headerImage),
-    subtitleEntries: null,
+    subtitleEntries: subTitlesVariables ? subTitlesVariables.entries : null,
     logoImage: getFileVariable(values.headerLogoImage, initialValues.headerImage),
     startDate: convertDateTimeToISO8601String(values.headerStartDate),
     endDate: convertDateTimeToISO8601String(values.headerEndDate)
-  };
-
-  if (!values.headerSubtitle) return staticValues;
-
-  const subtitlesEntries = await convertRichTextToVariables(values.headerSubtitle, client);
-  return {
-    subtitleEntries: subtitlesEntries.entries,
-    ...staticValues
   };
 };
 
