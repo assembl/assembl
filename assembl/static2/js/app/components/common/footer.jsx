@@ -33,6 +33,7 @@ const Footer = ({
   hasUserGuidelines,
   lang
 }: Props) => {
+  const debateSlug = { slug: slug };
   const legalPages = {
     terms: hasTermsAndConditions,
     legalNotice: hasLegalNotice,
@@ -40,7 +41,14 @@ const Footer = ({
     privacyPolicy: hasPrivacyPolicy,
     userGuidelines: hasUserGuidelines
   };
-  const debateSlug = { slug: slug };
+  const legalPagesInFooter = Object.keys(legalPages).map(
+    key =>
+      (legalPages[key] ? (
+        <Link to={`${get(key, debateSlug)}`}>
+          <Translate value={`footer.${key}`} />
+        </Link>
+      ) : null)
+  );
   return (
     <Grid fluid className="background-dark relative" id="footer">
       <div className="max-container">
@@ -81,16 +89,8 @@ const Footer = ({
                 bluenove
               </Link>
             </div>
-            <div className="legal-pages">
-              {Object.keys(legalPages).map(
-                key =>
-                  (legalPages[key] ? (
-                    <Link to={`${get(key, debateSlug)}`}>
-                      <Translate value={`footer.${key}`} />
-                    </Link>
-                  ) : null)
-              )}
-            </div>
+            <div />
+            <div className="legal-pages">{legalPagesInFooter}</div>
             {assemblVersion && <div className="assembl-version">v{assemblVersion}</div>}
           </div>
         </div>
