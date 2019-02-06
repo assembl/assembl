@@ -502,6 +502,34 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 }
 
+@media screen and (max-width: $screen-md-max) {
+  .synthesis {
+    .post-row {
+      background-color: $white;
+
+      .post-left {
+        .insert-box {
+          border-bottom: none;
+        }
+      }
+
+      .post-right {
+        border: 1px solid $light-grey;
+
+        .post-actions {
+          .post-icons {
+            border-top: none;
+          }
+
+          .post-actions-separator {
+            display: none;
+          }
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 599px) {
   .proposals {
     .content {
