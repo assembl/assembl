@@ -128,6 +128,7 @@ def venv(c):
         if exists(c, 'venv'):
             project_prefix = os.getcwd()
         else:
+            # _project_prefix is defined by Invoke at run-time
             project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
         venv = os.path.join(project_prefix, 'venv')
     assert exists(c, venv)

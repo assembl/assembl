@@ -4,6 +4,7 @@ import re
 import json
 from hashlib import sha256
 from os.path import join, normpath
+from contextlib import nested
 
 from semantic_version import Version
 
@@ -51,7 +52,7 @@ def get_node_bin_path(c):
 
 
 def bower_cmd(c, cmd, relative_path='.'):
-    with c.cd(c.projectpath):
+    with c.cd(c.config.projectpath):
         bower_cmd = normpath(join(get_node_bin_path(c), 'bower'))
         po2json_cmd = normpath(join(get_node_bin_path(c), 'po2json'))
         if not exists(c, bower_cmd) or not exists(c, po2json_cmd):
@@ -124,10 +125,13 @@ def update_node(c, force_reinstall=False):
 
 
 @task()
-def update_npm_requirements(c, force_reinstall=False):
+def update_npm_requirements(c, install=False, force_reinstall=False):
     """Normally not called manually"""
     with c.cd(get_node_base_path(c)):
-        if force_reinstall:
+        if install:
+            with venv(c):
+                c.run('yarn')
+        elif force_reinstall:
             with venv(c):
                 c.run('reinstall')
         else:
@@ -138,14 +142,17 @@ def update_npm_requirements(c, force_reinstall=False):
     static2_path = get_new_node_base_path(c)
     with c.cd(static2_path):
         if exists(c, yarn_path):
-            if force_reinstall:
+            if install or force_reinstall:
                 print('Removing node_modules directory...')
                 with venv(c):
                     c.run('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
             with venv(c):
                 c.run(yarn_path)
         else:
-            if force_reinstall:
+            if install:
+                with venv(c):
+                    c.run('npm install')
+            elif force_reinstall:
                 with venv(c):
                     c.run('reinstall')
             else:
@@ -224,6 +231,64 @@ def app_update_dependencies(c, force_reinstall=False):
     update_bower(c)
     update_bower_requirements(c, force_reinstall=force_reinstall)
     update_npm_requirements(c, force_reinstall=force_reinstall)
+
+
+@task()
+def compile_stylesheets(c):
+    """
+    Generate *.css files from *.scss
+    """
+    project_path = os.getenv('CI_PROJECT_DIR', c.config.projectpath)
+    with c.cd(project_path):
+        with nested(c.cd('assembl/static/js'), venv(c)):
+            c.run('./node_modules/.bin/gulp sass')
+        with venv(c):
+            # no-qa
+            c.run('./assembl/static/js/node_modules/.bin/node-sass --source-map ' +
+                  '-r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss')
+        with venv(c):
+            c.run('./assembl/static/js/node_modules/.bin/node-sass --source-map ' +
+                  '-r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss')
+        with venv(c):
+            c.run('./assembl/static/js/node_modules/.bin/node-sass --source-map ' +
+                  '-r -o assembl/static/widget/session/css --source-map assembl/static/widget/session/css assembl/static/widget/session/scss')
+
+
+@task()
+def compile_messages(c):
+    """
+    Run compile *.mo file from *.po
+    """
+    with venv(c):
+        c.run('python2 setup.py compile_catalog')
+    with venv(c):
+        c.run("python2 assembl/scripts/po2json.py")
+
+
+@task()
+def compile_javascript(c):
+    """
+    Generates and minifies javascript
+    """
+    project_path = os.getenv('CI_PROJECT_DIR', c.config.projectpath)
+    with c.cd(project_path):
+        with c.cd('assembl/static/js'):
+            with venv(c):
+                c.run('./node_modules/.bin/gulp libs')
+            with venv(c):
+                c.run('./node_modules/.bin/gulp browserify:prod')
+        if c.config.wsginame != 'dev.wsgi':
+            with c.cd('assembl/static2'):
+                with venv(c):
+                    c.run('yarn run build')
+
+
+@task()
+def compile_static_assets(c):
+    """Separated mostly for tests, which need to run alembic manually"""
+    compile_stylesheets(c)
+    compile_messages(c)
+    compile_javascript(c)
 
 
 @task()
@@ -503,4 +568,9 @@ def prepare_cicd_build(c):
     with c.cd(os.path.join(project_path, 'assembl/static2/css/themes/vendor')):
         c.run('git clone git@github.com:bluenove/assembl2-client-themes.git')
 
-    # Build functions for V1 and V2
+    # Build JS dependencies for V1 and V2
+    install_bower(c)
+    update_bower_requirements(c, force_reinstall=True)
+    update_npm_requirements(c, force_reinstall=True)
+
+
