@@ -25,7 +25,7 @@ type TimelineFormState = {
 };
 
 export class DumbTimelineForm extends React.Component<TimelineFormProps, TimelineFormState> {
-  componentDidUpdate() {
+  componentDidMount() {
     const { length } = this.props.phases;
     if (length === 0) {
       this.props.handleCreatePhase(1);
