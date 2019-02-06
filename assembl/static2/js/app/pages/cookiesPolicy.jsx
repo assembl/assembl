@@ -26,9 +26,7 @@ const CookiesPolicy = ({ text, headerTitle, debateData }) => (
       renderPageBody={() => (
         <Fragment>
           <CookiesSelectorContainer key="cookies-selector" />
-          <h2 className="dark-title-2">
-            <Translate value="cookiesPolicy.sectionTitle" />
-          </h2>
+          <h2 className="dark-title-2">{text !== '<p></p>' ? <Translate value="cookiesPolicy.sectionTitle" /> : null}</h2>
           <div
             className="ellipsis-content justify"
             dangerouslySetInnerHTML={{
