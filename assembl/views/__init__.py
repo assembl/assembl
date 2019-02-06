@@ -83,6 +83,8 @@ def find_theme_bucket():
     bucket_path = config.get('theme_bucket', None)
     if bucket_path.trim().startswith('s3://'):
         return None
+    else:
+        pass  # Local file system
 
 
 def find_theme(theme_name, frontend_version=1):
@@ -149,7 +151,7 @@ def extract_resources_hash(source, theme_name):
         return get_resource_hash(r'/build/bundle\.(.*)\.css$', href)
 
     def get_theme_css_hash(href):
-        return get_resource_hash(r'/build/theme_' + re.escape(theme_name) + r'_web\.(.*)\.css$', href)
+        return get_resource_hash(r'/build/themes/[^/]+/[^/]+/theme_' + re.escape(theme_name) + r'_web\.(.*)\.css$', href)
 
     soup = BeautifulSoup(source)
     bundle = soup.find(src=get_bundle_hash)
@@ -158,7 +160,7 @@ def extract_resources_hash(source, theme_name):
     return {
         'bundle_hash': get_bundle_hash(bundle['src']).group(1) if bundle else None,
         'bundle_css_hash': get_bundle_css_hash(bundle_css['href']).group(1) if bundle_css else None,
-        'theme_hash': get_theme_css_hash(theme_css['href']).group(1) if theme_css else None
+        'theme_file': get_theme_css_hash(theme_css['href']).group(0) if theme_css else None
     }
 
 
