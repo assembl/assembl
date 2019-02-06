@@ -25,28 +25,6 @@ export const moveLandingPageModuleDown: moveLandingPageModuleDownAction = id => 
   type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
 });
 
-export const updateLandingPageModuleTitle = (
-  id: string,
-  locale: string,
-  value: string
-): actionTypes.UpdateLandingPageModuleTitle => ({
-  id: id,
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_LANDING_PAGE_MODULE_TITLE
-});
-
-export const updateLandingPageModuleSubtitle = (
-  id: string,
-  locale: string,
-  value: string
-): actionTypes.UpdateLandingPageModuleSubtitle => ({
-  id: id,
-  locale: locale,
-  value: value,
-  type: actionTypes.UPDATE_LANDING_PAGE_MODULE_SUBTITLE
-});
-
 export const createLandingPageModule = (
   id: string,
   identifier: string,

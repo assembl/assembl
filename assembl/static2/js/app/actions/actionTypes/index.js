@@ -73,8 +73,6 @@ export const UPDATE_PHASE_START: 'UPDATE_PHASE_START' = 'UPDATE_PHASE_START';
 export const UPDATE_PHASE_END: 'UPDATE_PHASE_END' = 'UPDATE_PHASE_END';
 export const MOVE_PHASE_UP: 'MOVE_PHASE_UP' = 'MOVE_PHASE_UP';
 export const MOVE_PHASE_DOWN: 'MOVE_PHASE_DOWN' = 'MOVE_PHASE_DOWN';
-export const UPDATE_LANDING_PAGE_MODULE_TITLE: 'UPDATE_LANDING_PAGE_MODULE_TITLE' = 'UPDATE_LANDING_PAGE_MODULE_TITLE';
-export const UPDATE_LANDING_PAGE_MODULE_SUBTITLE: 'UPDATE_LANDING_PAGE_MODULE_SUBTITLE' = 'UPDATE_LANDING_PAGE_MODULE_SUBTITLE';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -352,20 +350,6 @@ export type MoveLandingPageModuleUp = {
 export type MoveLandingPageModuleDown = {
   id: string,
   type: typeof MOVE_LANDING_PAGE_MODULE_DOWN
-};
-
-export type UpdateLandingPageModuleTitle = {
-  id: string,
-  locale: string,
-  value: string,
-  type: typeof UPDATE_LANDING_PAGE_MODULE_TITLE
-};
-
-export type UpdateLandingPageModuleSubtitle = {
-  id: string,
-  locale: string,
-  value: string,
-  type: typeof UPDATE_LANDING_PAGE_MODULE_SUBTITLE
 };
 
 export type UpdateGaugeVoteInstructions = {
