@@ -66,6 +66,13 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
 
+    @classmethod
+    def push_slug(self, discussion_id, slug):
+        db = self.db
+        all_slugs = db.query(self.slug).all()
+        if slug not in all_slugs:
+            db.add(self(discussion_id=discussion_id, slug=slug))
+
 
 class Discussion(DiscussionBoundBase, NamedClassMixin):
     """
