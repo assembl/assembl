@@ -155,6 +155,7 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
                     hasConflictingDate={this.state.startDateConflict}
                     onDateChange={this.onStartChange}
                     form={form}
+                    dateFormat="LL"
                   />
                   <Field
                     name="headerEndDate"
@@ -166,6 +167,7 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
                     hasConflictingDate={this.state.endDateConflict}
                     onDateChange={this.onEndChange}
                     form={form}
+                    dateFormat="LL"
                   />
                 </div>
               </AdminForm>
