@@ -271,10 +271,9 @@ def webservers_reload(c):
     # sudo access
     print("Reloading nginx")
     if os.path.exists('/etc/init.d/nginx'):
-        user = c.config.get('webmaster_user', c.config.get('sudo_user', None))
-        result = c.sudo('/usr/sbin/nginx -t', user=user)
+        result = c.sudo('/usr/sbin/nginx -t')
         if "Command exited with status 0" in str(result):
-            c.sudo('/etc/init.d/nginx reload', user=user)
+            c.sudo('/etc/init.d/nginx reload')
         else:
             print("Your Nginx configuration returned an error, please check your nginx configuration.")
     elif c.config.get(c.config.mac, False):
