@@ -1,0 +1,25 @@
+# Sample supervisord service file
+# On Ubuntu 15.10 and later you need to drop it in 
+# /etc/systemd/system/uwsgicloudwatch.service
+# And then run
+# systemctl enable uwsgicloudwatch
+
+[Unit]
+Description=uwsgicloudwatch
+
+[Service]
+# These are the lines you have to modify for your environment. This assumes Assembl is running under the assembl_user user.
+Environment=VENV_PATH=/home/assembl_user/venvpy3
+User=assembl_user
+Group=www-data
+
+Type=simple
+Restart=on-failure
+ExecStart=/bin/bash -c "/home/assembl_user/venvpy3/bin/uwsgi-cloudwatch http://localhost:3002 --namespace assembl/uwsgi --frequency 60 --region `curl http://169.254.169.254/latest/meta-data/placement/availability-zone|sed -E 's/(.*).$/\1/'`"
+
+KillMode=control-group
+TimeoutStopSec=120
+
+[Install]
+WantedBy=multi-user.target
+
