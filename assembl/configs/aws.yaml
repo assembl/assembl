@@ -40,6 +40,12 @@ logger_assembl:
   handlers: file, cloudwatch
 logger_sqlalchemy:
   handlers: file, cloudwatch
+uwsgi_port: 3001
+uwsgi_host: localhost
+uwsgi:
+  socket: :3001
+  stats: :3002
+  stats-http: 1
 
 # temporary
 public_port: 80
