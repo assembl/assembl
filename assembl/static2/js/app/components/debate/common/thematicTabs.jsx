@@ -12,7 +12,7 @@ import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisF
 
 export type Props = {
   guidelinesContent?: React.Node,
-  summary: string,
+  summary: ?string,
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
