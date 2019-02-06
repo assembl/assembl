@@ -2,16 +2,13 @@
 import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
-import { updateInLangstringEntries } from '../../utils/i18n';
 import {
   type Action,
   CREATE_LANDING_PAGE_MODULE,
   MOVE_LANDING_PAGE_MODULE_DOWN,
   MOVE_LANDING_PAGE_MODULE_UP,
   TOGGLE_LANDING_PAGE_MODULE,
-  UPDATE_LANDING_PAGE_MODULES,
-  UPDATE_LANDING_PAGE_MODULE_TITLE,
-  UPDATE_LANDING_PAGE_MODULE_SUBTITLE
+  UPDATE_LANDING_PAGE_MODULES
 } from '../../actions/actionTypes';
 
 type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
@@ -20,8 +17,6 @@ export const modulesHasChanged: ModulesHasChangedReducer = (state = false, actio
   case CREATE_LANDING_PAGE_MODULE:
   case MOVE_LANDING_PAGE_MODULE_UP:
   case MOVE_LANDING_PAGE_MODULE_DOWN:
-  case UPDATE_LANDING_PAGE_MODULE_TITLE:
-  case UPDATE_LANDING_PAGE_MODULE_SUBTITLE:
   case TOGGLE_LANDING_PAGE_MODULE:
     return true;
   case UPDATE_LANDING_PAGE_MODULES:
@@ -137,14 +132,6 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
     });
     return newState;
   }
-  case UPDATE_LANDING_PAGE_MODULE_TITLE:
-    return state
-      .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
-      .setIn([action.id, '_hasChanged'], true);
-  case UPDATE_LANDING_PAGE_MODULE_SUBTITLE:
-    return state
-      .updateIn([action.id, 'subtitleEntries'], updateInLangstringEntries(action.locale, action.value))
-      .setIn([action.id, '_hasChanged'], true);
   default:
     return state;
   }
