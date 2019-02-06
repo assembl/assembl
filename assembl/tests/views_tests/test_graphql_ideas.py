@@ -1034,7 +1034,7 @@ def create_idea_thread(graphql_request, graphql_registry, phases):
         graphql_registry['updateIdeas'],
         context_value=graphql_request,
         variable_values={
-            'discussionPhaseId': phases['thread'].id,
+            'discussionPhaseId': phases['brightMirror'].id,
             'ideas': [{
                 'messageViewOverride': 'thread',
                 'titleEntries': [
