@@ -74,6 +74,22 @@ def install_assembl_systemd(c):
 
 
 @task
+def install_uwsgicloudwatch_systemd(c):
+    base = os.getcwd()
+    path = 'assembl/templates/system/uwsgicloudwatch.service.jinja2'
+    if not exists(path):
+        base = '/home/assembl_user/assembl/venv/lib/python2.7/site-packages'
+    assert exists(join(base, path))
+    c.config.code_root = base
+    fill_template(c, join(base, path), '/tmp/uwsgicloudwatch.service')
+
+    c.sudo('cp /tmp/uwsgicloudwatch.service /etc/systemd/system/uwsgicloudwatch.service')
+    c.sudo('sudo systemctl daemon-reload')
+    c.sudo('systemctl enable uwsgicloudwatch')
+    c.run('rm /tmp/uwsgicloudwatch.service')
+
+
+@task
 def install_urlmetadata_systemd(c):
     base = os.getcwd()
     path = 'assembl/templates/system/urlmetadata.service.jinja2'
