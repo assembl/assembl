@@ -55,8 +55,11 @@ cache:
 services:
  - redis-server
 before_install:
- # Remove mongodb repo that has an expired GPG key which gives a travis errored because
- # fabric is doing an apt-get update.
+# Fabric `run` commands is reading /home/travis/.travis/job_stages which
+# sources $TRAVIS_HOME/.travis/functions but $TRAVIS_HOME is not defined in
+# this context, doing a symlink fixes the issue.
+ - sudo mkdir -p /.travis
+ - sudo ln -s /home/travis/.travis/functions /.travis/functions
  - ls /etc/apt/sources.list.d/
  # The following line is needed, otherwise the set_file_permissions fab command yells error "Operation not permitted"
  - sudo usermod -a -G www-data $USER
