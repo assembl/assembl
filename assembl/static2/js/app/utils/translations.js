@@ -1912,7 +1912,7 @@ const Translations = {
         titleFormTitle: "Personalize the title of the page",
         title: "Web page Title (visual 1)",
         favicon: "Favicon (visual 2)",
-        faviconInstruction: "TO BE DEFINED",
+        faviconInstruction: "Favicon should have a maximum height of 110px. Its extension should be .ico",
         icoRequired: "The favicon must be an .ico file only"
       }
     },
