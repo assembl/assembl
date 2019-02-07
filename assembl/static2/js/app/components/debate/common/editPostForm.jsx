@@ -62,7 +62,8 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
     bodyMaxLength: BODY_MAX_LENGTH,
     onSuccess: () => {},
     draftable: false,
-    draftSuccessMsgId: null
+    draftSuccessMsgId: null,
+    multiColumns: false
   };
 
   constructor(props: EditPostFormProps) {
@@ -231,10 +232,6 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
     );
   }
 }
-
-DumbEditPostForm.defaultProps = {
-  multiColumns: false
-};
 
 const EditPostFormWithContext = props => (
   <DebateContext.Consumer>
