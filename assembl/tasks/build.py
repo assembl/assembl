@@ -395,8 +395,9 @@ def push_wheelhouse(c, house=None):
     B) a remote folder via SSH
     C) a local folder
     """
-    tmp_wheel_path = house if house else os.path.join(c.config.code_root, 'wheelhouse')
-    wheel_path = c.config.wheelhouse
+    tmp_wheel_path = house or os.path.join(c.config.code_root, 'wheelhouse')
+    wheel_path = os.getenv('ASSEMBL_WHEELHOUSE', c.config.get(
+        'wheelhouse', 's3://bluenove-assembl-wheelhouse'))
     json_filename = 'special-wheels.json'
     if not wheel_path:
         raise RuntimeError("No wheelhouse location was defined in configuration. Cannot continue...")
