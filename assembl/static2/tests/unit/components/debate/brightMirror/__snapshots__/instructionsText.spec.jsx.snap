@@ -98,9 +98,13 @@ exports[`Storyshots InstructionsText default 1`] = `
                 role="tabpanel"
               >
                 <div
-                  className="summary"
+                  className="announcement"
                 >
-                  To remember
+                  <div
+                    className="announcement-media"
+                  >
+                    To remember
+                  </div>
                 </div>
               </div>
             </div>
@@ -709,9 +713,13 @@ exports[`Storyshots InstructionsText playground 1`] = `
                 role="tabpanel"
               >
                 <div
-                  className="summary"
+                  className="announcement"
                 >
-                  To remember
+                  <div
+                    className="announcement-media"
+                  >
+                    To remember
+                  </div>
                 </div>
               </div>
             </div>

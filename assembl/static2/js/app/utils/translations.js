@@ -736,7 +736,7 @@ const Translations = {
       headerTitle: "Configuration du bandeau de haut de page",
       ProposalsSectionTitle: "Configuration du titre de la section Propositions",
       instructions: "Configuration de la section Consigne",
-      summary: "Configuration de la section 'À retenir",
+      summary: "Configuration de la section 'À retenir'",
       voteSessionSuccess: "La session de vote a été enregistrée avec succès.",
       exclusive: "Exclusif",
       tokenVoteInstructions: "Consigne du vote par jetons",

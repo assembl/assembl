@@ -4,6 +4,7 @@ import { renderRichtext } from '../../../utils/linkify';
 // Component imports
 import ThematicTabs from '../common/thematicTabs';
 import Title from '../../common/title/title';
+import { isMobile } from '../../../utils/globalFunctions';
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
@@ -35,6 +36,7 @@ const InstructionsText = ({ title, body, summary, semanticAnalysisForThematicDat
             guidelinesContent={guidelinesContent}
             summary={summary}
             semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+            isMobile={!!isMobile.any()}
           />
         </div>
       </div>

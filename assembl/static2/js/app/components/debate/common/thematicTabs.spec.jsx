@@ -16,6 +16,7 @@ describe('<InstructionsText /> - with shallow', () => {
 
   beforeEach(() => {
     props = {
+      isMobile: false,
       semanticAnalysisForThematicData: {
         id: '1234',
         nlpSentiment: {
@@ -65,5 +66,25 @@ describe('<InstructionsText /> - with shallow', () => {
       summary: 'A summary'
     });
     expect(wrapper.find(Tab)).toHaveLength(2);
+  });
+
+  it('should render regular mindmanager link in summary if mobile', () => {
+    wrapper.setProps({
+      isMobile: true,
+      summary:
+        'A summary with a link <a href="https://share.mindmanager.com/#publish/e_lZRkeg4pFdGATyzqTwXVHzNpOCHwR1cDRy4tOQ" title="Lien vers le mindmanager">Lien vers le mindmanager</a>'
+    });
+    expect(wrapper.find('.iframed')).toHaveLength(0);
+    expect(wrapper.find('.linkified')).toHaveLength(1);
+  });
+
+  it('should render iframed mindmanager link in summary if not mobile', () => {
+    wrapper.setProps({
+      isMobile: false,
+      summary:
+        'A summary with a link <a href="https://share.mindmanager.com/#publish/e_lZRkeg4pFdGATyzqTwXVHzNpOCHwR1cDRy4tOQ" title="Lien vers le mindmanager">Lien vers le mindmanager</a>'
+    });
+    expect(wrapper.find('.iframed')).toHaveLength(1);
+    expect(wrapper.find('.linkified')).toHaveLength(0);
   });
 });

@@ -25,4 +25,9 @@ export function addProtocol(url: string): string {
   return hasProtocol ? url : `https://${url}`;
 }
 
+export function addIframeForMindManager(html: string): string {
+  const url = /(<a href="(https:\/\/share.mindmanager.com[^\s]+)".*<\/a>)/gi;
+  return html.replace(url, '<div class="iframed"><iframe src="$2"></iframe></div>');
+}
+
 export const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());

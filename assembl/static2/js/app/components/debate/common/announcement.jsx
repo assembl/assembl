@@ -10,6 +10,7 @@ import { CountablePublicationStates, MESSAGE_VIEW } from '../../../constants';
 import PostsAndContributorsCount, { Counter } from '../../common/postsAndContributorsCount';
 import ThematicTabs from './thematicTabs';
 import Title from '../../common/title/title';
+import { isMobile } from '../../../utils/globalFunctions';
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
@@ -107,7 +108,13 @@ export const SurveyAnnouncement = ({ announcement, semanticAnalysisForThematicDa
     </div>
   );
 
-  return <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />;
+  return (
+    <ThematicTabs
+      guidelinesContent={guidelinesContent}
+      isMobile={!!isMobile.any()}
+      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+    />
+  );
 };
 
 export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData }: Props) => {
@@ -152,6 +159,7 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
       guidelinesContent={guidelinesContent}
       summary={announcement.summary}
       semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+      isMobile={!!isMobile.any()}
     />
   );
 };

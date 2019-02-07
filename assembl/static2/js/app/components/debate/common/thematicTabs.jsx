@@ -3,20 +3,24 @@ import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { Tabs, Tab } from 'react-bootstrap';
 import classnames from 'classnames';
+import activeHtml from 'react-active-html';
 // Component imports
 import { ANNOUNCEMENT_TAB_ITEM_ID } from '../../../constants';
 import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
-import { renderRichtext } from '../../../utils/linkify';
+import { addIframeForMindManager } from '../../../utils/linkify';
+import { postBodyReplacementComponents } from './post/postBody';
+
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
 export type Props = {
   guidelinesContent?: React.Node,
   summary: ?string,
+  isMobile: boolean,
   semanticAnalysisForThematicData: SemanticAnalysisForThematicQuery
 };
 
-const ThematicTabs = ({ guidelinesContent, summary, semanticAnalysisForThematicData }: Props) => {
+const ThematicTabs = ({ guidelinesContent, summary, semanticAnalysisForThematicData, isMobile }: Props) => {
   const { topKeywords } = semanticAnalysisForThematicData;
   const topKeywordsLength = topKeywords.length;
 
@@ -47,7 +51,13 @@ const ThematicTabs = ({ guidelinesContent, summary, semanticAnalysisForThematicD
 
   const summaryTabAndContent = (
     <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={summaryTabTitle}>
-      {summary ? <div className="summary">{renderRichtext(summary)}</div> : null}
+      {summary ? (
+        <div className="announcement">
+          <div className="announcement-media">
+            {activeHtml(summary && (isMobile ? summary : addIframeForMindManager(summary)), postBodyReplacementComponents())}
+          </div>
+        </div>
+      ) : null}
     </Tab>
   );
 
