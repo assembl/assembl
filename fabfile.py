@@ -1,1 +1,1 @@
-from assembl.fabfile import *
+assembl/fabfile.py

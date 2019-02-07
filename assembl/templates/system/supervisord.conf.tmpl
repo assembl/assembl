@@ -148,6 +148,8 @@ stdout_logfile_backups = %(sup_log_backups_uwsgi_out)s
 stderr_logfile = %(log_dir)s/uwsgi.err
 stderr_logfile_maxbytes = %(sup_log_size_uwsgi_err)s
 stderr_logfile_backups = %(sup_log_backups_uwsgi_err)s
+stopasgroup = true
+killasgroup = true
 
 [program:urlmetadata]
 directory = %(here)s
