@@ -9,7 +9,7 @@ from getpass import getuser
 
 from .common import (
     setup_ctx, running_locally, exists, venv, task, local_code_root,
-    create_venv, fill_template)
+    create_venv, fill_template, get_s3_file)
 
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
@@ -144,20 +144,6 @@ def setup_aws_default_region(c):
     region = get_and_set_region(c)
     assert region
     c.run('aws configure set region ' + region)
-
-
-def get_s3_file(bucket, key, destination=None):
-    import boto3
-    s3 = boto3.client('s3')
-    try:
-        ob = s3.get_object(Bucket=bucket, Key=key)
-        content = ob['Body'].read()
-        if destination:
-            with open(destination, 'w') as f:
-                f.write(content)
-        return content
-    except s3.exceptions.NoSuchKey:
-        return None
 
 
 CELERY_YAML = """_extends: cicd.yaml
