@@ -561,18 +561,19 @@ def push_built_themes_to_remote_bucket(c):
 @task(
     install_build_dependencies,
     install_node_and_yarn,
-    configure_github_user,
+    # configure_github_user,
+    # add_github_user_ssh_keys,
     clear_aptitude_cache)
 def prepare_cicd_build(c):
     """
     There is full assumption of being in CI/CD environment when calling this function
     """
-    project_path = os.gettenv('CI_PROJECT_DIR', c.config.code_root)
-    with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
-        c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
+    # project_path = os.gettenv('CI_PROJECT_DIR', c.config.code_root)
+    # with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
+    #     c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
 
-    with c.cd(os.path.join(project_path, 'assembl/static2/css/themes/vendor')):
-        c.run('git clone git@github.com:bluenove/assembl2-client-themes.git')
+    # with c.cd(os.path.join(project_path, 'assembl/static2/css/themes/vendor')):
+    #     c.run('git clone git@github.com:bluenove/assembl2-client-themes.git')
 
     # Build JS dependencies for V1 and V2
     install_bower(c)
@@ -583,6 +584,7 @@ def prepare_cicd_build(c):
 @task()
 def start_deploy_on_client(c, client_id):
     import boto3
+    assert client_id, "No client-id was passed"
     sts_client = boto3.client('sts')
     response = sts_client.assume_role(
         RoleArn='arn:aws:iam::%s:role/CICD-Role' % (client_id,),
@@ -600,8 +602,25 @@ def start_deploy_on_client(c, client_id):
         revision={
             'revisionType': 'S3',
             's3Location': {
-                'bucket': 'bluenove-assembl-wheelhouse',
+                'bucket': 'bluenove-assembl-deployments',
                 'key': 'code_deploy_test.zip',
                 'bundleType': 'zip'
             }
         })
+
+
+@task
+def get_deployment_clients(c):
+    """
+    Fetches the list of accounts available to deploy to from a remote bucket
+    Assume CI/CD Environment at all times
+    """
+    get_s3_file('bluenove-assembl-deployments', 'clients.json', 'clients.json')
+
+
+@task(get_deployment_clients)
+def deploy_to_sandbox(c):
+    with open('clients.json') as f:
+        data = json.load(f)
+    client_id = data.get('sandbox', None)
+    start_deploy_on_client(c, client_id)
