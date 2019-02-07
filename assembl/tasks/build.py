@@ -575,3 +575,27 @@ def prepare_cicd_build(c):
     update_npm_requirements(c, force_reinstall=True)
 
 
+@task()
+def start_deploy_on_client(c, client_id):
+    import boto3
+    sts_client = boto3.client('sts')
+    response = sts_client.assume_role(
+            RoleArn='arn:aws:iam::%s:role/CICD-Role' % (client_id,),
+            RoleSessionName='cicd')
+    credentials = response['Credentials']
+    cd_client = boto3.client('codedeploy',
+        aws_access_key_id=credentials['AccessKeyId'],
+        aws_secret_access_key=credentials['SecretAccessKey'],
+        aws_session_token=credentials['SessionToken'])
+
+    response = cd_client.create_deployment(
+            applicationName='assembl',
+            deploymentGroupName='assembl-deploymentgroup',
+            revision={
+                'revisionType': 'S3',
+                's3Location': {
+                    'bucket': 'bluenove-assembl-wheelhouse',
+                    'key': 'code_deploy_test.zip',
+                    'bundleType': 'zip'
+                }
+            })
