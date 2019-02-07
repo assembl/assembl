@@ -51,7 +51,7 @@ type FieldArrayProps = {
   name: string
 } & Props;
 
-function confirmDeletionModal(title: React.Node, body: React.Node, remove: () => void) {
+export function confirmDeletionModal(title: React.Node, body: React.Node, remove: () => void) {
   const footer = [
     <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
       <Translate value="cancel" />
