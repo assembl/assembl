@@ -309,13 +309,13 @@ input.placeholder, textarea.placeholder {
         margin: initial;
         height: 15px;
         width: 15px;
-        font-size: 12px;
+        font-size: 10px;
       }
     }
 
     .form-tree-item::after {
       position: absolute;
-      content: "";
+      content: '';
       top: 18px;
       left: -15px;
       border-left: 1px solid $grey11;

@@ -36,7 +36,7 @@ const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesForm
         ...arrayMutators
       }}
       render={({ handleSubmit, pristine, submitting, values }) => (
-        <div className="admin-content">
+        <div className="preferences-section admin-content">
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
             <div className="form-container">
               <div className="title">
