@@ -44,7 +44,7 @@ const Footer = ({
   const legalPagesInFooter = Object.keys(legalPages).map(
     key =>
       (legalPages[key] ? (
-        <Link to={`${get(key, debateSlug)}`}>
+        <Link to={`${get(key, debateSlug)}`} key={key}>
           <Translate value={`footer.${key}`} />
         </Link>
       ) : null)
