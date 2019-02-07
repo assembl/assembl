@@ -2,10 +2,12 @@
 import * as React from 'react';
 import { type FieldRenderProps } from 'react-final-form';
 import { ControlLabel, FormGroup, Tooltip } from 'react-bootstrap';
+import { Translate } from 'react-redux-i18n';
 
 import FileUploader from '../common/fileUploader';
 import Error from './error';
 import { getValidationState } from './utils';
+import { confirmDeletionModal } from './fieldArrayWithActions';
 
 type Props = {
   deleteTooltip: ?React.Element<Tooltip>,
@@ -13,6 +15,8 @@ type Props = {
 } & FieldRenderProps;
 
 const FileUploaderFieldAdapter = ({ deleteTooltip, input, label, meta: { error, touched } }: Props) => {
+  const confirmDeletionTitle = <Translate value="deleteConfirmation.confirmDeletionTitle" />;
+  const confirmDeletionBody = <Translate value="deleteConfirmation.confirmDeletionBody" />;
   const onChange = (value) => {
     input.onChange({
       externalUrl: value,
@@ -32,7 +36,7 @@ const FileUploaderFieldAdapter = ({ deleteTooltip, input, label, meta: { error, 
         mimeType={input.value && input.value.mimeType}
         name={input.name}
         isAdminUploader
-        onDeleteClick={() => input.onChange('')}
+        onDeleteClick={() => confirmDeletionModal(confirmDeletionTitle, confirmDeletionBody, () => input.onChange(''))}
       />
       <Error name={input.name} />
     </FormGroup>
