@@ -122,7 +122,7 @@ def setup_ctx(c):
     c.config.merge()
 
 
-def venv(c):
+def venv(c, cd=False):
     venv = c.config.get('virtualenv', None)
     if not venv:
         if exists(c, 'venv'):
@@ -133,7 +133,10 @@ def venv(c):
         venv = os.path.join(project_prefix, 'venv')
     assert exists(c, venv)
     activate = c.config.get('_internal', {}).get('activate', 'activate')
-    return nested(c.cd(project_prefix), c.prefix('source %s/bin/%s' % (venv, activate)))
+    if cd:
+        return nested(c.cd(project_prefix), c.prefix('source %s/bin/%s' % (venv, activate)))
+    else:
+        return c.prefix('source %s/bin/%s' % (venv, activate))
 
 
 def venv_py3(c):

@@ -102,7 +102,7 @@ def update_node(c, force_reinstall=False):
     n_version = c.config._internal.node.version
     npm_version = c.config._internal.node.npm
     node_version_cmd_regex = re.compile(r'v' + n_version.replace('.', r'\.'))
-    with venv(c):
+    with venv(c, True):
         node_version_cmd_result = c.run('node --version', echo=True).stdout
     match = node_version_cmd_regex.match(str(node_version_cmd_result))
     if not match or force_reinstall:
@@ -110,7 +110,7 @@ def update_node(c, force_reinstall=False):
         # TODO: Implement supervisor_process_stop
         # supervisor_process_stop('dev:gulp')
         # supervisor_process_stop('dev:webpack')
-        with venv(c):
+        with venv(c, True):
             c.run("rm -rf venv/lib/node_modules/")
             c.run("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
             c.run("nodeenv --node=%s --npm=%s --python-virtualenv assembl/static/js" % (n_version, npm_version))
@@ -259,9 +259,9 @@ def compile_messages(c):
     """
     Run compile *.mo file from *.po
     """
-    with venv(c):
+    with venv(c, True):
         c.run('python2 setup.py compile_catalog')
-    with venv(c):
+    with venv(c, True):
         c.run("python2 assembl/scripts/po2json.py")
 
 
@@ -301,7 +301,7 @@ def create_wheelhouse(c, dependency_links=None):
     if is_integration_env(c):
         c.run(cmd)
     else:
-        with venv(c):
+        with venv(c, True):
             c.run(cmd)
 
 
