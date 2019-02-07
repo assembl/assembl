@@ -93,9 +93,11 @@ def get_and_set_region(c):
 
 @task(create_venv)
 def install_wheel(c, allow_index=False):
-    wheelhouse = c.config.get('wheelhouse', 's3://bluenove-assembl-wheelhouse')
+    wheelhouse = os.getenv('ASSEMBL_WHEELHOUSE', c.config.get(
+        'wheelhouse', 's3://bluenove-assembl-wheelhouse'))
     # temporary: we will use assembl-([\d\.]*)-py27-none-any.whl
-    wheel = c.config.get('assembl_wheel', 'assembl-(.*)-py2-none-any\.whl')
+    wheel = os.getenv('ASSEMBL_WHEEL', c.config.get(
+        'assembl_wheel', 'assembl-(.*)-py2-none-any\.whl'))
     allow_index = '' if allow_index else '--no-index'
 
     def as_semantic(match):
