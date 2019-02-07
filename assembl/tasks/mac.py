@@ -76,7 +76,7 @@ def update_pip_requirements_mac(c, force_reinstall=False):
     Update external dependencies on remote host.
     """
     with venv(c):
-        c.run('pip install -U setuptools "pip<10" ')
+        c.run('pip install -U setuptools "pip<10" ', True)
 
     if force_reinstall:
         c.run("%s/bin/pip install --ignore-installed -r %s/requirements.txt" % (c.config.venvpath, c.config.projectpath))

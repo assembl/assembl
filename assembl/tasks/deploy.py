@@ -104,7 +104,7 @@ def install_wheel(c, allow_index=False):
         return Version.coerce(version)
     if wheelhouse.startswith('s3://'):
         wheelhouse = wheelhouse[5:]
-        with venv(c):
+        with venv(c, True):
             region = get_and_set_region(c)
             assert region
             if '(' in wheel:
@@ -124,7 +124,7 @@ def install_wheel(c, allow_index=False):
                   ' --find-links http://{host}/ http://{host}/{wheel}'.format(
                       host=host, wheel=wheel, allow_index=allow_index))
     else:
-        with venv(c):
+        with venv(c, True):
             region = c.config.region
             if '(' in wheel:
                 wheelre = re.compile('(%s)$' % wheel)
@@ -213,7 +213,7 @@ def ensure_aws_invoke_yaml(c):
 
 
 def is_supervisord_running(c):
-    with venv(c):
+    with venv(c, True):
         result = c.run('supervisorctl pid')
     if not result or 'no such file' in result.stdout or 'refused connection' in result.stdout:
         return False
@@ -232,11 +232,11 @@ def supervisor_shutdown(c):
     """
     if not is_supervisord_running(c):
         return
-    with venv(c):
+    with venv(c, True):
         c.run("supervisorctl shutdown")
     for i in range(10):
         sleep(6)
-        with venv(c):
+        with venv(c, True):
             result = c.run("supervisorctl status", warn=True)
         if not result.failed:
             break
@@ -248,7 +248,7 @@ def supervisor_shutdown(c):
 def supervisor_restart(c):
     """Restart supervisor itself."""
     supervisor_shutdown(c)
-    with venv(c):
+    with venv(c, True):
         result = c.run("supervisorctl status")
         if "no such file" in result.stdout:
             c.run("supervisord")
@@ -325,7 +325,7 @@ def generate_nginx_conf(c):
 
 @task(create_local_ini)
 def generate_supervisor_conf(c):
-    with venv(c):
+    with venv(c, True):
         ini_file = c.config.get('_internal', {}).get('ini_file', 'local.ini')
         c.run('assembl-ini-files populate %s' % (ini_file))
 
@@ -342,7 +342,7 @@ def aws_server_startup_from_local(c):
     if is_supervisord_running(c):
         supervisor_restart(c)
     else:
-        with venv(c):
+        with venv(c, True):
             c.run('supervisord')
     webservers_reload(c)
 
@@ -490,12 +490,12 @@ def update_url_metadata(c):
 def app_setup(c):
     """Setup the environment so the appliation can run"""
     if not c.config.package_install:
-        with venv(c):
+        with venv(c, True):
             c.run('pip install -e ./')
         create_var_dir(c)
         if not exists(c, c.config.ini_file):
             create_local_ini(c)
-        with venv(c):
+        with venv(c, True):
             c.run('assembl-ini-files populate %s' % (c.config.ini_file))
         # Missing part: for local environment only
         # To be separated in a separate function.
