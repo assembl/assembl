@@ -67,11 +67,13 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
         return (cls.discussion_id == discussion_id,)
 
     @classmethod
-    def push_slug(self, discussion_id, slug):
-        db = self.db
-        all_slugs = db.query(self.slug).all()
+    def push_old_slug(cls, discussion_id, slug):
+        all_slugs = cls.default_db.query(cls.slug).all()
+        discussion = cls.default_db.query(Discussion).get(discussion_id)
         if slug not in all_slugs:
-            db.add(self(discussion_id=discussion_id, slug=slug))
+            new_slug = cls(discussion_id=discussion_id, slug=discussion.slug, redirection_slug=slug)
+            cls.default_db.add(new_slug)
+            cls.default_db.flush()
 
 
 class Discussion(DiscussionBoundBase, NamedClassMixin):
