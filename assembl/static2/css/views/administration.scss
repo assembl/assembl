@@ -132,14 +132,24 @@
     margin-top: 30px;
   }
 
+  .admin-menu-sticky {
+    position: sticky;
+    top: 160px;
+    z-index: 99;
+    padding-left: 5px;
+    padding-right: 0;
+  }
+
   .admin-menu-container {
-    padding: 0 15px;
-    max-height: 500px;
+    padding: 0;
+    max-height: 600px;
     max-width: 320px;
-    position: fixed;
     overflow-y: auto;
-    z-index: 999;
     background-color: $page-bkg-grey;
+
+    .admin-menu2 {
+      padding-left: 5px;
+    }
   }
 
   .no-box-shadow {
@@ -836,5 +846,22 @@
 
   &.form-container {
     max-width: 550px;
+  }
+}
+
+@media screen and (max-width: $screen-md-min) {
+  .tabbed-content {
+    .admin-menu-sticky {
+      padding-left: initial;
+      padding-right: initial;
+    }
+
+    .admin-menu-container {
+      padding: 0 15px;
+
+      .admin-menu2 {
+        padding-left: 40px;
+      }
+    }
   }
 }
