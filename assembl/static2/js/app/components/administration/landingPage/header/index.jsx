@@ -139,11 +139,14 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
                     component={FileUploaderFieldAdapter}
                     label={I18n.t('administration.landingPage.header.headerImage')}
                   />
-                  <Field
-                    name="headerLogoImage"
-                    component={FileUploaderFieldAdapter}
-                    label={I18n.t('administration.landingPage.header.logoDescription')}
-                  />
+                  <div className="flex">
+                    <Field
+                      name="headerLogoImage"
+                      component={FileUploaderFieldAdapter}
+                      label={I18n.t('administration.landingPage.header.logoDescription')}
+                    />
+                    <Helper helperText={I18n.t('administration.landingPage.header.logoHelper')} />
+                  </div>
                   <div className="section-description">{I18n.t('administration.landingPage.header.dateDescription')}</div>
                   <Field
                     name="headerStartDate"
