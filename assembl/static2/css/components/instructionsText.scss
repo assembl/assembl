@@ -15,15 +15,6 @@
     margin-bottom: 33px;
   }
 
-  .announcement-media {
-    font-family: $font-family4;
-    letter-spacing: 1px;
-    line-height: 36px;
-    margin-bottom: 33px;
-    font-size: $font-size-sm;
-    text-align: left;
-  }
-
   @media (min-width: $screen-sm-min) {
     .announcement-title {
       margin-bottom: 40px;

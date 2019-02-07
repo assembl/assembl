@@ -123,6 +123,15 @@
   }
 }
 
+.announcement-text-only {
+  font-family: $font-family4;
+  letter-spacing: 1px;
+  line-height: 36px;
+  margin-bottom: 33px;
+  font-size: $font-size-sm;
+  text-align: left;
+}
+
 @media screen and (min-width: $screen-xxs-max) {
   .announcement-menu {
     margin-left: 55px;
@@ -211,6 +220,10 @@
   }
 
   .announcement {
+    .announcement-text-only {
+      font-size: $font-size-m;
+    }
+
     .iframed {
       position: relative;
       width: 100%;

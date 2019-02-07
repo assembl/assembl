@@ -111,6 +111,7 @@ export const SurveyAnnouncement = ({ announcement, semanticAnalysisForThematicDa
   return (
     <ThematicTabs
       guidelinesContent={guidelinesContent}
+      summary={announcement.summary}
       isMobile={!!isMobile.any()}
       semanticAnalysisForThematicData={semanticAnalysisForThematicData}
     />

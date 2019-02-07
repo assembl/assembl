@@ -24,7 +24,7 @@ const InstructionsText = ({ title, body, summary, semanticAnalysisForThematicDat
       <div className="announcement-title">
         <Title level={1}>{title}</Title>
       </div>
-      <div className="announcement-media">{renderRichtext(body)}</div>
+      <div className="announcement-media announcement-text-only">{renderRichtext(body)}</div>
     </div>
   );
 

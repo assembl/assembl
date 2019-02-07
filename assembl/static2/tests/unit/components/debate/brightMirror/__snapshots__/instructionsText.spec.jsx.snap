@@ -84,7 +84,7 @@ exports[`Storyshots InstructionsText default 1`] = `
                     </h1>
                   </div>
                   <div
-                    className="announcement-media"
+                    className="announcement-media announcement-text-only"
                   >
                     Lorem Ipsum body
                   </div>
@@ -101,7 +101,7 @@ exports[`Storyshots InstructionsText default 1`] = `
                   className="announcement"
                 >
                   <div
-                    className="announcement-media"
+                    className="announcement-media announcement-text-only"
                   >
                     To remember
                   </div>
@@ -699,7 +699,7 @@ exports[`Storyshots InstructionsText playground 1`] = `
                     </h1>
                   </div>
                   <div
-                    className="announcement-media"
+                    className="announcement-media announcement-text-only"
                   >
                     Lorem Ipsum body
                   </div>
@@ -716,7 +716,7 @@ exports[`Storyshots InstructionsText playground 1`] = `
                   className="announcement"
                 >
                   <div
-                    className="announcement-media"
+                    className="announcement-media announcement-text-only"
                   >
                     To remember
                   </div>

@@ -53,7 +53,7 @@ const ThematicTabs = ({ guidelinesContent, summary, semanticAnalysisForThematicD
     <Tab eventKey={ANNOUNCEMENT_TAB_ITEM_ID.SUMMARY} title={summaryTabTitle}>
       {summary ? (
         <div className="announcement">
-          <div className="announcement-media">
+          <div className="announcement-media announcement-text-only">
             {activeHtml(summary && (isMobile ? summary : addIframeForMindManager(summary)), postBodyReplacementComponents())}
           </div>
         </div>
