@@ -8,8 +8,10 @@ from contextlib import nested
 
 from semantic_version import Version
 
-from .common import venv, task, exists, is_integration_env, fill_template, configure_github_user
-from .sudoer import upgrade_yarn, install_build_dependencies, install_node_and_yarn, clear_aptitude_cache
+from .common import venv, task, exists, is_integration_env, fill_template, configure_github_user, get_s3_file
+from .sudoer import (
+    upgrade_yarn, install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
+    install_chrome_dependencies)
 
 
 def get_node_base_path(c):
@@ -127,36 +129,29 @@ def update_node(c, force_reinstall=False):
 @task()
 def update_npm_requirements(c, install=False, force_reinstall=False):
     """Normally not called manually"""
-    with c.cd(get_node_base_path(c)):
-        if install:
-            with venv(c):
+    with venv(c):
+        with c.cd(get_node_base_path(c)):
+            if install:
                 c.run('yarn')
-        elif force_reinstall:
-            with venv(c):
+            elif force_reinstall:
                 c.run('reinstall')
-        else:
-            with venv(c):
+            else:
                 c.run('npm update')
 
-    yarn_path = c.run('which yarn')
-    static2_path = get_new_node_base_path(c)
-    with c.cd(static2_path):
-        if exists(c, yarn_path):
-            if install or force_reinstall:
-                print('Removing node_modules directory...')
-                with venv(c):
+        yarn_path = c.run('which yarn')
+        static2_path = get_new_node_base_path(c)
+        with c.cd(static2_path):
+            if exists(c, yarn_path):
+                if install or force_reinstall:
+                    print('Removing node_modules directory...')
                     c.run('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
-            with venv(c):
                 c.run(yarn_path)
-        else:
-            if install:
-                with venv(c):
-                    c.run('npm install')
-            elif force_reinstall:
-                with venv(c):
-                    c.run('reinstall')
             else:
-                with venv(c):
+                if install:
+                    c.run('npm install')
+                elif force_reinstall:
+                    c.run('reinstall')
+                else:
                     c.run('npm update')
 
 
@@ -239,17 +234,14 @@ def compile_stylesheets(c):
     Generate *.css files from *.scss
     """
     project_path = os.getenv('CI_PROJECT_DIR', c.config.projectpath)
-    with c.cd(project_path):
-        with nested(c.cd('assembl/static/js'), venv(c)):
-            c.run('./node_modules/.bin/gulp sass')
-        with venv(c):
-            # no-qa
+    with venv(c):
+        with c.cd(project_path):
+            with c.cd('assembl/static/js'):
+                c.run('./node_modules/.bin/gulp sass')
             c.run('./assembl/static/js/node_modules/.bin/node-sass --source-map ' +
                   '-r -o assembl/static/widget/card/app/css --source-map assembl/static/widget/card/app/css assembl/static/widget/card/app/scss')
-        with venv(c):
             c.run('./assembl/static/js/node_modules/.bin/node-sass --source-map ' +
                   '-r -o assembl/static/widget/video/app/css --source-map assembl/static/widget/video/app/css assembl/static/widget/video/app/scss')
-        with venv(c):
             c.run('./assembl/static/js/node_modules/.bin/node-sass --source-map ' +
                   '-r -o assembl/static/widget/session/css --source-map assembl/static/widget/session/css assembl/static/widget/session/scss')
 
@@ -271,16 +263,29 @@ def compile_javascript(c):
     Generates and minifies javascript
     """
     project_path = os.getenv('CI_PROJECT_DIR', c.config.projectpath)
-    with c.cd(project_path):
-        with c.cd('assembl/static/js'):
-            with venv(c):
+    with venv(c):
+        with c.cd(project_path):
+            with c.cd('assembl/static/js'):
                 c.run('./node_modules/.bin/gulp libs')
-            with venv(c):
                 c.run('./node_modules/.bin/gulp browserify:prod')
-        if c.config.wsginame != 'dev.wsgi':
-            with c.cd('assembl/static2'):
-                with venv(c):
+            if c.config.wsginame != 'dev.wsgi':
+                with c.cd('assembl/static2'):
                     c.run('yarn run build')
+
+
+@task()
+def prepare_integration_tests(c):
+    """
+    Prepares the environment for running Assembl's integration tests. Fully assumes to be run in CI/CD env
+    """
+    c.run('apt-get update -qq')
+    install_chrome_dependencies(c)
+    c.run('git clone https://github.com/bluenove/assembl-tests')
+    yarn = c.run('which yarn')
+    with c.cd('assembl-tests'):
+        c.run('{}'.format(yarn))
+        # fetch data required for e2e tests
+        get_s3_file('bluenove-assembl-configurations', 'integrationTestConfig.js', 'data.js')
 
 
 @task()
@@ -571,8 +576,8 @@ def prepare_cicd_build(c):
 
     # Build JS dependencies for V1 and V2
     install_bower(c)
-    update_bower_requirements(c, force_reinstall=True)
-    update_npm_requirements(c, force_reinstall=True)
+    update_bower_requirements(c, install=True)
+    update_npm_requirements(c, install=True)
 
 
 @task()
@@ -580,22 +585,23 @@ def start_deploy_on_client(c, client_id):
     import boto3
     sts_client = boto3.client('sts')
     response = sts_client.assume_role(
-            RoleArn='arn:aws:iam::%s:role/CICD-Role' % (client_id,),
-            RoleSessionName='cicd')
+        RoleArn='arn:aws:iam::%s:role/CICD-Role' % (client_id,),
+        RoleSessionName='cicd')
     credentials = response['Credentials']
-    cd_client = boto3.client('codedeploy',
+    cd_client = boto3.client(
+        'codedeploy',
         aws_access_key_id=credentials['AccessKeyId'],
         aws_secret_access_key=credentials['SecretAccessKey'],
         aws_session_token=credentials['SessionToken'])
 
     response = cd_client.create_deployment(
-            applicationName='assembl',
-            deploymentGroupName='assembl-deploymentgroup',
-            revision={
-                'revisionType': 'S3',
-                's3Location': {
-                    'bucket': 'bluenove-assembl-wheelhouse',
-                    'key': 'code_deploy_test.zip',
-                    'bundleType': 'zip'
-                }
-            })
+        applicationName='assembl',
+        deploymentGroupName='assembl-deploymentgroup',
+        revision={
+            'revisionType': 'S3',
+            's3Location': {
+                'bucket': 'bluenove-assembl-wheelhouse',
+                'key': 'code_deploy_test.zip',
+                'bundleType': 'zip'
+            }
+        })

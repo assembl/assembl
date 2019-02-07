@@ -3,8 +3,8 @@ image: python:2.7
 stages:
   - test
   - build
-  - deploy_to_dev
-  - test_on_dev
+  - deploy_to_sandox
+  - test_on_sandbox
   - deploy_to_uat
   - deploy_to_prod
 
@@ -18,7 +18,7 @@ test_frontend:
   except:
     - master
     - tmp_master_for_ci_cd
-    - add_deploy_job
+    # - invoke
   image: node:10
   before_script:
     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
@@ -32,14 +32,18 @@ test_frontend:
     - yarn run flow --quiet
 
 test_integration_and_ui:
-  stage: test_on_dev
+  stage: test_on_sandbox
   image: node:10
   only:
     - tmp_master_for_ci_cd
     - add_deploy_job
   before_script:
-    - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
-    - sh scripts/prepare_integration_tests.sh
+    - sudo apt-get install python-pip python-dev build-essential
+    - pip install $(grep invoke requirements.in)
+    - echo '_extends: aws.yaml' > $CI_PROJECT_DIR/invoke.yaml
+    - touch $CI_PROJECT_DIR/secrets.yamls
+    - ln -s $CI_PROJECT_DIR/assembl/tasks .
+    - inv build.prepare-integration-tests
   script:
     # run integration tests
     - yarn jest tests/integration
@@ -71,29 +75,22 @@ build_wheel:
     - inv build.push-wheelhouse
     - inv build.push-built-themes-to-remote-bucket
     # # - twine upload -u bluenove --skip-existing dist/*
-    # - fab -f $CI_PROJECT_DIR/assembl/configs/local_prod.rc create_wheelhouse
-    # - fab -f $CI_PROJECT_DIR/assembl/configs/aws.rc push_wheelhouse:house="s3://bluenove-assembl-wheelhouse"
-    # - fab -f $CI_PROJECT_DIR/assembl/configs/aws.rc push_client_themes:house="s3//bluenove-client-themes"
     # Remove ssh files so that the keys are not kept on image prior to travis removal
     # - rm -rf ~/.ssh
 
 
 push_to_develop_server:
-  stage: deploy_to_dev
+  stage: deploy_to_sandbox
   only:
     - tmp_master_for_ci_cd
     - add_deploy_job
     - rws_connections
+    #- invoke
   variables:
     DEPLOYING: true
   before_script:
-    - sh scripts/configure_ssh.sh
-    - pip install fabric==1.14
-    - mkdir -p private_configs
-    - ssh -4 -i ~/.ssh/vaultmaster.pem vaultmaster@dev-assembl.bluenove.com "cd /opt/vault/bluenove-server-configs; git pull"
-    - scp -4 -i ~/.ssh/vaultmaster.pem vaultmaster@dev-assembl.bluenove.com:/opt/vault/bluenove-server-configs/dev_staging.rc ./private_configs/dev_staging.rc
-    - scp -4 -i ~/.ssh/vaultmaster.pem vaultmaster@dev-assembl.bluenove.com:/opt/vault/bluenove-server-configs/bluenove.rc ./private_configs/bluenove.rc
-    - export VERSION=$(grep current_version .bumpversion.cfg | tr -d ' ' | awk -F "=" '{print $2}')
+    - pip install $(grep invoke $CI_PROJECT_DIR/requirements.in)
+    # Fetch the configurations of sandbox from S3
   script:
     - fab -f assembl/fabfile.py -c private_configs/dev_staging.rc deploy_wheel:$VERSION
     - fab -f assembl/fabfile.py -c private_configs/dev_staging.rc bootstrap_from_wheel

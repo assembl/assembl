@@ -36,16 +36,26 @@ core_dependencies = [
     'python-dev'
 ]
 
+python_dependencies = [
+    'python-dev',
+    'python-pip',
+    'build-essential'
+]
+
 # Ensure that this is matching the node version set in base_env.yaml for Assembl's node
 node_version = '10.13.0'
 
 
 @task
+def install_python(c):
+    c.sudo('apt-get install -y {}'.format(' '.join(python_dependencies)))
+
+
+@task
 def install_base_deps(c):
     """Install base tools for a Ubuntu server."""
-    python_essentials = [
+    assembl_python_essentials = [
         'python-virtualenv',
-        'python-pip',
         'python-psycopg2',
         'python-semantic-version',
         'python-requests',
@@ -53,8 +63,8 @@ def install_base_deps(c):
         'python-yaml',
         'python-boto3'
     ]
-    total_dependencies = core_dependencies + python_essentials
-    c.sudo('apt-get install -y %s' % ','.join(total_dependencies))
+    total_dependencies = set(core_dependencies) + set(python_dependencies) + set(assembl_python_essentials)
+    c.sudo('apt-get install -y %s' % ' '.join(list(total_dependencies)))
 
 
 @task
@@ -240,3 +250,17 @@ def install_node_and_yarn(c):
     c.sudo('echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list')
     c.sudo('wget -qO- https://deb.nodesource.com/setup_%s.x | bash -' % node_major_version)
     c.sudo('apt-get install -yqq nodejs yarn')
+
+
+@task()
+def install_chrome_dependencies(c):
+    """
+    Installs the requirements for chrome + pupeteer to be run. Assumes to be run on Debian based machines
+    """
+    deps = ['gconf-service', 'libasound2', 'libatk1.0-0', 'libc6', 'libcairo2', 'libcups2', 'libdbus-1-3', 'libexpat1',
+            'libfontconfig1', 'libgcc1', 'libgconf-2-4', 'libgdk-pixbuf2.0-0', 'libglib2.0-0', 'libgtk-3-0', 'libnspr4',
+            'libpango-1.0-0', 'libpangocairo-1.0-0', 'libstdc++6', 'libx11-6', 'libx11-xcb1', 'libxcb1', 'libxcomposite1',
+            'libxcursor1', 'libxdamage1', 'libxext6', 'libxfixes3', 'libxi6', 'libxrandr2', 'libxrender1', 'libxss1',
+            'libxtst6', 'ca-certificates', 'fonts-liberation', 'libappindicator1', 'libnss3', 'lsb-release', 'xdg-utils',
+            'wget']
+    c.sudo('apt-get install -yq {}'.format(' '.join(deps)))

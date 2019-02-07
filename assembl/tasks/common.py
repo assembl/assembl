@@ -202,6 +202,20 @@ def fill_template(c, template, output=None, extra=None, default_dir=None):
             out.write(result)
 
 
+def get_s3_file(bucket, key, destination=None):
+    import boto3
+    s3 = boto3.client('s3')
+    try:
+        ob = s3.get_object(Bucket=bucket, Key=key)
+        content = ob['Body'].read()
+        if destination:
+            with open(destination, 'w') as f:
+                f.write(content)
+        return content
+    except s3.exceptions.NoSuchKey:
+        return None
+
+
 @task()
 def create_venv(c, path=None):
     # note that here, we do not depend on setup_ctx
