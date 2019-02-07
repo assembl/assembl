@@ -12,7 +12,7 @@ $column-synthesis-height: 320px;
     max-width: calc(#{$post-max-width} + 2 * #{$synthesis-padding});
     margin-left: auto;
     margin-right: auto;
-    height: $column-synthesis-height;
+    height: auto;
 
     .post-left {
       padding: 0;
@@ -101,6 +101,10 @@ $column-synthesis-height: 320px;
 
 .tab-selector > .tab-selector-buttons {
   display: flex;
+  position: sticky;
+  top: 60px;
+  width: 100%;
+  z-index: 1000;
 
   .button-container {
     padding: 0 1px;
@@ -190,11 +194,32 @@ $column-synthesis-height: 320px;
 
 .column-synthesis {
   .insert-box {
-    height: $column-synthesis-height;
+    height: 100%;
 
     .insert-content {
       overflow-y: auto;
-      height: calc(#{$column-synthesis-height} - 140px);
+      height: 100%;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-sm-max) {
+  .column-view {
+    height: 100%;
+
+    .synthesis {
+      height: $column-synthesis-height;
+    }
+  }
+
+  .column-synthesis {
+    .insert-box {
+      height: $column-synthesis-height;
+
+      .insert-content {
+        overflow-y: auto;
+        height: calc(#{$column-synthesis-height} - 140px);
+      }
     }
   }
 }

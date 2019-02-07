@@ -43,6 +43,12 @@
   .icon-schedule-container {
     margin-left: 10px;
 
+    .no-pointer {
+      &.assembl-icon-schedule {
+        cursor: initial;
+      }
+    }
+
     .assembl-icon-schedule {
       cursor: pointer;
 

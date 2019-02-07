@@ -100,7 +100,7 @@
 
   .thumbnails-mobile-slider {
     padding: 15px 0;
-    background-color: $grey5;
+    background-color: $light-grey;
   }
 
   .thumbnails-slider {
@@ -119,7 +119,7 @@
     z-index: 10;
     left: 0;
     right: 0;
-    background-color: $grey10;
+    background-color: $light-grey;
     height: 40px;
     padding-top: 3px;
 
@@ -168,7 +168,7 @@
 
   .theme {
     padding: 0;
-    transition: all .5s ease-out;
+    transition: all 0.5s ease-out;
   }
 
   .row-inline {

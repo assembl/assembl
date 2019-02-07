@@ -76,7 +76,7 @@
 
       .previous-extract,
       .next-extract {
-        background-color: rgba($color: $grey2, $alpha: 0.1);
+        background-color: rgba($color: $grey, $alpha: 0.1);
         display: flex;
         align-items: center;
         align-self: stretch;
@@ -87,7 +87,7 @@
         transition: all 0.2s linear;
 
         &:hover {
-          background-color: rgba($color: $grey2, $alpha: 1);
+          background-color: rgba($color: $grey, $alpha: 1);
 
           .assembl-icon-down-open {
             color: white;
@@ -143,7 +143,7 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    background-color: rgba($color: $grey2, $alpha: 0.1);
+    background-color: rgba($color: $grey, $alpha: 0.1);
     padding: 0 20px;
     height: 46px;
 
@@ -186,7 +186,7 @@
 .tools-menu {
   margin-top: 5px !important;
   margin-left: -5px !important;
-  border: 1px solid $grey1;
+  border: 1px solid $light-grey;
   border-radius: 0;
   width: 40px;
 

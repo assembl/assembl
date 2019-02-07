@@ -2,7 +2,7 @@
   font-size: $font-size-xs;
   letter-spacing: 1.3px;
   line-height: 1;
-  border: 1px solid $grey1;
+  border: 1px solid $light-grey;
   border-radius: 0;
   position: absolute;
   margin-top: -60px !important;
@@ -82,7 +82,7 @@
 
   .taxonomy-label-border {
     padding: 5px 10px 10px;
-    border-bottom: 1px solid $grey1;
+    border-bottom: 1px solid $light-grey;
   }
 
   .taxonomy-category {
@@ -226,7 +226,7 @@
   position: absolute;
   right: -9px;
   top: 2px;
-  border: 1px solid $grey2;
+  border: 1px solid $grey;
   border-radius: 50%;
   background-color: $white;
   height: 17px;
@@ -248,13 +248,13 @@
 }
 
 .harvesting-box {
-  box-shadow: 2px 2px 4px 0 $grey1;
+  box-shadow: 2px 2px 4px 0 $light-grey;
   margin: 0 0 20px 18px;
   width: 295px;
 
   .harvesting-box-header {
     padding: 16px 20px 15px 20px;
-    border-bottom: 1px solid $grey1;
+    border-bottom: 1px solid $light-grey;
   }
 
   .extracts-nb-msg {
@@ -305,7 +305,7 @@
 
   .profile {
     font-size: 11px;
-    color: $grey3;
+    color: $grey;
     margin-left: -5px;
     display: flex;
 
@@ -371,18 +371,18 @@
 
     .btn[disabled] {
       opacity: 1;
-      border-color: $grey5;
+      border-color: $light-grey;
 
       span {
-        color: $grey5;
+        color: $light-grey;
       }
 
       &:hover {
         background-color: $white;
-        border-color: $grey5;
+        border-color: $light-grey;
 
         span {
-          color: $grey5;
+          color: $light-grey;
         }
       }
     }
@@ -402,10 +402,10 @@
       border-radius: 5px;
       width: 26px;
       height: 26px;
-      border-color: $grey3;
+      border-color: $grey;
 
       span {
-        color: $grey3;
+        color: $grey;
       }
 
       &:hover {
@@ -439,7 +439,7 @@
   .harvesting-box-body {
     padding: 20px 5px 10px;
     font-size: $font-size-xs;
-    color: $grey3;
+    color: $grey;
     word-wrap: break-word;
 
     .extract-body {
@@ -455,15 +455,15 @@
     }
 
     textarea {
-      border: 1px solid $grey1;
+      border: 1px solid $light-grey;
       margin: -20px 0 0;
-      color: $grey2;
+      color: $grey;
       font-family: $font-family;
       font-size: $font-size-xs;
       min-height: 100px;
 
       &:focus {
-        border: 1px solid $grey1;
+        border: 1px solid $light-grey;
       }
     }
 
@@ -526,7 +526,7 @@
 
   .harvesting-tags-form-container,
   .harvesting-tags-container {
-    background-color: $grey1;
+    background-color: $light-grey;
     padding: 15px 15px 10px 26px;
 
     label {
@@ -539,12 +539,12 @@
     }
 
     .select-field__placeholder {
-      color: $grey3;
+      color: $grey;
       font-size: $font-size-xs;
     }
 
     .select-field__dropdown-indicator {
-      color: $grey3;
+      color: $grey;
       padding: 0 8px;
 
       svg {
@@ -565,7 +565,7 @@
 
       &:hover {
         background: none;
-        color: $grey3;
+        color: $grey;
       }
     }
 
@@ -585,7 +585,7 @@
       background-color: white;
       border-radius: 13px;
       padding: 2px 2px 2px 10px;
-      color: $grey3;
+      color: $grey;
       margin-right: 5px;
       margin-bottom: 5px;
       font-family: $font-family4;
@@ -635,7 +635,7 @@
 
   .harvesting-box-footer {
     text-align: center;
-    background-color: $grey1;
+    background-color: $light-grey;
     display: flex;
     justify-content: space-around;
     padding: 20px 0;
@@ -743,4 +743,3 @@
     display: none;
   }
 }
-

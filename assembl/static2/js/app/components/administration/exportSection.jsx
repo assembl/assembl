@@ -150,13 +150,12 @@ class ExportSection extends React.Component<Props, State> {
           annotation={I18n.t(`administration.export.${annotation}`)}
         />
         <div className="admin-content">
-          <FormGroup>
+          <FormGroup className="no-margin-bottom">
             {this.renderAnonymousOption()}
             {this.renderLanguageOptions()}
             {this.renderLinkOptions()}
           </FormGroup>
-          <br />
-          <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
+          <Link className="button-link button-dark margin-s" href={this.state.exportLink}>
             <Translate value="administration.export.link" />
           </Link>
         </div>

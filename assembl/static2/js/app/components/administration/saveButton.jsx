@@ -3,6 +3,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
+import classNames from 'classnames';
 
 import { type MutationsPromises } from '../form/types.flow';
 
@@ -103,7 +104,9 @@ export const getMutationsPromises = (params: Params) => {
 };
 
 export const DumbSaveButton = ({ disabled, saveAction, specificClasses }: Props) => {
-  const buttonClasses = specificClasses || 'save-button button-submit button-dark right';
+  const isHoverClass = !disabled ? 'button-dark' : '';
+  const buttonClasses = specificClasses || classNames('save-button button-submit right', isHoverClass);
+
   return (
     <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
       <Translate value="administration.saveThemes" />

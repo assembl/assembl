@@ -45,7 +45,7 @@
   width: calc(100% - 2px);
 
   .image-box {
-    background-color: $grey2;
+    background-color: $grey;
     background-position: top left;
     background-repeat: no-repeat;
     background-size: cover;
@@ -96,7 +96,7 @@
     margin: 10px 0 0;
     position: absolute;
     z-index: 2;
-    top: 50%;
+    top: 59%;
   }
 
   .rotate-hyphen {
@@ -110,7 +110,7 @@
   width: calc(100% - 2px);
 
   .image-box {
-    background-color: $grey2;
+    background-color: $grey;
     background-position: top left;
     background-repeat: no-repeat;
     background-size: cover;

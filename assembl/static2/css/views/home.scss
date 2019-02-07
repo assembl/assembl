@@ -86,7 +86,7 @@
       background-repeat: no-repeat;
       background-size: cover;
       height: 100%;
-      opacity: .5;
+      opacity: 0.5;
       position: absolute;
       top: 0;
       width: 100%;
@@ -141,7 +141,7 @@
         }
 
         .stats {
-          color: $grey3;
+          color: $grey;
           text-align: center;
         }
 
@@ -150,7 +150,7 @@
         }
 
         &:nth-child(3) {
-          background-color: $grey1;
+          background-color: $light-grey;
         }
 
         &:hover {

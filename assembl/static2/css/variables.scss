@@ -1,19 +1,8 @@
 $white: #fff;
 $black: #000;
-$grey0: #f3f3f3;
-$grey1: #e7e6f5;
-$grey2: #9b9b9b;
-$grey3: #4a4a4a;
-$grey4: #1d1d1d;
-$grey5: #d8d8d8;
-$grey6: #eef0f7;
-$grey7: #e5e5e5;
-$grey8: #8b8b8b;
-$grey9: #efefef;
-$grey10: #f7f8fc;
-$grey-shadow: #d0d0d0;
-$greyish-brown: #4c4c4c;
-$grey11: #ccc;
+$light-grey: #eceeed;
+$grey: #666;
+
 $orange: #ffd58f;
 $orange2: #ff6a00;
 $orange3: #ffa105;
@@ -43,7 +32,7 @@ $harvesting-blue-light: rgba(0, 182, 255, 0.4);
 $opacity-purple: rgba(84, 4, 215, 0.5);
 $opacity-cyan: rgba(0, 140, 166, 0.5);
 $min-opacity-cyan: rgba(0, 140, 166, 0.1);
-$linear-gradient: linear-gradient(90deg, $grey6, $white);
+$linear-gradient: linear-gradient(90deg, $light-grey, $white);
 
 $first-color: $cyan;
 $first-color-light: $cyan-light;

@@ -4,9 +4,10 @@
   .light-title-3 {
     font-size: $font-size-sm;
     width: calc(100% - 40px);
+    margin-top: 0;
     margin-right: 0;
     margin-left: 0;
-    padding-top: 20px;
+    padding-top: 10%;
   }
 
   .content-box {
@@ -14,7 +15,7 @@
 
     &.position-content-box {
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
       flex-direction: column;
       overflow: hidden;
@@ -61,7 +62,7 @@
 
   .stats {
     position: absolute;
-    bottom: 20px;
+    bottom: 10px;
     width: calc(100% - 40px);
     text-align: center;
 
@@ -156,6 +157,14 @@
   }
 }
 
+@media screen and (max-width: $screen-md-min) {
+  .idea-preview {
+    .stats {
+      bottom: 5px;
+    }
+  }
+}
+
 @media screen and (max-width: $screen-xxs-max) {
   .box-hyphen {
     width: 30px;
@@ -167,18 +176,15 @@
     }
 
     .light-title-3 {
-      top: 50px;
-    }
-
-    .stats {
-      bottom: 40px;
+      padding-top: 0;
+      margin-top: 10%;
     }
 
     .see-discussion {
       a {
         align-items: center;
         display: flex;
-        height: 70px;
+        height: 30px;
         justify-content: center;
         width: 100%;
       }
@@ -187,19 +193,48 @@
     .see-sub-ideas {
       align-items: center;
       display: flex;
-      height: 70px;
+      height: 30px;
       justify-content: center;
       width: 100%;
+    }
+
+    .stats {
+      bottom: 2px;
+    }
+
+    &.mobile-illustration-box {
+      .box-hyphen {
+        top: 40%;
+      }
+    }
+
+    &.idea-preview-thumbnails {
+      &.mobile-illustration-box {
+        display: table;
+
+        .content-box {
+          padding-left: 5px;
+          padding-right: 5px;
+
+          &.position-content-box {
+            display: block;
+
+            .light-title-3 {
+              padding-top: 0;
+              margin-left: auto;
+              margin-right: auto;
+            }
+
+            .selected-idea-arrow {
+              left: 30px;
+            }
+          }
+        }
+      }
     }
   }
 
   .idea-preview-level-1 {
     height: 436px;
-  }
-
-  .mobile-illustration-box {
-    .box-hyphen {
-      top: 40%;
-    }
   }
 }

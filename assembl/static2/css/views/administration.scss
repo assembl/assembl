@@ -6,7 +6,7 @@
 .tabbed-content {
   .tab-title {
     border-bottom: $border-not-active;
-    color: $grey2;
+    color: $grey;
     cursor: pointer;
     display: block;
     padding: 0 0 5px 0;
@@ -14,7 +14,7 @@
 
   .tab-title-active {
     border-bottom: $border-active;
-    color: $grey3;
+    color: $grey;
     cursor: pointer;
     display: block;
     padding: 0 0 5px 0;
@@ -164,7 +164,7 @@
       padding: 0 0 15px;
 
       a {
-        color: $grey2;
+        color: $grey;
 
         &:hover {
           color: $first-color;
@@ -172,7 +172,7 @@
       }
 
       .arrow {
-        color: $grey2;
+        color: $grey;
         font-size: 6px;
         margin-right: 10px;
         margin-left: -19px;
@@ -227,8 +227,22 @@
     }
 
     .admin-content {
-      padding: 30px 40px 80px;
+      padding: 10px 40px 40px;
       text-align: center;
+
+      .form-group {
+        &.no-margin-bottom {
+          margin-bottom: 0;
+        }
+      }
+
+      .block-picker {
+        &.no-border-radius {
+          > div {
+            border-radius: 0 0 0 0 !important;
+          }
+        }
+      }
     }
 
     .admin-paragraph {
@@ -243,7 +257,7 @@
 
       .language-list {
         padding-top: 20px;
-        color: $grey2;
+        color: $grey;
       }
     }
 
@@ -261,8 +275,11 @@
     }
 
     .annotation {
-      margin: 0 44px 20px;
       font-family: $font-family7;
+
+      &.margin {
+        margin: 0 44px 20px;
+      }
     }
   }
 
@@ -317,6 +334,11 @@
     .form-control::placeholder {
       font-size: 12px;
       font-family: $font-family6;
+    }
+
+    .separator {
+      margin: 40px 0;
+      padding: 0;
     }
   }
 
@@ -470,7 +492,7 @@
   }
 
   .preview-title {
-    color: $grey3;
+    color: $grey;
     font-family: $font-family6;
     font-size: $font-size-xs;
     margin: 10px 0 20px 5px;
@@ -493,7 +515,7 @@
   }
 
   .description-block {
-    color: $grey8;
+    color: $grey;
     font-size: $font-size-xxs;
     margin: 10px 0 0 5px;
     font-family: $font-family6;
@@ -505,7 +527,7 @@
     }
 
     &:hover {
-      color: $grey3;
+      color: $grey;
     }
   }
 
@@ -545,7 +567,7 @@
     .modules-preview {
       margin: 5px;
       padding: 2px;
-      background-color: $grey0;
+      background-color: $light-grey;
       min-height: 400px;
       display: flex;
       flex-direction: column;
@@ -613,7 +635,7 @@
       flex-direction: column;
       padding: 0 45px;
       font-size: $font-size-s;
-      color: $grey3;
+      color: $grey;
       font-family: $font-family4;
 
       .timeline-link {
@@ -628,8 +650,6 @@
   }
 
   .vote-proposal-form {
-    margin-top: 65px;
-
     .settings-link {
       margin-left: 20px;
       font-size: $font-size-xs;

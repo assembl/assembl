@@ -2,7 +2,7 @@
   cursor: pointer;
 
   &.disabled {
-    color: $grey2;
+    color: $grey;
     pointer-events: none;
     cursor: default;
   }

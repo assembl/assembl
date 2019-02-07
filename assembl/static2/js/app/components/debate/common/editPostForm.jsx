@@ -207,13 +207,10 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
               />
 
               <div className="button-container">
-                <Button className="button-cancel button-dark btn btn-default left" onClick={this.handleCancel}>
+                <Button className="button-cancel button-dark btn btn-default" onClick={this.handleCancel}>
                   <Translate value="cancel" />
                 </Button>
-                <Button
-                  className="button-submit button-dark btn btn-default right"
-                  onClick={() => this.handleSubmit(publicationState)}
-                >
+                <Button className="button-submit button-dark btn btn-default" onClick={() => this.handleSubmit(publicationState)}>
                   <Translate value="debate.post" />
                 </Button>
                 {draftable ? (

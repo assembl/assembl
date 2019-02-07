@@ -103,15 +103,15 @@
 
 .button-disable {
   background: $btn-light-txt;
-  color: $grey11;
+  color: $grey;
   cursor: not-allowed;
 
   &:active,
   &:focus,
   &:hover,
   &:visited {
-    color: $grey11 !important;
-    border: 1px solid $grey11;
+    color: $grey !important;
+    border: 1px solid $grey;
   }
 }
 

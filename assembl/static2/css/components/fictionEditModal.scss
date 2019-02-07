@@ -14,6 +14,7 @@
   }
 
   .fiction-edit-modal-inner {
+    height: 100%;
     padding: 40px;
 
     .assembl-icon-back-arrow {
@@ -31,7 +32,16 @@
     }
 
     .button-container {
-      margin: 25px 0 0;
+      width: 100%;
+      margin: 10px 0 0;
+
+      .button-cancel {
+        width: 100%;
+      }
+
+      .button-submit {
+        width: 100%;
+      }
     }
 
     .assembl-icon-back-arrow {
@@ -51,6 +61,19 @@
     }
 
     @media screen and (min-width: $screen-sm-min) {
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+
+        .button-cancel {
+          width: initial;
+        }
+
+        .button-submit {
+          width: initial;
+        }
+      }
+
       .rich-text-editor .public-DraftEditor-content {
         height: 400px;
       }
@@ -61,5 +84,23 @@
         height: 600px;
       }
     }
+  }
+}
+
+@media screen and (min-width: $screen-md-max) {
+  .fiction-edit-modal {
+    width: 70%;
+    height: 750px;
+    overflow: hidden;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .fiction-edit-modal {
+    height: 950px;
   }
 }

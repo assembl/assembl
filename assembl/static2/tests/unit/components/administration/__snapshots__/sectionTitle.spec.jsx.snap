@@ -11,7 +11,7 @@ exports[`SectionTitle component should render an admin section title 1`] = `
     className="box-hyphen"
   />
   <div
-    className="annotation"
+    className="annotation margin padding-left"
   >
     foobar
   </div>

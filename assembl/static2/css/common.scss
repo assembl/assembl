@@ -1,5 +1,5 @@
 html {
-  font-size: 12px;  // the base for the rem unit (used in react-datepicker)
+  font-size: 12px; // the base for the rem unit (used in react-datepicker)
 }
 
 body {
@@ -40,15 +40,18 @@ input {
   }
 }
 
-input:-moz-placeholder, textarea:-moz-placeholder {
+input:-moz-placeholder,
+textarea:-moz-placeholder {
   font-family: $font-family6;
 }
 
-input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
   font-family: $font-family6;
 }
 
-input.placeholder, textarea.placeholder {
+input.placeholder,
+textarea.placeholder {
   font-family: $font-family6;
 }
 
@@ -65,7 +68,7 @@ input.placeholder, textarea.placeholder {
 }
 
 .grey {
-  color: $grey2;
+  color: $grey;
 }
 
 .black {
@@ -260,7 +263,7 @@ input.placeholder, textarea.placeholder {
 }
 
 .form-label {
-  color: $grey3;
+  color: $grey;
   font-family: $font-family;
   font-size: $font-size-xs;
   padding: 0 0 0 5px;
@@ -318,8 +321,8 @@ input.placeholder, textarea.placeholder {
       content: '';
       top: 18px;
       left: -15px;
-      border-left: 1px solid $grey11;
-      border-top: 1px solid $grey11;
+      border-left: 1px solid $grey;
+      border-top: 1px solid $grey;
       border-radius: 0 0 0 0;
       width: 15px;
       height: 100%;
@@ -330,12 +333,12 @@ input.placeholder, textarea.placeholder {
     }
 
     .form-tree-item::before {
-      content: "";
+      content: '';
       position: absolute;
       top: -26px;
       left: -15px;
-      border-left: 1px solid $grey11;
-      border-bottom: 1px solid $grey11;
+      border-left: 1px solid $grey;
+      border-bottom: 1px solid $grey;
       border-radius: 0 0 0 0;
       width: 15px;
       height: 45px;

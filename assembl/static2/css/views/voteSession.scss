@@ -51,8 +51,8 @@
     left: 0;
     right: 0;
     z-index: 100;
-    border-top: 1px solid $grey1;
-    box-shadow: 3px 4px 7px $grey1;
+    border-top: 1px solid $light-grey;
+    box-shadow: 3px 4px 7px $light-grey;
 
     .separator {
       display: none;
@@ -156,7 +156,7 @@
     font-size: $font-size-xs;
     color: $link-color;
     text-decoration: none;
-    background-color: $grey0;
+    background-color: $light-grey;
     padding: 15px;
 
     &:hover {
@@ -203,7 +203,7 @@
 
   .proposal-results {
     .participants-count {
-      border: 1px solid $grey5;
+      border: 1px solid $light-grey;
       margin: 20px 0;
       min-height: 120px;
     }
@@ -248,7 +248,7 @@
     }
 
     .box {
-      border: 1px solid $grey5;
+      border: 1px solid $light-grey;
       margin-top: 10px;
       height: 140px;
       text-align: center;
@@ -302,7 +302,7 @@
   }
 
   .separator {
-    border-bottom: 1px $btn-dark-border-style $grey5;
+    border-bottom: 1px $btn-dark-border-style $light-grey;
     max-width: 605px;
     margin-left: -5px;
   }

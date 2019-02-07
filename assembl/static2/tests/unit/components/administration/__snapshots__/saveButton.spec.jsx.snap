@@ -2,7 +2,7 @@
 
 exports[`Save button component should render a disabled save button 1`] = `
 <button
-  className="save-button button-submit button-dark right btn btn-default"
+  className="save-button button-submit right btn btn-default"
   disabled={true}
   onClick={[MockFunction]}
   type="button"
@@ -15,7 +15,7 @@ exports[`Save button component should render a disabled save button 1`] = `
 
 exports[`Save button component should render a save button 1`] = `
 <button
-  className="save-button button-submit button-dark right btn btn-default"
+  className="save-button button-submit right button-dark btn btn-default"
   disabled={false}
   onClick={[MockFunction]}
   type="button"
