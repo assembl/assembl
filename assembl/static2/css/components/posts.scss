@@ -446,14 +446,18 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 }
 
-@media screen and (min-width: 600px) {
+@media screen and (min-width: $screen-sm-min) {
   .proposals {
     .sentiment-label {
       display: inline-block;
     }
 
     .stat-sentiment {
-      margin: -15px 0 0;
+      margin: -26px 0 0;
+
+      .min-sentiment {
+        text-align: center;
+      }
     }
 
     .content {
@@ -462,7 +466,7 @@ $deleted-post-border: 1px solid $light-grey !default;
       width: 80%;
 
       .user {
-        padding: 30px 0 0 40px;
+        padding: 20px 0 0 40px;
       }
     }
 
@@ -482,8 +486,8 @@ $deleted-post-border: 1px solid $light-grey !default;
 
       .statistics-doughnut {
         height: 100px;
-        margin-top: 30px;
-        margin-bottom: 30px;
+        margin-top: 15px;
+        margin-bottom: 15px;
 
         .circle {
           stroke-width: 14px;
@@ -496,11 +500,19 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .post-footer {
-      margin: 25px 50px 10px 73px;
+      margin: 10px 50px 10px 73px;
     }
 
     .box {
-      min-height: 230px;
+      min-height: 170px;
+    }
+  }
+
+  .survey {
+    .actions {
+      .overflow-action {
+        margin: 0;
+      }
     }
   }
 }
@@ -533,7 +545,7 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 }
 
-@media screen and (max-width: 599px) {
+@media screen and (max-width: $screen-xs-max) {
   .proposals {
     .content {
       .post-footer {
@@ -650,7 +662,7 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 }
 
-@media screen and (min-width: 993px) {
+@media screen and (min-width: $screen-md-min) {
   .posts {
     .post-actions {
       position: absolute;
@@ -663,7 +675,7 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 }
 
-@media screen and (max-width: 992px) {
+@media screen and (max-width: $screen-md-min) {
   .posts {
     .custom-overlay {
       display: inline-block;
