@@ -3,10 +3,8 @@
 
 {% block main_css %}
   {# Override the main CSS. #}
-  {% if NODE_ENV != 'development' %}
   <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/bundle.{{bundle_css_hash}}.css" />
   <link type="text/css" rel="stylesheet" href="{{REACT_URL}}{{theme_css_file}}" />
-  {% endif %}
 {% endblock %}
 
 {% block body %}
