@@ -317,12 +317,6 @@
       }
     }
 
-    .phases-section {
-      .hidden-xs {
-        display: none;
-      }
-    }
-
     .synthesis-section {
       .insert-content {
         -webkit-box-orient: vertical;
@@ -337,7 +331,7 @@
   }
 }
 
-@media screen and (min-width: 992px) {
+@media screen and (min-width: $screen-md-min) {
   .phases-section {
     .phase {
       &:nth-child(1) {
@@ -359,7 +353,7 @@
   }
 }
 
-@media screen and (max-width: 991px) {
+@media screen and (max-width: $screen-sm-max) {
   .themes-section {
     .theme {
       &:nth-child(1) {
@@ -381,6 +375,10 @@
   }
 
   .phases-section {
+    .hidden-xs {
+      display: none;
+    }
+
     .phase {
       &:nth-child(1) {
         margin: 2px 0 0;
@@ -450,7 +448,7 @@
   }
 }
 
-@media screen and (min-width: 1100px) {
+@media screen and (min-width: $screen-md-min) {
   .home {
     .header-section {
       .header-content {
@@ -460,7 +458,7 @@
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: $screen-xxs-max) {
   .home .header-section {
     .header-content {
       padding: 60px 5px 120px;
@@ -490,7 +488,7 @@
   }
 }
 
-@media screen and (min-width: 421px) {
+@media screen and (min-width: $screen-xxs-max) {
   .twitter-section {
     .tweet-section {
       padding: 45px 75px 65px;
