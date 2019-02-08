@@ -9,27 +9,22 @@ def index_languages():
 
 
 BOOL = {
-    'index': True,
     'type': 'boolean',
 }
 
 DATE = {
-    'index': True,
     'type': 'date',
 }
 
 KEYWORD = {
-    'index': True,
     'type': 'keyword'
 }
 
 LONG = {
-    'index': True,
     'type': 'long',
 }
 
 TEXT = {
-    'index': True,
     'type': 'text',
 }
 
@@ -81,12 +76,11 @@ def add_index_languages(props, names):
     langs.add('other')
     for name in names:
         for lang in langs:
-            analyzer = known_analyzers.get(lang, 'default')
-            props["_".join((name, lang))] = {
-                'analyzer': analyzer,
-                'index': True,
-                'type': 'text',
-            }
+            analyzer = known_analyzers.get(lang, None)
+            result = {'type': 'text'}
+            if analyzer:
+                result['analyzer'] = analyzer
+            props["_".join((name, lang))] = result
 
 
 COMMON_POST = {

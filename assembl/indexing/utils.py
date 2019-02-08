@@ -1,10 +1,11 @@
 from collections import defaultdict
 
+import simplejson as json
+from elasticsearch.client import Elasticsearch
+
 from assembl.lib import config
 from assembl.lib.locale import strip_country
 from assembl.lib.clean_input import unescape
-from elasticsearch.client import Elasticsearch
-
 from assembl.indexing.settings import index_languages, get_index_settings, MAPPINGS
 
 
@@ -33,16 +34,54 @@ def create_index(index_name):
     return es
 
 
+def compare_dicts_ref(reference, state, key_filter=None):
+    """Ensure that state is conformant to reference where defined."""
+    if isinstance(reference, dict) != isinstance(reference, dict):
+        return False
+    if not isinstance(reference, dict):
+        return reference == state
+    for key in reference.keys():
+        if key_filter and not key_filter(key):
+            continue
+        if key not in state:
+            return False
+        if not compare_dicts_ref(reference[key], state[key], key_filter):
+            return False
+    return True
+
+
+def check_mapping(index_name):
+    """Check if the mapping on ES resembles the intended one"""
+    es = connect()
+    c = es.transport.get_connection()
+    try:
+        result = c.perform_request('GET', '/' + index_name)
+        if result[0] != 200:
+            return False
+        result = json.loads(result[2])
+        mappings = result[index_name]['mappings']
+        return compare_dicts_ref(MAPPINGS, mappings, lambda k: k != '_routing')
+    except Exception:
+        return False
+
+
 def create_index_and_mapping(index_name):
     """Create the index, put mapping for each doc types.
     """
     es = create_index(index_name)
     for doc_type, mapping in MAPPINGS.items():
         es.indices.put_mapping(
-                index=index_name,
-                doc_type=doc_type,
-                body=mapping
-            )
+            index=index_name,
+            doc_type=doc_type,
+            body=mapping)
+
+
+def maybe_create_and_reindex(index_name, session):
+    """Reindex all contents if mapping is missing our outdated"""
+    if not check_mapping(index_name):
+        from .reindex import reindex_all_contents
+        create_index_and_mapping(index_name)
+        reindex_all_contents(session)
 
 
 def delete_index(index_name):
