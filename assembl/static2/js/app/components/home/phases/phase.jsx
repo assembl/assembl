@@ -50,7 +50,7 @@ class Phase extends React.Component {
           {description && <div className="description-box">{description}</div>}
         </div>
         <div className="color-box">&nbsp;</div>
-        <div className="box- hidden-xs">&nbsp;</div>
+        <div className="box-hyphen hidden-xs">&nbsp;</div>
         <div className="box-hyphen rotate-hyphen hidden-xs">&nbsp;</div>
       </div>
     );
