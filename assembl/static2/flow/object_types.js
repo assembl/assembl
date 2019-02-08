@@ -30,7 +30,7 @@ type DateRange = {
 };
 
 type Preset = {
-  id: string,
+  id: string | number,
   range: DateRange,
   labelTranslationKey: string
 };

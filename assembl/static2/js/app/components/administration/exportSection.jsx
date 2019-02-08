@@ -20,14 +20,14 @@ type Props = {
   translate: boolean,
   annotation: string,
   sectionTitle: string,
-  phases: Array<?string>
+  phasesPresets: Array<Preset>
 };
 
 type State = {
   exportLink: string
 };
 
-class ExportSection extends React.Component<Props, State> {
+export class DumbExportSection extends React.Component<Props, State> {
   static defaultProps = {
     withLanguageOptions: false,
     translate: false,
@@ -150,24 +150,9 @@ class ExportSection extends React.Component<Props, State> {
     );
   };
 
-  getPhasesDatePresets = () => {
-    const { phases, phasesById } = this.props;
-    return phases.map((phaseId, index) => {
-      const phase = phasesById.get(phaseId);
-      return {
-        id: index,
-        labelTranslationKey: `phase${index}`,
-        range: {
-          startDate: phase.get('start'),
-          endDate: phase.get('end')
-        }
-      };
-    });
-  };
-
   render() {
-    const { annotation, sectionTitle } = this.props;
-    const presets = [...datePickerPresets, ...this.getPhasesDatePresets()];
+    const { annotation, sectionTitle, phasesPresets } = this.props;
+    const presets = [...datePickerPresets, ...phasesPresets];
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -195,12 +180,22 @@ class ExportSection extends React.Component<Props, State> {
 
 const mapStateToProps = (state) => {
   const { phasesById } = state.admin.timeline;
-  const filteredPhases = phasesById.sortBy(phase => phase.get('order')).filter(phase => !phase.get('_toDelete'));
+  const filteredPhases = phasesById.sortBy(phase => phase.get('order'));
   const filteredPhasesId = filteredPhases.keySeq().toJS();
+  const phasesPreset = filteredPhasesId.map((phaseId, index) => {
+    const phase = phasesById.get(phaseId);
+    return {
+      id: index + 1,
+      labelTranslationKey: 'administration.export.presets.phase',
+      range: {
+        startDate: phase.get('start'),
+        endDate: phase.get('end')
+      }
+    };
+  });
   return {
-    phases: filteredPhasesId,
-    phasesById: state.admin.timeline.phasesById
+    phasesPreset: phasesPreset
   };
 };
 
-export default connect(mapStateToProps)(ExportSection);
+export default connect(mapStateToProps)(DumbExportSection);
