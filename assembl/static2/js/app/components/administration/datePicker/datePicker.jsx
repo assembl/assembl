@@ -53,6 +53,7 @@ class DatePicker extends React.PureComponent<Props, State> {
           onFocusChange={this.handleFocusChange}
           small
           numberOfMonths={1}
+          isOutsideRange={() => false}
         />
         <PresetsList presets={presets} onSelect={this.handlePresetSelect} />
       </div>
