@@ -184,6 +184,8 @@ def get_aws_invoke_yaml(c, celery=False):
     match = extends_re.search(content)
     while match:
         key = match.group(1)
+        # assuming local bucket; what if from shared region?
+        # maybe look for client_id in bucket name, assume shared otherwise???
         ex_content = get_s3_file(bucket, key)
         if not ex_content:
             break
