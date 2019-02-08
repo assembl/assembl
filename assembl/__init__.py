@@ -119,9 +119,10 @@ def main(global_config, **settings):
 
     # ensure default roles and permissions at startup
     if not settings.get('in_migration', False):
-        from .lib.migration import bootstrap_db, bootstrap_db_data
+        from .lib.migration import bootstrap_db, bootstrap_db_data, bootstrap_indexing
         db = bootstrap_db(settings['config_uri'])
         bootstrap_db_data(db, settings['config_uri'] != "testing.ini")
+        bootstrap_indexing(db)
 
     if asbool(settings.get('sqltap', False)):
         import sqltap.wsgi

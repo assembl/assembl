@@ -133,6 +133,14 @@ def bootstrap_db_data(db, mark=True):
         mark_changed(session)
 
 
+def bootstrap_indexing(db):
+    from assembl.indexing.utils import check_mapping, maybe_create_and_reindex
+    index_name = config.get('elasticsearch_index')
+    if not check_mapping(index_name):
+        with locked_transaction(db, 1237) as session:
+            maybe_create_and_reindex(index_name, session)
+
+
 def ensure_db_version(config_uri, session_maker):
     """Exit if database is not up-to-date."""
     config = Config(config_uri)
