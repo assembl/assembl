@@ -43,10 +43,20 @@ def get_secrets_from_manager(c, aws_secret_ids, cache=True):
     base = {}
     if aws_secret_ids:
         import boto3
-        sm = boto3.client('secretsmanager')
+        secret_clients = {}
+
+        def get_secret_client(region=None):
+            region = region or c.config.aws_region
+            if region not in secret_clients:
+                secret_clients[region] = boto3.client('secretsmanager', region_name=region)
+            return secret_clients[region]
         if not isinstance(aws_secret_ids, list):
             aws_secret_ids = aws_secret_ids.split()
         for aws_secret_id in aws_secret_ids:
+            region = None  # assume current region
+            if ':' in aws_secret_id:
+                region = aws_secret_id.split(':')[3]
+            sm = get_secret_client(region)
             response = sm.get_secret_value(SecretId=aws_secret_id)
             if 'SecretString' in response:
                 info = response['SecretString']
@@ -114,6 +124,9 @@ def setup_ctx(c):
 
     aws_secrets_ids = current.get('aws_secrets_ids', None)
     if aws_secrets_ids:
+        # partial merge for region
+        c.config._project = current
+        c.config.merge()
         secrets = get_secrets(c, aws_secrets_ids)
         current.update(secrets)
 
@@ -202,9 +215,9 @@ def fill_template(c, template, output=None, extra=None, default_dir=None):
             out.write(result)
 
 
-def get_s3_file(bucket, key, destination=None):
+def get_s3_file(bucket, key, destination=None, region=None):
     import boto3
-    s3 = boto3.client('s3')
+    s3 = boto3.client('s3', region_name=region)
     try:
         ob = s3.get_object(Bucket=bucket, Key=key)
         content = ob['Body'].read()
