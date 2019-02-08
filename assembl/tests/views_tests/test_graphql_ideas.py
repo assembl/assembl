@@ -695,7 +695,8 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
     idea = res.data['createThematic']['thematic']
     assert idea['announcement'] == {
         u'title': u'Title EN announce',
-        u'body': u'Body EN announce'
+        u'body': u'Body EN announce',
+        u'summary': None
     }
     assert idea['title'] == u'Understanding the dynamics and issues'
     assert idea['description'] == u'Desc EN'
