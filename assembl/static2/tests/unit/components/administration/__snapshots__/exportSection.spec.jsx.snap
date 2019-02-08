@@ -68,7 +68,9 @@ exports[`ExportSection component should render an ExportSection component with l
       </div>
     </div>
     <br />
-    <div>
+    <div
+      className="datepicker-with-presets"
+    >
       <div
         className="DateRangePicker DateRangePicker_1"
       >
@@ -142,6 +144,89 @@ exports[`ExportSection component should render an ExportSection component with l
           </div>
         </div>
       </div>
+      <div
+        className="dropdown btn-group"
+      >
+        <button
+          className="btn btn-default"
+          disabled={false}
+          drop="up"
+          type="button"
+        >
+          presets
+        </button>
+        <button
+          aria-expanded={false}
+          aria-haspopup={true}
+          aria-label="presets"
+          className="dropdown-toggle btn btn-default"
+          disabled={false}
+          id="presets-dropdown"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="button"
+          type="button"
+        >
+           
+          <span
+            className="caret"
+          />
+        </button>
+        <ul
+          aria-labelledby="presets-dropdown"
+          className="dropdown-menu"
+          role="menu"
+        >
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Today
+              </span>
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Last week
+              </span>
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Last month
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
     </div>
     <div
       className="center-flex"
@@ -187,7 +272,9 @@ exports[`ExportSection component should render an ExportSection component withou
       className="no-margin-bottom form-group"
     />
     <br />
-    <div>
+    <div
+      className="datepicker-with-presets"
+    >
       <div
         className="DateRangePicker DateRangePicker_1"
       >
@@ -260,6 +347,89 @@ exports[`ExportSection component should render an ExportSection component withou
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="dropdown btn-group"
+      >
+        <button
+          className="btn btn-default"
+          disabled={false}
+          drop="up"
+          type="button"
+        >
+          presets
+        </button>
+        <button
+          aria-expanded={false}
+          aria-haspopup={true}
+          aria-label="presets"
+          className="dropdown-toggle btn btn-default"
+          disabled={false}
+          id="presets-dropdown"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="button"
+          type="button"
+        >
+           
+          <span
+            className="caret"
+          />
+        </button>
+        <ul
+          aria-labelledby="presets-dropdown"
+          className="dropdown-menu"
+          role="menu"
+        >
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Today
+              </span>
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Last week
+              </span>
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Last month
+              </span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
     <div
@@ -345,7 +515,9 @@ exports[`ExportSection component should render an export section that handles di
       </div>
     </div>
     <br />
-    <div>
+    <div
+      className="datepicker-with-presets"
+    >
       <div
         className="DateRangePicker DateRangePicker_1"
       >
@@ -418,6 +590,89 @@ exports[`ExportSection component should render an export section that handles di
             </div>
           </div>
         </div>
+      </div>
+      <div
+        className="dropdown btn-group"
+      >
+        <button
+          className="btn btn-default"
+          disabled={false}
+          drop="up"
+          type="button"
+        >
+          presets
+        </button>
+        <button
+          aria-expanded={false}
+          aria-haspopup={true}
+          aria-label="presets"
+          className="dropdown-toggle btn btn-default"
+          disabled={false}
+          id="presets-dropdown"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="button"
+          type="button"
+        >
+           
+          <span
+            className="caret"
+          />
+        </button>
+        <ul
+          aria-labelledby="presets-dropdown"
+          className="dropdown-menu"
+          role="menu"
+        >
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Today
+              </span>
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Last week
+              </span>
+            </a>
+          </li>
+          <li
+            className=""
+            role="presentation"
+          >
+            <a
+              href="#"
+              onClick={[Function]}
+              onKeyDown={[Function]}
+              role="menuitem"
+              tabIndex="-1"
+            >
+              <span>
+                Last month
+              </span>
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
     <div

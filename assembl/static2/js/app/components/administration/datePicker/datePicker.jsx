@@ -4,24 +4,14 @@ import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
 import PresetsList from './presetsList';
 
-type Range = {
-  startDate: moment,
-  endDate: moment
-};
-
-type Preset = {
-  id: string,
-  range: Range,
-  label: string
-};
-
 type Props = {
-  presets: Array<Preset>
+  presets?: Array<Preset>
 };
 
 type State = {
   start: ?moment,
-  end: ?moment
+  end: ?moment,
+  focusedInput: ?string
 };
 
 // A custom DatePicker component to use presets
@@ -32,11 +22,11 @@ class DatePicker extends React.PureComponent<Props, State> {
     focusedInput: null
   };
 
-  handleDatesChange = ({ startDate, endDate }) => this.setState({ start: startDate, end: endDate });
+  handleDatesChange = ({ startDate, endDate }: DateRange) => this.setState({ start: startDate, end: endDate });
 
-  handleFocusChange = input => this.setState({ focusedInput: input });
+  handleFocusChange = (input: ?string) => this.setState({ focusedInput: input });
 
-  handlePresetSelect = (range: Range) => this.handleDatesChange(range);
+  handlePresetSelect = (range: DateRange) => this.handleDatesChange(range);
 
   render() {
     const { start, end, focusedInput } = this.state;
@@ -55,7 +45,7 @@ class DatePicker extends React.PureComponent<Props, State> {
           numberOfMonths={1}
           isOutsideRange={() => false}
         />
-        <PresetsList presets={presets} onSelect={this.handlePresetSelect} />
+        {presets ? <PresetsList presets={presets} onSelect={this.handlePresetSelect} /> : null}
       </div>
     );
   }

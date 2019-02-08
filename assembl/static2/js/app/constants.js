@@ -1,4 +1,5 @@
 // @flow
+import moment from 'moment';
 import ThematicsMenu from './components/administration/thematicsMenu';
 
 export const DEFAULT_FAVICON = '/static/img/icon/infinite-1.png';
@@ -416,4 +417,18 @@ export const availableLocales = [
   'th',
   'tr',
   'zh_Hans'
+];
+
+export const datePickerPresets = [
+  { id: 'today', labelTranslationKey: 'administration.export.presets.today', range: { startDate: moment(), endDate: moment() } },
+  {
+    id: 'lastWeek',
+    labelTranslationKey: 'administration.export.presets.lastWeek',
+    range: { startDate: moment().subtract(7, 'days'), endDate: moment() }
+  },
+  {
+    id: 'lastMonth',
+    labelTranslationKey: 'administration.export.presets.lastMonth',
+    range: { startDate: moment().subtract(1, 'month'), endDate: moment() }
+  }
 ];

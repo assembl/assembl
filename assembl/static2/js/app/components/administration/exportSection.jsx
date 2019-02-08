@@ -3,10 +3,10 @@ import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
-import moment from 'moment';
 
 import SectionTitle from './sectionTitle';
 import DatePicker from './datePicker/datePicker';
+import { datePickerPresets } from '../../constants';
 
 type Props = {
   languages?: Array<Object>,
@@ -151,12 +151,6 @@ class ExportSection extends React.Component<Props, State> {
   render() {
     const { annotation, sectionTitle } = this.props;
 
-    const mockPresets = [
-      { id: 'today', range: { startDate: moment(), endDate: moment() }, label: 'Today' },
-      { id: '7_days', range: { startDate: moment().subtract(7, 'days'), endDate: moment() }, label: 'Last 7 days' },
-      { id: '1_month', range: { startDate: moment().subtract(1, 'month'), endDate: moment() }, label: 'Last month' },
-      { id: '2_months', range: { startDate: moment().subtract(2, 'months'), endDate: moment() }, label: 'Last 2 months' }
-    ];
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -170,7 +164,7 @@ class ExportSection extends React.Component<Props, State> {
             {this.renderLinkOptions()}
           </FormGroup>
           <br />
-          <DatePicker presets={mockPresets} />
+          <DatePicker presets={datePickerPresets} />
           <div className="center-flex">
             <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
               <Translate value="administration.export.link" />

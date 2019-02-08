@@ -1,6 +1,7 @@
 /* @flow */
 /* eslint-disable */
 import { type EditorState } from 'draft-js';
+import { type moment } from 'moment';
 import Immutable from 'immutable';
 
 /* temporary dummy types */
@@ -21,6 +22,17 @@ export type TreeItem = {
 
 type ChildType = TreeItem & {
   [string]: any
+};
+
+type DateRange = {
+  startDate: moment,
+  endDate: moment
+};
+
+type Preset = {
+  id: string,
+  range: DateRange,
+  labelTranslationKey: string
 };
 
 export type Idea = {

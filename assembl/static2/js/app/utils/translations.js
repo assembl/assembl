@@ -923,6 +923,11 @@ const Translations = {
         translation: "Traduction des données",
         anonymous: "Rendre les données anonymes",
         contributions: "Les contributions des participants",
+        presets: {
+          today: "Aujourd'hui",
+          lastWeek: "Semaine dernière",
+          lastMonth: "Mois dernier"
+        },
         vote: {
           voteResultsCsv: "Exporter les données générales du module de vote",
           extractCsvVoters: "Exporter les détails de vote de chaque utilisateur"
@@ -1944,6 +1949,11 @@ const Translations = {
         translation: "Translation of the data",
         anonymous: "Make the data anonymous",
         contributions: "Contributions of the participants",
+        presets: {
+          today: "Today",
+          lastWeek: "Last week",
+          lastMonth: "Last month"
+        },
         vote: {
           voteResultsCsv: "Export general data for the vote module",
           extractCsvVoters: "Export vote details for each user"
