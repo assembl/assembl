@@ -153,14 +153,19 @@ def extract_resources_hash(source, theme_name):
     def get_theme_css_hash(href):
         return get_resource_hash(r'/build/themes/[^/]+/[^/]+/theme_' + re.escape(theme_name) + r'_web\.(.*)\.css$', href)
 
+    def get_theme_js_hash(href):
+        return get_resource_hash(r'/build/themes/[^/]+/[^/]+/theme_' + re.escape(theme_name) + r'_web\.(.*)\.js$', href)
+
     soup = BeautifulSoup(source)
     bundle = soup.find(src=get_bundle_hash)
     bundle_css = soup.find(href=get_bundle_css_hash)
     theme_css = soup.find(href=get_theme_css_hash)
+    theme_js = soup.find(src=get_theme_js_hash)
     return {
         'bundle_hash': get_bundle_hash(bundle['src']).group(1) if bundle else None,
         'bundle_css_hash': get_bundle_css_hash(bundle_css['href']).group(1) if bundle_css else None,
-        'theme_file': get_theme_css_hash(theme_css['href']).group(0) if theme_css else None
+        'theme_css_file': get_theme_css_hash(theme_css['href']).group(0) if theme_css else None,
+        'theme_js_file': get_theme_js_hash(theme_js['src']).group(0) if theme_js else None
     }
 
 
@@ -173,7 +178,8 @@ def get_resources_hash(theme_name):
     result = {
         'bundle_hash': None,
         'bundle_css_hash': None,
-        'theme_hash': None
+        'theme_css_file': None,
+        'theme_js_file': None
     }
     if os.path.exists(resources_path):
         with open(resources_path) as fp:
