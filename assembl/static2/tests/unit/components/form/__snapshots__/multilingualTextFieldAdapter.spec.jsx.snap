@@ -71,6 +71,12 @@ exports[`MultilingualTextFieldAdapter component should render a text field touch
   <div
     className="form-group has-error"
   >
+    <label
+      className="control-label"
+      htmlFor="title"
+    >
+      Title
+    </label>
     <input
       className="form-control"
       id="title"
@@ -97,6 +103,12 @@ exports[`MultilingualTextFieldAdapter component should render a text field untou
   <div
     className="form-group"
   >
+    <label
+      className="control-label"
+      htmlFor="title"
+    >
+      Title
+    </label>
     <input
       className="form-control"
       id="title"
@@ -123,6 +135,12 @@ exports[`MultilingualTextFieldAdapter component should render a text field witho
   <div
     className="form-group"
   >
+    <label
+      className="control-label"
+      htmlFor="title"
+    >
+      Title
+    </label>
     <input
       className="form-control"
       id="title"
