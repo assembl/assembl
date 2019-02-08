@@ -285,7 +285,7 @@ def prepare_integration_tests(c):
     with c.cd('assembl-tests'):
         c.run('{}'.format(yarn))
         # fetch data required for e2e tests
-        get_s3_file('bluenove-assembl-configurations', 'integrationTestConfig.js', 'data.js')
+        get_s3_file('bluenove-assembl-configurations', 'integrationTestConfig.js', 'data.js', c.config.aws_shared_region)
 
 
 @task()
@@ -582,7 +582,7 @@ def prepare_cicd_build(c):
 
 
 @task()
-def start_deploy_on_client(c, client_id):
+def start_deploy_on_client(c, client_id, region=None):
     import boto3
     assert client_id, "No client-id was passed"
     sts_client = boto3.client('sts')
@@ -590,11 +590,14 @@ def start_deploy_on_client(c, client_id):
         RoleArn='arn:aws:iam::%s:role/CICD-Role' % (client_id,),
         RoleSessionName='cicd')
     credentials = response['Credentials']
+    # we are running on shared, so this will be = aws_shared_region
+    region = region or c.config.aws_region
     cd_client = boto3.client(
         'codedeploy',
         aws_access_key_id=credentials['AccessKeyId'],
         aws_secret_access_key=credentials['SecretAccessKey'],
-        aws_session_token=credentials['SessionToken'])
+        aws_session_token=credentials['SessionToken'],
+        region_name=region)
 
     response = cd_client.create_deployment(
         applicationName='assembl',
@@ -615,12 +618,12 @@ def get_deployment_clients(c):
     Fetches the list of accounts available to deploy to from a remote bucket
     Assume CI/CD Environment at all times
     """
-    get_s3_file('bluenove-assembl-deployments', 'clients.json', 'clients.json')
+    get_s3_file('bluenove-assembl-deployments', 'clients.json', 'clients.json', c.config.aws_shared_region)
 
 
 @task(get_deployment_clients)
 def deploy_to_sandbox(c):
     with open('clients.json') as f:
         data = json.load(f)
-    client_id = data.get('sandbox', None)
-    start_deploy_on_client(c, client_id)
+    client_info = data.get('sandbox', None)
+    start_deploy_on_client(c, client_info['id'], client_info.get('region', None))
