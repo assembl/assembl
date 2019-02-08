@@ -445,6 +445,21 @@
         }
       }
     }
+
+    .padding-sm {
+      padding: 40px 0;
+    }
+
+    .partners-section {
+      .partner-logo {
+        margin: 20px;
+      }
+
+      img {
+        height: 60%;
+        width: 60%;
+      }
+    }
   }
 }
 
