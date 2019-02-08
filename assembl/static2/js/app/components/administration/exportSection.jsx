@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
 
@@ -18,7 +19,8 @@ type Props = {
   exportLocale?: string,
   translate: boolean,
   annotation: string,
-  sectionTitle: string
+  sectionTitle: string,
+  phases: Array<?string>
 };
 
 type State = {
@@ -148,9 +150,24 @@ class ExportSection extends React.Component<Props, State> {
     );
   };
 
+  getPhasesDatePresets = () => {
+    const { phases, phasesById } = this.props;
+    return phases.map((phaseId, index) => {
+      const phase = phasesById.get(phaseId);
+      return {
+        id: index,
+        labelTranslationKey: `phase${index}`,
+        range: {
+          startDate: phase.get('start'),
+          endDate: phase.get('end')
+        }
+      };
+    });
+  };
+
   render() {
     const { annotation, sectionTitle } = this.props;
-
+    const presets = [...datePickerPresets, ...this.getPhasesDatePresets()];
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -164,7 +181,7 @@ class ExportSection extends React.Component<Props, State> {
             {this.renderLinkOptions()}
           </FormGroup>
           <br />
-          <DatePicker presets={datePickerPresets} />
+          <DatePicker presets={presets} />
           <div className="center-flex">
             <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
               <Translate value="administration.export.link" />
@@ -176,4 +193,14 @@ class ExportSection extends React.Component<Props, State> {
   }
 }
 
-export default ExportSection;
+const mapStateToProps = (state) => {
+  const { phasesById } = state.admin.timeline;
+  const filteredPhases = phasesById.sortBy(phase => phase.get('order')).filter(phase => !phase.get('_toDelete'));
+  const filteredPhasesId = filteredPhases.keySeq().toJS();
+  return {
+    phases: filteredPhasesId,
+    phasesById: state.admin.timeline.phasesById
+  };
+};
+
+export default connect(mapStateToProps)(ExportSection);
