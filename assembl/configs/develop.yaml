@@ -15,7 +15,7 @@ public_port: 6543
 # Other public_port values
 # public_port: 9991
 # public_port: 8080
-
+package_install: false
 accept_secure_connection: false
 require_secure_connection: false
 
