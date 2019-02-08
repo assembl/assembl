@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
-import { DropdownButton } from 'react-bootstrap';
+import { SplitButton, MenuItem } from 'react-bootstrap';
 import { type moment } from 'moment';
-import Dropdown from '../../styleguide/dropdown';
 
 type Range = {
   start: moment,
@@ -21,9 +20,13 @@ type Props = {
 };
 
 const PresetsList = ({ onSelect, presets }: Props) => (
-  <DropdownButton drop="up" title="presets" id="presets-dropdown" onSelect={onSelect}>
-    {presets.map((preset, index) => <Dropdown.Item eventKey={index}>{index}</Dropdown.Item>)}
-  </DropdownButton>
+  <SplitButton drop="up" title="presets" id="presets-dropdown" onSelect={onSelect}>
+    {presets.map(preset => (
+      <MenuItem key={preset.id} eventKey={preset.range}>
+        {preset.label}
+      </MenuItem>
+    ))}
+  </SplitButton>
 );
 
 export default PresetsList;

@@ -3,10 +3,10 @@ import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
-import { DateRangePicker } from 'react-dates';
-import { type moment } from 'moment';
+import moment from 'moment';
 
 import SectionTitle from './sectionTitle';
+import DatePicker from './datePicker/datePicker';
 
 type Props = {
   languages?: Array<Object>,
@@ -22,10 +22,7 @@ type Props = {
 };
 
 type State = {
-  exportLink: string,
-  start: ?moment,
-  end: ?moment,
-  focusedInput: ?string
+  exportLink: string
 };
 
 class ExportSection extends React.Component<Props, State> {
@@ -45,10 +42,7 @@ class ExportSection extends React.Component<Props, State> {
   }
 
   state = {
-    exportLink: '',
-    start: null,
-    end: null,
-    focusedInput: null
+    exportLink: ''
   };
 
   handleExportLinkChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
@@ -156,7 +150,13 @@ class ExportSection extends React.Component<Props, State> {
 
   render() {
     const { annotation, sectionTitle } = this.props;
-    const { start, end, focusedInput } = this.state;
+
+    const mockPresets = [
+      { id: 'today', range: { startDate: moment(), endDate: moment() }, label: 'Today' },
+      { id: '7_days', range: { startDate: moment().subtract(7, 'days'), endDate: moment() }, label: 'Last 7 days' },
+      { id: '1_month', range: { startDate: moment().subtract(1, 'month'), endDate: moment() }, label: 'Last month' },
+      { id: '2_months', range: { startDate: moment().subtract(2, 'months'), endDate: moment() }, label: 'Last 2 months' }
+    ];
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -170,19 +170,7 @@ class ExportSection extends React.Component<Props, State> {
             {this.renderLinkOptions()}
           </FormGroup>
           <br />
-          <div>
-            <DateRangePicker
-              startDate={start}
-              startDateId="foo"
-              endDate={end}
-              endDateId="bar"
-              onDatesChange={({ startDate, endDate }) => this.setState({ start: startDate, end: endDate })}
-              focusedInput={focusedInput}
-              onFocusChange={input => this.setState({ focusedInput: input })}
-              small
-              numberOfMonths={1}
-            />
-          </div>
+          <DatePicker presets={mockPresets} />
           <div className="center-flex">
             <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
               <Translate value="administration.export.link" />
