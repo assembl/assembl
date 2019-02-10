@@ -2,19 +2,16 @@
 All utility methods, classes and functions needed for testing applications
 """
 
-import sys
 from itertools import chain
 
-import transaction
-from sqlalchemy.sql.functions import count
+from sqlalchemy import inspect
 from webtest import TestRequest
 from webob.request import environ_from_url
 from pyramid.threadlocal import manager
 from contextlib import contextmanager
 
 from assembl.lib.sqla import (
-    configure_engine, get_session_maker,
-    get_metadata, is_zopish, mark_changed)
+    get_session_maker, get_metadata, mark_changed)
 from assembl.lib import logging
 from assembl.auth import R_PARTICIPANT
 
