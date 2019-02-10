@@ -33,7 +33,7 @@ core_dependencies = [
     'libxslt1-dev',
     'libzmq3-dev',
     'pkg-config',
-    'python-dev'
+    'python-dev',
     'rsync',
     'wget',
 ]
