@@ -15,11 +15,12 @@ core_dependencies = [
     'automake',
     'bison',
     'build-essential',
+    'curl',
     'flex',
     'gawk',
-    'rsync',
     'gperf',
     'graphviz',
+    'libcurl4-openssl-dev',
     'libffi-dev',
     'libgraphviz-dev',
     'libhiredis-dev',
@@ -31,9 +32,10 @@ core_dependencies = [
     'libxmlsec1-dev',
     'libxslt1-dev',
     'libzmq3-dev',
-    'libcurl4-openssl-dev',
     'pkg-config',
     'python-dev'
+    'rsync',
+    'wget',
 ]
 
 python_dependencies = [
