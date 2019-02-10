@@ -73,9 +73,11 @@ build_wheel:
     - touch secrets.yaml
     - ln -s assembl/tasks .
     - inv build.prepare-cicd-build
+    - mkdir wheelhouse
   script:
     # create the wheel and upload to pypi
     - inv build.compile-static-assets
+    - pip wheel -w wheelhouse -r requirements-prod.frozen.txt
     - inv build.create-wheel
     - inv build.push-wheelhouse
     - inv build.push-built-themes-to-remote-bucket
