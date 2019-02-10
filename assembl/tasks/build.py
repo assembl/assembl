@@ -577,7 +577,7 @@ def prepare_cicd_build(c):
 
     # Build JS dependencies for V1 and V2
     install_bower(c)
-    update_bower_requirements(c, install=True)
+    update_bower_requirements(c, force_reinstall=True)
     update_npm_requirements(c, install=True)
 
 

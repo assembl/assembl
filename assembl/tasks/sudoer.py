@@ -44,9 +44,6 @@ python_dependencies = [
     'build-essential'
 ]
 
-# Ensure that this is matching the node version set in base_env.yaml for Assembl's node
-node_version = '10.13.0'
-
 
 @task
 def install_python(c):
@@ -224,14 +221,14 @@ def set_fail2ban_configurations(c):
 
 @task()
 def clear_aptitude_cache(c):
-    c.sudo('apt-get autoclean -qq && apt-get autoremove -qq && rm -rf /var/lib/apt/lists/*')
+    c.run('sudo apt-get autoclean -qq && sudo apt-get autoremove -qq && sudo rm -rf /var/lib/apt/lists/*')
 
 
 @task()
 def install_build_dependencies(c):
     """Build the necessary packages in order for CI/CD machines to build an Assembl wheel"""
     c.sudo('apt-get update -qq')
-    c.sudo('apt-get install -yqq %s' % ','.join(core_dependencies))
+    c.sudo('apt-get install -yqq %s' % ' '.join(core_dependencies))
     c.run('pip install -r requirements-build.txt')
 
 
@@ -243,14 +240,14 @@ def install_node_and_yarn(c):
     This is different than updating node inside of a virtual environment, and nodeenv is not used. However,
     the node version's MUST be mactching.
     """
-
+    node_version = c.config.get('node_version', '10.13.0')
     node_major_version = node_version.split('.')[0]
     c.sudo('apt-get update -qq')
-    if is_integration_env():
+    if is_integration_env(c):
         c.sudo('apt-get remove -yqq cmdtest')
-    c.sudo('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -')
-    c.sudo('echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list')
-    c.sudo('wget -qO- https://deb.nodesource.com/setup_%s.x | bash -' % node_major_version)
+    c.run('curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -')
+    c.run('echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list')
+    c.run('wget -qO- https://deb.nodesource.com/setup_%s.x | sudo bash -' % node_major_version)
     c.sudo('apt-get install -yqq nodejs yarn')
 
 
