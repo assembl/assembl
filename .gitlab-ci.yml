@@ -36,8 +36,9 @@ cache:
 #   only:
 #     - tmp_master_for_ci_cd
 #   before_script:
-#     - sudo apt-get install python-pip python-dev build-essential
-#     - pip install $(grep invoke requirements.in) $(grep semantic-version requirements.in)
+#     - sudo apt-get update
+#     - sudo apt-get install python python-pip python-semantic-version python-dev build-essential
+#     - pip install $(grep invoke requirements.in)
 #     - "echo '_extends: aws.yaml' > $CI_PROJECT_DIR/invoke.yaml"
 #     - touch $CI_PROJECT_DIR/secrets.yamls
 #     - ln -s $CI_PROJECT_DIR/assembl/tasks .
@@ -57,7 +58,9 @@ build_wheel:
     paths:
       - dist/
   before_script:
-    - pip install $(grep invoke requirements.in) $(grep semantic-version requirements.in)
+    - sudo apt-get update
+    - sudo apt-get install python python-pip python-semantic-version python-dev build-essential
+    - pip install $(grep invoke requirements.in)
     - "echo '_extends: aws.yaml' > $CI_PROJECT_DIR/invoke.yaml"
     - touch $CI_PROJECT_DIR/secrets.yamls
     - ln -s $CI_PROJECT_DIR/assembl/tasks .
@@ -79,7 +82,9 @@ push_to_develop_server:
     - rws_connections
     - invoke
   before_script:
-    - pip install $(grep invoke $CI_PROJECT_DIR/requirements.in) $(grep semantic-version requirements.in)
+    - sudo apt-get update
+    - sudo apt-get install python python-pip python-semantic-version python-dev build-essential
+    - pip install $(grep invoke requirements.in)
     # Fetch the configurations of sandbox from S3
     - "echo '_extends: aws.yaml' > $CI_PROJECT_DIR/invoke.yaml"
     - touch $CI_PROJECT_DIR/secrets.yamls
