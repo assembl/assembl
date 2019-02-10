@@ -54,6 +54,7 @@ aws_bucket_name:
 aws_access_key_id:
 aws_secret_access_key:
 attachment_service: hashfs
+node_version: 10.13.0
 
 # The port to use for the websocket (client frontends will connect to this)
 # In prod, your firewall needs to allow this through or proxy it through nginx
