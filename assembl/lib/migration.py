@@ -10,6 +10,7 @@ from alembic.config import Config
 from alembic.migration import MigrationContext
 from alembic.environment import EnvironmentContext
 from alembic.script import ScriptDirectory
+import transaction
 
 from ..lib.sqla import (
     get_metadata, get_session_maker, mark_changed, is_zopish)
@@ -32,16 +33,10 @@ def locked_transaction(db, num):
     cnx.execute("select pg_advisory_lock(%d)" % num).first()
     try:
         session = db()
-        if is_zopish():
-            import transaction
-            with transaction.manager:
-                session = db()
-                yield session
-                mark_changed(session)
-        else:
+        with transaction.manager:
+            session = db()
             yield session
             mark_changed(session)
-            session.commit()
     finally:
         cnx.execute("select pg_advisory_unlock(%d)" % num)
         cnx.close()
