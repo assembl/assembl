@@ -67,6 +67,27 @@ def install_base_deps(c):
     c.sudo('apt-get install -y %s' % ' '.join(list(total_dependencies)))
 
 
+def install_database_linux(c):
+    print('Installing Postgresql')
+    c.sudo('apt-get install -y postgresql')
+    if exists('/etc/init.d/postgresql'):
+        c.sudo('/etc/init.d/postgresql start')
+    else:
+        print("Make sure that postgres is running")
+
+
+@task
+def install_database(c):
+    """
+    Install a postgresql DB server
+    """
+    if c.config._internal.mac:
+        from .mac import install_database as install_database_mac
+        install_database_mac(c)
+    else:
+        install_database_linux(c)
+
+
 @task
 def install_assembl_systemd(c):
     base = os.getcwd()
