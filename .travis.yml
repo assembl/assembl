@@ -63,7 +63,7 @@ before_install:
 # fabric is doing an apt-get update.
  - sudo mkdir -p /.travis
  - sudo ln -s /home/travis/.travis/functions /.travis/functions
- - pip install boto3==1.9.73
+ - sudo pip install boto3==1.9.73 semantic-version==2.6.0 invoke==1.2.0
  - ls /etc/apt/sources.list.d/
  # The following line is needed, otherwise the set_file_permissions fab command yells error "Operation not permitted"
  - sudo usermod -a -G www-data $USER
