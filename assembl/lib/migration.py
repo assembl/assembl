@@ -129,7 +129,10 @@ def bootstrap_db_data(db, mark=True):
 
 
 def bootstrap_indexing(db):
+    from assembl.indexing import indexing_active
     from assembl.indexing.utils import check_mapping, maybe_create_and_reindex
+    if not indexing_active():
+        return
     index_name = config.get('elasticsearch_index')
     if not check_mapping(index_name):
         with locked_transaction(db, 1237) as session:
