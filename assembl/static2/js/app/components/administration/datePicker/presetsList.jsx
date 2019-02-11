@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { SplitButton, MenuItem } from 'react-bootstrap';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
 
 type Props = {
@@ -27,7 +27,7 @@ class PresetsList extends React.PureComponent<Props, State> {
     const selectedPresetPlaceHolder = I18n.t('administration.export.presets.placeHolder');
     const { selectedPreset } = this.state;
     return (
-      <SplitButton
+      <DropdownButton
         drop="up"
         title={selectedPreset ? I18n.t(selectedPreset) : selectedPresetPlaceHolder}
         id="presets-dropdown"
@@ -41,7 +41,7 @@ class PresetsList extends React.PureComponent<Props, State> {
             </MenuItem>
           );
         })}
-      </SplitButton>
+      </DropdownButton>
     );
   }
 }
