@@ -8,6 +8,7 @@ import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
 import SectionTitle from './sectionTitle';
 import DatePicker from './datePicker/datePicker';
 import { datePickerPresets } from '../../constants';
+import { getFullDebatePreset } from '../form/utils';
 
 type Props = {
   languages?: Array<Object>,
@@ -152,7 +153,8 @@ export class DumbExportSection extends React.Component<Props, State> {
 
   render() {
     const { annotation, sectionTitle, phasesPresets } = this.props;
-    const presets = phasesPresets ? [...datePickerPresets, ...phasesPresets] : null;
+    const fullDebatePreset = phasesPresets && phasesPresets.length > 0 && getFullDebatePreset(phasesPresets);
+    const presets = fullDebatePreset ? [...datePickerPresets, ...phasesPresets, fullDebatePreset] : [...datePickerPresets];
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle

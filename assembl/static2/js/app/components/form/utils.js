@@ -170,3 +170,16 @@ export function compareEditorState(a: mixed, b: mixed): ?boolean {
   // If customizer returns undefined, comparisons are handled by lodash isEqual.
   return undefined;
 }
+
+export const getFullDebatePreset = (phasesPresets: Array<Preset>) => {
+  const firstPhaseBegin = phasesPresets[0].range.startDate;
+  const lastPhaseEnd = phasesPresets[phasesPresets.length - 1].range.endDate;
+  return {
+    id: phasesPresets.length + 1,
+    labelTranslationKey: 'administration.export.presets.fullDebate',
+    range: {
+      startDate: firstPhaseBegin,
+      endDate: lastPhaseEnd
+    }
+  };
+};
