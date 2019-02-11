@@ -29,7 +29,7 @@ def test_cache_key(test_session):
         creator=None,
         session=test_session)
     fn = test_cache_key
-    result = d.generate_redis_key(fn) 
+    result = d.generate_redis_key(fn)
     expected_result = "test_cache_key_" + str(d.id) + "_21_42"
     assert result(d, 21, 42) == expected_result
     test_session.delete(d.table_of_contents)
