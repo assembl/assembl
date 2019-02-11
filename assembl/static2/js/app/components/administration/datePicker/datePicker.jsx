@@ -26,7 +26,7 @@ class DatePicker extends React.PureComponent<Props, State> {
 
   handleFocusChange = (input: ?string) => this.setState({ focusedInput: input });
 
-  handlePresetSelect = (range: DateRange) => this.handleDatesChange(range);
+  handlePresetSelect = (preset: Preset) => this.handleDatesChange(preset.range);
 
   render() {
     const { start, end, focusedInput } = this.state;
