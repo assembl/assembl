@@ -152,7 +152,7 @@ export class DumbExportSection extends React.Component<Props, State> {
 
   render() {
     const { annotation, sectionTitle, phasesPresets } = this.props;
-    const presets = [...datePickerPresets, ...phasesPresets];
+    const presets = phasesPresets ? [...datePickerPresets, ...phasesPresets] : null;
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -166,7 +166,7 @@ export class DumbExportSection extends React.Component<Props, State> {
             {this.renderLinkOptions()}
           </FormGroup>
           <br />
-          <DatePicker presets={presets} />
+          {presets ? <DatePicker presets={presets} /> : null}
           <div className="center-flex">
             <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
               <Translate value="administration.export.link" />
@@ -182,7 +182,7 @@ const mapStateToProps = (state) => {
   const { phasesById } = state.admin.timeline;
   const filteredPhases = phasesById.sortBy(phase => phase.get('order'));
   const filteredPhasesId = filteredPhases.keySeq().toJS();
-  const phasesPreset = filteredPhasesId.map((phaseId, index) => {
+  const phasesPresets = filteredPhasesId.map((phaseId, index) => {
     const phase = phasesById.get(phaseId);
     return {
       id: index + 1,
@@ -194,7 +194,7 @@ const mapStateToProps = (state) => {
     };
   });
   return {
-    phasesPreset: phasesPreset
+    phasesPresets: phasesPresets
   };
 };
 
