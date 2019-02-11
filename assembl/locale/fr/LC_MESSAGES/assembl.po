@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-02-04 16:00+0100\n"
+"POT-Creation-Date: 2019-02-11 12:06+0100\n"
 "PO-Revision-Date: 2018-02-05 17:41+0100\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: fr\n"
@@ -42,6 +42,10 @@ msgstr "Pas un courriel: <%s> à la ligne %d"
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr "Nom trop court: <%s> à la ligne %d"
+
+#: assembl/graphql/discussion.py:572
+msgid "Must pass at least one language to be saved"
+msgstr "Veuillez sélectionner au moins une langue"
 
 #: assembl/graphql/permissions_helpers.py:9
 msgid ""
@@ -5231,6 +5235,6 @@ msgstr ""
 
 #: assembl/views/discussion/views.py:56
 #, python-format
-#| msgid "No discussion found with id=%s"
 msgid "No discussion found for slug=%s"
 msgstr "Aucune discussion trouvée avec l’id=%s"
+
