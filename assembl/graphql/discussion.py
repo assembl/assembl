@@ -23,6 +23,9 @@ from .utils import (
     DateTime)
 from .idea import TagResult, SentimentAnalysisResult
 from .permissions_helpers import require_cls_permission, require_instance_permission
+from pyramid.i18n import TranslationStringFactory
+
+_ = TranslationStringFactory('assembl')
 
 
 class URLMeta(graphene.ObjectType):
@@ -558,17 +561,18 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         cls = models.Preferences
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-
         require_cls_permission(CrudPermissions.UPDATE, cls, context)
-
-        db = discussion.db
-        prefs_to_save = args.get('languages', [])
+        languages = args.get('languages', None)
         tab_title = args.get('tab_title', None)
         favicon = args.get('favicon', None)
         with_moderation = args.get('with_moderation', None)
-        with cls.default_db.no_autoflush:
-            if prefs_to_save:
-                discussion.discussion_locales = prefs_to_save
+        with cls.default_db.no_autoflush as db:
+            if languages is not None:
+                if not languages:
+                    error = _("Must pass at least one language to be saved")
+                    raise Exception(context.localizer.translate(error))
+
+                discussion.discussion_locales = languages
 
             if tab_title:
                 discussion.preferences['tab_title'] = tab_title

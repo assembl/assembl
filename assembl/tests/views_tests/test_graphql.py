@@ -1769,6 +1769,7 @@ mutation myMutation($languages: [String]!) {
                              "languages": []
                          })
     assert res.errors is not None
+    assert res.errors[0].message == 'Must pass at least one language to be saved'
 
 
 def test_query_post_message_classifier(graphql_request,
@@ -1802,6 +1803,7 @@ mutation myMutationModeration($withModeration: Boolean!) {
                         variable_values={
                             "withModeration": True
                         })
+    assert res.errors is None
     assert json.loads(json.dumps(res.data)) == {
         u'updateDiscussionPreferences': {
             u'preferences': {
