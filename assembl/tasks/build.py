@@ -29,9 +29,9 @@ def get_node_modules_path(c):
         get_node_base_path(c), 'node_modules'))
 
 
-def get_new_node_modules_path():
+def get_new_node_modules_path(c):
     return normpath(join(
-        get_new_node_base_path(), 'node_modules'))
+        get_new_node_base_path(c), 'node_modules'))
 
 
 @task()
