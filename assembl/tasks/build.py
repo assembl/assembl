@@ -138,21 +138,12 @@ def update_npm_requirements(c, install=False, force_reinstall=False):
             else:
                 c.run('npm update')
 
-        yarn_path = c.run('which yarn')
         static2_path = get_new_node_base_path(c)
         with c.cd(static2_path):
-            if exists(c, yarn_path):
-                if install or force_reinstall:
-                    print('Removing node_modules directory...')
-                    c.run('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
-                c.run(yarn_path)
-            else:
-                if install:
-                    c.run('npm install')
-                elif force_reinstall:
-                    c.run('reinstall')
-                else:
-                    c.run('npm update')
+            if install or force_reinstall:
+                print('Removing node_modules directory...')
+                c.run('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
+            c.run('yarn')
 
 
 @task()
