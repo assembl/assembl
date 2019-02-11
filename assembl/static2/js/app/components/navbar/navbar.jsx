@@ -145,8 +145,7 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
       slug: slug,
       phase: currentPhaseIdentifier,
       phaseId: currentPhaseId,
-      phaseContext: phaseContext(timeline, phase),
-      screenTooSmall: screenTooSmall
+      phaseContext: phaseContext(timeline, phase)
     };
     const commonProps = {
       elements: filteredSections.map(bind(mapSectionToElement, null, bind.placeholder, mapOptions)),
@@ -155,6 +154,7 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
       logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : '',
       renderUserMenu: this.renderUserMenu
     };
+
     return (
       <div className="background-light">
         <Navbar fixedTop fluid className="no-padding">
