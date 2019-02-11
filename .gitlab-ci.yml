@@ -43,9 +43,9 @@ cache:
 #     - python -mvirtualenv venv
 #     - source venv/bin/activate
 #     - pip install $(grep invoke requirements.in) $(grep boto3 requirements.in) $(grep semantic-version requirements.in)
-#     - "echo '_extends: aws.yaml' > $CI_PROJECT_DIR/invoke.yaml"
-#     - touch $CI_PROJECT_DIR/secrets.yamls
-#     - ln -s $CI_PROJECT_DIR/assembl/tasks .
+#     - "echo '_extends: aws.yaml' > invoke.yaml"
+#     - touch secrets.yaml
+#     - ln -s assembl/tasks .
 #     - inv build.prepare-integration-tests
 #   script:
 #     # run integration tests
@@ -80,14 +80,13 @@ build_wheel:
     - mkdir wheelhouse
   script:
     # create the wheel and upload to pypi
+    - source venv/bin/activate
     - inv build.compile-static-assets
     - pip wheel -w wheelhouse -r requirements-prod.frozen.txt
     - inv build.create-wheel
     - inv build.push-wheelhouse
     - inv build.push-built-themes-to-remote-bucket
     # # - twine upload -u bluenove --skip-existing dist/*
-    # Remove ssh files so that the keys are not kept on image prior to travis removal
-    # - rm -rf ~/.ssh
 
 
 push_to_develop_server:
