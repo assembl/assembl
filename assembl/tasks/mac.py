@@ -70,6 +70,16 @@ def update_npm_requirements_mac(c, force_reinstall=False):
                     c.run('npm update')
 
 
+def install_database(c):
+    """
+    Install a postgresql DB server
+    """
+    print('Installing Postgresql')
+    c.run('brew install postgresql')
+    c.run('brew tap homebrew/services')
+    c.run('brew services start postgres')
+
+
 @task()
 def update_pip_requirements_mac(c, force_reinstall=False):
     """
