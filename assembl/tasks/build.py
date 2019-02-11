@@ -127,12 +127,13 @@ def update_node(c, force_reinstall=False):
 
 
 @task()
-def update_npm_requirements(c, install=False, force_reinstall=False):
+def update_npm_requirements(c, install=False, development_mode=False, force_reinstall=False):
     """Normally not called manually"""
+    dev_command = '--production=false' if development_mode else ''
     with venv(c):
         with c.cd(get_node_base_path(c)):
             if install:
-                c.run('yarn')
+                c.run('yarn --non-interactive %s' % dev_command)
             elif force_reinstall:
                 c.run('reinstall')
             else:
@@ -143,7 +144,7 @@ def update_npm_requirements(c, install=False, force_reinstall=False):
             if install or force_reinstall:
                 print('Removing node_modules directory...')
                 c.run('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
-            c.run('yarn')
+            c.run('yarn --non-interactive %s' % dev_command)
 
 
 @task()
