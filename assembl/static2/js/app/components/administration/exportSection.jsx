@@ -62,9 +62,7 @@ export class DumbExportSection extends React.Component<Props, State> {
 
     return (
       <React.Fragment>
-        <div className="dark-title3">
-          <Translate value="administration.export.anonymity" />
-        </div>
+        <Translate value="administration.export.anonymity" />
         <Checkbox onChange={handleAnonymousChange}>
           <Translate value="administration.export.anonymous" />
         </Checkbox>
@@ -111,9 +109,7 @@ export class DumbExportSection extends React.Component<Props, State> {
     const activeLanguage = languages ? languages.filter(language => language.locale === exportLocale)[0] : null;
     return (
       <React.Fragment>
-        <div className="dark-title3">
-          <Translate value="administration.export.translation" />
-        </div>
+        <Translate value="administration.export.translation" />
         <Radio
           checked={!translate}
           onChange={() => {
@@ -151,10 +147,20 @@ export class DumbExportSection extends React.Component<Props, State> {
     );
   };
 
-  render() {
-    const { annotation, sectionTitle, phasesPresets } = this.props;
+  renderDatePicker = () => {
+    const { phasesPresets } = this.props;
     const fullDebatePreset = phasesPresets && phasesPresets.length > 0 && getFullDebatePreset(phasesPresets);
     const presets = fullDebatePreset ? [...datePickerPresets, ...phasesPresets, fullDebatePreset] : [...datePickerPresets];
+    return presets ? (
+      <div className="export-date">
+        <Translate value="administration.export.exportDate" />
+        <DatePicker presets={presets} />
+      </div>
+    ) : null;
+  };
+
+  render() {
+    const { annotation, sectionTitle } = this.props;
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -162,13 +168,16 @@ export class DumbExportSection extends React.Component<Props, State> {
           annotation={I18n.t(`administration.export.${annotation}`)}
         />
         <div className="admin-content">
-          <FormGroup className="no-margin-bottom">
-            {this.renderAnonymousOption()}
-            {this.renderLanguageOptions()}
-            {this.renderLinkOptions()}
+          <FormGroup>
+            <div className="export-options">
+              <div>
+                {this.renderAnonymousOption()}
+                {this.renderLanguageOptions()}
+                {this.renderLinkOptions()}
+              </div>
+              {this.renderDatePicker()}
+            </div>
           </FormGroup>
-          <br />
-          {presets ? <DatePicker presets={presets} /> : null}
           <div className="center-flex">
             <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
               <Translate value="administration.export.link" />

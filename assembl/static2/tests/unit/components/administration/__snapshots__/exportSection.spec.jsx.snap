@@ -26,120 +26,128 @@ exports[`DumbExportSection component should render an DumbExportSection componen
       className="no-margin-bottom form-group"
     >
       <div
-        className="dark-title3"
-      >
-        <span>
-          Translation of the data
-        </span>
-      </div>
-      <div
-        className="radio"
-      >
-        <label
-          title=""
-        >
-          <input
-            checked={true}
-            disabled={false}
-            onChange={[Function]}
-            type="radio"
-          />
-          <span>
-            Keep the messages in their original languages
-          </span>
-        </label>
-      </div>
-      <div
-        className="radio"
-      >
-        <label
-          title=""
-        >
-          <input
-            checked={false}
-            disabled={false}
-            onChange={[Function]}
-            type="radio"
-          />
-          <span>
-            Translate the messages in:
-          </span>
-        </label>
-      </div>
-    </div>
-    <br />
-    <div
-      className="datepicker-with-presets"
-    >
-      <div
-        className="DateRangePicker DateRangePicker_1"
+        className="export-options"
       >
         <div>
+          <span>
+            Translation of the data
+          </span>
           <div
-            className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+            className="radio"
+          >
+            <label
+              title=""
+            >
+              <input
+                checked={true}
+                disabled={false}
+                onChange={[Function]}
+                type="radio"
+              />
+              <span>
+                Keep the messages in their original languages
+              </span>
+            </label>
+          </div>
+          <div
+            className="radio"
+          >
+            <label
+              title=""
+            >
+              <input
+                checked={false}
+                disabled={false}
+                onChange={[Function]}
+                type="radio"
+              />
+              <span>
+                Translate the messages in:
+              </span>
+            </label>
+          </div>
+        </div>
+        <div
+          className="export-date"
+        >
+          <span>
+            Date de l'export
+          </span>
+          <div
+            className="datepicker-with-presets"
           >
             <div
-              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+              className="DateRangePicker DateRangePicker_1"
             >
-              <input
-                aria-describedby="DateInput__screen-reader-message-foo"
-                aria-label="Start Date"
-                autoComplete="off"
-                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                disabled={false}
-                id="foo"
-                name="foo"
-                onChange={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                placeholder="Start Date"
-                readOnly={false}
-                required={false}
-                type="text"
-                value=""
-              />
-              <p
-                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                id="DateInput__screen-reader-message-foo"
-              >
-                Press the down arrow key to interact with the calendar and
+              <div>
+                <div
+                  className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+                >
+                  <div
+                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+                  >
+                    <input
+                      aria-describedby="DateInput__screen-reader-message-foo"
+                      aria-label="Start Date"
+                      autoComplete="off"
+                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
+                      disabled={false}
+                      id="foo"
+                      name="foo"
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      placeholder="Start Date"
+                      readOnly={false}
+                      required={false}
+                      type="text"
+                      value=""
+                    />
+                    <p
+                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                      id="DateInput__screen-reader-message-foo"
+                    >
+                      Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-              </p>
-            </div>
-            <div
-              aria-hidden="true"
-              className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
-              role="presentation"
-            >
-              -
-            </div>
-            <div
-              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
-            >
-              <input
-                aria-describedby="DateInput__screen-reader-message-bar"
-                aria-label="End Date"
-                autoComplete="off"
-                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                disabled={false}
-                id="bar"
-                name="bar"
-                onChange={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                placeholder="End Date"
-                readOnly={false}
-                required={false}
-                type="text"
-                value=""
-              />
-              <p
-                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                id="DateInput__screen-reader-message-bar"
-              >
-                Press the down arrow key to interact with the calendar and
+                    </p>
+                  </div>
+                  <div
+                    aria-hidden="true"
+                    className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
+                    role="presentation"
+                  >
+                    -
+                  </div>
+                  <div
+                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+                  >
+                    <input
+                      aria-describedby="DateInput__screen-reader-message-bar"
+                      aria-label="End Date"
+                      autoComplete="off"
+                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
+                      disabled={false}
+                      id="bar"
+                      name="bar"
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      placeholder="End Date"
+                      readOnly={false}
+                      required={false}
+                      type="text"
+                      value=""
+                    />
+                    <p
+                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                      id="DateInput__screen-reader-message-bar"
+                    >
+                      Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-              </p>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -186,81 +194,93 @@ exports[`DumbExportSection component should render an DumbExportSection componen
     className="admin-content"
   >
     <div
-      className="no-margin-bottom form-group"
-    />
-    <br />
-    <div
-      className="datepicker-with-presets"
+      className="form-group"
     >
       <div
-        className="DateRangePicker DateRangePicker_1"
+        className="export-options"
       >
-        <div>
+        <div />
+        <div
+          className="export-date"
+        >
+          <span>
+            Date de l'export
+          </span>
           <div
-            className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+            className="datepicker-with-presets"
           >
             <div
-              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+              className="DateRangePicker DateRangePicker_1"
             >
-              <input
-                aria-describedby="DateInput__screen-reader-message-foo"
-                aria-label="Start Date"
-                autoComplete="off"
-                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                disabled={false}
-                id="foo"
-                name="foo"
-                onChange={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                placeholder="Start Date"
-                readOnly={false}
-                required={false}
-                type="text"
-                value=""
-              />
-              <p
-                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                id="DateInput__screen-reader-message-foo"
-              >
-                Press the down arrow key to interact with the calendar and
+              <div>
+                <div
+                  className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+                >
+                  <div
+                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+                  >
+                    <input
+                      aria-describedby="DateInput__screen-reader-message-foo"
+                      aria-label="Start Date"
+                      autoComplete="off"
+                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
+                      disabled={false}
+                      id="foo"
+                      name="foo"
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      placeholder="Start Date"
+                      readOnly={false}
+                      required={false}
+                      type="text"
+                      value=""
+                    />
+                    <p
+                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                      id="DateInput__screen-reader-message-foo"
+                    >
+                      Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-              </p>
-            </div>
-            <div
-              aria-hidden="true"
-              className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
-              role="presentation"
-            >
-              -
-            </div>
-            <div
-              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
-            >
-              <input
-                aria-describedby="DateInput__screen-reader-message-bar"
-                aria-label="End Date"
-                autoComplete="off"
-                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                disabled={false}
-                id="bar"
-                name="bar"
-                onChange={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                placeholder="End Date"
-                readOnly={false}
-                required={false}
-                type="text"
-                value=""
-              />
-              <p
-                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                id="DateInput__screen-reader-message-bar"
-              >
-                Press the down arrow key to interact with the calendar and
+                    </p>
+                  </div>
+                  <div
+                    aria-hidden="true"
+                    className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
+                    role="presentation"
+                  >
+                    -
+                  </div>
+                  <div
+                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+                  >
+                    <input
+                      aria-describedby="DateInput__screen-reader-message-bar"
+                      aria-label="End Date"
+                      autoComplete="off"
+                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
+                      disabled={false}
+                      id="bar"
+                      name="bar"
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      placeholder="End Date"
+                      readOnly={false}
+                      required={false}
+                      type="text"
+                      value=""
+                    />
+                    <p
+                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                      id="DateInput__screen-reader-message-bar"
+                    >
+                      Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-              </p>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -310,117 +330,129 @@ exports[`DumbExportSection component should render an export section that handle
       className="no-margin-bottom form-group"
     >
       <div
-        className="radio"
-      >
-        <label
-          title=""
-        >
-          <input
-            checked={true}
-            disabled={false}
-            name="exportLink"
-            onChange={[Function]}
-            type="radio"
-            value="foo.com"
-          />
-          <span>
-            Export general data for the vote module
-          </span>
-        </label>
-      </div>
-      <div
-        className="radio"
-      >
-        <label
-          title=""
-        >
-          <input
-            checked={false}
-            disabled={false}
-            name="exportLink"
-            onChange={[Function]}
-            type="radio"
-            value="bar.org"
-          />
-          <span>
-            Export vote details for each user
-          </span>
-        </label>
-      </div>
-    </div>
-    <br />
-    <div
-      className="datepicker-with-presets"
-    >
-      <div
-        className="DateRangePicker DateRangePicker_1"
+        className="export-options"
       >
         <div>
           <div
-            className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+            className="radio"
+          >
+            <label
+              title=""
+            >
+              <input
+                checked={true}
+                disabled={false}
+                name="exportLink"
+                onChange={[Function]}
+                type="radio"
+                value="foo.com"
+              />
+              <span>
+                Export general data for the vote module
+              </span>
+            </label>
+          </div>
+          <div
+            className="radio"
+          >
+            <label
+              title=""
+            >
+              <input
+                checked={false}
+                disabled={false}
+                name="exportLink"
+                onChange={[Function]}
+                type="radio"
+                value="bar.org"
+              />
+              <span>
+                Export vote details for each user
+              </span>
+            </label>
+          </div>
+        </div>
+        <div
+          className="export-date"
+        >
+          <span>
+            Date de l'export
+          </span>
+          <div
+            className="datepicker-with-presets"
           >
             <div
-              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+              className="DateRangePicker DateRangePicker_1"
             >
-              <input
-                aria-describedby="DateInput__screen-reader-message-foo"
-                aria-label="Start Date"
-                autoComplete="off"
-                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                disabled={false}
-                id="foo"
-                name="foo"
-                onChange={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                placeholder="Start Date"
-                readOnly={false}
-                required={false}
-                type="text"
-                value=""
-              />
-              <p
-                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                id="DateInput__screen-reader-message-foo"
-              >
-                Press the down arrow key to interact with the calendar and
+              <div>
+                <div
+                  className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+                >
+                  <div
+                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+                  >
+                    <input
+                      aria-describedby="DateInput__screen-reader-message-foo"
+                      aria-label="Start Date"
+                      autoComplete="off"
+                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
+                      disabled={false}
+                      id="foo"
+                      name="foo"
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      placeholder="Start Date"
+                      readOnly={false}
+                      required={false}
+                      type="text"
+                      value=""
+                    />
+                    <p
+                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                      id="DateInput__screen-reader-message-foo"
+                    >
+                      Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-              </p>
-            </div>
-            <div
-              aria-hidden="true"
-              className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
-              role="presentation"
-            >
-              -
-            </div>
-            <div
-              className="DateInput DateInput_1 DateInput__small DateInput__small_2"
-            >
-              <input
-                aria-describedby="DateInput__screen-reader-message-bar"
-                aria-label="End Date"
-                autoComplete="off"
-                className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                disabled={false}
-                id="bar"
-                name="bar"
-                onChange={[Function]}
-                onFocus={[Function]}
-                onKeyDown={[Function]}
-                placeholder="End Date"
-                readOnly={false}
-                required={false}
-                type="text"
-                value=""
-              />
-              <p
-                className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                id="DateInput__screen-reader-message-bar"
-              >
-                Press the down arrow key to interact with the calendar and
+                    </p>
+                  </div>
+                  <div
+                    aria-hidden="true"
+                    className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
+                    role="presentation"
+                  >
+                    -
+                  </div>
+                  <div
+                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+                  >
+                    <input
+                      aria-describedby="DateInput__screen-reader-message-bar"
+                      aria-label="End Date"
+                      autoComplete="off"
+                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
+                      disabled={false}
+                      id="bar"
+                      name="bar"
+                      onChange={[Function]}
+                      onFocus={[Function]}
+                      onKeyDown={[Function]}
+                      placeholder="End Date"
+                      readOnly={false}
+                      required={false}
+                      type="text"
+                      value=""
+                    />
+                    <p
+                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                      id="DateInput__screen-reader-message-bar"
+                    >
+                      Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-              </p>
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
