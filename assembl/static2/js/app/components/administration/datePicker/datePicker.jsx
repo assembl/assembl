@@ -44,8 +44,8 @@ class DatePicker extends React.PureComponent<Props, State> {
           small
           numberOfMonths={1}
           isOutsideRange={() => false}
+          renderCalendarInfo={() => (presets ? <PresetsList presets={presets} onSelect={this.handlePresetSelect} /> : null)}
         />
-        {presets ? <PresetsList presets={presets} onSelect={this.handlePresetSelect} /> : null}
       </div>
     );
   }
