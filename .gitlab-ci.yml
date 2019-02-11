@@ -36,8 +36,8 @@ cache:
 #   only:
 #     - tmp_master_for_ci_cd
 #   before_script:
-#     - sudo apt-get update
-#     - sudo apt-get install python python-pip python-dev build-essential
+#     - apt-get update
+#     - apt-get install sudo python python-pip python-dev build-essential
 #     - pip install virtualenv
 #     - cd $CI_PROJECT_DIR
 #     - python -mvirtualenv venv
@@ -62,8 +62,8 @@ build_wheel:
     paths:
       - dist/
   before_script:
-    - sudo apt-get update
-    - sudo apt-get install python python-pip python-dev build-essential
+    - apt-get update
+    - apt-get install sudo python python-pip python-dev build-essential
     - pip install virtualenv
     - cd $CI_PROJECT_DIR
     - python -mvirtualenv venv
@@ -93,8 +93,8 @@ push_to_develop_server:
     - rws_connections
     - invoke
   before_script:
-    - sudo apt-get update
-    - sudo apt-get install python python-pip python-dev build-essential
+    - apt-get update
+    - apt-get install sudo python python-pip python-dev build-essential
     - pip install virtualenv
     - cd $CI_PROJECT_DIR
     - python -mvirtualenv venv
