@@ -1161,6 +1161,10 @@ def test_mutation_update_ideas_change_module_type(test_session, graphql_request,
     created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
     created_post = create_post(graphql_request, graphql_registry, created_idea, phases)
     assert created_post.errors is None
+    # The PostPathGlobalCollection object attached to DiscussionGlobalData on graphql_request.discussion_data
+    # contains old posts counters before the creation of the idea.
+    # Removing the cache will recreate the counters so that the `assert len(posts) == 1` pass.
+    graphql_request.discussion_data = None
     related = created_idea.get_related_posts_query(True, include_moderating=False)
     query = models.Post.query.join(
         related, models.Post.id == related.c.post_id
