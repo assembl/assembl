@@ -18,6 +18,7 @@ core_dependencies = [
     'curl',
     'flex',
     'gawk',
+    'git',
     'gperf',
     'graphviz',
     'libcurl4-openssl-dev',
