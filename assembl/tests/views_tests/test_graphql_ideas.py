@@ -1029,6 +1029,37 @@ def test_mutation_update_ideas_multicol_create_two_columns_with_empty_message_cl
     test_session.rollback()
 
 
+def create_idea_thread(graphql_request, graphql_registry, phases):
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['brightMirror'].id,
+            'ideas': [{
+                'messageViewOverride': 'thread',
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'descriptionEntries': [
+                    {'value': u"Desc FR", 'localeCode': u"fr"},
+                    {'value': u"Desc EN", 'localeCode': u"en"}
+                ],
+                'announcement': {
+                    'titleEntries': [
+                        {'value': u"Title FR announce", 'localeCode': u"fr"},
+                        {'value': u"Title EN announce", 'localeCode': u"en"}
+                    ],
+                    'bodyEntries': [
+                        {'value': u"Body FR announce", 'localeCode': u"fr"},
+                        {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ]
+                }
+            }]
+        })
+    return res
+
+
 def create_idea(graphql_request, graphql_registry, phases):
     res = schema.execute(
         graphql_registry['updateIdeas'],
@@ -1120,6 +1151,61 @@ def test_mutation_update_ideas_multicol_create_two_columns(test_session, graphql
         u'fr': u'Synthèse de colonne en français for negative column',
         u'en': u'Column Synthesis in english for negative column'}
     test_session.rollback()
+
+
+def test_mutation_update_ideas_change_module_type(test_session, graphql_request, graphql_registry, phases):
+    test_session.commit()
+    res = create_idea_thread(graphql_request, graphql_registry, phases)
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    created_post = create_post(graphql_request, graphql_registry, created_idea, phases)
+    assert created_post.errors is None
+    # The PostPathGlobalCollection object attached to DiscussionGlobalData on graphql_request.discussion_data
+    # contains old posts counters before the creation of the idea.
+    # Removing the cache will recreate the counters so that the `assert len(posts) == 1` pass.
+    graphql_request.discussion_data = None
+    related = created_idea.get_related_posts_query(True, include_moderating=False)
+    query = models.Post.query.join(
+        related, models.Post.id == related.c.post_id
+        )
+    posts = query.all()
+    assert len(posts) == 1
+    updated_idea = schema.execute(
+                graphql_registry['updateIdeas'],
+                context_value = graphql_request,
+                variable_values={
+                'discussionPhaseId': phases['brightMirror'].id,
+                'ideas': [{
+                    'id': created_idea_global_id,
+                    'messageViewOverride': 'brightMirror',
+                    'titleEntries': [
+                        {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                        {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                    ]}
+                ]}
+                )
+    assert updated_idea.errors is None
+    related = created_idea.get_related_posts_query(True, include_moderating=False)
+    query = models.Post.query.join(
+        related, models.Post.id == related.c.post_id
+        )
+    posts = query.all()
+    assert len(posts) == 0
+    test_session.rollback()
+
+
+def create_post(graphql_request, graphql_registry, idea, phases):
+    res = schema.execute(
+        graphql_registry['createPost'],
+        context_value=graphql_request,
+        variable_values={
+        'subject': 'subject of the post',
+        'contentLocale': 'fr',
+        'body': "body of the test post",
+        'ideaId': to_global_id("Idea", idea.id)
+        })
+    return res
 
 
 def test_mutation_update_ideas_multicol_add_neutral_column(test_session, graphql_request, graphql_registry, phases):

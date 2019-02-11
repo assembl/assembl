@@ -781,6 +781,18 @@ def create_idea(parent_idea, phase, args, context):
     return saobj
 
 
+def tombstone_posts_related_to_idea(idea):
+    related = idea.get_related_posts_query(True, include_moderating=False)
+    query = models.Post.query.join(
+        related, models.Post.id == related.c.post_id
+        )
+    posts = query.all()
+    for post in posts:
+        post.is_tombstone = True
+        post.publication_state = models.PublicationStates.DELETED_BY_ADMIN
+        idea.db.flush()
+
+
 def update_idea(args, phase, context):
     cls = models.Idea
     discussion_id = context.matchdict['discussion_id']
@@ -800,6 +812,9 @@ def update_idea(args, phase, context):
     require_instance_permission(CrudPermissions.UPDATE, thematic, context)
 
     with cls.default_db.no_autoflush as db:
+        # If the admin changes the idea type, all posts associated to the idea must be deleted
+        if thematic.message_view_override != message_view_override:
+            tombstone_posts_related_to_idea(thematic)
         # introducing history at every step, including thematics + questions  # noqa: E501
         thematic.copy(tombstone=True)
         title_entries = args.get('title_entries')

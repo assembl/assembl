@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.22.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-02-04 16:22+0100\n"
+"POT-Creation-Date: 2019-02-11 12:06+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -33,6 +33,10 @@ msgstr ""
 #: assembl/auth/util.py:529
 #, python-format
 msgid "Name too short: <%s> at line %d"
+msgstr ""
+
+#: assembl/graphql/discussion.py:572
+msgid "Must pass at least one language to be saved"
 msgstr ""
 
 #: assembl/graphql/permissions_helpers.py:9
