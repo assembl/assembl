@@ -400,7 +400,7 @@ const Translations = {
         postSuccess: "Merci pour votre participation. Votre proposition a bien été envoyée !",
         postToBeValidated:
           "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
-        endPhase: "La phase %{closedPhaseName} est terminée."
+        endPhase: "La phase \"%{closedPhaseName}\" est terminée."
       },
       question: {
         backToQuestions: "Retour aux questions"
@@ -527,7 +527,7 @@ const Translations = {
         suggest: "Suggérer"
       },
       themes: "Thèmes",
-      notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
+      notStarted: "La phase \"%{phaseName}\" n'a pas encore commencé. Merci de revenir à partir du ",
       isCompleted: "Cette phase est terminée. Vous ne pouvez plus voter.",
       noAnswer: "Cette phase est terminée. Vous ne pouvez plus répondre.",
       edit: {
@@ -1407,7 +1407,7 @@ const Translations = {
         postSuccess: "Thanks for your participation. Your proposal has been sent!",
         postToBeValidated:
           "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.",
-        endPhase: "The %{closedPhaseName} phase is closed."
+        endPhase: "The \"%{closedPhaseName}\" phase is closed."
       },
       question: {
         backToQuestions: "Back to questions"
@@ -1534,7 +1534,7 @@ const Translations = {
         suggest: "Suggest"
       },
       themes: "Themes",
-      notStarted: "The %{phaseName} phase has not started. Please come back from ",
+      notStarted: "The \"%{phaseName}\" phase has not started. Please come back from ",
       isCompleted: "This phase is closed. You can no longer vote.",
       noAnswer: "This phase is closed. You can no longer answer.",
       edit: {
