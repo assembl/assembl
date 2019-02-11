@@ -146,28 +146,28 @@ export const ADMIN_MENU = {
     title: 'administration.edition',
     sectionId: '1',
     subMenu: {
-      language: {
-        title: 'administration.menu.preferences',
+      personalizeInterface: {
+        title: 'administration.menu.personalizeInterface',
         sectionId: '1'
       },
-      sections: {
-        title: 'administration.menu.sections',
+      languague: {
+        title: 'administration.menu.preferences',
         sectionId: '2'
-      },
-      manageProfileOptions: {
-        title: 'administration.menu.manageProfileOptions',
-        sectionId: '3'
-      },
-      legalContents: {
-        title: 'administration.menu.legalContents',
-        sectionId: '4'
       },
       timeline: {
         title: 'administration.menu.timeline',
+        sectionId: '3'
+      },
+      manageProfileOptions: {
+        title: 'administration.menu.manageProfileOptions',
+        sectionId: '4'
+      },
+      sections: {
+        title: 'administration.menu.sections',
         sectionId: '5'
       },
-      personalizeInterface: {
-        title: 'administration.menu.personalizeInterface',
+      legalContents: {
+        title: 'administration.menu.legalContents',
         sectionId: '6'
       }
     }

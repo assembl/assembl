@@ -246,12 +246,12 @@ class DiscussionAdmin extends React.Component<Props, State> {
     return (
       <div className="discussion-admin">
         {showSaveButton && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
-        {section === '1' && <PreferencesSection {...this.props} />}
-        {section === '2' && <ManageSectionsForm {...this.props} />}
-        {section === '3' && <ManageProfileOptionsForm />}
-        {section === '4' && <LegalContentsForm {...this.props} />}
-        {section === '5' && <TimelineForm {...this.props} />}
-        {section === '6' && <PersonalizeInterface {...this.props} />}
+        {section === '1' && <PersonalizeInterface {...this.props} />}
+        {section === '2' && <PreferencesSection {...this.props} />}
+        {section === '3' && <TimelineForm {...this.props} />}
+        {section === '4' && <ManageProfileOptionsForm />}
+        {section === '5' && <ManageSectionsForm {...this.props} />}
+        {section === '6' && <LegalContentsForm {...this.props} />}
       </div>
     );
   }
