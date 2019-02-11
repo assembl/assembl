@@ -570,7 +570,7 @@ def prepare_cicd_build(c):
     install_bower(c)
     update_bower_requirements(c, force_reinstall=True)
     update_npm_requirements(c, install=True, development_mode=True)
-    if is_integration_env():
+    if is_integration_env(c):
         # This has to be added to actually checkout a branch because gitlab runs its runner
         # in detached HEAD state. This is mostly fine, however, building the wheel names requires
         # access to the branch's history. This is a workaround instead of setting hard depths on
