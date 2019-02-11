@@ -268,9 +268,8 @@ def compile_javascript(c):
             with c.cd('assembl/static/js'):
                 c.run('./node_modules/.bin/gulp libs')
                 c.run('./node_modules/.bin/gulp browserify:prod')
-            if c.config.wsginame != 'dev.wsgi':
-                with c.cd('assembl/static2'):
-                    c.run('yarn run build')
+            with c.cd('assembl/static2'):
+                c.run('yarn run build')
 
 
 @task()
