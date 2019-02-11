@@ -192,13 +192,15 @@
         }
 
         .description-box {
+          bottom: 30px;
           display: none;
           font-family: $font-family4;
           font-size: $font-size-s;
           letter-spacing: $text-letter-spacing;
           padding: 0 20px;
+          position: absolute;
+          height: 30%;
           text-align: center;
-          margin: 200px 0 0;
         }
       }
     }
