@@ -24,7 +24,7 @@ const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.Compone
   if (error || (data && data.error)) {
     const graphqlError = error || data.error;
     if (graphqlError) {
-      throw new Error(`GraphQL error: ${graphqlError.message}`);
+      throw new Error(graphqlError.message);
     }
   }
 

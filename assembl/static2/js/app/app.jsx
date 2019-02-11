@@ -98,7 +98,7 @@ export class DumbApp extends React.Component<Props, State> {
   componentDidUpdate(prevProps: Props) {
     const { error, timelineLoading, location, params, timeline, putTimelineInStore } = this.props;
     if (error) {
-      throw new Error(`GraphQL error: ${error.message}`);
+      throw new Error(error.message);
     }
 
     // Don't do a timeline identity check (we are sure it's always different here) but use isEqual to be sure

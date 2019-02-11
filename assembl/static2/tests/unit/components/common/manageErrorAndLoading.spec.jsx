@@ -14,7 +14,7 @@ describe('manageErrorAndLoading HOC', () => {
       error: new Error('My awesome error'),
       loading: false
     };
-    expect(() => manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toThrowError('GraphQL error: My awesome error');
+    expect(() => manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toThrowError('My awesome error');
   });
 
   it('should throw an error if data.error is not null/undefined', () => {
@@ -24,7 +24,7 @@ describe('manageErrorAndLoading HOC', () => {
         error: new Error('My graphql error')
       }
     };
-    expect(() => manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toThrowError('GraphQL error: My graphql error');
+    expect(() => manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toThrowError('My graphql error');
   });
 
   it('should return null if data are loading and we don\'t want to display a loader (use data prop)', () => {
