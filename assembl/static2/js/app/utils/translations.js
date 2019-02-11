@@ -693,8 +693,6 @@ const Translations = {
         deletePhase: "Supprimer la phase",
         instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
         instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
-        configureThematicsTable:
-          "Après avoir sauvegardé, configurez la table des thématiques en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
         configureThematicsTableLink: "Configurer Phase %{count}",
         successSave: "La ligne de temps a été sauvegardée avec succès",
         startOrEndDateIsEmpty: "Veuillez sélectionner une date de début et une date de fin pour toutes les phases",
@@ -852,7 +850,7 @@ const Translations = {
         "0": "Préférences de la discussion",
         "3": "Options d'inscription",
         "4": "Contenus juridiques",
-        "5": "Édition des phases et modules",
+        "5": "Édition des phases",
         "6": "Personnaliser l'interface"
       },
       languageChoice: "Sélection des langues du débat",
@@ -966,13 +964,11 @@ const Translations = {
           endDateError: "La date de fin ne peut pas être antérieure à la date de début"
         },
         timeline: {
-          title: "Timeline",
+          title: "Timeline de la page d'accueil",
           image: "Choisir l'image pour cette phase",
-          phaseSection: "Configurer les phases du débat",
+          phaseSection: "Configurer la timeline du débat sur la page d'accueil",
           imageDescription: "L'image doit avoir une hauteur de 500px et une largeur de 400px.",
-          sectionTitle: "Configurer le titre et sous-titre de la section",
-          linkToTimeline: "Configurer le nombre phases souhaitées pour le débat",
-          linkToLandingPage: "Configurer la description et l'image pour chaque phase"
+          sectionTitle: "Configurer le titre et sous-titre de la section"
         },
         successSave: "Les modules ont été enregistrés avec succès !",
         headerSuccessSave: "Le bandeau de la page d'accueil a été sauvegardé avec succès !"
@@ -1714,8 +1710,6 @@ const Translations = {
         deletePhase: "Delete the phase",
         instruction1: "Choose the number of phases for your debate",
         instruction2: "Fill in the required fields for each phase by selecting each tab",
-        configureThematicsTable:
-          "Once you saved your work, configure the thematics table by clicking on the vertical menu on the left or on the following link: ",
         configureThematicsTableLink: "Configure Phase %{count}",
         successSave: "The timeline has been sucessfully saved",
         titleEntriesIsEmpty: "The phase title is required",
@@ -1867,7 +1861,7 @@ const Translations = {
         "0": "Discussion preferences",
         "3": "Registration options",
         "4": "Legal contents",
-        "5": "Edition of the phases and modules",
+        "5": "Edition of the phases",
         "6": "Personalize the interface"
       },
       languageChoice: "Select desired languages below",
@@ -1978,13 +1972,11 @@ const Translations = {
           endDateError: "The end date cannot be after the start date"
         },
         timeline: {
-          title: "Timeline",
+          title: "Timeline on the landing page",
           image: "Choose the image for this phase",
           sectionTitle: "Configure the title and the subtitle of the section",
-          phaseSection: "Configure each phase of the debate",
-          imageDescription: "The image must have a height of 500px and a width of 400px.",
-          linkToTimeline: "Set the number of phases for the debate",
-          linkToLandingPage: "Set the description and the image for each phase"
+          phaseSection: "Configure the timeline of the debate on the landing page",
+          imageDescription: "The image must have a height of 500px and a width of 400px."
         },
         successSave: "The modules have been saved with success!",
         headerSuccessSave: "The home page header have been saved with success!"

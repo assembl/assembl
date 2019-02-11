@@ -4,15 +4,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { connect } from 'react-redux';
 import { Translate, I18n } from 'react-redux-i18n';
-import { Link } from 'react-router';
-import { getDiscussionSlug } from '../../../utils/globalFunctions';
-import { get } from '../../../utils/routeMap';
 import { updateStartDate, updateEndDate } from '../../../actions/adminActions/timeline';
 
 type PhaseFormProps = {
-  phaseId: string,
   phaseNumber: number,
-  identifier: string,
   start: moment$Moment,
   end: moment$Moment,
   handleStartDateChange: Function,
@@ -22,11 +17,9 @@ type PhaseFormProps = {
 };
 
 export const DumbPhaseForm = ({
-  phaseId,
   phaseNumber,
   handleStartDateChange,
   handleEndDateChange,
-  identifier,
   start,
   end,
   hasConflictingDates,
@@ -34,8 +27,6 @@ export const DumbPhaseForm = ({
 }: PhaseFormProps) => {
   const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', { count: phaseNumber });
   const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
-
-  const slug = { slug: getDiscussionSlug() };
 
   return (
     <div className="phase-form">
@@ -92,17 +83,6 @@ export const DumbPhaseForm = ({
             <Translate value="administration.timelineAdmin.warningLabel" />
           </div>
         )}
-      </div>
-      <div className="text-xs configure-module-text">
-        <Translate value="administration.timelineAdmin.configureThematicsTable" />
-        {identifier ? (
-          <Link
-            to={`${get('administration', { ...slug, id: identifier }, { section: 1, phaseId: phaseId })}`}
-            className="configure-module-link"
-          >
-            <Translate value="administration.timelineAdmin.configureThematicsTableLink" count={phaseNumber} />
-          </Link>
-        ) : null}
       </div>
     </div>
   );

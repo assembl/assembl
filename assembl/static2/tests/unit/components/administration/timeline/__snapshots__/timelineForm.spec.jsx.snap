@@ -6,7 +6,7 @@ exports[`TimelineForm component should render a form to create, delete and edit 
 >
   <SectionTitle
     annotation="This module has to be filled. * Fields are required"
-    title="Edition of the phases and modules"
+    title="Edition of the phases"
   />
   <Translate
     className="admin-instruction"
@@ -67,25 +67,6 @@ exports[`TimelineForm component should render a form to create, delete and edit 
         </OverlayTrigger>
       </form>
     </div>
-    <div
-      className="margin-l"
-    >
-      <Translate
-        value="administration.landingPage.timeline.linkToLandingPage"
-      />
-      <span>
-         
-      </span>
-      <Link
-        onlyActiveOnIndex={false}
-        style={Object {}}
-        to="/\${slug}/administration/landingPage?section=2"
-      >
-        <Translate
-          value="here"
-        />
-      </Link>
-    </div>
   </div>
   <Translate
     className="admin-instruction"
@@ -115,5 +96,6 @@ exports[`TimelineForm component should render a form to create, delete and edit 
     }
     type="phase"
   />
+  <Connect(DumbManageTimeline) />
 </div>
 `;

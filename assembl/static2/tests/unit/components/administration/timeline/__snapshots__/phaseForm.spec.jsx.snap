@@ -108,23 +108,5 @@ exports[`PhaseForm component should render a form to update the dates and module
       </div>
     </label>
   </div>
-  <div
-    className="text-xs configure-module-text"
-  >
-    <Translate
-      value="administration.timelineAdmin.configureThematicsTable"
-    />
-    <Link
-      className="configure-module-link"
-      onlyActiveOnIndex={false}
-      style={Object {}}
-      to="/\${slug}/administration/survey?phaseId=1234&section=1"
-    >
-      <Translate
-        count={1}
-        value="administration.timelineAdmin.configureThematicsTableLink"
-      />
-    </Link>
-  </div>
 </div>
 `;
