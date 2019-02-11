@@ -37,7 +37,7 @@ cache:
 #     - tmp_master_for_ci_cd
 #   before_script:
 #     - apt-get update
-#     - apt-get install sudo python python-pip python-dev build-essential
+#     - apt-get install -y sudo python python-pip python-dev build-essential
 #     - pip install virtualenv
 #     - cd $CI_PROJECT_DIR
 #     - python -mvirtualenv venv
@@ -63,7 +63,7 @@ build_wheel:
       - dist/
   before_script:
     - apt-get update
-    - apt-get install sudo python python-pip python-dev build-essential
+    - apt-get install -y sudo python python-pip python-dev build-essential
     - pip install virtualenv
     - cd $CI_PROJECT_DIR
     - python -mvirtualenv venv
@@ -72,7 +72,7 @@ build_wheel:
     - "echo '_extends: aws.yaml' > invoke.yaml"
     - touch secrets.yaml
     - ln -s assembl/tasks .
-    - inv build.prepare-cicd-build
+    - inv -e build.prepare-cicd-build
     - mkdir wheelhouse
   script:
     # create the wheel and upload to pypi
@@ -94,7 +94,7 @@ push_to_develop_server:
     - invoke
   before_script:
     - apt-get update
-    - apt-get install sudo python python-pip python-dev build-essential
+    - apt-get install -y sudo python python-pip python-dev build-essential
     - pip install virtualenv
     - cd $CI_PROJECT_DIR
     - python -mvirtualenv venv
