@@ -1,6 +1,7 @@
 // @flow
 
 import { I18n } from 'react-redux-i18n';
+import { i18nValueIsEmpty } from '../../../form/utils';
 import type { DatePickerValue, DatePickerValidation } from './types.flow';
 
 export const validStartDate = (startDate: ?moment$Moment, endDate: ?moment$Moment): boolean => {
@@ -18,7 +19,7 @@ export const validEndDate = (startDate: ?moment$Moment, endDate: ?moment$Moment)
 };
 
 export const validateDatePicker = (values: DatePickerValue): DatePickerValidation => ({
-  headerTitle: undefined,
+  headerTitle: i18nValueIsEmpty(values.headerTitle) ? I18n.t('error.required') : undefined,
   headerSubtitle: undefined,
   headerButtonLabel: undefined,
   headerImage: undefined,
