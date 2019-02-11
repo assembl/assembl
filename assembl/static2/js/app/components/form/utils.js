@@ -91,7 +91,7 @@ export const createSave = (successMsgId: string) => async (mutationsPromises: Mu
     })
     .catch((error) => {
       status = 'KO';
-      displayAlert('danger', error.message, false, 30000);
+      displayAlert('danger', error.message.replace('GraphQL error: ', ''), false, 30000);
     });
 
   return status;
