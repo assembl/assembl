@@ -1,13 +1,8 @@
 import os
-import sys
-import re
-import json
-from hashlib import sha256
-from os.path import join, normpath
 
-from semantic_version import Version
+from .common import (venv, task, exists)
+from .build import (separate_pip_install, get_node_base_path, get_new_node_base_path)
 
-from .common import (venv, task, exists, is_integration_env, fill_template)
 
 @task()
 def uninstall_lamp_mac(c):
@@ -89,7 +84,7 @@ def update_pip_requirements_mac(c, force_reinstall=False):
         c.run('pip install -U setuptools "pip<10" ', True)
 
     if force_reinstall:
-        with venv(c)
+        with venv(c):
             c.run("pip install --ignore-installed -r %s/requirements.txt" % (c.config.projectpath))
     else:
         specials = [
