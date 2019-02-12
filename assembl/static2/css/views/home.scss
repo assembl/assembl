@@ -104,6 +104,30 @@
     }
   }
 
+  .objectives-section {
+    .container-objectives-img {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      .objectives {
+        width: 100%;
+
+        &.margin-right {
+          margin-right: 0;
+        }
+      }
+    }
+
+    .objectives-img {
+      background-size: cover;
+      height: 480px;
+      margin: 20px 0 0;
+      background-position-x: 50%;
+    }
+  }
+
   .themes-section {
     .theme {
       &:nth-child(1) {
@@ -169,14 +193,6 @@
           }
         }
       }
-    }
-  }
-
-  .objectives-section {
-    .objectives-img {
-      background-size: cover;
-      height: 480px;
-      margin: 20px 0 0;
     }
   }
 
@@ -430,13 +446,6 @@
 }
 
 @media screen and (max-width: $screen-sm-min) {
-  .container-objectives-img {
-    align-items: center;
-    display: flex;
-    justify-content: center;
-    width: 100%;
-  }
-
   .home {
     .phases-section {
       .illustration-box {
@@ -508,6 +517,20 @@
 }
 
 @media screen and (min-width: $screen-xxs-max) {
+  .home {
+    .objectives-section {
+      .container-objectives-img {
+        flex-direction: row;
+
+        .objectives {
+          &.margin-right {
+            margin-right: 20px;
+          }
+        }
+      }
+    }
+  }
+
   .twitter-section {
     .tweet-section {
       padding: 45px 75px 65px;
