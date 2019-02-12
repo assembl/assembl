@@ -4,16 +4,16 @@ DEFAULT:
   db_password: assembl_test
   db_database: assembl_test
 _internal:
-  _wsginame: dev.wsgi
-  _urlhost: localhost
-  _uses_nginx: false
-  _uses_bluenove_actionable: false
-  _gitbranch: develop
-  _is_production_env: false
-  _ini_file: testing.ini
-  _requirement_inputs: requirements.in requirements-doc.in requirements-tests.in
-  _build_docs: false
-  _can_test: true
+  wsginame: dev.wsgi
+  urlhost: localhost
+  uses_nginx: false
+  uses_bluenove_actionable: false
+  gitbranch: develop
+  is_production_env: false
+  ini_file: testing.ini
+  requirement_inputs: requirements.in requirements-doc.in requirements-tests.in
+  build_docs: false
+  can_test: true
 under_test: true
 pyramid.default_locale_name: en
 assembl_handle_exceptions: false
@@ -54,19 +54,19 @@ ini_files: production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl saml_test.
 handlers:
   keys: console
 logger_alembic:
-  handlers =
+  handlers:
   level: INFO
 logger_assembl:
-  handlers =
+  handlers:
   level: INFO
 logger_root:
   handlers: console
   level: INFO
 logger_sentry:
-  handlers =
+  handlers:
   level: INFO
 logger_sqlalchemy:
-  handlers =
+  handlers:
   level: INFO
 pipeline:main:
   pipeline: assembl
