@@ -17,12 +17,9 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
       </h3>
       <div
         className="text"
-        dangerouslySetInnerHTML={
-          Object {
-            "__html": "Try to override the CSS transmitter, maybe it will program the solid state program!",
-          }
-        }
-      />
+      >
+        Try to override the CSS transmitter, maybe it will program the solid state program!
+      </div>
     </div>
     <div
       className="proposal-vote-modules col-md-6 col-md-offset-1 col-xs-12"

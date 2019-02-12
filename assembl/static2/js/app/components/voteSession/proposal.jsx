@@ -4,6 +4,7 @@ import { Button, Col, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import { Map } from 'immutable';
 
+import { renderRichtext } from '../../utils/linkify';
 import TokenVoteForProposal from './tokenVoteForProposal';
 import { ChoiceGaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
 import VotesInProgress from './votesInProgress';
@@ -69,7 +70,7 @@ class Proposal extends React.Component<Props, State> {
         <Row className="proposal">
           <Col xs={12} md={5} className="margin-m">
             <h3 className="proposal-title dark-title-3">{title}</h3>
-            <div className="text" dangerouslySetInnerHTML={{ __html: description }} />
+            <div className="text">{renderRichtext(description || '')}</div>
           </Col>
           <Col xs={12} mdOffset={1} md={6} className="proposal-vote-modules">
             {tokenVoteModule && (

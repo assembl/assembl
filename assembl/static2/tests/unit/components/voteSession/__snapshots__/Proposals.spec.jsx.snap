@@ -18,12 +18,9 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         </h3>
         <div
           className="text"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "You can't hack the alarm without connecting the primary AGP microchip!",
-            }
-          }
-        />
+        >
+          You can't hack the alarm without connecting the primary AGP microchip!
+        </div>
       </div>
       <div
         className="proposal-vote-modules col-md-6 col-md-offset-1 col-xs-12"
@@ -812,12 +809,9 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
         </h3>
         <div
           className="text"
-          dangerouslySetInnerHTML={
-            Object {
-              "__html": "I'll input the multi-byte SAS monitor, that should bandwidth the USB microchip!",
-            }
-          }
-        />
+        >
+          I'll input the multi-byte SAS monitor, that should bandwidth the USB microchip!
+        </div>
       </div>
       <div
         className="proposal-vote-modules col-md-6 col-md-offset-1 col-xs-12"
