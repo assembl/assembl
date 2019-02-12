@@ -11,7 +11,6 @@ from .common import (
     setup_ctx, running_locally, exists, venv, task, local_code_root,
     create_venv, fill_template, get_s3_file, get_aws_account_id)
 
-
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
 
@@ -579,6 +578,20 @@ def build_doc(c):
             c.run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
             c.run('python2 assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (c.ini_files))
             c.run('sphinx-build doc assembl/static/techdocs')
+
+
+@task()
+def create_clean_cronlist(c):
+    """
+    Start with a clean cron list on a machine, or migrate by adding email at top
+    """
+    from .sudoer import add_cron_job
+    admin_email = c.config.admin_email
+    if not admin_email:
+        add_cron_job(c, '', force_clean=True)
+    else:
+        email_command = "MAILTO=%s" % (admin_email)
+        add_cron_job(c, email_command, force_clean=True, head=True)
 
 
 # avoid it being defined in both modules

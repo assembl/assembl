@@ -286,3 +286,16 @@ def install_chrome_dependencies(c):
             'libxtst6', 'ca-certificates', 'fonts-liberation', 'libappindicator1', 'libnss3', 'lsb-release', 'xdg-utils',
             'wget']
     c.sudo('apt-get install -yq {}'.format(' '.join(deps)))
+
+
+@task()
+def add_cron_job(c, cmd, force_clean=False, head=False):
+    # Will add a cron job to an ubuntu-based cronlist as a sudo user
+    if force_clean:
+        clause = 'echo %s' % cmd
+    else:
+        if head:
+            clause = '(echo %s; crontab -l)' % cmd
+        else:
+            clause = '(crontab -l; echo %s)' % cmd
+    c.sudo('%s | crontab -' % clause)
