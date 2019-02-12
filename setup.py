@@ -111,10 +111,10 @@ setup(name='assembl',
       zip_safe=False,
       test_suite='assembl',
       setup_requires=['pip>=6'],
-      install_requires=parse_reqs(['requirements.in', 'requirements-chrouter.in']),
+      install_requires=parse_reqs(['requirements.in']),
       tests_require=parse_reqs(['requirements-tests.in']),
       dependency_links=parse_reqs(
-          ['requirements.in', 'requirements-chrouter.in'],
+          ['requirements.in'],
           links=True
       ),
       extras_require={
