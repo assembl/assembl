@@ -580,7 +580,7 @@ def push_built_themes_to_remote_bucket(c):
                 with open(local_path, 'rb') as fp:
                     if content_type == 'application/octet-stream':
                         use_fp = fp
-                        content_encoding = None
+                        extra_args = {}
                         buffer = None
                     else:
                         buffer = StringIO()
@@ -588,12 +588,12 @@ def push_built_themes_to_remote_bucket(c):
                             copyfileobj(fp, gfp)
                         buffer.seek(0)
                         use_fp = buffer
-                        content_encoding = 'gzip'
+                        extra_args = {'ContentEncoding': 'gzip'}
                     bucket.put_object(
                         Body=use_fp, Key=s3_path, CacheControl='max-age=3600',
                         ContentType=content_type,
                         ACL='public-read',  # is that right?
-                        ContentEncoding=content_encoding)
+                        **extra_args)
                     if buffer:
                         buffer.close()
 
