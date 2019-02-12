@@ -9,7 +9,6 @@ DEFAULT:
 _internal:
   postgres_db_user: postgres
   postgres_db_password:
-  mac: false
   # We now use systemd instead of a global supervisor
   uses_global_supervisor: false
   uses_memcache: true
