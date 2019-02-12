@@ -1,4 +1,4 @@
-_extends: aws.rc
+_extends: aws.yaml
 DEFAULT:
   db_user: assembl_test
   db_password: assembl_test
