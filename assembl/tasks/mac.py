@@ -89,7 +89,8 @@ def update_pip_requirements_mac(c, force_reinstall=False):
         c.run('pip install -U setuptools "pip<10" ', True)
 
     if force_reinstall:
-        c.run("%s/bin/pip install --ignore-installed -r %s/requirements.txt" % (c.config.venvpath, c.config.projectpath))
+        with venv(c)
+            c.run("pip install --ignore-installed -r %s/requirements.txt" % (c.config.projectpath))
     else:
         specials = [
             # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
@@ -101,5 +102,6 @@ def update_pip_requirements_mac(c, force_reinstall=False):
         for package, wrapper, mac_wrapper in specials:
             wrapper = mac_wrapper
             separate_pip_install(c, package, wrapper)
-        cmd = "%s/bin/pip install -r %s/requirements.txt" % (c.config.venvpath, c.config.projectpath)
-        c.run("yes w | %s" % cmd)
+        cmd = "pip install -r %s/requirements.txt" % (c.config.projectpath)
+        with venv(c):
+            c.run("yes w | %s" % cmd)
