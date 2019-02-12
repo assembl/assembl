@@ -8,7 +8,7 @@ from ConfigParser import RawConfigParser
 from getpass import getuser
 
 from .common import (
-    setup_ctx, running_locally, exists, venv, task, local_code_root,
+    setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
     create_venv, fill_template, get_s3_file, get_aws_account_id)
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
@@ -574,7 +574,8 @@ def build_doc(c):
     with c.cd(c.config.projectpath):
         c.run('rm -rf doc/autodoc doc/jsdoc')
         with venv(c):
-            c.run('./assembl/static/js/node_modules/.bin/jsdoc -t ./assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
+            c.run('./assembl/static/js/node_modules/.bin/jsdoc -t ' +
+                  './assembl/static/js/node_modules/jsdoc-rst-template/template/ --recurse assembl/static/js/app -d ./doc/jsdoc/')
             c.run('env SPHINX_APIDOC_OPTIONS="members,show-inheritance" sphinx-apidoc -e -f -o doc/autodoc assembl')
             c.run('python2 assembl/scripts/make_er_diagram.py %s -o doc/er_diagram' % (c.ini_files))
             c.run('sphinx-build doc assembl/static/techdocs')
