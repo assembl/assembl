@@ -292,18 +292,20 @@ def compile_static_assets(c):
     compile_javascript(c)
 
 
-def psql_command(c, command, database=None, use_db_user=True):
+def psql_command(c, command, use_db_user=True, database=None):
     if use_db_user:
+        database = database or c.config.DEFAULT.db_database
         pypsql = join(c.config.code_root, 'assembl', 'scripts', 'pypsql.py')
-        result = c.run('python2 {pypsql} -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
+        result = c.run('python2 {pypsql} -1 --autocommit -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command=command, pypsql=pypsql, password=c.config.DEFAULT.db_password,
-            database=c.config.DEFAULT.db_database, host=c.config.DEFAULT.db_host,
-            user=c.config.DEFAULT.db_user), warn=True)
+            database=database, host=c.config.DEFAULT.db_host, user=c.config.DEFAULT.db_user
+        ), warn=True)
     else:
+        database = database or 'postgres'
         if c.config._internal.mac:
-            result = c.run('psql -t postgres -c "%s"' % command, warn=True)
+            result = c.run('psql -t %s -c "%s"' % (database, command), warn=True)
         else:
-            result = c.sudo('psql -t postgres -c "%s"' % command, user='postgres', warn=True)
+            result = c.sudo('psql -t %s -c "%s"' % (database, command), user='postgres', warn=True)
     if result.failed:
         return False
     return result.stdout.strip()
@@ -318,18 +320,19 @@ def check_and_create_database_user(c, user=None, password=None):
     user = user or c.config.DEFAULT.db_user
     password = password or c.config.DEFAULT.db_password
     checkUser = psql_command(c, "SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user), False)
-    if checkUser is False:
+    if not checkUser:
         print "User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"
         assert psql_command(c, "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'" % (
             user, password), False
         ) is not False, "Could not create user"
+        print "Created user"
     else:
         print "User exists and can connect"
 
 
 def check_if_database_exists(c):
     return psql_command(c, "SELECT 1 FROM pg_database WHERE datname='%s'" % (
-        c.config.DEFAULT.db_database))
+        c.config.DEFAULT.db_database), True, 'postgres')
 
 
 @task(check_and_create_database_user)
@@ -341,8 +344,8 @@ def database_create(c):
         assert psql_command(
             c, "CREATE DATABASE {database} WITH OWNER = {user} TEMPLATE = template0 ENCODING = UNICODE".format(
                 user=c.config.DEFAULT.db_user, password=c.config.DEFAULT.db_password,
-                host=c.config.DEFAULT.db_host, database=c.config.DEFAULT.db_database)
-            ), "Could not create database"
+                host=c.config.DEFAULT.db_host, database=c.config.DEFAULT.db_database), True, 'postgres'
+            ) is not False, "Could not create database"
         print "Database created successfully!"
     else:
         print "Database exists and user can connect"
