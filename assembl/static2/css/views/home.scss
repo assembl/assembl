@@ -476,22 +476,24 @@
 }
 
 @media screen and (max-width: $screen-xxs-max) {
-  .home .header-section {
-    .header-content {
-      padding: 60px 5px 120px;
-    }
-  }
-
-  .twitter-section {
-    .tweet-section {
-      padding: 10px 20px;
+  .home {
+    &.header-section {
+      .header-content {
+        padding: 60px 5px 120px;
+      }
     }
 
-    .title-section {
-      padding: 20px 0 0;
+    .twitter-section {
+      .tweet-section {
+        padding: 10px 20px $margin-section-tiny 20px;
+      }
 
-      h1 {
-        padding: 0 0 0 20px;
+      .title-section {
+        padding: $margin-section-tiny 0 0;
+
+        h1 {
+          padding: 0 0 0 20px;
+        }
       }
     }
   }
