@@ -11,7 +11,7 @@ from cStringIO import StringIO
 
 from semantic_version import Version
 
-from .common import venv, task, exists, is_integration_env, fill_template, configure_github_user, get_s3_file
+from .common import venv, task, exists, is_integration_env, fill_template, configure_github_user, add_github_bot_ssh_keys, get_s3_file
 from .sudoer import (
     upgrade_yarn, install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
     install_chrome_dependencies)
@@ -615,19 +615,19 @@ def push_built_themes_to_remote_bucket(c):
 @task(
     install_build_dependencies,
     install_node_and_yarn,
-    # configure_github_user,
-    # add_github_user_ssh_keys,
+    configure_github_user,
+    add_github_bot_ssh_keys,
     clear_aptitude_cache)
 def prepare_cicd_build(c):
     """
     There is full assumption of being in CI/CD environment when calling this function
     """
-    # project_path = os.gettenv('CI_PROJECT_DIR', c.config.code_root)
-    # with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
-    #     c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
+    project_path = os.gettenv('CI_PROJECT_DIR', c.config.code_root)
+    with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
+        c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
 
-    # with c.cd(os.path.join(project_path, 'assembl/static2/css/themes/vendor')):
-    #     c.run('git clone git@github.com:bluenove/assembl2-client-themes.git')
+    with c.cd(os.path.join(project_path, 'assembl/static2/css/themes/vendor')):
+        c.run('git clone git@github.com:bluenove/assembl2-client-themes.git')
 
     # Build JS dependencies for V1 and V2
     install_bower(c)
