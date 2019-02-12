@@ -1,3 +1,4 @@
+import sys
 import os
 import os.path
 from contextlib import nested
@@ -101,6 +102,8 @@ def setup_ctx(c):
     current = c.config._project or {}
     current['code_root'] = code_root
     current['projectpath'] = project_prefix
+    current['_internal'] = c.config.get('_internal') or {}
+    current['_internal']['mac'] = sys.platform == 'darwin'
     target = current.get('_extends', None)
     if not target and exists(c, 'invoke.yaml'):
         target = 'invoke.yaml'
