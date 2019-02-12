@@ -9,7 +9,7 @@ from getpass import getuser
 
 from .common import (
     setup_ctx, running_locally, exists, venv, task, local_code_root,
-    create_venv, fill_template, get_s3_file)
+    create_venv, fill_template, get_s3_file, get_aws_account_id)
 
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
@@ -157,12 +157,8 @@ supervisor:
 @task()
 def get_aws_invoke_yaml(c, celery=False):
     assert running_locally(c)
-    account = os.getenv("AWS_ACCOUNT_ID")
-    if not account:
-        import requests
-        r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
-        assert r.ok
-        account = r.json()['InstanceProfileArn'].split(':')[4]
+    account = get_aws_account_id(c)
+    assert account, "Could not get aws account"
     # This introduces a convention: yaml files
     # for a given amazon account will be stored in
     # s3://assembl-data-{account_id}/{fname}.yaml
