@@ -77,15 +77,16 @@ def _bower_foreach_do(c, cmd):
     bower_cmd(c, cmd, 'assembl/static/widget/share')
 
 
-def separate_pip_install(context, package, wrapper=None):
-    cmd = '%s/bin/pip install' % context.config.projectpath + "/venv"
+def separate_pip_install(c, package, wrapper=None):
+    cmd = 'pip install'
     if wrapper:
         cmd = wrapper % (cmd,)
-    context_dict = dict(context)
+    context_dict = dict(c.config)
     cmd = cmd % context_dict
     cmd = "egrep '^%(package)s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(cmd)s" % dict(
         cmd=cmd, package=package, **context_dict)
-    context.run(cmd)
+    with venv(c):
+        c.run(cmd)
 
 
 @task()
