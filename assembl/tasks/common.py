@@ -53,9 +53,9 @@ def get_aws_account_id(c):
             return None
     import requests
     try:
-        r = requests.get('http://169.254.169.254/latest/meta-data/iam/info', timeout=2)
+        r = requests.get('http://169.254.169.254/latest/dynamic/instance-identity/document', timeout=2)
         if r.ok:
-            return r.json()['InstanceProfileArn'].split(':')[4]
+            return r.json()['accountId']
     except:
         pass
 
