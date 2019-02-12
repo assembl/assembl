@@ -4,7 +4,9 @@ import re
 import json
 from hashlib import sha256
 from os.path import join, normpath
-from getpass import getuser
+from gzip import GzipFile
+from shutil import copyfileobj
+from cStringIO import StringIO
 
 from semantic_version import Version
 
@@ -553,56 +555,47 @@ def push_built_themes_to_remote_bucket(c):
         - a compressed and uncompressed versions of js + css files locally and on S3 bucket
     """
     import boto3
-    s3 = boto3.resource('s3')
-    v2_build_path = os.path.join(c.config.code_root, 'assembl/static2/build/themes')
-    v1_build_path = os.path.join(c.config.code_root, 'assembl/static/build/')
-    v2_bucket_name = 'bluenove-client-themes'
-    v1_bucket_name = 'bluenove-deprecated-client-themes'
-    buckets = ((1, v1_bucket_name), (2, v2_bucket_name))
+    region = c.config.get('aws_shared_region', 'eu-west-1')
+    s3 = boto3.resource('s3', region_name=region)
+    buckets = ((os.path.join(c.config.code_root, 'assembl/static/js/build/'),
+                s3.Bucket('bluenove-deprecated-client-themes')),
+               (os.path.join(c.config.code_root, 'assembl/static2/build/themes'),
+                s3.Bucket('bluenove-client-themes')))
 
     def determine_content_type(path):
-        ext = os.path.splitext(path)[1]
-        if ext:
-            if re.match(r'.*js$', ext):
-                return 'text/javascript'
-            elif re.match(r'.*css$', ext):
-                return 'text/css'
+        if path.endswith('.js'):
+            return 'text/javascript'
+        if path.endswith('.css'):
+            return 'text/css'
         return 'application/octet-stream'
 
-    def determine_content_encoding(path):
-        basename, _ = os.path.splitext(path)
-        if 'compressed_' in basename:
-            return 'gzip'
-        return None
-
-    def compress_file(path):
-        # Only compress css + js files
-        base, ext = os.path.splitext(path)
-        basename = os.path.basename(base)
-        zip_file = os.path.join(os.path.dirname(path), 'compressed_' + basename + ext)
-        if ext:
-            if re.match(r'.*js$', ext) or re.match(r'.*css$', ext):
-                c.run('gzip -vkc -9 %s > %s' % (path, zip_file))
-        else:
-            print("No files of JS/CSS type to compress")
-
-    for theme_version, bucket_name in buckets:
-        if theme_version == 1:
-            theme_path = v1_build_path
-        else:
-            theme_path = v2_build_path
+    for theme_path, bucket in buckets:
         # Push all content to S3, even if the files exist on S3, reupload them
         for root, dirs, files in os.walk(theme_path):
             for filename in files:
                 local_path = os.path.join(root, filename)
                 s3_path = os.path.relpath(local_path, theme_path)
-                configs = {
-                    'ACL': 'public-read',
-                    'ContentType': determine_content_type(local_path),
-                    'CacheControl': 'max-age=3600',
-                    'ContentEncoding': determine_content_encoding(local_path)
-                }
-                s3.meta.client.upload_file(local_path, bucket_name, s3_path, configs)
+                content_type = determine_content_type(local_path)
+                # print local_path, s3_path, content_type, determine_content_encoding(local_path)
+                with open(local_path, 'rb') as fp:
+                    if content_type == 'application/octet-stream':
+                        use_fp = fp
+                        content_encoding = None
+                        buffer = None
+                    else:
+                        buffer = StringIO()
+                        with GzipFile(s3_path, 'wb', 9, buffer) as gfp:
+                            copyfileobj(fp, gfp)
+                        buffer.seek(0)
+                        use_fp = buffer
+                        content_encoding = 'gzip'
+                    bucket.put_object(
+                        Body=use_fp, Key=s3_path, CacheControl='max-age=3600',
+                        ContentType=content_type,
+                        ACL='public-read',  # is that right?
+                        ContentEncoding=content_encoding)
+                    if buffer:
+                        buffer.close()
 
 
 @task(
