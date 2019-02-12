@@ -18,7 +18,12 @@ query { hasResourcesCenter }
 
 
 def test_query_resources(graphql_registry, discussion, resource, resource_with_image_and_doc, graphql_request):
-    res = schema.execute(graphql_registry['ResourcesQuery'], context_value=graphql_request)
+    res = schema.execute(
+        graphql_registry['ResourcesQuery'],
+        variable_values={
+            "lang": u"en"
+        },
+        context_value=graphql_request)
     assert res.data['resources'][0]['order'] == 1.0
     assert res.data['resources'][1]['order'] == 2.0
 
