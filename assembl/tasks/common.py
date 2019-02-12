@@ -40,6 +40,25 @@ def rec_update(d1, d2):
     return result
 
 
+def get_aws_account_id(c):
+    account = os.getenv("AWS_ACCOUNT_ID")
+    if account:
+        return account
+    # Attempt to fail fast on non-EC2 machines
+    if os.getenv('platform') != 'linux2' or not os.path.exists('/usr/sbin/dmidecode'):
+        return None
+    platform_info = c.sudo('dmidecode -s bios-version').stdout
+    if 'amazon' not in platform_info:
+        return None
+    import requests
+    try:
+        r = requests.get('http://169.254.169.254/latest/meta-data/iam/info', timeout=2)
+        if r.ok:
+            return r.json()['InstanceProfileArn'].split(':')[4]
+    except:
+        pass
+
+
 def get_secrets_from_manager(c, aws_secret_ids, cache=True):
     base = {}
     if aws_secret_ids:
@@ -125,13 +144,19 @@ def setup_ctx(c):
         target = data.get('_extends', None)
         current = rec_update(data, current)
 
-    aws_secrets_ids = current.get('aws_secrets_ids', None)
-    if aws_secrets_ids:
-        # partial merge for region
-        c.config._project = current
-        c.config.merge()
-        secrets = get_secrets(c, aws_secrets_ids)
-        current.update(secrets)
+    account_id = current.get('aws_client', None)
+    if not account_id:
+        account_id = get_aws_account_id(c)
+        if account_id:
+            current['aws_client'] = account_id
+    if account_id:
+        aws_secrets_ids = current.get('aws_secrets_ids', None)
+        if aws_secrets_ids:
+            # partial merge for region
+            c.config._project = current
+            c.config.merge()
+            secrets = get_secrets(c, aws_secrets_ids)
+            current.update(secrets)
 
     if current is not c.config._project:
         c.config._project = current
