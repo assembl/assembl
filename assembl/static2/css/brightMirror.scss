@@ -34,6 +34,10 @@ $fiction-toolbar-icon-size: 17px;
 .bright-mirror-fiction {
   padding-bottom: 30px;
   padding-top: 15px;
+
+  p {
+    min-height: 1em;
+  }
 }
 
 .side-comment-container {
