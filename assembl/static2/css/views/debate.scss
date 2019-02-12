@@ -404,12 +404,12 @@
   }
 }
 
-@media screen and (max-width: 320px) {
+@media screen and (max-width: $screen-xxs-max) {
   .debate {
     .questions {
       .questions-section {
         .dark-title-5 {
-          margin: 20px 0 10px 20px;
+          margin: 10px 0 10px 20px;
         }
       }
     }

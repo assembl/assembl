@@ -359,3 +359,36 @@ img.attachment-image {
     padding: 5px 0 0 5px;
   }
 }
+
+@media screen and (min-width: $screen-xxs-max) {
+  .questions-section {
+    .rich-text-editor {
+      .public-DraftEditor-content {
+        height: 200px;
+        overflow: auto;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .questions-section {
+    .rich-text-editor {
+      .public-DraftEditor-content {
+        height: 500px;
+        overflow: auto;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-xl-min) {
+  .questions-section {
+    .rich-text-editor {
+      .public-DraftEditor-content {
+        height: 300px;
+        overflow: auto;
+      }
+    }
+  }
+}
