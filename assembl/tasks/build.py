@@ -2,6 +2,7 @@ import os
 import sys
 import re
 import json
+import time
 from hashlib import sha256
 from os.path import join, normpath
 from gzip import GzipFile
@@ -669,6 +670,17 @@ def start_deploy_on_client(c, client_id, region=None):
                 'bundleType': 'zip'
             }
         })
+    deploymentId = response['deploymentId']
+    while True:
+        time.sleep(30)
+        deployment_info = cd_client.get_deployment(deploymentId=deploymentId)
+        status = deployment_info['status']
+        if status == 'Succeeded':
+            return
+        assert status not in ('Failed', 'Stopped'), "Status of %s is %s: %s\n%s" % (
+            deploymentId, status,
+            deployment_info['errorInformation']['code'],
+            deployment_info['errorInformation']['message'])
 
 
 @task
