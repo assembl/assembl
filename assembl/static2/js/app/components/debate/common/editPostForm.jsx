@@ -96,7 +96,15 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
   };
 
   handleSubmit = (publicationState) => {
-    const { uploadDocument, updatePost, postSuccessMsgId, childrenUpdate, draftSuccessMsgId, fillBodyLabelMsgId } = this.props;
+    const {
+      uploadDocument,
+      updatePost,
+      postSuccessMsgId,
+      childrenUpdate,
+      draftSuccessMsgId,
+      fillBodyLabelMsgId,
+      multiColumns
+    } = this.props;
     const { subject, body } = this.state;
     const subjectIsEmpty = subject.length === 0;
     const bodyIsEmpty = editorStateIsEmpty(body);
@@ -134,7 +142,7 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
             displayAlert('success', I18n.t(successMessage));
             this.props.goBackToViewMode();
             this.props.onSuccess(variables.subject, variables.body, variables.publicationState);
-            if (childrenUpdate && oldSubject !== subject) {
+            if ((childrenUpdate && oldSubject !== subject) || multiColumns) {
               // If we edited the subject, we need to reload all descendants posts,
               // we do this by refetch all Post queries.
               // Descendants are actually a subset of Post queries, so we overfetch here.
@@ -149,7 +157,7 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
             displayAlert('danger', `${error}`);
           });
       });
-    } else if (subjectIsEmpty) {
+    } else if (subjectIsEmpty && !multiColumns) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
     } else if (bodyIsEmpty) {
       displayAlert('warning', I18n.t(fillBodyLabelMsgId));
