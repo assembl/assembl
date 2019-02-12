@@ -13,23 +13,23 @@ cache:
     - assembl/static2/node_modules/
     - /usr/local/share/.cache/yarn/v2
 
-# test_frontend:
-#   stage: test
-#   except:
-#     - master
-#     - tmp_master_for_ci_cd
-#   image: node:10
-#   before_script:
-#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-#     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-#     - cd assembl/static2
-#     - yarn
-#   script:
-#     # This will fail if any test fails or if the coverage has lowered
-#     - yarn jest --coverage --maxWorkers 2
-#     - yarn run eslint
-#     - yarn run stylelint
-#     - yarn run flow --quiet
+test_frontend:
+  stage: test
+  except:
+    - master
+    - tmp_master_for_ci_cd
+  image: node:10
+  before_script:
+    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+    - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+    - cd assembl/static2
+    - yarn
+  script:
+    # This will fail if any test fails or if the coverage has lowered
+    - yarn jest --coverage --maxWorkers 2
+    - yarn run eslint
+    - yarn run stylelint
+    - yarn run flow --quiet
 
 # test_integration_and_ui:
 #   stage: test_integration
@@ -55,35 +55,35 @@ cache:
 #     # run each ui test one by one
 #     - yarn runinband
 
-test_backend:
-  stage: test
-  only:
-    - invoke
-  before_script:
-    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-    - apt-get update
-    - apt-get install -y sudo python python-pip python-dev build-essential
-    - pip install virtualenv
-    - cd $CI_PROJECT_DIR
-    - python -mvirtualenv venv
-    - source venv/bin/activate
-    - pip install $(egrep '(invoke|semantic-version)' requirements.in)
-    - "echo '_extends: testing_aws.yaml' > invoke.yaml"
-    - touch secrets.yaml
-    - ln -s assembl/tasks .
-    - inv sudoer.install-build-dependencies
-    - ln -s requirements-tests.frozen.txt requirements.txt
-    - inv build.update-pip-requirements
-    - python setup.py develop
-    - inv sudoer.install-database
-    - inv build.compile-messages-catalog
-  script:
-    # run integration tests
-    - source venv/bin/activate
-    - inv -f assembl/configs/testing_aws.yaml deploy.create-local-ini
-    - inv -f assembl/configs/testing_aws.yaml build.database-create
-    - cat testing.ini
-    - py.test assembl/tests
+# test_backend:
+#   stage: test
+#   only:
+#     - invoke
+#   before_script:
+#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+#     - apt-get update
+#     - apt-get install -y sudo python python-pip python-dev build-essential
+#     - pip install virtualenv
+#     - cd $CI_PROJECT_DIR
+#     - python -mvirtualenv venv
+#     - source venv/bin/activate
+#     - pip install $(egrep '(invoke|semantic-version)' requirements.in)
+#     - "echo '_extends: testing_aws.yaml' > invoke.yaml"
+#     - touch secrets.yaml
+#     - ln -s assembl/tasks .
+#     - inv sudoer.install-build-dependencies
+#     - ln -s requirements-tests.frozen.txt requirements.txt
+#     - inv build.update-pip-requirements
+#     - python setup.py develop
+#     - inv sudoer.install-database
+#     - inv build.compile-messages-catalog
+#   script:
+#     # run integration tests
+#     - source venv/bin/activate
+#     - inv -f assembl/configs/testing_aws.yaml deploy.create-local-ini
+#     - inv -f assembl/configs/testing_aws.yaml build.database-create
+#     - cat testing.ini
+#     - py.test assembl/tests
 
 build_wheel:
   stage: build
