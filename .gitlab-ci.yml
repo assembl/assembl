@@ -100,7 +100,7 @@ build_wheel:
   before_script:
     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
     - apt-get update
-    - apt-get install -y sudo python python-pip python-dev build-essential
+    - apt-get install -y sudo python python-pip python-dev build-essential openssh-server
     - pip install virtualenv
     - cd $CI_PROJECT_DIR
     - python -mvirtualenv venv
