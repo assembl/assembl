@@ -2,11 +2,11 @@
 
 mutation createResource(
   $doc: String
-  $embedCode: String
   $image: String
-  $lang: String
+  $lang: String!
+  $titleEntries: [LangStringEntryInput]!
   $textEntries: [LangStringEntryInput]!
-  $titleEntries: [LangStringEntryInput!]!
+  $embedCode: String
   $order: Float
 ) {
   createResource(

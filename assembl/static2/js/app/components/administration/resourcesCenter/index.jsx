@@ -35,7 +35,7 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
     const { client, editLocale, lang } = this.props;
     return (
       <LoadSaveReinitializeForm
-        load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
+        load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, lang)}
         loading={loading}
         postLoadFormat={postLoadFormat}
         createMutationsPromises={createMutationsPromises(client, lang)}
@@ -117,7 +117,7 @@ class ResourcesCenterAdminForm extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = ({ admin: { editLocale } }, i18n) => ({
+const mapStateToProps = ({ admin: { editLocale }, i18n }) => ({
   editLocale: editLocale,
   lang: i18n.locale
 });

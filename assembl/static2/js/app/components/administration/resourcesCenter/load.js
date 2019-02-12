@@ -6,14 +6,16 @@ import ResourcesCenterPageQuery from '../../../graphql/ResourcesCenterPage.graph
 import ResourcesQuery from '../../../graphql/ResourcesQuery.graphql';
 import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../form/utils';
 
-export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
+export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, lang: string) => {
   const { data: resourcesCenterData } = await client.query({
     query: ResourcesCenterPageQuery,
+    variables: { lang: lang },
     fetchPolicy: fetchPolicy
   });
 
   const { data: resourcesData } = await client.query({
     query: ResourcesQuery,
+    variables: { lang: lang },
     fetchPolicy: fetchPolicy
   });
 

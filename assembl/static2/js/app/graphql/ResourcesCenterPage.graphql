@@ -1,4 +1,4 @@
-query ResourcesCenterPage($lang: String) {
+query ResourcesCenterPage($lang: String!) {
   resourcesCenter {
     title(lang: $lang)
     titleEntries {

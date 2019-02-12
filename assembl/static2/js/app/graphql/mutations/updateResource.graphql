@@ -1,18 +1,18 @@
 #import "../fragments/Resource.graphql"
 
 mutation updateResource(
-  $doc: String
   $id: ID!
+  $doc: String
   $image: String
-  $lang: String
+  $lang: String!
   $titleEntries: [LangStringEntryInput]!
-  $textEntries: [LangStringEntryInput]
+  $textEntries: [LangStringEntryInput]!
   $embedCode: String
   $order: Float
 ) {
   updateResource(
-    doc: $doc
     id: $id
+    doc: $doc
     image: $image
     titleEntries: $titleEntries
     textEntries: $textEntries
