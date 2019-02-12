@@ -592,7 +592,7 @@ def push_built_themes_to_remote_bucket(c):
                     bucket.put_object(
                         Body=use_fp, Key=s3_path, CacheControl='max-age=3600',
                         ContentType=content_type,
-                        ACL='public-read',  # is that right?
+                        ACL='public-read',
                         **extra_args)
                     if buffer:
                         buffer.close()
