@@ -278,11 +278,13 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   const postUrl = getUrl(result);
   const ideaUrl = postUrl.slice(0, postUrl.indexOf('#'));
+  // subject may be an empty string if the post comes from multiColumns idea and the body
+  // locale wasn't detected, in this case fallback to ideaTitle
   return (
     <BaseHit
       bemBlocks={bemBlocks}
       imageType={result._type}
-      title={subject}
+      title={subject || ideaTitle}
       url={postUrl}
       onLinkClick={collapseSearch}
       published={published}
