@@ -1,4 +1,5 @@
 import os
+import sys
 from os.path import exists, join
 
 from invoke import task
@@ -81,7 +82,7 @@ def install_database(c):
     """
     Install a postgresql DB server
     """
-    if c.config._internal.mac:
+    if sys.platform == 'darwin':
         from .mac import install_database as install_database_mac
         install_database_mac(c)
     else:
