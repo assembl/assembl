@@ -108,7 +108,7 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
     const { subject, body } = this.state;
     const subjectIsEmpty = subject.length === 0;
     const bodyIsEmpty = editorStateIsEmpty(body);
-    if (!subjectIsEmpty && !bodyIsEmpty) {
+    if ((!subjectIsEmpty || multiColumns) && !bodyIsEmpty) {
       // first we upload the new documents
       const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result: UploadNewAttachmentsPromiseResult) => {
