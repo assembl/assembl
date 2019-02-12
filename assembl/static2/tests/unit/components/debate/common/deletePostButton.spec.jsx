@@ -11,6 +11,8 @@ import DeletePostButton from '../../../../../js/app/components/debate/common/del
 import type { Props as DeletePostButtonProps } from '../../../../../js/app/components/debate/common/deletePostButton';
 import { displayModal } from '../../../../../js/app/utils/utilityManager';
 
+import DeletePostIcon from '../../../../../js/app/components/common/icons/deletePostIcon/deletePostIcon';
+
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
 initStoryshots({
@@ -50,7 +52,7 @@ describe('<DeletePostButton /> - with mount', () => {
 
   it('should render one Button with a delete icon embedded', () => {
     expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find('span [className="assembl-icon-delete"]')).toHaveLength(1);
+    expect(wrapper.find(DeletePostIcon)).toHaveLength(1);
   });
 
   it('should render one Button with a declined-checkbox icon embedded if the post is pending and you are a moderator', () => {

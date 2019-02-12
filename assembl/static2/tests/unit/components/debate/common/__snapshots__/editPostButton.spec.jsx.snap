@@ -9,8 +9,6 @@ exports[`EditPostButton component should render an edit post button 1`] = `
   disabled={false}
   onClick={[MockFunction]}
 >
-  <span
-    className="assembl-icon-edit"
-  />
+  <EditPostIcon />
 </Button>
 `;

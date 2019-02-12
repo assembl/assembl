@@ -20,6 +20,12 @@
     background: none;
     border: none;
 
+    .assembl-icon-share::before {
+      margin-left: 0;
+      margin-right: 0;
+      font-size: $font-size-m;
+    }
+
     &:hover,
     &:focus,
     &:active {
@@ -28,6 +34,11 @@
       outline: none;
       box-shadow: none;
     }
+  }
+
+  .edit,
+  .delete {
+    padding-right: 10px;
   }
 }
 

@@ -7,6 +7,8 @@ import { Translate } from 'react-redux-i18n';
 import { displayModal, closeModal } from '../../../utils/utilityManager';
 import deletePostMutation from '../../../graphql/mutations/deletePost.graphql';
 
+import DeletePostIcon from '../../common/icons/deletePostIcon/deletePostIcon';
+
 type RefetchQuery = {
   query: DocumentNode,
   variables: TVariables
@@ -72,7 +74,7 @@ const DeletePostButton = ({
   };
   return (
     <Button bsClass={linkClassName} onClick={displayConfirmationModal}>
-      {isPendingForModerator ? <span className="assembl-icon-check-box-declined" /> : <span className="assembl-icon-delete" />}
+      {isPendingForModerator ? <span className="assembl-icon-check-box-declined" /> : <DeletePostIcon />}
     </Button>
   );
 };
