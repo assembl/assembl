@@ -380,6 +380,13 @@ $deleted-post-border: 1px solid $light-grey !default;
     .btn {
       margin: 3px 0 8px;
     }
+
+    @media screen and (min-width: $screen-sm-min) {
+      .button-container {
+        display: flex;
+        justify-content: space-between;
+      }
+    }
   }
 
   .collapsed-answer-form {
