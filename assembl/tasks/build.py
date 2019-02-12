@@ -673,14 +673,16 @@ def start_deploy_on_client(c, client_id, region=None):
     deploymentId = response['deploymentId']
     while True:
         time.sleep(30)
-        deployment_info = cd_client.get_deployment(deploymentId=deploymentId)
-        status = deployment_info['status']
+        deploymentInfo = cd_client.get_deployment(deploymentId=deploymentId)
+        deploymentInfo = deploymentInfo['deploymentInfo']
+        status = deploymentInfo['status']
         if status == 'Succeeded':
             return
         assert status not in ('Failed', 'Stopped'), "Status of %s is %s: %s\n%s" % (
             deploymentId, status,
-            deployment_info['errorInformation']['code'],
-            deployment_info['errorInformation']['message'])
+            deploymentInfo['errorInformation']['code'],
+            deploymentInfo['errorInformation']['message'])
+        print status
 
 
 @task()
