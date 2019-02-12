@@ -244,12 +244,19 @@ def compile_stylesheets(c):
 
 
 @task()
-def compile_messages(c):
+def compile_messages_catalog(c):
     """
     Run compile *.mo file from *.po
     """
     with venv(c, True):
         c.run('python2 setup.py compile_catalog')
+
+
+@task(compile_messages_catalog)
+def compile_messages(c):
+    """
+    Run compile *.mo file from *.po and v1 po2json
+    """
     with venv(c, True):
         c.run("python2 assembl/scripts/po2json.py")
 
@@ -299,7 +306,7 @@ def psql_command(c, command, use_db_user=True, database=None):
         result = c.run('python2 {pypsql} -1 --autocommit -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command=command, pypsql=pypsql, password=c.config.DEFAULT.db_password,
             database=database, host=c.config.DEFAULT.db_host, user=c.config.DEFAULT.db_user
-        ), warn=True)
+        ), warn=True, echo=False)
     else:
         database = database or 'postgres'
         if c.config._internal.mac:
