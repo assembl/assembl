@@ -683,7 +683,7 @@ def start_deploy_on_client(c, client_id, region=None):
             deployment_info['errorInformation']['message'])
 
 
-@task
+@task()
 def get_deployment_clients(c):
     """
     Fetches the list of accounts available to deploy to from a remote bucket
