@@ -142,7 +142,7 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
             displayAlert('success', I18n.t(successMessage));
             this.props.goBackToViewMode();
             this.props.onSuccess(variables.subject, variables.body, variables.publicationState);
-            if ((childrenUpdate && oldSubject !== subject) || multiColumns) {
+            if (childrenUpdate && oldSubject !== subject) {
               // If we edited the subject, we need to reload all descendants posts,
               // we do this by refetch all Post queries.
               // Descendants are actually a subset of Post queries, so we overfetch here.

@@ -248,6 +248,7 @@
 }
 
 .harvesting-box {
+  background-color: $white;
   box-shadow: 2px 2px 4px 0 $light-grey;
   margin: 0 0 20px 18px;
   width: 295px;
@@ -503,6 +504,7 @@
   }
 
   .harvesting-tag-form-container {
+    border: 1px solid $light-grey;
     width: 100%;
 
     .form-group {
@@ -526,8 +528,8 @@
 
   .harvesting-tags-form-container,
   .harvesting-tags-container {
-    background-color: $light-grey;
     padding: 15px 15px 10px 26px;
+    border-top: 1px solid $light-grey;
 
     label {
       font-weight: normal;
@@ -635,7 +637,6 @@
 
   .harvesting-box-footer {
     text-align: center;
-    background-color: $light-grey;
     display: flex;
     justify-content: space-around;
     padding: 20px 0;
