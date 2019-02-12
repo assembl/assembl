@@ -45,11 +45,12 @@ def get_aws_account_id(c):
     if account:
         return account
     # Attempt to fail fast on non-EC2 machines
-    if os.getenv('platform') != 'linux2' or not os.path.exists('/usr/sbin/dmidecode'):
+    if sys.platform != 'linux2' or not os.path.exists('/sys/devices/virtual/dmi/id/bios_version'):
         return None
-    platform_info = c.sudo('dmidecode -s bios-version').stdout
-    if 'amazon' not in platform_info:
-        return None
+    with open('/sys/devices/virtual/dmi/id/bios_version') as f:
+        platform_info = f.read()
+        if 'amazon' not in platform_info:
+            return None
     import requests
     try:
         r = requests.get('http://169.254.169.254/latest/meta-data/iam/info', timeout=2)
