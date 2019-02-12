@@ -218,7 +218,7 @@ class Administration extends React.Component<Props, State> {
         </div>
         <div className="max-container">
           <Grid fluid>
-            <Row>
+            <Row className="margin-container">
               <Col xs={12} sm={3} className="admin-menu-sticky">
                 <div className="admin-menu-container">
                   <Menu
