@@ -9,13 +9,13 @@
   }
 
   .title-section {
-    padding-bottom: 30px;
+    padding-bottom: 50px;
   }
 
   .resource-video-container {
     .resource-video {
       width: 500px;
-      max-height: 300px;
+      height: 300px;
 
       .resource-iframe {
         width: 100%;
@@ -49,8 +49,8 @@
   @media screen and (max-width: 1023px) {
     .resource-video-container {
       width: 100%;
-      display: flex;
       padding-bottom: 50px;
+      display: flex;
       justify-content: center;
     }
 
