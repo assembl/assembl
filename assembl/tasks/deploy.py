@@ -9,7 +9,7 @@ from getpass import getuser
 
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
-    create_venv, fill_template, get_s3_file, get_aws_account_id)
+    create_venv, fill_template, get_s3_file, get_aws_account_id, delete_foreign_tasks)
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
@@ -452,15 +452,6 @@ def update_bluenove_actionable(c):
 
 
 @task()
-def updatemaincode(c):
-    """Update code and/or switch branch"""
-    with c.cd(c.projectpath):
-        c.run('git fetch')
-        c.run('git checkout %s' % c.gitbranch)
-        c.run('git pull %s %s ' % (c.gitrepo, c.gitbranch))
-
-
-@task()
 def update_url_metadata(c):
     """Update url metadata microservice."""
     path = os.path.join(c.projectpath, '..', 'url_metadata')
@@ -531,42 +522,6 @@ def system_db_user(c):
     return "postgres"
 
 
-def run_db_command(c, command, user=None, *args, **kwargs):
-    # I need help with this.
-    pass
-
-
-@task()
-def check_and_create_database_user(c, host=None, user=None, password=None):
-    """
-    Create a user and a DB for the project.
-    """
-    host = host or c.config.DEFAULT.db_host
-    user = user or c.config.DEFAULT.db_user
-    password = password or c.DEFAULT.db_password
-    pypsql = os.path.join(code_root(c), 'scripts', 'pypsql.py')
-    checkUser = c.run('python2 {pypsql} -1 -u {user} -p {password} -n {host} "{command}"'.format(
-        command="SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user),
-        pypsql=pypsql, password=password, host=host, user=user))
-    if checkUser.failed:
-        db_user = system_db_user()
-        if (running_locally(c) or c.config.host_string == host) and db_user:
-            db_password_string = ''
-            sudo_user = db_user
-        else:
-            db_password = c.config.get('postgres_db_password', None)
-            assert db_password is not None, "We need a password for postgres on " + host
-            db_password_string = "-p '%s'" % db_password
-            sudo_user = None
-        run_db_command('python2 {pypsql} -u {db_user} -n {host} {db_password_string} "{command}"'.format(
-            command="CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'; COMMIT;" % (
-                user, password),
-            pypsql=pypsql, db_user=db_user, host=host, db_password_string=db_password_string),
-            sudo_user)
-    else:
-        print("User exists and can connect")
-
-
 @task()
 def build_doc(c):
     """Build the Sphinx documentation for the backend (and front-end) as well as build GraphQL documentation"""
@@ -596,4 +551,5 @@ def create_clean_cronlist(c):
 
 
 # avoid it being defined in both modules
-del create_venv
+delete_foreign_tasks(locals())
+
