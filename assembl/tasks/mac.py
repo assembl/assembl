@@ -1,7 +1,7 @@
 import os
 
 from .common import (venv, task, exists, delete_foreign_tasks)
-from .build import (separate_pip_install, get_node_base_path, get_new_node_base_path)
+from .build import (get_node_base_path, get_new_node_base_path)
 
 
 @task()
@@ -80,6 +80,7 @@ def update_pip_requirements_mac(c, force_reinstall=False):
     """
     Update external dependencies on remote host.
     """
+    from .build import separate_pip_install
     with venv(c):
         c.run('pip install -U setuptools "pip<10" ', True)
 
