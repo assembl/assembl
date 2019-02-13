@@ -89,6 +89,18 @@
     cursor: pointer;
     margin: 20px 3px 0;
     color: $first-color-opacity-70;
+    border: none;
+    background-color: transparent;
+
+    .deletePostIcon {
+      .group {
+        fill: $first-color;
+
+        .path {
+          stroke: $first-color;
+        }
+      }
+    }
 
     &:hover {
       color: $first-color;

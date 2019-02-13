@@ -278,6 +278,19 @@
   }
 }
 
+.deletePostIcon {
+  .group {
+    fill: $black;
+
+    .path {
+      stroke: $black;
+    }
+  }
+}
+
+// Deleted icon default style
+@import '../../js/app/components/common/icons/deletePostIcon/deletePostIcon.scss';
+
 // The partial used below is only used as an example for instruction purpose
 @import '../../js/app/integration/101/components/button101/button101';
 @import '../../js/app/integration/101/components/checkbox101/checkbox101';
