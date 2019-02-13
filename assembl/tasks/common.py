@@ -287,3 +287,11 @@ def add_github_bot_ssh_keys(c, private_key):
             print("The provided key was not found!")
     else:
         c.run('echo "$GITHUB_BOT_SSH_KEY" | tr -d \'\r\' | ssh-add - > /dev/null')
+
+
+def delete_foreign_tasks(locals):
+    here = locals['__name__']
+    for (name, func) in locals.items():
+        modname = getattr(func, '__module__', None)
+        if modname and modname != here and 'tasks.' in modname:
+            locals.pop(name)

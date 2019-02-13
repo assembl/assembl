@@ -11,7 +11,9 @@ from cStringIO import StringIO
 
 from semantic_version import Version
 
-from .common import venv, task, exists, is_integration_env, fill_template, configure_github_user, add_github_bot_ssh_keys, get_s3_file
+from .common import (
+    venv, task, exists, is_integration_env, fill_template, configure_github_user,
+    add_github_bot_ssh_keys, get_s3_file, delete_foreign_tasks)
 from .sudoer import (
     upgrade_yarn, install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
     install_chrome_dependencies)
@@ -700,3 +702,6 @@ def deploy_to_sandbox(c):
         data = json.load(f)
     client_info = data.get('sandbox', None)
     start_deploy_on_client(c, client_info['id'], client_info.get('region', None))
+
+
+delete_foreign_tasks(locals())
