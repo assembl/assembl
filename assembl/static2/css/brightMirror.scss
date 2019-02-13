@@ -16,11 +16,7 @@ $fiction-toolbar-icon-size: 17px;
 @mixin set-background($theme) {
   @if $theme == default {
     /* stylelint-disable-next-line declaration-colon-newline-after */
-    background-image: radial-gradient(
-      circle at 49% 95%,
-      $light-khaki,
-      $duck-egg-blue
-    );
+    background-image: radial-gradient(circle at 49% 95%, $light-khaki, $duck-egg-blue);
   }
 }
 
@@ -52,7 +48,6 @@ $fiction-toolbar-icon-size: 17px;
 
   .comments-content {
     background-color: $white;
-    margin-left: 30px;
     padding: 30px 15px 20px 15px;
 
     .level {
@@ -73,14 +68,7 @@ $fiction-toolbar-icon-size: 17px;
 
 .background-comments-default {
   // Striped background
-  background:
-    repeating-linear-gradient(
-      -45deg,
-      $ice,
-      $ice 4px,
-      $white 2px,
-      $white 7px
-    );
+  background: repeating-linear-gradient(-45deg, $ice, $ice 4px, $white 2px, $white 7px);
 }
 
 @media screen and (min-width: $screen-sm-min) {
@@ -90,9 +78,10 @@ $fiction-toolbar-icon-size: 17px;
   }
 
   .bright-mirror-comments {
-    padding: 40px 0 40px 70px;
+    padding: 40px;
 
     .comments-content {
+      margin-left: 0;
       padding-left: 70px;
       padding-right: 70px;
 
