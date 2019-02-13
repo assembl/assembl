@@ -1,6 +1,6 @@
 import os
 
-from .common import (venv, task, exists)
+from .common import (venv, task, exists, delete_foreign_tasks)
 from .build import (separate_pip_install, get_node_base_path, get_new_node_base_path)
 
 
@@ -100,3 +100,6 @@ def update_pip_requirements_mac(c, force_reinstall=False):
         cmd = "pip install -r %s/requirements.txt" % (c.config.projectpath)
         with venv(c):
             c.run("yes w | %s" % cmd)
+
+
+delete_foreign_tasks(locals())

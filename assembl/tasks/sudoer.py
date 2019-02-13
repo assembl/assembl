@@ -3,7 +3,7 @@ import sys
 from os.path import exists, join
 
 from invoke import task
-from common import fill_template, is_integration_env
+from common import (fill_template, is_integration_env, delete_foreign_tasks)
 
 # try:
 #     # invoke 0.11
@@ -299,3 +299,6 @@ def add_cron_job(c, cmd, force_clean=False, head=False):
         else:
             clause = '(crontab -l; echo %s)' % cmd
     c.sudo('%s | crontab -' % clause)
+
+
+delete_foreign_tasks(locals())
