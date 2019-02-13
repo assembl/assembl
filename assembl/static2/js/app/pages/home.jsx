@@ -35,7 +35,7 @@ class Home extends React.Component {
   }, 100);
 
   render() {
-    const { debateData } = this.props.debate;
+    const { objectives, video, twitter, chatbot, partners } = this.props.debate.debateData;
     const { locale } = this.props.i18n;
     const { timeline } = this.props;
     if (!timeline) {
@@ -50,12 +50,12 @@ class Home extends React.Component {
       <div className="home">
         <Header />
         <ScrollOnePageButton hidden={this.state.scrollOnePageButtonHidden} />
-        {debateData.objectives && <Objectives />}
-        {timeline && <Phases />}
-        {debateData.video && <Video />}
-        {debateData.twitter && <Twitter />}
-        {debateData.chatbot && <Chatbot chatbot={debateData.chatbot} locale={locale} />}
-        {debateData.partners && <Partners />}
+        {objectives && <Objectives />}
+        {timeline.length > 1 && <Phases />}
+        {video && <Video />}
+        {twitter && <Twitter />}
+        {chatbot && <Chatbot chatbot={chatbot} locale={locale} />}
+        {partners && <Partners />}
       </div>
     );
   }
