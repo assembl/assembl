@@ -348,7 +348,7 @@ def aws_instance_update_and_startup(c):
     setup_ctx(c)
 
 
-@task(setup_aws_default_region, post=[aws_server_startup_from_local])
+@task(setup_aws_default_region, download_rds_pem, post=[aws_server_startup_from_local])
 def aws_celery_instance_startup(c):
     """Operations to startup a fresh celery aws instance from an assembl AMI"""
     get_aws_invoke_yaml(c, True)
