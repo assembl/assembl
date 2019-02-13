@@ -5,7 +5,7 @@ exports[`Section component should match Section snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="max-container "
+    className="max-container"
   >
     <div
       className="title-section"
@@ -39,7 +39,7 @@ exports[`Section component should match Section with 1 parent snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="max-container "
+    className="max-container"
   >
     <div
       className="title-section"
@@ -71,7 +71,7 @@ exports[`Section component should match Section with 2 parents snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="max-container "
+    className="max-container"
   >
     <div
       className="title-section"
@@ -103,7 +103,7 @@ exports[`Section component should match Section with translate prop 1`] = `
   className="themes-section"
 >
   <div
-    className="max-container "
+    className="max-container"
   >
     <div
       className="title-section"

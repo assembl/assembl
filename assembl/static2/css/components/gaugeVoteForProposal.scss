@@ -1,11 +1,20 @@
-.gauge-vote-for-proposal {
-  p {
-    margin-top: 30px;
-  }
+.rc-slider-handle.no-value {
+  // the no-value handle is calculated at -11% for number gauge, fix it
+  left: 0% !important;
+}
+
+.gauge-no-value .rc-slider-mark-text-active {
+  // this to fix issue with first marker being marked as active for null value
+  font-weight: normal !important;
+  color: $grey !important;
 }
 
 .gauge-vote-for-proposal,
 .number-gauge-vote-for-proposal {
+  p {
+    margin-top: 35px;
+  }
+
   .gauge-container {
     display: flex;
     align-items: center;
@@ -57,11 +66,15 @@
 
       .rc-slider-mark-text {
         margin-top: 7px;
+        color: $grey;
+
+        .nowrap {
+          white-space: nowrap;
+        }
 
         &.rc-slider-mark-text-active {
           color: $first-color;
           font-weight: bold;
-          font-size: 110%;
         }
       }
 

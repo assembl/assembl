@@ -120,7 +120,7 @@
     "piwik-react-router": "assembl/piwik-react-router#skip_piwik_initialization",
     "prop-types": "^15.5.8",
     "query-string": "^4.1.0",
-    "rc-slider": "assembl/slider#use-src-instead-of-es",
+    "rc-slider": "^8.6.5",
     "react": "^16.3.1",
     "react-active-html": "~1.2.1",
     "react-animated-transitions": "^0.0.6",
@@ -173,8 +173,7 @@
     "moduleNameMapper": {
       "\\.(css|less|scss)$": "identity-obj-proxy",
       "jquery": "<rootDir>/node_modules/jquery/dist/jquery.slim.min.js",
-      "annotator_range": "<rootDir>/node_modules/hypothesis/src/annotator/anchoring/range.coffee",
-      "rc-slider": "<rootDir>/node_modules/searchkit/node_modules/rc-slider/lib/index.js"
+      "annotator_range": "<rootDir>/node_modules/hypothesis/src/annotator/anchoring/range.coffee"
     },
     "moduleFileExtensions": [
       "coffee",

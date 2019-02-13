@@ -774,7 +774,7 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
           I'll generate the mobile SMS bus, that should microchip the TCP matrix!
         </p>
         <div
-          className="gauge-container"
+          className="gauge-container gauge-no-value"
         >
           <div
             className="rc-slider"
@@ -809,7 +809,13 @@ exports[`Proposal component should match Proposal snapshot 1`] = `
               className="rc-slider-step"
             />
             <div
-              className="rc-slider-handle"
+              aria-disabled={false}
+              aria-valuemax={null}
+              aria-valuemin={null}
+              aria-valuenow={null}
+              className="rc-slider-handle no-value"
+              onBlur={[Function]}
+              onKeyDown={[Function]}
               role="slider"
               style={
                 Object {

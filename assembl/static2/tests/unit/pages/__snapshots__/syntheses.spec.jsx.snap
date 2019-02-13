@@ -5,7 +5,7 @@ exports[`Syntheses component should match Syntheses snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="max-container "
+    className="max-container"
   >
     <div
       className="title-section"
@@ -148,7 +148,7 @@ exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
   className="themes-section"
 >
   <div
-    className="max-container "
+    className="max-container"
   >
     <div
       className="title-section"

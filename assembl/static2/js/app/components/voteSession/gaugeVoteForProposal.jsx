@@ -1,6 +1,7 @@
 // @flow
 /* eslint-disable react/no-multi-comp */
 import * as React from 'react';
+import classNames from 'classnames';
 import { Translate } from 'react-redux-i18n';
 import Slider from 'rc-slider';
 
@@ -92,7 +93,9 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps> {
   };
 
   reset = () => {
-    this.handleChange(null);
+    this.handleChange(0); // to reset properly the colored track
+    // use setTimeout so the first change with 0 has time to render
+    setTimeout(() => this.handleChange(null), 0);
   };
 
   render() {
@@ -100,9 +103,9 @@ class GaugeVoteForProposal extends React.Component<GaugeVoteForProposalProps> {
     return (
       <React.Fragment>
         {instructions ? <p>{instructions}</p> : null}
-        <div className="gauge-container">
+        <div className={classNames('gauge-container', { 'gauge-no-value': sliderProps.value === null })}>
           <Slider
-            included={false}
+            included
             trackStyle={trackStyle}
             railStyle={railStyle}
             handleStyle={handleStyle}
@@ -151,7 +154,6 @@ export const ChoiceGaugeVoteForProposal = ({ choices, disabled, value, ...rest }
       };
     });
   }
-
   const sliderProps = {
     disabled: disabled,
     max: maximum,
@@ -196,7 +198,7 @@ export const NumberGaugeVoteForProposal = ({
     marks[`${minimum}`] = {
       style: markStyle,
       label: (
-        <div>
+        <div className="nowrap">
           <Translate value="debate.voteSession.valueWithUnit" num={minimum} unit={unit} />
         </div>
       )
@@ -205,7 +207,7 @@ export const NumberGaugeVoteForProposal = ({
     marks[`${maximum}`] = {
       style: markStyle,
       label: (
-        <div>
+        <div className="nowrap">
           <Translate value="debate.voteSession.valueWithUnit" num={maximum} unit={unit} />
         </div>
       )
