@@ -5,7 +5,7 @@ from contextlib import nested
 import base64
 import json
 
-from invoke import task as base_task
+from invoke import Task, task as base_task
 from os.path import dirname, realpath
 DEFAULT_SECTION = "DEFAULT"
 _local_file = __file__
@@ -292,6 +292,5 @@ def add_github_bot_ssh_keys(c, private_key):
 def delete_foreign_tasks(locals):
     here = locals['__name__']
     for (name, func) in locals.items():
-        modname = getattr(func, '__module__', None)
-        if modname and modname != here and 'tasks.' in modname:
+        if isinstance(func, Task) and func.__module__ != here and 'tasks.' in func.__module__:
             locals.pop(name)
