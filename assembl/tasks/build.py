@@ -15,7 +15,7 @@ from .common import (
     venv, task, exists, is_integration_env, fill_template, configure_github_user,
     add_github_bot_ssh_keys, get_s3_file, delete_foreign_tasks)
 from .sudoer import (
-    upgrade_yarn, install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
+    install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
     install_chrome_dependencies)
 
 
@@ -107,6 +107,7 @@ def update_node(c, force_reinstall=False):
     """
     Install node and npm to latest version specified. This is done inside of a virtual environment.
     """
+    from sudoer import upgrade_yarn
     n_version = c.config._internal.node.version
     npm_version = c.config._internal.node.npm
     node_version_cmd_regex = re.compile(r'v' + n_version.replace('.', r'\.'))
@@ -279,13 +280,11 @@ def compile_javascript(c):
                 c.run('yarn run build')
 
 
-@task()
+@task(install_chrome_dependencies)
 def prepare_integration_tests(c):
     """
     Prepares the environment for running Assembl's integration tests. Fully assumes to be run in CI/CD env
     """
-    c.run('apt-get update -qq')
-    install_chrome_dependencies(c)
     c.run('git clone https://github.com/bluenove/assembl-tests')
     yarn = c.run('which yarn')
     with c.cd('assembl-tests'):
