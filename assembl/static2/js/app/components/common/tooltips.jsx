@@ -102,7 +102,7 @@ export const shareSynthesisTooltip = (
 
 export const likeTooltip = (
   <Tooltip id="likeTooltip">
-    <Translate value="debate.like" />
+    <Translate value="debate.agree" />
   </Tooltip>
 );
 

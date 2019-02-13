@@ -652,7 +652,7 @@ Object {
       placement="right"
     >
       <Translate
-        value="debate.like"
+        value="debate.agree"
       />
     </Tooltip>,
     "type": "LIKE",
