@@ -1,7 +1,7 @@
 from collections import defaultdict
 
 import simplejson as json
-from elasticsearch.client import Elasticsearch
+from elasticsearch.client import Elasticsearch, TransportError
 
 from assembl.lib import config
 from assembl.lib.locale import strip_country
@@ -22,14 +22,60 @@ def connect():
     return _es
 
 
+def check_analysis_settings(index_name):
+    es = connect()
+    settings = get_index_settings(config)['index_settings']
+    try:
+        current = es.indices.get_settings(index_name)
+        current = current[index_name]['settings']['index']
+        return compare_dicts_ref(
+            stringify_dict(settings), current,
+            # this setting does not stick for some reason
+            lambda k: k != 'split_on_numerics')
+    except (TransportError, KeyError):
+        return False
+
+
+def push_analysis_settings(index_name):
+    es = connect()
+    settings = get_index_settings(config)['index_settings']
+    es.indices.close(index_name)
+    es.indices.put_settings({'analysis': settings['analysis']}, index_name)
+    es.indices.open(index_name)
+
+
+def stringify_dict(d):
+    if isinstance(d, bool):
+        return 'true' if bool else 'false'
+    if isinstance(d, int):
+        return str(d)
+    if isinstance(d, dict):
+        return {k: stringify_dict(v) for (k, v) in d.items()}
+    if isinstance(d, list):
+        return [stringify_dict(i) for i in d]
+    return unicode(d)
+
+
 def create_index(index_name):
     """Create the index and return connection.
     """
     es = connect()
-    settings = get_index_settings(config)['index_settings']
     exists = es.indices.exists(index_name)
+    if exists:
+        valid_analysis_settings = check_analysis_settings(index_name)
+        if not valid_analysis_settings:
+            try:
+                push_analysis_settings(index_name)
+                assert check_analysis_settings(index_name)
+            except Exception as e:
+                print e
+                # cannot push settings on amazon
+                delete_index(index_name)
+                exists = False
+
     if not exists:
-        es.indices.create(index=index_name, body={'settings': settings})
+        settings = get_index_settings(config)['index_settings']
+        es.indices.create(index_name, {'settings': settings})
 
     return es
 
@@ -53,12 +99,8 @@ def compare_dicts_ref(reference, state, key_filter=None):
 def check_mapping(index_name):
     """Check if the mapping on ES resembles the intended one"""
     es = connect()
-    c = es.transport.get_connection()
     try:
-        result = c.perform_request('GET', '/' + index_name)
-        if result[0] != 200:
-            return False
-        result = json.loads(result[2])
+        result = es.indices.get(index_name)
         mappings = result[index_name]['mappings']
         return compare_dicts_ref(MAPPINGS, mappings, lambda k: k != '_routing')
     except Exception:
@@ -78,7 +120,7 @@ def create_index_and_mapping(index_name):
 
 def maybe_create_and_reindex(index_name, session):
     """Reindex all contents if mapping is missing our outdated"""
-    if not check_mapping(index_name):
+    if not (check_mapping(index_name) and check_analysis_settings(index_name)):
         from .reindex import reindex_all_contents
         create_index_and_mapping(index_name)
         reindex_all_contents(session)
