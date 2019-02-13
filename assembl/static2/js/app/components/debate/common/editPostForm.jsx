@@ -96,11 +96,19 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
   };
 
   handleSubmit = (publicationState) => {
-    const { uploadDocument, updatePost, postSuccessMsgId, childrenUpdate, draftSuccessMsgId, fillBodyLabelMsgId } = this.props;
+    const {
+      uploadDocument,
+      updatePost,
+      postSuccessMsgId,
+      childrenUpdate,
+      draftSuccessMsgId,
+      fillBodyLabelMsgId,
+      multiColumns
+    } = this.props;
     const { subject, body } = this.state;
     const subjectIsEmpty = subject.length === 0;
     const bodyIsEmpty = editorStateIsEmpty(body);
-    if (!subjectIsEmpty && !bodyIsEmpty) {
+    if ((!subjectIsEmpty || multiColumns) && !bodyIsEmpty) {
       // first we upload the new documents
       const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
       uploadDocumentsPromise.then((result: UploadNewAttachmentsPromiseResult) => {
@@ -149,7 +157,7 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
             displayAlert('danger', `${error}`);
           });
       });
-    } else if (subjectIsEmpty) {
+    } else if (subjectIsEmpty && !multiColumns) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
     } else if (bodyIsEmpty) {
       displayAlert('warning', I18n.t(fillBodyLabelMsgId));
