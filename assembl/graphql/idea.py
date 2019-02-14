@@ -89,10 +89,7 @@ class IdeaInterface(graphene.Interface):
         return resolve_langstring_entries(self, 'title')
 
     def resolve_description(self, args, context, info):
-        description = resolve_langstring(self.description, args.get('lang'))
-        if not description:
-            description = self.get_definition_preview()
-        return description
+        return resolve_langstring(self.description, args.get('lang'))
 
     def resolve_description_entries(self, args, context, info):
         return resolve_langstring_entries(self, 'description')
