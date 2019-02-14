@@ -104,6 +104,11 @@
     }
   }
 
+  .center-content {
+    display: flex;
+    justify-content: center;
+  }
+
   .objectives-section {
     .container-objectives-img {
       display: flex;
