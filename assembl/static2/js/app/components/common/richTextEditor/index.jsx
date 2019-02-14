@@ -156,7 +156,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
-          {editorState.getCurrentContent().hasText() ? (
+          {editorState.getCurrentContent().hasText() && placeholder ? (
             <div className="editor-label form-label">{placeholder}</div>
           ) : (
             <div className="editor-label form-label">&nbsp;</div>
