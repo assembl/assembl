@@ -64,6 +64,10 @@ exports[`Html component should render a html body with extracts 1`] = `
       </ExtractInPost>
        
       <React.Fragment>
+        <URLMetadataLoader
+          afterLoad={[MockFunction]}
+          url="url"
+        />
         <a
           className="linkified"
           href="url"
@@ -77,10 +81,6 @@ exports[`Html component should render a html body with extracts 1`] = `
             the port
           </ExtractInPost>
         </a>
-        <URLMetadataLoader
-          afterLoad={[MockFunction]}
-          url="url"
-        />
       </React.Fragment>
        without programming
     </span>
@@ -122,16 +122,16 @@ exports[`Html component should render a html body without extracts 1`] = `
       index
        
       <React.Fragment>
+        <URLMetadataLoader
+          afterLoad={[MockFunction]}
+          url="url"
+        />
         <a
           className="linkified"
           href="url"
         >
           the port
         </a>
-        <URLMetadataLoader
-          afterLoad={[MockFunction]}
-          url="url"
-        />
       </React.Fragment>
        without programming
     </span>

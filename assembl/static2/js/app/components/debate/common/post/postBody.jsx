@@ -93,12 +93,12 @@ export const postBodyReplacementComponents = (afterLoad?: Function, isHarvesting
     );
     return (
       <React.Fragment>
-        {origin}
         {embeddedUrl ? (
           <Embed key={`url-embed-${href}`} url={href} />
         ) : (
           <URLMetadataLoader key={`url-preview-${href}`} url={href} afterLoad={afterLoad} />
         )}
+        {origin}
       </React.Fragment>
     );
   },
