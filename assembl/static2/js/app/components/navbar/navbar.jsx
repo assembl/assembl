@@ -22,6 +22,7 @@ import mergeLoadingAndError from '../common/mergeLoadingAndError';
 import DebateLink from '../debate/navigation/debateLink';
 import Logo from './Logo';
 import UserMenu from './UserMenu';
+import { addProtocol } from '../../utils/linkify';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
   switch (sectionType) {
@@ -58,8 +59,9 @@ const sectionURL = ({ sectionType, url }, options) => {
 const SectionLink = ({ section, options }) => {
   const { title, url, sectionType } = section;
   if (url || sectionType === 'CUSTOM') {
+    const urlWithHttpProtocol = addProtocol(url);
     return (
-      <a href={url} className="navbar-menu-item pointer" data-text={title}>
+      <a href={urlWithHttpProtocol} className="navbar-menu-item pointer" data-text={title} target="_blank" rel="noopener">
         {title}
       </a>
     );
