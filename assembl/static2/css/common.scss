@@ -396,6 +396,12 @@ strong {
   padding: 25px 0;
 }
 
+@media screen and (max-width: $screen-xxs-max) {
+  .content-section {
+    padding: $margin-section-xxxxs 0;
+  }
+}
+
 @media screen and (min-width: $screen-sm-min) {
   .content-section {
     padding: 35px 0;
