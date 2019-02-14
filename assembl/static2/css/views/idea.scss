@@ -39,7 +39,7 @@
     margin-bottom: -6px;
     position: relative;
     height: $post-space;
-    border-left: 1px solid $light-grey;
+    border-left: 1px solid $first-color-light;
     width: $tree-indentation;
 
     span {
@@ -50,7 +50,7 @@
   }
 
   .expand {
-    border-left: 1px solid $light-grey;
+    border-left: 1px solid $first-color-light;
     color: $first-color;
     cursor: pointer;
     position: relative;
@@ -109,7 +109,7 @@
   .level-4 {
     padding-bottom: $post-space;
     padding-left: $tree-indentation*2;
-    border-top: 1px solid $light-grey;
+    border-top: 1px solid $first-color-light;
 
     .box {
       border-top: none;
@@ -147,7 +147,7 @@
     }
 
     .level {
-      border-top: 1px solid $light-grey;
+      border-top: 1px solid $first-color-light;
       margin-top: 20px;
     }
 
