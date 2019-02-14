@@ -486,9 +486,9 @@
 
 @media screen and (max-width: $screen-xxs-max) {
   .home {
-    &.header-section {
+    .header-section {
       .header-content {
-        padding: 60px 5px 120px;
+        padding: 10px 5px 170px;
       }
     }
 
