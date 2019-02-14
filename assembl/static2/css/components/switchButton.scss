@@ -46,6 +46,7 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
   display: inline-block;
   vertical-align: middle;
   margin: -7px 10px 0;
+  white-space: nowrap;
 
   @include rsbc-box-sizing(border-box);
 
@@ -61,7 +62,7 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
   }
 
   // Hide the default input checkbox
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     position: absolute;
     margin-left: -9999px;
     visibility: hidden;
@@ -78,7 +79,7 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
     margin-left: 6px;
   }
 
-  input[type="checkbox"] + label {
+  input[type='checkbox'] + label {
     display: inline-block;
     position: relative;
     margin: 0;
@@ -91,7 +92,7 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
   // Flat-Round style
 
   // Theme
-  &.rsbc-switch-button-flat-round input[type="checkbox"] + label {
+  &.rsbc-switch-button-flat-round input[type='checkbox'] + label {
     padding: 1px;
     width: 36px;
     height: 20px;
@@ -102,27 +103,27 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
     @include rsbc-transition(background $rsbc-transtion-delay);
   }
 
-  &.rsbc-switch-button-flat-round.disabled input[type="checkbox"] + label {
+  &.rsbc-switch-button-flat-round.disabled input[type='checkbox'] + label {
     background-color: $rsbc-theme-flat-color-disabled;
   }
 
-  &.rsbc-switch-button-flat-round:hover input[type="checkbox"] + label {
+  &.rsbc-switch-button-flat-round:hover input[type='checkbox'] + label {
     background-color: $rsbc-theme-flat-color-on;
   }
 
-  &.rsbc-switch-button-flat-round.disabled:hover input[type="checkbox"] + label {
+  &.rsbc-switch-button-flat-round.disabled:hover input[type='checkbox'] + label {
     background-color: $rsbc-theme-flat-color-disabled;
   }
 
-  &.rsbc-switch-button-flat-round input[type="checkbox"] + label:before,
-  &.rsbc-switch-button-flat-round input[type="checkbox"] + label:after {
+  &.rsbc-switch-button-flat-round input[type='checkbox'] + label:before,
+  &.rsbc-switch-button-flat-round input[type='checkbox'] + label:after {
     display: inline-block;
     position: absolute;
     content: '';
   }
 
   // inner background
-  &.rsbc-switch-button-flat-round input[type="checkbox"] + label:before {
+  &.rsbc-switch-button-flat-round input[type='checkbox'] + label:before {
     top: 1px;
     left: 1px;
     bottom: 1px;
@@ -133,7 +134,7 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
     @include rsbc-transition(background $rsbc-transtion-delay);
   }
 
-  &.rsbc-switch-button-flat-round input[type="checkbox"] + label:after {
+  &.rsbc-switch-button-flat-round input[type='checkbox'] + label:after {
     top: 4px;
     left: 4px;
     bottom: 4px;
@@ -146,37 +147,37 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
     @include rsbc-transition(background $rsbc-transtion-delay);
   }
 
-  &.rsbc-switch-button-flat-round.disabled input[type="checkbox"] + label:after {
+  &.rsbc-switch-button-flat-round.disabled input[type='checkbox'] + label:after {
     background-color: $rsbc-theme-flat-color-disabled-border;
   }
 
-  &.rsbc-switch-button-flat-round:hover input[type="checkbox"]:checked + label {
+  &.rsbc-switch-button-flat-round:hover input[type='checkbox']:checked + label {
     background-color: $rsbc-theme-flat-color-off;
   }
 
-  &.rsbc-switch-button-flat-round input[type="checkbox"]:checked + label {
+  &.rsbc-switch-button-flat-round input[type='checkbox']:checked + label {
     background-color: $rsbc-theme-flat-color-on;
   }
 
-  &.rsbc-switch-button-flat-round.disabled input[type="checkbox"]:checked + label {
+  &.rsbc-switch-button-flat-round.disabled input[type='checkbox']:checked + label {
     background-color: $rsbc-theme-flat-color-disabled;
   }
 
-  &.rsbc-switch-button-flat-round input[type="checkbox"]:checked + label:after {
+  &.rsbc-switch-button-flat-round input[type='checkbox']:checked + label:after {
     margin-left: 0;
     background-color: $rsbc-theme-flat-color-on-border;
   }
 
-  &.rsbc-switch-button-flat-round.disabled input[type="checkbox"]:checked + label:after {
+  &.rsbc-switch-button-flat-round.disabled input[type='checkbox']:checked + label:after {
     margin-left: 24px;
     background-color: $rsbc-theme-flat-color-disabled-border;
   }
 
   &.rsbc-switch-button.rsbc-switch-button-flat-round {
     &.rsbc-mode-select {
-      input[type="checkbox"] + label:after,
-      &:hover input[type="checkbox"]:checked + label,
-      input[type="checkbox"] + label {
+      input[type='checkbox'] + label:after,
+      &:hover input[type='checkbox']:checked + label,
+      input[type='checkbox'] + label {
         background-color: $rsbc-theme-flat-color-on !important;
       }
     }
@@ -186,7 +187,7 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
 // switchButton style for the administration
 .administration {
   .rsbc-switch-button-flat-round {
-    input[type="checkbox"] + label {
+    input[type='checkbox'] + label {
       height: 14px;
       width: 27px;
       background-color: $white;
@@ -208,7 +209,7 @@ $rsbc-theme-flat-color-disabled-border: darken($rsbc-theme-flat-color-disabled, 
       }
     }
 
-    input[type="checkbox"]:checked + label {
+    input[type='checkbox']:checked + label {
       background-color: $white;
 
       &:hover {
