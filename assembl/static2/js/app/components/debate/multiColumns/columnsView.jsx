@@ -47,8 +47,8 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
     return (
       <div className="max-container">
         <ColumnsComponent messageColumns={messageColumns}>
-          {Object.keys(columnsArray).map((classifier, index) => {
-            const col = messageColumns[index];
+          {messageColumns.map((col) => {
+            const classifier = col.messageClassifier;
             const synthesisProps = showSynthesis && {
               classifier: classifier,
               debateData: debateData,
