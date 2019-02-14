@@ -1,11 +1,9 @@
 // @flow
 import * as React from 'react';
-import { I18n } from 'react-redux-i18n';
 import { EditorState, RichUtils } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
-import createCounterPlugin from 'draft-js-counter-plugin';
 
 // from our workspaces
 /* eslint-disable import/no-extraneous-dependencies */
@@ -22,7 +20,6 @@ type DraftPlugin = any;
 type Props = {
   editorState: EditorState,
   handleInputFocus?: Function,
-  maxLength: number,
   onChange: Function,
   placeholder?: string,
   textareaRef?: Function,
@@ -43,7 +40,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
   static defaultProps = {
     handleInputFocus: undefined,
-    maxLength: 0,
     toolbarPosition: 'top',
     withAttachmentButton: false
   };
@@ -53,7 +49,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
     this.editor = React.createRef();
     const modalPlugin = createModalPlugin();
     const { closeModal, setModalContent, Modal } = modalPlugin;
-    const counterPlugin = createCounterPlugin();
     const modalConfig = {
       closeModal: closeModal,
       setModalContent: setModalContent
@@ -66,7 +61,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
     const components = {};
     const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
-    const plugins = [counterPlugin, linkPlugin];
+    const plugins = [linkPlugin];
     if (props.withAttachmentButton) {
       const attachmentPlugin = createAttachmentPlugin({
         ...modalConfig
@@ -94,10 +89,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
     plugins.push(staticToolbarPlugin);
 
     this.plugins = plugins;
-    const { CustomCounter } = counterPlugin;
     const { Toolbar } = staticToolbarPlugin;
     this.components = {
-      CustomCounter: CustomCounter,
       Modal: Modal,
       Toolbar: Toolbar,
       ...components
@@ -116,13 +109,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
       },
       handleInputFocus
     );
-  };
-
-  countRemainingChars = (plainText: string): string => {
-    const regex = /(?:\r\n|\r|\n)/g; // new line, carriage return, line feed
-    const cleanString = plainText.replace(regex, '').trim(); // replace above characters w/ nothing
-    const count = this.props.maxLength - cleanString.length;
-    return I18n.t('debate.remaining_x_characters', { nbCharacters: count });
   };
 
   shouldHidePlaceholder(): boolean {
@@ -164,9 +150,9 @@ export default class RichTextEditor extends React.Component<Props, State> {
   };
 
   render() {
-    const { editorState, maxLength, onChange, placeholder, textareaRef } = this.props;
+    const { editorState, onChange, placeholder, textareaRef } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const { Attachments, CustomCounter, Modal, Toolbar } = this.components;
+    const { Attachments, Modal, Toolbar } = this.components;
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
@@ -190,11 +176,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
             spellCheck
           />
         </div>
-        {maxLength ? (
-          <div className="annotation margin-xs">
-            <CustomCounter limit={maxLength} countFunction={this.countRemainingChars} />
-          </div>
-        ) : null}
         {/*
           we have to move toolbar in css for now since there is a bug in draft-js-plugin
           It should be fixed in draft-js-plugin v3

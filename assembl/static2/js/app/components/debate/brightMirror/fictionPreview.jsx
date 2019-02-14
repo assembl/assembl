@@ -5,7 +5,6 @@ import { I18n } from 'react-redux-i18n';
 import classNames from 'classnames';
 // Constant imports
 import { PublicationStates } from '../../../constants';
-import { NO_BODY_LENGTH } from '../common/topPostForm';
 // Components imports
 import EditPostForm from '../common/editPostForm';
 import EditPostButton from '../common/editPostButton';
@@ -77,7 +76,6 @@ const FictionPreview = ({
           fillBodyLabelMsgId="debate.brightMirror.fillBodyLabel"
           draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"
           childrenUpdate={false}
-          bodyMaxLength={NO_BODY_LENGTH}
           draftable={isDraft}
         />
       </div>

@@ -6,7 +6,6 @@ import { Button } from 'react-bootstrap';
 
 import AvatarImage from '../../../common/avatarImage';
 import RichTextEditor from '../../../common/richTextEditor';
-import { FICTION_COMMENT_MAX_LENGTH } from '../../../../constants';
 
 export type Props = {
   userId: ?string,
@@ -34,7 +33,6 @@ const InnerBoxSubmit = ({ userId, userName, body, updateBody, submit, cancelSubm
       <div className="submit-comment">
         <RichTextEditor
           editorState={body}
-          maxLength={FICTION_COMMENT_MAX_LENGTH}
           onChange={updateBody}
           placeholder={I18n.t('debate.brightMirror.sideComment.commentLabel')}
           withAttachmentButton

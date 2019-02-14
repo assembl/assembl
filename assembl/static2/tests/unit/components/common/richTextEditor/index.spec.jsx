@@ -15,7 +15,6 @@ describe('RichTextEditor component', () => {
     const onChangeSpy = jest.fn();
     const props = {
       editorState: editorState,
-      maxLength: 2000,
       onChange: onChangeSpy,
       placeholder: 'Write here'
     };

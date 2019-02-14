@@ -17,7 +17,6 @@ const topPostFormProps: Props = {
   fillBodyLabelMsgId: '654321',
   bodyPlaceholderMsgId: '678910',
   postSuccessMsgId: '019876',
-  bodyMaxLength: 400,
   draftSuccessMsgId: '8765432',
   createPost: jest.fn(),
   refetchIdea: jest.fn(),

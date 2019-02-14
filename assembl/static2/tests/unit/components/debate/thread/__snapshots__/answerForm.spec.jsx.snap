@@ -102,7 +102,6 @@ exports[`AnswerForm component should render a answer form 1`] = `
             }
           }
           handleInputFocus={[Function]}
-          maxLength={3000}
           onChange={[Function]}
           placeholder="Answer"
           textareaRef={
@@ -167,15 +166,6 @@ exports[`AnswerForm component should render a answer form 1`] = `
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div
-                      class="annotation margin-xs"
-                    >
-                      <span
-                        class="draftJsUndoPlugin__counter__2wZYK"
-                      >
-                        You have 2995 characters left
-                      </span>
                     </div>
                     <div
                       class="editor-toolbar top"
@@ -317,15 +307,6 @@ exports[`AnswerForm component should render a answer form 1`] = `
                           </div>
                         </div>
                       </div>
-                    </div>
-                    <div
-                      class="annotation margin-xs"
-                    >
-                      <span
-                        class="draftJsUndoPlugin__counter__2wZYK"
-                      >
-                        You have 3000 characters left
-                      </span>
                     </div>
                     <div
                       class="editor-toolbar top"

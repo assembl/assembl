@@ -20,7 +20,6 @@ import { DebateContext } from '../../../app';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
-export const BODY_MAX_LENGTH = 3000;
 
 export type Props = {
   contentLocale: string,
@@ -35,7 +34,6 @@ export type Props = {
   fillBodyLabelMsgId?: string,
   bodyPlaceholderMsgId?: string,
   postSuccessMsgId?: string,
-  bodyMaxLength?: number,
   draftable?: boolean,
   draftSuccessMsgId?: ?string,
   isDebateModerated: boolean,
@@ -73,7 +71,6 @@ export class DumbTopPostForm extends React.Component<Props, State> {
     fillBodyLabelMsgId: 'debate.thread.fillBody',
     bodyPlaceholderMsgId: 'debate.insert',
     postSuccessMsgId: 'debate.thread.postSuccess',
-    bodyMaxLength: BODY_MAX_LENGTH,
     draftable: false,
     draftSuccessMsgId: null
   };
@@ -208,7 +205,7 @@ export class DumbTopPostForm extends React.Component<Props, State> {
   };
 
   render() {
-    const { bodyMaxLength, ideaOnColumn, bodyPlaceholderMsgId, draftable, isDebateModerated, messageViewOverride } = this.props;
+    const { ideaOnColumn, bodyPlaceholderMsgId, draftable, isDebateModerated, messageViewOverride } = this.props;
     const { subject, body, isActive, submitting } = this.state;
     const userIsModerator = connectedUserIsModerator();
     const isBrightMirror = messageViewOverride === MESSAGE_VIEW.brightMirror;
@@ -235,7 +232,6 @@ export class DumbTopPostForm extends React.Component<Props, State> {
               <RichTextEditor
                 editorState={body}
                 handleInputFocus={this.handleInputFocus}
-                maxLength={bodyMaxLength}
                 onChange={this.updateBody}
                 placeholder={I18n.t(bodyPlaceholderMsgId)}
                 withAttachmentButton

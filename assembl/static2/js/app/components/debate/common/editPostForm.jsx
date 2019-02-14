@@ -21,7 +21,7 @@ import {
 } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import { TextInputWithRemainingChars } from '../../common/textInputWithRemainingChars';
-import { TEXT_INPUT_MAX_LENGTH, BODY_MAX_LENGTH } from './topPostForm';
+import { TEXT_INPUT_MAX_LENGTH } from './topPostForm';
 
 type EditPostFormProps = {
   originalLocale: string,
@@ -40,7 +40,6 @@ type EditPostFormProps = {
   bodyDescriptionMsgId?: string,
   fillBodyLabelMsgId?: string,
   childrenUpdate?: boolean,
-  bodyMaxLength?: number,
   draftable?: boolean,
   draftSuccessMsgId?: string,
   isDebateModerated: boolean,
@@ -59,7 +58,6 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
     bodyDescriptionMsgId: 'debate.edit.body',
     fillBodyLabelMsgId: 'debate.thread.fillBody',
     childrenUpdate: true,
-    bodyMaxLength: BODY_MAX_LENGTH,
     onSuccess: () => {},
     draftable: false,
     draftSuccessMsgId: null,
@@ -170,7 +168,6 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
       editTitleLabelMsgId,
       modifiedOriginalSubject,
       bodyDescriptionMsgId,
-      bodyMaxLength,
       draftable,
       isDebateModerated,
       multiColumns
@@ -210,7 +207,6 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
                 editorState={body}
                 placeholder={I18n.t(bodyDescriptionMsgId)}
                 onChange={this.updateBody}
-                maxLength={bodyMaxLength}
                 withAttachmentButton
               />
 

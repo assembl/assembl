@@ -19,7 +19,6 @@ type TopPostFormContainerProps = {
   fillBodyLabelMsgId?: string,
   bodyPlaceholderMsgId?: string,
   postSuccessMsgId?: string,
-  bodyMaxLength?: number,
   draftable: boolean,
   draftSuccessMsgId?: ?string,
   fullscreen: boolean
@@ -105,7 +104,6 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
       bodyPlaceholderMsgId,
       postSuccessMsgId,
       draftSuccessMsgId,
-      bodyMaxLength,
       draftable,
       fullscreen
     } = this.props;
@@ -173,7 +171,6 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                             fillBodyLabelMsgId={fillBodyLabelMsgId}
                             bodyPlaceholderMsgId={bodyPlaceholderMsgId}
                             postSuccessMsgId={postSuccessMsgId}
-                            bodyMaxLength={bodyMaxLength}
                             draftable={draftable}
                             draftSuccessMsgId={draftSuccessMsgId}
                           />

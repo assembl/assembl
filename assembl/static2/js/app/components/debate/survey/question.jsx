@@ -129,7 +129,6 @@ export class Question extends React.Component<Props, State> {
             <Col xs={12} md={9} className="col-centered">
               <RichTextEditor
                 editorState={this.state.postBody}
-                maxLength={1000}
                 onChange={this.updateBody}
                 placeHolder={I18n.t('debate.survey.txtAreaPh')}
                 handleInputFocus={this.redirectToLogin}

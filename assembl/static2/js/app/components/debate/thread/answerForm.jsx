@@ -12,7 +12,6 @@ import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.gr
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
-import { BODY_MAX_LENGTH } from '../common/topPostForm';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import { scrollToPost } from '../../../utils/hashLinkScroll';
 import { getPostPublicationState } from '../../../utils/globalFunctions';
@@ -154,7 +153,6 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
                 <RichTextEditor
                   editorState={this.state.body}
                   handleInputFocus={this.handleInputFocus}
-                  maxLength={BODY_MAX_LENGTH}
                   placeholder={I18n.t('debate.toAnswer')}
                   onChange={this.updateBody}
                   textareaRef={textareaRef}

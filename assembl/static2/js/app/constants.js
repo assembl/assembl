@@ -15,7 +15,6 @@ export const NB_IDEA_PREVIEW_TO_SHOW = 4;
 export const APP_CONTAINER_PADDING = 15;
 export const MIN_WIDTH_COLUMN = 400;
 export const COLUMN_OPACITY_GAIN = 0.5;
-export const FICTION_COMMENT_MAX_LENGTH = 3000;
 
 // Bright mirror
 export const EMPTY_STRING = '';
