@@ -202,11 +202,10 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .post-right {
-    width: 7%;
+    width: 42px;
     position: relative;
     text-align: center;
     background-color: $first-color-light;
-    min-width: 40px;
 
     .answers {
       display: none;
@@ -228,10 +227,7 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .box {
-    border-bottom: $navbar-border;
-    border-left: $border-theme;
-    border-right: $navbar-border;
-    border-top: $navbar-border;
+    border: none;
     margin: 0 auto;
     max-width: 600px;
     position: relative;
