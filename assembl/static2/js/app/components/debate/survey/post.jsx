@@ -330,9 +330,11 @@ class Post extends React.Component<Props> {
           {screenWidth < SMALL_SCREEN_WIDTH && (
             <div className="sentiments">
               <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
+                <Translate value="debate.agree" className="sentiment-label-sm agree" />
                 {likeComponent}
               </ResponsiveOverlayTrigger>
               <ResponsiveOverlayTrigger placement="top" tooltip={disagreeTooltip}>
+                <Translate value="debate.disagree" className="sentiment-label-sm disagree" />
                 {disagreeComponent}
               </ResponsiveOverlayTrigger>
             </div>

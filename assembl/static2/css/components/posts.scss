@@ -589,12 +589,21 @@ $deleted-post-border: 1px solid $light-grey !default;
         width: 30%;
 
         .custom-overlay {
+          display: flex;
+          flex-direction: column;
           text-align: center;
           margin-top: 20px;
           margin-bottom: 20px;
+
+          .sentiment-label-sm {
+            font-size: $font-size-xs;
+            font-family: $font-family4;
+          }
         }
 
         .sentiment {
+          margin: 0;
+
           svg {
             vertical-align: middle;
           }
