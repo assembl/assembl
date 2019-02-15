@@ -202,20 +202,6 @@ class Administration extends React.Component<Props, State> {
     );
     return (
       <div className="administration">
-        <div className="save-bar">
-          <div className="max-container">
-            <Grid fluid>
-              <Row>
-                <Col xs={12} md={3} />
-                <Col xs={12} md={8}>
-                  {/* save button is moved here via a ReactDOM portal */}
-                  <div id="save-button" />
-                </Col>
-                <Col xs={12} md={1} />
-              </Row>
-            </Grid>
-          </div>
-        </div>
         <div className="max-container">
           <Grid fluid>
             <Row className="margin-container">
@@ -237,6 +223,20 @@ class Administration extends React.Component<Props, State> {
                   </div>
                 ) : null}
                 {childrenWithProps}
+                <div className="save-bar">
+                  <div className="max-container">
+                    <Grid fluid>
+                      <Row>
+                        <Col xs={12} md={3} />
+                        <Col xs={12} md={8}>
+                          {/* save button is moved here via a ReactDOM portal */}
+                          <div id="save-button" />
+                        </Col>
+                        <Col xs={12} md={1} />
+                      </Row>
+                    </Grid>
+                  </div>
+                </div>
               </Col>
               <Col xs={12} sm={1}>
                 <LanguageMenu />

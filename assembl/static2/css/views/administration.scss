@@ -458,12 +458,10 @@
 
   .save-bar {
     border-bottom: $navbar-border;
-    border-top: $navbar-border;
+    border-top: 0;
     background-color: $white;
     height: $navbar-height;
     padding: 10px 0;
-    position: sticky;
-    top: $navbar-height;
     width: 100%;
     z-index: 100;
   }
