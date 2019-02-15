@@ -15,7 +15,14 @@
       background: none;
       border: none;
 
-      &:hover, &:focus, &:active {
+      .deletePostIcon {
+        margin-top: 5px;
+        margin-left: 1px;
+      }
+
+      &:hover,
+      &:focus,
+      &:active {
         background: none;
         border: none;
         outline: none;
@@ -47,6 +54,15 @@
 
         &:nth-child(3n + 2) {
           height: 499px;
+        }
+
+        .fictions-list {
+          button {
+            .deletePostIcon {
+              margin-top: 5px;
+              margin-left: 2px;
+            }
+          }
         }
       }
 
