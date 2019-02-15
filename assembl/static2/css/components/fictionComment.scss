@@ -78,6 +78,11 @@
         display: flex;
       }
 
+      .action-edit,
+      .action-delete {
+        background-color: transparent;
+      }
+
       .action-edit {
         margin-left: 15px;
         margin-right: 15px;
