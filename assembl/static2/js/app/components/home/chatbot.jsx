@@ -1,9 +1,20 @@
+// @flow
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-const Chatbot = ({ chatbot, locale }) => (
+type ChatbotType = TitleEntries & {
+  link: string,
+  name: string
+};
+
+type Props = {
+  locale: string,
+  chatbot: ChatbotType
+};
+
+const Chatbot = ({ chatbot, locale }: Props) => (
   <section className="home-section contact-section">
     <Grid fluid>
       <div className="max-container center">

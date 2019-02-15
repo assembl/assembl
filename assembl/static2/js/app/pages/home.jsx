@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
