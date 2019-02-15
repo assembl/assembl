@@ -55,7 +55,7 @@ class Child extends React.PureComponent<Props, State> {
   };
 
   state = {
-    expanded: true,
+    expanded: false,
     visible: false
   };
 
