@@ -274,6 +274,10 @@
       padding-left: 20px;
     }
   }
+
+  .annotation {
+    font-size: $font-size-xxs;
+  }
 }
 
 @media screen and (max-width: 420px) {
