@@ -42,6 +42,7 @@
   "post": "${slug}/debate/${phase}/theme/${themeId}/#${element}",
   "extract": "${slug}/debate/${phase}/theme/${themeId}/#${element}#${extractId}",
   "resourcesCenter": "${slug}/resourcescenter",
+  "semanticAnalysis": "${slug}/semantic-analysis-for-discussion",
   "legalNotice": "${slug}/legal-notice",
   "privacyPolicy": "${slug}/privacy-policy",
   "cookiesPolicy": "${slug}/cookies-policy",
@@ -58,5 +59,6 @@
   "integration101Page": "integration/101/index",
   "integration101FormBuilderPage": "integration/101/form-builder",
   "integrationBrightMirrorIndex": "integration/bright-mirror/index",
-  "integrationBrightMirrorFiction": "integration/bright-mirror/bright-mirror-fiction"
+  "integrationBrightMirrorFiction": "integration/bright-mirror/bright-mirror-fiction",
+  "integrationSemanticAnalysis": "integration/semantic-analysis/semantic-analysis"
 }

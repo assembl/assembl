@@ -1,7 +1,4 @@
 .media-section {
-  padding-bottom: $margin-section-xxxs;
-  padding-top: $margin-section-m;
-
   .media-title-section {
     margin-left: 6.5%;
     margin-right: 6.5%;
@@ -28,13 +25,7 @@
       letter-spacing: 1px;
     }
 
-    .media-description-top {
-      margin-bottom: $margin-section-xxxs;
-    }
-
     .media-description {
-      width: 78%;
-
       .description-txt {
         font-family: $font-family6;
         color: $first-color;
@@ -69,9 +60,6 @@
 
 @media screen and (max-width: $screen-sm-max) {
   .media-section {
-    padding-top: $margin-section-xxs;
-    padding-bottom: $margin-section-tiny;
-
     .media-title-section {
       margin-left: 0;
       margin-right: 0;
@@ -80,7 +68,7 @@
       .dark-title-1 {
         margin-left: $margin-section-tiny;
         margin-right: $margin-section-tiny;
-        font-size: $font-size-l;
+        font-size: $font-size-ml;
         letter-spacing: 1px;
         line-height: 38px;
       }

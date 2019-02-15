@@ -43,7 +43,7 @@ class ThreadView extends React.Component<Props> {
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     return (
-      <div className="overflow-x">
+      <div>
         {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted ? (
           <TopPostFormContainer ideaId={ideaId} refetchIdea={refetchIdea} topPostsCount={posts.length} />
         ) : null}

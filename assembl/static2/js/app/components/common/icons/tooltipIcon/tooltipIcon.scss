@@ -1,0 +1,18 @@
+.icon {
+  z-index: 50;
+
+  &.tooltip {
+    .text {
+      fill: $first-color;
+      font-family: $font-family3;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.11px;
+    }
+
+    .circle {
+      stroke: $first-color;
+      stroke-width: 1.665;
+    }
+  }
+}

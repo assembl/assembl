@@ -1,0 +1,22 @@
+.keyword-info {
+  h3 {
+    color: $first-color;
+  }
+}
+
+p.info {
+  color: $grey;
+  font-family: $font-family4;
+  font-size: 16px;
+  letter-spacing: 1px;
+  line-height: 1.3;
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .description {
+    h3 {
+      margin-bottom: 5px;
+      margin-top: 0;
+    }
+  }
+}

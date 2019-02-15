@@ -9,13 +9,14 @@ import type { Map } from 'immutable';
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Header from '../components/common/header';
-import Announcement from '../components/debate/common/announcement';
+import { SurveyAnnouncement } from '../components/debate/common/announcement';
 import type { AnnouncementContent } from '../components/debate/common/announcement';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 import ThematicQuery from '../graphql/ThematicQuery.graphql';
+import SemanticAnalysisForThematicQuery from '../graphql/SemanticAnalysisForThematicQuery.graphql';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 
@@ -53,7 +54,7 @@ type Props = {
   totalSentiments: number,
   announcement: AnnouncementContent,
   updateContentLocaleMapping: Function // eslint-disable-line react/no-unused-prop-types
-};
+} & SemanticAnalysisForThematicQuery;
 
 type State = {
   isScroll: boolean,
@@ -131,9 +132,9 @@ class Survey extends React.Component<Props, State> {
       slug,
       totalSentiments,
       timeline,
-      announcement
+      announcement,
+      semanticAnalysisForThematicData
     } = this.props;
-
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: identifier })}`;
     let statElements = [];
@@ -154,10 +155,13 @@ class Survey extends React.Component<Props, State> {
           </Header>
           {announcement ? (
             <section className="post-section">
-              <Grid fluid className="background-light">
+              <Grid fluid className="background-light instructions-text">
                 <div className="max-container">
-                  <div className="content-section">
-                    <Announcement announcement={announcement} />
+                  <div className="content-section section-margin-top">
+                    <SurveyAnnouncement
+                      announcement={announcement}
+                      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+                    />
                   </div>
                 </div>
               </Grid>

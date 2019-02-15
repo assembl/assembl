@@ -1,5 +1,5 @@
 .comment-form {
-  border: 2px solid $blue-violet;
+  border: 2px solid $purple;
   border-radius: 4px;
   display: flex;
   flex-wrap: wrap;
@@ -11,7 +11,7 @@
     resize: none !important; // Set it to !important because TextareaAutosize force horizontal resize
 
     &::placeholder {
-      font-size: $font-size-mll;
+      font-size: $font-size-m;
     }
 
     &:focus {

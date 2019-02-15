@@ -66,7 +66,10 @@ const SectionLink = ({ section, options }) => {
       </a>
     );
   }
-  const sectionName = sectionType.toLowerCase().replace('_', '');
+  const sectionName =
+    sectionType === 'SEMANTIC_ANALYSIS'
+      ? sectionType.toLowerCase().replace('_', '-')
+      : sectionType.toLowerCase().replace('_', '');
   const isActiveUrl = location.pathname
     .split('/')
     .slice(2)

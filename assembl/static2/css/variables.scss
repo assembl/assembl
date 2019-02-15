@@ -6,11 +6,13 @@ $grey: #666;
 $orange: #ffd58f;
 $orange2: #ff6a00;
 $orange3: #ffa105;
+$orange4: #fbb040;
 $error: #a94442;
 $red: #f75959;
 $lightred: #ffcfcf;
 $green: #7ed321;
-$lightgreen: #93e79d;
+$green2: #5ecc6b;
+$light-green: #93e79d;
 $blue: #7490ca;
 $purple: #5404d7;
 $purple-light: #e7e6f5;
@@ -33,6 +35,11 @@ $opacity-purple: rgba(84, 4, 215, 0.5);
 $opacity-cyan: rgba(0, 140, 166, 0.5);
 $min-opacity-cyan: rgba(0, 140, 166, 0.1);
 $linear-gradient: linear-gradient(90deg, $light-grey, $white);
+
+$sentiment-level-0: $red;
+$sentiment-level-1: $orange4;
+$sentiment-level-2: $light-green;
+$sentiment-level-3: $green2;
 
 $first-color: $cyan;
 $first-color-light: $cyan-light;
@@ -149,9 +156,8 @@ $font-size-xs: 12px;
 $font-size-s: 14px;
 $font-size-sm: 16px;
 $font-size-m: 18px;
-$font-size-mll: 19px;
-$font-size-ml: 24px;
-$font-size-l: 26px;
+$font-size-ml: 25px;
+$font-size-l: 30px;
 $font-size-xl: 36px;
 $font-size-xll: 42px;
 $font-size-xxl: 48px;
@@ -172,6 +178,7 @@ $btn-dark-border-style: solid;
 $partner-logo-width: 200px;
 $partner-logo-height: 100px;
 
+$line-height-base: 1.428571429 !default;
 $line-height: 1.4;
 $lines-to-show: 3;
 
@@ -196,7 +203,7 @@ $screen-md-min: 992px;
 $screen-md-max: 1199px;
 
 $screen-lg-min: 1200px;
-$screen-xl-min: 1451px;
+$screen-xl-min: 1440px;
 
 // Proper media-queries examples https://stackoverflow.com/questions/18424798/twitter-bootstrap-3-how-to-use-media-queries
 

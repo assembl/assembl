@@ -108,8 +108,7 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
       fullscreen
     } = this.props;
     const columnsInfos = this.getColumnsInfos();
-    const { sticky } = this.state;
-    const containerClassNames = sticky && messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';
+    const containerClassNames = messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';
     const containerMdOffset = fullscreen ? 1 : 2;
     const formMdSize = fullscreen ? 8 : 6;
     return (

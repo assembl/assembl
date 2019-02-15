@@ -9,9 +9,7 @@ type DescriptionProps = {
   content: string
 };
 
-type Props = AnnouncementContent & {
-  children?: React.Node
-};
+type Props = AnnouncementContent;
 
 const isValidDescription = (description: ?string): boolean => (description ? description !== '<p></p>' : false);
 
@@ -31,26 +29,25 @@ const Body = ({ content }: DescriptionProps) => (
 
 class TextAndMedia extends React.Component<Props> {
   render() {
-    const { title, body, quote, children } = this.props;
+    const { title, body, quote } = this.props;
     const validQuote = isValidDescription(quote);
     const validBody = isValidDescription(body);
     const somethingOnRight = validBody;
-    const somethingOnLeft = validQuote || children;
+    const somethingOnLeft = validQuote;
     const something = !!(somethingOnLeft || somethingOnRight);
     const totalSize = 12;
-    const leftSize = 4;
+    const leftSize = 3;
     return title || something ? (
       <section className="media-section background-light">
-        <div className="max-container">
+        <div>
           {something && (
             <Grid fluid>
               {somethingOnRight ? (
                 <Col
                   xs={totalSize}
-                  md={8}
-                  className={classnames('announcement-media', {
-                    'col-md-push-2': !somethingOnLeft,
-                    'col-md-push-4': somethingOnLeft
+                  md={somethingOnLeft ? 9 : 12}
+                  className={classnames('announcement-media no-padding', {
+                    'col-md-push-3': somethingOnLeft
                   })}
                 >
                   <div className="media-right">{body && validBody && <Body content={body} />}</div>
@@ -61,13 +58,12 @@ class TextAndMedia extends React.Component<Props> {
                   xs={totalSize}
                   md={somethingOnRight ? leftSize : totalSize}
                   className={classnames({
-                    'col-md-pull-8': somethingOnRight
+                    'col-md-pull-9': somethingOnRight
                   })}
                 >
                   {quote && validQuote && <Quote content={quote} />}
                 </Col>
               ) : null}
-              {children}
             </Grid>
           )}
         </div>

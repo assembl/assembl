@@ -474,6 +474,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
         sq = self.db.query(
             func.sum(PostKeywordAnalysis.score).label('score'),
+            func.sum(PostKeywordAnalysis.occurences).label('count'),
             tag_col.label('id')
         ).filter_by(
             category=None
@@ -515,7 +516,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                         t.ensure_translations([display_lang], translator)
 
         q = self.db.query(
-            LangStringEntry.value, sq.c.score
+            LangStringEntry.value, sq.c.score, sq.c.count,
         ).join(Locale).filter(
             label_cond
         ).distinct().join(

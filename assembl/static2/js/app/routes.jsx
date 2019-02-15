@@ -31,6 +31,7 @@ import SurveyAdmin from './pages/surveyAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
 import ResourcesCenter from './pages/resourcesCenter';
+import SemanticAnalysisForDiscussion from './pages/semanticAnalysis/semanticAnalysisForDiscussion/semanticAnalysisForDiscussion';
 import LandingPageAdmin from './pages/landingPageAdmin';
 import ExportTaxonomies from './pages/exportTaxonomies';
 import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
@@ -41,6 +42,7 @@ import IntMainPage from './integration/index';
 import Int101Page from './integration/101/index';
 import Int101FormBuilderPage from './integration/101/containers/formBuilder101/formBuilder101';
 import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirrorFiction';
+import IntSemanticAnalysis from './integration/semanticAnalysis/pages/semanticAnalysis';
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
@@ -104,6 +106,7 @@ export default [
       path={routeForRouter('integrationBrightMirrorFiction', false, { preSlash: true })}
       component={IntBrightMirrorFiction}
     />
+    <Route path={routeForRouter('integrationSemanticAnalysis', false, { preSlash: true })} component={IntSemanticAnalysis} />
     {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}
     <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
     {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
@@ -126,6 +129,7 @@ export default [
         <Route path={routeForRouter('syntheses')} component={Syntheses} />
         <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
         <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
+        <Route path={routeForRouter('semanticAnalysis')} component={SemanticAnalysisForDiscussion} />
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
         <Route path={routeForRouter('privacyPolicy')} component={PrivacyPolicy} />
         <Route path={routeForRouter('cookiesPolicy')} component={CookiesPolicy} />

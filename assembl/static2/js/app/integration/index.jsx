@@ -34,6 +34,16 @@ const index = () => (
         </ListGroup>
       </Col>
     </Row>
+    <Row>
+      <Col xs={12}>
+        <h2>Semantic Analysis pages</h2>
+        <ListGroup componentClass="ul">
+          <li>
+            <Link to={`${get('integrationSemanticAnalysis')}`}>Semantic Analysis (section only)</Link>
+          </li>
+        </ListGroup>
+      </Col>
+    </Row>
   </Grid>
 );
 

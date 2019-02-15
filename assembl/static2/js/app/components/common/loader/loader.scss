@@ -1,0 +1,90 @@
+// Variables
+$animation-speed: 1.4s;
+
+@keyframes rotator {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(270deg);
+  }
+}
+
+@keyframes dash {
+  0% {
+    stroke-dashoffset: 190;
+  }
+
+  50% {
+    stroke-dashoffset: 47.5;
+    transform: rotate(135deg);
+  }
+
+  100% {
+    stroke-dashoffset: 190;
+    transform: rotate(450deg);
+  }
+}
+
+.custom-loader {
+  padding: 30px 0 20px 0;
+
+  .description {
+    color: $grey;
+    font-size: $font-size-m;
+    line-height: $line-height-base;
+    width: 220px;
+  }
+
+  .icon {
+    margin-bottom: 10px;
+    width: 60px;
+    height: 60px;
+  }
+
+  .path {
+    animation: dash infinite $animation-speed ease-in-out;
+    stroke: $first-color;
+    stroke-dasharray: 190;
+    transform-origin: center;
+  }
+
+  .spinner {
+    animation: rotator infinite $animation-speed linear;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .custom-loader {
+    padding: 50px 0 40px 0;
+
+    .description {
+      font-size: $font-size-ml;
+      width: 300px;
+    }
+
+    .icon {
+      margin-bottom: 20px;
+      width: 90px;
+      height: 90px;
+    }
+  }
+}
+
+@media screen and (min-width: $screen-lg-min) {
+  .custom-loader {
+    .description {
+      font-size: $font-size-l;
+      width: 360px;
+    }
+
+    .icon {
+      width: 120px;
+      height: 120px;
+    }
+  }
+}
+
+@import '../icons/errorIcon/errorIcon.scss';
+@import '../icons/noDataIcon/noDataIcon.scss';

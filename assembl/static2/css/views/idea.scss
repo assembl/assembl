@@ -1,6 +1,11 @@
 .idea {
   position: relative;
 
+  .padding-left-right {
+    padding-left: 40px;
+    padding-right: 40px;
+  }
+
   .subject-prefix {
     color: $first-color-opacity-70;
     font-family: 'LatoLight';
@@ -140,10 +145,24 @@
   }
 }
 
+@media screen and (min-width: $screen-xl-min) {
+  .idea {
+    .padding-left-right {
+      padding-left: 110px;
+      padding-right: 110px;
+    }
+  }
+}
+
 @media screen and (max-width: 992px) {
   .idea {
     .border-left {
       border-left: none;
+    }
+
+    .padding-left-right {
+      padding-left: 20px;
+      padding-right: 20px;
     }
 
     .level {
@@ -181,6 +200,11 @@
 
 @media screen and (max-width: 600px) {
   .idea {
+    .padding-left-right {
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+
     .level {
       width: 100%;
       padding-bottom: 0;

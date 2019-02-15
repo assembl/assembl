@@ -1,0 +1,40 @@
+.tooltip-container {
+  .custom-overlay {
+    div {
+      width: 22px;
+      height: 22px;
+    }
+  }
+}
+
+.title-tooltip {
+  .tooltip-inner {
+    background-color: $white;
+    border: 1px solid $white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px -1px rgba(0, 0, 0, 0.5);
+    color: $grey;
+    font-family: $font-family4;
+    font-size: $font-size-sm;
+    letter-spacing: 1.1px;
+    max-width: 270px;
+    text-align: left;
+    padding: 10px;
+  }
+
+  &.top > .tooltip-arrow {
+    border-top-color: $white;
+  }
+
+  &.right > .tooltip-arrow {
+    border-right-color: $white;
+  }
+
+  &.bottom > .tooltip-arrow {
+    border-bottom-color: $white;
+  }
+
+  &.left > .tooltip-arrow {
+    border-left-color: $white;
+  }
+}

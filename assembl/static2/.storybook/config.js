@@ -21,7 +21,9 @@ import '../css/themes/default/assembl_web.scss';
 // Option defaults:
 setOptions({
   name: 'Assembl',
-  url: '#'
+  url: '#',
+  hierarchySeparator: /\//,
+  hierarchyRootSeparator: /\|/
 });
 
 I18n.setTranslations(messages);
@@ -55,6 +57,17 @@ function loadStories() {
   require('../js/app/stories/components/debate/brightMirror/sideComment/sideCommentAnchor.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/innerBoxView.stories.jsx');
   require('../js/app/stories/components/debate/brightMirror/sideComment/innerBoxSubmit.stories.jsx');
+
+  require('../js/app/components/common/description/description.stories.jsx');
+  require('../js/app/components/common/loader/loader.stories.jsx');
+  require('../js/app/components/common/toolbarSlider/toolbarSlider.stories.jsx');
+  require('../js/app/components/common/title/title.stories.jsx');
+  require('../js/app/components/common/titleTooltip/titleTooltip.stories.jsx');
+  require('../js/app/components/common/titleWithTooltip/titleWithTooltip.stories.jsx');
+  require('../js/app/components/common/wordCloud/responsiveWordCloud.stories.jsx');
+  require('../js/app/components/common/keywordInfo/keywordInfo.stories');
+  require('../js/app/components/common/sentimentBar/sentimentBar.stories.jsx');
+  require('../js/app/components/common/wordCountInformation/wordCountInformation.stories.jsx');
 }
 
 configure(loadStories, module);

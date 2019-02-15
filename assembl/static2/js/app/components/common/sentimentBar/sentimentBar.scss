@@ -1,0 +1,42 @@
+.sentimentBar {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .icon {
+    margin-right: 15px;
+  }
+
+  p {
+    font-family: $font-family3;
+    font-size: 21px;
+    text-align: center;
+  }
+
+  .sentimentBar-level-0 {
+    color: $sentiment-level-0;
+  }
+
+  .sentimentBar-level-1 {
+    color: $sentiment-level-1;
+  }
+
+  .sentimentBar-level-2 {
+    color: $sentiment-level-2;
+  }
+
+  .sentimentBar-level-3 {
+    color: $sentiment-level-3;
+  }
+
+  @media screen and (min-width: $screen-lg-min) {
+    img {
+      max-width: 100px;
+    }
+
+    p {
+      font-size: 27px;
+    }
+  }
+}

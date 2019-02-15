@@ -1,9 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`ThreadView component should render a ThreadView without the TopPostForm 1`] = `
-<div
-  className="overflow-x"
->
+<div>
   <Grid
     bsClass="container"
     className="background-grey"
@@ -35,9 +33,7 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
 `;
 
 exports[`ThreadView component should render a TopPostForm 1`] = `
-<div
-  className="overflow-x"
->
+<div>
   <TopPostFormContainer
     draftSuccessMsgId={null}
     draftable={false}

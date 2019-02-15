@@ -1,0 +1,159 @@
+{
+  "nlpSentiment": {
+    "positive": 0.811844,
+    "negative": -3.406651,
+    "count": 7
+  },
+  "topKeywords": [
+    {
+      "count": 15,
+      "score": 6.13547,
+      "value": "Lorem Ipsum"
+    },
+    {
+      "count": 4,
+      "score": 2.696532,
+      "value": "release of Letraset sheets"
+    },
+    {
+      "count": 4,
+      "score": 2.642432,
+      "value": "1500s"
+    },
+    {
+      "count": 4,
+      "score": 2.517988,
+      "value": "dummy text of the printing"
+    },
+    {
+      "count": 4,
+      "score": 2.399828,
+      "value": "desktop publishing software"
+    },
+    {
+      "count": 4,
+      "score": 2.275792,
+      "value": "Lorem Ipsum passages"
+    },
+    {
+      "count": 4,
+      "score": 2.177552,
+      "value": "industry's standard dummy text"
+    },
+    {
+      "count": 4,
+      "score": 2.136484,
+      "value": "Aldus PageMaker"
+    },
+    {
+      "count": 4,
+      "score": 2.103428,
+      "value": "centuries"
+    },
+    {
+      "count": 4,
+      "score": 1.97466,
+      "value": "typesetting industry"
+    },
+    {
+      "count": 4,
+      "score": 1.861312,
+      "value": "versions of Lorem Ipsum"
+    },
+    {
+      "count": 2,
+      "score": 1.845482,
+      "value": "variations of passages of Lorem Ipsum"
+    },
+    {
+      "count": 4,
+      "score": 1.759284,
+      "value": "1960s"
+    },
+    {
+      "count": 4,
+      "score": 1.587244,
+      "value": "unknown printer"
+    },
+    {
+      "count": 5,
+      "score": 1.550117,
+      "value": "humour"
+    },
+    {
+      "count": 4,
+      "score": 1.526072,
+      "value": "galley of type"
+    },
+    {
+      "count": 2,
+      "score": 1.42651,
+      "value": "passage of Lorem Ipsum"
+    },
+    {
+      "count": 2,
+      "score": 1.382092,
+      "value": "handful of model sentence structures"
+    },
+    {
+      "count": 2,
+      "score": 1.370082,
+      "value": "Latin words"
+    },
+    {
+      "count": 4,
+      "score": 1.263044,
+      "value": "type specimen book"
+    },
+    {
+      "count": 2,
+      "score": 1.255126,
+      "value": "Lorem Ipsum generators"
+    },
+    {
+      "count": 4,
+      "score": 1.253964,
+      "value": "electronic typesetting"
+    },
+    {
+      "count": 2,
+      "score": 1.079904,
+      "value": "words"
+    },
+    {
+      "count": 2,
+      "score": 1.079074,
+      "value": "dictionary"
+    },
+    {
+      "count": 4,
+      "score": 1.056268,
+      "value": "Internet"
+    },
+    {
+      "count": 2,
+      "score": 1.045624,
+      "value": "chunks"
+    },
+    {
+      "count": 2,
+      "score": 1.041058,
+      "value": "majority"
+    },
+    {
+      "count": 2,
+      "score": 1.035156,
+      "value": "alteration"
+    },
+    {
+      "count": 2,
+      "score": 1.034098,
+      "value": "form"
+    },
+    {
+      "count": 2,
+      "score": 1.033052,
+      "value": "repetition"
+    }
+  ]
+}

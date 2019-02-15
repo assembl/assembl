@@ -28,7 +28,7 @@ class Index extends Component {
     return (
       <div className="instruction-view">
         <InstructionsText {...customInstructionsText} />
-        <div className="overflow-x">
+        <div>
           <TopPostFormContainer
             ideaId={props.ideaId}
             refetchIdea={props.refetchIdea}

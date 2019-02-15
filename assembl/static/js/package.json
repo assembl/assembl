@@ -18,7 +18,7 @@
   "scripts": {},
   "dependencies": {
     "bluebird": "~2.10.2",
-    "bower": "^1.8.4",
+    "bower": "^1.8.8",
     "ckeditor": "4.5.9",
     "classlist-polyfill": "~1.0.3",
     "d3": "~3.5.5",
@@ -26,7 +26,7 @@
     "jed": "~1.1.0",
     "jquery-autosize": "~1.18.18",
     "linkifyjs": "~2.0.0",
-    "moment": "^2.22.2",
+    "moment": "^2.24.0",
     "raven-js": "~3.8.0",
     "requirejs": "^2.3.6",
     "sockjs-client": "~1.1.1",

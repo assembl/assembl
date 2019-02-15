@@ -108,7 +108,8 @@ def do_watson_computation(id):
                         tag.simplistic_unify(translator)
                         post.db.add(PostKeywordAnalysis(
                             post=post, source=computation,
-                            value=tag, score=keyword['relevance']))
+                            value=tag, score=keyword['relevance'],
+                            occurences=keyword['count']))
                     for category in result.get('categories', ()):
                         tag = Tag.getOrCreateTag(
                             category['label'], lse.locale, post.db)
@@ -159,7 +160,7 @@ def get_or_create_computation_on_post(post, process_name, parameters):
             return computation
     process = ComputationProcess.by_name(process_name, post.db)
     computation = ComputationOnPost(
-        post=post, process=process,
+        post=post, process=process, post_id=post.id,
         parameters=parameters)
     post.db.add(computation)
     return computation
@@ -193,8 +194,12 @@ def prepare_computation(id):
 def process_post_watson(id, celery=False):
     """Use this entry point to analyze a post from pshell"""
     if celery:
-        with transaction.manager:
+        from assembl.lib.sqla import get_session_maker
+        if get_session_maker().session_factory.kw['extension']:
             do_it = prepare_computation(id)
+        else:
+            with transaction.manager:
+                do_it = prepare_computation(id)
         if do_it:
             return do_watson_computation.delay(id)
     else:

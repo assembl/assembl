@@ -1,0 +1,17 @@
+.icon {
+  &.error {
+    .arrow1,
+    .arrow2 {
+      stroke: #f75959;
+      stroke-linecap: round;
+    }
+
+    .mark {
+      fill: #f75959;
+      font-size: 66px;
+      font-weight: 500;
+      transform: translate(8px, 7px);
+      font-family: $font-family;
+    }
+  }
+}

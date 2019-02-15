@@ -10,8 +10,18 @@ import InstructionsText from '../../../../components/debate/brightMirror/instruc
 import type { InstructionsTextProps } from '../../../../components/debate/brightMirror/instructionsText';
 
 export const customInstructionsText: InstructionsTextProps = {
-  title: 'Instructions',
-  body: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis tincidunt dolor.'
+  title: 'Test',
+  body: 'Lorem Ipsum body',
+  semanticAnalysisForThematicData: {
+    id: '1234',
+    nlpSentiment: {
+      positive: null,
+      negative: null,
+      count: 0
+    },
+    title: 'Bright',
+    topKeywords: []
+  }
 };
 
 storiesOf('InstructionsText', module)
@@ -20,6 +30,10 @@ storiesOf('InstructionsText', module)
   .add(
     'playground',
     withInfo()(() => (
-      <InstructionsText title={text('title', customInstructionsText.title)} body={text('body', customInstructionsText.body)} />
+      <InstructionsText
+        {...customInstructionsText}
+        title={text('title', customInstructionsText.title)}
+        body={text('body', customInstructionsText.body)}
+      />
     ))
   );

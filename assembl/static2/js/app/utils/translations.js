@@ -326,6 +326,19 @@ const Translations = {
           }
         }
       },
+      icons: {
+        error: "Icone d'erreur",
+        tooltip: "Icone du tooltip"
+      },
+      loader: {
+        error: "Il y a une erreur de chargement de l’analyse",
+        loading: "Chargement en cours...",
+        "no-data": "Il n'y a pas assez de contenu à analyser"
+      },
+      wordCountInformation: {
+        msg: "Le résultat de l'analyse sémantique ci-dessous provient de l'analyse de %{words} dans la thématique.",
+        words: "<span class='words-watson'>%{wordCount} mots</span>"
+      },
       uploadButton: "Choisissez un fichier",
       goUp: "Remonter"
     },
@@ -424,7 +437,28 @@ const Translations = {
         voteForProposals: "Votez pour les propositions",
         seeSubIdeas: "Voir les %{count} sous-thèmes",
         seeSubIdeas_1: "Voir le sous-thème",
-        announcement: "Consigne"
+        announcement: "Consigne",
+        guidelines: "Consigne",
+        summary: "À retenir"
+      },
+      semanticAnalysis: {
+        long: "Sémantique",
+        short: "Analyse",
+        occurence: "Occurence",
+        occurenceDefinition:
+          "nombre de fois où le mot clé apparaît dans le débat ou dans les discussions relatives à la thématique en question",
+        relevance: "Pertinence",
+        relevanceDefinition:
+          "qualifie l'importance du mot clé pour comprendre le sens général du texte analysé. Le score varie de 0 à 1, de faible à fort.",
+        keywordCloud: "Nuage de mots-clés",
+        keywordCloudDefinition:
+          "Le nuage de mots-clés ci-dessous est une représentation visuelle des mots-clefs les plus utilisés dans le débat (ou \"dans les échanges liés à la thématique en question\" lorsque le texte fait référence à une thématique particulière). Les mots s'affichent dans des tailles de caractères d'autant plus visibles qu'ils sont utilisés ou populaires.",
+        informationKeyword: "Informations mots clés",
+        numberKeyword: "Nombre de mots clés",
+        noKeywordSelected: "Pas de mot sélectionné",
+        sentimentAnalysis: "Analyse du sentiment",
+        sentimentAnalysisDefinition:
+          "L'analyse du sentiment caractérise la tonalité positive ou négative des échanges du débat (ou \"des échanges relatifs à la thématique en question\")."
       },
       brightMirror: {
         deleteFiction: "Supprimez votre texte",
@@ -1290,6 +1324,19 @@ const Translations = {
           }
         }
       },
+      icons: {
+        error: "Error icon",
+        tooltip: "Tooltip icon"
+      },
+      loader: {
+        error: "There is an error loading the analysis",
+        loading: "Loading...",
+        "no-data": "Not enough data to analyse"
+      },
+      wordCountInformation: {
+        msg: "TO BE DEFINED %{words}",
+        words: "<span class='words-watson'>%{wordCount} words</span>"
+      },
       uploadButton: "Choose a file to upload",
       goUp: "Back to top"
     },
@@ -1397,7 +1444,28 @@ const Translations = {
         voteForProposals: "Vote for the proposals",
         seeSubIdeas: "See %{count} sub-thematics",
         seeSubIdeas_1: "See sub-thematic",
-        announcement: "Announcement"
+        announcement: "Announcement",
+        guidelines: "Guidelines",
+        summary: "Summary"
+      },
+      semanticAnalysis: {
+        long: "Analysis",
+        short: "Semantic",
+        occurence: "Occurence",
+        occurenceDefinition:
+          "frequency of keywords throughout the debate or throughout the discussions related to the theme being addressed.",
+        relevance: "Relevance",
+        relevanceDefinition:
+          "measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.",
+        keywordCloud: "Keyword cloud",
+        keywordCloudDefinition:
+          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" pour le texte à mettre en thématique). The importance of each keyword is shown with font size.",
+        informationKeyword: "Information on keywords",
+        numberKeyword: "Number of keywords",
+        noKeywordSelected: "Select your keyword",
+        sentimentAnalysis: "Sentiment analysis",
+        sentimentAnalysisDefinition:
+          "The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed)."
       },
       brightMirror: {
         deleteFiction: "Delete your text",

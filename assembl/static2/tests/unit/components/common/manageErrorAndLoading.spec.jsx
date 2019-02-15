@@ -2,7 +2,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 
-import manageErrorAndLoading from '../../../../js/app/components/common/manageErrorAndLoading';
+import manageErrorAndLoading, { TYPE } from '../../../../js/app/components/common/manageErrorAndLoading';
 
 const DummyComponent = () => <div>My dummy component</div>;
 
@@ -14,17 +14,28 @@ describe('manageErrorAndLoading HOC', () => {
       error: new Error('My awesome error'),
       loading: false
     };
-    expect(() => manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toThrowError('My awesome error');
+    expect(() => manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toThrowError('GraphQL error');
   });
 
-  it('should throw an error if data.error is not null/undefined', () => {
+  it('should throw an error if error is not null/undefined', () => {
     const props = { displayLoader: true };
+    const wrappedProps = {
+      data: {},
+      error: new Error('My awesome error'),
+      loading: false
+    };
+    expect(() => manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toThrowError('GraphQL error');
+  });
+
+  it('should render an error component if data.error or error is not null/undefined and type is watson', () => {
+    const props = { displayLoader: true, loaderType: TYPE.SEMANTIC_ANALYSIS };
     const wrappedProps = {
       data: {
         error: new Error('My graphql error')
       }
     };
-    expect(() => manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toThrowError('My graphql error');
+    const rendered = renderer.create(manageErrorAndLoading(props)(DummyComponent)(wrappedProps)).toJSON();
+    expect(rendered).toMatchSnapshot();
   });
 
   it('should return null if data are loading and we don\'t want to display a loader (use data prop)', () => {

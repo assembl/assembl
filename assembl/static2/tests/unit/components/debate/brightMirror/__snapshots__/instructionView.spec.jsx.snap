@@ -8,9 +8,7 @@ exports[`Bright Mirror page should hide fiction creation section if timeline is 
     body="Participez à la création de fiction"
     title="Instruction"
   />
-  <div
-    className="overflow-x"
-  />
+  <div />
 </div>
 `;
 
@@ -22,9 +20,7 @@ exports[`Bright Mirror page should hide fiction creation section if user is not 
     body="Participez à la création de fiction"
     title="Instruction"
   />
-  <div
-    className="overflow-x"
-  />
+  <div />
 </div>
 `;
 
@@ -36,9 +32,7 @@ exports[`Bright Mirror page should hide fiction creation section if user is not 
     body="Participez à la création de fiction"
     title="Instruction"
   />
-  <div
-    className="overflow-x"
-  />
+  <div />
 </div>
 `;
 
@@ -50,9 +44,7 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
     body="Participez à la création de fiction"
     title="Instruction"
   />
-  <div
-    className="overflow-x"
-  >
+  <div>
     <TopPostFormContainer
       bodyMaxLength={0}
       bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"

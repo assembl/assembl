@@ -1,3 +1,11 @@
+.max-container {
+  .content-section {
+    .section-margin-top {
+      padding: 5px 0 25px 0;
+    }
+  }
+}
+
 .instructions-text {
   .announcement {
     margin: 0;
@@ -11,7 +19,7 @@
     font-family: $font-family4;
     letter-spacing: 1px;
     line-height: 36px;
-    margin: 0 17px 33px 17px;
+    margin-bottom: 33px;
     font-size: $font-size-sm;
     text-align: left;
   }

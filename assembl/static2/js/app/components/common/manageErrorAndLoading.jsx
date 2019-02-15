@@ -8,9 +8,16 @@
 */
 import * as React from 'react';
 import Loader, { type Props as LoaderProps } from './loader';
+import SemanticAnalysisLoader, { LOADER_TYPE as LOADER_TYPE_WATSON } from './loader/loader';
+
+export const TYPE = {
+  SEMANTIC_ANALYSIS: 'SEMANTIC_ANALYSIS'
+};
 
 type Props = {
-  displayLoader: boolean
+  displayLoader: boolean,
+  /** Optional type */
+  loaderType?: $Keys<typeof TYPE>
 } & LoaderProps;
 
 type WrappedProps = {
@@ -19,24 +26,51 @@ type WrappedProps = {
   loading?: boolean
 };
 
+// Return the right loader to display for error and loading according
+const getLoaderToDisplay = (propsToPass: Props) => {
+  const { loaderType } = propsToPass;
+
+  switch (loaderType) {
+  case TYPE.SEMANTIC_ANALYSIS: {
+    return {
+      // eslint-disable-next-line no-unused-vars
+      ERROR: graphqlError => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.ERROR} />,
+      LOADING: () => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.LOADING} />
+    };
+  }
+  default: {
+    return {
+      ERROR: (graphqlError) => {
+        throw new Error(`GraphQL error: ${graphqlError.message}`);
+      },
+      LOADING: () => <Loader {...propsToPass} />
+    };
+  }
+  }
+};
+
 const manageErrorAndLoading = (props: Props) => (WrappedComponent: React.ComponentType<any>) => (wrappedProps: WrappedProps) => {
   const { data, error, loading } = wrappedProps;
+
+  const loaderToShow = getLoaderToDisplay(props);
+
+  // ERROR
   if (error || (data && data.error)) {
     const graphqlError = error || data.error;
     if (graphqlError) {
-      throw new Error(graphqlError.message);
+      loaderToShow.ERROR(graphqlError);
     }
   }
-
+  // LOADING
   if (loading || (data && data.loading)) {
-    if (props.displayLoader) {
-      return <Loader {...props} />;
-    }
-
-    return null;
+    return props.displayLoader ? loaderToShow.LOADING() : null;
   }
-
+  // WRAPPED COMPONENT
   return <WrappedComponent {...wrappedProps} />;
+};
+
+manageErrorAndLoading.defaultProps = {
+  loaderType: 'default'
 };
 
 export default manageErrorAndLoading;

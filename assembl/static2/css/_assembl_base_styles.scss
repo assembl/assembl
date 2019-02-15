@@ -75,7 +75,9 @@
 @import 'views/errorPage';
 @import 'bootstrap-overrides';
 @import 'brightMirror';
+@import 'semanticAnalysis';
 @import 'common';
+@import 'components/icons';
 
 // include style v1 of emoticons
 @import '../../static/css/base/variables.scss';

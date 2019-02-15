@@ -1,23 +1,26 @@
-.announcement {
-  text-align: center;
-  margin-left: 4.5%;
-  margin-right: 4.5%;
-  padding-bottom: $margin-section-xxs;
+.max-container {
+  .content-section {
+    .section-margin-top {
+      padding: 5px 0 25px 0;
+    }
+  }
+}
 
+.announcement {
   .announcement-title {
     .announcement-title-text {
       margin-top: 11px;
+      margin-bottom: 20px;
     }
+  }
 
-    text-align: left;
+  .announcement-statistics-container {
+    display: flex;
+    justify-content: center;
   }
 
   .announcement-statistics {
     display: inline-block;
-    text-align: center;
-    margin-top: $margin-section-xxxxs;
-    margin-bottom: 3em;
-    position: relative;
 
     .announcement-doughnut {
       width: 190px;
@@ -43,11 +46,8 @@
     }
 
     .announcement-numbers {
-      font-size: 12px;
-      margin-bottom: 15%;
       color: $first-color;
-      line-height: 26px;
-      margin-top: 10px;
+      text-align: center;
 
       span::before {
         font-size: 17px;
@@ -56,8 +56,6 @@
   }
 
   .media-section {
-    padding-top: 11px;
-
     .container-fluid {
       margin-left: 0;
       margin-right: 0;
@@ -67,16 +65,68 @@
       .col-sm-12 {
         padding-left: 0;
         padding-right: 0;
+      }
+    }
+  }
+}
 
-        .media-right {
-          padding-left: 0;
-        }
+.announcement-menu {
+  h1 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
-        .media-description-top {
-          margin-bottom: $margin-section-xxxxs;
+  .md-only {
+    display: none;
+  }
+
+  .nav-tabs.nav-justified {
+    display: table;
+    width: 100%;
+    position: sticky;
+    top: 60px;
+    background-color: $white;
+    z-index: 1000;
+    padding-left: 0;
+    padding-right: 0;
+    padding-bottom: 10px;
+    table-layout: fixed;
+
+    & > li {
+      display: table-cell;
+      width: 100%;
+
+      & > a {
+        border-radius: 0;
+        padding-top: 10px;
+        padding-left: 0;
+        padding-right: 0;
+      }
+    }
+  }
+
+  .tab-content {
+    margin-top: 30px;
+    overflow: hidden;
+  }
+}
+
+.announcement-menu {
+  &.single-tab {
+    .nav-tabs.nav-justified {
+      & > li {
+        & > a {
+          text-align: left;
         }
       }
     }
+  }
+}
+
+@media screen and (min-width: $screen-xxs-max) {
+  .announcement-menu {
+    margin-left: 55px;
+    margin-right: 55px;
   }
 }
 
@@ -91,7 +141,7 @@
 
       .announcement-title-text {
         margin-top: 23px;
-        font-size: $font-size-l;
+        font-size: $font-size-ml;
         font-family: $font-family4;
         letter-spacing: 1px;
         line-height: 36px;
@@ -105,27 +155,53 @@
       }
     }
 
-    .announcement-statistics {
-      margin-top: 0;
-    }
-
     .announcement-media {
       padding-left: 0;
       padding-right: 0;
 
       .media-section {
-        padding-top: 0;
-        padding-bottom: 25px;
-
         .media-description-layer {
           margin-left: 17px;
           margin-right: 17px;
         }
+      }
+    }
+  }
 
-        .media-right {
-          .media-description-top {
-            margin-bottom: 23px;
-          }
+  .announcement-menu {
+    h1 {
+      margin-top: 20px;
+      margin-bottom: 10px;
+    }
+
+    .tab-content {
+      margin-top: 0;
+    }
+
+    .nav-tabs.nav-justified {
+      & > li {
+        & > a {
+          padding-top: 0;
+        }
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-lg-min) {
+  .announcement-menu {
+    .md-only {
+      display: inline;
+
+      &::before {
+        content: ' ';
+      }
+    }
+
+    .nav-tabs.nav-justified {
+      & > li {
+        & > a {
+          padding-top: 5px;
         }
       }
     }

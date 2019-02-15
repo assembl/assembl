@@ -3,9 +3,10 @@ import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
-
+// Component imports
 import InstructionsText from '../../../../../js/app/components/debate/brightMirror/instructionsText';
 import { customInstructionsText } from '../../../../../js/app/stories/components/debate/brightMirror/instructionsText.stories';
+import ThematicTabs from '../../../../../js/app/components/debate/common/thematicTabs';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -22,11 +23,7 @@ describe('<InstructionsText /> - with shallow', () => {
     wrapper = shallow(<InstructionsText {...customInstructionsText} />);
   });
 
-  it('should render title', () => {
-    expect(wrapper.find('h3 [className="announcement-title-text dark-title-1"]')).toHaveLength(1);
-  });
-
-  it('should render body', () => {
-    expect(wrapper.find('Col [className="announcement-media col-md-push-2"]')).toHaveLength(1);
+  it('should render a ThematicTabs', () => {
+    expect(wrapper.find(ThematicTabs)).toHaveLength(1);
   });
 });
