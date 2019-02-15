@@ -48,9 +48,14 @@ const PostColumn = ({
   messageViewOverride
 }: Props) => (
   <div className="column-view" style={{ width: width }}>
-    {withColumnHeader && (
-      <ColumnHeader color={color} classifier={classifier} title={title} ideaId={ideaId} refetchIdea={refetchIdea} />
-    )}
+    <ColumnHeader
+      color={color}
+      classifier={classifier}
+      title={title}
+      ideaId={ideaId}
+      refetchIdea={refetchIdea}
+      withColumnHeader={withColumnHeader}
+    />
     {synthesisProps && <ColumnSynthesis {...synthesisProps} />}
     <div className="column-tree">
       {data.length > 0 ? (

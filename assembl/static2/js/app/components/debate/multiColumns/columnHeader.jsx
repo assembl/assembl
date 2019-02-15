@@ -10,13 +10,15 @@ const ColumnHeader = ({
   classifier,
   title,
   ideaId,
-  refetchIdea
+  refetchIdea,
+  withColumnHeader
 }: {
   color: string,
   classifier: string,
   title: string,
   ideaId: string,
-  refetchIdea: Function
+  refetchIdea: Function,
+  withColumnHeader: boolean
 }) => (
   <div className="column-header">
     <div
@@ -33,7 +35,9 @@ const ColumnHeader = ({
         </div>
         <div className="clear" />
       </div>
-      <TopPostForm ideaId={ideaId} refetchIdea={refetchIdea} ideaOnColumn messageClassifier={classifier} scrollOffset={240} />
+      {withColumnHeader ? (
+        <TopPostForm ideaId={ideaId} refetchIdea={refetchIdea} ideaOnColumn messageClassifier={classifier} scrollOffset={240} />
+      ) : null}
       <div className="clear" />
     </div>
   </div>

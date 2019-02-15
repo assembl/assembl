@@ -81,9 +81,8 @@ $column-synthesis-height: 320px;
     padding: 0;
     text-align: left;
     padding-top: $header-margin;
-    padding-bottom: 25px;
+    padding-bottom: $header-margin;
     padding-left: 15px;
-    height: 120px;
 
     .start-discussion {
       max-width: 80%;
@@ -153,6 +152,7 @@ $column-synthesis-height: 320px;
       max-width: $post-max-width;
       margin-left: auto;
       margin-right: auto;
+      margin-top: 40px;
     }
   }
 
