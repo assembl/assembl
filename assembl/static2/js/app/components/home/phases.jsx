@@ -3,7 +3,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Translate } from 'react-redux-i18n';
 import { Grid, Row, Col } from 'react-bootstrap';
-import { isCurrentPhase } from '../../utils/timeline';
 import Phase from './phases/phase';
 import Timeline from './phases/timeline';
 
@@ -24,13 +23,7 @@ const Phases = ({ timeline }: Props) => (
         <div className="content-section">
           <Row className="no-margin">
             {timeline.map((phase, index) => (
-              <Col
-                xs={12}
-                sm={6}
-                md={12 / timeline.length}
-                className={isCurrentPhase(timeline[index]) ? 'no-padding phase' : 'no-padding phase'}
-                key={index}
-              >
+              <Col xs={12} sm={6} md={12 / timeline.length} className={'no-padding phase'} key={index}>
                 <Phase
                   imgUrl={phase.image ? phase.image.externalUrl : null}
                   startDate={phase.start}
