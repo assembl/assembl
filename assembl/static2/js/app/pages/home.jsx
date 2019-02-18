@@ -14,7 +14,17 @@ import Partners from '../components/home/partners';
 import ScrollOnePageButton from '../components/common/scrollOnePageButton';
 import MessagePage from '../components/common/messagePage';
 
-class Home extends React.Component {
+type Props = {
+  timeline: Timeline,
+  debate: DebateData,
+  i18n: Object
+};
+
+type State = {
+  scrollOnePageButtonHidden: boolean
+};
+
+class Home extends React.Component<Props, State> {
   state = {
     scrollOnePageButtonHidden: false
   };
