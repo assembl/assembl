@@ -53,7 +53,7 @@ class RequestNewPasswordForm extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="login-view">
+      <div className="login-view margin-l">
         <div className="box-title">
           <Translate value="login.forgotPwd" />
         </div>

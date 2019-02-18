@@ -6,6 +6,8 @@ import { Translate, I18n } from 'react-redux-i18n';
 import { form, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Link } from 'react-router';
 import * as lodashGet from 'lodash/get';
+// Route helper import
+import { browserHistory } from '../../../app/router';
 
 import { signupAction } from '../../actions/authenticationActions';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
@@ -20,6 +22,7 @@ import TextFieldsQuery from '../../graphql/TextFields.graphql';
 import LegalContentsQuery from '../../graphql/LegalContents.graphql';
 import LegalForm from './legalForm';
 import SignupCheckbox from './signupCheckbox';
+import BackButton from '../../../app/components/debate/common/backButton';
 
 type Props = {
   hasTermsAndConditions: boolean,
@@ -127,6 +130,10 @@ class SignupForm extends React.Component<Props, State> {
     displayCustomModal(modalContent, true, 'modal-large');
   };
 
+  backBtnCallback = () => {
+    browserHistory.goBack();
+  };
+
   render() {
     const slug = getDiscussionSlug();
     const {
@@ -148,7 +155,8 @@ class SignupForm extends React.Component<Props, State> {
 
     return (
       <div className="login-view">
-        <div className="box-title">{I18n.t('login.createAccount')}</div>
+        <BackButton handleClick={this.backBtnCallback} linkClassName="back-btn" />
+        <div className="box-title margin-l">{I18n.t('login.createAccount')}</div>
         <div className="box">
           <form className="signup" onSubmit={this.signupHandler}>
             {textFields &&
