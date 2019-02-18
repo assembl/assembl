@@ -204,14 +204,16 @@ type RouterPath = {
   search: string
 };
 
-type StrictFile =
-  | {
-      externalUrl: ?File,
-      mimeType: ?string,
-      title: ?string
-    }
-  | {
-      externalUrl: ?string,
-      mimeType: ?string,
-      title: ?string
-    };
+type FileDocument = {|
+  externalUrl: ?string,
+  mimeType: ?string,
+  title: ?string
+|};
+
+type FileDocumentFile = {|
+  externalUrl: ?File,
+  mimeType: ?string,
+  title: ?string
+|};
+
+type StrictFile = FileDocumentFile | FileDocument;

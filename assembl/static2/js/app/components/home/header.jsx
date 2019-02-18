@@ -18,8 +18,8 @@ type Props = {
   timeline: Timeline,
   title: string,
   subtitle: string,
-  headerImage: Object,
-  logoImage: Object,
+  headerImage: FileDocument,
+  logoImage: FileDocument,
   buttonLabel?: ?string,
   startDate: string,
   endDate: string
