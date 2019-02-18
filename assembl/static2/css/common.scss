@@ -351,6 +351,14 @@ textarea.placeholder {
   }
 }
 
+.login {
+  .form-group {
+    .form-control {
+      border-radius: 0;
+    }
+  }
+}
+
 .capitalized {
   text-transform: capitalize;
 }
@@ -386,6 +394,12 @@ strong {
 
 .content-section {
   padding: 25px 0;
+}
+
+@media screen and (max-width: $screen-xxs-max) {
+  .content-section {
+    padding: 50px 0;
+  }
 }
 
 @media screen and (min-width: $screen-sm-min) {

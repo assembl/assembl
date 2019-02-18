@@ -136,8 +136,9 @@ const Translations = {
       Extracts: "Attrapages",
       Messages: "Messages",
       Participants: "Participants",
-      like: "J'aime",
-      disagree: "Pas convaincu",
+      like: "D'accord",
+      agree: "D'accord",
+      disagree: "Pas d'accord",
       dont_understand: "Pas tout compris",
       more_info: "SVP + d'infos",
       Nature: "Nature",
@@ -215,13 +216,13 @@ const Translations = {
     login: {
       loginModalBody: "Vous devez être connecté pour participer.",
       loginModalFooter: "Connectez-vous",
-      alreadyAccount: "Vous avez déjà un compte ?",
+      alreadyAccount: "Vous avez déjà un compte&nbsp;?",
       loginWithSocialMedia: "Vous utilisez un réseau social ?",
       password: "Mot de passe",
       email: "Email",
       login: "Se connecter",
       forgotPwd: "Réinitialiser votre mot de passe",
-      noAccount: "Vous n’avez pas encore de compte ?",
+      noAccount: "Vous n’avez pas encore de compte&nbsp;?",
       signUp: "Créer un compte",
       username: "Email ou nom d'utilisateur",
       fullName: "Nom complet",
@@ -400,7 +401,7 @@ const Translations = {
         postSuccess: "Merci pour votre participation. Votre proposition a bien été envoyée !",
         postToBeValidated:
           "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
-        endPhase: "La phase %{closedPhaseName} est terminée."
+        endPhase: "La phase \"%{closedPhaseName}\" est terminée."
       },
       question: {
         backToQuestions: "Retour aux questions"
@@ -527,7 +528,7 @@ const Translations = {
         suggest: "Suggérer"
       },
       themes: "Thèmes",
-      notStarted: "La phase %{phaseName} n'a pas encore commencé. Merci de revenir à partir du ",
+      notStarted: "La phase \"%{phaseName}\" n'a pas encore commencé. Merci de revenir à partir du ",
       isCompleted: "Cette phase est terminée. Vous ne pouvez plus voter.",
       noAnswer: "Cette phase est terminée. Vous ne pouvez plus répondre.",
       edit: {
@@ -1144,7 +1145,8 @@ const Translations = {
       Extracts: "Extracts",
       Messages: "Messages",
       Participants: "Participants",
-      like: "Like",
+      like: "Agree",
+      agree: "Agree",
       disagree: "Disagree",
       dont_understand: "Did not get it",
       more_info: "More info please?",
@@ -1407,7 +1409,7 @@ const Translations = {
         postSuccess: "Thanks for your participation. Your proposal has been sent!",
         postToBeValidated:
           "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.",
-        endPhase: "The %{closedPhaseName} phase is closed."
+        endPhase: "The \"%{closedPhaseName}\" phase is closed."
       },
       question: {
         backToQuestions: "Back to questions"
@@ -1534,7 +1536,7 @@ const Translations = {
         suggest: "Suggest"
       },
       themes: "Themes",
-      notStarted: "The %{phaseName} phase has not started. Please come back from ",
+      notStarted: "The \"%{phaseName}\" phase has not started. Please come back from ",
       isCompleted: "This phase is closed. You can no longer vote.",
       noAnswer: "This phase is closed. You can no longer answer.",
       edit: {

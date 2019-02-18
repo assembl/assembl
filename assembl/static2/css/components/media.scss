@@ -2,7 +2,7 @@
   .media-title-section {
     margin-left: 6.5%;
     margin-right: 6.5%;
-    padding-bottom: $margin-section-xxxxs;
+    padding-bottom: 50px;
 
     .dark-title-1 {
       padding-top: 9px;
@@ -20,8 +20,8 @@
     .media-description-layer {
       text-align: justify;
       font-family: $font-family4;
-      font-size: $font-size-m;
-      line-height: 32px;
+      font-size: $font-size-s;
+      line-height: 24px;
       letter-spacing: 1px;
     }
 
@@ -100,6 +100,10 @@
 
       .media-description {
         display: none;
+      }
+
+      .media-description-top {
+        margin-bottom: $margin-section-tiny;
       }
 
       .media-right {

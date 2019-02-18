@@ -118,7 +118,7 @@ export class Question extends React.Component<Props, State> {
       <section
         className={isPhaseCompleted ? 'hidden' : 'questions-section'}
         id={`q${index}`}
-        style={screenWidth >= SMALL_SCREEN_WIDTH ? { height: height } : { height: '100%' }}
+        style={screenWidth >= SMALL_SCREEN_WIDTH ? { height: height - 200 } : { height: 'auto' }}
       >
         <Grid fluid className="background-grey">
           <div className="max-container">

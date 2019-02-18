@@ -1,5 +1,5 @@
 .title-section {
-  margin: $margin-section 0 0;
+  margin: $margin-section-xxxs 0 0;
   text-align: left;
 
   .dark-title-1 {
@@ -290,6 +290,7 @@
       display: block;
       margin: -10px 0 15px 32px;
       width: calc(100% - 30px);
+      font-size: $font-size-l;
 
       &.no-margin-left-xs {
         margin-left: 0;

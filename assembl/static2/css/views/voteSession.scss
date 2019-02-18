@@ -115,6 +115,12 @@
       line-height: 24px;
     }
 
+    .proposal-vote-modules {
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+    }
+
     .tokens-line {
       margin-bottom: 0;
 

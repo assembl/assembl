@@ -240,8 +240,6 @@
         padding: 20px 0;
 
         .stat-container {
-          padding: 0 px !important;
-
           .stat-box {
             flex-direction: column;
             justify-content: center;
@@ -281,6 +279,8 @@
         padding: 20px 0;
 
         .stat-container {
+          margin-top: 5px;
+
           .stat-box {
             display: block !important;
             text-align: center;

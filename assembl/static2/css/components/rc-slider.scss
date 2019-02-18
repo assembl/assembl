@@ -67,8 +67,8 @@
 .rc-slider-mark {
   position: absolute;
   top: 18px;
-  left: 0;
-  width: 100%;
+  left: 25px;
+  width: 90%;
   font-size: 12px;
 }
 
@@ -79,6 +79,8 @@
   text-align: center;
   cursor: pointer;
   color: #999;
+  overflow: hidden;
+  word-wrap: break-word;
 }
 
 .rc-slider-mark-text-active {
@@ -180,8 +182,8 @@
 
 .rc-slider-tooltip-zoom-down-enter,
 .rc-slider-tooltip-zoom-down-appear {
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
   display: block !important;
@@ -190,8 +192,8 @@
 }
 
 .rc-slider-tooltip-zoom-down-leave {
-  -webkit-animation-duration: .3s;
-  animation-duration: .3s;
+  -webkit-animation-duration: 0.3s;
+  animation-duration: 0.3s;
   -webkit-animation-fill-mode: both;
   animation-fill-mode: both;
   display: block !important;
@@ -345,4 +347,20 @@
   margin-left: -4px;
   border-width: 4px 4px 0;
   border-top-color: #6c6c6c;
+}
+
+@media screen and (max-width: $screen-md-min) {
+  .rc-slider-mark {
+    font-size: 10px;
+    left: 0;
+    width: 90%;
+  }
+}
+
+@media screen and (max-width: $screen-sm-min) {
+  .rc-slider-mark {
+    font-size: 10px;
+    left: 22px;
+    width: 85%;
+  }
 }

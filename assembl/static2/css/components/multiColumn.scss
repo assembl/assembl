@@ -109,6 +109,11 @@ $column-synthesis-height: 320px;
   .button-container {
     padding: 0 1px;
 
+    button {
+      display: block;
+      text-overflow: ellipsis;
+    }
+
     &:first-child {
       padding-left: 0;
     }
@@ -232,6 +237,8 @@ $column-synthesis-height: 320px;
       line-height: 19px;
       font-size: 12px;
       text-transform: uppercase;
+      padding-left: 3px;
+      padding-right: 3px;
     }
   }
 }

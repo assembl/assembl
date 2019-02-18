@@ -3,6 +3,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 
+import BackIcon from '../../common/icons/backIcon/backIcon';
+
 export type Props = {
   handleClick: Function,
   linkClassName: ?string
@@ -10,10 +12,10 @@ export type Props = {
 
 const BackButton = ({ handleClick, linkClassName }: Props) => (
   <Link className={linkClassName} onClick={handleClick}>
-    <span className="assembl-icon-left icon-button hidden-sm hidden-md hidden-lg" />
+    <BackIcon className="blackIcon hidden-sm hidden-md hidden-lg" />
     <div className="share-button action-button hidden-xs">
       <div className="share-icon-container">
-        <span className="assembl-icon-left white" />
+        <BackIcon className="whiteIcon" />
       </div>
       <div className="action-button-label">
         <Translate value="debate.back" />

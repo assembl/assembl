@@ -16,7 +16,7 @@ const ResponsiveOverlayTrigger = ({ children, placement, tooltip }: Props) => {
       {isTouchScreenDevice ? (
         children
       ) : (
-        <OverlayTrigger placement={placement} overlay={tooltip}>
+        <OverlayTrigger placement={placement} overlay={tooltip} delayShow={300}>
           <div>{children}</div>
         </OverlayTrigger>
       )}

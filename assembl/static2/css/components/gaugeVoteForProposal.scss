@@ -90,3 +90,17 @@
     }
   }
 }
+
+@media screen and (max-width: $screen-md-min) {
+  .proposal-vote-modules {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .gauge-vote-for-proposal {
+    .gauge-container {
+      flex-direction: column;
+      padding: 0;
+    }
+  }
+}

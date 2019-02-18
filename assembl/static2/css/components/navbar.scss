@@ -46,7 +46,8 @@
     align-items: center;
     padding: 0;
 
-    .assembl-icon-expert, .assembl-icon-profil {
+    .assembl-icon-expert,
+    .assembl-icon-profil {
       &:before {
         font-size: 20px;
       }
@@ -73,7 +74,7 @@
     color: $navbar-text-color;
     font-family: $font-family2;
     font-size: $font-size-xs;
-    letter-spacing: .8px;
+    letter-spacing: 0.8px;
     line-height: 0;
     padding: 0 20px;
     text-transform: uppercase;
@@ -297,6 +298,22 @@
       height: $navbar-height;
       line-height: $navbar-height;
       vertical-align: middle;
+    }
+  }
+
+  @media (max-width: $screen-md-min) {
+    .burger-navbar {
+      .burgermenu-icon {
+        flex-grow: 0.25;
+      }
+    }
+
+    .navbar-logo {
+      flex-grow: 1.25;
+
+      img {
+        max-width: 90px;
+      }
     }
   }
 

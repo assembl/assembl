@@ -2,6 +2,8 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
 
+import EditPostIcon from '../../common/icons/editPostIcon/editPostIcon';
+
 export type Props = {
   handleClick: Function,
   linkClassName: ?string
@@ -9,7 +11,7 @@ export type Props = {
 
 const EditPostButton = ({ handleClick, linkClassName }: Props) => (
   <Button bsClass={linkClassName} onClick={handleClick}>
-    <span className="assembl-icon-edit" />
+    <EditPostIcon />
   </Button>
 );
 

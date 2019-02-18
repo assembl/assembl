@@ -24,7 +24,7 @@ import {
 } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
-import { EXTRA_SMALL_SCREEN_WIDTH, DeletedPublicationStates, PublicationStates } from '../../../constants';
+import { SMALL_SCREEN_WIDTH, DeletedPublicationStates, PublicationStates } from '../../../constants';
 import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
@@ -327,7 +327,7 @@ class Post extends React.Component<Props> {
           </div>
         </div>
         <div className={classnames('statistic', { pending: isPending })}>
-          {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
+          {screenWidth < SMALL_SCREEN_WIDTH && (
             <div className="sentiments">
               <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
                 {likeComponent}
@@ -357,7 +357,7 @@ class Post extends React.Component<Props> {
               </div>
             </div>
           </div>
-          {screenWidth < EXTRA_SMALL_SCREEN_WIDTH && (
+          {screenWidth < SMALL_SCREEN_WIDTH && (
             <div className="actions">
               {userCanDeleteThisMessage ? (
                 <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip}>
@@ -367,7 +367,7 @@ class Post extends React.Component<Props> {
             </div>
           )}
         </div>
-        <div className="clear">&nbsp;</div>
+        <div className="clear" />
       </div>
     );
   }

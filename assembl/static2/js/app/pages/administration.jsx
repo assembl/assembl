@@ -218,8 +218,8 @@ class Administration extends React.Component<Props, State> {
         </div>
         <div className="max-container">
           <Grid fluid>
-            <Row>
-              <Col xs={12} md={3}>
+            <Row className="margin-container">
+              <Col xs={12} sm={3} className="admin-menu-sticky">
                 <div className="admin-menu-container">
                   <Menu
                     timeline={timeline}
@@ -230,7 +230,7 @@ class Administration extends React.Component<Props, State> {
                   />
                 </div>
               </Col>
-              <Col xs={12} md={8}>
+              <Col xs={12} sm={8}>
                 {!timeline ? (
                   <div>
                     <Translate value="administration.noTimeline" />
@@ -238,7 +238,7 @@ class Administration extends React.Component<Props, State> {
                 ) : null}
                 {childrenWithProps}
               </Col>
-              <Col xs={12} md={1}>
+              <Col xs={12} sm={1}>
                 <LanguageMenu />
               </Col>
             </Row>

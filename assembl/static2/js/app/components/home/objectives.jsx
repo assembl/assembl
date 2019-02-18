@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Grid, Row, Col } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
@@ -31,6 +32,9 @@ const Objectives = ({ debate, timeline, lang, buttonLabel }: Props) => {
   if (locale === 'zh-CN') {
     locale = 'zh_CN';
   }
+
+  const haveImages = objectives.images.img1Url && objectives.images.img2Url;
+
   return (
     <section className="home-section objectives-section">
       <Grid fluid>
@@ -41,9 +45,9 @@ const Objectives = ({ debate, timeline, lang, buttonLabel }: Props) => {
           </div>
           <div className="content-section">
             <div className="content-margin">
-              <Row>
-                <Col xs={12} sm={12} md={objectives.images.img1Url && objectives.images.img2Url ? 6 : 9} className="objectives">
-                  <div className={objectives.images.img1Url && objectives.images.img2Url ? 'text-column-2' : 'text-column-3'}>
+              <Row className={classNames({ 'center-content': !haveImages })}>
+                <Col xs={12} sm={12} md={haveImages ? 6 : 9} className="objectives">
+                  <div className={haveImages ? 'text-column-2' : 'text-column-3'}>
                     <span>{objectives.descriptionEntries[locale]}</span>
                   </div>
                 </Col>

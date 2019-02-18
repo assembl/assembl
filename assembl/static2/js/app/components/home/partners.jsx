@@ -19,7 +19,7 @@ const Partners = ({ debate: { debateData } }: Props) => (
             <Translate value="home.partners" />
           </h1>
         </div>
-        <div className="content-section">
+        <div className="content-section padding-sm">
           <div className="content-margin">
             {debateData.partners.map((partner, index) => (
               <div className="partner-logo" key={index}>

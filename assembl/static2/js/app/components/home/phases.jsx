@@ -26,9 +26,9 @@ const Phases = ({ timeline }: Props) => (
             {timeline.map((phase, index) => (
               <Col
                 xs={12}
-                sm={24 / timeline.length}
+                sm={6}
                 md={12 / timeline.length}
-                className={isCurrentPhase(timeline[index]) ? 'no-padding phase' : 'no-padding phase hidden-xs'}
+                className={isCurrentPhase(timeline[index]) ? 'no-padding phase' : 'no-padding phase'}
                 key={index}
               >
                 <Phase

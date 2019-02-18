@@ -39,7 +39,7 @@ const MultilingualTextFieldAdapter = ({
   const valueInLocale = value ? value[editLocale] || '' : '';
   return (
     <FormGroup controlId={name} validationState={getValidationState(error, touched)}>
-      {valueInLocale ? <ControlLabel>{decoratedLabel}</ControlLabel> : null}
+      <ControlLabel>{decoratedLabel}</ControlLabel>
       <FormControl
         {...otherListeners}
         {...rest}

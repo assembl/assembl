@@ -229,7 +229,7 @@ class SignupForm extends React.Component<Props, State> {
                 </Button>
               </FormGroup>
               <FormGroup>
-                <Translate value="login.alreadyAccount" />
+                <Translate dangerousHTML value="login.alreadyAccount" />
                 <span>&nbsp;</span>
                 <Link to={slug ? getContextual('login', { slug: slug }) : get('login')}>
                   <Translate value="login.login" />

@@ -1,4 +1,3 @@
-
 .resources-center {
   .resource-block {
     margin-bottom: 80px;
@@ -38,11 +37,11 @@
     }
 
     .margin-case-right {
-      margin: 12px $margin-section-xxxxs $margin-section-tiny 0;
+      margin: 12px 50px $margin-section-tiny 0;
     }
 
     .margin-case-left {
-      margin: 12px 0 $margin-section-tiny $margin-section-xxxxs;
+      margin: 12px 0 $margin-section-tiny 50px;
     }
   }
 
