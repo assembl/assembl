@@ -29,7 +29,7 @@ class LoggingMiddleware(object):
         try:
             return next(source, gargs, context, info, *args, **kwargs)
         except Exception as e:
-            log.error(exc_info=True)
+            log.error("graphql_error", exc_info=True)
             raise e
 
 
