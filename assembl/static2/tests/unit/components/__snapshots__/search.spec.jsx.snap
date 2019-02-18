@@ -138,7 +138,7 @@ exports[`Hits components PostHit component should render a post hit 1`] = `
     <div>
       <div
         className="emoticon LikeSentimentOfPost"
-        title="Like"
+        title="Agree"
       />
       <div
         className="emoticonValue"
