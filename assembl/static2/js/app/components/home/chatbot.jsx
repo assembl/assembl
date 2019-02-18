@@ -4,9 +4,14 @@ import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-type ChatbotType = TitleEntries & {
+type TitleEntries = {
+  [string]: string
+};
+
+type ChatbotType = {
   link: string,
-  name: string
+  name: string,
+  titleEntries: TitleEntries
 };
 
 type Props = {
@@ -19,7 +24,6 @@ const Chatbot = ({ chatbot, locale }: Props) => (
     <Grid fluid>
       <div className="max-container center">
         <div className="margin-xl">
-          {/* $FlowFixMe Flow thinks locale has to be an array index */}
           <h1 className="dark-title-1 center">{chatbot.titleEntries[locale]}</h1>
         </div>
         <div className="center" style={{ margin: '60px 0' }}>
