@@ -8,7 +8,6 @@ mutation UpdateDiscussion(
   $logoImage: String
   $startDate: DateTime
   $endDate: DateTime
-
 ) {
   updateDiscussion(
     titleEntries: $titleEntries
@@ -20,6 +19,7 @@ mutation UpdateDiscussion(
     endDate: $endDate
   ) {
     discussion {
+      id
       titleEntries {
         ...langStringEntry
       }

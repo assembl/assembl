@@ -2,6 +2,7 @@
 
 query LandingPage($lang: String!) {
   discussion {
+    id
     titleEntries {
       ...langStringEntry
     }

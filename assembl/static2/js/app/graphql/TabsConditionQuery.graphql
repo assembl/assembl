@@ -7,6 +7,7 @@ query TabsCondition($lang: String!) {
   hasPrivacyPolicy(lang: $lang)
   hasUserGuidelines(lang: $lang)
   discussion {
+    id
     homepageUrl
   }
   legalContents {
