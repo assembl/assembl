@@ -15,11 +15,11 @@ import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 type Props = {
   debate: DebateData,
   timeline: Timeline,
-  i18n: Object,
+  lang: string,
   buttonLabel?: ?string
 };
 
-const Objectives = ({ debate, timeline, i18n, buttonLabel }: Props) => {
+const Objectives = ({ debate, timeline, lang, buttonLabel }: Props) => {
   const displayPhase = () => {
     const slug = { slug: getDiscussionSlug() };
     const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
@@ -27,7 +27,7 @@ const Objectives = ({ debate, timeline, i18n, buttonLabel }: Props) => {
   };
 
   const { debateData: { objectives } } = debate;
-  let { locale } = i18n;
+  let locale = lang;
   if (locale === 'zh-CN') {
     locale = 'zh_CN';
   }
@@ -79,7 +79,7 @@ Objectives.defaultProps = {
 
 const mapStateToProps = state => ({
   debate: state.debate,
-  i18n: state.i18n,
+  lang: state.i18n.locale,
   timeline: state.timeline
 });
 

@@ -17,7 +17,7 @@ import MessagePage from '../components/common/messagePage';
 type Props = {
   timeline: Timeline,
   debate: DebateData,
-  i18n: Object
+  locale: string
 };
 
 type State = {
@@ -47,8 +47,7 @@ class Home extends React.Component<Props, State> {
 
   render() {
     const { objectives, video, twitter, chatbot, partners } = this.props.debate.debateData;
-    const { locale } = this.props.i18n;
-    const { timeline } = this.props;
+    const { locale, timeline } = this.props;
     if (!timeline) {
       // timeline is still loading
       return null;
@@ -75,7 +74,7 @@ class Home extends React.Component<Props, State> {
 const mapStateToProps = state => ({
   debate: state.debate,
   timeline: state.timeline,
-  i18n: state.i18n
+  locale: state.i18n.locale
 });
 
 export default connect(mapStateToProps)(Home);
