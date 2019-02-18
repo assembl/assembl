@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
@@ -13,7 +14,17 @@ import Partners from '../components/home/partners';
 import ScrollOnePageButton from '../components/common/scrollOnePageButton';
 import MessagePage from '../components/common/messagePage';
 
-class Home extends React.Component {
+type Props = {
+  timeline: Timeline,
+  debate: DebateData,
+  locale: string
+};
+
+type State = {
+  scrollOnePageButtonHidden: boolean
+};
+
+class Home extends React.Component<Props, State> {
   state = {
     scrollOnePageButtonHidden: false
   };
@@ -36,8 +47,7 @@ class Home extends React.Component {
 
   render() {
     const { objectives, video, twitter, chatbot, partners } = this.props.debate.debateData;
-    const { locale } = this.props.i18n;
-    const { timeline } = this.props;
+    const { locale, timeline } = this.props;
     if (!timeline) {
       // timeline is still loading
       return null;
@@ -64,7 +74,7 @@ class Home extends React.Component {
 const mapStateToProps = state => ({
   debate: state.debate,
   timeline: state.timeline,
-  i18n: state.i18n
+  locale: state.i18n.locale
 });
 
 export default connect(mapStateToProps)(Home);

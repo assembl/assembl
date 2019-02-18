@@ -18,7 +18,7 @@ export const refWidthUpdate = (setWidth: (width: number) => void) => (ref: ?HTML
 type Props = {
   changeLanguage: Function,
   size: number,
-  i18n: Object,
+  locale: string,
   style: Object,
   className: string,
   setWidth: Function,
@@ -47,7 +47,7 @@ class LanguageMenu extends React.Component<Props> {
     availableLocales: Array<string>,
     preferencesMapByLocale: { [string]: { nativeName: string, name: string, locale: string } }
   } => {
-    const { data, i18n } = props;
+    const { data, locale } = props;
     const prefs = data.discussionPreferences.languages;
     const preferencesMapByLocale = {};
     prefs.forEach((p) => {
@@ -65,7 +65,7 @@ class LanguageMenu extends React.Component<Props> {
         preferencesMapByLocale[p.locale].nativeName = p.nativeName.split(' (')[0];
       }
     });
-    const availableLocales = getAvailableLocales(i18n.locale, preferencesMapByLocale);
+    const availableLocales = getAvailableLocales(locale, preferencesMapByLocale);
     return { availableLocales: availableLocales, preferencesMapByLocale: preferencesMapByLocale };
   };
 
@@ -75,14 +75,14 @@ class LanguageMenu extends React.Component<Props> {
   };
 
   render() {
-    const { size, i18n, style, className, setWidth = doNothing } = this.props;
+    const { size, locale, style, className, setWidth = doNothing } = this.props;
     const { availableLocales, preferencesMapByLocale } = this.getAvailableLanguages(this.props);
     if (availableLocales.length > 0) {
       return (
         <ul ref={refWidthUpdate(setWidth)} className={`dropdown-${size} uppercase ${className}`} style={style}>
-          <NavDropdown pullRight title={i18n.locale.split('-')[0]} id="nav-dropdown">
-            <MenuItem key={i18n.locale} className="active">
-              {this.getLocaleLabel(preferencesMapByLocale, i18n.locale)}
+          <NavDropdown pullRight title={locale.split('-')[0]} id="nav-dropdown">
+            <MenuItem key={locale} className="active">
+              {this.getLocaleLabel(preferencesMapByLocale, locale)}
             </MenuItem>
             {availableLocales.map(availableLocale => (
               <MenuItem
@@ -103,7 +103,7 @@ class LanguageMenu extends React.Component<Props> {
 }
 
 const mapStateToProps = state => ({
-  i18n: state.i18n
+  locale: state.i18n.locale
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -117,7 +117,7 @@ export default compose(
   graphql(DiscussionPreferences, {
     options: props => ({
       variables: {
-        inLocale: props.i18n.locale
+        inLocale: props.locale
       }
     })
   }),

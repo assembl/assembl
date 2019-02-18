@@ -9,7 +9,7 @@ type Props = {
   displayPhase: Function,
   timeline: Timeline,
   btnClass: string,
-  btnLabel?: string
+  btnLabel?: ?string
 };
 
 const ParticipateButton = ({ displayPhase, timeline, btnLabel, btnClass }: Props) => (
