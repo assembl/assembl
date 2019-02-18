@@ -492,6 +492,8 @@ def assembl_register_user(request):
                          ErrorTypes.INVALID_EMAIL)
     username = json.get('username', None)
     if username:
+        # If you change something here, please make sure to do similar changes
+        # for the UpdateProfileFields mutation in graphql/configurable_fields.py
         if session.query(Username).filter(
                 func.lower(Username.username) == username.lower()).count():
             if not discussion.preferences['generic_errors']:

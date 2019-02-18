@@ -4,6 +4,7 @@ from graphene.types.generic import GenericScalar
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from graphene_sqlalchemy.utils import get_query
 from pyramid.i18n import TranslationStringFactory
+from sqlalchemy import func
 
 import assembl.graphql.docstrings as docs
 from assembl import models
@@ -322,7 +323,17 @@ class UpdateProfileFields(graphene.Mutation):
                     elif configurable_field.identifier == ConfigurableFieldIdentifiersEnum.EMAIL.value:
                         agent_profile.preferred_email = field_info['value_data']['value']
                     elif configurable_field.identifier == ConfigurableFieldIdentifiersEnum.USERNAME.value:
-                        agent_profile.username_p = field_info['value_data']['value']
+                        username = field_info['value_data']['value']
+                        # same errors than in assembl/views/api2/auth.py
+                        if db.query(models.Username).filter(
+                            models.Username.user_id != agent_profile.id).filter(
+                                func.lower(models.Username.username) == username.lower()).count():
+                            error = _("We already have a user with this username.")
+                            raise Exception(context.localizer.translate(error))
+                        if len(username) > 20:
+                            error = _("The username must be less than 20 characters.")
+                            raise Exception(context.localizer.translate(error))
+                        agent_profile.username_p = username
                     elif configurable_field.identifier == ConfigurableFieldIdentifiersEnum.CUSTOM.value:
                         require_cls_permission(CrudPermissions.CREATE, cls, context)
                         profile_field = cls(

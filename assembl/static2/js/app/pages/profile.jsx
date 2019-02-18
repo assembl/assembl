@@ -123,7 +123,7 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
         displayAlert('success', I18n.t('profile.saveSuccess'));
       })
       .catch((error) => {
-        displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+        displayAlert('danger', error.message.replace('GraphQL error: ', ''), false, 10000);
       });
   };
 
