@@ -292,7 +292,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
         <React.Fragment>
           <div dangerouslySetInnerHTML={{ __html: body }} />
           <div>
-            <div title={I18n.t('search.agree')} className="emoticon LikeSentimentOfPost" />
+            <div title={I18n.t('search.like')} className="emoticon LikeSentimentOfPost" />
             <div className="emoticonValue">{source.sentiment_counts.like}</div>
             <div title={I18n.t('search.disagree')} className="emoticon DisagreeSentimentOfPost" />
             <div className="emoticonValue">{source.sentiment_counts.disagree}</div>
