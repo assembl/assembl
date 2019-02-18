@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
@@ -13,74 +14,98 @@ import { browserHistory } from '../../router';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 
-class Header extends React.Component {
-  constructor(props) {
-    super(props);
-    this.displayPhase = this.displayPhase.bind(this);
-  }
+type Props = {
+  timeline: Timeline,
+  title: string,
+  subtitle: string,
+  headerImage: Object,
+  logoImage: Object,
+  buttonLabel?: ?string,
+  startDate: string,
+  endDate: string
+};
 
-  displayPhase() {
+const Header = ({ timeline, title, subtitle, headerImage, logoImage, buttonLabel, startDate, endDate }: Props) => {
+  const displayPhase = () => {
     const slug = { slug: getDiscussionSlug() };
-    const { timeline } = this.props;
     const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
     browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
-  }
+  };
 
-  render() {
-    const { timeline, data: { discussion } } = this.props;
-    const { title, subtitle, headerImage, logoImage, buttonLabel, startDate, endDate } = discussion;
-    return (
-      <section className="home-section header-section">
-        <Grid fluid className="max-container">
-          <div className="header-content">
-            {logoImage && logoImage.externalUrl ? <img className="header-logo" src={logoImage.externalUrl} alt="logo" /> : null}
-            <div className="max-text-width">
-              {title ? <h1 className="light-title-1">{title}</h1> : null}
-              <h4 className="light-title-4 uppercase margin-m">
-                {subtitle ? <span dangerouslySetInnerHTML={{ __html: subtitle }} /> : null}
-                {startDate && endDate ? (
-                  <div>
-                    <Translate
-                      value="home.from_start_to_end"
-                      start={I18n.l(startDate, { dateFormat: 'date.format' })}
-                      end={I18n.l(endDate, { dateFormat: 'date.format' })}
-                    />
-                  </div>
-                ) : null}
-              </h4>
-              <div className="margin-l">
-                <ParticipateButton
-                  displayPhase={this.displayPhase}
-                  timeline={timeline}
-                  btnClass="light"
-                  btnLabel={buttonLabel || null}
-                />
-              </div>
+  return (
+    <section className="home-section header-section">
+      <Grid fluid className="max-container">
+        <div className="header-content">
+          {logoImage && logoImage.externalUrl ? <img className="header-logo" src={logoImage.externalUrl} alt="logo" /> : null}
+          <div className="max-text-width">
+            {title ? <h1 className="light-title-1">{title}</h1> : null}
+            <h4 className="light-title-4 uppercase margin-m">
+              {subtitle ? <span dangerouslySetInnerHTML={{ __html: subtitle }} /> : null}
+              {startDate && endDate ? (
+                <div>
+                  <Translate
+                    value="home.from_start_to_end"
+                    start={I18n.l(startDate, { dateFormat: 'date.format' })}
+                    end={I18n.l(endDate, { dateFormat: 'date.format' })}
+                  />
+                </div>
+              ) : null}
+            </h4>
+            <div className="margin-l">
+              <ParticipateButton displayPhase={displayPhase} timeline={timeline} btnClass="light" btnLabel={buttonLabel} />
             </div>
           </div>
-        </Grid>
-        <Grid fluid>
-          <Row>
-            <Statistic />
-            {headerImage && headerImage.externalUrl ? (
-              <div className="header-bkg" style={{ backgroundImage: `url(${headerImage.externalUrl})` }}>
-                &nbsp;
-              </div>
-            ) : (
-              <div className="header-bkg">&nbsp;</div>
-            )}
-          </Row>
-        </Grid>
-      </section>
-    );
-  }
-}
+        </div>
+      </Grid>
+      <Grid fluid>
+        <Row>
+          <Statistic />
+          {headerImage && headerImage.externalUrl ? (
+            <div className="header-bkg" style={{ backgroundImage: `url(${headerImage.externalUrl})` }}>
+              &nbsp;
+            </div>
+          ) : (
+            <div className="header-bkg">&nbsp;</div>
+          )}
+        </Row>
+      </Grid>
+    </section>
+  );
+};
+
+Header.defaultProps = {
+  buttonLabel: null
+};
 
 const mapStateToProps = state => ({
-  lang: state.i18n.locale,
   timeline: state.timeline
 });
 
-export default compose(connect(mapStateToProps), graphql(DiscussionQuery), manageErrorAndLoading({ displayLoader: false }))(
-  Header
-);
+export default compose(
+  connect(mapStateToProps),
+  graphql(DiscussionQuery, {
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
+      }
+
+      const { title, subtitle, headerImage, logoImage, buttonLabel, startDate, endDate } = data.discussion;
+
+      return {
+        error: data.error,
+        loading: data.loading,
+        buttonLabel: buttonLabel,
+        title: title,
+        subtitle: subtitle,
+        headerImage: headerImage,
+        logoImage: logoImage,
+        startDate: startDate,
+        endDate: endDate
+      };
+    }
+  }),
+  manageErrorAndLoading({ displayLoader: false })
+)(Header);
