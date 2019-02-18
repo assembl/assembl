@@ -22,7 +22,7 @@ const props: Props = {
     chatbot: {
       link: 'foo',
       name: 'barbara',
-      titleEntries: []
+      titleEntries: {}
     },
     chatframe: {
       src: 'foo'

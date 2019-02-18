@@ -4,16 +4,6 @@ import { Translate } from 'react-redux-i18n';
 import { Link } from 'react-router';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-type TitleEntries = {
-  [string]: string
-};
-
-type ChatbotType = {
-  link: string,
-  name: string,
-  titleEntries: TitleEntries
-};
-
 type Props = {
   locale: string,
   chatbot: ChatbotType

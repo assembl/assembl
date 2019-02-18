@@ -86,9 +86,10 @@ type RouterParams = {
   themeId: string
 };
 
-type Chatbot = TitleEntries & {
+type ChatbotType = {
   link: string,
-  name: string
+  name: string,
+  titleEntries: { [string]: string }
 };
 
 type Partner = {
@@ -113,7 +114,7 @@ type DebateVideo = {
 };
 
 type DebateData = Object & {
-  chatbot: Chatbot,
+  chatbot: ChatbotType,
   chatframe: any, // TODO
   dates: {
     endDate: string,
