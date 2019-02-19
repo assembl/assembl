@@ -115,21 +115,18 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-
-      .objectives {
-        width: 100%;
-
-        &.margin-right {
-          margin-right: 0;
-        }
-      }
+      overflow: hidden;
     }
 
     .objectives-img {
       background-size: cover;
+      background-position-x: 50%;
       height: 480px;
       margin: 20px 0 0;
-      background-position-x: 50%;
+
+      &.size-single-img {
+        width: 100%;
+      }
     }
   }
 
@@ -329,6 +326,14 @@
       text-overflow: ellipsis;
     }
   }
+
+  .container-objectives-img {
+    .objectives-img {
+      &.size-single-img {
+        width: 100%;
+      }
+    }
+  }
 }
 
 /* Landscape phones and portrait tablets */
@@ -379,6 +384,24 @@
 }
 
 @media screen and (max-width: $screen-sm-max) {
+  .home {
+    .objectives-section {
+      .objectives-img {
+        &.margin-right {
+          margin-right: 0;
+        }
+
+        &.size-single-img {
+          width: 50%;
+        }
+
+        &.size-two-img {
+          width: 100%;
+        }
+      }
+    }
+  }
+
   .themes-section {
     .theme {
       &:nth-child(1) {
@@ -499,6 +522,12 @@
       }
     }
 
+    .objectives-section {
+      .objectives-img.size-single-img {
+        width: 100%;
+      }
+    }
+
     .twitter-section {
       .tweet-section {
         padding: 10px 20px $margin-section-tiny 20px;
@@ -528,10 +557,15 @@
     .objectives-section {
       .container-objectives-img {
         flex-direction: row;
+        overflow: hidden;
 
-        .objectives {
+        .objectives-img {
           &.margin-right {
             margin-right: 20px;
+          }
+
+          &.size-two-img {
+            width: 100%;
           }
         }
       }

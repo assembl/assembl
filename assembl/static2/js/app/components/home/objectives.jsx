@@ -33,7 +33,8 @@ const Objectives = ({ debate, timeline, lang, buttonLabel }: Props) => {
     locale = 'zh_CN';
   }
 
-  const haveImages = objectives.images.img1Url && objectives.images.img2Url;
+  const haveOneImage = objectives.images.img1Url !== '' || objectives.images.img2Url !== '';
+  const haveTwoImages = objectives.images.img1Url !== '' && objectives.images.img2Url !== '';
 
   return (
     <section className="home-section objectives-section">
@@ -45,25 +46,27 @@ const Objectives = ({ debate, timeline, lang, buttonLabel }: Props) => {
           </div>
           <div className="content-section">
             <div className="content-margin">
-              <Row className={classNames({ 'center-content': !haveImages })}>
-                <Col xs={12} sm={12} md={haveImages ? 6 : 9} className="objectives">
-                  <div className={haveImages ? 'text-column-2' : 'text-column-3'}>
+              <Row className={classNames({ 'center-content': !haveOneImage })}>
+                <Col xs={12} sm={12} md={haveTwoImages ? 6 : 9} className="objectives">
+                  <div className={haveOneImage ? 'text-column-2' : 'text-column-3'}>
                     <span>{objectives.descriptionEntries[locale]}</span>
                   </div>
                 </Col>
-                {objectives.images && (
-                  <div className="container-objectives-img">
+                {haveOneImage && (
+                  <Col xs={12} sm={12} md={haveTwoImages ? 6 : 3} className="container-objectives-img objectives">
                     {objectives.images.img1Url && (
-                      <Col xs={12} sm={6} md={3} className="objectives">
-                        <div className="objectives-img" style={{ backgroundImage: `url(${objectives.images.img1Url})` }} />
-                      </Col>
+                      <div
+                        className={classNames('objectives-img', haveTwoImages ? 'margin-right size-two-img' : 'size-single-img')}
+                        style={{ backgroundImage: `url(${objectives.images.img1Url})` }}
+                      />
                     )}
                     {objectives.images.img2Url && (
-                      <Col xs={12} sm={6} md={3} className="objectives">
-                        <div className="objectives-img" style={{ backgroundImage: `url(${objectives.images.img2Url})` }} />
-                      </Col>
+                      <div
+                        className={classNames('objectives-img', 'size-two-img')}
+                        style={{ backgroundImage: `url(${objectives.images.img2Url})` }}
+                      />
                     )}
-                  </div>
+                  </Col>
                 )}
               </Row>
             </div>
