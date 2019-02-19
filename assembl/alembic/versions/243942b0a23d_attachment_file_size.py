@@ -1,14 +1,14 @@
 """attachment_file_size
 
 Revision ID: 243942b0a23d
-Revises: 4227dfe5456c
+Revises: 4f529b59026b
 Create Date: 2019-01-01 23:43:46.462949
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '243942b0a23d'
-down_revision = '4227dfe5456c'
+down_revision = '4f529b59026b'
 
 from alembic import context, op
 import sqlalchemy as sa
