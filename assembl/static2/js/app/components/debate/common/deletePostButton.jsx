@@ -46,8 +46,8 @@ const DeletePostButton = ({
   isPendingForModerator
 }: LocalProps) => {
   const displayConfirmationModal = () => {
-    const title = <Translate value="debate.confirmDeletionTitle" />;
-    const body = <Translate value={modalBodyMessage} />;
+    const title = !isPendingForModerator && <Translate value="debate.confirmDeletionTitle" />;
+    const body = <Translate value={modalBodyMessage || 'debate.confirmDeletionBody'} />;
     const footer = [
       <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="debate.confirmDeletionButtonCancel" />
@@ -66,7 +66,7 @@ const DeletePostButton = ({
         }}
         className="button-submit button-dark"
       >
-        <Translate value="debate.confirmDeletionButtonDelete" />
+        <Translate value={isPendingForModerator ? 'debate.confirmRefusalButton' : 'debate.confirmDeletionButtonDelete'} />
       </Button>
     ];
     const includeFooter = true;

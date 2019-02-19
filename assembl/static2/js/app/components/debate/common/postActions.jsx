@@ -88,6 +88,7 @@ export class PostActions extends React.Component<Props> {
     const shareIcon = <span className={classnames('assembl-icon-share color', { 'share-multiColumns': isMultiColumns })} />;
     const isPendingForModerator = isPending && connectedUserIsModerator();
     const isPendingForUser = isPending && !connectedUserIsModerator();
+    const deleteModalMessage = isPendingForModerator ? 'debate.confirmRefusalBody' : null;
     const userCanEditThisMessage =
       connectedUserId === String(creatorUserId) &&
       connectedUserCan(Permissions.EDIT_MY_POST) &&
@@ -170,7 +171,12 @@ export class PostActions extends React.Component<Props> {
             placement={tooltipPlacement}
             tooltip={isPendingForModerator ? deniedMessageTooltip : deleteMessageTooltip}
           >
-            <DeletePostButton postId={postId} linkClassName="post-action" isPendingForModerator={isPendingForModerator} />
+            <DeletePostButton
+              modalBodyMessage={deleteModalMessage}
+              postId={postId}
+              linkClassName="post-action"
+              isPendingForModerator={isPendingForModerator}
+            />
           </ResponsiveOverlayTrigger>
         ) : null}
         {editable && userCanEditThisMessage ? (
