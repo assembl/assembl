@@ -184,7 +184,7 @@ const PublishedInfo = ({ date, publishedOnMsgId, userId, userName, relatedIdeasT
       <TagFilter key={userId} field="creator_id" value={userId}>
         <ProfileLine userId={userId} userName={userName} />
       </TagFilter>
-      {hasRelatedIdeasTitles ? (
+      {hasRelatedIdeasTitles && ideaUrl ? (
         <Link to={ideaUrl} onClick={onLinkClick}>
           <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} />
         </Link>
@@ -277,7 +277,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
   const published = {};
   const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   const postUrl = getUrl(result);
-  const ideaUrl = postUrl.slice(0, postUrl.indexOf('#'));
+  const ideaUrl = postUrl ? postUrl.slice(0, postUrl.indexOf('#')) : '';
   // subject may be an empty string if the post comes from multiColumns idea and the body
   // locale wasn't detected, in this case fallback to ideaTitle
   return (
@@ -329,7 +329,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
   };
   const ideaTitle = highlightedLSOrTruncatedLS(result, 'idea_title', locale);
   const extractUrl = getUrl(result);
-  const ideaUrl = extractUrl.slice(0, extractUrl.indexOf('#'));
+  const ideaUrl = extractUrl ? extractUrl.slice(0, extractUrl.indexOf('#')) : '';
   return (
     <BaseHit
       bemBlocks={bemBlocks}
