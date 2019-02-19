@@ -1,14 +1,14 @@
 """Add semantic analysis to section type
 
 Revision ID: 4f529b59026b
-Revises: 4227dfe5456c
+Revises: 243942b0a23d
 Create Date: 2019-01-17 16:47:22.932933
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '4f529b59026b'
-down_revision = '4227dfe5456c'
+down_revision = '243942b0a23d'
 
 def upgrade(pyramid_env):
     # Do stuff with the app's models here.
