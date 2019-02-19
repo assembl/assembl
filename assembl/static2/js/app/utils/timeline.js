@@ -53,7 +53,8 @@ export const getCurrentPhase = (_timeline: Timeline) => {
   }
   // if all phases are closed, take the last closed phase
   const sortedTimeline = [...timeline].sort(dateComparator);
-  return sortedTimeline[sortedTimeline.length - 1];
+  const previousPhases = sortedTimeline.filter(phase => new Date(phase.start) < currentDate);
+  return previousPhases[previousPhases.length - 1];
 };
 
 export const getCurrentPhaseData = (_timeline: Timeline) => {
