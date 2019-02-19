@@ -10,8 +10,7 @@ import FormControlWithLabel from '../common/formControlWithLabel';
 
 type Props = {
   id: string,
-  updateUser: Function,
-  successCallback: Function
+  updateUser: Function
 };
 
 type State = {
@@ -61,7 +60,7 @@ class ModifyPasswordForm extends React.Component<Props, State> {
       updateUser({ variables: variables })
         .then(() => {
           displayAlert('success', I18n.t('profile.passwordModifiedSuccess'));
-          this.props.successCallback();
+          this.resetFields();
         })
         .catch((error) => {
           let message = error.message.replace('GraphQL error: ', '');
@@ -73,6 +72,14 @@ class ModifyPasswordForm extends React.Component<Props, State> {
           this.setState({ disabled: false });
         });
     this.setState({ disabled: true }, changePassword);
+  };
+
+  resetFields = () => {
+    this.setState({
+      oldPassword: '',
+      newPassword: '',
+      newPassword2: ''
+    });
   };
 
   render() {

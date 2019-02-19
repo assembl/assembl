@@ -130,10 +130,6 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
       });
   };
 
-  handlePasswordClick = () => {
-    this.setState({ passwordEditionOpen: true });
-  };
-
   handleFieldValueChange = (id, value) => {
     this.setState(prevState => ({
       ...prevState,
@@ -193,17 +189,7 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                         <Translate value="profile.password" />
                       </h2>
                       <div className="profile-form center">
-                        {this.state.passwordEditionOpen ? (
-                          <ModifyPasswordForm id={id} successCallback={() => this.setState({ passwordEditionOpen: false })} />
-                        ) : (
-                          <Button
-                            id="modify-password-button"
-                            className="button-submit button-dark"
-                            onClick={this.handlePasswordClick}
-                          >
-                            <Translate value="profile.changePassword" />
-                          </Button>
-                        )}
+                        <ModifyPasswordForm id={id} />
                       </div>
                     </div>
                   )}
