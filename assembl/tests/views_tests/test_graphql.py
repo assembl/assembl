@@ -1633,7 +1633,7 @@ mutation addPostAttachment($postId: ID!, $file: String!) {
     attachment_id = res.data['addPostAttachment']['post']['attachments'][-1]['id']
 
     res = schema.execute(u"""
-mutation deletePostAttachment($postId: ID!, $attachmentId: Int!) {
+mutation deletePostAttachment($postId: ID!, $attachmentId: ID!) {
     deletePostAttachment(
         postId: $postId,
         attachmentId: $attachmentId,

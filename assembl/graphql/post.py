@@ -717,7 +717,7 @@ class DeletePostAttachment(graphene.Mutation):
 
     class Input:
         post_id = graphene.ID(required=True, description=docs.DeletePostAttachment.post_id)
-        attachment_id = graphene.Int(required=True, description=docs.DeletePostAttachment.attachment_id)
+        attachment_id = graphene.ID(required=True, description=docs.DeletePostAttachment.attachment_id)
 
     post = graphene.Field(lambda: Post)
 
@@ -728,6 +728,7 @@ class DeletePostAttachment(graphene.Mutation):
         post_id = int(Node.from_global_id(post_id)[1])
         post = models.Post.get(post_id)
         post_attachment_id = args.get('attachment_id')
+        post_attachment_id = int(Node.from_global_id(post_attachment_id)[1])
         post_attachment = models.PostAttachment.get(post_attachment_id)
 
         require_instance_permission(CrudPermissions.DELETE, post_attachment, context)

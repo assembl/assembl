@@ -1,6 +1,7 @@
 import os.path
 
 import graphene
+from graphene.relay import Node
 
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
@@ -18,6 +19,7 @@ class Document(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
         model = models.Document
+        interfaces = (Node, )
         only_fields = ('id', 'title', 'mime_type')
 
     external_url = graphene.String(description=docs.Document.external_url)

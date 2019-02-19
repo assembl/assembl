@@ -50,7 +50,7 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Extract
         interfaces = (Node, ExtractInterface)
-        only_fields = ('id')
+        only_fields = ('id', )
 
     creation_date = DateTime(description=docs.ExtractInterface.creation_date)
     creator_id = graphene.Int(description=docs.ExtractInterface.creator_id)

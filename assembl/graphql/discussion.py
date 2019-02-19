@@ -1,6 +1,7 @@
 import os.path
 
 import graphene
+from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from urlparse import urljoin
 
@@ -39,6 +40,7 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
         model = models.Discussion
+        interfaces = (Node, )
         only_fields = ('id',)
 
     homepage_url = graphene.String(description=docs.Discussion.homepage_url)

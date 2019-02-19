@@ -1,5 +1,6 @@
 # -*- coding=utf-8 -*-
 import graphene
+from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
 from assembl import models
@@ -15,6 +16,7 @@ class Attachment(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
         model = models.Attachment
+        interfaces = (Node, )
         only_fields = ('id',)
 
     document = graphene.Field(
