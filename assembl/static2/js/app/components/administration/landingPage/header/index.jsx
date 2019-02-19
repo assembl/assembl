@@ -145,7 +145,8 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
                       component={FileUploaderFieldAdapter}
                       label={I18n.t('administration.landingPage.header.logoDescription')}
                     />
-                    <Helper helperText={I18n.t('administration.landingPage.header.logoHelper')} />
+                    {/* Passing an empty class to the popOver cancels the default styling */}
+                    <Helper helperText={I18n.t('administration.landingPage.header.logoHelper')} popOverClass=" " />
                   </div>
                   <div className="section-description">{I18n.t('administration.landingPage.header.dateDescription')}</div>
                   <Field
