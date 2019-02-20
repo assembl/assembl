@@ -35,6 +35,10 @@
     width: 45%;
     margin-left: 20px;
     display: flex;
+
+    .dark-title-3 {
+      font-family: $font-family;
+    }
   }
 
   .cookie-with-link {
@@ -71,5 +75,36 @@
 
   .cookies-categories {
     margin: 25px 0;
+  }
+}
+
+@media screen and (max-width: $screen-xxs-max) {
+  .cookies-selector {
+    .cookie-with-link {
+      flex-direction: column;
+      margin-top: 20px;
+
+      > span {
+        margin-left: 10px;
+      }
+    }
+
+    .cookie-title {
+      display: inline-block;
+      width: 100%;
+      margin-left: 10px;
+
+      .dark-title-3 {
+        &.ellipsis {
+          overflow: hidden;
+          text-overflow: initial;
+          white-space: normal;
+        }
+      }
+
+      .cookie-helper {
+        display: inline-block;
+      }
+    }
   }
 }

@@ -152,7 +152,7 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
               <Col xs={12} sm={3}>
                 <Avatar creationDate={creationDate} lang={lang} name={name} />
               </Col>
-              <Col xs={12} sm={9}>
+              <Col xs={12} sm={9} className="no-padding-sm">
                 <div className="border-left">
                   <h1 className="dark-title-1">
                     <Translate value="profile.panelTitle" />

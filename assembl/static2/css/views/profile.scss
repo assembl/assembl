@@ -74,6 +74,11 @@
     margin-top: 28px;
   }
 
+  .dark-title-3 {
+    font-family: $font-family3;
+    font-size: $font-size-sm;
+  }
+
   .help-block {
     color: $error;
     text-align: left;
@@ -102,6 +107,23 @@
   }
 }
 
+@media screen and (max-width: $screen-xxs-max) {
+  .profile {
+    .border-left {
+      padding-left: 0;
+    }
+
+    .profile-form {
+      padding: 0;
+    }
+
+    .no-padding-sm {
+      padding-left: 0;
+      padding-right: 0;
+    }
+  }
+}
+
 @media screen and (max-width: 600px) {
   .profile {
     .border-left {
@@ -111,7 +133,6 @@
     .profile-form {
       width: 100%;
       margin: 0;
-      padding: 0 20px 0 0;
     }
 
     .dark-title-1 {
