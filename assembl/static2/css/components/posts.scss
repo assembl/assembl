@@ -255,6 +255,8 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .profileLine {
+    width: 109%;
+
     img {
       vertical-align: text-bottom;
     }
@@ -326,7 +328,7 @@ $deleted-post-border: 1px solid $light-grey !default;
 
     .assembl-icon-check-box-declined {
       font-size: 18px;
-      padding-left: 3px;
+      padding-left: 2px;
     }
   }
 
