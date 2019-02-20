@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'assembl-glyph';
-  src: url('#{$fonts-dir}/assembl-glyph.eot?65424657');
-  src: url('#{$fonts-dir}/assembl-glyph.eot?65424657#iefix') format('embedded-opentype'),
-       url('#{$fonts-dir}/assembl-glyph.woff2?65424657') format('woff2'),
-       url('#{$fonts-dir}/assembl-glyph.woff?65424657') format('woff'),
-       url('#{$fonts-dir}/assembl-glyph.ttf?65424657') format('truetype'),
-       url('#{$fonts-dir}/assembl-glyph.svg?65424657#assembl-glyph') format('svg');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?67943024');
+  src: url('#{$fonts-dir}/assembl-glyph.eot?67943024#iefix') format('embedded-opentype'),
+       url('#{$fonts-dir}/assembl-glyph.woff2?67943024') format('woff2'),
+       url('#{$fonts-dir}/assembl-glyph.woff?67943024') format('woff'),
+       url('#{$fonts-dir}/assembl-glyph.ttf?67943024') format('truetype'),
+       url('#{$fonts-dir}/assembl-glyph.svg?67943024#assembl-glyph') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -15,7 +15,7 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {
   @font-face {
     font-family: 'assembl-glyph';
-    src: url('../font/assembl-glyph.svg?65424657#assembl-glyph') format('svg');
+    src: url('../font/assembl-glyph.svg?67943024#assembl-glyph') format('svg');
   }
 }
 */
@@ -107,6 +107,10 @@
 .assembl-icon-robot:before { content: '\e86d'; } /* '' */
 .assembl-icon-sentiment-neutral:before { content: '\e86f'; } /* '' */
 .assembl-icon-thumb:before { content: '\f00a'; } /* '' */
+.assembl-icon-angle-left:before { content: '\f104'; } /* '' */
+.assembl-icon-angle-right:before { content: '\f105'; } /* '' */
+.assembl-icon-angle-up:before { content: '\f106'; } /* '' */
+.assembl-icon-angle-down:before { content: '\f107'; } /* '' */
 .assembl-icon-ellipsis:before { content: '\f141'; } /* '' */
 .assembl-icon-ellipsis-vert:before { content: '\f142'; } /* '' */
 .assembl-icon-twitter:before { content: '\f309'; } /* '' */
