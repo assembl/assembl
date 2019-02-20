@@ -2,7 +2,7 @@
 // @flow
 import * as React from 'react';
 
-import YoutubeEmbed from '../components/common/urlPreview/youtubeTheater';
+import YoutubeEmbed from '../components/common/urlPreview/youtubeEmbed';
 import SketchFabEmbed from '../components/common/urlPreview/sketchFabTheater';
 
 let urlMetadataWebServiceUrl;
