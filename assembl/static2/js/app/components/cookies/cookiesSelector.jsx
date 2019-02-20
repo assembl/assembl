@@ -2,7 +2,7 @@
 import React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button } from 'react-bootstrap';
-import classnames from 'classnames';
+import classNames from 'classnames';
 import CookieSetter from './cookieSetter';
 import type { CookiesObject } from './cookiesSelectorContainer';
 import { moveElementToFirstPosition } from '../../utils/globalFunctions';
@@ -50,7 +50,12 @@ const CookiesSelector = ({
                     handleCategorySelection(category);
                   }}
                 >
-                  <span className={classnames('assembl-icon-right-dir', { 'active-arrow': isActiveKey })} />
+                  <span
+                    className={classNames({
+                      'assembl-icon-down-dir': isActiveKey || show,
+                      'assembl-icon-right-dir': !isActiveKey || !show
+                    })}
+                  />
                   <Translate value={`cookiesPolicy.${category}`} className="dark-title-3" />
                 </div>
                 <div className="cookies-toggles">

@@ -11,7 +11,7 @@ exports[`Menu component should match Menu snapshot 1`] = `
       className="menu-item-title"
     >
       <span
-        className="arrow assembl-icon-down-open"
+        className="assembl-icon-angle-right"
         onClick={[Function]}
       />
       <span>
@@ -44,7 +44,7 @@ exports[`Menu component should match opened Menu snapshot 1`] = `
       className="menu-item-title"
     >
       <span
-        className="arrow assembl-icon-up-open"
+        className="assembl-icon-angle-down"
         onClick={[Function]}
       />
       <span>

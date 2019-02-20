@@ -28,9 +28,9 @@ const MenuItem = ({ id, parents, title, toggle, className, openedItem, openedPat
       <div className="menu-item-title">
         {childrenElm ? (
           <span
-            className={classNames('arrow', {
-              'assembl-icon-up-open': active,
-              'assembl-icon-down-open': !active
+            className={classNames({
+              'assembl-icon-angle-down': active,
+              'assembl-icon-angle-right': !active
             })}
             onClick={toggle ? () => toggle(id) : null}
           />

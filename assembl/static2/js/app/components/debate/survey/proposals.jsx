@@ -49,7 +49,7 @@ class Proposals extends React.Component {
             <div className={postsToShow.length > 0 ? 'shown proposal-arrow' : 'hidden proposal-arrow'}>
               <span
                 className={
-                  this.state.hideProposals ? 'assembl-icon-down-open color pointer' : 'assembl-icon-up-open color pointer'
+                  this.state.hideProposals ? 'assembl-icon-angle-right color pointer' : 'assembl-icon-angle-down color pointer'
                 }
               />
             </div>

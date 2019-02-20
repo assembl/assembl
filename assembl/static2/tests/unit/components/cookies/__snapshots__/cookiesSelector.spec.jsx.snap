@@ -25,7 +25,7 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
         onClick={[Function]}
       >
         <span
-          className="assembl-icon-right-dir active-arrow"
+          className="assembl-icon-down-dir"
         />
         <span
           className="dark-title-3"
@@ -74,7 +74,7 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
         onClick={[Function]}
       >
         <span
-          className="assembl-icon-right-dir"
+          className="assembl-icon-down-dir assembl-icon-right-dir"
         />
         <span
           className="dark-title-3"

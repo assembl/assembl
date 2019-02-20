@@ -1,3 +1,17 @@
+.proposals {
+  .assembl-icon-angle-right {
+    &:before {
+      font-size: 30px;
+    }
+  }
+
+  .assembl-icon-angle-down {
+    &:before {
+      font-size: 30px;
+    }
+  }
+}
+
 .debate-link.active {
   > .navbar-menu-item {
     background-color: $first-color;
@@ -345,18 +359,6 @@
         padding: 3px 0 0 5px;
         text-align: left;
         width: 36px;
-
-        .assembl-icon-up-open {
-          &:before {
-            font-size: 12px;
-          }
-        }
-
-        .assembl-icon-down-open {
-          &:before {
-            font-size: 12px;
-          }
-        }
       }
     }
   }
