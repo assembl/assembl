@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import isEqualWith from 'lodash/isEqualWith';
 import { connect } from 'react-redux';
 import { type ApolloClient, graphql, compose, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
@@ -14,6 +15,7 @@ import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
 import DatePickerFieldAdapter from '../../../form/datePickerFieldAdapter';
 import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../../form/multilingualRichTextFieldAdapter';
+import { compareEditorState } from '../../../form/utils';
 import AdminForm from '../../../form/adminForm';
 import Loader from '../../../common/loader';
 import { validStartDate, validEndDate, validateDatePicker } from './validate';
@@ -98,85 +100,89 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
           save={save}
           mutators={{ setFieldTouched: setFieldTouched }}
           validate={validateDatePicker}
-          render={({ handleSubmit, pristine, submitting, form }) => (
-            <div className="admin-content">
-              <AdminForm
-                handleSubmit={handleSubmit}
-                pristine={pristine || startDateConflict || endDateConflict}
-                submitting={submitting}
-              >
-                <div className="form-container">
-                  <Helper
-                    classname="admin-paragraph"
-                    label={I18n.t('administration.landingPage.header.helper')}
-                    helperUrl={'/static2/img/helpers/landing_page_admin/header.png'}
-                    helperText={I18n.t('administration.helpers.landingPage.header')}
-                  />
-                  <Field
-                    editLocale={editLocale}
-                    name="headerTitle"
-                    component={MultilingualTextFieldAdapter}
-                    label={I18n.t('administration.landingPage.header.titleLabel')}
-                    required
-                  />
-                  <Field
-                    editLocale={editLocale}
-                    withAttachmentButton={false}
-                    name="headerSubtitle"
-                    component={MultilingualRichTextFieldAdapter}
-                    label={I18n.t('administration.landingPage.header.subtitleLabel')}
-                    required
-                  />
-                  <Field
-                    editLocale={editLocale}
-                    name="headerButtonLabel"
-                    component={MultilingualTextFieldAdapter}
-                    label={I18n.t('administration.landingPage.header.buttonLabel')}
-                    required={false}
-                  />
-                  <Field
-                    name="headerImage"
-                    component={FileUploaderFieldAdapter}
-                    label={I18n.t('administration.landingPage.header.headerImage')}
-                  />
-                  <div className="flex">
-                    <Field
-                      name="headerLogoImage"
-                      component={FileUploaderFieldAdapter}
-                      label={I18n.t('administration.landingPage.header.logoDescription')}
+          render={({ handleSubmit, submitting, initialValues, values, form }) => {
+            // Don't use final form pristine here, we need special comparison for richtext fields
+            const pristine = isEqualWith(initialValues, values, compareEditorState);
+            return (
+              <div className="admin-content">
+                <AdminForm
+                  handleSubmit={handleSubmit}
+                  pristine={pristine || startDateConflict || endDateConflict}
+                  submitting={submitting}
+                >
+                  <div className="form-container">
+                    <Helper
+                      classname="admin-paragraph"
+                      label={I18n.t('administration.landingPage.header.helper')}
+                      helperUrl={'/static2/img/helpers/landing_page_admin/header.png'}
+                      helperText={I18n.t('administration.helpers.landingPage.header')}
                     />
-                    {/* Passing an empty class to the popOver cancels the default styling */}
-                    <Helper helperText={I18n.t('administration.landingPage.header.logoHelper')} popOverClass=" " />
+                    <Field
+                      editLocale={editLocale}
+                      name="headerTitle"
+                      component={MultilingualTextFieldAdapter}
+                      label={I18n.t('administration.landingPage.header.titleLabel')}
+                      required
+                    />
+                    <Field
+                      editLocale={editLocale}
+                      withAttachmentButton={false}
+                      name="headerSubtitle"
+                      component={MultilingualRichTextFieldAdapter}
+                      label={I18n.t('administration.landingPage.header.subtitleLabel')}
+                      required
+                    />
+                    <Field
+                      editLocale={editLocale}
+                      name="headerButtonLabel"
+                      component={MultilingualTextFieldAdapter}
+                      label={I18n.t('administration.landingPage.header.buttonLabel')}
+                      required={false}
+                    />
+                    <Field
+                      name="headerImage"
+                      component={FileUploaderFieldAdapter}
+                      label={I18n.t('administration.landingPage.header.headerImage')}
+                    />
+                    <div className="flex">
+                      <Field
+                        name="headerLogoImage"
+                        component={FileUploaderFieldAdapter}
+                        label={I18n.t('administration.landingPage.header.logoDescription')}
+                      />
+                      {/* Passing an empty class to the popOver cancels the default styling */}
+                      <Helper helperText={I18n.t('administration.landingPage.header.logoHelper')} popOverClass=" " />
+                    </div>
+                    <div className="section-description">{I18n.t('administration.landingPage.header.dateDescription')}</div>
+                    <Field
+                      name="headerStartDate"
+                      component={DatePickerFieldAdapter}
+                      picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
+                      editLocale={editLocale}
+                      placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
+                      showTime={false}
+                      hasConflictingDate={this.state.startDateConflict}
+                      onDateChange={this.onStartChange}
+                      form={form}
+                      dateFormat="LL"
+                    />
+                    <Field
+                      name="headerEndDate"
+                      component={DatePickerFieldAdapter}
+                      picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}
+                      editLocale={editLocale}
+                      placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
+                      showTime={false}
+                      hasConflictingDate={this.state.endDateConflict}
+                      onDateChange={this.onEndChange}
+                      form={form}
+                      dateFormat="LL"
+                    />
                   </div>
-                  <div className="section-description">{I18n.t('administration.landingPage.header.dateDescription')}</div>
-                  <Field
-                    name="headerStartDate"
-                    component={DatePickerFieldAdapter}
-                    picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
-                    editLocale={editLocale}
-                    placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
-                    showTime={false}
-                    hasConflictingDate={this.state.startDateConflict}
-                    onDateChange={this.onStartChange}
-                    form={form}
-                    dateFormat="LL"
-                  />
-                  <Field
-                    name="headerEndDate"
-                    component={DatePickerFieldAdapter}
-                    picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}
-                    editLocale={editLocale}
-                    placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
-                    showTime={false}
-                    hasConflictingDate={this.state.endDateConflict}
-                    onDateChange={this.onEndChange}
-                    form={form}
-                    dateFormat="LL"
-                  />
-                </div>
-              </AdminForm>
-            </div>
-          )}
+                </AdminForm>
+              </div>
+            );
+          }}
         />
       </div>
     );
