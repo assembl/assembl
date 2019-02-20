@@ -34,14 +34,5 @@
         padding: 0 !important;
       }
     }
-
-    &.active {
-      > .menu-item-title {
-        > .arrow,
-        > a {
-          color: $first-color;
-        }
-      }
-    }
   }
 }
