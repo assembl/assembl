@@ -29,7 +29,8 @@ type FormControlWithLabelProps = {
   validationErrors?: Array<ErrorDef>,
   helperUrl?: string,
   helperText: string,
-  children?: React.Node
+  children?: React.Node,
+  validationCallback?: (hasError: boolean) => void
 };
 
 type FormControlWithLabelState = {
@@ -79,7 +80,7 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
 
   /* onBlur validation */
   setValidationState = () => {
-    const { value, required } = this.props;
+    const { value, required, validationCallback } = this.props;
     let errorMessage = '';
     let validationState = null;
     let valueSize = 0;
@@ -95,7 +96,10 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
       validationState = 'error';
     }
 
-    this.setState({ errorMessage: errorMessage, validationState: validationState });
+    this.setState(
+      { errorMessage: errorMessage, validationState: validationState },
+      validationCallback ? validationCallback(validationState === 'error') : undefined
+    );
   };
 
   getLabel = () => {

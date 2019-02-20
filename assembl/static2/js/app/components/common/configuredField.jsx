@@ -12,10 +12,11 @@ export type ConfiguredFieldType = {
 type Props = {
   configurableField: ConfigurableField,
   handleValueChange: Function,
+  validationCallback?: (hasError: boolean) => void,
   value: any
 };
 
-const ConfiguredField = ({ configurableField, handleValueChange, value }: Props) => {
+const ConfiguredField = ({ configurableField, handleValueChange, validationCallback, value }: Props) => {
   if (configurableField.__typename === 'TextField' && configurableField.fieldType !== 'PASSWORD') {
     return (
       <FormControlWithLabel
@@ -26,6 +27,7 @@ const ConfiguredField = ({ configurableField, handleValueChange, value }: Props)
         value={value}
         required={configurableField.required}
         disabled={configurableField.fieldType === 'EMAIL'}
+        validationCallback={validationCallback}
       />
     );
   }
@@ -39,6 +41,7 @@ const ConfiguredField = ({ configurableField, handleValueChange, value }: Props)
         onChange={e => handleValueChange(e.target.value ? [e.target.value] : null)}
         value={value ? value[0] : value}
         required={configurableField.required}
+        validationCallback={validationCallback}
         labelAlwaysVisible
       >
         <option key="0" value="" />
@@ -52,6 +55,10 @@ const ConfiguredField = ({ configurableField, handleValueChange, value }: Props)
   }
 
   return null;
+};
+
+ConfiguredField.defaultProps = {
+  validationCallback: () => {}
 };
 
 export default ConfiguredField;

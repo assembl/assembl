@@ -39,10 +39,12 @@ type ProfileProps = {
 };
 
 type ProfileState = {
+  name: string,
   passwordEditionOpen: boolean,
   values: {
     [string]: Object
-  }
+  },
+  saveDisabled: boolean
 };
 
 class Profile extends React.PureComponent<ProfileProps, ProfileState> {
@@ -82,7 +84,8 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
     this.state = {
       name: name,
       values: {},
-      passwordEditionOpen: false
+      passwordEditionOpen: false,
+      saveDisabled: false
     };
   }
 
@@ -144,7 +147,7 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
   render() {
     const { creationDate, hasPassword, lang, id, name } = this.props;
     const profileFields = this.props.profileFields;
-
+    const saveDisabled = this.state.saveDisabled;
     return (
       <div className="profile background-dark-grey">
         <div className="content-section">
@@ -171,11 +174,16 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                               configurableField={pf.configurableField}
                               handleValueChange={value => this.handleFieldValueChange(pf.id, value)}
                               value={this.state.values[pf.id]}
+                              validationCallback={(hasError: boolean) => this.setState(() => ({ saveDisabled: hasError }))}
                             />
                           )
                       )}
                     <Translate value="profile.usernameInformations" />
-                    <Button className="button-submit button-dark margin-l" onClick={this.handleSaveClick}>
+                    <Button
+                      className="button-submit button-dark margin-l"
+                      onClick={!saveDisabled ? this.handleSaveClick : null}
+                      disabled={saveDisabled}
+                    >
                       <Translate value="profile.save" />
                     </Button>
                   </div>
