@@ -5,7 +5,7 @@
 
   .meta {
     color: $black;
-    font-size: $font-size-xxs;
+    font-size: $font-size-m;
     padding-left: 15px;
     flex-grow: 1;
   }
@@ -15,7 +15,8 @@
   }
 
   .date-time {
-    font-size: $font-size-xxxs;
+    font-size: $font-size-s;
+    font-family: $font-family4;
     margin-bottom: 0;
   }
 }
@@ -32,7 +33,6 @@ hr {
     flex-direction: column;
 
     .meta {
-      font-size: $font-size-sm;
       padding-left: 0;
       padding-top: 10px;
     }
@@ -43,10 +43,6 @@ hr {
   .header {
     .author {
       margin-bottom: 7px;
-    }
-
-    .date-time {
-      font-size: $font-size-xs;
     }
   }
 
