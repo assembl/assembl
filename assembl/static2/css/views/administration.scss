@@ -681,6 +681,7 @@
     }
 
     .admin-instruction {
+      display: block;
       margin-left: 50px;
       font-family: $font-family4;
     }
@@ -851,6 +852,48 @@
 
       .admin-menu2 {
         padding-left: 15px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $screen-sm-min) {
+  .administration {
+    .margin-container {
+      margin: 10px 0 20px 0;
+    }
+
+    .admin-menu-sticky {
+      padding: 0;
+
+      .admin-menu2 {
+        padding-left: 8px;
+      }
+    }
+
+    .profile-options {
+      .profile-options-field {
+        input[type='text'] {
+          min-width: 240px;
+        }
+
+        .form-control {
+          width: 240px;
+        }
+      }
+    }
+
+    .timeline-admin {
+      .phase-side-title {
+        margin-left: 0;
+      }
+
+      .form-group .form-control {
+        width: 160px;
+      }
+
+      .admin-content {
+        padding: 10px 10px 40px;
       }
     }
   }
