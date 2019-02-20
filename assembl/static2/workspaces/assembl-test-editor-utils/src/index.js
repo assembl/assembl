@@ -25,7 +25,7 @@ export default {
   ) {
     let contentState = ContentState.createFromText(text);
     contentState = contentState.createEntity(ENTITY_TYPES.image, ENTITY_MUTABILITY.immutable, {
-      id: 'my-img-id',
+      id: '1',
       mimeType: 'image/png',
       src: imgSrc,
       title: 'My image'
@@ -33,7 +33,7 @@ export default {
     const imgEntityKey = contentState.getLastCreatedEntityKey();
     // $FlowFixMe DraftEntityType is too restrictive in DraftJS (see https://github.com/facebook/draft-js/issues/868 )
     contentState = contentState.createEntity(ENTITY_TYPES.document, ENTITY_MUTABILITY.immutable, {
-      id: 'my-doc-id',
+      id: '2',
       mimeType: 'application/pdf',
       src: fileSrc,
       title: 'My document'

@@ -229,7 +229,7 @@ describe('draftjs utils', () => {
           uploadDocument: {
             document: {
               externalUrl: '/data/my-doc.pdf',
-              id: 'my-doc-id',
+              id: btoa('Document:3'),
               mimeType: 'application/pdf',
               title: 'My document'
             }
@@ -243,12 +243,12 @@ describe('draftjs utils', () => {
       const updatedContentState = result.contentState;
       const updatedEntityData = updatedContentState.getEntity('2').getData();
       expect(updatedEntityData).toEqual({
-        id: 'my-doc-id',
+        id: '3',
         mimeType: 'application/pdf',
         src: '/data/my-doc.pdf',
         title: 'My document'
       });
-      expect(result.documentIds).toEqual(['my-img-id', 'my-doc-id']);
+      expect(result.documentIds).toEqual(['1', '3']);
       expect(uploadDocumentSpy).toHaveBeenCalledWith({ variables: { file: myFile } });
     });
   });

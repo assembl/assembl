@@ -15,6 +15,7 @@ import { converters as attachmentsConverters } from 'draft-js-attachment-plugin'
 /* eslint-enable import/no-extraneous-dependencies */
 
 import { addProtocol } from './linkify';
+import { fromGlobalId } from './globalFunctions';
 
 type Entry = {
   localeCode: string,
@@ -145,11 +146,12 @@ export function uploadNewAttachments(
         uploadDocument({ variables: variables }).then((res) => {
           if (res && res.data) {
             const doc = res.data.uploadDocument.document;
-            documentIds.push(doc.id);
+            const docId = fromGlobalId(doc.id);
+            documentIds.push(docId);
             // update entity
-            const { externalUrl, id, mimeType, title } = doc;
+            const { externalUrl, mimeType, title } = doc;
             contentState = contentState.replaceEntityData(entityKey, {
-              id: id,
+              id: docId,
               src: externalUrl,
               title: title,
               mimeType: mimeType
@@ -167,6 +169,7 @@ export function uploadNewAttachments(
       new Promise((resolve) => {
         resolve({
           contentState: contentState,
+          // $FlowFixMe
           documentIds: documentIds
         });
       })

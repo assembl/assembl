@@ -175,16 +175,16 @@ describe('convertRichTextToVariables function', () => {
     const expectedEn =
       '<p></p><div class="atomic-block" data-blocktype="atomic">' +
       '<img class="attachment-image" src="/data/my-img.png" alt="" title="My great image" ' +
-      'data-id="img-id-from-backend" data-mimetype="image/png" /></div><p></p><div class="atomic-block" ' +
+      'data-id="1" data-mimetype="image/png" /></div><p></p><div class="atomic-block" ' +
       'data-blocktype="atomic"><a href="/data/my-doc.pdf" title="My great document"><img ' +
       'class="attachment-icon" alt="unknown" src="/static2/img/icons/black/doc.svg" ' +
-      'data-id="doc-id-from-backend" data-mimetype="application/pdf" ' +
+      'data-id="2" data-mimetype="application/pdf" ' +
       'data-title="My great document" data-externalurl="/data/my-doc.pdf" /></a></div><p>My text in english</p>';
     const expectedFr = '<p>Mon texte en français</p>';
 
     const { attachments, entries } = await convertRichTextToVariables(input, client);
 
-    expect(attachments).toEqual(['img-id-from-backend', 'doc-id-from-backend']);
+    expect(attachments).toEqual(['1', '2']);
 
     const expectedEntries = [{ localeCode: 'en', value: expectedEn }, { localeCode: 'fr', value: expectedFr }];
     expect(entries).toEqual(expectedEntries);

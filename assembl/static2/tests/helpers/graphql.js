@@ -12,9 +12,9 @@ import UploadDocument from '../../js/app/graphql/mutations/uploadDocument.graphq
 
 const fileB64 = window.btoa('gimme some base64');
 export const docFile = new File([fileB64], 'my-file.pdf');
-docFile.id = 'my-doc-id';
+docFile.id = '2';
 export const imgFile = new File([fileB64], 'my-img.png');
-imgFile.id = 'my-img-id';
+imgFile.id = '1';
 
 const MockedResponses = [
   // documents
@@ -29,7 +29,7 @@ const MockedResponses = [
       data: {
         uploadDocument: {
           document: {
-            id: 'doc-id-from-backend',
+            id: btoa('Document:2'),
             externalUrl: '/data/my-doc.pdf',
             mimeType: 'application/pdf',
             title: 'My great document',
@@ -50,7 +50,7 @@ const MockedResponses = [
       data: {
         uploadDocument: {
           document: {
-            id: 'img-id-from-backend',
+            id: btoa('Document:1'),
             externalUrl: '/data/my-img.png',
             mimeType: 'image/png',
             title: 'My great image',
