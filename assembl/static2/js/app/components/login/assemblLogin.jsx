@@ -37,18 +37,22 @@ const AssemblLogin = (props: Props) => {
             <Translate value="login.login" />
           </Button>
         </FormGroup>
-        <Link to={requestPasswordChange}>
-          <Translate value="login.forgotPwd" />
-        </Link>
+        {slug ? (
+          <Link to={requestPasswordChange}>
+            <Translate value="login.forgotPwd" />
+          </Link>
+        ) : null}
       </form>
-      <div className="signup border-top margin-m">
-        <h4 className="dark-title-4 margin-m">
-          <Translate dangerousHTML value="login.noAccount" />
-        </h4>
-        <Link className="button-link button-dark margin-s" to={signUp}>
-          <Translate value="login.signUp" />
-        </Link>
-      </div>
+      {slug ? (
+        <div className="signup border-top margin-m">
+          <h4 className="dark-title-4 margin-m">
+            <Translate dangerousHTML value="login.noAccount" />
+          </h4>
+          <Link className="button-link button-dark margin-s" to={signUp}>
+            <Translate value="login.signUp" />
+          </Link>
+        </div>
+      ) : null}
     </div>
   );
 };
