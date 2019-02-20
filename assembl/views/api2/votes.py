@@ -248,11 +248,13 @@ def global_vote_results_csv(request):
 
     # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
     num_participants_by_idea_id = {}
+    vote_class = with_polymorphic(models.AbstractIdeaVote, models.AbstractIdeaVote)
     for idea in ideas:
         vote_specifications = idea.criterion_for
-        query = vote_specifications[0].get_voter_ids_query()
-        for vote_spec in vote_specifications[1:]:
-            query = query.union(vote_spec.get_voter_ids_query())
+        query = idea.db.query(vote_class.voter_id
+            ).filter_by(tombstone_date=None
+            ).filter(vote_class.vote_spec_id.in_([vote_spec.id for vote_spec in vote_specifications])
+            ).distinct()
         num_participants_by_idea_id[idea.id] = query.count()
 
     # construct a query with each votespec creating columns for:

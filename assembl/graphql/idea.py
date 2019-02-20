@@ -3,6 +3,7 @@ from itertools import takewhile
 from random import sample as random_sample
 from random import shuffle as random_shuffle
 
+from sqlalchemy.orm import with_polymorphic
 from graphql_relay.connection.arrayconnection import offset_to_cursor
 import graphene
 from graphene.relay import Node
@@ -313,9 +314,11 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         if not vote_specifications:
             return VoteResults(num_participants=0, participants=[])
 
-        query = vote_specifications[0].get_voter_ids_query()
-        for vote_spec in vote_specifications[1:]:
-            query = query.union(vote_spec.get_voter_ids_query())
+        vote_class = with_polymorphic(models.AbstractIdeaVote, models.AbstractIdeaVote)
+        query = self.db.query(vote_class.voter_id
+            ).filter_by(tombstone_date=None
+            ).filter(vote_class.vote_spec_id.in_([vote_spec.id for vote_spec in vote_specifications])
+            ).distinct()
 
         participant_ids = [row[0] for row in query]
         num_participants = len(participant_ids)
