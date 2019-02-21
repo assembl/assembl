@@ -9,27 +9,31 @@ type Props = {
 };
 
 type State = {
-  selectedPreset: ?string
+  selectedPreset: ?string,
+  selectedPhaseNumber: ?string | number
 };
 
 class PresetsList extends React.PureComponent<Props, State> {
   state = {
-    selectedPreset: null
+    selectedPreset: null,
+    selectedPhaseNumber: null
   };
 
   handlePresetSelect = (preset: Preset) => {
+    const { type, labelTranslationKey, id } = preset;
+    const isPhase = type === 'phase';
     this.props.onSelect(preset);
-    this.setState({ selectedPreset: preset.labelTranslationKey });
+    this.setState({ selectedPreset: labelTranslationKey, selectedPhaseNumber: isPhase ? id : null });
   };
 
   render() {
     const { presets } = this.props;
     const selectedPresetPlaceHolder = I18n.t('administration.export.presets.placeHolder');
-    const { selectedPreset } = this.state;
+    const { selectedPreset, selectedPhaseNumber } = this.state;
     return (
       <DropdownButton
         drop="up"
-        title={selectedPreset ? I18n.t(selectedPreset) : selectedPresetPlaceHolder}
+        title={selectedPreset ? I18n.t(selectedPreset, { count: selectedPhaseNumber }) : selectedPresetPlaceHolder}
         id="presets-dropdown"
         onSelect={this.handlePresetSelect}
       >

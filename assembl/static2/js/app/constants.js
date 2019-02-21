@@ -420,15 +420,22 @@ export const availableLocales = [
 ];
 
 export const datePickerPresets = [
-  { id: 'today', labelTranslationKey: 'administration.export.presets.today', range: { startDate: moment(), endDate: moment() } },
+  {
+    id: 'today',
+    labelTranslationKey: 'administration.export.presets.today',
+    range: { startDate: moment(), endDate: moment() },
+    type: 'basic'
+  },
   {
     id: 'lastWeek',
     labelTranslationKey: 'administration.export.presets.lastWeek',
-    range: { startDate: moment().subtract(7, 'days'), endDate: moment() }
+    range: { startDate: moment().subtract(7, 'days'), endDate: moment() },
+    type: 'basic'
   },
   {
     id: 'lastMonth',
     labelTranslationKey: 'administration.export.presets.lastMonth',
-    range: { startDate: moment().subtract(1, 'month'), endDate: moment() }
+    range: { startDate: moment().subtract(1, 'month'), endDate: moment() },
+    type: 'basic'
   }
 ];

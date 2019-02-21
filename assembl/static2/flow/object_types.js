@@ -32,7 +32,8 @@ type DateRange = {
 type Preset = {
   id: string | number,
   range: DateRange,
-  labelTranslationKey: string
+  labelTranslationKey: string,
+  type: string
 };
 
 export type Idea = {

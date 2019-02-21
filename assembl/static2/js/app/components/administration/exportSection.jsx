@@ -201,7 +201,8 @@ const mapStateToProps = (state) => {
       range: {
         startDate: phase.get('start'),
         endDate: phase.get('end')
-      }
+      },
+      type: 'phase'
     };
   });
   return {

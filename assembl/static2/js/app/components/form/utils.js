@@ -180,6 +180,7 @@ export const getFullDebatePreset = (phasesPresets: Array<Preset>) => {
     range: {
       startDate: firstPhaseBegin,
       endDate: lastPhaseEnd
-    }
+    },
+    type: 'basic'
   };
 };
