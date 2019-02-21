@@ -201,6 +201,34 @@ def react_admin_view(request):
     return react_view(request, required_permission=P_ADMIN_DISC)
 
 
+def react_base_view(request, required_permission=P_READ):
+    # This will make slug redirections as needed
+    from assembl.models import Discussion, OldSlug
+    if 'discussion_slug' in request.matchdict:
+        path = request.path
+        requested_slug = base_slug = request.matchdict['discussion_slug']
+        db = Discussion.default_db
+        old_slugs = {o.slug: o for o in db.query(OldSlug)}
+        if requested_slug in old_slugs:
+            discussion = None
+            found = False
+            while not found:
+                redirection_slug = old_slugs[requested_slug].redirection_slug
+                if redirection_slug in old_slugs:
+                    requested_slug = redirection_slug
+                    del old_slugs[redirection_slug]
+                else:
+                    found = True
+                    discussion = db.query(Discussion).filter_by(slug=redirection_slug).first()
+            if discussion:
+                destination = path.replace(base_slug, discussion.slug)
+                return HTTPSeeOther(location=destination)
+        else:
+            return react_view(request, required_permission)
+    else:
+        raise HTTPNotFound("No discussion named %s" % (base_slug,))
+
+
 def react_view(request, required_permission=P_READ):
     """
     The view rendered by any react-based URL requested
@@ -463,8 +491,8 @@ def purl_ideas(request):
     )
 
 
-def register_react_views(config, routes, view=react_view):
-    """Add list of routes to the `assembl.views.discussion.views.react_view` method."""
+def register_react_views(config, routes, view=react_base_view):
+    """Add list of routes to the `assembl.views.discussion.views.react_base_view` method."""
     if not routes:
         return
     for route in routes:

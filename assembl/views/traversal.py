@@ -1120,7 +1120,7 @@ class DiscussionPreferenceCollection(AbstractCollectionDefinition):
 def root_factory(request):
     """The factory function for the root context"""
     # OK, this is the old code... I need to do better, but fix first.
-    from ..models import Discussion
+    from ..models import Discussion, OldSlug
     if request.matchdict and 'traverse' in request.matchdict:
         # hack: reset request as if pure traversal
         from pyramid.interfaces import IRequest
@@ -1136,10 +1136,22 @@ def root_factory(request):
         return discussion
     elif request.matchdict and 'discussion_slug' in request.matchdict:
         discussion_slug = request.matchdict['discussion_slug']
-        discussion = Discussion.default_db.query(Discussion).filter_by(
+        db = Discussion.default_db
+        discussion = db.query(Discussion).filter_by(
             slug=discussion_slug).first()
         if not discussion:
-            raise HTTPNotFound("No discussion named %s" % (discussion_slug,))
+            old_slugs = {o.slug: o for o in db.query(OldSlug)}
+            if discussion_slug in old_slugs:
+                found = False
+                while not found:
+                    redirection_slug = old_slugs[discussion_slug].redirection_slug
+                    if redirection_slug in old_slugs:
+                        del old_slugs[redirection_slug]
+                    else:
+                        found = True
+                        discussion = db.query(Discussion).filter_by(slug=redirection_slug).first()
+            else:
+                raise HTTPNotFound("No discussion named %s" % (discussion_slug,))
         return discussion
     # fallthrough: Use traversal
     return AppRoot()
