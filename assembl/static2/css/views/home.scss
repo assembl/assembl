@@ -335,6 +335,8 @@
 @media screen and (max-width: $screen-xs-max) {
   .home {
     .header-section {
+      min-height: 500px;
+
       .header-content {
         padding: 60px 5px 120px;
       }

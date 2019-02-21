@@ -34,7 +34,7 @@ const Header = ({ timeline, title, subtitle, headerImage, logoImage, buttonLabel
 
   return (
     <section className="home-section header-section">
-      <Grid fluid className="max-container">
+      <Grid fluid className="max-container header-content-container">
         <div className="header-content">
           {logoImage && logoImage.externalUrl ? <img className="header-logo" src={logoImage.externalUrl} alt="logo" /> : null}
           <div className="max-text-width">
