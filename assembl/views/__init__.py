@@ -546,6 +546,10 @@ def get_description(request):
     If the discussion does not have a description corresponding to this locale,
     returns the description corresponding to the first preferred locale of the discussion
     """
+    # TODO: 1. alter this code to look at a new objectives model, rather than the
+    # extra json, as the work is started in
+    # [67a9815](https://github.com/assembl/assembl/commit/67a9815147830888c080c0e1225e7c9bd5819bcd)
+    # on branch https://github.com/assembl/assembl/compare/admin_text_multimedia_DEVAS-1251.
     opengraph_locale = get_opengraph_locale(request)
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
@@ -559,8 +563,12 @@ def get_description(request):
             locale = discussion.preferences['preferred_locales'][0]
             if locale in objectives_dict:
                 return adapt_to_html_content(objectives_dict.get(opengraph_locale, objectives_dict[locale]))
+            elif len(objectives_dict) != 0:
+                return adapt_to_html_content(objectives_dict.get(objectives_dict.keys()[0]))
             else:
-                return "Default objectives"
+                return ""
+    else:
+        return "Assembl is an online debate platform."
 
 
 def get_topic(request):
@@ -582,8 +590,12 @@ def get_topic(request):
             locale = discussion.preferences["preferred_locales"][0]
             if locale in topic_dict:
                 return adapt_to_html_content(topic_dict.get(opengraph_locale, topic_dict[locale]))
+            elif len(topic_dict) != 0:
+                return adapt_to_html_content(topic_dict.get(topic_dict.keys()[0]))
             else:
-                return "No topic available in the extra json."
+                return ""
+    else:
+        return "Assembl is an online debate platform."
 
 
 def discussion_title():
