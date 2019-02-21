@@ -75,11 +75,11 @@ class AmazonAttachmentService(AttachmentService):
         if not self.exists(key):
             if hasattr(dataf, 'read'):
                 self.bucket.upload_fileobj(dataf, key, {
-                    'ContentType': mimetype or 'application/binary'
+                    'ContentType': mimetype or 'application/octet-stream'
                 })
             else:
                 self.bucket.upload_file(dataf, key, {
-                    'ContentType': mimetype or 'application/binary'
+                    'ContentType': mimetype or 'application/octet-stream'
                 })
         return key
 
