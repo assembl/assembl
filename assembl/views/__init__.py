@@ -577,7 +577,10 @@ def get_topic(request):
         else:
             topic_dict = topic_dict["titleEntries"]
             locale = discussion.preferences["preferred_locales"][0]
-            return adapt_to_html_content(topic_dict.get(opengraph_locale, topic_dict[locale]))
+            if locale in topic_dict:
+                return adapt_to_html_content(topic_dict.get(opengraph_locale, topic_dict[locale]))
+            else:
+                return "No topic available in the extra json."
 
 
 def discussion_title():
