@@ -42,13 +42,22 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.vote_specifications)
     proposals = graphene.List(lambda: Idea, required=True, description=docs.VoteSession.proposals)
     see_current_votes = graphene.Boolean(required=True, description=docs.VoteSession.see_current_votes)
+    num_participants = graphene.Int(required=True, description=docs.VoteSession.num_participants)
 
     def resolve_proposals(self, args, context, info):
-        return [child for child in self.idea.get_children() if isinstance(child, models.VoteProposal)]
+        return self.idea.get_vote_proposals()
 
     def resolve_vote_specifications(self, args, context, info):
         # return only vote specifications not associated to a proposal
         return [vote_spec for vote_spec in self.vote_specifications if vote_spec.criterion_idea_id is None]
+
+    def resolve_num_participants(self, args, context, info):
+        all_participant_ids = set()
+        for proposal in self.idea.get_vote_proposals():
+            query = proposal.get_voter_ids_query()
+            participant_ids = [row[0] for row in query]
+            all_participant_ids = all_participant_ids.union(participant_ids)
+        return len(all_participant_ids)
 
 
 class UpdateVoteSession(graphene.Mutation):

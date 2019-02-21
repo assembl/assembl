@@ -1205,6 +1205,11 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         query = query.filter(Post.id.in_(post_ids))
         return query.count()
 
+    def get_vote_proposals(self):
+        from . import VoteProposal
+        return [child for child in self.get_children()
+                if isinstance(child, VoteProposal)]
+
     def get_voter_ids_query(self):
         from .votes import AbstractIdeaVote
         vote_specifications = self.criterion_for

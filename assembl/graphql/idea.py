@@ -291,6 +291,14 @@ class VoteResults(graphene.ObjectType):
     num_participants = graphene.Int(required=True, description=docs.VoteResults.num_participants)
     participants = graphene.List(AgentProfile, required=True, description=docs.VoteResults.participants)
 
+    def resolve_num_participants(self, args, context, info):
+        return len(self.participant_ids)
+
+    def resolve_participants(self, args, context, info):
+        participants = [models.AgentProfile.get(participant_id)
+                        for participant_id in self.participant_ids]
+        return participants
+
 
 class Idea(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.IdeaInterface.__doc__
@@ -311,16 +319,15 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     def resolve_vote_results(self, args, context, info):
         vote_specifications = self.criterion_for
         if not vote_specifications:
-            return VoteResults(num_participants=0, participants=[])
+            vote_results = VoteResults()
+            vote_results.participant_ids = []
+            return vote_results
 
         query = self.get_voter_ids_query()
-
         participant_ids = [row[0] for row in query]
-        num_participants = len(participant_ids)
-        participants = [models.AgentProfile.get(participant_id) for participant_id in participant_ids]
-        return VoteResults(
-            num_participants=num_participants,
-            participants=participants)
+        vote_results = VoteResults()
+        vote_results.participant_ids = participant_ids
+        return vote_results
 
     @classmethod
     def is_type_of(cls, root, context, info):

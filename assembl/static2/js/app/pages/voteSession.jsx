@@ -50,13 +50,7 @@ export type Proposal = {|
   order: ?number,
   modules: Array<VoteSpecification>,
   voteResults: {|
-    numParticipants: number,
-    participants: Array<?{|
-      // The ID of the object.
-      id: string,
-      userId: number,
-      displayName: ?string
-    |}>
+    numParticipants: number
   |}
 |};
 
@@ -69,6 +63,7 @@ type Props = {
   instructionsSectionContent: string,
   isPhaseCompleted: boolean,
   modules: Array<VoteSpecification>,
+  numParticipants: number,
   phaseId: string,
   propositionsSectionTitle: string,
   proposals: Array<Proposal>,
@@ -292,23 +287,10 @@ class DumbVoteSession extends React.Component<Props, State> {
 
   getStatElements = () => {
     let numParticipations = 0;
-    let participantsIds = [];
+    const numParticipants = this.props.numParticipants;
     this.props.proposals.forEach((p: Proposal) => {
-      participantsIds = participantsIds
-        .concat(
-          p.voteResults.participants.map((participant) => {
-            if (participant) {
-              return participant.id;
-            }
-
-            return null;
-          })
-        )
-        .filter(item => item !== null);
       numParticipations += p.modules.reduce((acc, m) => acc + m.numVotes, 0);
     });
-
-    const numParticipants = new Set(participantsIds).size;
     return [statParticipations(numParticipations), statParticipants(numParticipants)];
   };
 
@@ -440,6 +422,7 @@ export default compose(
           instructionsSectionTitle: ownProps.announcement.title,
           instructionsSectionContent: ownProps.announcement.body,
           propositionsSectionTitle: '',
+          numParticipants: 0,
           modules: [],
           proposals: [],
           randomProposals: []
@@ -449,6 +432,7 @@ export default compose(
         seeCurrentVotes,
         propositionsSectionTitle,
         modules, // we still need to get templates here for AvailableTokens component
+        numParticipants,
         proposals
       } = data.voteSession;
 
@@ -463,6 +447,7 @@ export default compose(
         instructionsSectionContent: ownProps.announcement.body,
         propositionsSectionTitle: propositionsSectionTitle,
         modules: modules,
+        numParticipants: numParticipants,
         proposals: proposals,
         randomProposals: shuffle(proposals),
         refetchVoteSession: data.refetch

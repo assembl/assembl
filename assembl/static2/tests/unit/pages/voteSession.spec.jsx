@@ -13,6 +13,7 @@ describe('VoteSession component', () => {
       headerImageUrl: 'foo.jpg',
       instructionsSectionTitle: 'Instructions de la phase de vote',
       instructionsSectionContent: '',
+      numParticipants: 0,
       modules: [],
       phaseId: 'my-phase-id',
       propositionsSectionTitle: 'Vote sur 0 propositions',
@@ -53,6 +54,7 @@ describe('VoteSession component', () => {
           voteType: 'token_vote_specification'
         }
       ],
+      numParticipants: 2,
       phaseId: 'my-phase-id',
       propositionsSectionTitle: 'Vote sur 10 propositions',
       proposals: proposals,

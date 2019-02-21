@@ -325,8 +325,8 @@ class Locale:
 
 class VoteResults:
     __doc__ = """The metadata describing the resulting votes on a Thematic or Idea."""
-    num_participants = """The count of participants on the vote session."""
-    participants = """The list of users who participated on the vote session. The length of the list matches the number of participants."""
+    num_participants = """The count of participants on the vote proposal."""
+    participants = """The list of users who participated on the vote proposal. The length of the list matches the number of participants."""
 
 
 class TagResult:
@@ -855,6 +855,7 @@ class VoteSession:
     thread)."""
     idea_id = "The database identifier of the idea the session is under."
     vote_specifications = "A list of VoteSpecifications."
+    num_participants = """The count of participants on the vote session."""
     proposals = "The list of Proposals on which the Users will be allowed to vote."
     see_current_votes = "A flag allowing users to view the current votes."
     propositions_section_title = """The title of the section where all Propositions are given."""

@@ -1,5 +1,4 @@
 #import "./fragments/LangString.graphql"
-#import "./fragments/AgentProfileInfo.graphql"
 
 fragment tokenVoteSpecification on TokenVoteSpecification {
   id
@@ -110,6 +109,7 @@ fragment gaugeVoteSpecificationResults on GaugeVoteSpecification {
 query VoteSession($ideaId: ID!, $lang: String!) {
   voteSession(ideaId: $ideaId) {
     id
+    numParticipants
     seeCurrentVotes
     propositionsSectionTitleEntries {
       ...langStringEntry
@@ -129,9 +129,6 @@ query VoteSession($ideaId: ID!, $lang: String!) {
         order
         voteResults {
           numParticipants
-          participants {
-            ...AgentProfileInfo
-          }
         }
       }
       modules: voteSpecifications {
