@@ -79,13 +79,6 @@ describe('CookiesSelectorContainer component', () => {
       expect(instance.toggleCookieType('REJECT_TRACKING_ON_DISCUSSION')).toBe('ACCEPT_TRACKING_ON_DISCUSSION');
     });
   });
-  describe('handleCategorySelection method', () => {
-    it('should update the activeKey in the state', () => {
-      expect(wrapper.state('activeKey')).toBe('essential');
-      instance.handleCategorySelection('other');
-      expect(wrapper.state('activeKey')).toBe('other');
-    });
-  });
   describe('handleToggle method', () => {
     it('should update the cookies in the state', () => {
       const updatedCookie = {
