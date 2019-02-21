@@ -167,7 +167,7 @@ def get_resources_hash(theme_name):
     if os.path.exists(resources_path):
         with open(resources_path) as fp:
             result = extract_resources_hash(fp, theme_name)
-    
+
     RESOURCES[theme_name] = result
     return result
 
@@ -557,7 +557,10 @@ def get_description(request):
         else:
             objectives_dict = objectives_dict["descriptionEntries"]
             locale = discussion.preferences['preferred_locales'][0]
-            return adapt_to_html_content(objectives_dict.get(opengraph_locale, objectives_dict[locale]))
+            if locale in objectives_dict:
+                return adapt_to_html_content(objectives_dict.get(opengraph_locale, objectives_dict[locale]))
+            else:
+                return "Default objectives"
 
 
 def get_topic(request):
