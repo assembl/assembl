@@ -1205,6 +1205,17 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         query = query.filter(Post.id.in_(post_ids))
         return query.count()
 
+    def get_voter_ids_query(self):
+        from .votes import AbstractIdeaVote
+        vote_specifications = self.criterion_for
+        vote_class = with_polymorphic(AbstractIdeaVote, AbstractIdeaVote)
+        query = self.db.query(vote_class.voter_id
+            ).filter_by(tombstone_date=None
+            ).filter(vote_class.vote_spec_id.in_(
+                [vote_spec.id for vote_spec in vote_specifications])
+            ).distinct()
+        return query
+
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
         P_ADMIN_DISC)
