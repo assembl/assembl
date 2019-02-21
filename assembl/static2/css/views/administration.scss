@@ -528,11 +528,7 @@
 
   .assembl-icon-faq {
     &:before {
-      font-size: $font-size-xxs;
-    }
-
-    &:hover {
-      color: $grey;
+      font-size: $font-size-sm;
     }
   }
 
@@ -842,6 +838,18 @@
 
   &.form-container {
     max-width: 550px;
+  }
+}
+
+@media screen and (min-width: $screen-sm-max) {
+  .administration .assembl-icon-faq {
+    &:before {
+      font-size: $font-size-xxs;
+    }
+
+    &:hover {
+      color: $black;
+    }
   }
 }
 
