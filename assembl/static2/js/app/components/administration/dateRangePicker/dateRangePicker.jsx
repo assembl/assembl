@@ -32,7 +32,7 @@ class DatePicker extends React.PureComponent<Props, State> {
     const { start, end, focusedInput } = this.state;
     const { presets } = this.props;
     return (
-      <div className="datepicker-with-presets">
+      <div className="date-range-picker">
         <DateRangePicker
           startDate={start}
           endDate={end}

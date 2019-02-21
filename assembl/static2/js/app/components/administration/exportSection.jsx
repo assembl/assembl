@@ -6,7 +6,7 @@ import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
 
 import SectionTitle from './sectionTitle';
-import DatePicker from './datePicker/datePicker';
+import DateRangePicker from './dateRangePicker/dateRangePicker';
 import { datePickerPresets } from '../../constants';
 import { getFullDebatePreset } from '../form/utils';
 
@@ -154,7 +154,7 @@ export class DumbExportSection extends React.Component<Props, State> {
     return presets ? (
       <div className="export-date">
         <Translate value="administration.export.exportDate" />
-        <DatePicker presets={presets} />
+        <DateRangePicker presets={presets} />
       </div>
     ) : null;
   };

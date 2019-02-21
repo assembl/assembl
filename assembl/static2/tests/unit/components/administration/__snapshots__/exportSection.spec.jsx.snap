@@ -74,7 +74,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
             Date de l'export
           </span>
           <div
-            className="datepicker-with-presets"
+            className="date-range-picker"
           >
             <div
               className="DateRangePicker DateRangePicker_1"
@@ -207,7 +207,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
             Date de l'export
           </span>
           <div
-            className="datepicker-with-presets"
+            className="date-range-picker"
           >
             <div
               className="DateRangePicker DateRangePicker_1"
@@ -379,7 +379,7 @@ exports[`DumbExportSection component should render an export section that handle
             Date de l'export
           </span>
           <div
-            className="datepicker-with-presets"
+            className="date-range-picker"
           >
             <div
               className="DateRangePicker DateRangePicker_1"

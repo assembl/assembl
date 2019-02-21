@@ -1,0 +1,36 @@
+.date-range-picker {
+  .dropdown {
+    width: 100%;
+
+    span {
+      font-size: $font-size-sm;
+    }
+
+    #presets-dropdown {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: $font-size-sm;
+    }
+
+    .dropdown-menu {
+      width: 100%;
+    }
+  }
+
+  .DateRangePickerInput__withBorder {
+    border: 2px solid $first-color;
+  }
+
+  .CalendarDay__selected {
+    background: $cyan;
+    border: 1px double $cyan;
+  }
+
+  .CalendarDay__selected_span,
+  .CalendarDay__hovered_span {
+    background: $cyan-transparent;
+    border: 1px double $cyan-transparent;
+  }
+}
