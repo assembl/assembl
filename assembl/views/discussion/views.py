@@ -222,11 +222,11 @@ def react_base_view(request, required_permission=P_READ):
                     discussion = db.query(Discussion).filter_by(slug=redirection_slug).first()
             if discussion:
                 destination = path.replace(base_slug, discussion.slug)
-                return HTTPSeeOther(location=destination)
+                return HTTPMovedPermanently(destination)
         else:
             return react_view(request, required_permission)
-    else:
-        raise HTTPNotFound("No discussion named %s" % (base_slug,))
+
+    raise HTTPNotFound("No discussion named %s" % (base_slug,))
 
 
 def react_view(request, required_permission=P_READ):
