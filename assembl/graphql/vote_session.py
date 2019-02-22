@@ -54,8 +54,7 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     def resolve_num_participants(self, args, context, info):
         all_participant_ids = set()
         for proposal in self.idea.get_vote_proposals():
-            query = proposal.get_voter_ids_query()
-            participant_ids = [row[0] for row in query]
+            participant_ids = proposal.get_voter_ids()
             all_participant_ids = all_participant_ids.union(participant_ids)
         return len(all_participant_ids)
 

@@ -323,8 +323,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             vote_results.participant_ids = []
             return vote_results
 
-        query = self.get_voter_ids_query()
-        participant_ids = [row[0] for row in query]
+        participant_ids = self.get_voter_ids()
         vote_results = VoteResults()
         vote_results.participant_ids = participant_ids
         return vote_results

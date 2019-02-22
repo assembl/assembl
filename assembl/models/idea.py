@@ -1221,6 +1221,22 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             ).distinct()
         return query
 
+    def get_voter_ids(self):
+        from pyramid.threadlocal import get_current_request
+        req = get_current_request()
+        cache = getattr(req, 'idea_get_voter_ids', None) if req else None
+        if cache is not None:
+            participant_ids = cache.get(self.id, None)
+            if participant_ids is not None:
+                return participant_ids
+        query = self.get_voter_ids_query()
+        participant_ids = [row[0] for row in query]
+        if req:
+            if cache is None:
+                req.idea_get_voter_ids = {}
+            req.idea_get_voter_ids[self.id] = participant_ids
+        return participant_ids
+
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
         P_ADMIN_DISC)
