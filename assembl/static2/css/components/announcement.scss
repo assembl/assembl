@@ -146,8 +146,6 @@
     margin-right: 0;
 
     .announcement-title {
-      margin-bottom: $margin-section-tiny;
-
       .announcement-title-text {
         margin-top: 23px;
         font-size: $font-size-ml;
@@ -173,8 +171,8 @@
         padding-bottom: 0;
 
         .media-description-layer {
-          margin-left: 17px;
-          margin-right: 17px;
+          margin-left: 0;
+          margin-right: 0;
         }
       }
     }

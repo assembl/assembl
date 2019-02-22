@@ -20,9 +20,9 @@
     .media-description-layer {
       text-align: justify;
       font-family: $font-family4;
-      font-size: $font-size-s;
-      line-height: 24px;
-      letter-spacing: 1px;
+      font-size: $font-size-m;
+      line-height: 1.78;
+      letter-spacing: 1.1px;
     }
 
     .media-description {
@@ -95,7 +95,6 @@
         margin-left: $margin-section-tiny;
         margin-right: $margin-section-tiny;
         width: calc(100% - ($margin-section-tiny * 2));
-        font-size: $font-size-sm;
       }
 
       .media-description {
