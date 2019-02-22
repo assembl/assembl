@@ -29,13 +29,14 @@
 
   .CalendarDay__selected {
     background: $cyan;
-    border: 2px double $cyan;
+    border: none;
   }
 
   .CalendarDay__selected_span,
   .CalendarDay__hovered_span {
     background: $cyan-transparent;
-    border: 1px double $cyan-transparent;
+    border: none;
+    color: $white;
   }
 
   .DateRangePicker_picker {
