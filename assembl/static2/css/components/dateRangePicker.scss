@@ -1,4 +1,10 @@
 .date-range-picker {
+  margin-top: 10px;
+
+  .DateInput_input__small {
+    font-size: $font-size-sm;
+  }
+
   .dropdown {
     width: 100%;
 
@@ -46,4 +52,8 @@
   .DateInput_fang {
     display: none;
   }
+}
+
+.DateRangePickerInput__withBorder {
+  width: 323px;
 }
