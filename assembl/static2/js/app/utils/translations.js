@@ -923,7 +923,8 @@ const Translations = {
         translation: "Traduction des données",
         anonymous: "Rendre les données anonymes",
         contributions: "Les contributions des participants",
-        exportDate: "Export date",
+        exportDate: "Date de l'export",
+
         presets: {
           today: "Aujourd'hui",
           lastWeek: "Semaine dernière",
@@ -1953,7 +1954,7 @@ const Translations = {
         translation: "Translation of the data",
         anonymous: "Make the data anonymous",
         contributions: "Contributions of the participants",
-        exportDate: "Date de l'export",
+        exportDate: "Export date",
         presets: {
           today: "Today",
           lastWeek: "Last week",
