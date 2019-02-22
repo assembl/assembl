@@ -26,6 +26,15 @@ import createDiscussionPhaseMutation from '../graphql/mutations/createDiscussion
 import deleteDiscussionPhaseMutation from '../graphql/mutations/deleteDiscussionPhase.graphql';
 import { type State as ReduxState } from '../reducers/rootReducer';
 
+import {
+  SECTION_PERSONALIZE_INTERFACE,
+  SECTION_DISCUSSION_PREFERENCES,
+  SECTION_TIMELINE,
+  SECTION_PROFILE_OPTIONS,
+  SECTION_MENU_SECTION,
+  SECTION_LEGAL_CONTENTS
+} from './../constants';
+
 type Section = Object;
 
 const createVariablesForSectionMutation = section => ({
@@ -242,16 +251,19 @@ class DiscussionAdmin extends React.Component<Props, State> {
     const { section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     // @TODO use final-form logic
-    const showSaveButton = section !== '6' && section !== '4' && section !== '1';
+    const showSaveButton =
+      section !== SECTION_PERSONALIZE_INTERFACE &&
+      section !== SECTION_DISCUSSION_PREFERENCES &&
+      section !== SECTION_LEGAL_CONTENTS;
     return (
       <div className="discussion-admin">
         {showSaveButton && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
-        {section === '1' && <PersonalizeInterface {...this.props} />}
-        {section === '2' && <PreferencesSection {...this.props} />}
-        {section === '3' && <TimelineForm {...this.props} />}
-        {section === '4' && <ManageProfileOptionsForm />}
-        {section === '5' && <ManageSectionsForm {...this.props} />}
-        {section === '6' && <LegalContentsForm {...this.props} />}
+        {section === SECTION_PERSONALIZE_INTERFACE && <PersonalizeInterface {...this.props} />}
+        {section === SECTION_DISCUSSION_PREFERENCES && <PreferencesSection {...this.props} />}
+        {section === SECTION_TIMELINE && <TimelineForm {...this.props} />}
+        {section === SECTION_PROFILE_OPTIONS && <ManageProfileOptionsForm />}
+        {section === SECTION_MENU_SECTION && <ManageSectionsForm {...this.props} />}
+        {section === SECTION_LEGAL_CONTENTS && <LegalContentsForm {...this.props} />}
       </div>
     );
   }

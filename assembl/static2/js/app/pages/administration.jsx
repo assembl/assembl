@@ -27,6 +27,8 @@ import { getPhaseId } from '../utils/timeline';
 import { fromGlobalId } from '../utils/globalFunctions';
 import { addEnumSuffixToModuleTitles } from '../components/administration/landingPage/addEnumSuffixToModuleTitles';
 
+import { SECTION_PROFILE_OPTIONS } from './../constants';
+
 const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
 
 type Props = {
@@ -393,7 +395,8 @@ export default compose(
         textFields: data.textFields
       };
     },
-    skip: props => isNotInDiscussionAdmin(props) || props.router.getCurrentLocation().search !== '?section=3'
+    skip: props =>
+      isNotInDiscussionAdmin(props) || props.router.getCurrentLocation().search !== `?section=${SECTION_PROFILE_OPTIONS}`
   }),
   mergeLoadingAndError([
     'voteSessionMetadata',

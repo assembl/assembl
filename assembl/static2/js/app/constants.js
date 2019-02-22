@@ -43,6 +43,13 @@ export const SENTIMENT_BAR_TOP_POSITION_OFFSET = 78;
 
 export const MAX_TREE_FORM_LEVEL = 4;
 
+export const SECTION_PERSONALIZE_INTERFACE = '1';
+export const SECTION_DISCUSSION_PREFERENCES = '2';
+export const SECTION_TIMELINE = '3';
+export const SECTION_PROFILE_OPTIONS = '4';
+export const SECTION_MENU_SECTION = '5';
+export const SECTION_LEGAL_CONTENTS = '6';
+
 export const APOLLO_NETWORK_STATUS = {
   /**
    * The query has never been run before and the query is now currently running. A query will still
@@ -148,27 +155,27 @@ export const ADMIN_MENU = {
     subMenu: {
       personalizeInterface: {
         title: 'administration.menu.personalizeInterface',
-        sectionId: '1'
+        sectionId: SECTION_PERSONALIZE_INTERFACE
       },
-      languague: {
+      preferences: {
         title: 'administration.menu.preferences',
-        sectionId: '2'
+        sectionId: SECTION_DISCUSSION_PREFERENCES
       },
       timeline: {
         title: 'administration.menu.timeline',
-        sectionId: '3'
+        sectionId: SECTION_TIMELINE
       },
       manageProfileOptions: {
         title: 'administration.menu.manageProfileOptions',
-        sectionId: '4'
+        sectionId: SECTION_PROFILE_OPTIONS
       },
       sections: {
         title: 'administration.menu.sections',
-        sectionId: '5'
+        sectionId: SECTION_MENU_SECTION
       },
       legalContents: {
         title: 'administration.menu.legalContents',
-        sectionId: '6'
+        sectionId: SECTION_LEGAL_CONTENTS
       }
     }
   },
