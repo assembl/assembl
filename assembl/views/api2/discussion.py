@@ -618,9 +618,66 @@ def extract_taxonomy_csv(request):
     return csv_response(extract_list, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="extract_taxonomies.csv"')
 
 
-def csv_response(results, format, fieldnames=None, content_disposition=None):
+@view_config(context=InstanceContext, name="multi-module-export",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_DISC_STATS)
+def multi_module_csv_export(request):
+    import pdb; pdb.set_trace()
+    results = {"export_phase": None,
+               "export_module_survey": None,
+               "export_module_thread": None,
+               "export_module_multicolumn": None,
+               "export_module_vote": None,
+               "vote_users_data": None,
+               "export_module_bright_mirror": None}
+
+    fieldnames = {"export_phase": None,
+               "export_module_survey": None,
+               "export_module_thread": None,
+               "export_module_multicolumn": None,
+               "export_module_vote": None,
+               "vote_users_data": None,
+               "export_module_bright_mirror": None}
+
+    from assembl.views.api2.votes import extract_voters
+    phase_results, phase_fieldnames = extract_voters(request)
+    import pdb; pdb.set_trace()
+    results['vote_users_data'] = phase_results
+    fieldnames['vote_users_data'] = phase_fieldnames
+    return csv_response_multiple_sheets(results, fieldnames, content_disposition='attachment; filename=multimodule_excel_export.csv')
+
+
+def csv_response_multiple_sheets(results, fieldnames, content_disposition):
     output = StringIO()
 
+    from zipfile import ZipFile, ZIP_DEFLATED
+    from openpyxl.workbook import Workbook
+    workbook = Workbook(True)
+    archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
+    import pdb; pdb.set_trace()
+    writerow = [None] * len(fieldnames)
+    for key, elem in enumerate(fieldnames):
+        worksheet = workbook.create_sheet()
+        writerow[key] = worksheet.append
+        empty = None
+
+        if fieldnames[elem]:
+            # TODO: i18n
+            writerow[key]([' '.join(fn.split('_')).title() for fn in fieldnames[elem]])
+            for r in results:
+                writerow[key]([r.get(f, empty) for f in fieldnames[elem]])
+        else:
+            if results[elem]:
+                for r in results[elem]:
+                    writerow[key](r)
+    output.seek(0)
+    return Response(body_file=output, content_type=format, content_disposition=content_disposition)
+
+
+def csv_response(results, format, number_of_sheets=1, fieldnames=None, content_disposition=None):
+    output = StringIO()
+
+    format = XSLX_MIMETYPE
     if format == CSV_MIMETYPE:
         from csv import writer
         # include BOM for Excel to open the file in UTF-8 properly
@@ -628,23 +685,27 @@ def csv_response(results, format, fieldnames=None, content_disposition=None):
         csv = writer(output, dialect='excel', delimiter=';')
         writerow = csv.writerow
         empty = ''
+
     elif format == XSLX_MIMETYPE:
         from zipfile import ZipFile, ZIP_DEFLATED
         from openpyxl.workbook import Workbook
         workbook = Workbook(True)
         archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
-        worksheet = workbook.create_sheet()
-        writerow = worksheet.append
-        empty = None
+        # import pdb; pdb.set_trace()
+        writerow = [None] * number_of_sheets
+        for i in range(number_of_sheets):
+            worksheet = workbook.create_sheet()
+            writerow[i] = worksheet.append
+            empty = None
 
-    if fieldnames:
-        # TODO: i18n
-        writerow([' '.join(fn.split('_')).title() for fn in fieldnames])
-        for r in results:
-            writerow([r.get(f, empty) for f in fieldnames])
-    else:
-        for r in results:
-            writerow(r)
+            if fieldnames:
+                # TODO: i18n
+                writerow[i]([' '.join(fn.split('_')).title() for fn in fieldnames])
+                for r in results:
+                    writerow[i]([r.get(f, empty) for f in fieldnames])
+            else:
+                for r in results:
+                    writerow[i](r)
 
     if format == XSLX_MIMETYPE:
         from openpyxl.writer.excel import ExcelWriter

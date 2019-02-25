@@ -349,10 +349,11 @@ def global_vote_results_csv(request):
     return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
 
 
-@view_config(context=InstanceContext, name="extract_csv_voters",
-             ctx_instance_class=VotingWidget, request_method='GET',
-             permission=P_DISC_STATS)
+# @view_config(context=InstanceContext, name="extract_csv_voters",
+#              ctx_instance_class=VotingWidget, request_method='GET',
+#              permission=P_DISC_STATS)
 def extract_voters(request):
+    # import pdb; pdb.set_trace()
     extract_votes = []
     ctx = request.context
     user_id = request.authenticated_userid
@@ -360,10 +361,10 @@ def extract_voters(request):
         raise HTTPUnauthorized
     widget = ctx._instance
     user_id = request.authenticated_userid
-    if widget.activity_state != "ended":
-        permissions = get_permissions(user_id, ctx.get_discussion_id())
-        if P_ADMIN_DISC not in permissions:
-            raise HTTPUnauthorized()
+    # if widget.activity_state != "ended":
+    #     permissions = get_permissions(user_id, ctx.get_discussion_id())
+    #     if P_ADMIN_DISC not in permissions:
+    #         raise HTTPUnauthorized()
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
     votes = widget.db.query(AbstractIdeaVote
@@ -416,4 +417,5 @@ def extract_voters(request):
 
             extract_votes.append(extract_info)
     extract_votes.sort(key=operator.itemgetter('Nom du contributeur'))
-    return csv_response(extract_votes, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="detailed_vote_results.csv"')
+    return extract_votes, fieldnames
+    # return csv_response(extract_votes, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="detailed_vote_results.csv"')
