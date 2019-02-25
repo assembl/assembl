@@ -11,7 +11,7 @@ exports[`Storyshots InstructionsText default 1`] = `
     }
   >
     <div
-      className="background-light instructions-text"
+      className="background-light instructions-text padding-left-right"
     >
       <div
         className="max-container"
@@ -626,7 +626,7 @@ exports[`Storyshots InstructionsText playground 1`] = `
     }
   >
     <div
-      className="background-light instructions-text"
+      className="background-light instructions-text padding-left-right"
     >
       <div
         className="max-container"
