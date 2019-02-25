@@ -24,7 +24,7 @@ export class DumbRequestPasswordChange extends React.Component<Props> {
   render() {
     const { passwordChangeResponse, requestPasswordChange } = this.props;
 
-    const backBtnCallback = () => {
+    const redirectToPreviousPage = () => {
       browserHistory.goBack();
     };
 
@@ -32,7 +32,7 @@ export class DumbRequestPasswordChange extends React.Component<Props> {
       <Grid fluid className="login-container">
         <Row className="max-container">
           <Col xs={12} md={6} className="col-centered">
-            <BackButton handleClick={backBtnCallback} linkClassName="back-btn" />
+            <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
             {passwordChangeResponse.success ? (
               <SendPwdConfirm />
             ) : (

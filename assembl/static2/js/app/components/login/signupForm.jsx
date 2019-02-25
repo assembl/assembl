@@ -130,7 +130,7 @@ class SignupForm extends React.Component<Props, State> {
     displayCustomModal(modalContent, true, 'modal-large');
   };
 
-  backBtnCallback = () => {
+  redirectToPreviousPage = () => {
     browserHistory.goBack();
   };
 
@@ -155,7 +155,7 @@ class SignupForm extends React.Component<Props, State> {
 
     return (
       <div className="login-view">
-        <BackButton handleClick={this.backBtnCallback} linkClassName="back-btn" />
+        <BackButton handleClick={this.redirectToPreviousPage} linkClassName="back-btn" />
         <div className="box-title margin-l">{I18n.t('login.createAccount')}</div>
         <div className="box">
           <form className="signup" onSubmit={this.signupHandler}>

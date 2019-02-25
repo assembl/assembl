@@ -10,13 +10,13 @@ class SignUpConfirm extends React.Component {
   // TODO: Move state from signup form to signup page so this component will
   // have access to that information as well.
   render() {
-    const backBtnCallback = () => {
+    const redirectToPreviousPage = () => {
       browserHistory.goBack();
     };
 
     return (
       <div className="login-view">
-        <BackButton handleClick={backBtnCallback} linkClassName="back-btn" />
+        <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
         <div className="box-title margin-l">
           <Translate value="login.accountCreated" />
         </div>

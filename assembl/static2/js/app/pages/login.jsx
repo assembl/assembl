@@ -34,14 +34,14 @@ class Login extends React.Component<Props> {
     // TODO: Determine contextless social media login action
     const hasSocialMedias = providers && slug && providers.length > 0;
 
-    const backBtnCallback = () => {
+    const redirectToPreviousPage = () => {
       browserHistory.goBack();
     };
 
     return (
       <Grid fluid className="login-grid">
         <Col xs={12} sm={hasSocialMedias ? 9 : 6} lg={hasSocialMedias ? 7 : 4} className="login-container col-centered">
-          <BackButton handleClick={backBtnCallback} linkClassName="back-btn" />
+          <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
           <div className="box-title margin-l">{I18n.t('login.login')}</div>
           <div className="box">
             {hasSocialMedias && (
