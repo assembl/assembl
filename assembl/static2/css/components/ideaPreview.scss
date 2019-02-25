@@ -4,7 +4,7 @@
   .light-title-3 {
     font-size: $font-size-sm;
     width: calc(100% - 40px);
-    margin-top: 0;
+    margin-top: 40px;
     margin-right: 0;
     margin-left: 0;
     padding-top: 10%;
@@ -23,7 +23,7 @@
   }
 
   .access-discussion {
-    width: calc(100% - 40px);
+    width: 100%;
     text-align: center;
     padding-bottom: 160px;
   }
@@ -126,9 +126,8 @@
   height: 500px;
 
   .light-title-3 {
-    position: absolute;
-    top: 150px;
     width: calc(100% - 40px);
+    margin-top: 40px;
   }
 
   .content-box {
@@ -148,12 +147,18 @@
   height: 300px;
 
   .light-title-3 {
-    top: 20px;
     width: calc(100% - 40px);
+    margin-top: 20px;
   }
 
   .access-discussion {
     padding-bottom: 85px;
+  }
+}
+
+.idea-preview-level-3 {
+  .light-title-3 {
+    margin-top: 0;
   }
 }
 
