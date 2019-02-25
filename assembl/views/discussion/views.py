@@ -222,7 +222,7 @@ def react_base_view(request, required_permission=P_READ):
                     discussion = db.query(Discussion).filter_by(slug=redirection_slug).first()
             if discussion:
                 destination = path.replace(base_slug, discussion.slug)
-                return HTTPMovedPermanently(destination)
+                return HTTPTemporaryRedirect(destination)
         else:
             return react_view(request, required_permission)
 
