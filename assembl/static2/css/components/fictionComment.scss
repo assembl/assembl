@@ -89,8 +89,8 @@
 
         .editPostIcon {
           path {
-            fill: $purple;
-            stroke: $purple;
+            fill: $first-color;
+            stroke: $first-color;
           }
         }
       }
@@ -98,10 +98,10 @@
       .action-delete {
         .deletePostIcon {
           .group {
-            fill: $purple;
+            fill: $first-color;
 
             .path {
-              stroke: $purple;
+              stroke: $first-color;
             }
           }
         }
