@@ -226,9 +226,9 @@
 }
 
 @media screen and (max-width: 1019px) {
-  .intermediary-container {
+  .header-section .statistic .intermediary-container {
     .stat-container {
-      padding: 0 12px !important;
+      padding: 0 12px;
     }
   }
 }
@@ -284,7 +284,7 @@
 
         .stat-container {
           margin-top: 5px;
-          padding: 0 9px !important;
+          padding: 0 9px;
 
           .stat-box {
             display: block !important;
