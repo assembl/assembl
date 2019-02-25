@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalContentsForm from '../components/administration/legalContents/index';
-import TimelineForm from '../components/administration/discussion/timelineForm';
+import TimelineForm from '../components/administration/discussion/timelineConfiguration/';
 import PreferencesSection from '../components/administration/discussion/preferences/index';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import PersonalizeInterface from '../components/administration/discussion/personalizeInterface';
@@ -254,6 +254,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
     const showSaveButton =
       section !== SECTION_PERSONALIZE_INTERFACE &&
       section !== SECTION_DISCUSSION_PREFERENCES &&
+      section !== SECTION_TIMELINE &&
       section !== SECTION_LEGAL_CONTENTS;
     return (
       <div className="discussion-admin">

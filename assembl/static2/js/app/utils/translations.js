@@ -686,7 +686,7 @@ const Translations = {
         configureThematic: "Configurer la thématique %{index}"
       },
       timelineAdmin: {
-        phase: "Phase %{count}",
+        phase: "Phase %{index}",
         annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
         phaseLabel: "Titre de la phase",
         addPhase: "Ajouter une phase",
@@ -1703,7 +1703,7 @@ const Translations = {
         configureThematic: "Configure the theme %{index}"
       },
       timelineAdmin: {
-        phase: "Phase %{count}",
+        phase: "Phase %{index}",
         annotation: "This module has to be filled. * Fields are required",
         phaseLabel: "Phase title",
         addPhase: "Add a phase",
