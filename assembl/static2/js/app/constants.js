@@ -16,6 +16,9 @@ export const APP_CONTAINER_PADDING = 15;
 export const MIN_WIDTH_COLUMN = 400;
 export const COLUMN_OPACITY_GAIN = 0.5;
 
+export const SM_SCREEN_WIDTH = 768;
+export const LG_SCREEN_WIDTH = 1200;
+
 // Bright mirror
 export const EMPTY_STRING = '';
 export const FICTION_DELETE_CALLBACK = 'FICTION_DELETE_CALLBACK';
