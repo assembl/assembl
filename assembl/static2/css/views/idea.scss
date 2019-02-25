@@ -33,7 +33,7 @@
   .postfolded-container {
     cursor: pointer;
     position: relative;
-    top: -11px;
+    top: -8px;
   }
 
   .expand-indented {
@@ -194,6 +194,10 @@
 
     .padding-right {
       padding-right: 0;
+    }
+
+    .postfolded-container {
+      top: 0;
     }
   }
 }
