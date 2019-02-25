@@ -16,7 +16,7 @@ type State = {
 };
 
 // A custom DatePicker component to use presets
-class DatePicker extends React.PureComponent<Props, State> {
+class CustomDateRangePicker extends React.PureComponent<Props, State> {
   state = {
     start: null,
     end: null,
@@ -60,4 +60,4 @@ class DatePicker extends React.PureComponent<Props, State> {
   }
 }
 
-export default DatePicker;
+export default CustomDateRangePicker;
