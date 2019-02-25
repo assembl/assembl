@@ -83,8 +83,8 @@
     margin: 6px 6px 12px auto;
 
     li {
-      width: 44px;
-      height: 44px;
+      width: 30px;
+      height: 30px;
       background-color: $white;
       border-radius: 50%;
       margin-bottom: 8px;
@@ -102,6 +102,12 @@
         height: 100%;
         font-size: 9px;
         color: $black;
+      }
+
+      .edit {
+        svg {
+          margin-top: 6px;
+        }
       }
     }
   }
