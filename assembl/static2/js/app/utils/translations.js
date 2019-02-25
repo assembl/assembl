@@ -1372,7 +1372,7 @@ const Translations = {
       sharePost: "Share this message",
       shareSynthesis: "Share this synthesis",
       copyLink: "Copy the link to the clipboard",
-      shareMail: "Share link via email",
+      shareMail: "Share the link via email",
       linkCopied: "Link copied",
       subject: "Write the title",
       insert: "Post a comment",
