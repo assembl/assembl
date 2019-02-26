@@ -10401,9 +10401,9 @@ react-virtualized@9.18.5:
     loose-envify "^1.3.0"
     prop-types "^15.6.0"
 
-"react-wordcloud@https://github.com/beyowi/react-wordcloud.git":
+"react-wordcloud@https://github.com/assembl/react-wordcloud":
   version "0.1.0"
-  resolved "https://github.com/beyowi/react-wordcloud.git#778db5a6a2ab86a1a2550f1aa37c966da8cb1b36"
+  resolved "https://github.com/assembl/react-wordcloud#778db5a6a2ab86a1a2550f1aa37c966da8cb1b36"
   dependencies:
     d3-array "^1.2.1"
     d3-cloud "^1.2.4"

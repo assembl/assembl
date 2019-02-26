@@ -10,6 +10,7 @@ import { CountablePublicationStates, MESSAGE_VIEW } from '../../../constants';
 import PostsAndContributorsCount, { Counter } from '../../common/postsAndContributorsCount';
 import ThematicTabs from './thematicTabs';
 import Title from '../../common/title/title';
+import { isMobile } from '../../../utils/globalFunctions';
 // GraphQL imports
 import SemanticAnalysisForThematicQuery from '../../../graphql/SemanticAnalysisForThematicQuery.graphql';
 
@@ -41,7 +42,8 @@ type Posts = {
 export type AnnouncementContent = {
   body: string,
   title: ?string,
-  quote?: ?string
+  quote?: ?string,
+  summary?: ?string
 };
 
 type DoughnutElements = {
@@ -106,7 +108,14 @@ export const SurveyAnnouncement = ({ announcement, semanticAnalysisForThematicDa
     </div>
   );
 
-  return <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />;
+  return (
+    <ThematicTabs
+      guidelinesContent={guidelinesContent}
+      summary={announcement.summary}
+      isMobile={!!isMobile.any()}
+      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+    />
+  );
 };
 
 export const Announcement = ({ announcement, idea, semanticAnalysisForThematicData }: Props) => {
@@ -146,7 +155,14 @@ export const Announcement = ({ announcement, idea, semanticAnalysisForThematicDa
     </div>
   );
 
-  return <ThematicTabs guidelinesContent={guidelinesContent} semanticAnalysisForThematicData={semanticAnalysisForThematicData} />;
+  return (
+    <ThematicTabs
+      guidelinesContent={guidelinesContent}
+      summary={announcement.summary}
+      semanticAnalysisForThematicData={semanticAnalysisForThematicData}
+      isMobile={!!isMobile.any()}
+    />
+  );
 };
 
 const announcementDefaultProps = {
@@ -159,6 +175,12 @@ const announcementDefaultProps = {
     title: '',
     topKeywords: []
   }
+};
+
+SurveyAnnouncement.defaultProps = { ...announcementDefaultProps };
+
+Announcement.defaultProps = {
+  ...announcementDefaultProps
 };
 
 SurveyAnnouncement.defaultProps = { ...announcementDefaultProps };

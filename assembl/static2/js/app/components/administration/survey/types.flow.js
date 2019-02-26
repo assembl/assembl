@@ -59,7 +59,8 @@ export type ThemeValue = {
   announcement: {
     title: I18nValue,
     body: I18nRichTextValue,
-    quote: I18nRichTextValue
+    quote: I18nRichTextValue,
+    summary: I18nRichTextValue
   },
   questions: Array<QuestionValue>,
   children: Array<ThemeValue>,
@@ -77,7 +78,8 @@ export type ThemeValueFromQuery = {
   announcement: ?{
     titleEntries: LangstringEntries,
     bodyEntries: LangstringEntries,
-    quoteEntries: LangstringEntries
+    quoteEntries: LangstringEntries,
+    summaryEntries: LangstringEntries
   },
   questions: Array<QuestionValueFromQuery>,
   children: Array<ThemeValueFromQuery>,

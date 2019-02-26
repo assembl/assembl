@@ -43,6 +43,23 @@ exports[`Storyshots InstructionsText default 1`] = `
                   Consigne
                 </a>
               </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  aria-controls="announcement-tabs-id-pane-1"
+                  aria-selected={false}
+                  href="#"
+                  id="announcement-tabs-id-tab-1"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="tab"
+                  tabIndex={-1}
+                >
+                  À retenir
+                </a>
+              </li>
             </ul>
             <div
               className="tab-content"
@@ -67,9 +84,26 @@ exports[`Storyshots InstructionsText default 1`] = `
                     </h1>
                   </div>
                   <div
-                    className="announcement-media"
+                    className="announcement-media announcement-text-only"
                   >
                     Lorem Ipsum body
+                  </div>
+                </div>
+              </div>
+              <div
+                aria-hidden={true}
+                aria-labelledby="announcement-tabs-id-tab-1"
+                className="tab-pane fade"
+                id="announcement-tabs-id-pane-1"
+                role="tabpanel"
+              >
+                <div
+                  className="announcement"
+                >
+                  <div
+                    className="announcement-media announcement-text-only"
+                  >
+                    To remember
                   </div>
                 </div>
               </div>
@@ -229,7 +263,10 @@ exports[`Storyshots InstructionsText default 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -256,7 +293,10 @@ exports[`Storyshots InstructionsText default 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -283,7 +323,40 @@ exports[`Storyshots InstructionsText default 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      summary
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          To remember
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -469,7 +542,7 @@ exports[`Storyshots InstructionsText default 1`] = `
                         }
                       </span>
                     </span>
-                     
+                    <br />
                   </span>
                 </span>
                 <span
@@ -585,6 +658,23 @@ exports[`Storyshots InstructionsText playground 1`] = `
                   Consigne
                 </a>
               </li>
+              <li
+                className=""
+                role="presentation"
+              >
+                <a
+                  aria-controls="announcement-tabs-id-pane-1"
+                  aria-selected={false}
+                  href="#"
+                  id="announcement-tabs-id-tab-1"
+                  onClick={[Function]}
+                  onKeyDown={[Function]}
+                  role="tab"
+                  tabIndex={-1}
+                >
+                  À retenir
+                </a>
+              </li>
             </ul>
             <div
               className="tab-content"
@@ -609,9 +699,26 @@ exports[`Storyshots InstructionsText playground 1`] = `
                     </h1>
                   </div>
                   <div
-                    className="announcement-media"
+                    className="announcement-media announcement-text-only"
                   >
                     Lorem Ipsum body
+                  </div>
+                </div>
+              </div>
+              <div
+                aria-hidden={true}
+                aria-labelledby="announcement-tabs-id-tab-1"
+                className="tab-pane fade"
+                id="announcement-tabs-id-pane-1"
+                role="tabpanel"
+              >
+                <div
+                  className="announcement"
+                >
+                  <div
+                    className="announcement-media announcement-text-only"
+                  >
+                    To remember
                   </div>
                 </div>
               </div>
@@ -771,7 +878,10 @@ exports[`Storyshots InstructionsText playground 1`] = `
                 </span>
                 <span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -798,7 +908,10 @@ exports[`Storyshots InstructionsText playground 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -825,7 +938,40 @@ exports[`Storyshots InstructionsText playground 1`] = `
                     </span>
                   </span>
                   <span>
-                     
+                    <span>
+                      <br />
+                        
+                    </span>
+                    <span
+                      style={Object {}}
+                    >
+                      summary
+                    </span>
+                    <span>
+                      =
+                      <span
+                        style={Object {}}
+                      >
+                        "
+                        <span
+                          style={
+                            Object {
+                              "color": "#22a",
+                              "wordBreak": "break-word",
+                            }
+                          }
+                        >
+                          To remember
+                        </span>
+                        "
+                      </span>
+                    </span>
+                  </span>
+                  <span>
+                    <span>
+                      <br />
+                        
+                    </span>
                     <span
                       style={Object {}}
                     >
@@ -1011,7 +1157,7 @@ exports[`Storyshots InstructionsText playground 1`] = `
                         }
                       </span>
                     </span>
-                     
+                    <br />
                   </span>
                 </span>
                 <span

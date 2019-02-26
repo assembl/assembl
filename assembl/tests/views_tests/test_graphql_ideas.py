@@ -531,6 +531,7 @@ query Idea($id: ID!, $lang: String!){
             announcement {
                 title(lang: $lang)
                 body(lang: $lang)
+                summary(lang: $lang)
             }
         }
     }
@@ -542,7 +543,8 @@ query Idea($id: ID!, $lang: String!){
         u'idea': {
             u'announcement': {
                 u'title': u"Announce title in English",
-                u'body': u"Announce body in English"
+                u'body': u"Announce body in English",
+                u'summary': u'Announce summary in English'
             }
         }
     }
@@ -693,7 +695,8 @@ def test_graphql_create_bright_mirror(graphql_request, graphql_registry, test_se
     idea = res.data['createThematic']['thematic']
     assert idea['announcement'] == {
         u'title': u'Title EN announce',
-        u'body': u'Body EN announce'
+        u'body': u'Body EN announce',
+        u'summary': None
     }
     assert idea['title'] == u'Understanding the dynamics and issues'
     assert idea['description'] == u'Desc EN'
@@ -1559,6 +1562,10 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
                     'bodyEntries': [
                         {'value': u"Body FR announce", 'localeCode': u"fr"},
                         {'value': u"Body EN announce", 'localeCode': u"en"}
+                    ],
+                    'summaryEntries': [
+                        {'value': u"Summary FR announce", 'localeCode': u"fr"},
+                        {'value': u"Summary EN announce", 'localeCode': u"en"}
                     ]
                 }
             }]
@@ -1572,7 +1579,10 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
                          {u'localeCode': u'fr', u'value': u'Body FR announce'}],
         u'titleEntries': [{u'localeCode': u'en', u'value': u'Title EN announce'},
                           {u'localeCode': u'fr', u'value': u'Title FR announce'}],
-        u'quoteEntries': []}
+        u'quoteEntries': [],
+        u'summaryEntries': [{u'localeCode': u'en', u'value': u'Summary EN announce'},
+                            {u'localeCode': u'fr', u'value': u'Summary FR announce'}]
+        }
     assert idea['titleEntries'] == [
         {u'localeCode': u'en', u'value': u'Understanding the dynamics and issues'},
         {u'localeCode': u'fr', u'value': u'Comprendre les dynamiques et les enjeux'}]
@@ -1610,6 +1620,10 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
                     'bodyEntries': [
                         {'value': u"[modified] Body FR announce", 'localeCode': u"fr"},
                         {'value': u"[modified] Body EN announce", 'localeCode': u"en"}
+                    ],
+                    'summaryEntries': [
+                        {'value': u"[modified] Summary FR announce", 'localeCode': u"fr"},
+                        {'value': u"[modified] Summary EN announce", 'localeCode': u"en"}
                     ]
                 }
             }]
@@ -1624,7 +1638,9 @@ def test_mutation_update_ideas_create(test_session, graphql_request, graphql_reg
                          {u'localeCode': u'fr', u'value': u'[modified] Body FR announce'}],
         u'titleEntries': [{u'localeCode': u'en', u'value': u'[modified] Title EN announce'},
                           {u'localeCode': u'fr', u'value': u'[modified] Title FR announce'}],
-        u'quoteEntries': []}
+        u'quoteEntries': [],
+        u'summaryEntries': [{u'localeCode': u'en', u'value': u'[modified] Summary EN announce'},
+                        {u'localeCode': u'fr', u'value': u'[modified] Summary FR announce'}],}
     assert idea['titleEntries'] == [
         {u'localeCode': u'en', u'value': u'[modified] Understanding the dynamics and issues'},
         {u'localeCode': u'fr', u'value': u'[modified] Comprendre les dynamiques et les enjeux'}]

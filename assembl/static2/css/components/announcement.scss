@@ -123,6 +123,15 @@
   }
 }
 
+.announcement-text-only {
+  font-family: $font-family4;
+  letter-spacing: 1px;
+  line-height: 36px;
+  margin-bottom: 33px;
+  font-size: $font-size-sm;
+  text-align: left;
+}
+
 @media screen and (min-width: $screen-xxs-max) {
   .announcement-menu {
     margin-left: 55px;
@@ -206,6 +215,27 @@
         & > a {
           padding-top: 5px;
         }
+      }
+    }
+  }
+
+  .announcement {
+    .announcement-text-only {
+      font-size: $font-size-m;
+    }
+
+    .iframed {
+      position: relative;
+      width: 100%;
+      height: 0;
+      padding-bottom: 54%;
+
+      iframe {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        left: 0;
+        top: 0;
       }
     }
   }

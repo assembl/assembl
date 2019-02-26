@@ -27,6 +27,7 @@ mutation createThematic(
         announcement {
           title
           body
+          summary
         }
         img {
           externalUrl

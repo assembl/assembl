@@ -96,6 +96,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
     const messageViewOverrideName = `${name}.messageViewOverride`;
     const announcementTitleName = `${name}.announcement.title`;
     const announcementBodyName = `${name}.announcement.body`;
+    const announcementSummaryName = `${name}.announcement.summary`;
     const checkedForm =
       theme &&
       theme.multiColumns &&
@@ -181,6 +182,23 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
         {theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.messageColumns ? (
           <MultiColumnsFields editLocale={editLocale} fieldPrefix={name} nbColumnsInForm={nbColumnsInForm} />
         ) : null}
+        <React.Fragment>
+          <div className="margin-l" />
+          <Helper
+            label={I18n.t('administration.summary')}
+            helperUrl="/static2/img/helpers/helper_BM_1.png"
+            helperText={I18n.t('administration.tableOfThematics.summaryHeader')}
+            classname="title"
+          />
+          <Field
+            key={`${announcementSummaryName}-${editLocale}`}
+            editLocale={editLocale}
+            name={announcementSummaryName}
+            label={`${I18n.t('administration.tableOfThematics.summaryLabel')} ${upperCaseLocale}`}
+            withAttachmentButton
+            component={MultilingualRichTextFieldAdapter}
+          />
+        </React.Fragment>
       </div>
     );
   }

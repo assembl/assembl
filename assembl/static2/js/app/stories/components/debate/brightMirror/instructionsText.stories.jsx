@@ -12,6 +12,7 @@ import type { InstructionsTextProps } from '../../../../components/debate/bright
 export const customInstructionsText: InstructionsTextProps = {
   title: 'Test',
   body: 'Lorem Ipsum body',
+  summary: 'To remember',
   semanticAnalysisForThematicData: {
     id: '1234',
     nlpSentiment: {

@@ -121,16 +121,23 @@ def announcement_en_fr(request, discussion, en_locale,
                     locale=fr_locale,
                     value=u"Une quote en français",
                     locale_confirmed=True))
+    summary = LangString.create(u"Announce summary in English", 'en')
+    summary.add_entry(LangStringEntry(
+                locale=fr_locale,
+                value=u"Announce retenir en Français",
+                locale_confirmed=True))
     announce = IdeaAnnouncement(creator=admin_user,
                                 last_updated_by=admin_user,
                                 title=title,
                                 body=body,
                                 discussion=discussion,
                                 idea=idea_with_en_fr,
-                                quote=quote)
+                                quote=quote,
+                                summary=summary)
 
     test_session.add(title)
     test_session.add(body)
+    test_session.add(summary)
     test_session.add(announce)
     test_session.flush()
 
@@ -138,6 +145,7 @@ def announcement_en_fr(request, discussion, en_locale,
         print "finalizer announcement_en_fr"
         test_session.delete(title)
         test_session.delete(body)
+        test_session.delete(summary)
         test_session.delete(announce)
         test_session.flush()
 

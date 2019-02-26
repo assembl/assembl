@@ -35,7 +35,8 @@ const getThemeData = (t: ThemeValueFromQuery): ThemeValue => {
   const announcement = {
     title: convertEntriesToI18nValue(t.announcement ? t.announcement.titleEntries : []),
     body: convertEntriesToI18nRichText(t.announcement ? t.announcement.bodyEntries : []),
-    quote: convertEntriesToI18nRichText(t.announcement ? t.announcement.quoteEntries : [])
+    quote: convertEntriesToI18nRichText(t.announcement ? t.announcement.quoteEntries : []),
+    summary: convertEntriesToI18nRichText(t.announcement ? t.announcement.summaryEntries : [])
   };
   const isChecked1 = t.messageColumns && t.messageColumns.length >= 1 ? t.messageColumns.length === 2 : true;
   const isChecked2 = t.messageColumns && t.messageColumns.length >= 1 ? t.messageColumns.length === 3 : false;

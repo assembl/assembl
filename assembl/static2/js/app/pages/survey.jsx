@@ -48,7 +48,6 @@ type Props = {
   refetchThematic: Function,
   title: string,
   description: string,
-  synthesisTitle: string,
   id: string,
   slug: string,
   totalSentiments: number,
@@ -128,7 +127,6 @@ class Survey extends React.Component<Props, State> {
       refetchThematic,
       title,
       description,
-      synthesisTitle,
       slug,
       totalSentiments,
       timeline,
@@ -143,14 +141,7 @@ class Survey extends React.Component<Props, State> {
     return (
       <div className="survey">
         <div className="relative">
-          <Header
-            title={title}
-            synthesisTitle={synthesisTitle}
-            subtitle={description}
-            imgUrl={imgUrl}
-            phaseId={phaseId}
-            type="idea"
-          >
+          <Header title={title} subtitle={description} imgUrl={imgUrl} phaseId={phaseId} type="idea">
             <HeaderStatistics statElements={statElements} />
           </Header>
           {announcement ? (
@@ -268,7 +259,6 @@ export default compose(
         refetchThematic: refetch,
         title: ownProps.title,
         description: ownProps.description,
-        synthesisTitle: ownProps.synthesisTitle,
         totalSentiments: totalSentiments,
         announcement: ownProps.announcement
       };
