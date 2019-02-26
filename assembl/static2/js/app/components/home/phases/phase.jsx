@@ -8,7 +8,7 @@ import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 import { browserHistory } from '../../../router';
 import { withScreenWidth } from '../../common/screenDimensions';
-import { SM_SCREEN_WIDTH, LG_SCREEN_WIDTH } from '../../../constants';
+import { isMobileSizedScreen, isTabletSizedScreen } from '../../../utils/globalFunctions';
 
 const BOX_TOP_MARGIN = {
   mobile: {
@@ -63,17 +63,19 @@ class Phase extends React.Component {
     const stepNumber = index + 1;
     const backgroundImage = imgUrl ? `url(${imgUrl})` : null;
 
+    const computeBoxTopMargin = (marginSettings) => {
+      const { maxTopMargin, marginStep, phasesPerLine } = marginSettings;
+      return maxTopMargin - (index % phasesPerLine) * marginStep;
+    };
+
     // Return top margin value according to the screenwidth
     const boxTopMargin = () => {
-      if (screenWidth < SM_SCREEN_WIDTH) {
-        const { maxTopMargin, marginStep, phasesPerLine } = BOX_TOP_MARGIN.mobile;
-        return maxTopMargin - (index % phasesPerLine) * marginStep;
-      } else if (screenWidth >= SM_SCREEN_WIDTH && screenWidth < LG_SCREEN_WIDTH) {
-        const { maxTopMargin, marginStep, phasesPerLine } = BOX_TOP_MARGIN.tablet;
-        return maxTopMargin - (index % phasesPerLine) * marginStep;
+      if (isMobileSizedScreen(screenWidth)) {
+        return computeBoxTopMargin(BOX_TOP_MARGIN.mobile);
+      } else if (isTabletSizedScreen(screenWidth)) {
+        return computeBoxTopMargin(BOX_TOP_MARGIN.tablet);
       }
-      const { maxTopMargin, marginStep, phasesPerLine } = BOX_TOP_MARGIN.desktop;
-      return maxTopMargin - (index % phasesPerLine) * marginStep;
+      return computeBoxTopMargin(BOX_TOP_MARGIN.desktop);
     };
 
     return (
