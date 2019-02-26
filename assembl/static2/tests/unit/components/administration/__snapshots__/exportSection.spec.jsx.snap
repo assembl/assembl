@@ -71,7 +71,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
           className="export-date"
         >
           <span>
-            Date de l'export
+            Export date
           </span>
           <div
             className="date-range-picker"
@@ -204,7 +204,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
           className="export-date"
         >
           <span>
-            Date de l'export
+            Export date
           </span>
           <div
             className="date-range-picker"
@@ -376,7 +376,7 @@ exports[`DumbExportSection component should render an export section that handle
           className="export-date"
         >
           <span>
-            Date de l'export
+            Export date
           </span>
           <div
             className="date-range-picker"
