@@ -111,7 +111,7 @@ $illustration-box-margin-right: 2px;
     justify-content: center;
   }
 
-  .objectives-section {
+  .objectives-section-1 {
     .container-objectives-img {
       display: flex;
       flex-direction: column;
@@ -382,7 +382,7 @@ $illustration-box-margin-right: 2px;
 
 @media screen and (max-width: $screen-sm-max) {
   .home {
-    .objectives-section {
+    .objectives-section-1 {
       .objectives-img {
         &.margin-right {
           margin-right: 0;
@@ -491,7 +491,7 @@ $illustration-box-margin-right: 2px;
       }
     }
 
-    .objectives-section {
+    .objectives-section-1 {
       .objectives-img.size-single-img {
         width: 100%;
       }
@@ -512,7 +512,7 @@ $illustration-box-margin-right: 2px;
     }
   }
 
-  .objectives-section {
+  .objectives-section-1 {
     .objectives {
       &:nth-child(3) {
         display: none;
@@ -523,7 +523,7 @@ $illustration-box-margin-right: 2px;
 
 @media screen and (min-width: $screen-xxs-max) {
   .home {
-    .objectives-section {
+    .objectives-section-1 {
       .container-objectives-img {
         flex-direction: row;
         overflow: hidden;

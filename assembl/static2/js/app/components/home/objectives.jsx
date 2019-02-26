@@ -37,7 +37,7 @@ const Objectives = ({ debate, timeline, lang, buttonLabel }: Props) => {
   const haveTwoImages = objectives.images.img1Url !== '' && objectives.images.img2Url !== '';
 
   return (
-    <section className="home-section objectives-section">
+    <section className="home-section objectives-section-1">
       <Grid fluid>
         <div className="max-container">
           <div className="title-section">
