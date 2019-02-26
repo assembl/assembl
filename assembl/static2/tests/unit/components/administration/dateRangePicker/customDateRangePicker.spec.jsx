@@ -1,47 +1,17 @@
 import React from 'react';
-import { configure, mount, shallow } from 'enzyme';
+import { configure, mount } from 'enzyme';
 import 'react-dates/initialize';
 import Adapter from 'enzyme-adapter-react-16.3';
-import moment from 'moment';
 
-import CustomDateRangePicker from './customDateRangePicker';
+import CustomDateRangePicker from '../../../../../js/app/components/administration/dateRangePicker/customDateRangePicker';
 
 // Import range presets for the datepicker
-import { datePickerPresets } from '../../../constants';
-import { getFullDebatePreset } from '../../form/utils';
-import PresetsList from './presetsList';
+import { datePickerPresets } from '../../../../../js/app/constants';
+import { getFullDebatePreset } from '../../../../../js/app/components/form/utils';
+// Import fake phases ranges presets
+import { mockPhasesPresets } from './constants';
 
 configure({ adapter: new Adapter() });
-
-const mockPhasesPresets = [
-  {
-    id: 1,
-    labelTranslationKey: 'administration.export.presets.phase',
-    range: {
-      startDate: moment(20190101, 'YYYYMMDD'),
-      endDate: moment(20190120, 'YYYYMMDD')
-    },
-    type: 'phase'
-  },
-  {
-    id: 2,
-    labelTranslationKey: 'administration.export.presets.phase',
-    range: {
-      startDate: moment(20190121, 'YYYYMMDD'),
-      endDate: moment(20190226, 'YYYYMMDD')
-    },
-    type: 'phase'
-  },
-  {
-    id: 3,
-    labelTranslationKey: 'administration.export.presets.phase',
-    range: {
-      startDate: moment(20190227, 'YYYYMMDD'),
-      endDate: moment(20190315, 'YYYYMMDD')
-    },
-    type: 'phase'
-  }
-];
 
 const fullDebatePreset = getFullDebatePreset(mockPhasesPresets);
 
