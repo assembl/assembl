@@ -3,7 +3,14 @@ import moment from 'moment';
 import type Moment from 'moment';
 import { type Map } from 'immutable';
 
-import { ICONS_PATH, PICTURE_BASE_URL, PICTURE_EXTENSION, PublicationStates } from '../constants';
+import {
+  ICONS_PATH,
+  PICTURE_BASE_URL,
+  PICTURE_EXTENSION,
+  PublicationStates,
+  SM_SCREEN_WIDTH,
+  LG_SCREEN_WIDTH
+} from '../constants';
 
 const getInputValue = (id: string) => {
   const elem = document.getElementById(id);
@@ -166,6 +173,9 @@ export const isMobile = {
   windows: () => navigator.userAgent.match(/IEMobile/i),
   any: () => isMobile.android() || isMobile.blackberry() || isMobile.ios() || isMobile.opera() || isMobile.windows()
 };
+
+export const isMobileSizedScreen = (screenWidth: number) => screenWidth < SM_SCREEN_WIDTH;
+export const isTabletSizedScreen = (screenWidth: number) => screenWidth >= SM_SCREEN_WIDTH && screenWidth < LG_SCREEN_WIDTH;
 
 // works for SCREAMING_SNAKE_CASE, snake_case or cRazY_SNAKE_case
 export const snakeToCamel = (string: string) => string.toLowerCase().replace(/_[a-z]/g, match => match[1].toUpperCase());

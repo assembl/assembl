@@ -1,4 +1,5 @@
 import React from 'react';
+import { compose } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Translate, Localize } from 'react-redux-i18n';
 
@@ -6,6 +7,26 @@ import { get } from '../../../utils/routeMap';
 import { getPhaseStatus, isSeveralIdentifiers } from '../../../utils/timeline';
 import { displayModal } from '../../../utils/utilityManager';
 import { browserHistory } from '../../../router';
+import { withScreenWidth } from '../../common/screenDimensions';
+import { isMobileSizedScreen, isTabletSizedScreen } from '../../../utils/globalFunctions';
+
+const BOX_TOP_MARGIN = {
+  mobile: {
+    maxTopMargin: 0,
+    marginStep: 0,
+    phasesPerLine: 1
+  },
+  tablet: {
+    maxTopMargin: 20,
+    marginStep: 10,
+    phasesPerLine: 2
+  },
+  desktop: {
+    maxTopMargin: 30,
+    marginStep: 10,
+    phasesPerLine: 4
+  }
+};
 
 class Phase extends React.Component {
   constructor(props) {
@@ -38,20 +59,35 @@ class Phase extends React.Component {
   }
 
   render() {
-    const { imgUrl, startDate, title, description, index } = this.props;
+    const { imgUrl, startDate, title, description, index, screenWidth } = this.props;
     const stepNumber = index + 1;
+    const backgroundImage = imgUrl ? `url(${imgUrl})` : null;
+
+    const computeBoxTopMargin = (marginSettings) => {
+      const { maxTopMargin, marginStep, phasesPerLine } = marginSettings;
+      return maxTopMargin - (index % phasesPerLine) * marginStep;
+    };
+
+    // Return top margin value according to the screenwidth
+    const boxTopMargin = () => {
+      if (isMobileSizedScreen(screenWidth)) {
+        return computeBoxTopMargin(BOX_TOP_MARGIN.mobile);
+      } else if (isTabletSizedScreen(screenWidth)) {
+        return computeBoxTopMargin(BOX_TOP_MARGIN.tablet);
+      }
+      return computeBoxTopMargin(BOX_TOP_MARGIN.desktop);
+    };
+
     return (
-      <div className="illustration-box">
-        <div className="image-box" style={imgUrl ? { backgroundImage: `url(${imgUrl})` } : null} />
+      <div className="illustration-box" style={{ backgroundImage: backgroundImage, marginTop: `${boxTopMargin()}px` }}>
         <div onClick={this.displayPhase} className="content-box">
-          <h1 className="timeline-box-number">{stepNumber}</h1>
+          {stepNumber && <h1 className="timeline-box-number">{stepNumber}</h1>}
           {title && <h3 className="light-title-3">{title}</h3>}
-          <h4 className="light-title-4">{startDate && <Localize value={startDate} dateFormat="date.format2" />}</h4>
+          {startDate && <h4 className="light-title-4">{<Localize value={startDate} dateFormat="date.format2" />}</h4>}
           {description && <div className="description-box">{description}</div>}
+          <div className="box-hyphen visible-lg">&nbsp;</div>
+          <div className="box-hyphen rotate-hyphen visible-lg">&nbsp;</div>
         </div>
-        <div className="color-box">&nbsp;</div>
-        <div className="box-hyphen hidden-xs">&nbsp;</div>
-        <div className="box-hyphen rotate-hyphen hidden-xs">&nbsp;</div>
       </div>
     );
   }
@@ -63,4 +99,4 @@ const mapStateToProps = state => ({
   timeline: state.timeline
 });
 
-export default connect(mapStateToProps)(Phase);
+export default compose(connect(mapStateToProps), withScreenWidth)(Phase);

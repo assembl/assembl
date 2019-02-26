@@ -1,3 +1,17 @@
+@keyframes pop {
+  0% {
+    transform: scale(1, 1);
+  }
+
+  50% {
+    transform: scale(1.1, 1.1);
+  }
+
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
 .footer {
   color: $white;
   font-family: $font-family4;
@@ -55,6 +69,17 @@
   }
 
   .social-medias {
+    list-style-type: none;
+    padding: 0;
+
+    li {
+      display: inline-block;
+    }
+
+    [class^='media-']:hover {
+      animation: pop 0.3s 2;
+    }
+
     i:before {
       font-size: 30px;
       margin: 10px 20px 30px;

@@ -37,7 +37,7 @@ class Header extends React.Component<Props> {
     return (
       <div className="header-section-container">
         <section className="header-section">
-          <Grid fluid className="max-container">
+          <Grid fluid className="max-container header-content-container">
             <div className="header-content">
               <h1 className={titleClassNames}>{title}</h1>
               {subtitle ? <h3 className="light-title-2">{subtitle}</h3> : null}

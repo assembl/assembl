@@ -55,7 +55,7 @@ exports[`CookiesSelector component should render a list of cookieSetter componen
               <span
                 className="assembl-icon-faq grey pointer"
                 onBlur={[Function]}
-                onClick={null}
+                onClick={[Function]}
                 onFocus={[Function]}
                 onMouseOut={[Function]}
                 onMouseOver={[Function]}

@@ -132,10 +132,9 @@
 
   .admin-menu-sticky {
     position: sticky;
-    top: 160px;
+    top: 100px;
     z-index: 99;
-    padding-left: 5px;
-    padding-right: 0;
+    padding: 15px 0 0 30px;
   }
 
   .admin-menu-container {
@@ -144,10 +143,6 @@
     max-width: 320px;
     overflow-y: auto;
     background-color: $page-bkg-grey;
-
-    .admin-menu2 {
-      padding-left: 5px;
-    }
   }
 
   .no-box-shadow {
@@ -458,12 +453,10 @@
 
   .save-bar {
     border-bottom: $navbar-border;
-    border-top: $navbar-border;
+    border-top: 0;
     background-color: $white;
     height: $navbar-height;
     padding: 10px 0;
-    position: sticky;
-    top: $navbar-height;
     width: 100%;
     z-index: 100;
   }
@@ -535,11 +528,7 @@
 
   .assembl-icon-faq {
     &:before {
-      font-size: $font-size-xxs;
-    }
-
-    &:hover {
-      color: $grey;
+      font-size: $font-size-sm;
     }
   }
 
@@ -665,7 +654,7 @@
     .settings-link {
       margin-left: 20px;
       font-size: $font-size-xs;
-      color: $purple;
+      color: $first-color;
       font-family: $font-family7;
 
       &:hover {
@@ -688,6 +677,7 @@
     }
 
     .admin-instruction {
+      display: block;
       margin-left: 50px;
       font-family: $font-family4;
     }
@@ -851,18 +841,67 @@
   }
 }
 
-@media screen and (max-width: $screen-md-min) {
-  .tabbed-content {
-    .admin-menu-sticky {
-      padding-left: initial;
-      padding-right: initial;
+@media screen and (min-width: $screen-sm-max) {
+  .administration .assembl-icon-faq {
+    &:before {
+      font-size: $font-size-xxs;
     }
 
-    .admin-menu-container {
-      padding: 0 15px;
+    &:hover {
+      color: $black;
+    }
+  }
+}
+
+@media screen and (max-width: $screen-md-min) {
+  .administration {
+    .admin-menu-sticky {
+      padding: 15px 0 0 15px;
 
       .admin-menu2 {
-        padding-left: 40px;
+        padding-left: 15px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: $screen-sm-min) {
+  .administration {
+    .margin-container {
+      margin: 10px 0 20px 0;
+    }
+
+    .admin-menu-sticky {
+      padding: 0;
+
+      .admin-menu2 {
+        padding-left: 8px;
+      }
+    }
+
+    .profile-options {
+      .profile-options-field {
+        input[type='text'] {
+          min-width: 240px;
+        }
+
+        .form-control {
+          width: 240px;
+        }
+      }
+    }
+
+    .timeline-admin {
+      .phase-side-title {
+        margin-left: 0;
+      }
+
+      .form-group .form-control {
+        width: 160px;
+      }
+
+      .admin-content {
+        padding: 10px 10px 40px;
       }
     }
   }

@@ -460,6 +460,42 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 }
 
+.column-post {
+  .post-body-title {
+    display: none;
+  }
+
+  .box {
+    border: none;
+  }
+
+  .answer-form {
+    border-top: none;
+  }
+
+  .column-hint {
+    font-family: $font-family4;
+    font-size: $font-size-m;
+    letter-spacing: 1px;
+    line-height: 30px;
+    padding-top: 20px;
+  }
+
+  .post-actions-separator {
+    margin: 7.5px auto 0 auto;
+  }
+}
+
+.action-validate {
+  border: none;
+}
+
+.post-actions-separator {
+  margin: 20px auto 10px auto;
+  border-bottom: 2px solid white;
+  width: 85%;
+}
+
 @media screen and (min-width: $screen-sm-min) {
   .proposals {
     .sentiment-label {
@@ -581,20 +617,28 @@ $deleted-post-border: 1px solid $light-grey !default;
       .sentiments {
         border-top: 0;
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: center;
         padding: 0;
         padding-top: 12px;
-        margin-left: 10px;
-        width: 30%;
+        padding-left: 10px;
 
         .custom-overlay {
+          display: flex;
+          flex-direction: column;
           text-align: center;
-          margin-top: 20px;
-          margin-bottom: 20px;
+          margin: 20px 10px 20px 0;
+
+          .sentiment-label-sm {
+            display: block;
+            font-size: $font-size-xs;
+            font-family: $font-family4;
+          }
         }
 
         .sentiment {
+          margin: 0;
+
           svg {
             vertical-align: middle;
           }
@@ -692,7 +736,12 @@ $deleted-post-border: 1px solid $light-grey !default;
 @media screen and (max-width: $screen-md-min) {
   .posts {
     .custom-overlay {
+      float: right;
       display: inline-block;
+    }
+
+    .post-actions-separator {
+      display: none;
     }
 
     .post-row {
@@ -704,9 +753,9 @@ $deleted-post-border: 1px solid $light-grey !default;
       width: 100%;
 
       .answers {
-        float: right;
-        display: block;
-        padding: 20px 20px 0 0;
+        float: none;
+        display: inline-block;
+        padding: 6px 0 0 0;
       }
     }
 
@@ -721,6 +770,10 @@ $deleted-post-border: 1px solid $light-grey !default;
     .post-actions {
       position: relative;
 
+      .post-action {
+        margin-top: 5px;
+      }
+
       .post-icons {
         border-bottom: 1px solid $light-grey;
         border-top: 1px solid $light-grey;
@@ -728,7 +781,7 @@ $deleted-post-border: 1px solid $light-grey !default;
 
         .post-action {
           display: inline-block;
-          margin: 0 10px;
+          margin: 8px 10px;
         }
 
         .add-sentiment {
@@ -787,40 +840,18 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 }
 
-.column-post {
-  .post-body-title {
-    display: none;
+@media screen and (max-width: $screen-xxs-max) {
+  .posts {
+    .post-right {
+      .answers {
+        float: left;
+        display: block;
+        padding: 6px 0 0 17px;
+      }
+    }
   }
 
-  .box {
-    border: none;
-  }
-
-  .answer-form {
-    border-top: none;
-  }
-
-  .column-hint {
-    font-family: $font-family4;
-    font-size: $font-size-m;
-    letter-spacing: 1px;
-    line-height: 30px;
-    padding-top: 20px;
-  }
-}
-
-.action-validate {
-  border: none;
-}
-
-.post-actions-separator {
-  margin: 20px auto 10px auto;
-  border-bottom: 2px solid white;
-  width: 85%;
-}
-
-.column-post {
-  .post-actions-separator {
-    margin: 7.5px auto 0 auto;
+  .proposals .statistic .sentiments {
+    flex-direction: column;
   }
 }

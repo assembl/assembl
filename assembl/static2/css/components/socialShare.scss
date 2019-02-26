@@ -1,28 +1,81 @@
 .share-buttons-container {
-  padding-top: 10px;
-  padding-bottom: 15px;
+  margin-bottom: 25px;
 
-  .btn-copy {
+  .social-share-buttons-container {
+    margin-top: 8px;
+    margin-bottom: 8px;
+  }
+
+  .btn-share {
+    padding: 8px 12px;
     white-space: normal;
     width: 60%;
 
-    &:focus {
-      outline: none;
+    svg {
+      margin-bottom: -2px;
+      margin-right: 6px;
+    }
+
+    &.btn-copy {
+      border: solid 1px $first-color;
+      background-color: $first-color;
+      color: $white;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        border: solid 1px $black;
+        background-color: $black;
+        color: $white;
+      }
+    }
+
+    &.btn-copied {
+      background-color: $green;
+      border: solid 1px $green;
+      color: $white;
+
+      &:focus {
+        outline: none;
+      }
+    }
+
+    &.btn-mail {
+      background-color: $white;
+      border: solid 1px $first-color;
+      color: $first-color;
+      margin-top: 8px;
+
+      &:focus {
+        outline: none;
+      }
+
+      &:hover {
+        border: solid 1px $black;
+        background-color: $black;
+        color: $white;
+
+        .mailIcon {
+          g {
+            fill: $white;
+          }
+        }
+      }
     }
   }
 
   @media screen and (max-width: 700px) {
-    .btn-copy {
+    .btn-share {
       width: 100%;
     }
   }
 
   .social-share-buttons-container {
-    padding-bottom: 20px;
-
     .social-share-button {
       display: inline-block;
-      padding: 0 15px;
+      padding: 0 10px;
     }
   }
 }
@@ -37,7 +90,7 @@
 }
 
 @media screen and (min-width: 701px) {
-  .btn-copy {
+  .btn-share {
     min-width: 300px;
   }
 }

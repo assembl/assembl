@@ -1,3 +1,5 @@
+$illustration-box-margin-right: 2px;
+
 .home {
   .home-section {
     &:nth-child(2) {
@@ -109,27 +111,24 @@
     justify-content: center;
   }
 
-  .objectives-section {
+  .objectives-section-1 {
     .container-objectives-img {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-
-      .objectives {
-        width: 100%;
-
-        &.margin-right {
-          margin-right: 0;
-        }
-      }
+      overflow: hidden;
     }
 
     .objectives-img {
       background-size: cover;
+      background-position-x: 50%;
       height: 480px;
       margin: 20px 0 0;
-      background-position-x: 50%;
+
+      &.size-single-img {
+        width: 100%;
+      }
     }
   }
 
@@ -202,45 +201,62 @@
   }
 
   .phases-section {
-    .illustration-box {
-      height: 500px;
+    .phases-container {
+      display: flex;
+      flex-wrap: wrap;
+      padding-bottom: 80px;
+      width: 100%;
 
-      .content-box {
-        &:hover {
-          .description-box {
-            display: block;
-          }
-        }
+      .illustration-box {
+        background-color: $grey;
+        background-position: top center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        height: 300px;
+        margin-bottom: 2px;
+        width: 100%;
 
-        .description-box {
-          bottom: 30px;
-          display: none;
-          font-family: $font-family4;
-          font-size: $font-size-s;
-          letter-spacing: $text-letter-spacing;
-          padding: 0 20px;
-          position: absolute;
-          height: 30%;
-          text-align: center;
+        .content-box {
+          background-color: rgba($black, 0.5);
+          position: relative;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
         }
       }
     }
 
     .bar {
       &:nth-child(1) {
-        margin: 80px 0 0;
+        margin-top: 80px;
       }
 
       &:nth-child(2) {
-        margin: 65px 0 0;
+        margin-top: 70px;
       }
 
       &:nth-child(3) {
-        margin: 50px 0 0;
+        margin-top: 60px;
       }
 
       &:nth-child(4) {
-        margin: 35px 0 0;
+        margin-top: 50px;
+      }
+
+      &:nth-child(5) {
+        margin-top: 40px;
+      }
+
+      &:nth-child(6) {
+        margin-top: 30px;
+      }
+
+      &:nth-child(7) {
+        margin-top: 20px;
+      }
+
+      &:nth-child(8) {
+        margin-top: 10px;
       }
     }
   }
@@ -329,12 +345,22 @@
       text-overflow: ellipsis;
     }
   }
+
+  .container-objectives-img {
+    .objectives-img {
+      &.size-single-img {
+        width: 100%;
+      }
+    }
+  }
 }
 
 /* Landscape phones and portrait tablets */
 @media screen and (max-width: $screen-xs-max) {
   .home {
     .header-section {
+      min-height: 500px;
+
       .header-content {
         padding: 60px 5px 120px;
       }
@@ -354,29 +380,25 @@
   }
 }
 
-@media screen and (min-width: $screen-md-min) {
-  .phases-section {
-    .phase {
-      &:nth-child(1) {
-        margin: 120px 0 0;
-      }
+@media screen and (max-width: $screen-sm-max) {
+  .home {
+    .objectives-section-1 {
+      .objectives-img {
+        &.margin-right {
+          margin-right: 0;
+        }
 
-      &:nth-child(2) {
-        margin: 80px 0 0;
-      }
+        &.size-single-img {
+          width: 50%;
+        }
 
-      &:nth-child(3) {
-        margin: 40px 0 0;
-      }
-
-      &:nth-child(4) {
-        margin: 0;
+        &.size-two-img {
+          width: 100%;
+        }
       }
     }
   }
-}
 
-@media screen and (max-width: $screen-sm-max) {
   .themes-section {
     .theme {
       &:nth-child(1) {
@@ -396,48 +418,6 @@
       }
     }
   }
-
-  .phases-section {
-    .hidden-xs {
-      display: none;
-    }
-
-    .phase {
-      &:nth-child(1) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(2) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(3) {
-        margin: 2px 0 0;
-      }
-
-      &:nth-child(4) {
-        margin: 2px 0 0;
-      }
-    }
-
-    .bar {
-      &:nth-child(1) {
-        margin: 95px 0 0;
-      }
-
-      &:nth-child(2) {
-        margin: 80px 0 0;
-      }
-
-      &:nth-child(3) {
-        margin: 65px 0 0;
-      }
-
-      &:nth-child(4) {
-        margin: 50px 0 0;
-      }
-    }
-  }
 }
 
 @media screen and (min-width: $screen-sm-min) {
@@ -447,21 +427,20 @@
         padding: 75px 40px 150px;
       }
     }
+
+    .phases-section {
+      .phases-container {
+        .illustration-box {
+          margin-right: $illustration-box-margin-right;
+          width: calc(50% - #{$illustration-box-margin-right});
+        }
+      }
+    }
   }
 }
 
 @media screen and (max-width: $screen-sm-min) {
   .home {
-    .phases-section {
-      .illustration-box {
-        height: 300px;
-
-        .color-box {
-          height: 300px;
-        }
-      }
-    }
-
     .padding-sm {
       padding: 40px 0;
     }
@@ -489,11 +468,32 @@
   }
 }
 
+@media screen and (min-width: $screen-lg-min) {
+  .home {
+    .phases-section {
+      .phases-container {
+        padding-bottom: 0;
+
+        .illustration-box {
+          height: 500px;
+          width: calc(25% - #{$illustration-box-margin-right});
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: $screen-xxs-max) {
   .home {
     .header-section {
       .header-content {
         padding: 10px 5px 170px;
+      }
+    }
+
+    .objectives-section-1 {
+      .objectives-img.size-single-img {
+        width: 100%;
       }
     }
 
@@ -512,7 +512,7 @@
     }
   }
 
-  .objectives-section {
+  .objectives-section-1 {
     .objectives {
       &:nth-child(3) {
         display: none;
@@ -523,13 +523,18 @@
 
 @media screen and (min-width: $screen-xxs-max) {
   .home {
-    .objectives-section {
+    .objectives-section-1 {
       .container-objectives-img {
         flex-direction: row;
+        overflow: hidden;
 
-        .objectives {
+        .objectives-img {
           &.margin-right {
             margin-right: 20px;
+          }
+
+          &.size-two-img {
+            width: 100%;
           }
         }
       }

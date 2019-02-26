@@ -3,13 +3,17 @@ import * as React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import { I18n } from 'react-redux-i18n';
+import classNames from 'classnames';
+
+import MailIcon from '../common/icons/mailIcon/mailIcon';
+import LinkIcon from '../common/icons/linkIcon/linkIcon';
+import ThickIcon from '../common/icons/tickIcon/tickIcon';
 
 const {
   FacebookShareButton,
   GooglePlusShareButton,
   LinkedinShareButton,
   TwitterShareButton,
-  EmailShareButton,
   WhatsappShareButton,
   TelegramShareButton
 } = ShareButtons;
@@ -42,6 +46,22 @@ const SuperShareButton = ({ Component, Icon, url, onClose, ...props }: SuperShar
   );
 };
 
+type EmailButtonProps = {
+  url: string
+};
+
+const EmailButton = ({ url }: EmailButtonProps) => {
+  const onClick = () => {
+    window.location.href = `mailto:?body=${url}`;
+  };
+  return (
+    <button className="btn btn-default btn-share btn-mail" onClick={() => onClick()}>
+      <MailIcon />
+      {I18n.t('debate.shareMail')}
+    </button>
+  );
+};
+
 export default class SocialShare extends React.Component<Props, State> {
   state = {
     copied: false
@@ -64,26 +84,28 @@ export default class SocialShare extends React.Component<Props, State> {
       <SuperShareButton Component={Component} Icon={generateShareIcon(iconName)} url={url} onClose={onClose} key={index} />
     ));
 
+    const contentCopied = (
+      <React.Fragment>
+        <ThickIcon />
+        {I18n.t('debate.linkCopied')}
+      </React.Fragment>
+    );
+
+    const contentCopy = (
+      <React.Fragment>
+        <LinkIcon />
+        {I18n.t('debate.copyLink')}
+      </React.Fragment>
+    );
+
     return (
-      <div className="share-buttons-container">
-        {social ? (
-          <div className="social-share-buttons-container">{SocialNetworks}</div>
-        ) : (
-          <div className="social-share-buttons-container">
-            <div className="social-share-button">
-              <SuperShareButton
-                Component={EmailShareButton}
-                Icon={generateShareIcon('email')}
-                url={url}
-                body={url}
-                onClose={onClose}
-              />
-            </div>
-          </div>
-        )}
+      <div className="share-buttons-container center">
         <CopyToClipboard text={url} onCopy={() => this.setState({ copied: true })}>
-          <button className="btn btn-default btn-copy">{copied ? I18n.t('debate.linkCopied') : I18n.t('debate.copyLink')}</button>
+          <button className={classNames('btn btn-default btn-share', copied ? 'btn-copied' : 'btn-copy')}>
+            {copied ? contentCopied : contentCopy}
+          </button>
         </CopyToClipboard>
+        {social ? <div className="social-share-buttons-container">{SocialNetworks}</div> : <EmailButton url={url} />}
       </div>
     );
   }

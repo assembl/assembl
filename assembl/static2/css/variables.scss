@@ -10,7 +10,7 @@ $orange4: #fbb040;
 $error: #a94442;
 $red: #f75959;
 $lightred: #ffcfcf;
-$green: #7ed321;
+$green: #30c86e;
 $green2: #5ecc6b;
 $light-green: #93e79d;
 $blue: #7490ca;
@@ -54,6 +54,9 @@ $timeline-box-number-color: $white;
 $app-max-width: 1400px;
 $navbar-height: 60px;
 $navbar-line-height: 64px;
+
+$alert-mobile-position: 140px;
+$alert-mobile-height: 80px;
 
 $margin-section-xxl: 240px;
 $margin-section-xl: 200px;
@@ -179,6 +182,8 @@ $partner-logo-height: 100px;
 
 $line-height-base: 1.428571429 !default;
 $line-height: 1.4;
+$line-height-small: 1.27;
+$line-height-big: 1.5;
 $lines-to-show: 3;
 
 $small-hyphen-width: 50px;

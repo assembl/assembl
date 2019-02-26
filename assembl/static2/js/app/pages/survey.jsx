@@ -182,7 +182,7 @@ class Survey extends React.Component<Props, State> {
               isPhaseCompleted={isPhaseCompleted}
             />
           )}
-          <div className="proposals" style={{ minHeight: '100px' }}>
+          <div className="proposals" style={{ minHeight: '200px' }}>
             <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">
               <Grid fluid className="background-light">
                 {numPosts > 0 ? (

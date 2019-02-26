@@ -59,7 +59,7 @@
 .dark-title-5 {
   color: $title5-dark-color;
   font-family: $font-family4;
-  font-size: $title5-size + 2px;
+  font-size: $title5-size;
   letter-spacing: $title-letter-spacing;
   line-height: $title1-size;
 }
@@ -75,7 +75,7 @@
   font-family: $font-family4;
   font-size: $title6-size;
   letter-spacing: $title-letter-spacing;
-  line-height: $title1-size + 10px;
+  line-height: $line-height-small;
 }
 
 .light-title-1 {
@@ -83,7 +83,7 @@
   font-family: $font-family4;
   font-size: $title1-size;
   letter-spacing: $title-letter-spacing;
-  line-height: $title1-size + 10px;
+  line-height: $line-height-small;
 }
 
 .light-title-2 {
@@ -97,7 +97,7 @@
   font-family: $font-family5;
   font-size: $title3-size;
   text-transform: uppercase;
-  line-height: $title3-size + 10px;
+  line-height: $line-height-big;
 }
 
 .light-title-4 {
@@ -105,13 +105,13 @@
   font-family: $font-family;
   font-size: $title4-size;
   letter-spacing: $title-letter-spacing;
-  line-height: $title4-size + 10px;
+  line-height: $line-height-big;
 }
 
 .light-title-5 {
   color: $title5-light-color;
   font-family: $font-family4;
-  font-size: $title5-size + 2px;
+  font-size: $title5-size;
   letter-spacing: $title-letter-spacing;
   line-height: $title1-size;
 }
@@ -127,7 +127,7 @@
   font-family: $font-family4;
   font-size: $title6-size;
   letter-spacing: $title-letter-spacing;
-  line-height: $title1-size + 10px;
+  line-height: $line-height-small;
 }
 
 .collapsed-title {
@@ -233,7 +233,7 @@
 @media screen and (max-width: $screen-sm-min) {
   .collapsed-title {
     font-size: $font-size-s;
-    line-height: $font-size-s + 6px;
+    line-height: $line-height;
     margin: 0 -15px 30px -15px;
     padding: 20px 10px 20px 10px;
 
@@ -273,6 +273,10 @@
     &.padding-title {
       padding-left: 20px;
     }
+  }
+
+  .annotation {
+    font-size: $font-size-xxs;
   }
 }
 

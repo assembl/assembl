@@ -54,7 +54,7 @@
     }
 
     .action-button {
-      padding: 10px 0 8px;
+      padding: 10px 8px;
     }
   }
 
@@ -226,9 +226,9 @@
 }
 
 @media screen and (max-width: 1019px) {
-  .intermediary-container {
+  .header-section .statistic .intermediary-container {
     .stat-container {
-      padding: 0 12px !important;
+      padding: 0 12px;
     }
   }
 }
@@ -272,14 +272,19 @@
   }
 }
 
-@media screen and (max-width: 375px) {
+@media screen and (max-width: $screen-sm-min) {
   .header-section {
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+
     .statistic {
       .intermediary-container {
         padding: 20px 0;
 
         .stat-container {
           margin-top: 5px;
+          padding: 0 9px;
 
           .stat-box {
             display: block !important;
@@ -296,6 +301,24 @@
           }
         }
       }
+    }
+
+    .header-content-container {
+      width: 100%;
+      max-height: 75%;
+      min-height: 75%;
+      justify-content: center;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header-content {
+      margin: 0;
+      padding-top: 0;
+    }
+
+    .header-actions-container {
+      padding: 10px 0 0 40px;
     }
   }
 }

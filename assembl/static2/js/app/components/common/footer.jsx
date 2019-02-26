@@ -58,13 +58,15 @@ const Footer = ({
               <p>
                 <Translate value="footer.socialMedias" />
               </p>
-              <div className="social-medias">
+              <ul className="social-medias">
                 {socialMedias.map((sMedia, index) => (
-                  <Link to={sMedia.url} target="_blank" key={index}>
-                    <i className={`assembl-icon-${sMedia.name}-circle`} />
-                  </Link>
+                  <li className={`media-${index}`}>
+                    <Link to={sMedia.url} target="_blank" key={index}>
+                      <i className={`assembl-icon-${sMedia.name}-circle`} />
+                    </Link>
+                  </li>
                 ))}
-              </div>
+              </ul>
             </div>
           )}
           {footerLinks && (

@@ -3,6 +3,8 @@ import * as React from 'react';
 import { OverlayTrigger, Popover } from 'react-bootstrap';
 import classnames from 'classnames';
 
+import { isMobile } from '../../utils/globalFunctions';
+
 type HelperProps = {
   label?: string,
   helperUrl?: string,
@@ -27,9 +29,9 @@ const Helper = ({ label, helperUrl, helperText, classname, additionalTextClasses
     {label && label}
     &nbsp;
     <OverlayTrigger
-      trigger={['hover', 'focus']}
+      trigger={['hover', 'focus', 'click']}
       rootClose
-      placement="right"
+      placement={isMobile.any() ? 'bottom' : 'right'}
       overlay={overflowMenu(helperUrl, helperText, additionalTextClasses, popOverClass)}
     >
       <span className="assembl-icon-faq grey pointer" />
