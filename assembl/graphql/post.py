@@ -12,7 +12,7 @@ from sqlalchemy import exists
 
 from assembl import models
 from assembl.auth import (
-    Everyone, P_MODERATE, P_DELETE_MY_POST, P_DELETE_POST, CrudPermissions)
+    Everyone, P_MODERATE, P_DELETE_MY_POST, P_DELETE_POST, P_ADD_SIDE_COMMENT, CrudPermissions)
 from assembl.auth.util import get_permissions
 from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.models.auth import (LanguagePreferenceCollection,
@@ -764,10 +764,12 @@ class AddPostExtract(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
         discussion_id = context.matchdict['discussion_id']
-
         user_id = context.authenticated_userid or Everyone
+
+        permissions = get_permissions(user_id, discussion_id)
+        if P_ADD_SIDE_COMMENT not in permissions and require_cls_permission(CrudPermissions.CREATE, models.Extract, context):
+            raise HTTPUnauthorized()
 
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
