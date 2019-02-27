@@ -60,5 +60,6 @@
   "integration101FormBuilderPage": "integration/101/form-builder",
   "integrationBrightMirrorIndex": "integration/bright-mirror/index",
   "integrationBrightMirrorFiction": "integration/bright-mirror/bright-mirror-fiction",
-  "integrationSemanticAnalysis": "integration/semantic-analysis/semantic-analysis"
+  "integrationSemanticAnalysis": "integration/semantic-analysis/semantic-analysis",
+  "integrationTagOnPost": "integration/tag-on-post/tag-on-post"
 }

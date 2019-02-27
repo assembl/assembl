@@ -44,6 +44,16 @@ const index = () => (
         </ListGroup>
       </Col>
     </Row>
+    <Row>
+      <Col xs={12}>
+        <h2>Tag On Post pages</h2>
+        <ListGroup componentClass="ul">
+          <li>
+            <Link to={`${get('integrationTagOnPost')}`}>Tag On Post (section only)</Link>
+          </li>
+        </ListGroup>
+      </Col>
+    </Row>
   </Grid>
 );
 
