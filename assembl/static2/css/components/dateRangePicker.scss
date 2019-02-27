@@ -9,6 +9,28 @@
     width: 156px;
   }
 
+  .DateInput_input,
+  .DateInput_input__focused {
+    width: 68%;
+  }
+
+  input[aria-label='Start Date'] {
+    margin-left: 40px;
+
+    &[value=''] {
+      width: 55%;
+    }
+  }
+
+  input[aria-label='End Date'] {
+    margin-left: 10px;
+
+    &[value=''] {
+      width: 50%;
+      margin-left: 30px;
+    }
+  }
+
   .dropdown {
     width: 100%;
 
