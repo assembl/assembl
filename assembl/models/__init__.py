@@ -366,6 +366,11 @@ from .tag import (  # noqa: E402, F401
     ExtractsTagsAssociation
 )
 
+from .abstract_tag import (  # noqa: E402, F401
+    AbstractTag,
+    TagOnPost
+)
+
 from .resource import Resource  # noqa: E402, F401
 
 from .section import Section  # noqa: E402, F401

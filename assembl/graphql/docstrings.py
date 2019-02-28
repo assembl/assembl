@@ -54,6 +54,7 @@ class Schema:
     text_fields = """A list of ConfigurableField union, where each text field represents a field on a bound entity."""
     profile_fields = """A list of ConfigurableField union, where each text field represents a field on a profile only."""
     timeline = """A list of DiscussionPhase objects, descriping the timeline objects on the debate."""
+    abstract_tags = """A list of abstract tags associated to Posts"""
 
 
 class SchemaPosts:
@@ -249,6 +250,23 @@ class ExtractInterface:
 class TagInterface:
     __doc__ = """A tag is a string. It allows to classify objects such as extracts."""
     value = """The value of the tag. This is not language dependent, but rather just unicode text."""
+
+
+class AbstractTagInterface:
+    __doc__ = """An abstract tag is a string. It allows to classify posts."""
+    value = """The value of the abstract tag. This is not language dependent, but rather just unicode text."""
+
+
+class AddTagOnPost:
+    __doc__ = """A mutation to add an AbstractTag to a Post."""
+    post_id = Default.node_id % ("Post")
+    value = """The value of the tag"""
+
+
+class DeleteTagOnPost:
+    __doc__ = """A mutation to create an AbstractTag association to a Post."""
+    post_id = Default.node_id % ("Post")
+    value = """The value of the tag"""
 
 
 class PostExtract:
@@ -588,6 +606,7 @@ class PostInterface:
     modified = """A boolean flag to say whether the post is modified or not."""
     parent_post_creator = "The User or AgentProfile who created the parent post."
     parent_extract_id = "The Extract id to which the post is associated with"
+    tags = """A list of abstract tags associated to the post."""
 
 
 class Post:

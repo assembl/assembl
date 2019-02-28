@@ -1,0 +1,7 @@
+mutation addTagOnPost($postId: ID!, $value: String!) {
+  addTagOnPost(postId: $postId, value: $value) {
+    tags {
+      value
+    }
+  }
+}

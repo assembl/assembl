@@ -1,0 +1,7 @@
+mutation deleteTagOnPost($postId: ID!, $value: String!) {
+  deleteTagOnPost(postId: $postId, value: $value) {
+    tags {
+      value
+    }
+  }
+}

@@ -1,0 +1,5 @@
+query AbstractTags {
+  abstractTags {
+    value
+  }
+}

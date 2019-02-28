@@ -42,6 +42,7 @@ from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
 from assembl.graphql.tag import Tag
+from assembl.graphql.abstract_tag import (AbstractTag, AddTagOnPost, DeleteTagOnPost)
 from .configurable_fields import (
     ConfigurableFieldUnion, CreateTextField, UpdateTextField,
     DeleteTextField, ProfileField, UpdateProfileFields)
@@ -141,6 +142,9 @@ class Query(graphene.ObjectType):
         lambda: Tag,
         filter=graphene.String(description=docs.SchemaTags.filter),
         description=docs.SchemaTags.__doc__)
+    abstract_tags = graphene.List(
+        lambda: AbstractTag,
+        description=docs.Schema.abstract_tags.__doc__)
 
     def resolve_tags(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -154,6 +158,14 @@ class Query(graphene.ObjectType):
 
         _filter = '%{}%'.format(_filter)
         return query.filter(model.value.ilike(_filter)).all()
+
+    def resolve_abstract_tags(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        model = models.AbstractTag
+        query = get_query(model, context).filter(
+            model.discussion_id == discussion_id)
+
+        return query.all()
 
     def resolve_resources(self, args, context, info):
         model = models.Resource
@@ -528,6 +540,8 @@ class Mutations(graphene.ObjectType):
     update_discussion_phase = UpdateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     delete_discussion_phase = DeleteDiscussionPhase.Field(description=docs.DeleteDiscussionPhase.__doc__)
     update_harvesting_translation_preference = UpdateHarvestingTranslationPreference.Field(description=docs.UpdateHarvestingTranslationPreference.__doc__)
+    add_tag_on_post = AddTagOnPost.Field(description=docs.AddTagOnPost.__doc__)
+    delete_tag_on_post = DeleteTagOnPost.Field(description=docs.DeleteTagOnPost.__doc__)
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)
