@@ -1,0 +1,26 @@
+.tag-on-post-container {
+  border-bottom: solid 1px $grey;
+  border-top: solid 1px $grey;
+  color: $grey;
+  padding-top: 5px;
+  padding-bottom: 5px;
+
+  .suggestion-container {
+    border-top: solid 1px $grey;
+    padding-top: 5px;
+  }
+
+  .title {
+    font-size: 1.1rem;
+    letter-spacing: 1.2px;
+  }
+
+  .suggestion-list {
+    span {
+      display: inline-block;
+      font-size: 1rem;
+      letter-spacing: normal;
+      margin-right: 15px;
+    }
+  }
+}

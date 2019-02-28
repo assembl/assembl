@@ -16,7 +16,7 @@ describe('<TagOnPost /> - with shallow', () => {
     wrapper = shallow(<TagOnPost />);
   });
 
-  it('should render a title', () => {
-    expect(wrapper.find('h1')).toHaveLength(1);
+  it('should render a div', () => {
+    expect(wrapper.find('div')).toHaveLength(7);
   });
 });
