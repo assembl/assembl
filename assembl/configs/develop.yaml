@@ -54,6 +54,7 @@ use_letsencrypt: false
 mail.port: 8025
 mail.host: localhost
 
+theme_base: "%(code_root)s/static2/build/themes/develop"
 disable_notification: true
 visible_errors: true
 frozen_requirements: requirements-dev.frozen.txt
