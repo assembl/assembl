@@ -21,6 +21,8 @@ class CustomDateRangePicker extends React.PureComponent<Props, State> {
     start: null,
     end: null,
     focusedInput: null,
+    // selectedPreset is handled at this level and not in PresetsList
+    // so that we keep this info when the DateRangePicker is closed/reopened
     selectedPreset: null
   };
 

@@ -22,7 +22,7 @@ const PresetsList = ({ onPresetSelect, presets, selectedPreset }: Props) => {
       onSelect={onPresetSelect}
     >
       {presets.map((preset) => {
-        const isPhase = preset.labelTranslationKey === 'administration.export.presets.phase';
+        const isPhase = preset.type === 'phase';
         return (
           <MenuItem key={preset.id} eventKey={preset}>
             <Translate value={preset.labelTranslationKey} count={isPhase ? preset.id : null} />
