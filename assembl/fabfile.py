@@ -210,6 +210,7 @@ def sanitize_env():
     env.group = env.get('group', env.user)
     env.wheel_path = env.get('assembl_wheel_dir', os.path.join('/home/%s/' % env.user, 'assembl_wheels'))
     env.webmaster_user = env.get('webmaster_user', 'webmaster')
+    env.package_install = as_bool(env.get('package_install', False))
     populate_secrets()
 
 
