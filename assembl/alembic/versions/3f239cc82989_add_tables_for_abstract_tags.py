@@ -1,14 +1,14 @@
 """Add tables for abstract tags
 
 Revision ID: 3f239cc82989
-Revises: 4f529b59026b
+Revises: 96c1c41d223b
 Create Date: 2019-02-22 17:33:55.001649
 
 """
 
 # revision identifiers, used by Alembic.
 revision = '3f239cc82989'
-down_revision = '4f529b59026b'
+down_revision = '96c1c41d223b'
 
 from alembic import context, op
 import sqlalchemy as sa
