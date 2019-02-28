@@ -73,4 +73,4 @@ disable_notification = true
 visible_errors = true
 
 # This is a bucket dedicated for local development
-theme_bucket = %(code_root)s/assembl/static2/build/themes/develop
+theme_base = %(code_root)s/assembl/static2/build/themes/develop
