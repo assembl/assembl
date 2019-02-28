@@ -5,12 +5,13 @@ import React from 'react';
 import TagContainer from '../../../components/common/tagContainer/tagContainer';
 import SuggestionContainer from '../../../components/common/suggestionContainer/suggestionContainer';
 
-// Type imports
+// Data imports
+import { defaultProps as suggestionContainerProps } from '../../../components/common/suggestionContainer/suggestionContainer.stories';
 
 const TagOnPost = () => (
   <div className="tag-on-post-container">
     <TagContainer />
-    <SuggestionContainer />
+    <SuggestionContainer {...suggestionContainerProps} />
   </div>
 );
 
