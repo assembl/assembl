@@ -963,8 +963,8 @@ class Notification(Base):
 
     @classmethod
     def get_css_paths(cls, discussion):
-        from ..views import get_theme_info, get_theme_base_path
-        (theme_name, theme_relative_path) = get_theme_info(discussion)
+        from ..views import get_theme_info_deprecated, get_theme_base_path
+        (theme_name, theme_relative_path) = get_theme_info_deprecated(discussion)
         assembl_css_path = os.path.normpath(os.path.join(get_theme_base_path(), theme_relative_path, 'assembl_notifications.css'))
         assembl_css = open(assembl_css_path)
         assert assembl_css
