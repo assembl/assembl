@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, number } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 /* eslint-enable */
@@ -20,15 +19,12 @@ export const defaultSideCommentBadge: SideCommentBadgeProps = {
 
 storiesOf('SideCommentBadge', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <SideCommentBadge {...defaultSideCommentBadge} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <SideCommentBadge
-        extractsNumber={number('extractsNumber', defaultSideCommentBadge.extractsNumber)}
-        position={defaultSideCommentBadge.position}
-        showBox={defaultSideCommentBadge.showBox}
-        toggleExtractsBox={defaultSideCommentBadge.toggleExtractsBox}
-      />
-    ))
-  );
+  .add('default', () => <SideCommentBadge {...defaultSideCommentBadge} />)
+  .add('playground', () => (
+    <SideCommentBadge
+      extractsNumber={number('extractsNumber', defaultSideCommentBadge.extractsNumber)}
+      position={defaultSideCommentBadge.position}
+      showBox={defaultSideCommentBadge.showBox}
+      toggleExtractsBox={defaultSideCommentBadge.toggleExtractsBox}
+    />
+  ));

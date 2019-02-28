@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -35,16 +34,13 @@ const playground: Object = {
 
 storiesOf('Checkbox101', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <Checkbox101 {...defaultCheckbox} />))
-  .add('checked', withInfo()(() => <Checkbox101 {...checkedCheckbox} />))
-  .add('custom label', withInfo()(() => <Checkbox101 {...customLabelCheckbox} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <Checkbox101
-        label={text('label', playground.label)}
-        isDone={boolean('isDone', playground.isDone)}
-        onChangeHandler={actions.onChangeHandler}
-      />
-    ))
-  );
+  .add('default', () => <Checkbox101 {...defaultCheckbox} />)
+  .add('checked', () => <Checkbox101 {...checkedCheckbox} />)
+  .add('custom label', () => <Checkbox101 {...customLabelCheckbox} />)
+  .add('playground', () => (
+    <Checkbox101
+      label={text('label', playground.label)}
+      isDone={boolean('isDone', playground.isDone)}
+      onChangeHandler={actions.onChangeHandler}
+    />
+  ));

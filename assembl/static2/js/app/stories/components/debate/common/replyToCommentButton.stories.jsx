@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 /* eslint-enable */
 
 import ReplyToCommentButton from '../../../../components/debate/common/replyToCommentButton';
@@ -19,5 +18,5 @@ export const disabledReplyToCommentButton: ReplyToCommentButtonProps = {
 };
 
 storiesOf('ReplyToCommentButton', module)
-  .add('default', withInfo()(() => <ReplyToCommentButton {...defaultReplyToCommentButton} />))
-  .add('disabled', withInfo()(() => <ReplyToCommentButton {...disabledReplyToCommentButton} />));
+  .add('default', () => <ReplyToCommentButton {...defaultReplyToCommentButton} />)
+  .add('disabled', () => <ReplyToCommentButton {...disabledReplyToCommentButton} />);

@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 /* eslint-enable */
 
 import FictionCommentForm from '../../../../components/debate/brightMirror/fictionCommentForm';
@@ -32,6 +31,6 @@ const fictionCommentFormInEditMode: FictionCommentFormProps = {
 };
 
 storiesOf('FictionCommentForm', module)
-  .add('default', withInfo()(() => <FictionCommentForm {...defaultFictionCommentForm} />))
-  .add('with comment', withInfo()(() => <FictionCommentForm {...fictionCommentFormWithComment} />))
-  .add('in edit mode', withInfo()(() => <FictionCommentForm {...fictionCommentFormInEditMode} />));
+  .add('default', () => <FictionCommentForm {...defaultFictionCommentForm} />)
+  .add('with comment', () => <FictionCommentForm {...fictionCommentFormWithComment} />)
+  .add('in edit mode', () => <FictionCommentForm {...fictionCommentFormInEditMode} />);

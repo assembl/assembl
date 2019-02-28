@@ -1,6 +1,7 @@
 import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
-import { withOptions } from '@storybook/addon-options';
+import { setOptions } from '@storybook/addon-options';
+import { withInfo } from '@storybook/addon-info';
 import { I18n } from 'react-i18nify';
 import { Grid, Row, Col } from 'react-bootstrap';
 import messages from '../js/app/utils/translations';
@@ -18,8 +19,10 @@ import '../css/themes/default/assembl_web.scss';
 // );
 // addDecorator(bootstrapWrapperDecorator);
 
+addDecorator(withInfo);
+
 // Option defaults:
-withOptions({
+setOptions({
   name: 'Assembl',
   url: '#',
   hierarchySeparator: /\//,

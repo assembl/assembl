@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -27,14 +26,11 @@ export const customInstructionsText: InstructionsTextProps = {
 
 storiesOf('InstructionsText', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <InstructionsText {...customInstructionsText} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <InstructionsText
-        {...customInstructionsText}
-        title={text('title', customInstructionsText.title)}
-        body={text('body', customInstructionsText.body)}
-      />
-    ))
-  );
+  .add('default', () => <InstructionsText {...customInstructionsText} />)
+  .add('playground', () => (
+    <InstructionsText
+      {...customInstructionsText}
+      title={text('title', customInstructionsText.title)}
+      body={text('body', customInstructionsText.body)}
+    />
+  ));

@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, object } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -30,6 +29,6 @@ const emptyListOfCheckboxes: CheckboxList101Type = {
 
 storiesOf('CheckboxList101', module)
   .addDecorator(withKnobs)
-  .add('List of 5', withInfo()(() => <CheckboxList101 {...listOf5Checkboxes} />))
-  .add('Empty list', withInfo()(() => <CheckboxList101 {...emptyListOfCheckboxes} />))
-  .add('playground', withInfo()(() => <CheckboxList101 checkboxes={object('checkboxes', listOfcheckboxes)} />));
+  .add('List of 5', () => <CheckboxList101 {...listOf5Checkboxes} />)
+  .add('Empty list', () => <CheckboxList101 {...emptyListOfCheckboxes} />)
+  .add('playground', () => <CheckboxList101 checkboxes={object('checkboxes', listOfcheckboxes)} />);

@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, boolean, number } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -24,15 +23,12 @@ const playground = {
 
 storiesOf('DeletedFictionComment', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <DeletedFictionComment {...defaultDeletedFictionComment} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <DeletedFictionComment
-        expandCollapseCallbackFromTree={playground.expandCollapseCallbackFromTree}
-        expandedFromTree={playground.expandedFromTree}
-        isDeletedByAuthor={boolean('Is comment deleted by author', playground.isDeletedByAuthor)}
-        numChildren={number('Number of comments', playground.numChildren)}
-      />
-    ))
-  );
+  .add('default', () => <DeletedFictionComment {...defaultDeletedFictionComment} />)
+  .add('playground', () => (
+    <DeletedFictionComment
+      expandCollapseCallbackFromTree={playground.expandCollapseCallbackFromTree}
+      expandedFromTree={playground.expandedFromTree}
+      isDeletedByAuthor={boolean('Is comment deleted by author', playground.isDeletedByAuthor)}
+      numChildren={number('Number of comments', playground.numChildren)}
+    />
+  ));

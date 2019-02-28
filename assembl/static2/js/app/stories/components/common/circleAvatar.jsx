@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -21,15 +20,12 @@ const playground = {
 
 storiesOf('CircleAvatar', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <CircleAvatar />))
-  .add('custom image', withInfo()(() => <CircleAvatar src={customCircleAvatar.src} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <CircleAvatar
-        size={text('size', playground.size)}
-        username={text('username', playground.username)}
-        src={select('src', playground.src)}
-      />
-    ))
-  );
+  .add('default', () => <CircleAvatar />)
+  .add('custom image', () => <CircleAvatar src={customCircleAvatar.src} />)
+  .add('playground', () => (
+    <CircleAvatar
+      size={text('size', playground.size)}
+      username={text('username', playground.username)}
+      src={select('src', playground.src)}
+    />
+  ));

@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, boolean, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -39,17 +38,14 @@ const playground: Object = {
 
 storiesOf('Button101', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <Button101 {...defaultButton} />))
-  .add('disabled', withInfo()(() => <Button101 {...disabledButton} />))
-  .add('danger', withInfo()(() => <Button101 {...dangerButton} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <Button101
-        label={text('label', playground.label)}
-        type={select('type', playground.type, playground.type[0])}
-        isDisabled={boolean('isDisabled', playground.isDisabled)}
-        onClickHandler={actions.onClickHandler}
-      />
-    ))
-  );
+  .add('default', () => <Button101 {...defaultButton} />)
+  .add('disabled', () => <Button101 {...disabledButton} />)
+  .add('danger', () => <Button101 {...dangerButton} />)
+  .add('playground', () => (
+    <Button101
+      label={text('label', playground.label)}
+      type={select('type', playground.type, playground.type[0])}
+      isDisabled={boolean('isDisabled', playground.isDisabled)}
+      onClickHandler={actions.onClickHandler}
+    />
+  ));

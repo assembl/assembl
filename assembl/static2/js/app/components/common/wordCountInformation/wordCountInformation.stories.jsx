@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, number } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -20,5 +19,5 @@ const playground = {
 
 storiesOf('Semantic Analysis|WordCountInformation', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <WordCountInformation {...defaultWordCountInformationProps} />))
-  .add('playground', withInfo()(() => <WordCountInformation wordCount={number('words count', playground.wordCount)} />));
+  .add('default', () => <WordCountInformation {...defaultWordCountInformationProps} />)
+  .add('playground', () => <WordCountInformation wordCount={number('words count', playground.wordCount)} />);

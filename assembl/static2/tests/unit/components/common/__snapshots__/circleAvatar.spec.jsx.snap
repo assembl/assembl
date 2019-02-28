@@ -143,7 +143,19 @@ exports[`Storyshots CircleAvatar default 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-r8d96o eyvlbql0"
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fafafa",
+                "display": "flex",
+                "fontFamily": "Menlo, Monaco, \\"Courier New\\", monospace",
+                "fontSize": ".88em",
+                "justifyContent": "space-between",
+                "lineHeight": 1.5,
+                "overflowX": "scroll",
+                "padding": ".5rem",
+              }
+            }
           >
             <div>
               <div
@@ -233,25 +245,26 @@ exports[`Storyshots CircleAvatar default 1`] = `
               </div>
             </div>
             <button
-              className="css-1naocv3 eva467m0"
               onClick={[Function]}
+              style={
+                Object {
+                  "alignSelf": "flex-start",
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderColor": "rgb(238, 238, 238)",
+                  "borderImage": "initial",
+                  "borderRadius": "3px",
+                  "borderStyle": "solid",
+                  "borderWidth": "1px",
+                  "cursor": "pointer",
+                  "flexShrink": "0",
+                  "fontSize": "13px",
+                  "overflow": "hidden",
+                  "padding": "3px 10px",
+                }
+              }
+              type="button"
             >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
+              Copy
             </button>
           </pre>
         </div>
@@ -280,33 +293,56 @@ exports[`Storyshots CircleAvatar default 1`] = `
               CircleAvatar
               " Component
             </h2>
-            <table
-              className="css-1uhv8nx e1vdo5380"
-            >
+            <table>
               <thead>
                 <tr>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     property
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     propType
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     required
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     default
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     description
                   </th>
@@ -315,24 +351,44 @@ exports[`Storyshots CircleAvatar default 1`] = `
               <tbody>
                 <tr>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     username
                   </td>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     -
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span
                       style={
@@ -346,29 +402,54 @@ exports[`Storyshots CircleAvatar default 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   />
                 </tr>
                 <tr>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     src
                   </td>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     -
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span
                       style={
@@ -382,7 +463,12 @@ exports[`Storyshots CircleAvatar default 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   />
                 </tr>
               </tbody>
@@ -538,7 +624,19 @@ exports[`Storyshots CircleAvatar no username 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-r8d96o eyvlbql0"
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fafafa",
+                "display": "flex",
+                "fontFamily": "Menlo, Monaco, \\"Courier New\\", monospace",
+                "fontSize": ".88em",
+                "justifyContent": "space-between",
+                "lineHeight": 1.5,
+                "overflowX": "scroll",
+                "padding": ".5rem",
+              }
+            }
           >
             <div>
               <div
@@ -572,25 +670,26 @@ exports[`Storyshots CircleAvatar no username 1`] = `
               </div>
             </div>
             <button
-              className="css-1naocv3 eva467m0"
               onClick={[Function]}
+              style={
+                Object {
+                  "alignSelf": "flex-start",
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderColor": "rgb(238, 238, 238)",
+                  "borderImage": "initial",
+                  "borderRadius": "3px",
+                  "borderStyle": "solid",
+                  "borderWidth": "1px",
+                  "cursor": "pointer",
+                  "flexShrink": "0",
+                  "fontSize": "13px",
+                  "overflow": "hidden",
+                  "padding": "3px 10px",
+                }
+              }
+              type="button"
             >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
+              Copy
             </button>
           </pre>
         </div>
@@ -619,33 +718,56 @@ exports[`Storyshots CircleAvatar no username 1`] = `
               CircleAvatar
               " Component
             </h2>
-            <table
-              className="css-1uhv8nx e1vdo5380"
-            >
+            <table>
               <thead>
                 <tr>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     property
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     propType
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     required
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     default
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     description
                   </th>
@@ -654,24 +776,44 @@ exports[`Storyshots CircleAvatar no username 1`] = `
               <tbody>
                 <tr>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     username
                   </td>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     -
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span
                       style={
@@ -685,29 +827,54 @@ exports[`Storyshots CircleAvatar no username 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   />
                 </tr>
                 <tr>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     src
                   </td>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     -
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span
                       style={
@@ -721,7 +888,12 @@ exports[`Storyshots CircleAvatar no username 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   />
                 </tr>
               </tbody>
@@ -877,7 +1049,19 @@ exports[`Storyshots CircleAvatar playground 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-r8d96o eyvlbql0"
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fafafa",
+                "display": "flex",
+                "fontFamily": "Menlo, Monaco, \\"Courier New\\", monospace",
+                "fontSize": ".88em",
+                "justifyContent": "space-between",
+                "lineHeight": 1.5,
+                "overflowX": "scroll",
+                "padding": ".5rem",
+              }
+            }
           >
             <div>
               <div
@@ -967,25 +1151,26 @@ exports[`Storyshots CircleAvatar playground 1`] = `
               </div>
             </div>
             <button
-              className="css-1naocv3 eva467m0"
               onClick={[Function]}
+              style={
+                Object {
+                  "alignSelf": "flex-start",
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderColor": "rgb(238, 238, 238)",
+                  "borderImage": "initial",
+                  "borderRadius": "3px",
+                  "borderStyle": "solid",
+                  "borderWidth": "1px",
+                  "cursor": "pointer",
+                  "flexShrink": "0",
+                  "fontSize": "13px",
+                  "overflow": "hidden",
+                  "padding": "3px 10px",
+                }
+              }
+              type="button"
             >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
+              Copy
             </button>
           </pre>
         </div>
@@ -1014,33 +1199,56 @@ exports[`Storyshots CircleAvatar playground 1`] = `
               CircleAvatar
               " Component
             </h2>
-            <table
-              className="css-1uhv8nx e1vdo5380"
-            >
+            <table>
               <thead>
                 <tr>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     property
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     propType
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     required
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     default
                   </th>
                   <th
-                    className="css-11b5gui e6fp4ir1"
+                    style={
+                      Object {
+                        "textAlign": "left",
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     description
                   </th>
@@ -1049,24 +1257,44 @@ exports[`Storyshots CircleAvatar playground 1`] = `
               <tbody>
                 <tr>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     username
                   </td>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     -
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span
                       style={
@@ -1080,29 +1308,54 @@ exports[`Storyshots CircleAvatar playground 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   />
                 </tr>
                 <tr>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     src
                   </td>
                   <td
-                    className="css-1qcb1f7 e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span>
                       unknown
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     -
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   >
                     <span
                       style={
@@ -1116,7 +1369,12 @@ exports[`Storyshots CircleAvatar playground 1`] = `
                     </span>
                   </td>
                   <td
-                    className="css-11b5gui e6fp4ir0"
+                    style={
+                      Object {
+                        "paddingRight": 10,
+                        "verticalAlign": "top",
+                      }
+                    }
                   />
                 </tr>
               </tbody>

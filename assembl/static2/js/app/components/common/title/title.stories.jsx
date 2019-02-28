@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, number } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -20,8 +19,7 @@ const playground: TitleProps = {
 
 storiesOf('Semantic Analysis|Title', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <Title {...defaultTitleProps} />))
-  .add(
-    'playground',
-    withInfo()(() => <Title level={number('title level', playground.level)}>{text('title content', playground.children)}</Title>)
-  );
+  .add('default', () => <Title {...defaultTitleProps} />)
+  .add('playground', () => (
+    <Title level={number('title level', playground.level)}>{text('title content', playground.children)}</Title>
+  ));

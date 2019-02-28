@@ -1,1171 +1,147 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Semantic Analysis|Loader default 1`] = `
-<div>
-  <div
-    style={
-      Object {
-        "position": "relative",
-        "zIndex": 0,
-      }
-    }
+<div
+  className="custom-loader center"
+>
+  <svg
+    className="icon spinner"
+    viewBox="0 0 66 66"
   >
-    <div
-      className="custom-loader center"
-    >
-      <svg
-        className="icon spinner"
-        viewBox="0 0 66 66"
-      >
-        <circle
-          className="path"
-          cx="33"
-          cy="33"
-          fill="none"
-          r="30"
-          strokeLinecap="round"
-          strokeWidth="6"
-        />
-      </svg>
-      <p
-        className="description center"
-      >
-        Chargement en cours...
-      </p>
-    </div>
-  </div>
-  <button
-    onClick={[Function]}
-    style={
-      Object {
-        "background": "#28c",
-        "border": "none",
-        "borderRadius": "0 0 0 5px",
-        "color": "#fff",
-        "cursor": "pointer",
-        "display": "block",
-        "fontFamily": "sans-serif",
-        "fontSize": "12px",
-        "padding": "5px 15px",
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-      }
-    }
-    type="button"
+    <circle
+      className="path"
+      cx="33"
+      cy="33"
+      fill="none"
+      r="30"
+      strokeLinecap="round"
+      strokeWidth="6"
+    />
+  </svg>
+  <p
+    className="description center"
   >
-    Show Info
-  </button>
-  <div
-    style={
-      Object {
-        "background": "white",
-        "bottom": 0,
-        "display": "none",
-        "left": 0,
-        "overflow": "auto",
-        "padding": "0 40px",
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 99999,
-      }
-    }
-  >
-    <button
-      onClick={[Function]}
-      style={
-        Object {
-          "background": "#28c",
-          "border": "none",
-          "borderRadius": "0 0 0 5px",
-          "color": "#fff",
-          "cursor": "pointer",
-          "display": "block",
-          "fontFamily": "sans-serif",
-          "fontSize": "12px",
-          "padding": "5px 15px",
-          "position": "fixed",
-          "right": 0,
-          "top": 0,
-        }
-      }
-      type="button"
-    >
-      ×
-    </button>
-    <div>
-      <div
-        style={
-          Object {
-            "WebkitFontSmoothing": "antialiased",
-            "backgroundColor": "#fff",
-            "border": "1px solid #eee",
-            "borderRadius": "2px",
-            "color": "#444",
-            "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
-            "fontSize": "15px",
-            "fontWeight": 300,
-            "lineHeight": 1.45,
-            "marginBottom": "20px",
-            "marginTop": "20px",
-            "padding": "20px 40px 40px",
-          }
-        }
-      >
-        <div
-          style={
-            Object {
-              "borderBottom": "1px solid #eee",
-              "marginBottom": 10,
-              "paddingTop": 10,
-            }
-          }
-        >
-          <h1
-            style={
-              Object {
-                "fontSize": "35px",
-                "margin": 0,
-                "padding": 0,
-              }
-            }
-          >
-            Semantic Analysis|Loader
-          </h1>
-          <h2
-            style={
-              Object {
-                "fontSize": "22px",
-                "fontWeight": 400,
-                "margin": "0 0 10px 0",
-                "padding": 0,
-              }
-            }
-          >
-            default
-          </h2>
-        </div>
-        
-        <div>
-          <h1
-            style={
-              Object {
-                "borderBottom": "1px solid #EEE",
-                "fontSize": "25px",
-                "margin": "20px 0 0 0",
-                "padding": "0 0 5px 0",
-              }
-            }
-          >
-            Story Source
-          </h1>
-          <pre
-            className="css-r8d96o eyvlbql0"
-          >
-            <div>
-              <div
-                style={
-                  Object {
-                    "paddingLeft": 18,
-                    "paddingRight": 3,
-                  }
-                }
-              >
-                <span
-                  style={
-                    Object {
-                      "color": "#444",
-                    }
-                  }
-                >
-                  &lt;
-                  Loader
-                </span>
-                <span>
-                  <span>
-                     
-                    <span
-                      style={Object {}}
-                    >
-                      type
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        "
-                        <span
-                          style={
-                            Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
-                            }
-                          }
-                        >
-                          LOADING
-                        </span>
-                        "
-                      </span>
-                    </span>
-                     
-                  </span>
-                </span>
-                <span
-                  style={
-                    Object {
-                      "color": "#444",
-                    }
-                  }
-                >
-                  /&gt;
-                </span>
-              </div>
-            </div>
-            <button
-              className="css-1naocv3 eva467m0"
-              onClick={[Function]}
-            >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
-            </button>
-          </pre>
-        </div>
-        <div>
-          <h1
-            style={
-              Object {
-                "borderBottom": "1px solid #EEE",
-                "fontSize": "25px",
-                "margin": "20px 0 0 0",
-                "padding": "0 0 5px 0",
-              }
-            }
-          >
-            Prop Types
-          </h1>
-          <div>
-            <h2
-              style={
-                Object {
-                  "margin": "20px 0 0 0",
-                }
-              }
-            >
-              "
-              Loader
-              " Component
-            </h2>
-            <small>
-              No propTypes defined!
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    Chargement en cours...
+  </p>
 </div>
 `;
 
 exports[`Storyshots Semantic Analysis|Loader error 1`] = `
-<div>
-  <div
-    style={
-      Object {
-        "position": "relative",
-        "zIndex": 0,
-      }
-    }
+<div
+  className="custom-loader center"
+>
+  <svg
+    className="icon error"
+    height="126"
+    viewBox="0 0 126 126"
+    width="126"
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <div
-      className="custom-loader center"
+    <g
+      fill="none"
+      fillRule="evenodd"
     >
-      <svg
-        className="icon error"
-        height="126"
-        viewBox="0 0 126 126"
-        width="126"
-        xmlns="http://www.w3.org/2000/svg"
+      <g
+        className="arrow1"
       >
-        <g
-          fill="none"
-          fillRule="evenodd"
+        <path
+          d="M117.052 38.72C107.787 17.665 87.042 3 62.938 3c-32.74 0-59.28 27.052-59.28 60.422"
+          strokeWidth="5.4"
+        />
+        <path
+          d="M122.334 18.285l-3.32 20.692-18.506-5.075"
+          strokeLinejoin="round"
+          strokeWidth="6"
+        />
+      </g>
+      <g
+        className="arrow2"
+      >
+        <path
+          d="M8.948 87.28C18.213 108.335 38.958 123 63.062 123c32.74 0 59.28-27.052 59.28-60.422"
+          strokeWidth="5.4"
+        />
+        <path
+          d="M3.666 107.715l3.32-20.692 18.506 5.075"
+          strokeLinejoin="round"
+          strokeWidth="6"
+        />
+      </g>
+      <text
+        className="mark"
+      >
+        <tspan
+          x="46.239"
+          y="84.175"
         >
-          <g
-            className="arrow1"
-          >
-            <path
-              d="M117.052 38.72C107.787 17.665 87.042 3 62.938 3c-32.74 0-59.28 27.052-59.28 60.422"
-              strokeWidth="5.4"
-            />
-            <path
-              d="M122.334 18.285l-3.32 20.692-18.506-5.075"
-              strokeLinejoin="round"
-              strokeWidth="6"
-            />
-          </g>
-          <g
-            className="arrow2"
-          >
-            <path
-              d="M8.948 87.28C18.213 108.335 38.958 123 63.062 123c32.74 0 59.28-27.052 59.28-60.422"
-              strokeWidth="5.4"
-            />
-            <path
-              d="M3.666 107.715l3.32-20.692 18.506 5.075"
-              strokeLinejoin="round"
-              strokeWidth="6"
-            />
-          </g>
-          <text
-            className="mark"
-          >
-            <tspan
-              x="46.239"
-              y="84.175"
-            >
-              !
-            </tspan>
-          </text>
-        </g>
-      </svg>
-      <p
-        className="description center"
-      >
-        Il y a une erreur de chargement de l’analyse
-      </p>
-    </div>
-  </div>
-  <button
-    onClick={[Function]}
-    style={
-      Object {
-        "background": "#28c",
-        "border": "none",
-        "borderRadius": "0 0 0 5px",
-        "color": "#fff",
-        "cursor": "pointer",
-        "display": "block",
-        "fontFamily": "sans-serif",
-        "fontSize": "12px",
-        "padding": "5px 15px",
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-      }
-    }
-    type="button"
+          !
+        </tspan>
+      </text>
+    </g>
+  </svg>
+  <p
+    className="description center"
   >
-    Show Info
-  </button>
-  <div
-    style={
-      Object {
-        "background": "white",
-        "bottom": 0,
-        "display": "none",
-        "left": 0,
-        "overflow": "auto",
-        "padding": "0 40px",
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 99999,
-      }
-    }
-  >
-    <button
-      onClick={[Function]}
-      style={
-        Object {
-          "background": "#28c",
-          "border": "none",
-          "borderRadius": "0 0 0 5px",
-          "color": "#fff",
-          "cursor": "pointer",
-          "display": "block",
-          "fontFamily": "sans-serif",
-          "fontSize": "12px",
-          "padding": "5px 15px",
-          "position": "fixed",
-          "right": 0,
-          "top": 0,
-        }
-      }
-      type="button"
-    >
-      ×
-    </button>
-    <div>
-      <div
-        style={
-          Object {
-            "WebkitFontSmoothing": "antialiased",
-            "backgroundColor": "#fff",
-            "border": "1px solid #eee",
-            "borderRadius": "2px",
-            "color": "#444",
-            "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
-            "fontSize": "15px",
-            "fontWeight": 300,
-            "lineHeight": 1.45,
-            "marginBottom": "20px",
-            "marginTop": "20px",
-            "padding": "20px 40px 40px",
-          }
-        }
-      >
-        <div
-          style={
-            Object {
-              "borderBottom": "1px solid #eee",
-              "marginBottom": 10,
-              "paddingTop": 10,
-            }
-          }
-        >
-          <h1
-            style={
-              Object {
-                "fontSize": "35px",
-                "margin": 0,
-                "padding": 0,
-              }
-            }
-          >
-            Semantic Analysis|Loader
-          </h1>
-          <h2
-            style={
-              Object {
-                "fontSize": "22px",
-                "fontWeight": 400,
-                "margin": "0 0 10px 0",
-                "padding": 0,
-              }
-            }
-          >
-            error
-          </h2>
-        </div>
-        
-        <div>
-          <h1
-            style={
-              Object {
-                "borderBottom": "1px solid #EEE",
-                "fontSize": "25px",
-                "margin": "20px 0 0 0",
-                "padding": "0 0 5px 0",
-              }
-            }
-          >
-            Story Source
-          </h1>
-          <pre
-            className="css-r8d96o eyvlbql0"
-          >
-            <div>
-              <div
-                style={
-                  Object {
-                    "paddingLeft": 18,
-                    "paddingRight": 3,
-                  }
-                }
-              >
-                <span
-                  style={
-                    Object {
-                      "color": "#444",
-                    }
-                  }
-                >
-                  &lt;
-                  Loader
-                </span>
-                <span>
-                  <span>
-                     
-                    <span
-                      style={Object {}}
-                    >
-                      type
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        "
-                        <span
-                          style={
-                            Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
-                            }
-                          }
-                        >
-                          ERROR
-                        </span>
-                        "
-                      </span>
-                    </span>
-                     
-                  </span>
-                </span>
-                <span
-                  style={
-                    Object {
-                      "color": "#444",
-                    }
-                  }
-                >
-                  /&gt;
-                </span>
-              </div>
-            </div>
-            <button
-              className="css-1naocv3 eva467m0"
-              onClick={[Function]}
-            >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
-            </button>
-          </pre>
-        </div>
-        <div>
-          <h1
-            style={
-              Object {
-                "borderBottom": "1px solid #EEE",
-                "fontSize": "25px",
-                "margin": "20px 0 0 0",
-                "padding": "0 0 5px 0",
-              }
-            }
-          >
-            Prop Types
-          </h1>
-          <div>
-            <h2
-              style={
-                Object {
-                  "margin": "20px 0 0 0",
-                }
-              }
-            >
-              "
-              Loader
-              " Component
-            </h2>
-            <small>
-              No propTypes defined!
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    Il y a une erreur de chargement de l’analyse
+  </p>
 </div>
 `;
 
 exports[`Storyshots Semantic Analysis|Loader no data 1`] = `
-<div>
-  <div
-    style={
-      Object {
-        "position": "relative",
-        "zIndex": 0,
-      }
-    }
+<div
+  className="custom-loader center"
+>
+  <svg
+    className="icon no-data"
+    height="120"
+    viewBox="0 0 120 120"
+    width="120"
+    xmlns="http://www.w3.org/2000/svg"
   >
-    <div
-      className="custom-loader center"
+    <g
+      fillRule="evenodd"
     >
-      <svg
-        className="icon no-data"
-        height="120"
-        viewBox="0 0 120 120"
-        width="120"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <g
-          fillRule="evenodd"
-        >
-          <path
-            d="M32.903 48.29c0 14.912 12.155 27.042 27.097 27.042 14.942 0 27.097-12.13 27.097-27.042 0-14.913-12.155-27.043-27.097-27.043-14.942 0-27.097 12.13-27.097 27.043zm3.871 0c0-1.32.137-2.604.35-3.863h3.347a4.045 4.045 0 0 1 4.045 4.036 7.855 7.855 0 0 0 4.377 7.068l2.997 1.495a8.797 8.797 0 0 0 3.908.922 4.836 4.836 0 0 1 4.35 2.683l1 1.995a5.496 5.496 0 0 0 4.941 3.048c.912 0 1.653.741 1.653 1.65v2.792A23.1 23.1 0 0 1 60 71.47c-12.808 0-23.226-10.397-23.226-23.18zm34.839 20.042v-1.008c0-3.041-2.477-5.513-5.524-5.513-.631 0-1.198-.35-1.479-.914l-1-1.995a8.69 8.69 0 0 0-7.812-4.817 4.884 4.884 0 0 1-2.175-.515l-3-1.494a4.016 4.016 0 0 1-2.236-3.613c0-4.355-3.552-7.9-7.916-7.9H38.13c2.992-8.406 10.693-14.59 19.935-15.354v2.262a10.95 10.95 0 0 1-3.234 7.795 8.693 8.693 0 0 0-2.573 6.195c0 4.831 3.939 8.76 8.78 8.76h.63c.904 0 1.754.352 2.395.991l2.69 2.683a7.22 7.22 0 0 0 5.13 2.121c1.392 0 2.626.835 3.123 2.07l2.125 5.802a23.315 23.315 0 0 1-5.518 4.444zM83.226 48.29c0 4.353-1.232 8.414-3.332 11.899l-1.274-3.482a7.22 7.22 0 0 0-6.738-4.554 3.367 3.367 0 0 1-2.395-.991l-2.69-2.683a7.228 7.228 0 0 0-5.13-2.12h-.631c-2.704 0-4.907-2.2-4.907-4.898 0-1.307.511-2.536 1.438-3.463a14.78 14.78 0 0 0 4.368-10.527V25.21c11.902.987 21.29 10.95 21.29 23.08z"
-          />
-          <path
-            d="M79.894 0L74.34 16.638c-4.38-1.983-9.225-3.117-14.339-3.117-4.802 0-9.382.975-13.548 2.737V0H0v27.042h32.485c-4.572 5.884-7.324 13.243-7.324 21.248 0 12.463 6.625 23.382 16.526 29.52l-9.752 12.975H0v3.863h33.871L45.118 79.68a34.456 34.456 0 0 0 5.205 1.985v5.257h-3.871v3.863h3.87v3.863h-3.87v3.863h3.87v11.59c0 5.325 4.342 9.658 9.678 9.658 5.336 0 9.677-4.333 9.677-9.658V98.51h3.871v-3.863h-3.87v-3.863h3.87v-3.863h-3.87v-5.257c14.512-4.199 25.16-17.557 25.16-33.375 0-12.673-6.85-23.75-17.03-29.828l4.878-14.599H120V0H79.894zM3.871 3.863h38.71v14.363a34.98 34.98 0 0 0-6.612 4.953H3.871V3.863zm61.935 106.238c0 3.194-2.605 5.794-5.806 5.794-3.2 0-5.806-2.6-5.806-5.794V98.51h11.612v11.59zM54.194 94.648h11.612v-3.863H54.194v3.863zm11.612-7.726H54.194v-4.387c1.892.319 3.824.523 5.806.523 1.982 0 3.914-.204 5.806-.523v4.387zM90.968 48.29c0 17.04-13.894 30.905-30.968 30.905-17.074 0-30.968-13.865-30.968-30.905S42.926 17.384 60 17.384c17.074 0 30.968 13.866 30.968 30.906z"
-          />
-          <path
-            d="M89.302 11.163H120V7.442H89.302zM89.302 19.535h23.256v-3.721H89.302zM116.28 19.535H120v-3.721h-3.72zM7.769 86.512h19.422V82.79H7.77zM.015 86.512h3.87V82.79H.014zM.015 79.07H27.19v-3.721H.015zM7.442 11.163h3.72V7.442h-3.72zM15.814 11.163H39.07V7.442H15.814zM7.442 19.535h3.72v-3.721h-3.72zM15.814 19.535h18.605v-3.721H15.814z"
-          />
-        </g>
-      </svg>
-      <p
-        className="description center"
-      >
-        Il n'y a pas assez de contenu à analyser
-      </p>
-    </div>
-  </div>
-  <button
-    onClick={[Function]}
-    style={
-      Object {
-        "background": "#28c",
-        "border": "none",
-        "borderRadius": "0 0 0 5px",
-        "color": "#fff",
-        "cursor": "pointer",
-        "display": "block",
-        "fontFamily": "sans-serif",
-        "fontSize": "12px",
-        "padding": "5px 15px",
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-      }
-    }
-    type="button"
+      <path
+        d="M32.903 48.29c0 14.912 12.155 27.042 27.097 27.042 14.942 0 27.097-12.13 27.097-27.042 0-14.913-12.155-27.043-27.097-27.043-14.942 0-27.097 12.13-27.097 27.043zm3.871 0c0-1.32.137-2.604.35-3.863h3.347a4.045 4.045 0 0 1 4.045 4.036 7.855 7.855 0 0 0 4.377 7.068l2.997 1.495a8.797 8.797 0 0 0 3.908.922 4.836 4.836 0 0 1 4.35 2.683l1 1.995a5.496 5.496 0 0 0 4.941 3.048c.912 0 1.653.741 1.653 1.65v2.792A23.1 23.1 0 0 1 60 71.47c-12.808 0-23.226-10.397-23.226-23.18zm34.839 20.042v-1.008c0-3.041-2.477-5.513-5.524-5.513-.631 0-1.198-.35-1.479-.914l-1-1.995a8.69 8.69 0 0 0-7.812-4.817 4.884 4.884 0 0 1-2.175-.515l-3-1.494a4.016 4.016 0 0 1-2.236-3.613c0-4.355-3.552-7.9-7.916-7.9H38.13c2.992-8.406 10.693-14.59 19.935-15.354v2.262a10.95 10.95 0 0 1-3.234 7.795 8.693 8.693 0 0 0-2.573 6.195c0 4.831 3.939 8.76 8.78 8.76h.63c.904 0 1.754.352 2.395.991l2.69 2.683a7.22 7.22 0 0 0 5.13 2.121c1.392 0 2.626.835 3.123 2.07l2.125 5.802a23.315 23.315 0 0 1-5.518 4.444zM83.226 48.29c0 4.353-1.232 8.414-3.332 11.899l-1.274-3.482a7.22 7.22 0 0 0-6.738-4.554 3.367 3.367 0 0 1-2.395-.991l-2.69-2.683a7.228 7.228 0 0 0-5.13-2.12h-.631c-2.704 0-4.907-2.2-4.907-4.898 0-1.307.511-2.536 1.438-3.463a14.78 14.78 0 0 0 4.368-10.527V25.21c11.902.987 21.29 10.95 21.29 23.08z"
+      />
+      <path
+        d="M79.894 0L74.34 16.638c-4.38-1.983-9.225-3.117-14.339-3.117-4.802 0-9.382.975-13.548 2.737V0H0v27.042h32.485c-4.572 5.884-7.324 13.243-7.324 21.248 0 12.463 6.625 23.382 16.526 29.52l-9.752 12.975H0v3.863h33.871L45.118 79.68a34.456 34.456 0 0 0 5.205 1.985v5.257h-3.871v3.863h3.87v3.863h-3.87v3.863h3.87v11.59c0 5.325 4.342 9.658 9.678 9.658 5.336 0 9.677-4.333 9.677-9.658V98.51h3.871v-3.863h-3.87v-3.863h3.87v-3.863h-3.87v-5.257c14.512-4.199 25.16-17.557 25.16-33.375 0-12.673-6.85-23.75-17.03-29.828l4.878-14.599H120V0H79.894zM3.871 3.863h38.71v14.363a34.98 34.98 0 0 0-6.612 4.953H3.871V3.863zm61.935 106.238c0 3.194-2.605 5.794-5.806 5.794-3.2 0-5.806-2.6-5.806-5.794V98.51h11.612v11.59zM54.194 94.648h11.612v-3.863H54.194v3.863zm11.612-7.726H54.194v-4.387c1.892.319 3.824.523 5.806.523 1.982 0 3.914-.204 5.806-.523v4.387zM90.968 48.29c0 17.04-13.894 30.905-30.968 30.905-17.074 0-30.968-13.865-30.968-30.905S42.926 17.384 60 17.384c17.074 0 30.968 13.866 30.968 30.906z"
+      />
+      <path
+        d="M89.302 11.163H120V7.442H89.302zM89.302 19.535h23.256v-3.721H89.302zM116.28 19.535H120v-3.721h-3.72zM7.769 86.512h19.422V82.79H7.77zM.015 86.512h3.87V82.79H.014zM.015 79.07H27.19v-3.721H.015zM7.442 11.163h3.72V7.442h-3.72zM15.814 11.163H39.07V7.442H15.814zM7.442 19.535h3.72v-3.721h-3.72zM15.814 19.535h18.605v-3.721H15.814z"
+      />
+    </g>
+  </svg>
+  <p
+    className="description center"
   >
-    Show Info
-  </button>
-  <div
-    style={
-      Object {
-        "background": "white",
-        "bottom": 0,
-        "display": "none",
-        "left": 0,
-        "overflow": "auto",
-        "padding": "0 40px",
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 99999,
-      }
-    }
-  >
-    <button
-      onClick={[Function]}
-      style={
-        Object {
-          "background": "#28c",
-          "border": "none",
-          "borderRadius": "0 0 0 5px",
-          "color": "#fff",
-          "cursor": "pointer",
-          "display": "block",
-          "fontFamily": "sans-serif",
-          "fontSize": "12px",
-          "padding": "5px 15px",
-          "position": "fixed",
-          "right": 0,
-          "top": 0,
-        }
-      }
-      type="button"
-    >
-      ×
-    </button>
-    <div>
-      <div
-        style={
-          Object {
-            "WebkitFontSmoothing": "antialiased",
-            "backgroundColor": "#fff",
-            "border": "1px solid #eee",
-            "borderRadius": "2px",
-            "color": "#444",
-            "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
-            "fontSize": "15px",
-            "fontWeight": 300,
-            "lineHeight": 1.45,
-            "marginBottom": "20px",
-            "marginTop": "20px",
-            "padding": "20px 40px 40px",
-          }
-        }
-      >
-        <div
-          style={
-            Object {
-              "borderBottom": "1px solid #eee",
-              "marginBottom": 10,
-              "paddingTop": 10,
-            }
-          }
-        >
-          <h1
-            style={
-              Object {
-                "fontSize": "35px",
-                "margin": 0,
-                "padding": 0,
-              }
-            }
-          >
-            Semantic Analysis|Loader
-          </h1>
-          <h2
-            style={
-              Object {
-                "fontSize": "22px",
-                "fontWeight": 400,
-                "margin": "0 0 10px 0",
-                "padding": 0,
-              }
-            }
-          >
-            no data
-          </h2>
-        </div>
-        
-        <div>
-          <h1
-            style={
-              Object {
-                "borderBottom": "1px solid #EEE",
-                "fontSize": "25px",
-                "margin": "20px 0 0 0",
-                "padding": "0 0 5px 0",
-              }
-            }
-          >
-            Story Source
-          </h1>
-          <pre
-            className="css-r8d96o eyvlbql0"
-          >
-            <div>
-              <div
-                style={
-                  Object {
-                    "paddingLeft": 18,
-                    "paddingRight": 3,
-                  }
-                }
-              >
-                <span
-                  style={
-                    Object {
-                      "color": "#444",
-                    }
-                  }
-                >
-                  &lt;
-                  Loader
-                </span>
-                <span>
-                  <span>
-                     
-                    <span
-                      style={Object {}}
-                    >
-                      type
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        "
-                        <span
-                          style={
-                            Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
-                            }
-                          }
-                        >
-                          NO_DATA
-                        </span>
-                        "
-                      </span>
-                    </span>
-                     
-                  </span>
-                </span>
-                <span
-                  style={
-                    Object {
-                      "color": "#444",
-                    }
-                  }
-                >
-                  /&gt;
-                </span>
-              </div>
-            </div>
-            <button
-              className="css-1naocv3 eva467m0"
-              onClick={[Function]}
-            >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
-            </button>
-          </pre>
-        </div>
-        <div>
-          <h1
-            style={
-              Object {
-                "borderBottom": "1px solid #EEE",
-                "fontSize": "25px",
-                "margin": "20px 0 0 0",
-                "padding": "0 0 5px 0",
-              }
-            }
-          >
-            Prop Types
-          </h1>
-          <div>
-            <h2
-              style={
-                Object {
-                  "margin": "20px 0 0 0",
-                }
-              }
-            >
-              "
-              Loader
-              " Component
-            </h2>
-            <small>
-              No propTypes defined!
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    Il n'y a pas assez de contenu à analyser
+  </p>
 </div>
 `;
 
 exports[`Storyshots Semantic Analysis|Loader playground 1`] = `
-<div>
-  <div
-    style={
-      Object {
-        "position": "relative",
-        "zIndex": 0,
-      }
-    }
+<div
+  className="custom-loader center"
+>
+  <svg
+    className="icon spinner"
+    viewBox="0 0 66 66"
   >
-    <div
-      className="custom-loader center"
-    >
-      <svg
-        className="icon spinner"
-        viewBox="0 0 66 66"
-      >
-        <circle
-          className="path"
-          cx="33"
-          cy="33"
-          fill="none"
-          r="30"
-          strokeLinecap="round"
-          strokeWidth="6"
-        />
-      </svg>
-      <p
-        className="description center"
-      >
-        Chargement en cours...
-      </p>
-    </div>
-  </div>
-  <button
-    onClick={[Function]}
-    style={
-      Object {
-        "background": "#28c",
-        "border": "none",
-        "borderRadius": "0 0 0 5px",
-        "color": "#fff",
-        "cursor": "pointer",
-        "display": "block",
-        "fontFamily": "sans-serif",
-        "fontSize": "12px",
-        "padding": "5px 15px",
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-      }
-    }
-    type="button"
+    <circle
+      className="path"
+      cx="33"
+      cy="33"
+      fill="none"
+      r="30"
+      strokeLinecap="round"
+      strokeWidth="6"
+    />
+  </svg>
+  <p
+    className="description center"
   >
-    Show Info
-  </button>
-  <div
-    style={
-      Object {
-        "background": "white",
-        "bottom": 0,
-        "display": "none",
-        "left": 0,
-        "overflow": "auto",
-        "padding": "0 40px",
-        "position": "fixed",
-        "right": 0,
-        "top": 0,
-        "zIndex": 99999,
-      }
-    }
-  >
-    <button
-      onClick={[Function]}
-      style={
-        Object {
-          "background": "#28c",
-          "border": "none",
-          "borderRadius": "0 0 0 5px",
-          "color": "#fff",
-          "cursor": "pointer",
-          "display": "block",
-          "fontFamily": "sans-serif",
-          "fontSize": "12px",
-          "padding": "5px 15px",
-          "position": "fixed",
-          "right": 0,
-          "top": 0,
-        }
-      }
-      type="button"
-    >
-      ×
-    </button>
-    <div>
-      <div
-        style={
-          Object {
-            "WebkitFontSmoothing": "antialiased",
-            "backgroundColor": "#fff",
-            "border": "1px solid #eee",
-            "borderRadius": "2px",
-            "color": "#444",
-            "fontFamily": "-apple-system, \\".SFNSText-Regular\\", \\"San Francisco\\", BlinkMacSystemFont, \\"Segoe UI\\", \\"Roboto\\", \\"Oxygen\\", \\"Ubuntu\\", \\"Cantarell\\", \\"Fira Sans\\", \\"Droid Sans\\", \\"Helvetica Neue\\", \\"Lucida Grande\\", \\"Arial\\", sans-serif",
-            "fontSize": "15px",
-            "fontWeight": 300,
-            "lineHeight": 1.45,
-            "marginBottom": "20px",
-            "marginTop": "20px",
-            "padding": "20px 40px 40px",
-          }
-        }
-      >
-        <div
-          style={
-            Object {
-              "borderBottom": "1px solid #eee",
-              "marginBottom": 10,
-              "paddingTop": 10,
-            }
-          }
-        >
-          <h1
-            style={
-              Object {
-                "fontSize": "35px",
-                "margin": 0,
-                "padding": 0,
-              }
-            }
-          >
-            Semantic Analysis|Loader
-          </h1>
-          <h2
-            style={
-              Object {
-                "fontSize": "22px",
-                "fontWeight": 400,
-                "margin": "0 0 10px 0",
-                "padding": 0,
-              }
-            }
-          >
-            playground
-          </h2>
-        </div>
-        
-        <div>
-          <h1
-            style={
-              Object {
-                "borderBottom": "1px solid #EEE",
-                "fontSize": "25px",
-                "margin": "20px 0 0 0",
-                "padding": "0 0 5px 0",
-              }
-            }
-          >
-            Story Source
-          </h1>
-          <pre
-            className="css-r8d96o eyvlbql0"
-          >
-            <div>
-              <div
-                style={
-                  Object {
-                    "paddingLeft": 18,
-                    "paddingRight": 3,
-                  }
-                }
-              >
-                <span
-                  style={
-                    Object {
-                      "color": "#444",
-                    }
-                  }
-                >
-                  &lt;
-                  Loader
-                </span>
-                <span>
-                  <span>
-                     
-                    <span
-                      style={Object {}}
-                    >
-                      type
-                    </span>
-                    <span>
-                      =
-                      <span
-                        style={Object {}}
-                      >
-                        "
-                        <span
-                          style={
-                            Object {
-                              "color": "#22a",
-                              "wordBreak": "break-word",
-                            }
-                          }
-                        >
-                          LOADING
-                        </span>
-                        "
-                      </span>
-                    </span>
-                     
-                  </span>
-                </span>
-                <span
-                  style={
-                    Object {
-                      "color": "#444",
-                    }
-                  }
-                >
-                  /&gt;
-                </span>
-              </div>
-            </div>
-            <button
-              className="css-1naocv3 eva467m0"
-              onClick={[Function]}
-            >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
-            </button>
-          </pre>
-        </div>
-        <div>
-          <h1
-            style={
-              Object {
-                "borderBottom": "1px solid #EEE",
-                "fontSize": "25px",
-                "margin": "20px 0 0 0",
-                "padding": "0 0 5px 0",
-              }
-            }
-          >
-            Prop Types
-          </h1>
-          <div>
-            <h2
-              style={
-                Object {
-                  "margin": "20px 0 0 0",
-                }
-              }
-            >
-              "
-              Loader
-              " Component
-            </h2>
-            <small>
-              No propTypes defined!
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+    Chargement en cours...
+  </p>
 </div>
 `;

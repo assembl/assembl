@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, object } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -22,5 +21,5 @@ const playground = {
 
 storiesOf('Semantic Analysis|KeywordInfo', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <KeywordInfo {...defaultKeywordInfoProps} />))
-  .add('playground', withInfo()(() => <KeywordInfo keyword={object('keyword', playground.keyword)} />));
+  .add('default', () => <KeywordInfo {...defaultKeywordInfoProps} />)
+  .add('playground', () => <KeywordInfo keyword={object('keyword', playground.keyword)} />);

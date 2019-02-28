@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, number, object, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -53,26 +52,23 @@ const playground = {
 
 storiesOf('FictionComment', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <FictionComment
-        authorUserId={playground.authorUserId}
-        authorFullname={text('Author fullname', playground.authorFullname)}
-        circleAvatar={object('circleAvatar', playground.circleAvatar)}
-        commentContent={text('Comment content', playground.commentContent)}
-        commentId={text('Comment id', playground.commentId)}
-        contentLocale={playground.contentLocale}
-        displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
-        measureTreeHeight={playground.measureTreeHeight}
-        numChildren={number('Number of comments', playground.numChildren)}
-        modified={boolean('Is modified', playground.modified)}
-        parentPostAuthorFullname={text('Parent comment author fullname', playground.parentPostAuthorFullname)}
-        publicationState={playground.publicationState}
-        publishedDate={text('Published date', playground.publishedDate)}
-        updateComment={playground.updateComment}
-        fictionCommentExtraProps={playground.fictionCommentExtraProps}
-      />
-    ))
-  );
+  .add('default', () => <FictionComment {...defaultFictionComment} {...defaultFictionCommentGraphQL} />)
+  .add('playground', () => (
+    <FictionComment
+      authorUserId={playground.authorUserId}
+      authorFullname={text('Author fullname', playground.authorFullname)}
+      circleAvatar={object('circleAvatar', playground.circleAvatar)}
+      commentContent={text('Comment content', playground.commentContent)}
+      commentId={text('Comment id', playground.commentId)}
+      contentLocale={playground.contentLocale}
+      displayedPublishedDate={text('Displayed published date', playground.displayedPublishedDate)}
+      measureTreeHeight={playground.measureTreeHeight}
+      numChildren={number('Number of comments', playground.numChildren)}
+      modified={boolean('Is modified', playground.modified)}
+      parentPostAuthorFullname={text('Parent comment author fullname', playground.parentPostAuthorFullname)}
+      publicationState={playground.publicationState}
+      publishedDate={text('Published date', playground.publishedDate)}
+      updateComment={playground.updateComment}
+      fictionCommentExtraProps={playground.fictionCommentExtraProps}
+    />
+  ));

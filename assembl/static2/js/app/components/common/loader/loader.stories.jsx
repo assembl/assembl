@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -29,7 +28,7 @@ const playground = {
 
 storiesOf('Semantic Analysis|Loader', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <Loader {...defaultLoaderProps} />))
-  .add('error', withInfo()(() => <Loader {...loaderErrorProps} />))
-  .add('no data', withInfo()(() => <Loader {...loaderNoDataProps} />))
-  .add('playground', withInfo()(() => <Loader type={select('type', playground.type, playground.type[0])} />));
+  .add('default', () => <Loader {...defaultLoaderProps} />)
+  .add('error', () => <Loader {...loaderErrorProps} />)
+  .add('no data', () => <Loader {...loaderNoDataProps} />)
+  .add('playground', () => <Loader type={select('type', playground.type, playground.type[0])} />);

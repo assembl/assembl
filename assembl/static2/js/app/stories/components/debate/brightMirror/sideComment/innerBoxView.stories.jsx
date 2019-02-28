@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import { getExtractTagId } from '../../../../../utils/extract';
@@ -143,19 +142,13 @@ export const multipleInnerBoxViewProps: Props = {
 
 storiesOf('InnerBoxView', module)
   .addDecorator(withKnobs)
-  .add(
-    'single comment',
-    withInfo()(() => (
-      <div className="harvesting-box">
-        <InnerBoxView {...defaultInnerBoxViewProps} />
-      </div>
-    ))
-  )
-  .add(
-    'multiple comments',
-    withInfo()(() => (
-      <div className="harvesting-box">
-        <InnerBoxView {...multipleInnerBoxViewProps} />
-      </div>
-    ))
-  );
+  .add('single comment', () => (
+    <div className="harvesting-box">
+      <InnerBoxView {...defaultInnerBoxViewProps} />
+    </div>
+  ))
+  .add('multiple comments', () => (
+    <div className="harvesting-box">
+      <InnerBoxView {...multipleInnerBoxViewProps} />
+    </div>
+  ));

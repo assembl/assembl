@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
 import { EditorState, ContentState } from 'draft-js';
 import { action } from '@storybook/addon-actions';
@@ -21,11 +20,8 @@ export const defaultInnerBoxSubmitProps: Props = {
 
 storiesOf('InnerBoxSubmit', module)
   .addDecorator(withKnobs)
-  .add(
-    'default',
-    withInfo()(() => (
-      <div className="harvesting-box">
-        <InnerBoxSubmit {...defaultInnerBoxSubmitProps} />
-      </div>
-    ))
-  );
+  .add('default', () => (
+    <div className="harvesting-box">
+      <InnerBoxSubmit {...defaultInnerBoxSubmitProps} />
+    </div>
+  ));
