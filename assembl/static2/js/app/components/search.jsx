@@ -44,7 +44,7 @@ import { connectedUserIsExpert } from '../utils/permissions';
 import { get as getRoute } from '../utils/routeMap';
 import UserMessagesTagFilter from './search/UserMessagesTagFilter';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
-import RelatedIdeas from './debate/common/post/relatedIdeas';
+import SuggestionContainer from './common/suggestionContainer/suggestionContainer';
 import { MESSAGE_VIEW } from '../constants';
 
 const FRAGMENT_SIZE = 400;
@@ -178,6 +178,12 @@ if (v1Interface) {
 
 const PublishedInfo = ({ date, publishedOnMsgId, userId, userName, relatedIdeasTitles, ideaUrl, onLinkClick }) => {
   const hasRelatedIdeasTitles = relatedIdeasTitles && relatedIdeasTitles.length > 0;
+
+  const suggestionContainerProps = {
+    suggestionList: relatedIdeasTitles,
+    suggestionContainerTitle: I18n.t('debate.thread.linkIdea')
+  };
+
   return (
     <React.Fragment>
       <Translate value={publishedOnMsgId} /> <Localize value={date} dateFormat="date.format" /> <Translate value="search.by" />{' '}
@@ -186,7 +192,7 @@ const PublishedInfo = ({ date, publishedOnMsgId, userId, userName, relatedIdeasT
       </TagFilter>
       {hasRelatedIdeasTitles && ideaUrl ? (
         <Link to={ideaUrl} onClick={onLinkClick}>
-          <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} />
+          <SuggestionContainer {...suggestionContainerProps} />
         </Link>
       ) : null}
     </React.Fragment>

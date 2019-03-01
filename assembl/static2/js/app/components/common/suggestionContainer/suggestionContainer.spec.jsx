@@ -20,17 +20,42 @@ describe('<SuggestionContainer /> - with shallow', () => {
   let wrapper;
   let suggestionList: Props;
 
-  beforeEach(() => {
-    suggestionList = { ...defaultProps };
-    wrapper = shallow(<SuggestionContainer {...suggestionList} />);
+  describe('with default props', () => {
+    beforeEach(() => {
+      suggestionList = { ...defaultProps };
+      wrapper = shallow(<SuggestionContainer {...suggestionList} />);
+    });
+
+    it('should render a title', () => {
+      expect(wrapper.find('div [className="title"]')).toHaveLength(1);
+    });
+
+    it('should render a list of 5 suggestions', () => {
+      expect(wrapper.find('div [className="suggestion-list"]')).toHaveLength(1);
+      expect(wrapper.find('span')).toHaveLength(5);
+    });
   });
 
-  it('should render a title', () => {
-    expect(wrapper.find('div [className="title"]')).toHaveLength(1);
-  });
+  describe('with custom props', () => {
+    beforeEach(() => {
+      suggestionList = {
+        ...defaultProps,
+        suggestionContainerClassnamePrefix: 'custom-prefix',
+        suggestionContainerTitle: 'custom-title'
+      };
+      wrapper = shallow(<SuggestionContainer {...suggestionList} />);
+    });
 
-  it('should render a list of 5 suggestions', () => {
-    expect(wrapper.find('div [className="suggestion-list"]')).toHaveLength(1);
-    expect(wrapper.find('span')).toHaveLength(5);
+    it('should render a title', () => {
+      expect(wrapper.find('div [className="title"]').text()).toEqual('custom-title');
+    });
+
+    it('should render a custom-prefix-container element', () => {
+      expect(wrapper.find('div [className="custom-prefix-container"]')).toHaveLength(1);
+    });
+
+    it('should render a custom-prefix-list element', () => {
+      expect(wrapper.find('div [className="custom-prefix-list"]')).toHaveLength(1);
+    });
   });
 });

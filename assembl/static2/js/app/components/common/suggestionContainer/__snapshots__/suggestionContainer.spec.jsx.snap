@@ -7,7 +7,7 @@ exports[`Storyshots Tag On Post|SuggestionContainer default 1`] = `
   <div
     className="title"
   >
-    Suggestions de mots-clés :
+    Suggested keywords:
   </div>
   <div
     className="suggestion-list"
@@ -38,7 +38,7 @@ exports[`Storyshots Tag On Post|SuggestionContainer playground 1`] = `
   <div
     className="title"
   >
-    Suggestions de mots-clés :
+    This is a custom title
   </div>
   <div
     className="suggestion-list"

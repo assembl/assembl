@@ -161,6 +161,7 @@ exports[`PostView component should render a post in view mode 1`] = `
           attachments={Array []}
         />
         <React.Fragment>
+          <TagOnPost />
           <div
             className="answers annotation"
           >

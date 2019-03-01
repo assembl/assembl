@@ -349,20 +349,6 @@ $marginLeft: 80px;
     font-family: $font-family4;
     margin-left: $marginLeft;
     bottom: 2em;
-
-    .link-idea {
-      display: flex;
-
-      .label {
-        color: #a4a4a4;
-        font-size: 11px;
-        padding-left: 0;
-      }
-
-      .badge {
-        background-color: #c5c5c5;
-      }
-    }
   }
 
   &__assembl-icon-message,

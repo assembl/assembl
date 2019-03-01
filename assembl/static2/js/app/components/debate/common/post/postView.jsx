@@ -9,12 +9,16 @@ import ProfileLine from '../../../common/profileLine';
 import PostActions from '../../common/postActions';
 import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
-import RelatedIdeas from './relatedIdeas';
+import TagOnPost from '../../../tagOnPost/tagOnPost';
+import SuggestionContainer from '../../../common/suggestionContainer/suggestionContainer';
 import PostBody from './postBody';
 import HarvestingMenu from '../../../harvesting/harvestingMenu';
-import type { Props as PostProps } from './index';
 import { getExtractTagId } from '../../../../utils/extract';
 import { PublicationStates, pendingOrange, MESSAGE_VIEW } from '../../../../constants';
+
+// Type imports
+import type { Props as PostProps } from './index';
+import type { Props as SuggestionContainerProps } from '../../../common/suggestionContainer/suggestionContainer';
 
 type Props = PostProps & {
   body: string,
@@ -193,6 +197,12 @@ class PostView extends React.PureComponent<Props, State> {
       userName = I18n.t('deletedUser');
     }
     const userNameClasses = classnames({ pending: isPending });
+
+    const suggestionContainerProps: SuggestionContainerProps = {
+      suggestionList: relatedIdeasTitles,
+      suggestionContainerTitle: I18n.t('debate.thread.linkIdea')
+    };
+
     return (
       <div
         ref={(p) => {
@@ -254,7 +264,8 @@ class PostView extends React.PureComponent<Props, State> {
 
               {!multiColumns ? (
                 <React.Fragment>
-                  {hasRelatedIdeas ? <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} /> : null}
+                  {<TagOnPost />}
+                  {hasRelatedIdeas ? <SuggestionContainer {...suggestionContainerProps} /> : null}
                   <div className="answers annotation">
                     <Translate value="debate.thread.numberOfResponses" count={numChildren} />
                   </div>

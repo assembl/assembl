@@ -1,11 +1,12 @@
 .suggestion-container {
-  border-top: solid 1px $grey;
-  padding-top: 5px;
+  border-top: solid 1px $light-grey;
+  color: $grey;
+  font-family: $font-family4;
   padding-bottom: 5px;
+  padding-top: 5px;
 
   .title {
-    font-size: 1.1rem;
-    letter-spacing: 1.2px;
+    font-size: 1rem;
   }
 
   .suggestion-list {
@@ -14,7 +15,10 @@
       font-size: 1rem;
       letter-spacing: normal;
       margin-right: 15px;
-      text-transform: capitalize;
+
+      &::first-letter {
+        text-transform: uppercase;
+      }
     }
   }
 }

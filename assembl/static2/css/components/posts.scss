@@ -288,33 +288,6 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
   }
 
-  .link-idea {
-    border-bottom: $navbar-border;
-    border-top: $navbar-border;
-    margin: 0 0 5px 0;
-    padding: 5px 0;
-
-    .label {
-      color: $grey;
-      font-size: $font-size-xs;
-      font-family: $font-family4;
-    }
-
-    .badges {
-      padding: 5px 0;
-
-      .badge {
-        display: inline;
-        background-color: $light-grey;
-        color: $grey;
-        text-align: left;
-        white-space: normal;
-        word-wrap: break-word;
-        font-family: $font-family4;
-      }
-    }
-  }
-
   .post-action {
     cursor: pointer;
     margin: 10px 0 0;
@@ -793,12 +766,6 @@ $deleted-post-border: 1px solid $light-grey !default;
           }
         }
       }
-    }
-
-    .link-idea {
-      border-bottom: none;
-      margin: 0;
-      padding: 20px 0 0;
     }
 
     .sentiments-count {
