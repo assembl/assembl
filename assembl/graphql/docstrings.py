@@ -54,7 +54,7 @@ class Schema:
     text_fields = """A list of ConfigurableField union, where each text field represents a field on a bound entity."""
     profile_fields = """A list of ConfigurableField union, where each text field represents a field on a profile only."""
     timeline = """A list of DiscussionPhase objects, descriping the timeline objects on the debate."""
-    abstract_tags = """A list of abstract tags associated to Posts"""
+    tags = """A list of abstract tags associated to Posts"""
 
 
 class SchemaPosts:
@@ -252,21 +252,16 @@ class TagInterface:
     value = """The value of the tag. This is not language dependent, but rather just unicode text."""
 
 
-class AbstractTagInterface:
-    __doc__ = """An abstract tag is a string. It allows to classify posts."""
-    value = """The value of the abstract tag. This is not language dependent, but rather just unicode text."""
+class AddTag:
+    __doc__ = """A mutation to add a Tag to a Post."""
+    taggable_id = """The Relay.Node ID type of the TaggableEntity object representing the context of the mutation."""
+    value = """The value of the keyword"""
 
 
-class AddTagOnPost:
-    __doc__ = """A mutation to add an AbstractTag to a Post."""
-    post_id = Default.node_id % ("Post")
-    value = """The value of the tag"""
-
-
-class DeleteTagOnPost:
-    __doc__ = """A mutation to create an AbstractTag association to a Post."""
-    post_id = Default.node_id % ("Post")
-    value = """The value of the tag"""
+class RemoveTag:
+    __doc__ = """A mutation to create a Tag association to a Post."""
+    id = """The Relay.Node ID type of the Tag object to the updated."""
+    taggable_id = """The Relay.Node ID type of the TaggableEntity object representing the context of the mutation."""
 
 
 class PostExtract:

@@ -1,5 +1,0 @@
-query AbstractTags {
-  abstractTags {
-    value
-  }
-}

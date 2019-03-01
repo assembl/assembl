@@ -32,8 +32,7 @@ from .user import AgentProfile
 from .utils import DateTime, abort_transaction_on_exception
 from .synthesis import Synthesis
 from .extract import Extract, ExtractStates, ExtractNatures
-from .abstract_tag import AbstractTag
-
+from .tag import Tag
 
 _ = TranslationStringFactory('assembl')
 
@@ -103,7 +102,7 @@ class PostInterface(SQLAlchemyInterface):
     parent_extract_id = graphene.ID(description=docs.PostInterface.parent_extract_id)
     keywords = graphene.List(TagResult, description=docs.PostInterface.keywords)
     nlp_sentiment = graphene.Float(description=docs.PostInterface.nlp_sentiment)
-    tags = graphene.List(AbstractTag, description=docs.PostInterface.tags)
+    tags = graphene.List(Tag, description=docs.PostInterface.tags)
 
     def resolve_db_id(self, args, context, info):
         return self.id
@@ -251,7 +250,7 @@ class PostInterface(SQLAlchemyInterface):
             return sentiments[0].sentiment
 
     def resolve_tags(self, args, context, info):
-        return [tag_on_post.abstract_tag for tag_on_post in self.abstract_tags]
+        return self.tags
 
 
 class Post(SecureObjectType, SQLAlchemyObjectType):

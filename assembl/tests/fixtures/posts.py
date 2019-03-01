@@ -515,6 +515,55 @@ testa""")
 
 
 @pytest.fixture(scope="function")
+def root_post_for_tags(request, participant1_user, discussion, test_session):
+    """
+    From participant1_user
+    """
+    from assembl.models import Post, LangString
+    p = Post(
+        discussion=discussion, creator=participant1_user,
+        subject=LangString.create(u"a root post"),
+        body=LangString.create(u"post body"), moderator=None,
+        creation_date=datetime(year=2000, month=1, day=1),
+        type="post", message_id="msg1@example.com")
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_for_tags"
+        p.tags = []
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
+def root_post_with_tags(request, participant1_user, discussion, test_session, tags):
+    """
+    From participant1_user
+    """
+    from assembl.models import Post, LangString
+    p = Post(
+        discussion=discussion, creator=participant1_user,
+        subject=LangString.create(u"a root post"),
+        body=LangString.create(u"post body"), moderator=None,
+        creation_date=datetime(year=2000, month=1, day=1),
+        type="post", message_id="msg1@example.com")
+    p.tags = tags
+    test_session.add(p)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_with_tags"
+        p.tags = []
+        test_session.delete(p)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
 def extract_comment(request, extract_post_1_to_subidea_1_1, discussion, admin_user, test_session):
     from assembl.models import ExtractComment, LangString
     p = ExtractComment(
