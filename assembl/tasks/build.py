@@ -208,6 +208,7 @@ def update_pip_requirements(c, force_reinstall=False):
             # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
             ("dm.xmlsec.binding", "%s --install-option='-q'"),
             ("pycurl", None),
+            ("psycopg2", "%s --install-option='-q'")
         ]
         for package, wrapper in specials:
             separate_pip_install(c, package, wrapper)
