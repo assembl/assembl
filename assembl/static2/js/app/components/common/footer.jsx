@@ -60,8 +60,8 @@ const Footer = ({
               </p>
               <ul className="social-medias">
                 {socialMedias.map((sMedia, index) => (
-                  <li className={`media-${index}`}>
-                    <Link to={sMedia.url} target="_blank" key={index}>
+                  <li className={`media-${index}`} key={sMedia.name}>
+                    <Link to={sMedia.url} target="_blank">
                       <i className={`assembl-icon-${sMedia.name}-circle`} />
                     </Link>
                   </li>
