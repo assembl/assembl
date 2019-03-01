@@ -463,6 +463,11 @@ const Translations = {
         sentimentAnalysisDefinition:
           "L'analyse du sentiment caractérise la tonalité positive ou négative des échanges du débat (ou \"des échanges relatifs à la thématique en question\")."
       },
+      tagOnPost: {
+        suggestionContainerTitle: "Suggestions de mots-clés :",
+        tagContainerAdminTitle: "Ajoutez des mots-clés relatifs à ce post :",
+        tagContainerTitle: "Mots-clés relatifs à ce post :"
+      },
       brightMirror: {
         deleteFiction: "Supprimez votre texte",
         deleteFictionModalBody: "Êtes-vous sûr de vouloir supprimer ce texte ?",
@@ -1476,6 +1481,11 @@ const Translations = {
         sentimentAnalysis: "Sentiment analysis",
         sentimentAnalysisDefinition:
           "The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed)."
+      },
+      tagOnPost: {
+        suggestionContainerTitle: "Suggested keywords:",
+        tagContainerAdminTitle: "Add post-related keywords:",
+        tagContainerTitle: "Keywords in post:"
       },
       brightMirror: {
         deleteFiction: "Delete your text",
