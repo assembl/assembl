@@ -25,3 +25,13 @@ def require_instance_permission(permission_type, instance, request):
     allowed = instance.user_can(user_id, permission_type, permissions) if instance else False
     if not allowed:
         raise HTTPUnauthorized(request.localizer.translate(error))
+
+
+def require_specific_permission(permission, request):
+    user_id = request.authenticated_userid or Everyone
+    discussion_id = request.matchdict['discussion_id']
+    permissions = get_permissions(user_id, discussion_id)
+    if permission not in permissions:
+        raise HTTPUnauthorized(request.localizer.translate(error))
+
+    return True

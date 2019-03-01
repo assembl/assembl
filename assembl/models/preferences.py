@@ -44,6 +44,7 @@ from assembl.auth import (
     P_SELF_REGISTER,
     P_SEND_SYNTHESIS,
     P_SYSADMIN,
+    P_ADD_SIDE_COMMENT,
     P_VOTE,
     R_ADMINISTRATOR,
     R_CATCHER,
@@ -775,6 +776,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                     P_OVERRIDE_SOCIAL_AUTOLOGIN,
                     P_SEND_SYNTHESIS,
                     P_VOTE,
+                    P_ADD_SIDE_COMMENT,
                 ],
                 R_CATCHER: [
                     P_ADD_EXTRACT,
@@ -807,12 +809,14 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                     P_OVERRIDE_SOCIAL_AUTOLOGIN,
                     P_SEND_SYNTHESIS,
                     P_VOTE,
+                    P_ADD_SIDE_COMMENT,
                 ],
                 R_PARTICIPANT: [
                     P_ADD_POST,
                     P_DELETE_MY_POST,
                     P_EDIT_MY_POST,
                     P_VOTE,
+                    P_ADD_SIDE_COMMENT,
                 ],
                 Authenticated: [
                     P_SELF_REGISTER,

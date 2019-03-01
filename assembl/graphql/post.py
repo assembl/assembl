@@ -20,7 +20,8 @@ from assembl.models.auth import (LanguagePreferenceCollection,
 from jwzthreading import restrip_pat
 
 import assembl.graphql.docstrings as docs
-from .permissions_helpers import require_cls_permission, require_instance_permission
+from .permissions_helpers import (
+    require_cls_permission, require_instance_permission, require_specific_permission)
 from .attachment import Attachment
 from .idea import Idea, TagResult
 from .langstring import (LangStringEntry, resolve_best_langstring_entries,
@@ -767,9 +768,7 @@ class AddPostExtract(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
 
-        permissions = get_permissions(user_id, discussion_id)
-        if P_ADD_SIDE_COMMENT not in permissions and require_cls_permission(CrudPermissions.CREATE, models.Extract, context):
-            raise HTTPUnauthorized()
+        require_specific_permission(P_ADD_SIDE_COMMENT, context) or require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
 
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])
