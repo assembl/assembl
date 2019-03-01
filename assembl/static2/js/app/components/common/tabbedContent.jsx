@@ -7,7 +7,8 @@ import { hiddenTooltip } from './tooltips';
 
 export type Tab = {
   id: string,
-  title: string
+  title: string,
+  index: number
 };
 
 type Props = {

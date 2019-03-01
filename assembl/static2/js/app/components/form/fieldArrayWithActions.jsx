@@ -201,7 +201,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
             <div className="form-container" key={fieldname}>
               {titleMsgId ? (
                 <div className="title left">
-                  <Translate value={titleMsgId} index={idx + 1} />
+                  <Translate value={titleMsgId} count={idx + 1} />
                 </div>
               ) : null}
               <div className="pointer right">

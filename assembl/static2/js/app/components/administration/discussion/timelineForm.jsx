@@ -79,7 +79,8 @@ export class DumbTimelineForm extends React.Component<TimelineFormProps, Timelin
               const tabTitle = `${I18n.t('administration.timelineAdmin.phase', { count: index + 1 })}`;
               return {
                 id: id,
-                title: tabTitle
+                title: tabTitle,
+                index: index
               };
             })}
             renderTooltip={phaseTooltip}

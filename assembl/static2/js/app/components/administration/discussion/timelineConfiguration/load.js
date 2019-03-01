@@ -1,7 +1,8 @@
 // @flow
 import type { ApolloClient } from 'react-apollo';
 import TimelineQuery from '../../../../graphql/Timeline.graphql';
-import { convertEntriesToI18nValue } from '../../../form/utils';
+import type { PhasesValues } from './type.flow';
+import { convertEntriesToI18nValue, convertISO8601StringToDateTime } from '../../../form/utils';
 
 // import type { LegalContentsFormValues } from './../types.flow';
 
@@ -14,8 +15,13 @@ export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, lang:
   return data;
 };
 
-export const postLoadFormat = (data: Data) => ({
+export const postLoadFormat = (data: PhasesValues) => ({
   phases: data.timeline.map(phase => ({
-    title: convertEntriesToI18nValue(phase.titleEntries)
+    title: convertEntriesToI18nValue(phase.titleEntries),
+    description: convertEntriesToI18nValue(phase.descriptionEntries),
+    image: phase.image,
+    id: phase.id,
+    start: convertISO8601StringToDateTime(phase.start),
+    end: convertISO8601StringToDateTime(phase.end)
   }))
 });

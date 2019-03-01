@@ -82,14 +82,17 @@ exports[`TimelineForm component should render a form to create, delete and edit 
       Array [
         Object {
           "id": "123",
+          "index": 0,
           "title": "Phase 1",
         },
         Object {
           "id": "345",
+          "index": 1,
           "title": "Phase 2",
         },
         Object {
           "id": "456",
+          "index": 2,
           "title": "Phase 3",
         },
       ]
