@@ -65,6 +65,7 @@ def test_get_user_permissions(discussion_with_permissions, participant1_user):
     assert sorted(user_permissions) == sorted(
         [
             u'add_post',
+            u'add_side_comment',
             u'delete_my_post',
             u'edit_my_post',
             u'read',
