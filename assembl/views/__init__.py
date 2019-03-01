@@ -568,7 +568,7 @@ def get_description(request):
             else:
                 return ""
     else:
-        return "Assembl is an online debate platform."
+        return "Assembl is a collective intelligence platform capable of hosting massive structured conversations online."
 
 
 def get_topic(request):
@@ -595,7 +595,7 @@ def get_topic(request):
             else:
                 return ""
     else:
-        return "Assembl is an online debate platform."
+        return "Assembl is a collective intelligence platform capable of hosting massive structured conversations online."
 
 
 def discussion_title():
