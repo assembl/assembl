@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-// Helpers imports
 
 export type Props = {
   /** Suggestion container classname prefix. Default is 'suggestion' */

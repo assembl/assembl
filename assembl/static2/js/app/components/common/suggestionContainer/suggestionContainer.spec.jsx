@@ -18,12 +18,12 @@ configure({ adapter: new Adapter() });
 
 describe('<SuggestionContainer /> - with shallow', () => {
   let wrapper;
-  let suggestionList: Props;
+  let suggestionContainerProps: Props;
 
   describe('with default props', () => {
     beforeEach(() => {
-      suggestionList = { ...defaultProps };
-      wrapper = shallow(<SuggestionContainer {...suggestionList} />);
+      suggestionContainerProps = { ...defaultProps };
+      wrapper = shallow(<SuggestionContainer {...suggestionContainerProps} />);
     });
 
     it('should render a title', () => {
@@ -38,12 +38,12 @@ describe('<SuggestionContainer /> - with shallow', () => {
 
   describe('with custom props', () => {
     beforeEach(() => {
-      suggestionList = {
+      suggestionContainerProps = {
         ...defaultProps,
         suggestionContainerClassnamePrefix: 'custom-prefix',
         suggestionContainerTitle: 'custom-title'
       };
-      wrapper = shallow(<SuggestionContainer {...suggestionList} />);
+      wrapper = shallow(<SuggestionContainer {...suggestionContainerProps} />);
     });
 
     it('should render a title', () => {

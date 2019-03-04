@@ -1,18 +1,32 @@
 // @flow
 import React from 'react';
+// Helpers imports
+import { I18n } from 'react-redux-i18n';
 
-// Component imports
+export type Props = {
+  /** Flag that checks whether we have to display the admin mode */
+  isAdmin?: boolean,
+  /** List of tags manually set by a consultant */
+  tagList: Array<string>
+};
 
-// Type imports
+const TagContainer = ({ isAdmin, tagList }: Props) => {
+  const tagContainerTitle = isAdmin
+    ? I18n.t('debate.tagOnPost.tagContainerAdminTitle')
+    : I18n.t('debate.tagOnPost.tagContainerTitle');
 
-const TagContainer = () => (
-  <div className="tag-container">
-    <div className="title">Ajoutez des mots-clés relatifs à ce post :</div>
-    <div className="tag-list">
-      <span>Habitat et SDF</span>
-      <span>Facilitation</span>
+  const displayTagList = tagList.map((tag, index) => <span key={`tag-${index}`}>{tag}</span>);
+
+  return (
+    <div className="tag-container">
+      <div className="title">{tagContainerTitle}</div>
+      <div className="tag-list">{displayTagList}</div>
     </div>
-  </div>
-);
+  );
+};
+
+TagContainer.defaultProps = {
+  isAdmin: false
+};
 
 export default TagContainer;
