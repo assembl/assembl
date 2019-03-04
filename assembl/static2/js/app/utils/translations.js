@@ -384,9 +384,12 @@ const Translations = {
       confirmRefusalButton: "Refuser",
       confirmDeletionButtonDelete: "Supprimer",
       confirmDeletionButtonCancel: "Annuler",
-      syntheses: "Synthèses",
       back: "Retour",
       validateSuccess: "La contribution a bien été validée. Elle est désormais visible par l'ensemble des participants.",
+      syntheses: {
+        summary: "Sommaire des synthèses",
+        createNewSynthesis: "Créer une nouvelle synthèse"
+      },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
         themesTitle: "Choisissez une thématique !",
@@ -1435,8 +1438,11 @@ const Translations = {
       confirmRefusalButton: "Refuse",
       confirmDeletionButtonDelete: "Delete",
       confirmDeletionButtonCancel: "Cancel",
-      syntheses: "Syntheses",
       back: "Back",
+      syntheses: {
+        summary: "Syntheses summary",
+        createNewSynthesis: "Create a new synthesis"
+      },
       validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {
         loadRecentPosts: "Load recent proposals",
