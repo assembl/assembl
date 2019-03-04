@@ -2,6 +2,7 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
+import { withKnobs, object } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import TagContainer from './tagContainer';
@@ -11,4 +12,11 @@ export const defaultProps: tagContainerProps = {
   tagList: ['Habitat et SDF', 'Facilitation']
 };
 
-storiesOf('Tag On Post|TagContainer', module).add('default', () => <TagContainer {...defaultProps} />);
+const playground: tagContainerProps = {
+  ...defaultProps
+};
+
+storiesOf('Tag On Post|TagContainer', module)
+  .addDecorator(withKnobs)
+  .add('default', () => <TagContainer {...defaultProps} />)
+  .add('playground', () => <TagContainer tagList={object('List of tags', playground.tagList)} />);

@@ -21,3 +21,25 @@ exports[`Storyshots Tag On Post|TagContainer default 1`] = `
   </div>
 </div>
 `;
+
+exports[`Storyshots Tag On Post|TagContainer playground 1`] = `
+<div
+  className="tag-container"
+>
+  <div
+    className="title"
+  >
+    Mots-clés relatifs à ce post :
+  </div>
+  <div
+    className="tag-list"
+  >
+    <span>
+      Habitat et SDF
+    </span>
+    <span>
+      Facilitation
+    </span>
+  </div>
+</div>
+`;
