@@ -29,4 +29,9 @@ fragment BrightMirrorFiction on Post {
   extracts {
     ...FictionExtract
   }
+  keywords {
+    score
+    count
+    value
+  }
 }

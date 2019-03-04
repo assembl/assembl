@@ -44,7 +44,14 @@ export type GaugeChoiceSpecificationInput = {|
   value: number
 |};
 
-export type SectionTypesEnum = 'ADMINISTRATION' | 'CUSTOM' | 'DEBATE' | 'HOMEPAGE' | 'RESOURCES_CENTER' | 'SYNTHESES';
+export type SectionTypesEnum =
+  | 'ADMINISTRATION'
+  | 'CUSTOM'
+  | 'DEBATE'
+  | 'HOMEPAGE'
+  | 'RESOURCES_CENTER'
+  | 'SEMANTIC_ANALYSIS'
+  | 'SYNTHESES';
 
 export type SelectFieldOptionInput = {|
   // The Relay.Node ID type of the SelectFieldOption object.
@@ -70,7 +77,9 @@ export type IdeaAnnouncementInput = {|
   // A list of possible languages of the entity as LangStringEntry objects. This is the body of announcement in multiple languages.
   bodyEntries: Array<?LangStringEntryInput>,
   // A list of possible languages of the entity as LangStringEntry objects. This is the quote of the announcement in multiple languages.
-  quoteEntries?: ?Array<?LangStringEntryInput>
+  quoteEntries?: ?Array<?LangStringEntryInput>,
+  // A list of possible languages of the entity as LangStringEntry objects. This is the summry of the announcement in multiple languages.
+  summaryEntries?: ?Array<?LangStringEntryInput>
 |};
 
 export type TokenCategorySpecificationInput = {|
@@ -210,6 +219,7 @@ export type BrightMirrorFictionQueryVariables = {|
 export type BrightMirrorFictionQuery = {|
   // The ID of the object
   fiction: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -435,9 +445,11 @@ export type BrightMirrorFictionQuery = {|
             |},
             // List of attachements to the post.
             attachments: ?Array<?{|
+              // The ID of the object.
               id: string,
               // Any file that can be attached. A file metadata object, described by the Document object.
               document: ?{|
+                // The ID of the object.
                 id: string,
                 // The filename title.
                 title: ?string,
@@ -480,8 +492,19 @@ export type BrightMirrorFictionQuery = {|
             //
             publicationState: ?PublicationStates
           |}>
+        |}>,
+        // Keywords associated with the post, according to NLP engine.
+        keywords: ?Array<?{|
+          // The score associated with the tag (0-1, increasing relevance)
+          score: ?number,
+          // The number of times the tag was found
+          count: ?number,
+          // The tag keyword
+          value: ?string
         |}>
       }
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -553,6 +576,8 @@ export type DiscussionDataQueryVariables = {|
 export type DiscussionDataQuery = {|
   // The discussion object metadata.
   discussion: ?{|
+    // The ID of the object.
+    id: string,
     // The file representing the logo of the debate. A file metadata object, described by the Document object.
     logoImage: ?{|
       // The MIME-Type of the file uploaded.
@@ -642,9 +667,14 @@ export type IdeaQuery = {|
           // A body of announcement in a given language.
           body: ?string,
           // A quote of announcement in a given language.
-          quote: ?string
+          quote: ?string,
+          // A summary of announcement in a given language.
+          summary: ?string
         |}
       }
+    | {}
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -861,6 +891,9 @@ export type IdeaWithPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -871,6 +904,8 @@ export type LandingPageQueryVariables = {|
 export type LandingPageQuery = {|
   // The discussion object metadata.
   discussion: ?{|
+    // The ID of the object.
+    id: string,
     // A list of possible languages of the entity as LangStringEntry objects. %s
     titleEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
@@ -1133,6 +1168,7 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -1348,9 +1384,11 @@ export type PostQuery = {|
         |}>,
         // List of attachements to the post.
         attachments: ?Array<?{|
+          // The ID of the object.
           id: string,
           // Any file that can be attached. A file metadata object, described by the Document object.
           document: ?{|
+            // The ID of the object.
             id: string,
             // The filename title.
             title: ?string,
@@ -1371,6 +1409,8 @@ export type PostQuery = {|
           |}
         |}>
       }
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -1490,6 +1530,7 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -1529,6 +1570,8 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -1540,6 +1583,7 @@ export type QuestionQueryVariables = {|
 export type QuestionQuery = {|
   // The ID of the object
   question: ?(
+    | {}
     | {}
     | {}
     | {}
@@ -1593,11 +1637,13 @@ export type QuestionQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
     | {})
 |};
 
 export type ResourcesCenterPageQueryVariables = {|
-  lang?: ?string
+  lang: string
 |};
 
 export type ResourcesCenterPageQuery = {|
@@ -1625,7 +1671,7 @@ export type ResourcesCenterPageQuery = {|
 |};
 
 export type ResourcesQueryQueryVariables = {|
-  lang?: ?string
+  lang: string
 |};
 
 export type ResourcesQueryQuery = {|
@@ -1743,6 +1789,101 @@ export type SectionsQueryQuery = {|
   |}>
 |};
 
+export type SemanticAnalysisForDiscussionDataQueryVariables = {|
+  lang?: ?string
+|};
+
+export type SemanticAnalysisForDiscussionDataQuery = {|
+  // The discussion object metadata.
+  semanticAnalysisForDiscussionData: ?{|
+    // The ID of the object.
+    id: string,
+    // The aggregated sentiment analysis on the posts
+    nlpSentiment: ?{|
+      // The sum of positive scores
+      positive: ?number,
+      // The sum of negative scores
+      negative: ?number,
+      // The number of posts analyzed
+      count: ?number
+    |},
+    // The title of the discussion, in the language specified by the input
+    title: ?string,
+    // Keywords most often found in the discussion, according to NLP engine
+    topKeywords: ?Array<?{|
+      // The number of times the tag was found
+      count: ?number,
+      // The score associated with the tag (0-1, increasing relevance)
+      score: ?number,
+      // The tag keyword
+      value: ?string
+    |}>
+  |}
+|};
+
+export type SemanticAnalysisForThematicDataQueryVariables = {|
+  lang: string,
+  id: string
+|};
+
+export type SemanticAnalysisForThematicDataQuery = {|
+  // The ID of the object
+  semanticAnalysisForThematicData: ?(
+    | {
+        // The ID of the object.
+        id: string,
+        // The aggregated sentiment analysis on the posts
+        nlpSentiment: ?{|
+          // The sum of positive scores
+          positive: ?number,
+          // The sum of negative scores
+          negative: ?number,
+          // The number of posts analyzed
+          count: ?number
+        |},
+        // The title of the Idea, often shown in the Idea header itself.
+        title: ?string,
+        // The list of top keywords found in messages associated to this idea, according to NLP engine
+        topKeywords: ?Array<?{|
+          // The number of times the tag was found
+          count: ?number,
+          // The score associated with the tag (0-1, increasing relevance)
+          score: ?number,
+          // The tag keyword
+          value: ?string
+        |}>
+      }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {})
+|};
+
 export type SynthesesQueryQueryVariables = {|
   lang: string
 |};
@@ -1777,6 +1918,10 @@ export type SynthesisQueryQueryVariables = {|
 export type SynthesisQueryQuery = {|
   // The ID of the object
   synthesisPost: ?(
+    | {
+        // The ID of the object.
+        id: string
+      }
     | {
         // The ID of the object.
         id: string
@@ -2035,6 +2180,14 @@ export type SynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
+      }
+    | {
+        // The ID of the object.
+        id: string
       })
 |};
 
@@ -2059,6 +2212,8 @@ export type TabsConditionQuery = {|
   hasUserGuidelines: ?boolean,
   // The discussion object metadata.
   discussion: ?{|
+    // The ID of the object.
+    id: string,
     // A URL for the homepage (optional). Often placed on the logo.
     homepageUrl: ?string
   |},
@@ -2223,6 +2378,9 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
+    | {}
+    | {}
+    | {}
     | {})
 |};
 
@@ -2306,6 +2464,13 @@ export type ThematicsQueryQuery = {|
       |}>,
       // A list of possible languages of the entity as LangStringEntry objects. This is the quote of the announcement in multiple languages.
       quoteEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects. This is the summry of the announcement in multiple languages.
+      summaryEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
@@ -2442,6 +2607,7 @@ export type UserPreferencesQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -2456,6 +2622,8 @@ export type UserPreferencesQuery = {|
           |}
         |}
       }
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -2885,12 +3053,15 @@ export type AcceptedCookiesQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The list of cookies accepted by the agent.
         acceptedCookies: ?Array<?CookieTypes>,
         // The ID of the object.
         id: string
       }
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -3110,6 +3281,21 @@ export type addSentimentMutation = {|
       // The SentimentType that the API calling User has on the Post, if any.
       mySentiment: ?SentimentTypes
     |}
+  |}
+|};
+
+export type addTagMutationVariables = {|
+  taggableId: string,
+  value: string
+|};
+
+export type addTagMutation = {|
+  // A mutation to add a Tag to a Post.
+  addTag: ?{|
+    tags: ?Array<?{|
+      // The value of the tag. This is not language dependent, but rather just unicode text.
+      value: string
+    |}>
   |}
 |};
 
@@ -3614,9 +3800,11 @@ export type createPostMutation = {|
       |}>,
       // List of attachements to the post.
       attachments: ?Array<?{|
+        // The ID of the object.
         id: string,
         // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
+          // The ID of the object.
           id: string,
           // The filename title.
           title: ?string,
@@ -3679,11 +3867,11 @@ export type createProposalMutation = {|
 
 export type createResourceMutationVariables = {|
   doc?: ?string,
-  embedCode?: ?string,
   image?: ?string,
-  lang?: ?string,
+  lang: string,
+  titleEntries: Array<?LangStringEntryInput>,
   textEntries: Array<?LangStringEntryInput>,
-  titleEntries: Array<LangStringEntryInput>,
+  embedCode?: ?string,
   order?: ?number
 |};
 
@@ -3871,7 +4059,9 @@ export type createThematicMutation = {|
         // A title of announcement in a given language.
         title: ?string,
         // A body of announcement in a given language.
-        body: ?string
+        body: ?string,
+        // A summary of announcement in a given language.
+        summary: ?string
       |},
       // Header image associated with the idea. A file metadata object, described by the Document object.
       img: ?{|
@@ -4126,6 +4316,21 @@ export type deleteVoteSpecificationMutation = {|
   |}
 |};
 
+export type removeTagMutationVariables = {|
+  taggableId: string,
+  id: string
+|};
+
+export type removeTagMutation = {|
+  // A mutation to create a Tag association to a Post.
+  removeTag: ?{|
+    tags: ?Array<?{|
+      // The value of the tag. This is not language dependent, but rather just unicode text.
+      value: string
+    |}>
+  |}
+|};
+
 export type updateAcceptedCookiesMutationVariables = {|
   actions: Array<?CookieTypes>
 |};
@@ -4154,6 +4359,8 @@ export type UpdateDiscussionMutation = {|
   // The mutation that allows to update an existing Discussion object
   updateDiscussion: ?{|
     discussion: ?{|
+      // The ID of the object.
+      id: string,
       // A list of possible languages of the entity as LangStringEntry objects. %s
       titleEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
@@ -4547,6 +4754,13 @@ export type updateIdeasMutation = {|
             localeCode: string,
             // The unicode encoded string representation of the content.
             value: ?string
+          |}>,
+          // A list of possible languages of the entity as LangStringEntry objects. This is the summry of the announcement in multiple languages.
+          summaryEntries: ?Array<?{|
+            // The ISO 639-1 locale code of the language the content represents.
+            localeCode: string,
+            // The unicode encoded string representation of the content.
+            value: ?string
           |}>
         |},
         // A list of Question objects that are bound to the Thematic.
@@ -4742,9 +4956,11 @@ export type UpdateLegalContentsMutation = {|
       |}>,
       // A Attachments for legal notice in a given language.
       legalNoticeAttachments: ?Array<?{|
+        // The ID of the object.
         id: string,
         // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
+          // The ID of the object.
           id: string,
           // The filename title.
           title: ?string,
@@ -4766,9 +4982,11 @@ export type UpdateLegalContentsMutation = {|
       |}>,
       // A Attachments for terms and conditions. in a given language.
       termsAndConditionsAttachments: ?Array<?{|
+        // The ID of the object.
         id: string,
         // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
+          // The ID of the object.
           id: string,
           // The filename title.
           title: ?string,
@@ -4790,9 +5008,11 @@ export type UpdateLegalContentsMutation = {|
       |}>,
       // A Attachments for cookies policy. in a given language.
       cookiesPolicyAttachments: ?Array<?{|
+        // The ID of the object.
         id: string,
         // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
+          // The ID of the object.
           id: string,
           // The filename title.
           title: ?string,
@@ -4814,9 +5034,11 @@ export type UpdateLegalContentsMutation = {|
       |}>,
       // A Attachments for privacy policy. in a given language.
       privacyPolicyAttachments: ?Array<?{|
+        // The ID of the object.
         id: string,
         // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
+          // The ID of the object.
           id: string,
           // The filename title.
           title: ?string,
@@ -4838,9 +5060,11 @@ export type UpdateLegalContentsMutation = {|
       |}>,
       // A Attachments for user guidelines. in a given language.
       userGuidelinesAttachments: ?Array<?{|
+        // The ID of the object.
         id: string,
         // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
+          // The ID of the object.
           id: string,
           // The filename title.
           title: ?string,
@@ -5146,9 +5370,11 @@ export type updatePostMutation = {|
       |}>,
       // List of attachements to the post.
       attachments: ?Array<?{|
+        // The ID of the object.
         id: string,
         // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
+          // The ID of the object.
           id: string,
           // The filename title.
           title: ?string,
@@ -5290,12 +5516,12 @@ export type updateProposalMutation = {|
 |};
 
 export type updateResourceMutationVariables = {|
-  doc?: ?string,
   id: string,
+  doc?: ?string,
   image?: ?string,
-  lang?: ?string,
+  lang: string,
   titleEntries: Array<?LangStringEntryInput>,
-  textEntries?: ?Array<?LangStringEntryInput>,
+  textEntries: Array<?LangStringEntryInput>,
   embedCode?: ?string,
   order?: ?number
 |};
@@ -5530,7 +5756,9 @@ export type updateThematicMutation = {|
         // A title of announcement in a given language.
         title: ?string,
         // A body of announcement in a given language.
-        body: ?string
+        body: ?string,
+        // A summary of announcement in a given language.
+        summary: ?string
       |},
       // Header image associated with the idea. A file metadata object, described by the Document object.
       img: ?{|
@@ -5666,6 +5894,7 @@ export type uploadDocumentMutation = {|
   // A mutation allowing the uploading of a File object.
   uploadDocument: ?{|
     document: ?{|
+      // The ID of the object.
       id: string,
       // A url to an image or a document to be attached.
       externalUrl: ?string,
@@ -5728,6 +5957,7 @@ export type UserQuery = {|
     | {}
     | {}
     | {}
+    | {}
     | {
         // The ID of the object.
         id: string,
@@ -5747,6 +5977,8 @@ export type UserQuery = {|
         // If True, the User information is cleansed from the system, and the User can no longer log in.
         isDeleted: ?boolean
       }
+    | {}
+    | {}
     | {}
     | {}
     | {}
@@ -5956,6 +6188,7 @@ export type gaugeVoteSpecificationResultsFragment = {|
 |};
 
 export type ADocumentFragment = {|
+  // The ID of the object.
   id: string,
   // The filename title.
   title: ?string,
@@ -6000,9 +6233,11 @@ export type AgentProfileInfoFragment = {|
 |};
 
 export type AttachmentFragment = {|
+  // The ID of the object.
   id: string,
   // Any file that can be attached. A file metadata object, described by the Document object.
   document: ?{|
+    // The ID of the object.
     id: string,
     // The filename title.
     title: ?string,
@@ -6239,9 +6474,11 @@ export type BrightMirrorFictionFragment = {|
       |},
       // List of attachements to the post.
       attachments: ?Array<?{|
+        // The ID of the object.
         id: string,
         // Any file that can be attached. A file metadata object, described by the Document object.
         document: ?{|
+          // The ID of the object.
           id: string,
           // The filename title.
           title: ?string,
@@ -6284,6 +6521,15 @@ export type BrightMirrorFictionFragment = {|
       //
       publicationState: ?PublicationStates
     |}>
+  |}>,
+  // Keywords associated with the post, according to NLP engine.
+  keywords: ?Array<?{|
+    // The score associated with the tag (0-1, increasing relevance)
+    score: ?number,
+    // The number of times the tag was found
+    count: ?number,
+    // The tag keyword
+    value: ?string
   |}>
 |};
 
@@ -6467,9 +6713,11 @@ export type ExtractCommentFragment = {|
   |},
   // List of attachements to the post.
   attachments: ?Array<?{|
+    // The ID of the object.
     id: string,
     // Any file that can be attached. A file metadata object, described by the Document object.
     document: ?{|
+      // The ID of the object.
       id: string,
       // The filename title.
       title: ?string,
@@ -6645,9 +6893,11 @@ export type FictionExtractFragment = {|
     |},
     // List of attachements to the post.
     attachments: ?Array<?{|
+      // The ID of the object.
       id: string,
       // Any file that can be attached. A file metadata object, described by the Document object.
       document: ?{|
+        // The ID of the object.
         id: string,
         // The filename title.
         title: ?string,
@@ -6754,6 +7004,13 @@ export type ideaDataFragment = {
     |}>,
     // A list of possible languages of the entity as LangStringEntry objects. This is the quote of the announcement in multiple languages.
     quoteEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // A list of possible languages of the entity as LangStringEntry objects. This is the summry of the announcement in multiple languages.
+    summaryEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
       localeCode: string,
       // The unicode encoded string representation of the content.
@@ -7134,9 +7391,11 @@ export type PostFragment = {|
   |}>,
   // List of attachements to the post.
   attachments: ?Array<?{|
+    // The ID of the object.
     id: string,
     // Any file that can be attached. A file metadata object, described by the Document object.
     document: ?{|
+      // The ID of the object.
       id: string,
       // The filename title.
       title: ?string,

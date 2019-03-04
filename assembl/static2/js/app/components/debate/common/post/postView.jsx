@@ -198,6 +198,10 @@ class PostView extends React.PureComponent<Props, State> {
     }
     const userNameClasses = classnames({ pending: isPending });
 
+    const tagOnPostProps: TagOnPostProps = {
+      suggestedKeywords: {}
+    };
+
     const suggestionContainerProps: SuggestionContainerProps = {
       suggestionList: relatedIdeasTitles,
       suggestionContainerTitle: I18n.t('debate.thread.linkIdea')
@@ -264,7 +268,7 @@ class PostView extends React.PureComponent<Props, State> {
 
               {!multiColumns ? (
                 <React.Fragment>
-                  <TagOnPost />
+                  <TagOnPost {...tagOnPostProps} />
                   {hasRelatedIdeas ? <SuggestionContainer {...suggestionContainerProps} /> : null}
                   <div className="answers annotation">
                     <Translate value="debate.thread.numberOfResponses" count={numChildren} />

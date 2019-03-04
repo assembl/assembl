@@ -44,7 +44,9 @@ import type { Props as FictionBodyProps } from '../components/debate/brightMirro
 import type { FictionCommentHeaderProps } from '../components/debate/brightMirror/fictionCommentHeader';
 import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
 import type { FictionCommentListProps } from '../components/debate/brightMirror/fictionCommentList';
+import type { Props as TagOnPostProps } from '../components/tagOnPost/tagOnPost';
 import type { CreateCommentInputs } from '../components/debate/brightMirror/fictionComment';
+import type { Keywords } from './semanticAnalysis/dataType';
 
 // Define types
 export type BrightMirrorFictionData = {
@@ -130,7 +132,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     const { loading } = nextProps.brightMirrorFictionData;
     if (loading) return null;
 
-    const { subject, body, publicationState } = nextProps.brightMirrorFictionData.fiction;
+    const { body, publicationState, subject } = nextProps.brightMirrorFictionData.fiction;
 
     return {
       title: subject || EMPTY_STRING,
@@ -354,6 +356,16 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       onSubmitHandler: this.submitCommentHandler
     };
 
+    // Convert `fiction.keywords` to Keywords to fix Flow error: not currently working...
+    const formatedKeywords: Keywords = fiction.keywords.map((k) => {
+      const { count, score, value } = k;
+      return { count: count, score: score, value: value };
+    });
+
+    const tagOnPostProps: TagOnPostProps = {
+      suggestedKeywords: formatedKeywords
+    };
+
     const displayFictionCommentForm = userCanPost ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
 
     return (
@@ -368,7 +380,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
                   <FictionToolbar {...fictionToolbarProps} />
                   <FictionBody {...fictionBodyProps} />
                 </article>
-                <TagOnPost />
+                <TagOnPost {...tagOnPostProps} />
               </Col>
             </Row>
           </Grid>

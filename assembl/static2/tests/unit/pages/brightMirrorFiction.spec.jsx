@@ -73,7 +73,24 @@ const brightMirrorFictionDataTemplate = {
       dontUnderstand: 0,
       like: 0,
       moreInfo: 0
-    }
+    },
+    keywords: [
+      {
+        count: 1,
+        score: 0.6075,
+        value: 'complete account of the system'
+      },
+      {
+        count: 1,
+        score: 0.600927,
+        value: 'great pleasure'
+      },
+      {
+        count: 1,
+        score: 0.607114,
+        value: 'actual teachings of the great explorer of the truth'
+      }
+    ]
   },
   error: null,
   refetch: () => {}
