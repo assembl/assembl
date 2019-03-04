@@ -16,7 +16,7 @@ exports[`SideMenuTree component should render a 1 level SideMenuTree component 1
       Cool story
     </Link>
     <span
-      className="assembl-icon-down-open pointer"
+      className="pointer assembl-icon-angle-right"
       onClick={[Function]}
     />
   </div>

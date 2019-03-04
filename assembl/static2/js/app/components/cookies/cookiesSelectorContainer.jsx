@@ -29,8 +29,6 @@ export type CookiesObject = {
 };
 
 type State = {
-  activeKey: ?string,
-  show: boolean,
   cookies: ?CookiesObject,
   settingsHaveChanged: boolean
 };
@@ -69,8 +67,6 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     }
 
     this.state = {
-      activeKey: 'essential',
-      show: true,
       cookies: cookiesByCategory,
       settingsHaveChanged: false
     };
@@ -158,14 +154,8 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     displayAlert('success', I18n.t('cookiesPolicy.success'));
   };
 
-  handleCategorySelection = (category: string) => {
-    const { show, activeKey } = this.state;
-    this.setState({ activeKey: category, show: !show });
-    return category !== activeKey && this.setState({ show: true });
-  };
-
   render() {
-    const { cookies, show, activeKey, settingsHaveChanged } = this.state;
+    const { cookies, settingsHaveChanged } = this.state;
     if (!cookies) {
       return null;
     }
@@ -173,11 +163,8 @@ export class DumbCookiesSelectorContainer extends React.Component<Props, State> 
     return (
       <CookiesSelector
         cookies={cookies}
-        show={show}
-        activeKey={activeKey}
         handleSave={this.saveChanges}
         handleToggle={this.handleToggle}
-        handleCategorySelection={this.handleCategorySelection}
         toggleCookieType={this.toggleCookieType}
         locale={this.props.locale}
         settingsHaveChanged={settingsHaveChanged}

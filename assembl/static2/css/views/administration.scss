@@ -174,12 +174,9 @@
         }
       }
 
-      .arrow {
-        color: $grey;
-        font-size: 6px;
-        margin-right: 10px;
-        margin-left: -19px;
-        cursor: pointer;
+      .assembl-icon-angle-right:before,
+      .assembl-icon-angle-down:before {
+        margin-left: -7px;
       }
     }
 
