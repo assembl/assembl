@@ -32,6 +32,7 @@ import PostBody from '../common/post/postBody';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 import DeletePostButton from '../common/deletePostButton';
 import ValidatePostButton from '../common/validatePostButton';
+import TagOnPost from '../../tagOnPost/tagOnPost';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
 
@@ -295,6 +296,7 @@ class Post extends React.Component<Props> {
             bodyMimeType={post.bodyMimeType}
             isHarvesting={isHarvesting}
           />
+          <TagOnPost />
           <div className={classnames('post-footer', { pending: isPending })}>
             {!isPending ? (
               <div className="sentiments">

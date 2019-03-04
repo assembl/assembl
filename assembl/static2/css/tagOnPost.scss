@@ -1,2 +1,18 @@
+.proposals {
+  .tag-on-post-container {
+    padding-left: 25px;
+    padding-right: 20px;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .proposals {
+    .tag-on-post-container {
+      padding-left: 50px;
+      padding-right: 50px;
+    }
+  }
+}
+
 @import '../js/app/components/common/tagContainer/tagContainer.scss';
 @import '../js/app/components/common/suggestionContainer/suggestionContainer.scss';

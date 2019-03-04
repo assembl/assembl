@@ -264,7 +264,7 @@ class PostView extends React.PureComponent<Props, State> {
 
               {!multiColumns ? (
                 <React.Fragment>
-                  {<TagOnPost />}
+                  <TagOnPost />
                   {hasRelatedIdeas ? <SuggestionContainer {...suggestionContainerProps} /> : null}
                   <div className="answers annotation">
                     <Translate value="debate.thread.numberOfResponses" count={numChildren} />
