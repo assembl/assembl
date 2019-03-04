@@ -99,8 +99,9 @@ class SideMenuTree extends React.Component<SideMenuTreeProps, SideMenuTreeState>
           {hasChildren &&
             level === 1 && (
               <span
-                className={classNames('assembl-icon-down-open pointer', {
-                  'active-arrow': showSubIdeasTree,
+                className={classNames('pointer', {
+                  'assembl-icon-angle-right': !showSubIdeasTree,
+                  'assembl-icon-angle-down ': showSubIdeasTree,
                   'no-pointer-events': isIdeaOnScroll || isChildOnScroll
                 })}
                 onClick={() => {
