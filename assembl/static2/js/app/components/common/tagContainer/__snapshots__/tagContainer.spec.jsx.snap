@@ -12,12 +12,48 @@ exports[`Storyshots Tag On Post|TagContainer default 1`] = `
   <div
     className="tag-list"
   >
-    <span>
-      Habitat et SDF
-    </span>
-    <span>
-      Facilitation
-    </span>
+    <div>
+      <div
+        className="ReactTags__tags react-tags-wrapper-user"
+      >
+        <div
+          className="ReactTags__selected"
+        >
+          <button
+            className="tag-wrapper ReactTags__tag"
+            onClick={null}
+            style={
+              Object {
+                "cursor": "auto",
+                "opacity": 1,
+              }
+            }
+          >
+            <span
+              className="tag-name"
+            >
+              Habitat et SDF
+            </span>
+          </button>
+          <button
+            className="tag-wrapper ReactTags__tag"
+            onClick={null}
+            style={
+              Object {
+                "cursor": "auto",
+                "opacity": 1,
+              }
+            }
+          >
+            <span
+              className="tag-name"
+            >
+              Facilitation
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
@@ -34,12 +70,48 @@ exports[`Storyshots Tag On Post|TagContainer playground 1`] = `
   <div
     className="tag-list"
   >
-    <span>
-      Habitat et SDF
-    </span>
-    <span>
-      Facilitation
-    </span>
+    <div>
+      <div
+        className="ReactTags__tags react-tags-wrapper-user"
+      >
+        <div
+          className="ReactTags__selected"
+        >
+          <button
+            className="tag-wrapper ReactTags__tag"
+            onClick={null}
+            style={
+              Object {
+                "cursor": "auto",
+                "opacity": 1,
+              }
+            }
+          >
+            <span
+              className="tag-name"
+            >
+              Habitat et SDF
+            </span>
+          </button>
+          <button
+            className="tag-wrapper ReactTags__tag"
+            onClick={null}
+            style={
+              Object {
+                "cursor": "auto",
+                "opacity": 1,
+              }
+            }
+          >
+            <span
+              className="tag-name"
+            >
+              Facilitation
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 `;
