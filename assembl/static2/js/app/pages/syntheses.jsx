@@ -34,7 +34,7 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
     const { syntheses, slug, hasSyntheses } = this.props;
     return (
       <Section title="debate.syntheses.summary" translate>
-        <div className="center">
+        <div className="center create-synthesis">
           <Link className="button-submit button-dark">
             <Translate value="debate.syntheses.createNewSynthesis" />
           </Link>
