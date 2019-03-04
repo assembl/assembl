@@ -25,6 +25,7 @@ import BackButton from '../components/debate/common/backButton';
 import FictionCommentHeader from '../components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../components/debate/brightMirror/fictionCommentList';
+import TagOnPost from '../components/tagOnPost/tagOnPost';
 import { withScreenWidth } from '../components/common/screenDimensions';
 // Utils imports
 import { transformPosts, getDebateTotalMessages } from './idea';
@@ -367,6 +368,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
                   <FictionToolbar {...fictionToolbarProps} />
                   <FictionBody {...fictionBodyProps} />
                 </article>
+                <TagOnPost />
               </Col>
             </Row>
           </Grid>

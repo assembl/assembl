@@ -7,6 +7,7 @@ import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 import BackButton, { type Props as BackButtonProps } from '../../../components/debate/common/backButton';
 import FictionCommentHeader from '../../../components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../../../components/debate/brightMirror/fictionCommentForm';
+import TagOnPost from '../../../components/tagOnPost/tagOnPost';
 import { FictionComment } from '../../../components/debate/brightMirror/fictionComment';
 
 // Import existing storybook data
@@ -61,6 +62,7 @@ const BrightMirrorFiction = () => (
               <FictionToolbar {...defaultFictionToolbar} />
               <FictionBody {...defaultFictionBody} />
             </article>
+            <TagOnPost />
           </Col>
         </Row>
       </Grid>

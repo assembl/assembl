@@ -1,15 +1,16 @@
 .tag-container {
   border-top: solid 1px $light-grey;
   color: $grey;
-  font-family: $font-family4;
   padding-bottom: 5px;
   padding-top: 5px;
 
   .title {
-    font-size: 1rem;
+    font-size: 1.1rem;
   }
 
   .tag-list {
+    font-family: $font-family4;
+
     span {
       display: inline-block;
       font-size: 1rem;
@@ -18,6 +19,31 @@
 
       &::first-letter {
         text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.bright-mirror-fiction {
+  .tag-container {
+    border-top: none;
+    padding-top: 25px;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .bright-mirror-fiction {
+    .tag-container {
+      padding-bottom: 10px;
+
+      .title {
+        font-size: 1.33rem;
+      }
+
+      .tag-list {
+        span {
+          font-size: 1.17rem;
+        }
       }
     }
   }

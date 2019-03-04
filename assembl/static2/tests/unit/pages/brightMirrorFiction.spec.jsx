@@ -16,6 +16,7 @@ import FictionBody from '../../../js/app/components/debate/brightMirror/fictionB
 import FictionCommentHeader from '../../../js/app/components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../../../js/app/components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../../../js/app/components/debate/brightMirror/fictionCommentList';
+import TagOnPost from '../../../js/app/components/tagOnPost/tagOnPost';
 // Constant imports
 import { PublicationStates } from '../../../js/app/constants';
 // Type imports
@@ -205,6 +206,10 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
     it('should render a FictionCommentList', () => {
       expect(wrapper.find(FictionCommentList)).toHaveLength(1);
+    });
+
+    it('should render a TagOnPost', () => {
+      expect(wrapper.find(TagOnPost)).toHaveLength(1);
     });
   });
 

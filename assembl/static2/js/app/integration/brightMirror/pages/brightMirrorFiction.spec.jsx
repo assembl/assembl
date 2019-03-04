@@ -12,6 +12,7 @@ import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 import BackButton from '../../../components/debate/common/backButton';
 import FictionCommentHeader from '../../../components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../../../components/debate/brightMirror/fictionCommentForm';
+import TagOnPost from '../../../components/tagOnPost/tagOnPost';
 import { FictionComment } from '../../../components/debate/brightMirror/fictionComment';
 
 configure({ adapter: new Adapter() });
@@ -49,5 +50,9 @@ describe('<BrightMirrorFiction /> - with shallow', () => {
 
   it('should render a FictionComment', () => {
     expect(wrapper.find(FictionComment)).toHaveLength(20);
+  });
+
+  it('should render a TagOnPost', () => {
+    expect(wrapper.find(TagOnPost)).toHaveLength(1);
   });
 });
