@@ -4,8 +4,9 @@ import { Field } from 'react-final-form';
 import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import arrayMutators from 'final-form-arrays';
-import { type ApolloClient } from 'react-apollo';
+import { type ApolloClient, graphql, compose, withApollo } from 'react-apollo';
 
+import TimelineQuery from '../../../../graphql/Timeline.graphql';
 import TabbedContent from '../../../common/tabbedContent';
 import SectionTitle from '../../../../components/administration/sectionTitle';
 import AdminForm from '../../../../components/form/adminForm';
@@ -17,6 +18,9 @@ import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAda
 import DatePickerFieldAdapter from '../../../form/datePickerFieldAdapter';
 import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
 import { deleteResourceTooltip, createResourceTooltip, phaseTooltip } from '../../../common/tooltips';
+import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
+import { validStartDate, validEndDate } from '../../landingPage/header/validate';
+import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 
 const loading = <Loader />;
 
@@ -26,7 +30,51 @@ type Props = {
   lang: string
 };
 
-class TimelineFields extends React.Component<Props> {
+type State = {
+  phases: Array<Object>,
+  startDateConflict: boolean,
+  endDateConflict: boolean
+};
+
+class TimelineFields extends React.Component<Props, State> {
+  static getDerivedStateFromProps(props) {
+    const phases = props.phases.map(({ start, end }) => ({
+      start: start ? convertISO8601StringToDate(start) : null,
+      end: end ? convertISO8601StringToDate(end) : null
+    }));
+    return {
+      phases: phases,
+      startDateConflict: false,
+      endDateConflict: false
+    };
+  }
+
+  state = {
+    phases: [],
+    startDateConflict: false,
+    endDateConflict: false
+  };
+
+  onStartChange = (newStart: moment$Moment, index: number) => {
+    const startDateConflict = validStartDate(newStart, this.state.phases[index].end);
+    const updatedPhases = [...this.state.phases];
+    updatedPhases[index].start = newStart;
+    this.setState({
+      phases: updatedPhases,
+      startDateConflict: startDateConflict
+    });
+  };
+
+  onEndChange = (newEnd: moment$Moment, index: number) => {
+    const endDateConflict = validEndDate(newEnd, this.state.phases[index].end);
+    const updatedPhases = [...this.state.phases];
+    updatedPhases[index].ernd = newEnd;
+    this.setState({
+      phases: updatedPhases,
+      startDateConflict: endDateConflict
+    });
+  };
+
   render() {
     const { client, editLocale, lang } = this.props;
     return (
@@ -91,9 +139,9 @@ class TimelineFields extends React.Component<Props> {
                     };
                   })}
                   renderTooltip={phaseTooltip}
-                  renderBody={phase => (
-                    <React.Fragment>
-                      <div className="admin-paragraph">Choisissez les dates de début et de fin de la phase</div>
+                  renderBody={(phase, index) => (
+                    <div className="discussion-admin admin-box admin-content">
+                      <Translate value="administration.timelineAdmin.instruction1" className="admin-instruction" />
                       <Field
                         name={`phases[${phase.index}].start`}
                         component={DatePickerFieldAdapter}
@@ -101,9 +149,8 @@ class TimelineFields extends React.Component<Props> {
                         editLocale={editLocale}
                         placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
                         showTime={false}
-                        // hasConflictingDate={this.state.startDateConflict}
-                        // onDateChange={this.onStartChange}
-                        form={form}
+                        hasConflictingDate={false}
+                        onDateChange={e => this.onStartChange(e, index)}
                         dateFormat="LL"
                       />
                       <Field
@@ -113,18 +160,18 @@ class TimelineFields extends React.Component<Props> {
                         editLocale={editLocale}
                         placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
                         showTime={false}
-                        // hasConflictingDate={this.state.endDateConflict}
-                        // onDateChange={this.onEndChange}
+                        hasConflictingDate={false}
+                        onDateChange={e => this.onEndChange(e, index)}
                         form={form}
                         dateFormat="LL"
                       />
-                      <div className="admin-paragraph">Télécharger une image pour le bandeau timeline de la page accueil</div>
+                      <Translate value="administration.timelineAdmin.instruction1" className="admin-instruction" />
                       <Field
                         name={`phases[${phase.index}].image`}
                         component={FileUploaderFieldAdapter}
                         label={I18n.t('administration.landingPage.header.logoDescription')}
                       />
-                      <div className="admin-paragraph">Écrivez une description pour votre phase</div>
+                      <Translate value="administration.timelineAdmin.instruction1" className="admin-instruction" />
                       <Field
                         editLocale={editLocale}
                         withAttachmentButton={false}
@@ -133,7 +180,7 @@ class TimelineFields extends React.Component<Props> {
                         label={I18n.t('administration.landingPage.header.subtitleLabel')}
                         required
                       />
-                    </React.Fragment>
+                    </div>
                   )}
                 />
               </div>
@@ -145,15 +192,20 @@ class TimelineFields extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state) => {
-  const { phasesById } = state.admin.timeline;
-  const filteredPhases = phasesById.sortBy(phase => phase.get('order')).filter(phase => !phase.get('_toDelete'));
-  const filteredPhasesId = filteredPhases.keySeq().toJS();
-  return {
-    editLocale: state.admin.editLocale,
-    lang: state.i18n.locale,
-    phases: filteredPhasesId
-  };
-};
+const mapStateToProps = state => ({
+  editLocale: state.admin.editLocale,
+  lang: state.i18n.locale
+});
 
-export default connect(mapStateToProps)(TimelineFields);
+export default compose(
+  connect(mapStateToProps),
+  graphql(TimelineQuery, {
+    options: ({ editLocale }) => ({
+      variables: {
+        lang: editLocale
+      }
+    })
+  }),
+  manageErrorAndLoading({ displayLoader: true }),
+  withApollo
+)(TimelineFields);
