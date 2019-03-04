@@ -116,7 +116,10 @@ def setup_ctx(c):
     code_root = project_prefix
     config_prefix = code_root + '/assembl/configs/'
     if not exists(c, config_prefix):
-        code_root = project_prefix + '/venv/lib/python2.7/site-packages'
+        if exists(c, project_prefix + '/venv/lib/python2.7'):
+            code_root = project_prefix + '/venv/lib/python2.7/site-packages'
+        else:
+            code_root = project_prefix + '/venv/lib/python-2.7/site-packages'
         config_prefix = code_root + '/assembl/configs/'
 
     current = c.config._project or {}
