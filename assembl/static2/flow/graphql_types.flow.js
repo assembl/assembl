@@ -1415,6 +1415,15 @@ export type PostQuery = {|
             avChecked: ?string
           |}
         |}>,
+        // Keywords associated with the post, according to NLP engine.
+        keywords: ?Array<?{|
+          // The score associated with the tag (0-1, increasing relevance)
+          score: ?number,
+          // The number of times the tag was found
+          count: ?number,
+          // The tag keyword
+          value: ?string
+        |}>,
         // A list of abstract tags associated to the post.
         tags: ?Array<?{|
           // The ID of the object.
@@ -3838,6 +3847,15 @@ export type createPostMutation = {|
           avChecked: ?string
         |}
       |}>,
+      // Keywords associated with the post, according to NLP engine.
+      keywords: ?Array<?{|
+        // The score associated with the tag (0-1, increasing relevance)
+        score: ?number,
+        // The number of times the tag was found
+        count: ?number,
+        // The tag keyword
+        value: ?string
+      |}>,
       // A list of abstract tags associated to the post.
       tags: ?Array<?{|
         // The ID of the object.
@@ -5414,6 +5432,15 @@ export type updatePostMutation = {|
           //
           avChecked: ?string
         |}
+      |}>,
+      // Keywords associated with the post, according to NLP engine.
+      keywords: ?Array<?{|
+        // The score associated with the tag (0-1, increasing relevance)
+        score: ?number,
+        // The number of times the tag was found
+        count: ?number,
+        // The tag keyword
+        value: ?string
       |}>,
       // A list of abstract tags associated to the post.
       tags: ?Array<?{|
@@ -7449,6 +7476,15 @@ export type PostFragment = {|
       //
       avChecked: ?string
     |}
+  |}>,
+  // Keywords associated with the post, according to NLP engine.
+  keywords: ?Array<?{|
+    // The score associated with the tag (0-1, increasing relevance)
+    score: ?number,
+    // The number of times the tag was found
+    count: ?number,
+    // The tag keyword
+    value: ?string
   |}>,
   // A list of abstract tags associated to the post.
   tags: ?Array<?{|

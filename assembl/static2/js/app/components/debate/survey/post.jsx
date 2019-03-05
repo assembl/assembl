@@ -5,8 +5,8 @@ import { compose, graphql, withApollo } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 
-import { getConnectedUserId } from '../../../utils/globalFunctions';
-import Permissions, { connectedUserCan, connectedUserIsModerator } from '../../../utils/permissions';
+import { getConnectedUserId, formatedSuggestedTagList, formatedTagList } from '../../../utils/globalFunctions';
+import Permissions, { connectedUserCan, connectedUserIsModerator, connectedUserIsAdmin } from '../../../utils/permissions';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -284,11 +284,10 @@ class Post extends React.Component<Props> {
     );
 
     const tagOnPostProps: TagOnPostProps = {
-      isAdmin: true,
+      isAdmin: connectedUserIsAdmin(),
       postId: post.id,
-      suggestedTagList: [],
-      // $FlowFixMe list of tags and each tag are not null
-      tagList: post.tags
+      tagList: formatedTagList(post.tags),
+      suggestedTagList: formatedSuggestedTagList(post.keywords)
     };
 
     return (
