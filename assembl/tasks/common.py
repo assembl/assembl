@@ -110,16 +110,18 @@ def get_secrets(c, aws_secret_ids, cache=True, reset_cache=False):
     return get_secrets_from_manager(c, aws_secret_ids, cache or reset_cache)
 
 
+def get_venv_site_packages(c):
+    with venv(c):
+        return c.run("python -c 'import sysconfig; print sysconfig.get_path(\"purelib\")'").stdout.strip()
+
+
 def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
     code_root = project_prefix
     config_prefix = code_root + '/assembl/configs/'
     if not exists(c, config_prefix):
-        if exists(c, project_prefix + '/venv/lib/python2.7'):
-            code_root = project_prefix + '/venv/lib/python2.7/site-packages'
-        else:
-            code_root = project_prefix + '/venv/lib/python-2.7/site-packages'
+        code_root = get_venv_site_packages(c)
         config_prefix = code_root + '/assembl/configs/'
 
     current = c.config._project or {}
