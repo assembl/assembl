@@ -390,6 +390,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       : [];
 
     const tagOnPostProps: TagOnPostProps = {
+      isAdmin: true,
       postId: fictionId,
       tagList: formatedTags,
       suggestedKeywords: formatedKeywords

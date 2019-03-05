@@ -16,8 +16,13 @@ describe('<TagOnPost /> - with shallow', () => {
 
   beforeEach(() => {
     const defaultProps = {
-      suggestedKeywords: [],
+      isAdmin: true,
       postId: '0',
+      suggestedKeywords: [
+        'Complete account of the system',
+        'Great pleasure',
+        'Actual teachings of the great explorer of the truth'
+      ],
       tagList: [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }]
     };
     wrapper = shallow(<TagOnPost {...defaultProps} />);

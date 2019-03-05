@@ -30,6 +30,7 @@ const defaultBackBtnProps: BackButtonProps = {
 };
 
 const tagOnPostProps: TagOnPostProps = {
+  isAdmin: true,
   postId: '0',
   tagList: [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }],
   suggestedKeywords: ['complete account of the system', 'great pleasure', 'actual teachings of the great explorer of the truth']

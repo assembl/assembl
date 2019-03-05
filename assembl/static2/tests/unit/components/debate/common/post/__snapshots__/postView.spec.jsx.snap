@@ -162,6 +162,7 @@ exports[`PostView component should render a post in view mode 1`] = `
         />
         <React.Fragment>
           <TagOnPost
+            isAdmin={true}
             postId="XYZ333"
             suggestedKeywords={Array []}
           />

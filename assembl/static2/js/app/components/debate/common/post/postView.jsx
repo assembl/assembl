@@ -201,6 +201,7 @@ class PostView extends React.PureComponent<Props, State> {
     const userNameClasses = classnames({ pending: isPending });
 
     const tagOnPostProps: TagOnPostProps = {
+      isAdmin: true,
       postId: id,
       suggestedKeywords: [],
       // $FlowFixMe list of tags and each tag are not null

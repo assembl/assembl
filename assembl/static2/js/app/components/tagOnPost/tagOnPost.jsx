@@ -10,9 +10,13 @@ import type { Props as TagContainerProps } from '../common/tagContainer/tagConta
 import type { Props as SuggestionContainerProps } from '../common/suggestionContainer/suggestionContainer';
 
 export type Props = {
+  /** Flag that check if the current user is an admin */
+  isAdmin: boolean,
+  /** Post ID */
   postId: string,
-  /** List of suggested keywords fetched from IBM Watson for the current post */
+  /** List of suggested keywords related to the current post */
   suggestedKeywords: Array<string>,
+  /** List of tags fetched related to the current post */
   tagList: Array<Tag>
 };
 
