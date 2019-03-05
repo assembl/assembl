@@ -32,23 +32,7 @@ const defaultBackBtnProps: BackButtonProps = {
 const tagOnPostProps: TagOnPostProps = {
   postId: '0',
   tagList: [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }],
-  suggestedKeywords: [
-    {
-      count: 1,
-      score: 0.6075,
-      value: 'complete account of the system'
-    },
-    {
-      count: 1,
-      score: 0.600927,
-      value: 'great pleasure'
-    },
-    {
-      count: 1,
-      score: 0.607114,
-      value: 'actual teachings of the great explorer of the truth'
-    }
-  ]
+  suggestedKeywords: ['complete account of the system', 'great pleasure', 'actual teachings of the great explorer of the truth']
 };
 
 const fictionComments = (

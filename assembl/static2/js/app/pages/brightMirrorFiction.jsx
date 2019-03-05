@@ -34,7 +34,13 @@ import { getConnectedUserId, compareByTextPosition } from '../utils/globalFuncti
 import Permissions, { connectedUserCan } from '../utils/permissions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 // Constant imports
-import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND } from '../constants';
+import {
+  FICTION_DELETE_CALLBACK,
+  EMPTY_STRING,
+  PublicationStates,
+  USER_ID_NOT_FOUND,
+  KEYWORD_SCORE_THRESHOLD
+} from '../constants';
 // Type imports
 import type { ContentLocaleMapping } from '../actions/actionTypes';
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
@@ -46,7 +52,6 @@ import type { FictionCommentFormProps } from '../components/debate/brightMirror/
 import type { FictionCommentListProps } from '../components/debate/brightMirror/fictionCommentList';
 import type { Props as TagOnPostProps } from '../components/tagOnPost/tagOnPost';
 import type { CreateCommentInputs } from '../components/debate/brightMirror/fictionComment';
-import type { Keywords } from './semanticAnalysis/dataType';
 
 // Define types
 export type BrightMirrorFictionData = {
@@ -356,12 +361,16 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       onSubmitHandler: this.submitCommentHandler
     };
 
-    // Convert `fiction.keywords` to Keywords and filter null values
-    const formatedKeywords: Keywords = fiction.keywords
+    // Convert `fiction.keywords` to Array<string>, filter null values and filter score greater than KEYWORD_SCORE_THRESHOLD
+    const formatedKeywords: Array<string> = fiction.keywords
       ? fiction.keywords.reduce((result, k) => {
         if (k) {
-          const { count, score, value } = k;
-          result.push({ count: count || 0, score: score || 0, value: value || '' });
+          const { score, value } = k;
+          const newScore: number = score || 0;
+          const newValue: string = value || '';
+          if (newScore > KEYWORD_SCORE_THRESHOLD && newValue) {
+            result.push(newValue);
+          }
         }
         return result;
       }, [])
