@@ -789,6 +789,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
                     P_EDIT_MY_POST,
                     P_OVERRIDE_SOCIAL_AUTOLOGIN,
                     P_VOTE,
+                    P_ADD_SIDE_COMMENT
                 ],
                 R_MODERATOR: [
                     P_ADD_EXTRACT,
