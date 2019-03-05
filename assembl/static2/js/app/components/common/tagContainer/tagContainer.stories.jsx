@@ -2,7 +2,7 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withKnobs, boolean } from '@storybook/addon-knobs';
+import { withKnobs, object, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
 
 import TagContainer from './tagContainer';
@@ -10,7 +10,8 @@ import type { Props as tagContainerProps } from './tagContainer';
 
 export const defaultProps: tagContainerProps = {
   isAdmin: false,
-  postId: '0'
+  postId: '0',
+  tagList: [{ id: '0', text: 'Habitat et SDF' }, { id: '1', text: 'Facilitation' }]
 };
 
 const adminProps: tagContainerProps = {
@@ -26,4 +27,10 @@ storiesOf('Tag On Post|TagContainer', module)
   .addDecorator(withKnobs)
   .add('default', () => <TagContainer {...defaultProps} />)
   .add('admin', () => <TagContainer {...adminProps} />)
-  .add('playground', () => <TagContainer isAdmin={boolean('Is admin?', playground.isAdmin)} postId={playground.postId} />);
+  .add('playground', () => (
+    <TagContainer
+      isAdmin={boolean('Is admin?', playground.isAdmin)}
+      postId={playground.postId}
+      tagList={object('List of tags', playground.tagList)}
+    />
+  ));

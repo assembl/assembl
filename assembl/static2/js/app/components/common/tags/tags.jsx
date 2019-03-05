@@ -6,8 +6,6 @@ import { WithContext as ReactTags } from 'react-tag-input';
 /* eslint-enable */
 import { compose, graphql } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
-import { connect } from 'react-redux';
-import { additionTag, deleteTag } from '../../../actions/tagActions';
 
 import AddkeywordIcon from '../icons/addkeywordIcon/addkeywordIcon';
 import CrossIcon from '../icons/crossIcon/crossIcon';
@@ -15,6 +13,7 @@ import { displayAlert } from '../../../utils/utilityManager';
 
 import addTagMutation from '../../../graphql/mutations/addTag.graphql';
 import removeTagMutation from '../../../graphql/mutations/removeTag.graphql';
+import manageErrorAndLoading from '../manageErrorAndLoading';
 
 export type TagProps = {
   id: string,
@@ -24,13 +23,15 @@ export type TagProps = {
 export type Props = {
   postId: string,
   isAdmin?: boolean,
+  tagsList: Array<TagProps>,
   alreadyAdded?: string,
   addTag: Function,
-  removeTag: Function,
+  removeTag: Function
+};
+
+type State = {
   tags: Array<TagProps>,
-  suggestions: Array<TagProps>,
-  deleteTag: Function,
-  additionTag: Function
+  suggestions: Array<TagProps>
 };
 
 const KeyCodes = {
@@ -52,24 +53,32 @@ const AddComponent = () => (
   </span>
 );
 
-export class DumbTags extends Component<Props> {
+export class DumbTags extends Component<Props, State> {
   static defaultProps = {
     isAdmin: false,
     alreadyAdded: 'Already added'
   };
 
+  state = {
+    tags: [...this.props.tagsList],
+    suggestions: [...this.props.tagsList]
+  };
+
   handleDelete = (i: number) => {
-    const { postId, removeTag, tags } = this.props;
+    const { tags } = this.state;
+    const { postId, removeTag } = this.props;
     const selectedTag = tags[i];
     const variables = {
       taggableId: postId,
       id: selectedTag.id
     };
-    displayAlert('success', I18n.t('loading.wait'));
     removeTag({ variables: variables })
       .then(() => {
         displayAlert('success', I18n.t('harvesting.tags.removeTagSuccessMsg', { tag: selectedTag.text }));
-        this.props.deleteTag(i);
+        this.setState({
+          tags: tags.filter((tag, index) => index !== i),
+          suggestions: tags.filter((tag, index) => index !== i)
+        });
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -82,15 +91,14 @@ export class DumbTags extends Component<Props> {
       taggableId: postId,
       value: tag.text
     };
-    displayAlert('success', I18n.t('loading.wait'));
     addTag({ variables: variables })
       .then((result) => {
-        const dataTags = result.data.addTag.tags;
-        // dataTags ne se vide pas, elle contient d'anciens ajouts
-        // si j'ajoute un nouveau tag, elle m'ajoute tous ceux présents dans dataTags
-        const tagsList = dataTags.map(tagItem => ({ id: tagItem.id, text: tagItem.value }));
+        const newTag = { id: result.data.addTag.tag.id, text: result.data.addTag.tag.value };
         displayAlert('success', I18n.t('harvesting.tags.addTagSuccessMsg', { tag: tag.text }));
-        this.props.additionTag(tagsList);
+        this.setState(state => ({
+          tags: [...state.tags, newTag],
+          suggestions: [...state.suggestions]
+        }));
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -98,7 +106,8 @@ export class DumbTags extends Component<Props> {
   };
 
   render() {
-    const { isAdmin, alreadyAdded, suggestions, tags } = this.props;
+    const { isAdmin, alreadyAdded } = this.props;
+    const { suggestions, tags } = this.state;
 
     const reactTagsProps = {
       allowDragDrop: false,
@@ -123,26 +132,12 @@ export class DumbTags extends Component<Props> {
   }
 }
 
-const mapStateToProps = state => ({
-  tags: state.tag.tags,
-  suggestions: state.tag.suggestions
-});
-
-const mapDispatchToProps = dispatch => ({
-  additionTag: (tag, id) => {
-    dispatch(additionTag(tag, id));
-  },
-  deleteTag: (tagKey) => {
-    dispatch(deleteTag(tagKey));
-  }
-});
-
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
   graphql(addTagMutation, {
     name: 'addTag'
   }),
   graphql(removeTagMutation, {
     name: 'removeTag'
-  })
+  }),
+  manageErrorAndLoading({ displayLoader: true })
 )(DumbTags);

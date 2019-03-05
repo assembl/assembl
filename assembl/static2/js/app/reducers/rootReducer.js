@@ -5,7 +5,6 @@ import Context from './contextReducer';
 import Debate from './debateReducer';
 import Partners from './partnersReducer';
 import Synthesis from './synthesisReducer';
-import Tag from './tagReducer';
 import Auth from './authenticationReducer';
 import Timeline from './timelineReducers';
 import Admin from './adminReducer';
@@ -20,7 +19,6 @@ const reducers = {
   debate: Debate,
   partners: Partners,
   synthesis: Synthesis,
-  tag: Tag,
   auth: Auth,
   timeline: Timeline,
   admin: Admin,
