@@ -1,3 +1,4 @@
+// @flow
 import {
   getNumberOfDays,
   calculatePercentage,
@@ -5,8 +6,12 @@ import {
   hexToRgb,
   encodeUserIdBase64,
   moveElementToFirstPosition,
-  getPostPublicationState
+  getPostPublicationState,
+  formatedSuggestedTagList,
+  formatedTagList
 } from '../../../js/app/utils/globalFunctions';
+
+import type { SuggestedTags, Tags } from '../../../js/app/pages/semanticAnalysis/dataType';
 
 describe('This test concern GlobalFunctions Class', () => {
   it('Should return the number of days between 2 dates', () => {
@@ -136,5 +141,77 @@ describe('getPostPublicationState function', () => {
     const actual = getPostPublicationState(isDebateModerated, connectedUserIsAdmin);
     const expected = 'SUBMITTED_AWAITING_MODERATION';
     expect(actual).toEqual(expected);
+  });
+});
+
+describe('formatedSuggestedTagList function', () => {
+  describe('when there are tags with a score higher than KEYWORD_SCORE_THRESHOLD', () => {
+    it('should return an array of suggested tags', () => {
+      const suggestedTags: SuggestedTags = [
+        {
+          score: 0.51,
+          count: 2,
+          value: 'Complete account of the system'
+        },
+        {
+          score: 0.61,
+          count: 3,
+          value: 'Great pleasure'
+        },
+        {
+          score: 0.71,
+          count: 4,
+          value: 'Actual teachings of the great explorer of the truth'
+        }
+      ];
+      const actual = formatedSuggestedTagList(suggestedTags);
+      const expected = ['Great pleasure', 'Actual teachings of the great explorer of the truth'];
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('when there is no tag with a score higher than KEYWORD_SCORE_THRESHOLD', () => {
+    it('should return an empty array of suggested tags', () => {
+      const suggestedTags: SuggestedTags = [
+        {
+          score: 0.51,
+          count: 2,
+          value: 'Complete account of the system'
+        },
+        {
+          score: 0.41,
+          count: 3,
+          value: 'Great pleasure'
+        },
+        {
+          score: 0.31,
+          count: 4,
+          value: 'Actual teachings of the great explorer of the truth'
+        }
+      ];
+      const actual = formatedSuggestedTagList(suggestedTags);
+      const expected = [];
+      expect(actual).toEqual(expected);
+    });
+  });
+});
+
+describe('formatedTagList function', () => {
+  describe('when there are tags', () => {
+    it('should return an array of tags', () => {
+      const tags: Tags = [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }];
+      const actual = formatedTagList(tags);
+      const expected = [{ id: '0', text: 'Habitat et SDF' }, { id: '1', text: 'Facilitation' }];
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('when there is no tag', () => {
+    it('should return an empty array of tags', () => {
+      const tags: Tags = [];
+      const actual = formatedTagList(tags);
+      const expected = [];
+      expect(actual).toEqual(expected);
+    });
   });
 });

@@ -369,7 +369,7 @@ export const formatedSuggestedTagList = (suggestedTags: SuggestedTags): Array<st
     }, [])
     : []);
 
-// Lift flow error: Convert `fiction.tags` to Array<Tag>
+// Lift flow error: Convert `Tags` to Array<Tag>
 export const formatedTagList = (tags: Tags): Array<TagProps> =>
   (tags
     ? tags.reduce((result, tag) => {
