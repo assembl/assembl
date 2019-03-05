@@ -622,7 +622,6 @@ def extract_taxonomy_csv(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def multi_module_csv_export(request):
-    import pdb; pdb.set_trace()
     results = {"export_phase": None,
                "export_module_survey": None,
                "export_module_thread": None,

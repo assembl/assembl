@@ -1,7 +1,6 @@
 /* @flow */
 /* eslint-disable */
 import { type EditorState } from 'draft-js';
-import { type moment } from 'moment';
 import Immutable from 'immutable';
 
 /* temporary dummy types */
@@ -25,8 +24,8 @@ type ChildType = TreeItem & {
 };
 
 type DateRange = {
-  startDate: moment,
-  endDate: moment
+  startDate: moment$Moment,
+  endDate: moment$Moment
 };
 
 type Preset = {
