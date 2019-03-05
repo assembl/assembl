@@ -6,7 +6,7 @@ import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16.3';
 /* eslint-enable */
 
-import Tags from './tags';
+import { DumbTags } from './tags';
 import type { Props } from './tags';
 
 initStoryshots({
@@ -21,9 +21,12 @@ describe('<Tags /> - with shallow', () => {
 
   beforeEach(() => {
     tagsProps = {
-      tagsList: [{ id: 'Habitat et SDF', text: 'Habitat et SDF' }, { id: 'Facilitation', text: 'Facilitation' }]
+      tagsList: [{ id: 'Habitat et SDF', text: 'Habitat et SDF' }, { id: 'Facilitation', text: 'Facilitation' }],
+      postId: '0',
+      addTag: jest.fn(),
+      removeTag: jest.fn()
     };
-    wrapper = shallow(<Tags {...tagsProps} />);
+    wrapper = shallow(<DumbTags {...tagsProps} />);
   });
 
   it('should render a ReactTags component', () => {

@@ -6,19 +6,22 @@ import { I18n } from 'react-redux-i18n';
 import Tags from '../tags/tags';
 
 export type Props = {
+  postId: string,
   /** Flag that checks whether we have to display the admin mode */
   isAdmin?: boolean,
   /** List of tags manually set by a consultant */
-  tagList: Array<string>
+  tagList: Array<Tag>
 };
 
-const TagContainer = ({ isAdmin, tagList }: Props) => {
+const TagContainer = ({ postId, isAdmin, tagList }: Props) => {
   const tagContainerTitle = isAdmin
     ? I18n.t('debate.tagOnPost.tagContainerAdminTitle')
     : I18n.t('debate.tagOnPost.tagContainerTitle');
 
-  const tagsList = tagList.map(tag => ({ id: tag, text: tag }));
-  const displayTagList = <Tags tagsList={tagsList} isAdmin={isAdmin} alreadyAdded={I18n.t('debate.tagOnPost.alreadyAdded')} />;
+  const tagsList = tagList.map(tag => ({ id: tag.id, text: tag.value }));
+  const displayTagList = (
+    <Tags postId={postId} tagsList={tagsList} isAdmin={isAdmin} alreadyAdded={I18n.t('debate.tagOnPost.alreadyAdded')} />
+  );
 
   return (
     <div className="tag-container">

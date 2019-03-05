@@ -69,7 +69,9 @@ const Translations = {
           placeholder: "Sélectionner des tags",
           noOptions: "Aucun tag trouvé",
           newOption: "Ajouter ce tag '%{option}'"
-        }
+        },
+        addTagSuccessMsg: "Le tag \"%{tag}\" a été ajouté avec succès.",
+        removeTagSuccessMsg: "Le tag \"%{tag}\" a été retiré avec succès."
       }
     },
     cookies: {
@@ -1091,7 +1093,9 @@ const Translations = {
           placeholder: "Select tags",
           noOptions: "No tags",
           newOption: "Create this tag '%{option}'"
-        }
+        },
+        addTagSuccessMsg: "Tag \"%{tag}\" has been successfully added.",
+        removeTagSuccessMsg: "Tag \"%{tag}\" has been successfully removed."
       }
     },
     cookies: {

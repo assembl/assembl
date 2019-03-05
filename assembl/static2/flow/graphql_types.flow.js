@@ -501,6 +501,13 @@ export type BrightMirrorFictionQuery = {|
           count: ?number,
           // The tag keyword
           value: ?string
+        |}>,
+        // A list of abstract tags associated to the post.
+        tags: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // The value of the tag. This is not language dependent, but rather just unicode text.
+          value: string
         |}>
       }
     | {}
@@ -1407,6 +1414,13 @@ export type PostQuery = {|
             //
             avChecked: ?string
           |}
+        |}>,
+        // A list of abstract tags associated to the post.
+        tags: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // The value of the tag. This is not language dependent, but rather just unicode text.
+          value: string
         |}>
       }
     | {}
@@ -3824,6 +3838,13 @@ export type createPostMutation = {|
           avChecked: ?string
         |}
       |}>,
+      // A list of abstract tags associated to the post.
+      tags: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The value of the tag. This is not language dependent, but rather just unicode text.
+        value: string
+      |}>,
       // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
       parentId: ?string,
       // The date that the object was created, in UTC timezone, in ISO 8601 format.
@@ -5393,6 +5414,13 @@ export type updatePostMutation = {|
           //
           avChecked: ?string
         |}
+      |}>,
+      // A list of abstract tags associated to the post.
+      tags: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The value of the tag. This is not language dependent, but rather just unicode text.
+        value: string
       |}>
     |}
   |}
@@ -6530,6 +6558,13 @@ export type BrightMirrorFictionFragment = {|
     count: ?number,
     // The tag keyword
     value: ?string
+  |}>,
+  // A list of abstract tags associated to the post.
+  tags: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    // The value of the tag. This is not language dependent, but rather just unicode text.
+    value: string
   |}>
 |};
 
@@ -7414,6 +7449,13 @@ export type PostFragment = {|
       //
       avChecked: ?string
     |}
+  |}>,
+  // A list of abstract tags associated to the post.
+  tags: ?Array<?{|
+    // The ID of the object.
+    id: string,
+    // The value of the tag. This is not language dependent, but rather just unicode text.
+    value: string
   |}>
 |};
 

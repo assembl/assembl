@@ -39,4 +39,8 @@ fragment Post on Post {
   attachments {
     ...Attachment
   }
+  tags {
+    id
+    value
+  }
 }

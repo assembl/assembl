@@ -284,7 +284,10 @@ class Post extends React.Component<Props> {
     );
 
     const tagOnPostProps: TagOnPostProps = {
-      suggestedKeywords: []
+      postId: post.id,
+      suggestedKeywords: [],
+      // $FlowFixMe list of tags and each tag are not null
+      tagList: post.tags
     };
 
     return (

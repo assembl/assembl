@@ -9,7 +9,8 @@ import TagContainer from './tagContainer';
 import type { Props as tagContainerProps } from './tagContainer';
 
 export const defaultProps: tagContainerProps = {
-  tagList: ['Habitat et SDF', 'Facilitation']
+  tagList: [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }],
+  postId: '0'
 };
 
 const playground: tagContainerProps = {
@@ -19,4 +20,4 @@ const playground: tagContainerProps = {
 storiesOf('Tag On Post|TagContainer', module)
   .addDecorator(withKnobs)
   .add('default', () => <TagContainer {...defaultProps} />)
-  .add('playground', () => <TagContainer tagList={object('List of tags', playground.tagList)} />);
+  .add('playground', () => <TagContainer tagList={object('List of tags', playground.tagList)} postId={defaultProps.postId} />);

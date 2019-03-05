@@ -90,7 +90,8 @@ const brightMirrorFictionDataTemplate = {
         score: 0.607114,
         value: 'actual teachings of the great explorer of the truth'
       }
-    ]
+    ],
+    tags: [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }]
   },
   error: null,
   refetch: () => {}

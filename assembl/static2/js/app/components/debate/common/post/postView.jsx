@@ -136,7 +136,8 @@ class PostView extends React.PureComponent<Props, State> {
       mySentiment,
       attachments,
       extracts,
-      publicationState
+      publicationState,
+      tags
     } = this.props.data.post;
     const {
       borderLeftColor,
@@ -200,7 +201,10 @@ class PostView extends React.PureComponent<Props, State> {
     const userNameClasses = classnames({ pending: isPending });
 
     const tagOnPostProps: TagOnPostProps = {
-      suggestedKeywords: []
+      postId: id,
+      suggestedKeywords: [],
+      // $FlowFixMe list of tags and each tag are not null
+      tagList: tags
     };
 
     const suggestionContainerProps: SuggestionContainerProps = {

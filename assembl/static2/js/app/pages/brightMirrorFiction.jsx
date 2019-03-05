@@ -368,6 +368,9 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       : [];
 
     const tagOnPostProps: TagOnPostProps = {
+      postId: fictionId,
+      // $FlowFixMe list of tags and each tag are not null
+      tagList: fiction.tags,
       suggestedKeywords: formatedKeywords
     };
 

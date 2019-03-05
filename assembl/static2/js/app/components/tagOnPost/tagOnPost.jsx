@@ -12,13 +12,16 @@ import type { Keywords } from '../../pages/semanticAnalysis/dataType';
 import { KEYWORD_SCORE_THRESHOLD } from '../../constants';
 
 export type Props = {
+  postId: string,
   /** List of suggested keywords fetched from IBM Watson for the current post */
-  suggestedKeywords: Keywords
+  suggestedKeywords: Keywords,
+  tagList: Array<Tag>
 };
 
-const TagOnPost = ({ suggestedKeywords }: Props) => {
+const TagOnPost = ({ postId, suggestedKeywords, tagList }: Props) => {
   const tagContainerProps: TagContainerProps = {
-    tagList: ['Habitat et SDF', 'Facilitation']
+    postId: postId,
+    tagList: tagList
   };
 
   const filteredSuggestedKeywords = suggestedKeywords.reduce((result, keyword) => {

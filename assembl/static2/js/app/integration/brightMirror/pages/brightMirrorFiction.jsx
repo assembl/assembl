@@ -30,6 +30,8 @@ const defaultBackBtnProps: BackButtonProps = {
 };
 
 const tagOnPostProps: TagOnPostProps = {
+  postId: '0',
+  tagList: [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }],
   suggestedKeywords: [
     {
       count: 1,
