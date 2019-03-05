@@ -3,7 +3,8 @@ import sys
 from os.path import exists, join
 
 from invoke import task
-from common import (fill_template, is_integration_env, delete_foreign_tasks)
+from common import (
+    fill_template, is_integration_env, delete_foreign_tasks, get_venv_site_packages)
 
 # try:
 #     # invoke 0.11
@@ -96,7 +97,7 @@ def install_assembl_systemd(c):
     print "Contents of the folder: %s" % os.listdir(base)
     path = 'assembl/templates/system/assembl.service.jinja2'
     if not exists(path):
-        base = '/home/assembl_user/assembl/venv/lib/python2.7/site-packages'
+        base = get_venv_site_packages(c)
     assert exists(join(base, path))
     c.config.code_root = base
     fill_template(c, join(base, path), '/tmp/assembl.service')
@@ -114,7 +115,7 @@ def install_uwsgicloudwatch_systemd(c):
     print "Contents of the folder: %s" % os.listdir(base)
     path = 'assembl/templates/system/uwsgicloudwatch.service.jinja2'
     if not exists(path):
-        base = '/home/assembl_user/assembl/venv/lib/python2.7/site-packages'
+        base = get_venv_site_packages(c)
     assert exists(join(base, path))
     c.config.code_root = base
     fill_template(c, join(base, path), '/tmp/uwsgicloudwatch.service')
@@ -130,7 +131,7 @@ def install_urlmetadata_systemd(c):
     base = os.getcwd()
     path = 'assembl/templates/system/urlmetadata.service.jinja2'
     if not exists(path):
-        base = '/home/assembl_user/assembl/venv/lib/python2.7/site-packages'
+        base = get_venv_site_packages(c)
     assert exists(join(base, path))
     c.config.code_root = base
     fill_template(c, join(base, path), '/tmp/urlmetadata.service')

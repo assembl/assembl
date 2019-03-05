@@ -9,7 +9,8 @@ from getpass import getuser
 
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
-    create_venv, fill_template, get_s3_file, get_aws_account_id, delete_foreign_tasks)
+    create_venv, fill_template, get_s3_file, get_aws_account_id, delete_foreign_tasks,
+    get_venv_site_packages)
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
@@ -359,7 +360,8 @@ def aws_celery_instance_startup(c):
 
 @task(install_wheel)
 def assembl_dir_permissions(c):
-    code_path = 'venv/lib/python2.7/site-packages'
+    with venv(c):
+        code_path = get_venv_site_packages(c)
     c.run('chgrp -R www-data {path}/assembl/static {path}/assembl/static2'.format(path=code_path))
     c.run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
     c.run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
@@ -485,7 +487,7 @@ def code_root(c, alt_env=None):
         return local_code_root
     else:
         if (as_bool(get_prefixed('package_install', alt_env, False))):
-            return os.path.join(venv_path(alt_env), 'lib', 'python2.7', 'site-packages')
+            return get_venv_site_packages(alt_env)
         else:
             return get_prefixed('projectpath', alt_env, os.getcwd())
 
