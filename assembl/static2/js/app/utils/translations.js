@@ -388,7 +388,8 @@ const Translations = {
       validateSuccess: "La contribution a bien été validée. Elle est désormais visible par l'ensemble des participants.",
       syntheses: {
         summary: "Sommaire des synthèses",
-        createNewSynthesis: "Créer une nouvelle synthèse"
+        createNewSynthesis: "Créer une nouvelle synthèse",
+        publishedOn: "Publiée le "
       },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
@@ -1441,7 +1442,8 @@ const Translations = {
       back: "Back",
       syntheses: {
         summary: "Syntheses summary",
-        createNewSynthesis: "Create a new synthesis"
+        createNewSynthesis: "Create a new synthesis",
+        publishedOn: "Published on "
       },
       validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {

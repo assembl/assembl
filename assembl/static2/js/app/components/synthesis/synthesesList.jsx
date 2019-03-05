@@ -3,7 +3,7 @@ import * as React from 'react';
 import Masonry from 'react-masonry-component';
 import Animated from 'react-animated-transitions';
 import { Grid } from 'react-bootstrap';
-import { Translate, I18n } from 'react-redux-i18n';
+import { I18n } from 'react-redux-i18n';
 // Route helpers imports
 // import { get } from '../../../utils/routeMap';
 // Utils imports

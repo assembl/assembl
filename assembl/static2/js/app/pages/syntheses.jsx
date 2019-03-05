@@ -24,25 +24,44 @@ type SynthesesProps = {
 const fakeSyntheses = [
   {
     id: '1234',
-    title: 'Une jolie synthèse',
-    subTitle: 'Cette synthèse est fort bien écrite',
+    subject: 'Une jolie synthèse',
     creationDate: '02-03-2019',
     link: 'http://www.google.com',
     lang: 'fr',
     userCanEdit: true,
     userCanDelete: true,
-    imageUrl: 'https://start.lesechos.fr/images/2017/07/11/8856_1499784814_felix-simplon.jpg'
+    img: 'https://images.pexels.com/photos/1097456/pexels-photo-1097456.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
   },
   {
     id: '4524',
-    title: 'Une seconde synthèse',
-    subTitle: 'Cette synthèse est bif bof on va pas se mentir on est entre adultes',
+    subject: 'Une seconde synthèse',
     creationDate: '01-02-2019',
     link: 'http://www.google.com',
     lang: 'fr',
     userCanEdit: true,
     userCanDelete: true,
-    imageUrl: 'https://start.lesechos.fr/images/2017/07/11/8856_1499784814_felix-simplon.jpg'
+    img:
+      'https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/BKpZoQ4viqlda90c/abstract-dark-blue-background-with-moving-colored-particles_bjfoo46np__F0000.png'
+  },
+  {
+    id: '4524',
+    subject: 'Une troisième synthèse',
+    creationDate: '01-02-2019',
+    link: 'http://www.google.com',
+    lang: 'fr',
+    userCanEdit: true,
+    userCanDelete: true,
+    img: 'https://images.pexels.com/photos/1090977/pexels-photo-1090977.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
+  },
+  {
+    id: '4524',
+    subject: 'Une quatrième synthèse tant qu\'on y est',
+    creationDate: '01-02-2019',
+    link: 'http://www.google.com',
+    lang: 'fr',
+    userCanEdit: true,
+    userCanDelete: true,
+    img: 'https://images.pexels.com/photos/1895162/pexels-photo-1895162.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'
   }
 ];
 
@@ -57,6 +76,7 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
 
   render() {
     const { syntheses, slug, hasSyntheses } = this.props;
+    console.log('syntheses', syntheses);
     return (
       <Section title="debate.syntheses.summary" translate>
         <div className="center create-synthesis">
