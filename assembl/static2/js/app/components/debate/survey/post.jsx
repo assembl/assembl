@@ -286,7 +286,7 @@ class Post extends React.Component<Props> {
     const tagOnPostProps: TagOnPostProps = {
       isAdmin: true,
       postId: post.id,
-      suggestedKeywords: [],
+      suggestedTagList: [],
       // $FlowFixMe list of tags and each tag are not null
       tagList: post.tags
     };

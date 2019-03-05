@@ -15,13 +15,13 @@ export type Props = {
   isAdmin: boolean,
   /** Post ID */
   postId: string,
-  /** List of suggested keywords related to the current post */
-  suggestedKeywords: Array<string>,
-  /** List of tags fetched related to the current post */
+  /** List of suggested tags related to the current post (from IBM Watson) */
+  suggestedTagList: Array<string>,
+  /** List of tags related to the current post */
   tagList: Array<TagProps>
 };
 
-const TagOnPost = ({ isAdmin, postId, suggestedKeywords, tagList }: Props) => {
+const TagOnPost = ({ isAdmin, postId, suggestedTagList, tagList }: Props) => {
   const tagContainerProps: TagContainerProps = {
     isAdmin: isAdmin,
     postId: postId,
@@ -30,15 +30,26 @@ const TagOnPost = ({ isAdmin, postId, suggestedKeywords, tagList }: Props) => {
 
   const suggestionContainerProps: SuggestionContainerProps = {
     suggestionContainerTitle: I18n.t('debate.tagOnPost.suggestionContainerTitle'),
-    suggestionList: suggestedKeywords
+    suggestionList: suggestedTagList
   };
 
-  return (
-    <div className="tag-on-post-container">
-      <TagContainer {...tagContainerProps} />
-      <SuggestionContainer {...suggestionContainerProps} />
-    </div>
-  );
+  // Display tag container when there are tags to display
+  const displayTagContainer = tagList.length > 0 ? <TagContainer {...tagContainerProps} /> : null;
+
+  // Display suggestion container when there are suggested tags to display
+  const displaySuggestionContainer =
+    suggestedTagList.length > 0 && isAdmin ? <SuggestionContainer {...suggestionContainerProps} /> : null;
+
+  // Display tag on post container when there are tags or suggested tags to display
+  const displayTagOnPostContainer =
+    tagList.length > 0 || suggestedTagList.length > 0 ? (
+      <div className="tag-on-post-container">
+        {displayTagContainer}
+        {displaySuggestionContainer}
+      </div>
+    ) : null;
+
+  return displayTagOnPostContainer;
 };
 
 export default TagOnPost;

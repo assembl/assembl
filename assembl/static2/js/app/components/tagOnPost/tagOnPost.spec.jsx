@@ -18,7 +18,7 @@ describe('<TagOnPost /> - with shallow', () => {
     const defaultProps = {
       isAdmin: true,
       postId: '0',
-      suggestedKeywords: [
+      suggestedTagList: [
         'Complete account of the system',
         'Great pleasure',
         'Actual teachings of the great explorer of the truth'

@@ -33,7 +33,7 @@ const tagOnPostProps: TagOnPostProps = {
   isAdmin: true,
   postId: '0',
   tagList: [{ id: '0', text: 'Habitat et SDF' }, { id: '1', text: 'Facilitation' }],
-  suggestedKeywords: ['complete account of the system', 'great pleasure', 'actual teachings of the great explorer of the truth']
+  suggestedTagList: ['complete account of the system', 'great pleasure', 'actual teachings of the great explorer of the truth']
 };
 
 const fictionComments = (

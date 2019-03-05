@@ -394,7 +394,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       isAdmin: connectedUserIsAdmin(),
       postId: fictionId,
       tagList: formatedTags,
-      suggestedKeywords: formatedKeywords
+      suggestedTagList: formatedKeywords
     };
 
     const displayFictionCommentForm = userCanPost ? <FictionCommentForm {...fictionCommentFormProps} /> : null;

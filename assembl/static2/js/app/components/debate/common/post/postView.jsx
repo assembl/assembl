@@ -203,7 +203,7 @@ class PostView extends React.PureComponent<Props, State> {
     const tagOnPostProps: TagOnPostProps = {
       isAdmin: true,
       postId: id,
-      suggestedKeywords: [],
+      suggestedTagList: [],
       // $FlowFixMe list of tags and each tag are not null
       tagList: tags
     };
