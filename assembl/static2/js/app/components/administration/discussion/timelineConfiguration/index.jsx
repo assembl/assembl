@@ -68,7 +68,7 @@ class TimelineFields extends React.Component<Props, State> {
   onEndChange = (newEnd: moment$Moment, index: number) => {
     const endDateConflict = validEndDate(newEnd, this.state.phases[index].end);
     const updatedPhases = [...this.state.phases];
-    updatedPhases[index].ernd = newEnd;
+    updatedPhases[index].end = newEnd;
     this.setState({
       phases: updatedPhases,
       startDateConflict: endDateConflict
