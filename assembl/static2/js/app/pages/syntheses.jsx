@@ -10,7 +10,7 @@ import { browserHistory } from '../router';
 import { CLASS_NAME_GENERATOR } from '../utils/cardList';
 import Section from '../components/common/section';
 import Card from '../components/common/card';
-import CardList from '../components/common/cardList';
+import SynthesesList from '../components/synthesis/synthesesList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
@@ -20,6 +20,31 @@ type SynthesesProps = {
   slug: string,
   hasSyntheses: boolean
 };
+
+const fakeSyntheses = [
+  {
+    id: '1234',
+    title: 'Une jolie synthèse',
+    subTitle: 'Cette synthèse est fort bien écrite',
+    creationDate: '02-03-2019',
+    link: 'http://www.google.com',
+    lang: 'fr',
+    userCanEdit: true,
+    userCanDelete: true,
+    imageUrl: 'https://start.lesechos.fr/images/2017/07/11/8856_1499784814_felix-simplon.jpg'
+  },
+  {
+    id: '4524',
+    title: 'Une seconde synthèse',
+    subTitle: 'Cette synthèse est bif bof on va pas se mentir on est entre adultes',
+    creationDate: '01-02-2019',
+    link: 'http://www.google.com',
+    lang: 'fr',
+    userCanEdit: true,
+    userCanDelete: true,
+    imageUrl: 'https://start.lesechos.fr/images/2017/07/11/8856_1499784814_felix-simplon.jpg'
+  }
+];
 
 export class DumbSyntheses extends React.Component<SynthesesProps> {
   componentDidMount() {
@@ -44,23 +69,7 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
             <Translate value="synthesis.noSynthesisYet" />
           </h2>
         ) : (
-          <CardList
-            data={syntheses}
-            classNameGenerator={CLASS_NAME_GENERATOR.default}
-            itemClassName="theme"
-            CardItem={itemData => (
-              <Card imgUrl={itemData.img ? itemData.img.externalUrl : ''} className="synthesis-preview">
-                <Link className="content-box" to={`${get('synthesis', { synthesisId: itemData.post.id, slug: slug })}`}>
-                  <div className="title-container center">
-                    <h3 className="light-title-3">{itemData.subject}</h3>
-                    <h4 className="light-title-4">
-                      <Localize value={itemData.creationDate} dateFormat="date.format2" />
-                    </h4>
-                  </div>
-                </Link>
-              </Card>
-            )}
-          />
+          <SynthesesList syntheses={fakeSyntheses} />
         )}
       </Section>
     );
