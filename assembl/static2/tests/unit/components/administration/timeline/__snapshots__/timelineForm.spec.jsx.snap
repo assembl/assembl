@@ -39,17 +39,7 @@ exports[`TimelineForm component should render a form to create, delete and edit 
         />
         <OverlayTrigger
           defaultOverlayShown={false}
-          overlay={
-            <Tooltip
-              bsClass="tooltip"
-              id="addPhaseTooltip"
-              placement="right"
-            >
-              <Translate
-                value="administration.timelineAdmin.addPhase"
-              />
-            </Tooltip>
-          }
+          overlay={[Function]}
           placement="top"
           trigger={
             Array [

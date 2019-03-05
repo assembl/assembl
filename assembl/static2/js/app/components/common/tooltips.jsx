@@ -287,13 +287,13 @@ export const textFieldToggleRequiredTooltip = (
   </Tooltip>
 );
 
-export const addPhaseTooltip = (
+export const addPhaseTooltip = () => (
   <Tooltip id="addPhaseTooltip">
     <Translate value="administration.timelineAdmin.addPhase" />
   </Tooltip>
 );
 
-export const deletePhaseTooltip = (
+export const deletePhaseTooltip = () => (
   <Tooltip id="deletePhaseTooltip">
     <Translate value="administration.timelineAdmin.deletePhase" />
   </Tooltip>

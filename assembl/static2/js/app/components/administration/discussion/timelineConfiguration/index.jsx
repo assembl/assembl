@@ -17,10 +17,11 @@ import FieldArrayWithActions from '../../../form/fieldArrayWithActions';
 import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAdapter';
 import DatePickerFieldAdapter from '../../../form/datePickerFieldAdapter';
 import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
-import { deleteResourceTooltip, createResourceTooltip, phaseTooltip } from '../../../common/tooltips';
+import { deletePhaseTooltip, addPhaseTooltip, phaseTooltip } from '../../../common/tooltips';
 import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
 import { validStartDate, validEndDate } from '../../landingPage/header/validate';
 import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
+import Helper from '../../../common/helper';
 
 const loading = <Loader />;
 
@@ -102,8 +103,8 @@ class TimelineFields extends React.Component<Props, State> {
                   withSeparators={false}
                   titleMsgId="administration.timelineAdmin.phase"
                   tooltips={{
-                    addTooltip: createResourceTooltip,
-                    deleteTooltip: deleteResourceTooltip
+                    addTooltip: addPhaseTooltip,
+                    deleteTooltip: deletePhaseTooltip
                   }}
                   renderFields={({ name }) => (
                     <React.Fragment>
@@ -139,7 +140,7 @@ class TimelineFields extends React.Component<Props, State> {
                   renderTooltip={phaseTooltip}
                   renderBody={(phase, index) => (
                     <div className="form-container">
-                      <Translate value="administration.timelineAdmin.instruction1" className="admin-paragraph" />
+                      <Translate value="administration.timelineAdmin.instruction3" className="admin-paragraph" />
                       <Field
                         name={`phases[${phase.index}].start`}
                         component={DatePickerFieldAdapter}
@@ -163,21 +164,31 @@ class TimelineFields extends React.Component<Props, State> {
                         form={form}
                         dateFormat="LL"
                       />
-                      <Translate value="administration.timelineAdmin.instruction1" className="admin-paragraph" />
+                      <Helper
+                        label={I18n.t('administration.timelineAdmin.instruction4')}
+                        helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
+                        helperText={I18n.t('administration.helpers.timelinePhases')}
+                        classname="title"
+                      />
                       <Field
                         className="admin-content"
                         name={`phases[${phase.index}].image`}
                         component={FileUploaderFieldAdapter}
-                        label={I18n.t('administration.landingPage.header.logoDescription')}
+                        label={I18n.t('administration.landingPage.timeline.imageDescription')}
                       />
-                      <Translate value="administration.timelineAdmin.instruction1" className="admin-paragraph" />
+                      <Helper
+                        label={I18n.t('administration.timelineAdmin.instruction5')}
+                        helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
+                        helperText={I18n.t('administration.helpers.timelinePhases')}
+                        classname="title"
+                      />
                       <Field
                         className="form-control"
                         editLocale={editLocale}
                         withAttachmentButton={false}
                         name={`phases[${phase.index}].description`}
                         component={MultilingualTextFieldAdapter}
-                        label={I18n.t('administration.landingPage.header.subtitleLabel')}
+                        label={I18n.t('administration.timelineAdmin.descriptionPhaseLabel')}
                         required
                       />
                     </div>
