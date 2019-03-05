@@ -40,16 +40,12 @@ const TagOnPost = ({ isAdmin, postId, suggestedTagList, tagList }: Props) => {
   const displaySuggestionContainer =
     suggestedTagList.length > 0 && isAdmin ? <SuggestionContainer {...suggestionContainerProps} /> : null;
 
-  // Display tag on post container when there are tags or suggested tags to display
-  const displayTagOnPostContainer =
-    tagList.length > 0 || suggestedTagList.length > 0 ? (
-      <div className="tag-on-post-container">
-        {displayTagContainer}
-        {displaySuggestionContainer}
-      </div>
-    ) : null;
-
-  return displayTagOnPostContainer;
+  return (
+    <div className="tag-on-post-container">
+      {displayTagContainer}
+      {displaySuggestionContainer}
+    </div>
+  );
 };
 
 export default TagOnPost;

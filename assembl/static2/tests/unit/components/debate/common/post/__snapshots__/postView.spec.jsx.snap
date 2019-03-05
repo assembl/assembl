@@ -162,9 +162,10 @@ exports[`PostView component should render a post in view mode 1`] = `
         />
         <React.Fragment>
           <TagOnPost
-            isAdmin={true}
+            isAdmin={false}
             postId="XYZ333"
             suggestedTagList={Array []}
+            tagList={Array []}
           />
           <div
             className="answers annotation"

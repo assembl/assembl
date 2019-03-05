@@ -39,6 +39,11 @@ fragment Post on Post {
   attachments {
     ...Attachment
   }
+  keywords {
+    score
+    count
+    value
+  }
   tags {
     id
     value

@@ -30,17 +30,11 @@ import { withScreenWidth } from '../components/common/screenDimensions';
 // Utils imports
 import { transformPosts, getDebateTotalMessages } from './idea';
 import { displayAlert } from '../utils/utilityManager';
-import { getConnectedUserId, compareByTextPosition } from '../utils/globalFunctions';
+import { getConnectedUserId, compareByTextPosition, formatedSuggestedTagList, formatedTagList } from '../utils/globalFunctions';
 import Permissions, { connectedUserCan, connectedUserIsAdmin } from '../utils/permissions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 // Constant imports
-import {
-  FICTION_DELETE_CALLBACK,
-  EMPTY_STRING,
-  PublicationStates,
-  USER_ID_NOT_FOUND,
-  KEYWORD_SCORE_THRESHOLD
-} from '../constants';
+import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND } from '../constants';
 // Type imports
 import type { ContentLocaleMapping } from '../actions/actionTypes';
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
@@ -51,7 +45,6 @@ import type { FictionCommentHeaderProps } from '../components/debate/brightMirro
 import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
 import type { FictionCommentListProps } from '../components/debate/brightMirror/fictionCommentList';
 import type { Props as TagOnPostProps } from '../components/tagOnPost/tagOnPost';
-import type { TagProps } from '../components/common/tags/tags';
 import type { CreateCommentInputs } from '../components/debate/brightMirror/fictionComment';
 
 // Define types
@@ -362,39 +355,11 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       onSubmitHandler: this.submitCommentHandler
     };
 
-    // Lift flow error: Convert `fiction.keywords` to Array<string>, filter null values and filter score greater than KEYWORD_SCORE_THRESHOLD
-    const formatedKeywords: Array<string> = fiction.keywords
-      ? fiction.keywords.reduce((result, keyword) => {
-        if (keyword) {
-          const { score, value } = keyword;
-          const newScore: number = score || 0;
-          const newValue: string = value || '';
-          if (newScore > KEYWORD_SCORE_THRESHOLD && newValue) {
-            result.push(newValue);
-          }
-        }
-        return result;
-      }, [])
-      : [];
-
-    // Lift flow error: Convert `fiction.tags` to Array<Tag>
-    const formatedTags: Array<TagProps> = fiction.tags
-      ? fiction.tags.reduce((result, tag) => {
-        if (tag) {
-          const { id, value } = tag;
-          const newId = id || '';
-          const newValue = value || '';
-          result.push({ id: newId, text: newValue });
-        }
-        return result;
-      }, [])
-      : [];
-
     const tagOnPostProps: TagOnPostProps = {
       isAdmin: connectedUserIsAdmin(),
       postId: fictionId,
-      tagList: formatedTags,
-      suggestedTagList: formatedKeywords
+      tagList: formatedTagList(fiction.tags),
+      suggestedTagList: formatedSuggestedTagList(fiction.keywords)
     };
 
     const displayFictionCommentForm = userCanPost ? <FictionCommentForm {...fictionCommentFormProps} /> : null;

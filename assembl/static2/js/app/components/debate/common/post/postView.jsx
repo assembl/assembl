@@ -2,8 +2,13 @@
 import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
-import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
-import { connectedUserIsModerator } from '../../../../utils/permissions';
+import {
+  getDomElementOffset,
+  elementContainsSelection,
+  formatedSuggestedTagList,
+  formatedTagList
+} from '../../../../utils/globalFunctions';
+import { connectedUserIsModerator, connectedUserIsAdmin } from '../../../../utils/permissions';
 import Attachments from '../../../common/attachments';
 import ProfileLine from '../../../common/profileLine';
 import PostActions from '../../common/postActions';
@@ -137,6 +142,7 @@ class PostView extends React.PureComponent<Props, State> {
       attachments,
       extracts,
       publicationState,
+      keywords,
       tags
     } = this.props.data.post;
     const {
@@ -201,11 +207,10 @@ class PostView extends React.PureComponent<Props, State> {
     const userNameClasses = classnames({ pending: isPending });
 
     const tagOnPostProps: TagOnPostProps = {
-      isAdmin: true,
+      isAdmin: connectedUserIsAdmin(),
       postId: id,
-      suggestedTagList: [],
-      // $FlowFixMe list of tags and each tag are not null
-      tagList: tags
+      tagList: formatedTagList(tags),
+      suggestedTagList: formatedSuggestedTagList(keywords)
     };
 
     const suggestionContainerProps: SuggestionContainerProps = {

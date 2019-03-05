@@ -2,6 +2,8 @@
 import moment from 'moment';
 import type Moment from 'moment';
 import { type Map } from 'immutable';
+import type { SuggestedTags, Tags } from '../pages/semanticAnalysis/dataType';
+import type { TagProps } from '../components/common/tags/tags';
 
 import {
   ICONS_PATH,
@@ -9,7 +11,8 @@ import {
   PICTURE_EXTENSION,
   PublicationStates,
   SM_SCREEN_WIDTH,
-  LG_SCREEN_WIDTH
+  LG_SCREEN_WIDTH,
+  KEYWORD_SCORE_THRESHOLD
 } from '../constants';
 
 const getInputValue = (id: string) => {
@@ -349,3 +352,33 @@ export const getPostPublicationState = (isDebateModerated: boolean, connectedUse
 
   return PublicationStates.SUBMITTED_AWAITING_MODERATION;
 };
+
+// Lift flow error: Convert `SuggestedTags` to Array<string>, filter null values and filter score greater than KEYWORD_SCORE_THRESHOLD
+export const formatedSuggestedTagList = (suggestedTags: SuggestedTags): Array<string> =>
+  (suggestedTags
+    ? suggestedTags.reduce((result, keyword) => {
+      if (keyword) {
+        const { score, value } = keyword;
+        const newScore: number = score || 0;
+        const newValue: string = value || '';
+        if (newScore > KEYWORD_SCORE_THRESHOLD && newValue) {
+          result.push(newValue);
+        }
+      }
+      return result;
+    }, [])
+    : []);
+
+// Lift flow error: Convert `fiction.tags` to Array<Tag>
+export const formatedTagList = (tags: Tags): Array<TagProps> =>
+  (tags
+    ? tags.reduce((result, tag) => {
+      if (tag) {
+        const { id, value } = tag;
+        const newId = id || '';
+        const newValue = value || '';
+        result.push({ id: newId, text: newValue });
+      }
+      return result;
+    }, [])
+    : []);
