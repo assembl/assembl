@@ -361,11 +361,11 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       onSubmitHandler: this.submitCommentHandler
     };
 
-    // Convert `fiction.keywords` to Array<string>, filter null values and filter score greater than KEYWORD_SCORE_THRESHOLD
+    // Lift flow error: Convert `fiction.keywords` to Array<string>, filter null values and filter score greater than KEYWORD_SCORE_THRESHOLD
     const formatedKeywords: Array<string> = fiction.keywords
-      ? fiction.keywords.reduce((result, k) => {
-        if (k) {
-          const { score, value } = k;
+      ? fiction.keywords.reduce((result, keyword) => {
+        if (keyword) {
+          const { score, value } = keyword;
           const newScore: number = score || 0;
           const newValue: string = value || '';
           if (newScore > KEYWORD_SCORE_THRESHOLD && newValue) {
@@ -376,10 +376,22 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       }, [])
       : [];
 
+    // Lift flow error: Convert `fiction.tags` to Array<Tag>
+    const formatedTags: Array<Tag> = fiction.tags
+      ? fiction.tags.reduce((result, tag) => {
+        if (tag) {
+          const { id, value } = tag;
+          const newId = id || '';
+          const newValue = value || '';
+          result.push({ id: newId, value: newValue });
+        }
+        return result;
+      }, [])
+      : [];
+
     const tagOnPostProps: TagOnPostProps = {
       postId: fictionId,
-      // $FlowFixMe list of tags and each tag are not null
-      tagList: fiction.tags,
+      tagList: formatedTags,
       suggestedKeywords: formatedKeywords
     };
 
