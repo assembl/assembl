@@ -356,11 +356,16 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       onSubmitHandler: this.submitCommentHandler
     };
 
-    // Convert `fiction.keywords` to Keywords to fix Flow error: not currently working...
-    const formatedKeywords: Keywords = fiction.keywords.map((k) => {
-      const { count, score, value } = k;
-      return { count: count, score: score, value: value };
-    });
+    // Convert `fiction.keywords` to Keywords and filter null values
+    const formatedKeywords: Keywords = fiction.keywords
+      ? fiction.keywords.reduce((result, k) => {
+        if (k) {
+          const { count, score, value } = k;
+          result.push({ count: count || 0, score: score || 0, value: value || '' });
+        }
+        return result;
+      }, [])
+      : [];
 
     const tagOnPostProps: TagOnPostProps = {
       suggestedKeywords: formatedKeywords

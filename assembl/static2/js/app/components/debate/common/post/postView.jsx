@@ -19,6 +19,7 @@ import { PublicationStates, pendingOrange, MESSAGE_VIEW } from '../../../../cons
 // Type imports
 import type { Props as PostProps } from './index';
 import type { Props as SuggestionContainerProps } from '../../../common/suggestionContainer/suggestionContainer';
+import type { Props as TagOnPostProps } from '../../../tagOnPost/tagOnPost';
 
 type Props = PostProps & {
   body: string,
@@ -199,7 +200,7 @@ class PostView extends React.PureComponent<Props, State> {
     const userNameClasses = classnames({ pending: isPending });
 
     const tagOnPostProps: TagOnPostProps = {
-      suggestedKeywords: {}
+      suggestedKeywords: []
     };
 
     const suggestionContainerProps: SuggestionContainerProps = {

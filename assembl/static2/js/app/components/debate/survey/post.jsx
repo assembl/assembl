@@ -36,6 +36,9 @@ import TagOnPost from '../../tagOnPost/tagOnPost';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
 
+// Import types
+import type { Props as TagOnPostProps } from '../../../components/tagOnPost/tagOnPost';
+
 type Props = {
   isPhaseCompleted: boolean,
   addSentiment: Function,
@@ -279,6 +282,11 @@ class Post extends React.Component<Props> {
     const validatePostButton = (
       <ValidatePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />
     );
+
+    const tagOnPostProps: TagOnPostProps = {
+      suggestedKeywords: []
+    };
+
     return (
       <div className={classnames('shown box', { pending: isPending })} id={post.id}>
         <div className="content">
@@ -296,7 +304,7 @@ class Post extends React.Component<Props> {
             bodyMimeType={post.bodyMimeType}
             isHarvesting={isHarvesting}
           />
-          <TagOnPost />
+          <TagOnPost {...tagOnPostProps} />
           <div className={classnames('post-footer', { pending: isPending })}>
             {!isPending ? (
               <div className="sentiments">

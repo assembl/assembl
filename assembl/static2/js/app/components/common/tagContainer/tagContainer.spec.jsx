@@ -44,7 +44,10 @@ describe('<TagOnPost /> - with shallow', () => {
 
   describe('when the user is not an admin', () => {
     beforeEach(() => {
-      tagContainerProps = { ...defaultProps };
+      tagContainerProps = {
+        ...defaultProps,
+        isAdmin: false
+      };
       wrapper = shallow(<TagContainer {...tagContainerProps} />);
     });
 

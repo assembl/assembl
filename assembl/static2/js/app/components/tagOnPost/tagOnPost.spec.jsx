@@ -15,7 +15,7 @@ describe('<TagOnPost /> - with shallow', () => {
   let wrapper;
 
   beforeEach(() => {
-    wrapper = shallow(<TagOnPost />);
+    wrapper = shallow(<TagOnPost suggestedKeywords={[]} />);
   });
 
   it('should render a TagContainer component', () => {
