@@ -4,13 +4,15 @@ import React from 'react';
 import { I18n } from 'react-redux-i18n';
 // Component import
 import Tags from '../tags/tags';
+// Type imports
+import type { TagProps } from '../tags/tags';
 
 export type Props = {
   postId: string,
   /** Flag that checks whether we have to display the admin mode */
-  isAdmin?: boolean,
+  isAdmin: boolean,
   /** List of tags manually set by a consultant */
-  tagList: Array<Tag>
+  tagList: Array<TagProps>
 };
 
 const TagContainer = ({ postId, isAdmin, tagList }: Props) => {
@@ -18,9 +20,8 @@ const TagContainer = ({ postId, isAdmin, tagList }: Props) => {
     ? I18n.t('debate.tagOnPost.tagContainerAdminTitle')
     : I18n.t('debate.tagOnPost.tagContainerTitle');
 
-  const tagsList = tagList.map(tag => ({ id: tag.id, text: tag.value }));
   const displayTagList = (
-    <Tags postId={postId} tagsList={tagsList} isAdmin={isAdmin} alreadyAdded={I18n.t('debate.tagOnPost.alreadyAdded')} />
+    <Tags postId={postId} tagsList={tagList} isAdmin={isAdmin} alreadyAdded={I18n.t('debate.tagOnPost.alreadyAdded')} />
   );
 
   return (
@@ -29,10 +30,6 @@ const TagContainer = ({ postId, isAdmin, tagList }: Props) => {
       <div className="tag-list">{displayTagList}</div>
     </div>
   );
-};
-
-TagContainer.defaultProps = {
-  isAdmin: false
 };
 
 export default TagContainer;

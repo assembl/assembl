@@ -14,7 +14,7 @@ import { displayAlert } from '../../../utils/utilityManager';
 import addTagMutation from '../../../graphql/mutations/addTag.graphql';
 import removeTagMutation from '../../../graphql/mutations/removeTag.graphql';
 
-type TagProps = {
+export type TagProps = {
   id: string,
   text: string
 };

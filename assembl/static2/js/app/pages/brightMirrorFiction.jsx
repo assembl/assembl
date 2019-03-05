@@ -31,7 +31,7 @@ import { withScreenWidth } from '../components/common/screenDimensions';
 import { transformPosts, getDebateTotalMessages } from './idea';
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId, compareByTextPosition } from '../utils/globalFunctions';
-import Permissions, { connectedUserCan } from '../utils/permissions';
+import Permissions, { connectedUserCan, connectedUserIsAdmin } from '../utils/permissions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 // Constant imports
 import {
@@ -51,6 +51,7 @@ import type { FictionCommentHeaderProps } from '../components/debate/brightMirro
 import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
 import type { FictionCommentListProps } from '../components/debate/brightMirror/fictionCommentList';
 import type { Props as TagOnPostProps } from '../components/tagOnPost/tagOnPost';
+import type { TagProps } from '../components/common/tags/tags';
 import type { CreateCommentInputs } from '../components/debate/brightMirror/fictionComment';
 
 // Define types
@@ -377,20 +378,20 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       : [];
 
     // Lift flow error: Convert `fiction.tags` to Array<Tag>
-    const formatedTags: Array<Tag> = fiction.tags
+    const formatedTags: Array<TagProps> = fiction.tags
       ? fiction.tags.reduce((result, tag) => {
         if (tag) {
           const { id, value } = tag;
           const newId = id || '';
           const newValue = value || '';
-          result.push({ id: newId, value: newValue });
+          result.push({ id: newId, text: newValue });
         }
         return result;
       }, [])
       : [];
 
     const tagOnPostProps: TagOnPostProps = {
-      isAdmin: true,
+      isAdmin: connectedUserIsAdmin(),
       postId: fictionId,
       tagList: formatedTags,
       suggestedKeywords: formatedKeywords

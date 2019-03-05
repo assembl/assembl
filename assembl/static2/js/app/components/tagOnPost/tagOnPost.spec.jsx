@@ -23,7 +23,7 @@ describe('<TagOnPost /> - with shallow', () => {
         'Great pleasure',
         'Actual teachings of the great explorer of the truth'
       ],
-      tagList: [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }]
+      tagList: [{ id: '0', text: 'Habitat et SDF' }, { id: '1', text: 'Facilitation' }]
     };
     wrapper = shallow(<TagOnPost {...defaultProps} />);
   });

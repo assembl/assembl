@@ -8,6 +8,7 @@ import SuggestionContainer from '../common/suggestionContainer/suggestionContain
 // Type imports
 import type { Props as TagContainerProps } from '../common/tagContainer/tagContainer';
 import type { Props as SuggestionContainerProps } from '../common/suggestionContainer/suggestionContainer';
+import type { TagProps } from '../common/tags/tags';
 
 export type Props = {
   /** Flag that check if the current user is an admin */
@@ -17,11 +18,12 @@ export type Props = {
   /** List of suggested keywords related to the current post */
   suggestedKeywords: Array<string>,
   /** List of tags fetched related to the current post */
-  tagList: Array<Tag>
+  tagList: Array<TagProps>
 };
 
-const TagOnPost = ({ postId, suggestedKeywords, tagList }: Props) => {
+const TagOnPost = ({ isAdmin, postId, suggestedKeywords, tagList }: Props) => {
   const tagContainerProps: TagContainerProps = {
+    isAdmin: isAdmin,
     postId: postId,
     tagList: tagList
   };

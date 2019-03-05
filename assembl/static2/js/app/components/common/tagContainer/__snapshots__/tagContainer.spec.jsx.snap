@@ -1,5 +1,152 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Storyshots Tag On Post|TagContainer admin 1`] = `
+<div
+  className="tag-container"
+>
+  <div
+    className="title"
+  >
+    Ajoutez des mots-clés relatifs à ce post :
+  </div>
+  <div
+    className="tag-list"
+  >
+    <div>
+      <div
+        className="ReactTags__tags react-tags-wrapper-admin"
+      >
+        <div
+          className="ReactTags__selected"
+        >
+          <button
+            className="tag-wrapper ReactTags__tag"
+            onClick={[Function]}
+            style={
+              Object {
+                "cursor": "auto",
+                "opacity": 1,
+              }
+            }
+          >
+            <span
+              className="tag-name"
+            >
+              Habitat et SDF
+            </span>
+            <span
+              className="icon-delete"
+            >
+              <svg
+                className="cross-icon"
+                height="8"
+                viewBox="0 0 8 8"
+                width="8"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  className="cross-icon-path"
+                  fillRule="nonzero"
+                >
+                  <path
+                    d="M.184 1.074a.63.63 0 1 1 .89-.89l6.742 6.742a.63.63 0 1 1-.89.89L.184 1.074z"
+                  />
+                  <path
+                    d="M.195 6.918L6.918.195c.591-.591 1.478.296.887.887L1.082 7.805c-.591.591-1.478-.296-.887-.887z"
+                  />
+                </g>
+              </svg>
+            </span>
+          </button>
+          <button
+            className="tag-wrapper ReactTags__tag"
+            onClick={[Function]}
+            style={
+              Object {
+                "cursor": "auto",
+                "opacity": 1,
+              }
+            }
+          >
+            <span
+              className="tag-name"
+            >
+              Facilitation
+            </span>
+            <span
+              className="icon-delete"
+            >
+              <svg
+                className="cross-icon"
+                height="8"
+                viewBox="0 0 8 8"
+                width="8"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  className="cross-icon-path"
+                  fillRule="nonzero"
+                >
+                  <path
+                    d="M.184 1.074a.63.63 0 1 1 .89-.89l6.742 6.742a.63.63 0 1 1-.89.89L.184 1.074z"
+                  />
+                  <path
+                    d="M.195 6.918L6.918.195c.591-.591 1.478.296.887.887L1.082 7.805c-.591.591-1.478-.296-.887-.887z"
+                  />
+                </g>
+              </svg>
+            </span>
+          </button>
+          <div
+            className="ReactTags__tagInput"
+          >
+            <span
+              className="icon-add"
+            >
+              <svg
+                className="addkeyword-icon"
+                height="22"
+                viewBox="0 0 22 22"
+                width="22"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g
+                  fill="none"
+                  fillRule="nonzero"
+                >
+                  <g
+                    className="addkeyword-icon-cross"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="1.2"
+                  >
+                    <path
+                      d="M11 6v9.09M6.455 10.545h9.09"
+                    />
+                  </g>
+                </g>
+              </svg>
+            </span>
+            <input
+              aria-label=""
+              autoFocus={true}
+              className="ReactTags__tagInputField"
+              onBlur={[Function]}
+              onChange={[Function]}
+              onFocus={[Function]}
+              onKeyDown={[Function]}
+              onPaste={[Function]}
+              placeholder=""
+              type="text"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Tag On Post|TagContainer default 1`] = `
 <div
   className="tag-container"
