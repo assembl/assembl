@@ -74,7 +74,7 @@ exports[`TimelineForm component should render a form to create, delete and edit 
   />
   <TabbedContent
     bodyRowClassName=""
-    divClassName="admin-content"
+    divClassName=""
     renderBody={[Function]}
     renderTooltip={[Function]}
     tabTitleMsgId="administration.timelineAdmin.phase"

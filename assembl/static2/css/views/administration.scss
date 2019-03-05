@@ -1,9 +1,22 @@
-.warning-message {
-  color: $orange2;
-  font-size: $font-size-xxs;
-}
-
 .tabbed-content {
+  .phases-creation,
+  .phase-configuration-section {
+    margin: 30px 0;
+  }
+
+  .tabs-section {
+    padding: 10px 40px 40px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .warning-label {
+    width: 250px;
+    font-size: $font-size-xs;
+    color: $orange2;
+    text-align: left;
+  }
+
   .tab-title {
     border-bottom: $border-not-active;
     color: $grey;
@@ -665,59 +678,15 @@
   }
 
   .timeline-admin {
-    .form-group {
-      margin-left: 15px;
-
-      .form-control {
-        width: 270px;
-      }
-    }
-
     .admin-instruction {
-      display: block;
-      margin-left: 50px;
-      font-family: $font-family4;
-    }
-
-    .phase-side-title {
-      margin-left: -70px;
-      margin-top: 30px;
-      font-size: 12px;
-    }
-
-    .phase-side-title-low {
-      margin-top: 6px;
-    }
-
-    .admin-icons {
-      margin-bottom: 25px;
-    }
-
-    .side-button-high {
-      margin-bottom: 65px;
-    }
-
-    .phase-form {
-      margin-top: 50px;
-    }
-
-    .warning-label {
-      width: 250px;
-      font-size: $font-size-xs;
-      color: $orange2;
       text-align: left;
+      margin-left: 50px;
+      font-family: 'LatoLight';
     }
 
-    .phase-title-form-container {
-      margin: 20px auto;
-
-      .phase-title-form {
-        margin-bottom: -45px;
-      }
-
-      .warning-label {
-        margin-left: 30px;
-      }
+    .phases-creation,
+    .phase-configuration-section {
+      margin: 30px 0;
     }
   }
 

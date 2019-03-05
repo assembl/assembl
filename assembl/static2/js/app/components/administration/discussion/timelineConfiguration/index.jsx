@@ -78,12 +78,11 @@ class TimelineFields extends React.Component<Props, State> {
   render() {
     const { client, editLocale, lang } = this.props;
     return (
-      <div className="discussion-admin admin-box admin-content">
+      <div className="timeline-admin admin-box">
         <SectionTitle
           title={I18n.t('administration.discussion.5')}
           annotation={I18n.t('administration.timelineAdmin.annotation')}
         />
-        <Translate value="administration.timelineAdmin.instruction1" className="admin-instruction" />
         <LoadSaveReinitializeForm
           load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, lang)}
           loading={loading}
@@ -96,7 +95,8 @@ class TimelineFields extends React.Component<Props, State> {
           }}
           render={({ values, handleSubmit, pristine, submitting, form }) => (
             <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-              <div className="form-container phase-creation-section">
+              <Translate value="administration.timelineAdmin.instruction1" className="admin-instruction" />
+              <div className="phases-creation">
                 <FieldArrayWithActions
                   name="phases"
                   withSeparators={false}
@@ -119,13 +119,11 @@ class TimelineFields extends React.Component<Props, State> {
                   )}
                 />
               </div>
-              <div className="section-test">
-                <div className="phase-configuration-section">
-                  <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />
-                </div>
+              <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />
+              <div className="phase-configuration-section">
                 <TabbedContent
                   type="phase"
-                  divClassName="admin-content"
+                  divClassName=""
                   tabTitleMsgId="administration.timelineAdmin.phase"
                   tabs={values.phases.map((phase, index) => {
                     const tabTitle = `${I18n.t('administration.timelineAdmin.phase', { count: index + 1 })}`;
@@ -140,8 +138,8 @@ class TimelineFields extends React.Component<Props, State> {
                   })}
                   renderTooltip={phaseTooltip}
                   renderBody={(phase, index) => (
-                    <div className="discussion-admin admin-box admin-content">
-                      <Translate value="administration.timelineAdmin.instruction1" className="admin-instruction" />
+                    <div className="form-container">
+                      <Translate value="administration.timelineAdmin.instruction1" className="admin-paragraph" />
                       <Field
                         name={`phases[${phase.index}].start`}
                         component={DatePickerFieldAdapter}
@@ -165,14 +163,16 @@ class TimelineFields extends React.Component<Props, State> {
                         form={form}
                         dateFormat="LL"
                       />
-                      <Translate value="administration.timelineAdmin.instruction1" className="admin-instruction" />
+                      <Translate value="administration.timelineAdmin.instruction1" className="admin-paragraph" />
                       <Field
+                        className="admin-content"
                         name={`phases[${phase.index}].image`}
                         component={FileUploaderFieldAdapter}
                         label={I18n.t('administration.landingPage.header.logoDescription')}
                       />
-                      <Translate value="administration.timelineAdmin.instruction1" className="admin-instruction" />
+                      <Translate value="administration.timelineAdmin.instruction1" className="admin-paragraph" />
                       <Field
+                        className="form-control"
                         editLocale={editLocale}
                         withAttachmentButton={false}
                         name={`phases[${phase.index}].description`}
