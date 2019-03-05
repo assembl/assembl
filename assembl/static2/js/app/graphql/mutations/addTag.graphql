@@ -1,6 +1,6 @@
 mutation addTag($taggableId: ID!, $value: String!) {
   addTag(taggableId: $taggableId, value: $value) {
-    tags {
+    tag {
       id
       value
     }

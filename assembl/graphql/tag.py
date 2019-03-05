@@ -88,7 +88,7 @@ class AddTag(graphene.Mutation):
         taggable_id = graphene.ID(required=True, description=docs.AddTag.taggable_id)
         value = graphene.String(required=True, description=docs.AddTag.value)
 
-    tags = graphene.List(lambda: Tag)
+    tag = graphene.Field(lambda: Tag)
 
     @staticmethod
     @abort_transaction_on_exception
@@ -115,7 +115,7 @@ class AddTag(graphene.Mutation):
             taggable.tags = taggable.tags + [tag]
             db.flush()
 
-        return AddTag(tags=taggable.tags)
+        return AddTag(tag=tag)
 
 
 class RemoveTag(graphene.Mutation):
@@ -125,7 +125,7 @@ class RemoveTag(graphene.Mutation):
         taggable_id = graphene.ID(required=True, description=docs.RemoveTag.taggable_id)
         id = graphene.ID(required=True, description=docs.RemoveTag.id)
 
-    tags = graphene.List(lambda: Tag)
+    success = graphene.Boolean()
 
     @staticmethod
     @abort_transaction_on_exception
@@ -151,4 +151,4 @@ class RemoveTag(graphene.Mutation):
 
         db.flush()
 
-        return RemoveTag(tags=taggable.tags)
+        return RemoveTag(success=True)

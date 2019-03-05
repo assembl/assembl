@@ -142,7 +142,7 @@ def test_add_tag_on_post_new(graphql_request, tags, root_post_for_tags):
             taggableId: $taggableId
             value: $value
         ) {
-            tags {
+            tag {
             value
             }
         }
@@ -151,7 +151,7 @@ def test_add_tag_on_post_new(graphql_request, tags, root_post_for_tags):
 
     assert json.loads(json.dumps(res.data)) == {
         u'addTag': {
-        u'tags': [{u'value': u'new tag'}]
+        u'tag': {u'value': u'new tag'}
         }
     }
     assert len(root_post_for_tags.db.query(models.Keyword).all()) == 3
@@ -173,7 +173,7 @@ def test_add_tag_on_post_existing(graphql_request, tags, root_post_for_tags):
             taggableId: $taggableId
             value: $value
         ) {
-            tags {
+            tag {
             value
             }
         }
@@ -182,7 +182,7 @@ def test_add_tag_on_post_existing(graphql_request, tags, root_post_for_tags):
 
     assert json.loads(json.dumps(res.data)) == {
         u'addTag': {
-        u'tags': [{u'value': u'tag1'}]
+        u'tag': {u'value': u'tag1'}
         }
     }
     assert len(root_post_for_tags.db.query(models.Keyword).all()) == 2
@@ -204,7 +204,7 @@ def test_add_tag_on_post_already_added(graphql_request, tags, root_post_with_tag
             taggableId: $taggableId
             value: $value
         ) {
-            tags {
+            tag {
             value
             }
         }
@@ -213,7 +213,7 @@ def test_add_tag_on_post_already_added(graphql_request, tags, root_post_with_tag
 
     assert json.loads(json.dumps(res.data)) == {
         u'addTag': {
-        u'tags': [{u'value': u'tag1'}, {u'value': u'tag2'}]
+        u'tag': {u'value': u'tag1'}
         }
     }
     assert len(root_post_with_tags.db.query(models.Keyword).all()) == 2
@@ -236,16 +236,14 @@ def test_remove_tag_on_post(graphql_request, tags, root_post_with_tags):
             taggableId: $taggableId
             id: $id
         ) {
-            tags{
-                value
-            }
+            success
         }
         }
     """, context_value=graphql_request, variable_values=variable_values)
 
     assert json.loads(json.dumps(res.data)) == {
         u'removeTag': {
-        u'tags': [{u'value': u'tag2'}]
+        u'success': True
         }
     }
     assert len(root_post_with_tags.db.query(models.Keyword).all()) == 2
