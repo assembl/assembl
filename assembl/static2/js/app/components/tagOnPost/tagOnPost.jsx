@@ -34,7 +34,7 @@ const TagOnPost = ({ isAdmin, postId, suggestedTagList, tagList }: Props) => {
   };
 
   // Display tag container when there are tags to display
-  const displayTagContainer = tagList.length > 0 ? <TagContainer {...tagContainerProps} /> : null;
+  const displayTagContainer = tagList.length > 0 || isAdmin ? <TagContainer {...tagContainerProps} /> : null;
 
   // Display suggestion container when there are suggested tags to display
   const displaySuggestionContainer =
