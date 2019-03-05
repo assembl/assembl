@@ -50,6 +50,29 @@ describe('<TagOnPost /> - with shallow', () => {
         expect(wrapper.find(SuggestionContainer)).toHaveLength(0);
       });
     });
+
+    describe('when tagList includes one suggested tag from suggestedTagList with one tag', () => {
+      it('should not render a SuggestionContainer component ', () => {
+        wrapper.setProps({
+          suggestedTagList: ['Habitat et SDF']
+        });
+        expect(wrapper.find(SuggestionContainer)).toHaveLength(0);
+      });
+    });
+
+    describe('when tagList includes one suggested tag from suggestedTagList with mutliples tags', () => {
+      it('should render a SuggestionContainer component ', () => {
+        wrapper.setProps({
+          suggestedTagList: [
+            'Habitat et SDF',
+            'Complete account of the system',
+            'Great pleasure',
+            'Actual teachings of the great explorer of the truth'
+          ]
+        });
+        expect(wrapper.find(SuggestionContainer)).toHaveLength(1);
+      });
+    });
   });
 
   describe('when is not admin', () => {

@@ -28,9 +28,15 @@ const TagOnPost = ({ isAdmin, postId, suggestedTagList, tagList }: Props) => {
     tagList: tagList
   };
 
+  // Difference between tagList and suggestedTagList to hide in SuggestionContainer manually added suggested tags
+  const formattedTagList = tagList.map(tag => tag.text.toLowerCase());
+  const filteredSuggestedTagList = suggestedTagList.filter(
+    suggestedTag => !formattedTagList.includes(suggestedTag.toLowerCase())
+  );
+
   const suggestionContainerProps: SuggestionContainerProps = {
     suggestionContainerTitle: I18n.t('debate.tagOnPost.suggestionContainerTitle'),
-    suggestionList: suggestedTagList
+    suggestionList: filteredSuggestedTagList
   };
 
   // Display tag container when there are tags to display
@@ -38,7 +44,7 @@ const TagOnPost = ({ isAdmin, postId, suggestedTagList, tagList }: Props) => {
 
   // Display suggestion container when there are suggested tags to display
   const displaySuggestionContainer =
-    suggestedTagList.length > 0 && isAdmin ? <SuggestionContainer {...suggestionContainerProps} /> : null;
+    filteredSuggestedTagList.length > 0 && isAdmin ? <SuggestionContainer {...suggestionContainerProps} /> : null;
 
   return (
     <div className="tag-on-post-container">
