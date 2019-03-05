@@ -73,22 +73,18 @@ def bootstrap_db(config_uri, with_migration=True):
         db_version = context.get_current_revision()
         # artefact: in tests, db_version may be none.
         if db_version and db_version != head:
-            def migration_fn(heads, context):
-                with locked_transaction(db, 1235) as session:
-                    context = MigrationContext.configure(session.connection())
-                    db_version = context.get_current_revision()
-                    if db_version != head:
-                        return script_dir._upgrade_revs(head, db_version)
-                    session.commit()
-
-            with EnvironmentContext(
-                config,
-                script_dir,
-                fn=migration_fn,
-                as_sql=False,
-                destination_rev=head
-            ):
-                script_dir.run_env()
+            with locked_transaction(db, 1235) as session:
+                context = MigrationContext.configure(session.connection())
+                db_version = context.get_current_revision()
+                if db_version != head:
+                    with EnvironmentContext(
+                        config,
+                        script_dir,
+                        as_sql=False,
+                        fn=lambda heads, context: script_dir._upgrade_revs(head, db_version),
+                        destination_rev=head
+                    ):
+                        script_dir.run_env()
             context = MigrationContext.configure(db().connection())
             db_version = context.get_current_revision()
             assert db_version == head
