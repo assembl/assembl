@@ -11640,7 +11640,7 @@ react-style-proptype@^3.0.0:
 
 "react-tag-input@https://github.com/beyowi/react-tags.git#assembl":
   version "0.0.0-semantically-released"
-  resolved "https://github.com/beyowi/react-tags.git#a2533eeb8f68a42cd4e73f9bf9c27f4b5f3dc6a5"
+  resolved "https://github.com/beyowi/react-tags.git#16d4a9067e35f81c817815a9f19d6cbe4db7d046"
   dependencies:
     classnames "2.2.6"
     core-js "2.6.5"
