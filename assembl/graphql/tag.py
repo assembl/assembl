@@ -105,7 +105,7 @@ class AddTag(graphene.Mutation):
             taggable = models.TaggableEntity.get_taggable_from_id(
                 taggable_node[0], taggable_id)
 
-        value = args.get('value')
+        value = args.get('value').lower()
         db = taggable.db
         tag = models.Keyword.get_tag(value, discussion_id, db)
         if not tag:

@@ -58,6 +58,42 @@ query tags($filter: String) {
   }
 
 
+def test_query_tags_with_limit(graphql_request, tags):
+  variable_values = {
+    "limit": 1
+  }
+
+  res = schema.execute(u"""
+query tags($limit: Int) {
+  tags(limit: $limit) {
+    value
+  }
+}
+""", context_value=graphql_request, variable_values=variable_values)
+
+  assert json.loads(json.dumps(res.data)) == {
+    u'tags': [{u'value': u'tag1'}]
+  }
+
+
+def test_query_tags_no_limit(graphql_request, tags):
+  variable_values = {
+    "limit": 0
+  }
+
+  res = schema.execute(u"""
+query tags($limit: Int) {
+  tags(limit: $limit) {
+    value
+  }
+}
+""", context_value=graphql_request, variable_values=variable_values)
+
+  assert json.loads(json.dumps(res.data)) == {
+    u'tags': [{u'value': u'tag1'}, {u'value': u'tag2'}]
+  }
+
+
 def test_mutation_update_tag(graphql_request, tags, extract_post_1_to_subidea_1_1):
   extract_tags = extract_post_1_to_subidea_1_1.tags
   tag = extract_tags[0]

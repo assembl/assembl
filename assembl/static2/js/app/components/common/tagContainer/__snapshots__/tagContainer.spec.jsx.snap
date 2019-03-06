@@ -1,264 +1,766 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Storyshots Tag On Post|TagContainer admin 1`] = `
-<div
-  className="tag-container"
->
-  <div
-    className="title"
-  >
-    Ajoutez des mots-clés relatifs à ce post :
-  </div>
-  <div
-    className="tag-list"
-  >
-    <div>
-      <div
-        className="ReactTags__tags react-tags-wrapper-admin"
-      >
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <TagContainer
+    isAdmin={true}
+    postId="0"
+    tagList={
+      Array [
+        Object {
+          "id": "0",
+          "text": "Habitat et SDF",
+        },
+        Object {
+          "id": "1",
+          "text": "Facilitation",
+        },
+      ]
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
         <div
-          className="ReactTags__selected"
+          className="title"
         >
-          <button
-            className="tag-wrapper ReactTags__tag"
-            onClick={[Function]}
-            style={
-              Object {
-                "cursor": "auto",
-                "opacity": 1,
-              }
+          Ajoutez des mots-clés relatifs à ce post :
+        </div>,
+        <div
+          className="tag-list"
+        >
+          <Connect(Apollo(Apollo(Component)))
+            alreadyAdded="Déja ajouté"
+            isAdmin={true}
+            postId="0"
+            tagsList={
+              Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ]
             }
-          >
-            <span
-              className="tag-name"
-            >
-              Habitat et SDF
-            </span>
-            <span
-              className="icon-delete"
-            >
-              <svg
-                className="cross-icon"
-                height="8"
-                viewBox="0 0 8 8"
-                width="8"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g
-                  className="cross-icon-path"
-                  fillRule="nonzero"
-                >
-                  <path
-                    d="M.184 1.074a.63.63 0 1 1 .89-.89l6.742 6.742a.63.63 0 1 1-.89.89L.184 1.074z"
-                  />
-                  <path
-                    d="M.195 6.918L6.918.195c.591-.591 1.478.296.887.887L1.082 7.805c-.591.591-1.478-.296-.887-.887z"
-                  />
-                </g>
-              </svg>
-            </span>
-          </button>
-          <button
-            className="tag-wrapper ReactTags__tag"
-            onClick={[Function]}
-            style={
-              Object {
-                "cursor": "auto",
-                "opacity": 1,
-              }
+          />
+        </div>,
+      ],
+      "className": "tag-container",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "Ajoutez des mots-clés relatifs à ce post :",
+          "className": "title",
+        },
+        "ref": null,
+        "rendered": "Ajoutez des mots-clés relatifs à ce post :",
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <Connect(Apollo(Apollo(Component)))
+            alreadyAdded="Déja ajouté"
+            isAdmin={true}
+            postId="0"
+            tagsList={
+              Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ]
             }
-          >
-            <span
-              className="tag-name"
-            >
-              Facilitation
-            </span>
-            <span
-              className="icon-delete"
-            >
-              <svg
-                className="cross-icon"
-                height="8"
-                viewBox="0 0 8 8"
-                width="8"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g
-                  className="cross-icon-path"
-                  fillRule="nonzero"
-                >
-                  <path
-                    d="M.184 1.074a.63.63 0 1 1 .89-.89l6.742 6.742a.63.63 0 1 1-.89.89L.184 1.074z"
-                  />
-                  <path
-                    d="M.195 6.918L6.918.195c.591-.591 1.478.296.887.887L1.082 7.805c-.591.591-1.478-.296-.887-.887z"
-                  />
-                </g>
-              </svg>
-            </span>
-          </button>
+          />,
+          "className": "tag-list",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "alreadyAdded": "Déja ajouté",
+            "isAdmin": true,
+            "postId": "0",
+            "tagsList": Array [
+              Object {
+                "id": "0",
+                "text": "Habitat et SDF",
+              },
+              Object {
+                "id": "1",
+                "text": "Facilitation",
+              },
+            ],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        "type": "div",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
           <div
-            className="ReactTags__tagInput"
+            className="title"
           >
-            <span
-              className="icon-add"
-            >
-              <svg
-                className="addkeyword-icon"
-                height="22"
-                viewBox="0 0 22 22"
-                width="22"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <g
-                  fill="none"
-                  fillRule="nonzero"
-                >
-                  <g
-                    className="addkeyword-icon-cross"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="1.2"
-                  >
-                    <path
-                      d="M11 6v9.09M6.455 10.545h9.09"
-                    />
-                  </g>
-                </g>
-              </svg>
-            </span>
-            <input
-              aria-label=""
-              autoFocus={true}
-              className="ReactTags__tagInputField"
-              onBlur={[Function]}
-              onChange={[Function]}
-              onFocus={[Function]}
-              onKeyDown={[Function]}
-              onPaste={[Function]}
-              placeholder=""
-              type="text"
+            Ajoutez des mots-clés relatifs à ce post :
+          </div>,
+          <div
+            className="tag-list"
+          >
+            <Connect(Apollo(Apollo(Component)))
+              alreadyAdded="Déja ajouté"
+              isAdmin={true}
+              postId="0"
+              tagsList={
+                Array [
+                  Object {
+                    "id": "0",
+                    "text": "Habitat et SDF",
+                  },
+                  Object {
+                    "id": "1",
+                    "text": "Facilitation",
+                  },
+                ]
+              }
             />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+          </div>,
+        ],
+        "className": "tag-container",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "Ajoutez des mots-clés relatifs à ce post :",
+            "className": "title",
+          },
+          "ref": null,
+          "rendered": "Ajoutez des mots-clés relatifs à ce post :",
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <Connect(Apollo(Apollo(Component)))
+              alreadyAdded="Déja ajouté"
+              isAdmin={true}
+              postId="0"
+              tagsList={
+                Array [
+                  Object {
+                    "id": "0",
+                    "text": "Habitat et SDF",
+                  },
+                  Object {
+                    "id": "1",
+                    "text": "Facilitation",
+                  },
+                ]
+              }
+            />,
+            "className": "tag-list",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "alreadyAdded": "Déja ajouté",
+              "isAdmin": true,
+              "postId": "0",
+              "tagsList": Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ],
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenThreeAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
+  },
+}
 `;
 
 exports[`Storyshots Tag On Post|TagContainer default 1`] = `
-<div
-  className="tag-container"
->
-  <div
-    className="title"
-  >
-    Mots-clés relatifs à ce post :
-  </div>
-  <div
-    className="tag-list"
-  >
-    <div>
-      <div
-        className="ReactTags__tags react-tags-wrapper-user"
-      >
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <TagContainer
+    isAdmin={false}
+    postId="0"
+    tagList={
+      Array [
+        Object {
+          "id": "0",
+          "text": "Habitat et SDF",
+        },
+        Object {
+          "id": "1",
+          "text": "Facilitation",
+        },
+      ]
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
         <div
-          className="ReactTags__selected"
+          className="title"
         >
-          <button
-            className="tag-wrapper ReactTags__tag"
-            onClick={null}
-            style={
-              Object {
-                "cursor": "auto",
-                "opacity": 1,
-              }
+          Mots-clés relatifs à ce post :
+        </div>,
+        <div
+          className="tag-list"
+        >
+          <Connect(Apollo(Apollo(Component)))
+            alreadyAdded="Déja ajouté"
+            isAdmin={false}
+            postId="0"
+            tagsList={
+              Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ]
             }
-          >
-            <span
-              className="tag-name"
-            >
-              Habitat et SDF
-            </span>
-          </button>
-          <button
-            className="tag-wrapper ReactTags__tag"
-            onClick={null}
-            style={
-              Object {
-                "cursor": "auto",
-                "opacity": 1,
-              }
+          />
+        </div>,
+      ],
+      "className": "tag-container",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "Mots-clés relatifs à ce post :",
+          "className": "title",
+        },
+        "ref": null,
+        "rendered": "Mots-clés relatifs à ce post :",
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <Connect(Apollo(Apollo(Component)))
+            alreadyAdded="Déja ajouté"
+            isAdmin={false}
+            postId="0"
+            tagsList={
+              Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ]
             }
+          />,
+          "className": "tag-list",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "alreadyAdded": "Déja ajouté",
+            "isAdmin": false,
+            "postId": "0",
+            "tagsList": Array [
+              Object {
+                "id": "0",
+                "text": "Habitat et SDF",
+              },
+              Object {
+                "id": "1",
+                "text": "Facilitation",
+              },
+            ],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        "type": "div",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="title"
           >
-            <span
-              className="tag-name"
-            >
-              Facilitation
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+            Mots-clés relatifs à ce post :
+          </div>,
+          <div
+            className="tag-list"
+          >
+            <Connect(Apollo(Apollo(Component)))
+              alreadyAdded="Déja ajouté"
+              isAdmin={false}
+              postId="0"
+              tagsList={
+                Array [
+                  Object {
+                    "id": "0",
+                    "text": "Habitat et SDF",
+                  },
+                  Object {
+                    "id": "1",
+                    "text": "Facilitation",
+                  },
+                ]
+              }
+            />
+          </div>,
+        ],
+        "className": "tag-container",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "Mots-clés relatifs à ce post :",
+            "className": "title",
+          },
+          "ref": null,
+          "rendered": "Mots-clés relatifs à ce post :",
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <Connect(Apollo(Apollo(Component)))
+              alreadyAdded="Déja ajouté"
+              isAdmin={false}
+              postId="0"
+              tagsList={
+                Array [
+                  Object {
+                    "id": "0",
+                    "text": "Habitat et SDF",
+                  },
+                  Object {
+                    "id": "1",
+                    "text": "Facilitation",
+                  },
+                ]
+              }
+            />,
+            "className": "tag-list",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "alreadyAdded": "Déja ajouté",
+              "isAdmin": false,
+              "postId": "0",
+              "tagsList": Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ],
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenThreeAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
+  },
+}
 `;
 
 exports[`Storyshots Tag On Post|TagContainer playground 1`] = `
-<div
-  className="tag-container"
->
-  <div
-    className="title"
-  >
-    Mots-clés relatifs à ce post :
-  </div>
-  <div
-    className="tag-list"
-  >
-    <div>
-      <div
-        className="ReactTags__tags react-tags-wrapper-user"
-      >
+ShallowWrapper {
+  Symbol(enzyme.__root__): [Circular],
+  Symbol(enzyme.__unrendered__): <TagContainer
+    isAdmin={false}
+    postId="0"
+    tagList={
+      Array [
+        Object {
+          "id": "0",
+          "text": "Habitat et SDF",
+        },
+        Object {
+          "id": "1",
+          "text": "Facilitation",
+        },
+      ]
+    }
+  />,
+  Symbol(enzyme.__renderer__): Object {
+    "batchedUpdates": [Function],
+    "getNode": [Function],
+    "render": [Function],
+    "simulateError": [Function],
+    "simulateEvent": [Function],
+    "unmount": [Function],
+  },
+  Symbol(enzyme.__node__): Object {
+    "instance": null,
+    "key": undefined,
+    "nodeType": "host",
+    "props": Object {
+      "children": Array [
         <div
-          className="ReactTags__selected"
+          className="title"
         >
-          <button
-            className="tag-wrapper ReactTags__tag"
-            onClick={null}
-            style={
-              Object {
-                "cursor": "auto",
-                "opacity": 1,
-              }
+          Mots-clés relatifs à ce post :
+        </div>,
+        <div
+          className="tag-list"
+        >
+          <Connect(Apollo(Apollo(Component)))
+            alreadyAdded="Déja ajouté"
+            isAdmin={false}
+            postId="0"
+            tagsList={
+              Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ]
             }
-          >
-            <span
-              className="tag-name"
-            >
-              Habitat et SDF
-            </span>
-          </button>
-          <button
-            className="tag-wrapper ReactTags__tag"
-            onClick={null}
-            style={
-              Object {
-                "cursor": "auto",
-                "opacity": 1,
-              }
+          />
+        </div>,
+      ],
+      "className": "tag-container",
+    },
+    "ref": null,
+    "rendered": Array [
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": "Mots-clés relatifs à ce post :",
+          "className": "title",
+        },
+        "ref": null,
+        "rendered": "Mots-clés relatifs à ce post :",
+        "type": "div",
+      },
+      Object {
+        "instance": null,
+        "key": undefined,
+        "nodeType": "host",
+        "props": Object {
+          "children": <Connect(Apollo(Apollo(Component)))
+            alreadyAdded="Déja ajouté"
+            isAdmin={false}
+            postId="0"
+            tagsList={
+              Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ]
             }
+          />,
+          "className": "tag-list",
+        },
+        "ref": null,
+        "rendered": Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "class",
+          "props": Object {
+            "alreadyAdded": "Déja ajouté",
+            "isAdmin": false,
+            "postId": "0",
+            "tagsList": Array [
+              Object {
+                "id": "0",
+                "text": "Habitat et SDF",
+              },
+              Object {
+                "id": "1",
+                "text": "Facilitation",
+              },
+            ],
+          },
+          "ref": null,
+          "rendered": null,
+          "type": [Function],
+        },
+        "type": "div",
+      },
+    ],
+    "type": "div",
+  },
+  Symbol(enzyme.__nodes__): Array [
+    Object {
+      "instance": null,
+      "key": undefined,
+      "nodeType": "host",
+      "props": Object {
+        "children": Array [
+          <div
+            className="title"
           >
-            <span
-              className="tag-name"
-            >
-              Facilitation
-            </span>
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+            Mots-clés relatifs à ce post :
+          </div>,
+          <div
+            className="tag-list"
+          >
+            <Connect(Apollo(Apollo(Component)))
+              alreadyAdded="Déja ajouté"
+              isAdmin={false}
+              postId="0"
+              tagsList={
+                Array [
+                  Object {
+                    "id": "0",
+                    "text": "Habitat et SDF",
+                  },
+                  Object {
+                    "id": "1",
+                    "text": "Facilitation",
+                  },
+                ]
+              }
+            />
+          </div>,
+        ],
+        "className": "tag-container",
+      },
+      "ref": null,
+      "rendered": Array [
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": "Mots-clés relatifs à ce post :",
+            "className": "title",
+          },
+          "ref": null,
+          "rendered": "Mots-clés relatifs à ce post :",
+          "type": "div",
+        },
+        Object {
+          "instance": null,
+          "key": undefined,
+          "nodeType": "host",
+          "props": Object {
+            "children": <Connect(Apollo(Apollo(Component)))
+              alreadyAdded="Déja ajouté"
+              isAdmin={false}
+              postId="0"
+              tagsList={
+                Array [
+                  Object {
+                    "id": "0",
+                    "text": "Habitat et SDF",
+                  },
+                  Object {
+                    "id": "1",
+                    "text": "Facilitation",
+                  },
+                ]
+              }
+            />,
+            "className": "tag-list",
+          },
+          "ref": null,
+          "rendered": Object {
+            "instance": null,
+            "key": undefined,
+            "nodeType": "class",
+            "props": Object {
+              "alreadyAdded": "Déja ajouté",
+              "isAdmin": false,
+              "postId": "0",
+              "tagsList": Array [
+                Object {
+                  "id": "0",
+                  "text": "Habitat et SDF",
+                },
+                Object {
+                  "id": "1",
+                  "text": "Facilitation",
+                },
+              ],
+            },
+            "ref": null,
+            "rendered": null,
+            "type": [Function],
+          },
+          "type": "div",
+        },
+      ],
+      "type": "div",
+    },
+  ],
+  Symbol(enzyme.__options__): Object {
+    "adapter": ReactSixteenThreeAdapter {
+      "options": Object {
+        "enableComponentDidUpdateOnSetState": true,
+        "lifecycles": Object {
+          "componentDidUpdate": Object {
+            "onSetState": true,
+          },
+          "getDerivedStateFromProps": true,
+          "getSnapshotBeforeUpdate": true,
+          "setState": Object {
+            "skipsComponentDidUpdateOnNullish": true,
+          },
+        },
+      },
+    },
+    "attachTo": undefined,
+    "hydrateIn": undefined,
+  },
+}
 `;

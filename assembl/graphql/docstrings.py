@@ -67,6 +67,7 @@ class SchemaPosts:
 class SchemaTags:
     __doc__ = """The list of filtered tags available on the discussion."""
     filter = "A string used to filter the list of tags."
+    limit = "An integer to define the number of tags to retrieve"
 
 
 class Discussion:

@@ -12,6 +12,8 @@ import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphq
 import CreateBrightMirrorCommentMutation from '../graphql/mutations/createPost.graphql';
 // Optimization: Should create ideaWithCommentsQuery.graphql and adapt the query
 import IdeaWithCommentsQuery from '../graphql/IdeaWithPostsQuery.graphql';
+import TagsQuery from '../graphql/TagsQuery.graphql';
+import { updateTags } from '../actions/tagActions';
 // Route helpers imports
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
@@ -79,7 +81,9 @@ type BrightMirrorFictionReduxProps = {
   /** Fiction locale fetched from mapStateToProps */
   contentLocale: string,
   /** Fiction locale mapping fetched from mapStateToProps */
-  contentLocaleMapping: ContentLocaleMapping
+  contentLocaleMapping: ContentLocaleMapping,
+  /** Function to call action to store tags on store */
+  putTagsInStore: Function
 };
 
 export type IdeaWithCommentsData = {
@@ -99,7 +103,9 @@ type BrightMirrorFictionGraphQLProps = {
   /** Create comment mutation from GraphQL */
   createComment: Function,
   /** Fiction data information fetched from GraphQL */
-  ideaWithCommentsData: IdeaWithCommentsData
+  ideaWithCommentsData: IdeaWithCommentsData,
+  /** Fiction data information fetched from GraphQL */
+  existingTags: Array<Tag>
 };
 
 type LocalBrightMirrorFictionProps = AdditionalProps &
@@ -132,6 +138,10 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     if (loading) return null;
 
     const { body, publicationState, subject } = nextProps.brightMirrorFictionData.fiction;
+
+    const { existingTags, putTagsInStore } = nextProps;
+    // Store tag suggestions in store
+    putTagsInStore(existingTags);
 
     return {
       title: subject || EMPTY_STRING,
@@ -414,8 +424,12 @@ const withData: OperationComponent<Response> = graphql(BrightMirrorFictionQuery,
   })
 });
 
+const mapDispatchToProps = dispatch => ({
+  putTagsInStore: tags => dispatch(updateTags(tags))
+});
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withData,
   withScreenWidth,
   graphql(IdeaWithCommentsQuery, {
@@ -433,6 +447,9 @@ export default compose(
   graphql(CreateBrightMirrorCommentMutation, {
     // GraphQL custom function name
     name: 'createComment'
+  }),
+  graphql(TagsQuery, {
+    props: ({ data }) => ({ existingTags: data.tags })
   }),
   manageErrorAndLoading({ displayLoader: true })
 )(BrightMirrorFiction);

@@ -14,7 +14,11 @@ import type { Props } from './tagContainer';
 import { defaultProps } from './tagContainer.stories';
 
 initStoryshots({
-  storyKindRegex: /^Tag\s{1}On\s{1}Post\|TagContainer$/
+  storyKindRegex: /^Tag\s{1}On\s{1}Post\|TagContainer$/,
+  test: function ({ story, context }) {
+    const result = shallow(story.render(context));
+    expect(result).toMatchSnapshot();
+  }
 });
 
 configure({ adapter: new Adapter() });

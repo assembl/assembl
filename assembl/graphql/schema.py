@@ -139,17 +139,22 @@ class Query(graphene.ObjectType):
     tags = graphene.List(
         lambda: Tag,
         filter=graphene.String(description=docs.SchemaTags.filter),
+        limit=graphene.Int(description=docs.SchemaTags.limit),
         description=docs.SchemaTags.__doc__)
 
     def resolve_tags(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         _filter = args.get('filter', '')
+        limit = args.get('limit', 0)
         model = models.Keyword
         query = get_query(model, context).filter(
             model.discussion_id == discussion_id)
 
         if not _filter:
-            return query.limit(30).all()
+            if limit == 0:
+                return query.all()
+            else:
+                return query.limit(limit).all()
 
         _filter = '%{}%'.format(_filter)
         return query.filter(model.value.ilike(_filter)).all()

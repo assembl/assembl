@@ -22,6 +22,7 @@ describe('<Tags /> - with shallow', () => {
   beforeEach(() => {
     tagsProps = {
       tagsList: [{ id: 'Habitat et SDF', text: 'Habitat et SDF' }, { id: 'Facilitation', text: 'Facilitation' }],
+      existingTags: [],
       postId: '0',
       addTag: jest.fn(),
       removeTag: jest.fn()
