@@ -93,8 +93,6 @@ def install_database(c):
 @task
 def install_assembl_systemd(c):
     base = os.getcwd()
-    print "Currently in directory: %s" % base
-    print "Contents of the folder: %s" % os.listdir(base)
     path = 'assembl/templates/system/assembl.service.jinja2'
     if not exists(path):
         base = get_venv_site_packages(c)
@@ -111,8 +109,6 @@ def install_assembl_systemd(c):
 @task
 def install_uwsgicloudwatch_systemd(c):
     base = os.getcwd()
-    print "Currently in directory: %s" % base
-    print "Contents of the folder: %s" % os.listdir(base)
     path = 'assembl/templates/system/uwsgicloudwatch.service.jinja2'
     if not exists(path):
         base = get_venv_site_packages(c)
