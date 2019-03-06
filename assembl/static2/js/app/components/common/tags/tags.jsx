@@ -18,6 +18,8 @@ import { formatedTagList } from '../../../utils/globalFunctions';
 import addTagMutation from '../../../graphql/mutations/addTag.graphql';
 import removeTagMutation from '../../../graphql/mutations/removeTag.graphql';
 
+import { updateTags } from '../../../actions/tagActions';
+
 export type TagProps = {
   /** Tag ID */
   id: string,
@@ -32,6 +34,7 @@ export type Props = {
   isAdmin?: boolean,
   /** List of existing tags in the overall discussion fetched and updated from the general store */
   existingTags: Array<TagProps>,
+  initialExistingTags: Array<TagProps>,
   /** Post ID */
   postId: string,
   /** List of tags related to the current post */
@@ -41,7 +44,8 @@ export type Props = {
   /** Graphql mutation function called to remove an existing tag */
   removeTag: Function,
   /** Tag list update callback: is call when a tag is added or deleted */
-  onTagListUpdateCallback: (Array<TagProps>) => void
+  onTagListUpdateCallback: (Array<TagProps>) => void,
+  updateTags: Function
 };
 
 type State = {
@@ -100,7 +104,7 @@ export class DumbTags extends Component<Props, State> {
   };
 
   handleAddition = (tag: TagProps) => {
-    const { postId, addTag, onTagListUpdateCallback } = this.props;
+    const { postId, addTag, onTagListUpdateCallback, initialExistingTags, existingTags } = this.props;
     const variables = {
       taggableId: postId,
       value: tag.text
@@ -112,6 +116,14 @@ export class DumbTags extends Component<Props, State> {
         this.setState(state => ({
           tags: [...state.tags, newTag]
         }));
+        const index = existingTags.findIndex(item => item.id === newTag.id);
+        if (index === -1) {
+          const updateSuggestionList = initialExistingTags.concat({
+            id: result.data.addTag.tag.id,
+            value: result.data.addTag.tag.value
+          });
+          this.props.updateTags(updateSuggestionList);
+        }
         onTagListUpdateCallback(this.state.tags);
       })
       .catch((error) => {
@@ -146,11 +158,18 @@ export class DumbTags extends Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  existingTags: formatedTagList(state.tags)
+  existingTags: formatedTagList(state.tags),
+  initialExistingTags: state.tags
+});
+
+const mapDispatchToProps = dispatch => ({
+  updateTags: (tags) => {
+    dispatch(updateTags(tags));
+  }
 });
 
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(addTagMutation, {
     name: 'addTag'
   }),

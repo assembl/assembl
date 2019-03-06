@@ -23,10 +23,12 @@ describe('<Tags /> - with shallow', () => {
     tagsProps = {
       tagsList: [{ id: 'Habitat et SDF', text: 'Habitat et SDF' }, { id: 'Facilitation', text: 'Facilitation' }],
       existingTags: [],
+      initialExistingTags: [],
       postId: '0',
       addTag: jest.fn(),
       removeTag: jest.fn(),
-      onTagListUpdateCallback: jest.fn()
+      onTagListUpdateCallback: jest.fn(),
+      updateTags: jest.fn()
     };
     wrapper = shallow(<DumbTags {...tagsProps} />);
   });
