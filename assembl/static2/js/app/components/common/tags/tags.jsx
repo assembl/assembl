@@ -93,10 +93,12 @@ export class DumbTags extends Component<Props, State> {
     removeTag({ variables: variables })
       .then(() => {
         displayAlert('success', I18n.t('harvesting.tags.removeTagSuccessMsg', { tag: selectedTag.text }));
-        this.setState({
-          tags: tags.filter((tag, index) => index !== i)
-        });
-        onTagListUpdateCallback(this.state.tags);
+        this.setState(
+          {
+            tags: tags.filter((tag, index) => index !== i)
+          },
+          () => onTagListUpdateCallback(this.state.tags)
+        );
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
