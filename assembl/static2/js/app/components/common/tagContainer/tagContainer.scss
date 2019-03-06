@@ -27,6 +27,14 @@
   .tag-container {
     border-top: none;
     padding-top: 25px;
+
+    .tag-list {
+      .ReactTags__tag,
+      .ReactTags__suggestions,
+      .ReactTags__tagInput:focus-within {
+        background-color: $white;
+      }
+    }
   }
 }
 
@@ -37,6 +45,10 @@
 
       .title {
         font-size: 1.33rem;
+      }
+
+      .ReactTags__tagInput {
+        font-size: 1.17rem;
       }
 
       .tag-list {
