@@ -9,7 +9,7 @@ from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.security import Everyone, forget
 from pyramid.httpexceptions import (
-    HTTPOk, HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
+    HTTPOk, HTTPFound, HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 from urllib import quote_plus
@@ -51,7 +51,9 @@ def get_default_context(request):
     base = base_default_context(request)
     slug = request.matchdict['discussion_slug']
     try:
-        discussion = Discussion.default_db.query(Discussion).filter(Discussion.slug==slug).one()
+        discussion = Discussion.default_db.query(Discussion).filter(Discussion.slug==slug).first()
+        if not discussion:
+            discussion = find_discussion_from_slug(request, slug)
     except NoResultFound:
         raise HTTPNotFound(_("No discussion found for slug=%s") % slug)
     return dict(base, discussion=discussion)
@@ -204,9 +206,11 @@ def react_admin_view(request):
 def react_base_view(request, required_permission=P_READ):
     # This will make slug redirections as needed
     from assembl.models import Discussion, OldSlug
+    from assembl.views import create_get_route
     if 'discussion_slug' in request.matchdict:
         path = request.path
         requested_slug = base_slug = request.matchdict['discussion_slug']
+        from assembl.views.discussion.__init__ import find_discussion_from_slug
         db = Discussion.default_db
         old_slugs = {o.slug: o for o in db.query(OldSlug)}
         if requested_slug in old_slugs:
@@ -222,7 +226,9 @@ def react_base_view(request, required_permission=P_READ):
                     discussion = db.query(Discussion).filter_by(slug=redirection_slug).first()
             if discussion:
                 destination = path.replace(base_slug, discussion.slug)
-                return HTTPTemporaryRedirect(destination)
+                get_routes = create_get_route(request, discussion)
+                path = get_routes('home')
+                return HTTPFound(location=path)
         else:
             return react_view(request, required_permission)
 
@@ -241,6 +247,8 @@ def react_view(request, required_permission=P_READ):
     old_context = base_default_context(request)
     user_id = get_non_expired_user_id(request) or Everyone
     discussion = old_context["discussion"] or None
+    if not discussion:
+        discussion = find_discussion_from_slug(request, slug)
     get_route = old_context["get_route"]
     theme_name, theme_relative_path = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')
