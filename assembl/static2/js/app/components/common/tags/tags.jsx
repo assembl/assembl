@@ -7,31 +7,45 @@ import { WithContext as ReactTags } from 'react-tag-input';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
 import { I18n } from 'react-redux-i18n';
-
+// Component imports
 import AddkeywordIcon from '../icons/addkeywordIcon/addkeywordIcon';
 import CrossIcon from '../icons/crossIcon/crossIcon';
+import manageErrorAndLoading from '../manageErrorAndLoading';
+// Helper imports
 import { displayAlert } from '../../../utils/utilityManager';
 import { formatedTagList } from '../../../utils/globalFunctions';
+// GraphQL imports
 import addTagMutation from '../../../graphql/mutations/addTag.graphql';
 import removeTagMutation from '../../../graphql/mutations/removeTag.graphql';
-import manageErrorAndLoading from '../manageErrorAndLoading';
 
 export type TagProps = {
+  /** Tag ID */
   id: string,
+  /** Tag value */
   text: string
 };
 
 export type Props = {
-  postId: string,
-  isAdmin?: boolean,
-  tagsList: Array<TagProps>,
+  /** Flag that checks whether the tag is already added and displayed */
   alreadyAdded?: string,
+  /** Flag that checks whether we have to display the admin mode */
+  isAdmin?: boolean,
+  /** List of existing tags in the overall discussion fetched and updated from the general store */
+  existingTags: Array<TagProps>,
+  /** Post ID */
+  postId: string,
+  /** List of tags related to the current post */
+  tagsList: Array<TagProps>,
+  /** Graphql mutation function called to add a new tag */
   addTag: Function,
+  /** Graphql mutation function called to remove an existing tag */
   removeTag: Function,
-  existingTags: Array<TagProps>
+  /** Tag list update callback: is call when a tag is added or deleted */
+  onTagListUpdateCallback: (Array<TagProps>) => void
 };
 
 type State = {
+  /** List of tags related to the current post */
   tags: Array<TagProps>
 };
 
@@ -66,7 +80,7 @@ export class DumbTags extends Component<Props, State> {
 
   handleDelete = (i: number) => {
     const { tags } = this.state;
-    const { postId, removeTag } = this.props;
+    const { postId, removeTag, onTagListUpdateCallback } = this.props;
     const selectedTag = tags[i];
     const variables = {
       taggableId: postId,
@@ -78,6 +92,7 @@ export class DumbTags extends Component<Props, State> {
         this.setState({
           tags: tags.filter((tag, index) => index !== i)
         });
+        onTagListUpdateCallback(this.state.tags);
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -85,7 +100,7 @@ export class DumbTags extends Component<Props, State> {
   };
 
   handleAddition = (tag: TagProps) => {
-    const { postId, addTag } = this.props;
+    const { postId, addTag, onTagListUpdateCallback } = this.props;
     const variables = {
       taggableId: postId,
       value: tag.text
@@ -97,6 +112,7 @@ export class DumbTags extends Component<Props, State> {
         this.setState(state => ({
           tags: [...state.tags, newTag]
         }));
+        onTagListUpdateCallback(this.state.tags);
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);

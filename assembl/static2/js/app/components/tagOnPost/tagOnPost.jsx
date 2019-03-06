@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, { Component } from 'react';
 // Helpers imports
 import { I18n } from 'react-redux-i18n';
 // Component imports
@@ -21,37 +21,55 @@ export type Props = {
   tagList: Array<TagProps>
 };
 
-const TagOnPost = ({ isAdmin, postId, suggestedTagList, tagList }: Props) => {
-  const tagContainerProps: TagContainerProps = {
-    isAdmin: isAdmin,
-    postId: postId,
-    tagList: tagList
-  };
-
-  // Difference between tagList and suggestedTagList to hide in SuggestionContainer manually added suggested tags
-  const formattedTagList = tagList.map(tag => tag.text.toLowerCase());
-  const filteredSuggestedTagList = suggestedTagList.filter(
-    suggestedTag => !formattedTagList.includes(suggestedTag.toLowerCase())
-  );
-
-  const suggestionContainerProps: SuggestionContainerProps = {
-    suggestionContainerTitle: I18n.t('debate.tagOnPost.suggestionContainerTitle'),
-    suggestionList: filteredSuggestedTagList
-  };
-
-  // Display tag container when there are tags to display
-  const displayTagContainer = tagList.length > 0 || isAdmin ? <TagContainer {...tagContainerProps} /> : null;
-
-  // Display suggestion container when there are suggested tags to display
-  const displaySuggestionContainer =
-    filteredSuggestedTagList.length > 0 && isAdmin ? <SuggestionContainer {...suggestionContainerProps} /> : null;
-
-  return (
-    <div className="tag-on-post-container">
-      {displayTagContainer}
-      {displaySuggestionContainer}
-    </div>
-  );
+type State = {
+  /** List of tags related to the current post */
+  tagList: Array<TagProps>
 };
+
+class TagOnPost extends Component<Props, State> {
+  state = {
+    tagList: this.props.tagList
+  };
+
+  // Callback called when a tag is added or deleted
+  onTagListUpdateHandler = (tagList: Array<TagProps>) => this.setState({ tagList: tagList });
+
+  render() {
+    const { tagList } = this.state;
+    const { isAdmin, postId, suggestedTagList } = this.props;
+
+    const tagContainerProps: TagContainerProps = {
+      isAdmin: isAdmin,
+      postId: postId,
+      tagList: tagList,
+      onTagListUpdateCallback: tags => this.onTagListUpdateHandler(tags)
+    };
+
+    // Difference between tagList and suggestedTagList to hide in SuggestionContainer manually added suggested tags
+    const formattedTagList = tagList.map(tag => tag.text.toLowerCase());
+    const filteredSuggestedTagList = suggestedTagList.filter(
+      suggestedTag => !formattedTagList.includes(suggestedTag.toLowerCase())
+    );
+
+    const suggestionContainerProps: SuggestionContainerProps = {
+      suggestionContainerTitle: I18n.t('debate.tagOnPost.suggestionContainerTitle'),
+      suggestionList: filteredSuggestedTagList
+    };
+
+    // Display tag container when there are tags to display
+    const displayTagContainer = tagList.length > 0 || isAdmin ? <TagContainer {...tagContainerProps} /> : null;
+
+    // Display suggestion container when there are suggested tags to display
+    const displaySuggestionContainer =
+      filteredSuggestedTagList.length > 0 && isAdmin ? <SuggestionContainer {...suggestionContainerProps} /> : null;
+
+    return (
+      <div className="tag-on-post-container">
+        {displayTagContainer}
+        {displaySuggestionContainer}
+      </div>
+    );
+  }
+}
 
 export default TagOnPost;

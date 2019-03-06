@@ -91,12 +91,5 @@ describe('<TagOnPost /> - with shallow', () => {
     it('should not render a SuggestionContainer component', () => {
       expect(wrapper.find(SuggestionContainer)).toHaveLength(0);
     });
-
-    describe('when tagList is empty', () => {
-      it('should not render a TagContainer component ', () => {
-        wrapper.setProps({ tagList: [] });
-        expect(wrapper.find(TagContainer)).toHaveLength(0);
-      });
-    });
   });
 });

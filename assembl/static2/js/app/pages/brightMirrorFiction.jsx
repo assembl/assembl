@@ -104,7 +104,7 @@ type BrightMirrorFictionGraphQLProps = {
   createComment: Function,
   /** Fiction data information fetched from GraphQL */
   ideaWithCommentsData: IdeaWithCommentsData,
-  /** Fiction data information fetched from GraphQL */
+  /** List of existing tags in the overall discussion fetched and updated from the general store */
   existingTags: Array<Tag>
 };
 
