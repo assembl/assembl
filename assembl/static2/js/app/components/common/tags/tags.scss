@@ -1,5 +1,5 @@
 .ReactTags__tags {
-  color: $purple;
+  color: $first-color;
   font-family: $font-family;
   font-size: $font-size-xs;
   font-weight: 300;
@@ -10,7 +10,7 @@
     flex-basis: 100%;
 
     .ReactTags__tag {
-      background-color: $purple-light;
+      background-color: $first-color-light;
       border-radius: 11px;
       border: none;
       height: 22px;
@@ -53,7 +53,7 @@
       }
 
       .ReactTags__tagInput {
-        background-color: $purple;
+        background-color: $first-color;
         border-radius: 11px;
         border: none;
         width: 22px;
@@ -94,7 +94,7 @@
     }
 
     .ReactTags__tagInput:focus-within {
-      background-color: $purple-light;
+      background-color: $first-color-light;
       padding-left: 10px;
       padding-right: 5px;
       width: 150px;
@@ -106,7 +106,7 @@
     }
 
     .ReactTags__suggestions {
-      background-color: $purple-light;
+      background-color: $first-color-light;
       border-bottom-left-radius: 11px;
       border-bottom-right-radius: 11px;
       z-index: -1;
@@ -135,7 +135,7 @@
 
         mark {
           background: none;
-          color: $purple;
+          color: $first-color;
           margin-right: 0;
           padding-right: 0;
         }
