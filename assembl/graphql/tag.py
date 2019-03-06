@@ -142,7 +142,7 @@ class RemoveTag(graphene.Mutation):
         tag_id = args.get('id')
         tag_id = int(Node.from_global_id(tag_id)[1])
 
-        # The tag to replace or edit
+        # The tag to remove
         tag = models.Keyword.get(tag_id)
         require_instance_permission(CrudPermissions.DELETE, tag, context)
 
