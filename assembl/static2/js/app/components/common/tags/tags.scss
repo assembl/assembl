@@ -61,7 +61,7 @@
         margin-top: 5px;
         margin-right: 10px;
         position: relative;
-        z-index: 33333;
+        z-index: 333;
         transition: background-color 0.4s ease, width 0.6s ease;
 
         .icon-add {
@@ -86,6 +86,11 @@
           }
         }
       }
+
+      .ReactTags__tagInput:has(> .ReactTags__suggestions) {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
     }
 
     .ReactTags__tagInput:focus-within {
@@ -101,18 +106,31 @@
     }
 
     .ReactTags__suggestions {
+      background-color: $purple-light;
+      border-bottom-left-radius: 11px;
+      border-bottom-right-radius: 11px;
+      z-index: -1;
+      padding: 5px 10px;
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+
       ul {
         margin: 0;
         padding: 0;
-        display: inline;
       }
 
       li {
         list-style-type: none;
+        padding-top: 2px;
         padding-left: 0;
 
         &:hover {
-          text-decoration: underline;
+          span {
+            text-decoration: underline;
+            cursor: pointer;
+          }
         }
 
         mark {
