@@ -113,7 +113,7 @@ def get_secrets(c, aws_secret_ids, cache=True, reset_cache=False):
 def get_venv_site_packages(c):
     with venv(c):
         lib_path = c.run("python -c 'import sysconfig; print sysconfig.get_path(\"stdlib\")'").stdout.strip()
-        return os.path.join(lib_path, 'site-packages', 'assembl')
+    return os.path.join(lib_path, 'site-packages', 'assembl')
 
 
 def setup_ctx(c):
@@ -175,10 +175,12 @@ def venv(c, cd=False):
     if not venv:
         if exists(c, 'venv'):
             project_prefix = os.getcwd()
+            print "Calculated from current dir: %s" % project_prefix
         else:
             # _project_prefix is defined by Invoke at run-time
             project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
         venv = os.path.join(project_prefix, 'venv')
+    print venv
     assert exists(c, venv)
     activate = c.config.get('_internal', {}).get('activate', 'activate')
     if cd:
