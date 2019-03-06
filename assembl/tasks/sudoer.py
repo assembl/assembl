@@ -91,11 +91,14 @@ def install_database(c):
 
 
 @task
-def install_assembl_systemd(c):
+def install_assembl_systemd(c, assembl_path=None):
     base = os.getcwd()
     path = 'assembl/templates/system/assembl.service.jinja2'
     if not exists(path):
-        base = get_venv_site_packages(c)
+        if not assembl_path:
+            base = get_venv_site_packages(c)
+        else:
+            base = assembl_path
     assert exists(join(base, path))
     c.config.code_root = base
     fill_template(c, join(base, path), '/tmp/assembl.service')
@@ -107,11 +110,13 @@ def install_assembl_systemd(c):
 
 
 @task
-def install_uwsgicloudwatch_systemd(c):
+def install_uwsgicloudwatch_systemd(c, assembl_path=None):
     base = os.getcwd()
     path = 'assembl/templates/system/uwsgicloudwatch.service.jinja2'
-    if not exists(path):
+    if not assembl_path:
         base = get_venv_site_packages(c)
+    else:
+        base = assembl_path
     assert exists(join(base, path))
     c.config.code_root = base
     fill_template(c, join(base, path), '/tmp/uwsgicloudwatch.service')
