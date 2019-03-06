@@ -556,8 +556,9 @@ def push_wheelhouse(c, house=None):
         for file in os.listdir(tmp_wheel_path):
             # The hash of created wheels change due to wheel metadata, therefore existing wheels should be overwritten
             # to maintain hash integrity
-            with open(os.path.join(tmp_wheel_path, file)) as fp:
-                bucket.put_object(Body=fp, Key=file, ACL='public-read')
+            if file not in ('index.html', json_filename):
+                with open(os.path.join(tmp_wheel_path, file)) as fp:
+                    bucket.put_object(Body=fp, Key=file, ACL='public-read')
 
     elif wheel_path.strip().startswith('local://'):
         c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path.split('local://')[1]))
