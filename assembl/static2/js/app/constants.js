@@ -20,7 +20,7 @@ export const SM_SCREEN_WIDTH = 768;
 export const LG_SCREEN_WIDTH = 1200;
 
 // Semantic analysis
-export const KEYWORD_SCORE_THRESHOLD = 0.6;
+export const KEYWORD_SCORE_THRESHOLD = 0.7;
 
 // Bright mirror
 export const EMPTY_STRING = '';

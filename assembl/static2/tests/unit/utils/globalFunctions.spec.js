@@ -165,7 +165,7 @@ describe('formatedSuggestedTagList function', () => {
         }
       ];
       const actual = formatedSuggestedTagList(suggestedTags);
-      const expected = ['Great pleasure', 'Actual teachings of the great explorer of the truth'];
+      const expected = ['Actual teachings of the great explorer of the truth'];
       expect(actual).toEqual(expected);
     });
   });
