@@ -365,14 +365,19 @@ def database_create(c):
 def create_wheelhouse(c, dependency_links=None):
     if not dependency_links:
         dependency_links = c.run('grep "git+http" %(here)s/requirements-dev.frozen.txt > %(here)s/deps.txt' % {
-                                 'here': c.config.code_root}).stdout
+                                 'here': c.config.code_root})
+        dependency_links = 'deps.txt'
     tmp_wheel_path = os.path.join(c.config.code_root, 'wheelhouse')
     cmd = 'pip wheel --wheel-dir=%s --process-dependency-links -r %s' % (tmp_wheel_path, dependency_links)
-    if is_integration_env(c):
-        c.run(cmd)
-    else:
-        with venv(c, True):
+    try:
+        if is_integration_env(c):
             c.run(cmd)
+        else:
+            with venv(c, True):
+                c.run(cmd)
+    finally:
+        if exists(c, os.path.join(c.config.code_root, 'deps.txt')):
+            c.run('rm -f %(here)s/deps.txt' % {'here': c.config.code_root})
 
 
 def create_wheel_name(version, num=0, commit_hash=None, branch=None, tag=None):
