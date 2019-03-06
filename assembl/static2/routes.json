@@ -22,6 +22,7 @@
   "homeBare": "${slug}",
   "profile": "${slug}/profile/${userId}",
   "ideas": "${slug}/ideas",
+  "createSynthesis": "${slug}/createSynthesis",
   "syntheses": "${slug}/syntheses",
   "synthesis": "${slug}/syntheses/${synthesisId}",
   "synthesisIdea": "${slug}/syntheses/${synthesisId}/#${ideaId}",

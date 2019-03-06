@@ -388,7 +388,7 @@ const Translations = {
       validateSuccess: "La contribution a bien été validée. Elle est désormais visible par l'ensemble des participants.",
       syntheses: {
         summary: "Sommaire des synthèses",
-        createNewSynthesis: "Créer une nouvelle synthèse",
+        createNewSynthesis: "Rédiger une nouvelle synthèse",
         publishedOn: "Publiée le "
       },
       survey: {

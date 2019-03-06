@@ -76,11 +76,11 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
 
   render() {
     const { syntheses, slug, hasSyntheses } = this.props;
-    console.log('syntheses', syntheses);
+    const createSynthesisRoute = get('createSynthesis', { slug: slug });
     return (
       <Section title="debate.syntheses.summary" translate>
         <div className="center create-synthesis">
-          <Link className="button-submit button-dark">
+          <Link to={createSynthesisRoute} className="button-submit button-dark">
             <Translate value="debate.syntheses.createNewSynthesis" />
           </Link>
         </div>
