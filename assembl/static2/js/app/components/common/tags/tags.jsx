@@ -115,19 +115,22 @@ export class DumbTags extends Component<Props, State> {
     addTag({ variables: variables })
       .then((result) => {
         const newTag = { id: result.data.addTag.tag.id, text: result.data.addTag.tag.value };
-        displayAlert('success', I18n.t('harvesting.tags.addTagSuccessMsg', { tag: tag.text }));
-        this.setState(state => ({
-          tags: [...state.tags, newTag]
-        }));
-        const index = existingTags.findIndex(item => item.id === newTag.id);
-        if (index === -1) {
-          const updateSuggestionList = initialExistingTags.concat({
-            id: result.data.addTag.tag.id,
-            value: result.data.addTag.tag.value
-          });
-          this.props.updateTags(updateSuggestionList);
+        const indexNewTag = this.state.tags.findIndex(item => item.id === newTag.id);
+        if (indexNewTag === -1) {
+          displayAlert('success', I18n.t('harvesting.tags.addTagSuccessMsg', { tag: tag.text }));
+          this.setState(state => ({
+            tags: [...state.tags, newTag]
+          }));
+          const index = existingTags.findIndex(item => item.id === newTag.id);
+          if (index === -1) {
+            const updateSuggestionList = initialExistingTags.concat({
+              id: result.data.addTag.tag.id,
+              value: result.data.addTag.tag.value
+            });
+            this.props.updateTags(updateSuggestionList);
+          }
+          onTagListUpdateCallback(this.state.tags);
         }
-        onTagListUpdateCallback(this.state.tags);
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
