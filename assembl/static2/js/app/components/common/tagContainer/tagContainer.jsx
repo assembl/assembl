@@ -28,7 +28,7 @@ const TagContainer = ({ postId, isAdmin, tagList, onTagListUpdateCallback }: Pro
       postId={postId}
       tagsList={tagList}
       isAdmin={isAdmin}
-      alreadyAdded={I18n.t('debate.tagOnPost.alreadyAdded')}
+      alreadyAddedWarningMessage={I18n.t('debate.tagOnPost.alreadyAddedWarningMessage')}
       onTagListUpdateCallback={onTagListUpdateCallback}
     />
   );

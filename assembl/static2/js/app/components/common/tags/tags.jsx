@@ -29,7 +29,7 @@ export type TagProps = {
 
 export type Props = {
   /** Flag that checks whether the tag is already added and displayed */
-  alreadyAdded?: string,
+  alreadyAddedWarningMessage?: string,
   /** Flag that checks whether we have to display the admin mode */
   isAdmin?: boolean,
   /** List of existing tags in the overall discussion fetched and updated from the general store */
@@ -76,7 +76,7 @@ const AddComponent = () => (
 export class DumbTags extends Component<Props, State> {
   static defaultProps = {
     isAdmin: false,
-    alreadyAdded: 'Already added'
+    alreadyAddedWarningMessage: 'Already added'
   };
 
   state = {
@@ -135,14 +135,14 @@ export class DumbTags extends Component<Props, State> {
   };
 
   render() {
-    const { isAdmin, alreadyAdded, existingTags } = this.props;
+    const { isAdmin, alreadyAddedWarningMessage, existingTags } = this.props;
     const { tags } = this.state;
     const reactTagsProps = {
       allowDragDrop: false,
       isAdmin: isAdmin,
       tags: tags,
       allowUnique: true,
-      allowUniqueWarning: alreadyAdded,
+      allowUniqueWarning: alreadyAddedWarningMessage,
       suggestions: existingTags,
       handleDelete: this.handleDelete,
       handleAddition: this.handleAddition,

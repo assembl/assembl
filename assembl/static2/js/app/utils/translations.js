@@ -469,7 +469,7 @@ const Translations = {
         suggestionContainerTitle: "Suggestions de mots-clés :",
         tagContainerAdminTitle: "Ajoutez des mots-clés relatifs à ce post :",
         tagContainerTitle: "Mots-clés relatifs à ce post :",
-        alreadyAdded: "Déja ajouté"
+        alreadyAddedWarningMessage: "Déja ajouté"
       },
       brightMirror: {
         deleteFiction: "Supprimez votre texte",
@@ -1491,7 +1491,7 @@ const Translations = {
         suggestionContainerTitle: "Suggested keywords:",
         tagContainerAdminTitle: "Add post-related keywords:",
         tagContainerTitle: "Keywords in post:",
-        alreadyAdded: "Already added"
+        alreadyAddedWarningMessage: "Already added"
       },
       brightMirror: {
         deleteFiction: "Delete your text",
