@@ -73,4 +73,12 @@ manageErrorAndLoading.defaultProps = {
   loaderType: 'default'
 };
 
+export const manageErrorOnly = (WrappedComponent: React.ComponentType<any>) => (wrappedProps: WrappedProps) => {
+  const { error } = wrappedProps;
+  if (error) {
+    throw new Error(`GraphQL error: ${error.message}`);
+  }
+  return <WrappedComponent {...wrappedProps} />;
+};
+
 export default manageErrorAndLoading;

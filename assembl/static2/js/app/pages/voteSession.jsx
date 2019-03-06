@@ -21,7 +21,8 @@ import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
-import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
+import { manageErrorOnly } from '../components/common/manageErrorAndLoading';
+import Loader from '../components/common/loader';
 
 export type TokenCategory = {|
   id: string,
@@ -55,6 +56,7 @@ export type Proposal = {|
 |};
 
 type Props = {
+  loading: boolean,
   title: string,
   subTitle: string,
   seeCurrentVotes: boolean,
@@ -296,6 +298,7 @@ class DumbVoteSession extends React.Component<Props, State> {
 
   render() {
     const {
+      loading,
       title,
       seeCurrentVotes,
       subTitle,
@@ -323,7 +326,8 @@ class DumbVoteSession extends React.Component<Props, State> {
         <Header title={title} subtitle={subTitleToShow} imgUrl={headerImageUrl} type="voteSession" phaseId={phaseId}>
           <HeaderStatistics statElements={this.getStatElements()} />
         </Header>
-        {!isPhaseCompleted ? (
+        {loading ? <Loader /> : null}
+        {!loading && !isPhaseCompleted ? (
           <Grid fluid className="background-light">
             <Section title={instructionsSectionTitle} containerAdditionalClassNames={availableTokensSticky ? ['no-margin'] : ''}>
               <Row>
@@ -351,38 +355,40 @@ class DumbVoteSession extends React.Component<Props, State> {
             </Section>
           </Grid>
         ) : null}
-        <Grid fluid className="background-grey">
-          <Section title={propositionsSectionTitleToShow} className={availableTokensSticky ? 'extra-margin-top' : ''}>
-            <Row>
-              <Col mdOffset={1} md={10} smOffset={1} sm={10}>
-                {!isPhaseCompleted ? (
-                  <Proposals
-                    proposals={randomProposals}
-                    remainingTokensByCategory={remainingTokensByCategory}
-                    seeCurrentVotes={seeCurrentVotes}
-                    userGaugeVotes={this.state.userGaugeVotes}
-                    userTokenVotes={this.state.userTokenVotes}
-                    voteForProposalToken={this.voteForProposalToken}
-                    voteForProposalGauge={this.voteForProposalGauge}
-                  />
-                ) : (
-                  <ProposalsResults proposals={proposals} />
-                )}
-              </Col>
-            </Row>
-            {!isPhaseCompleted ? (
-              <Row className="form-actions center">
+        {!loading ? (
+          <Grid fluid className="background-grey">
+            <Section title={propositionsSectionTitleToShow} className={availableTokensSticky ? 'extra-margin-top' : ''}>
+              <Row>
                 <Col mdOffset={1} md={10} smOffset={1} sm={10}>
-                  {hasChanged ? (
-                    <Button className="button-submit button-dark" onClick={this.submitVotes} disabled={this.state.submitting}>
-                      <Translate value="debate.voteSession.submit" />
-                    </Button>
-                  ) : null}
+                  {!isPhaseCompleted ? (
+                    <Proposals
+                      proposals={randomProposals}
+                      remainingTokensByCategory={remainingTokensByCategory}
+                      seeCurrentVotes={seeCurrentVotes}
+                      userGaugeVotes={this.state.userGaugeVotes}
+                      userTokenVotes={this.state.userTokenVotes}
+                      voteForProposalToken={this.voteForProposalToken}
+                      voteForProposalGauge={this.voteForProposalGauge}
+                    />
+                  ) : (
+                    <ProposalsResults proposals={proposals} />
+                  )}
                 </Col>
               </Row>
-            ) : null}
-          </Section>
-        </Grid>
+              {!isPhaseCompleted ? (
+                <Row className="form-actions center">
+                  <Col mdOffset={1} md={10} smOffset={1} sm={10}>
+                    {hasChanged ? (
+                      <Button className="button-submit button-dark" onClick={this.submitVotes} disabled={this.state.submitting}>
+                        <Translate value="debate.voteSession.submit" />
+                      </Button>
+                    ) : null}
+                  </Col>
+                </Row>
+              ) : null}
+            </Section>
+          </Grid>
+        ) : null}
       </div>
     );
   }
@@ -404,29 +410,27 @@ export default compose(
       variables: { ideaId: id, lang: lang }
     }),
     props: ({ data, ownProps }) => {
+      const minimalProps = {
+        error: data.error,
+        loading: data.loading,
+        headerImageUrl: ownProps.headerImgUrl,
+        title: ownProps.title,
+        seeCurrentVotes: false,
+        subTitle: ownProps.description,
+        instructionsSectionTitle: ownProps.announcement.title,
+        instructionsSectionContent: ownProps.announcement.body,
+        propositionsSectionTitle: '',
+        numParticipants: 0,
+        modules: [],
+        proposals: [],
+        randomProposals: []
+      };
       if (data.error || data.loading) {
-        return {
-          error: data.error,
-          loading: data.loading
-        };
+        return minimalProps;
       }
 
       if (!data.voteSession) {
-        return {
-          error: data.error,
-          loading: data.loading,
-          headerImageUrl: ownProps.headerImgUrl,
-          title: ownProps.title,
-          seeCurrentVotes: false,
-          subTitle: ownProps.description,
-          instructionsSectionTitle: ownProps.announcement.title,
-          instructionsSectionContent: ownProps.announcement.body,
-          propositionsSectionTitle: '',
-          numParticipants: 0,
-          modules: [],
-          proposals: [],
-          randomProposals: []
-        };
+        return minimalProps;
       }
       const {
         seeCurrentVotes,
@@ -460,5 +464,5 @@ export default compose(
   graphql(AddTokenVoteMutation, {
     name: 'addTokenVote'
   }),
-  manageErrorAndLoading({ displayLoader: true })
+  manageErrorOnly
 )(DumbVoteSession);
