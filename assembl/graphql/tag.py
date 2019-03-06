@@ -112,7 +112,7 @@ class AddTag(graphene.Mutation):
             tag = models.Keyword(value=value, discussion_id=discussion_id)
 
         if tag not in taggable.tags:
-            taggable.tags = taggable.tags + [tag]
+            taggable.tags.append(tag)
             db.flush()
 
         return AddTag(tag=tag)
