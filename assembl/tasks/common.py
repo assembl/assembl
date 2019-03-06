@@ -112,7 +112,8 @@ def get_secrets(c, aws_secret_ids, cache=True, reset_cache=False):
 
 def get_venv_site_packages(c):
     with venv(c):
-        return c.run("python -c 'import sysconfig; print sysconfig.get_path(\"purelib\")'").stdout.strip()
+        lib_path = c.run("python -c 'import sysconfig; print sysconfig.get_path(\"stdlib\")'").stdout.strip()
+        return os.path.join(lib_path, 'site-packages', 'assembl')
 
 
 def setup_ctx(c):
