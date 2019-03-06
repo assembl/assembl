@@ -17,7 +17,7 @@ import { formatedTagList } from '../../../utils/globalFunctions';
 // GraphQL imports
 import addTagMutation from '../../../graphql/mutations/addTag.graphql';
 import removeTagMutation from '../../../graphql/mutations/removeTag.graphql';
-
+// Action imports
 import { updateTags } from '../../../actions/tagActions';
 
 export type TagProps = {
@@ -45,6 +45,7 @@ export type Props = {
   removeTag: Function,
   /** Tag list update callback: is call when a tag is added or deleted */
   onTagListUpdateCallback: (Array<TagProps>) => void,
+  /** Use redux action to update autocomplete list in store when adding tag */
   updateTags: Function
 };
 
