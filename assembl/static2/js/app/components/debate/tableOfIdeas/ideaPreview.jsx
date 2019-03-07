@@ -15,6 +15,7 @@ type Props = {
   messageViewOverride: string,
   numPosts: number,
   numContributors: number,
+  numVotes: number,
   numChildren: number,
   ideaId: string,
   ideaLevel: number,
@@ -33,6 +34,7 @@ const IdeaPreview = ({
   messageViewOverride,
   numPosts,
   numContributors,
+  numVotes,
   numChildren,
   ideaId,
   ideaLevel,
@@ -106,8 +108,12 @@ const IdeaPreview = ({
         <div className="selected-idea-arrow">
           <span className="assembl-icon-down-open" />
         </div>
-        {messageViewOverride !== MESSAGE_VIEW.noModule && messageViewOverride !== MESSAGE_VIEW.voteSession ? (
-          <Statistic numPosts={numPosts} numContributors={numContributors} />
+        {messageViewOverride !== MESSAGE_VIEW.noModule ? (
+          <Statistic
+            numPosts={messageViewOverride !== MESSAGE_VIEW.voteSession ? numPosts : null}
+            numContributors={numContributors}
+            numVotes={messageViewOverride === MESSAGE_VIEW.voteSession ? numVotes : null}
+          />
         ) : null}
       </div>
       <div className="color-box">&nbsp;</div>

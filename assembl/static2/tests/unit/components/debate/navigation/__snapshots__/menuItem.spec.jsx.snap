@@ -35,8 +35,10 @@ exports[`DumbMenuItem component should match a not selected menu item 1`] = `
         className="menu-stats"
         numContributors={10}
         numPosts={123}
+        numVotes={0}
         showNumContributors={true}
         showNumPosts={true}
+        showNumVotes={false}
         vertical={false}
       />
     </div>
@@ -79,8 +81,59 @@ exports[`DumbMenuItem component should match a selected menu item 1`] = `
         className="menu-stats"
         numContributors={10}
         numPosts={123}
+        numVotes={0}
         showNumContributors={true}
         showNumPosts={true}
+        showNumVotes={false}
+        vertical={false}
+      />
+    </div>
+    <span
+      className="thumb-arrow assembl-icon assembl-icon-right-dir"
+    />
+  </div>
+</div>
+`;
+
+exports[`DumbMenuItem component should match a selected menu item of type vote session 1`] = `
+<div
+  className="menu-item-container active"
+  onMouseLeave={[Function]}
+  onMouseOver={[Function]}
+>
+  <div
+    className="menu-item"
+    onClick={[Function]}
+  >
+    <div
+      className="thumb-img"
+      style={
+        Object {
+          "backgroundImage": "url(https://foo.bar/img)",
+        }
+      }
+    >
+      <div
+        className="thumb-img-background"
+      />
+    </div>
+    <div
+      className="thumb-body"
+    >
+      <div
+        className="thumb-title"
+        title="Foo"
+      >
+        Foo
+      </div>
+      <PostsAndContributorsCount
+        className="menu-stats"
+        numContributors={10}
+        numPosts={0}
+        numVotes={123}
+        showNumContributors={true}
+        showNumPosts={false}
+        showNumVotes={true}
         vertical={false}
       />
     </div>

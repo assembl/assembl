@@ -297,6 +297,7 @@ class IdeasLevel extends React.Component {
                   messageViewOverride={idea.messageViewOverride}
                   numPosts={idea.numPosts}
                   numContributors={idea.numContributors}
+                  numVotes={idea.numVotes}
                   numChildren={idea.numChildren}
                   link={`${getRoute('idea', { slug: slug, phase: identifier, phaseId: phaseId, themeId: idea.id })}`}
                   title={truncate(idea.title, {

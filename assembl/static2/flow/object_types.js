@@ -32,6 +32,7 @@ export type Idea = {
   numChildren: number,
   numContributors: number,
   numPosts: number,
+  numVotes: number,
   order: number,
   ancestors: Array<string>,
   posts: Posts,

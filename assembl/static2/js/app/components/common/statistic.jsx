@@ -2,19 +2,28 @@
 import React from 'react';
 
 type Props = {
-  numPosts: number,
-  numContributors: number
+  numPosts: number | null,
+  numContributors: number,
+  numVotes: number | null
 };
 
 class Statistic extends React.PureComponent<Props> {
   render() {
-    const { numPosts, numContributors } = this.props;
+    const { numPosts, numContributors, numVotes } = this.props;
     return (
       <div className="stats">
-        <div className="stat-nb">
-          <span>{numPosts}</span>
-          <span className="assembl-icon-message white">&nbsp;</span>
-        </div>
+        {numPosts !== null ? (
+          <div className="stat-nb">
+            <span>{numPosts}</span>
+            <span className="assembl-icon-message white">&nbsp;</span>
+          </div>
+        ) : null}
+        {numVotes !== null ? (
+          <div className="stat-nb">
+            <span>{numVotes}</span>
+            <span className="assembl-icon-participation-vote white">&nbsp;</span>
+          </div>
+        ) : null}
         <div className="dash">-</div>
         <div className="stat-nb">
           <span>{numContributors}</span>
