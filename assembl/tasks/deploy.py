@@ -11,6 +11,7 @@ from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
     create_venv, fill_template, get_s3_file, get_aws_account_id, delete_foreign_tasks,
     get_venv_site_packages, is_cloud_env)
+from .build import update_pip_requirements
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
@@ -91,7 +92,7 @@ def get_and_set_region(c):
     return c.config.aws_region
 
 
-@task(create_venv)
+@task(create_venv, post=[update_pip_requirements])
 def install_wheel(c, allow_index=False):
     wheelhouse = os.getenv('ASSEMBL_WHEELHOUSE', c.config.get(
         'wheelhouse', 's3://bluenove-assembl-wheelhouse'))
