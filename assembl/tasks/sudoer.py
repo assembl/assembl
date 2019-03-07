@@ -4,7 +4,7 @@ from os.path import exists, join
 
 from invoke import task
 from common import (
-    fill_template, is_integration_env, delete_foreign_tasks, get_venv_site_packages)
+    fill_template, is_integration_env, delete_foreign_tasks, get_venv_site_packages, exists as sudo_exists)
 
 # try:
 #     # invoke 0.11
@@ -94,12 +94,12 @@ def install_database(c):
 def install_assembl_systemd(c, assembl_path=None):
     base = os.getcwd()
     path = 'assembl/templates/system/assembl.service.jinja2'
-    if not exists(path):
+    if not sudo_exists(c, path, sudo=True):
         if not assembl_path:
             base = get_venv_site_packages(c)
         else:
             base = assembl_path
-    assert exists(join(base, path))
+    assert sudo_exists(c, join(base, path), sudo=True)
     c.config.code_root = base
     fill_template(c, join(base, path), '/tmp/assembl.service')
 
@@ -113,11 +113,11 @@ def install_assembl_systemd(c, assembl_path=None):
 def install_uwsgicloudwatch_systemd(c, assembl_path=None):
     base = os.getcwd()
     path = 'assembl/templates/system/uwsgicloudwatch.service.jinja2'
-    if not assembl_path:
+    if not sudo_exists(c, assembl_path, sudo=True):
         base = get_venv_site_packages(c)
     else:
         base = assembl_path
-    assert exists(join(base, path))
+    assert sudo_exists(c, join(base, path), sudo=True)
     c.config.code_root = base
     fill_template(c, join(base, path), '/tmp/uwsgicloudwatch.service')
 
