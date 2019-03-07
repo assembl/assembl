@@ -4,7 +4,11 @@ from os.path import exists, join
 
 from invoke import task
 from common import (
-    fill_template, is_integration_env, delete_foreign_tasks, get_venv_site_packages, exists as sudo_exists)
+    fill_template,
+    is_integration_env,
+    delete_foreign_tasks,
+    get_venv_site_packages,
+    exists as sudo_exists)
 
 # try:
 #     # invoke 0.11
@@ -92,16 +96,12 @@ def install_database(c):
 
 @task
 def install_assembl_systemd(c, assembl_path=None):
-    base = os.getcwd()
-    path = 'assembl/templates/system/assembl.service.jinja2'
-    if not sudo_exists(c, path, sudo=True):
-        if not assembl_path:
-            base = get_venv_site_packages(c)
-        else:
-            base = assembl_path
-    assert sudo_exists(c, join(base, path), sudo=True)
-    c.config.code_root = base
-    fill_template(c, join(base, path), '/tmp/assembl.service')
+    """Push assembl.service configuration on a server. Asseme cloud env only"""
+    base = get_venv_site_packages(c)
+    template_dir = join(base, 'templates/system/')
+    template_path = join(template_dir, 'assembl.service.jinja2')
+    assert sudo_exists(c, template_path, sudo=True)
+    fill_template(c, template_path, '/tmp/assembl.service', default_dir=template_dir)
 
     c.sudo('cp /tmp/assembl.service /etc/systemd/system/assembl.service')
     c.sudo('sudo systemctl daemon-reload')
@@ -111,15 +111,12 @@ def install_assembl_systemd(c, assembl_path=None):
 
 @task
 def install_uwsgicloudwatch_systemd(c, assembl_path=None):
-    base = os.getcwd()
-    path = 'assembl/templates/system/uwsgicloudwatch.service.jinja2'
-    if not sudo_exists(c, assembl_path, sudo=True):
-        base = get_venv_site_packages(c)
-    else:
-        base = assembl_path
-    assert sudo_exists(c, join(base, path), sudo=True)
-    c.config.code_root = base
-    fill_template(c, join(base, path), '/tmp/uwsgicloudwatch.service')
+    """Push uwsgicloudwatch.service configuration on a server"""
+    base = get_venv_site_packages(c)
+    template_dir = join(base, 'templates/system/')
+    template_path = join(template_dir, 'uwsgicloudwatch.service.jinja2')
+    assert sudo_exists(c, template_path, sudo=True)
+    fill_template(c, template_path, '/tmp/uwsgicloudwatch.service', default_dir=template_dir)
 
     c.sudo('cp /tmp/uwsgicloudwatch.service /etc/systemd/system/uwsgicloudwatch.service')
     c.sudo('sudo systemctl daemon-reload')
@@ -129,13 +126,12 @@ def install_uwsgicloudwatch_systemd(c, assembl_path=None):
 
 @task
 def install_urlmetadata_systemd(c):
-    base = os.getcwd()
-    path = 'assembl/templates/system/urlmetadata.service.jinja2'
-    if not exists(path):
-        base = get_venv_site_packages(c)
-    assert exists(join(base, path))
-    c.config.code_root = base
-    fill_template(c, join(base, path), '/tmp/urlmetadata.service')
+    """Push urlmetadata.service configuration on a server"""
+    base = get_venv_site_packages(c)
+    template_dir = join(base, 'templates/system/')
+    template_path = join(template_dir, 'urlmetadata.service.jinja2.jinja2')
+    assert sudo_exists(c, template_path, sudo=True)
+    fill_template(c, template_path, '/tmp/urlmetadata.service', default_dir=template_dir)
 
     c.sudo('cp /tmp/urlmetadata.service /etc/systemd/system/urlmetadata.service')
     c.sudo('sudo systemctl daemon-reload')
