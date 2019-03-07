@@ -356,6 +356,7 @@ class IdeaInterface:
     num_total_posts = "The total number of posts on the discussion."
     num_contributors = """The total number of users who contributed to the Idea/Thematic/Question.\n
     Contribution is counted as either as a sentiment set, a post created."""
+    num_votes = """The total number of votes (participations) for the vote session related to the idea."""
     num_children = "The total number of children ideas (called \"subideas\") on the Idea or Thematic."
     img = Default.document % "Header image associated with the idea. "
     order = "The order of the Idea, Thematic, Question in the idea tree."

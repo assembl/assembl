@@ -65,6 +65,7 @@ class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int(description=docs.IdeaInterface.num_posts)
     num_total_posts = graphene.Int(description=docs.IdeaInterface.num_total_posts)
     num_contributors = graphene.Int(description=docs.IdeaInterface.num_contributors)
+    num_votes = graphene.Int(description=docs.IdeaInterface.num_votes)
     num_children = graphene.Int(discussion_phase_id=graphene.Int(), description=docs.IdeaInterface.num_children)
     img = graphene.Field(Document, description=docs.IdeaInterface.img)
     order = graphene.Float(description=docs.IdeaInterface.order)
@@ -178,6 +179,22 @@ class IdeaInterface(graphene.Interface):
 
     def resolve_announcement(self, args, context, info):
         return self.get_applicable_announcement()
+
+    def resolve_num_contributors(self, args, context, info):
+        if self.message_view_override != MessageView.voteSession.value:
+            return self.num_contributors
+
+        if not self.vote_session:
+            return 0
+
+        query = self.vote_session.get_voter_ids_query()
+        return query.count()
+
+    def resolve_num_votes(self, args, context, info):
+        if not self.vote_session:
+            return 0
+
+        return self.vote_session.get_num_votes()
 
 
 class IdeaAnnouncementInput(graphene.InputObjectType):

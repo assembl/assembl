@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from sqlalchemy.orm import relationship, backref
+from sqlalchemy.orm import relationship, backref, with_polymorphic
 from sqlalchemy import (
     Boolean,
     Column,
@@ -80,6 +80,34 @@ class VoteSession(
         if phase:
             return phase.end != None and phase.end < datetime.utcnow()  # noqa: E711
         return False
+
+    def get_voter_ids_query(self):
+        vote_specifications = []
+        for proposal in self.idea.get_vote_proposals():
+            vote_specifications.extend(proposal.criterion_for)
+        from .votes import AbstractIdeaVote
+        vote_class = with_polymorphic(AbstractIdeaVote, AbstractIdeaVote)
+        query = self.db.query(vote_class.voter_id
+            ).filter_by(tombstone_date=None
+            ).filter(vote_class.vote_spec_id.in_(
+                [vote_spec.id for vote_spec in vote_specifications])
+            ).distinct()
+        return query
+
+    def get_num_votes(self):
+        vote_specifications = []
+        for proposal in self.idea.get_vote_proposals():
+            vote_specifications.extend(proposal.criterion_for)
+        from .votes import AbstractIdeaVote
+        vote_class = with_polymorphic(AbstractIdeaVote, AbstractIdeaVote)
+        query = self.db.query(vote_class.voter_id
+            ).filter_by(tombstone_date=None
+            ).filter(vote_class.vote_spec_id.in_(
+                [vote_spec.id for vote_spec in vote_specifications])
+            )
+        # There is no distinct on purpose here.
+        # For a token vote spec, voting on two categories is counted as 2 votes.
+        return query.count()
 
     crud_permissions = CrudPermissions(
         create=P_ADMIN_DISC,

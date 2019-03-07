@@ -1,6 +1,8 @@
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
+
+from sqlalchemy.orm import with_polymorphic
 from sqlalchemy.sql import func
 
 from assembl import models
@@ -148,8 +150,9 @@ class VoteSpecificationInterface(graphene.Interface):
             vote_spec_id=self.id, tombstone_date=None, voter_id=user_id, idea_id=self.criterion_idea_id).all()
 
     def resolve_num_votes(self, args, context, info):
+        vote_class = with_polymorphic(models.AbstractIdeaVote, models.AbstractIdeaVote)
         res = self.db.query(
-            getattr(self.get_vote_class(), "voter_id")).filter_by(
+            vote_class.voter_id).filter_by(
             vote_spec_id=self.id,
             tombstone_date=None).count()
         # There is no distinct on purpose here.
