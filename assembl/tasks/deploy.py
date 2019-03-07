@@ -92,7 +92,32 @@ def get_and_set_region(c):
     return c.config.aws_region
 
 
-@task(create_venv, post=[update_pip_requirements])
+def seperate_post_pip_install(c, package_name, wrapper, v_def):
+    from importlib import import_module
+    package = import_module(package_name)
+    _version = package.__version__
+    version = v_def(_version)
+    cmd = 'pip install {}=={}'.format(package_name, version)
+    if wrapper:
+        cmd = wrapper % (cmd,)
+    with venv(c):
+        c.run(cmd)
+
+
+@task()
+def post_pip_update(c):
+
+    with venv(c, True):
+        # A list of special packages that need to be re-installed, because they hate you
+        # [package_name, instalation command with special instructions, package version extraction func]
+        special_commands = [
+            ("psycopg2", "%s --ignore-installed --install-option='-q'", lambda v: re.search(r'(\d\.)+\w', v).group(0))
+        ]
+        for package_name, wrapper, func in special_commands:
+            seperate_post_pip_install(c, package_name, wrapper, func)
+
+
+@task(create_venv, post=[post_pip_update])
 def install_wheel(c, allow_index=False):
     wheelhouse = os.getenv('ASSEMBL_WHEELHOUSE', c.config.get(
         'wheelhouse', 's3://bluenove-assembl-wheelhouse'))
