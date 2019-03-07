@@ -61,8 +61,8 @@ const KeyCodes = {
 
 const delimiters = [KeyCodes.comma, KeyCodes.enter];
 
-const RemoveComponent = () => (
-  <span className="icon-delete">
+const RemoveComponent = props => (
+  <span className="icon-delete" onClick={props.onClick}>
     <CrossIcon />
   </span>
 );
