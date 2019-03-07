@@ -10,7 +10,7 @@ from getpass import getuser
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
     create_venv, fill_template, get_s3_file, get_aws_account_id, delete_foreign_tasks,
-    get_venv_site_packages)
+    get_venv_site_packages, is_cloud_env)
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
@@ -306,7 +306,11 @@ def create_local_ini(c):
 
 @task(ensure_aws_invoke_yaml)
 def generate_nginx_conf(c):
-    fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx')
+    if is_cloud_env(c):
+        path = os.path.join(get_venv_site_packages(c), 'templates/system/')
+    else:
+        path = None
+    fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx', default_dir=path)
 
 
 @task(create_local_ini)
