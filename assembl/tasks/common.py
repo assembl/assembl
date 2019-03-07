@@ -20,11 +20,11 @@ def task(*args, **kwargs):
     return base_task(pre=pre, **kwargs)
 
 
-def exists(c, path):
+def exists(c, path, sudo=False):
     """
     Return True if given path exists on the current remote host. Taken from patchwork.
     """
-    cmd = 'test -e "$(echo {})"'.format(path)
+    cmd = '{}test -e "$(echo {})"'.format('sudo ' if sudo else '', path)
     return c.run(cmd, hide=True, warn=True).ok
 
 
