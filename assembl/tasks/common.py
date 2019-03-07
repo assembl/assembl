@@ -117,15 +117,22 @@ def get_venv_site_packages(c):
     return os.path.join('venv/lib/python2.7', 'site-packages', 'assembl')
 
 
+def is_cloud_env(c):
+    # Be explicit about cloud vs local env. Lack of existence of key will assume cloud on default
+    # Because sudoers are only called on cloud solution
+    _internal = c.config.get('_internal') or {}
+    return _internal.get('cloud', True)
+
+
 def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
-    code_root = project_prefix
-    config_prefix = code_root + '/assembl/configs/'
-    if not exists(c, config_prefix):
+    if is_cloud_env(c):
         code_root = get_venv_site_packages(c)
+        config_prefix = code_root + '/configs/'
+    else:
+        code_root = project_prefix
         config_prefix = code_root + '/assembl/configs/'
-
     current = c.config._project or {}
     current['code_root'] = code_root
     current['projectpath'] = project_prefix
@@ -210,6 +217,7 @@ def is_integration_env(c):
 
 
 def fill_template(c, template, output=None, extra=None, default_dir=None):
+    """Passing default_dir is often used in cloud conditions. The typical config will assume local env."""
     config = dict(c.config.get('DEFAULT', {}))
     config.update(c.config)
     if extra is not None:
