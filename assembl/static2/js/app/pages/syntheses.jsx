@@ -44,7 +44,7 @@ const fakeSyntheses = [
       'https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/BKpZoQ4viqlda90c/abstract-dark-blue-background-with-moving-colored-particles_bjfoo46np__F0000.png'
   },
   {
-    id: '4524',
+    id: '4624',
     subject: 'Une troisième synthèse',
     creationDate: '01-02-2019',
     link: 'http://www.google.com',
@@ -54,7 +54,7 @@ const fakeSyntheses = [
     img: 'https://images.pexels.com/photos/1090977/pexels-photo-1090977.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
   },
   {
-    id: '4524',
+    id: '4522',
     subject: 'Une quatrième synthèse tant qu\'on y est',
     creationDate: '01-02-2019',
     link: 'http://www.google.com',
@@ -79,7 +79,7 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
     const createSynthesisRoute = get('createSynthesis', { slug: slug });
     return (
       <Section title="debate.syntheses.summary" translate>
-        <div className="center create-synthesis">
+        <div className="center create-synthesis-button">
           <Link to={createSynthesisRoute} className="button-submit button-dark">
             <Translate value="debate.syntheses.createNewSynthesis" />
           </Link>
