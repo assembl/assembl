@@ -18,6 +18,8 @@ import { load } from './load';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import Helper from '../../common/helper';
+import BackButton from '../../debate/common/backButton';
+import { redirectToPreviousPage } from '../../form/utils';
 
 type Props = {
   client: ApolloClient,
@@ -41,6 +43,7 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
           <Row>
             <Col xs={12} md={10}>
               <div className="admin-box">
+                <BackButton handleClick={redirectToPreviousPage} linkClassName="btn-default" />
                 <Section title="debate.syntheses.createNewSynthesis" translate>
                   <Field
                     editLocale={editLocale}
@@ -57,7 +60,7 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
                       label={I18n.t('debate.syntheses.url')}
                       required
                     />
-                    <Helper helperText={I18n.t('debate.synthesis.urlHelper')} popOverClass=" " />
+                    <Helper helperText={I18n.t('debate.syntheses.urlHelper')} popOverClass=" " />
                   </div>
                   <div className="flex">
                     <Field name="picture" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />

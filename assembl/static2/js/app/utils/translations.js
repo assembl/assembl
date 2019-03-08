@@ -394,7 +394,10 @@ const Translations = {
         url: "URL de la synthèse",
         picture: "Image de l'encarté de la synthèse",
         urlHelper: "Insérez l'URL de votre story sur storychief",
-        pictureHelper: "Cette image illustrera votre synthèse dans la page des synthèses"
+        pictureHelper: "Cette image illustrera votre synthèse dans la page des synthèses",
+        deleteSucessMessage: "La synthèse a bien été supprimée",
+        deleteSynthesisTooltip: "Supprimer la synthèse",
+        editSynthesisTooltip: "Editer la synthèse"
       },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
@@ -1453,7 +1456,10 @@ const Translations = {
         url: "URL of the synthesis",
         picture: "Picture of the synthesis' frame",
         urlHelper: "Insert the url of your story on storychief",
-        pictureHelper: "This is the picture that will be shown to illustrate your synthesis in the syntheses page"
+        pictureHelper: "This is the picture that will be shown to illustrate your synthesis in the syntheses page",
+        deleteSuccessMessage: "The synthesis has been successfully deleted",
+        deleteSynthesisTooltip: "Delete the synthesis",
+        editSynthesisTooltip: "Edit the synthesis"
       },
       validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {

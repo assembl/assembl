@@ -5,14 +5,12 @@ import Animated from 'react-animated-transitions';
 import { Grid } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
 
-// import { getDiscussionSlug, getConnectedUserId } from '../../../utils/globalFunctions';
 import SynthesisPreview from './synthesisPreview';
 import { displayAlert } from '../../utils/utilityManager';
-// import Permissions, { connectedUserCan } from '../../../utils/permissions';
+import { connectedUserIsAdmin } from '../../utils/permissions';
 
 export type Props = {
-  syntheses: Array<SynthesisPreviw>,
-  lang: string
+  syntheses: Array<SynthesisPreviw>
 };
 
 const masonryOptions = {
@@ -22,7 +20,7 @@ const masonryOptions = {
 };
 
 const deleteSynthesisHandler = () => {
-  displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg')); // TODO: add proper translation
+  displayAlert('success', I18n.t('debate.syntheses.deleteSuccessMessage'));
 };
 
 const publicationStateCreationDateComparator = (a, b) => {
@@ -39,26 +37,19 @@ const publicationStateCreationDateComparator = (a, b) => {
   return aState < bState ? -1 : 1;
 };
 
-const SynthesesList = ({ syntheses, lang }: Props) => {
-  // const connectedUserId = getConnectedUserId();
-
+const SynthesesList = ({ syntheses }: Props) => {
   const childElements = syntheses.sort(publicationStateCreationDateComparator).reduce((result, synthesis) => {
-    // Define user permissions
-    const userCanEdit = false;
-    const userCanDelete = false;
-
-    // if (post.creator) {
-    //   const { userId, displayName, isDeleted } = post.creator;
-    //   authorName = isDeleted ? I18n.t('deletedUser') : displayName;
-    //   userCanEdit = connectedUserId === String(userId) && connectedUserCan(Permissions.EDIT_MY_POST);
-    //   userCanDelete =
-    //     (connectedUserId === String(userId) && connectedUserCan(Permissions.DELETE_MY_POST)) ||
-    //     connectedUserCan(Permissions.DELETE_POST);
-    // }
+    const userCanEdit = connectedUserIsAdmin() || false;
+    const userCanDelete = connectedUserIsAdmin() || false;
 
     result.push(
       <Animated key={synthesis.id} preset="scalein">
-        <SynthesisPreview {...synthesis} />
+        <SynthesisPreview
+          {...synthesis}
+          deleteSynthesisHandler={deleteSynthesisHandler}
+          userCanDelete={userCanDelete}
+          userCanEdit={userCanEdit}
+        />
       </Animated>
     );
     return result;
