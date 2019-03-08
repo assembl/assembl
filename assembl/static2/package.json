@@ -160,7 +160,9 @@
     "url-join": "^1.1.0"
   },
   "resolutions": {
-    "searchkit/lodash": "^4.17.11"
+    "*/lodash": "^4.17.11",
+    "*/prop-types": "^15.7.0",
+    "*/react-is": "^15.7.0"
   },
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
