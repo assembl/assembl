@@ -5,6 +5,7 @@ import { type ApolloClient, withApollo, compose } from 'react-apollo';
 import { Row, Col } from 'react-bootstrap';
 import { Field } from 'react-final-form';
 import arrayMutators from 'final-form-arrays';
+import { I18n } from 'react-redux-i18n';
 
 // Components imports
 import Section from '../../common/section';
@@ -17,7 +18,6 @@ import { load } from './load';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import Helper from '../../common/helper';
-import { I18n } from 'react-redux-i18n';
 
 type Props = {
   client: ApolloClient,
@@ -38,10 +38,10 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
     render={({ handleSubmit, pristine, submitting }) => (
       <div className="administration max-container create-synthesis-form">
         <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-          <Section title="debate.syntheses.createNewSynthesis" translate>
-            <Row>
-              <Col xs={8}>
-                <div className="admin-box">
+          <Row>
+            <Col xs={12} md={10}>
+              <div className="admin-box">
+                <Section title="debate.syntheses.createNewSynthesis" translate>
                   <Field
                     editLocale={editLocale}
                     name="title"
@@ -60,10 +60,10 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
                     <Field name="picture" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
                     <Helper helperText="Photo de l'encarté dans la page des synthèses" popOverClass=" " />
                   </div>
-                </div>
-              </Col>
-            </Row>
-          </Section>
+                </Section>
+              </div>
+            </Col>
+          </Row>
         </AdminForm>
       </div>
     )}
