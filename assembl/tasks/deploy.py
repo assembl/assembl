@@ -332,15 +332,11 @@ def create_local_ini(c):
 
 @task(ensure_aws_invoke_yaml)
 def generate_nginx_conf(c):
+    """Hard assumption that this is only used under the cloud condition"""
     if is_cloud_env(c):
         path = os.path.join(get_venv_site_packages(c), 'templates/system/')
-        code_root = os.path.join(c.config.code_root, get_venv_site_packages(c))
-    else:
-        path = None
-        code_root = c.config.code_root
-    fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx',
-                  default_dir=path,
-                  extra={'code_root': code_root})
+        fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx',
+                      default_dir=path, extra={'is_cloud': True})
 
 
 @task(create_local_ini)
