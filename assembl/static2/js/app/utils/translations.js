@@ -389,7 +389,10 @@ const Translations = {
       syntheses: {
         summary: "Sommaire des synthèses",
         createNewSynthesis: "Rédiger une nouvelle synthèse",
-        publishedOn: "Publiée le "
+        publishedOn: "Publiée le ",
+        title: "Titre de la synthèse",
+        url: "URL de la synthèse",
+        picture: "Image de l'encarté de la synthèse"
       },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
@@ -1443,7 +1446,10 @@ const Translations = {
       syntheses: {
         summary: "Syntheses summary",
         createNewSynthesis: "Create a new synthesis",
-        publishedOn: "Published on "
+        publishedOn: "Published on ",
+        title: "Title of the synthesis",
+        url: "URL of the synthesis",
+        picture: "Picture of the synthesis' frame"
       },
       validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {

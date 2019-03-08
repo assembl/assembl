@@ -17,6 +17,7 @@ import { load } from './load';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import Helper from '../../common/helper';
+import { I18n } from 'react-redux-i18n';
 
 type Props = {
   client: ApolloClient,
@@ -45,18 +46,18 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
                     editLocale={editLocale}
                     name="title"
                     component={MultilingualTextFieldAdapter}
-                    label="Titre de la synthèse" // TODO: translation
+                    label={I18n.t('debate.syntheses.title')}
                     required
                   />
                   <Field
                     editLocale={editLocale}
                     name="url"
                     component={MultilingualTextFieldAdapter}
-                    label="URL de la synthèse"
+                    label={I18n.t('debate.syntheses.url')}
                     required
                   />
                   <div className="flex">
-                    <Field name="picture" component={FileUploaderFieldAdapter} label="Photo d'illustration de la synhtèse" />
+                    <Field name="picture" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
                     <Helper helperText="Photo de l'encarté dans la page des synthèses" popOverClass=" " />
                   </div>
                 </div>
