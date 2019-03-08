@@ -63,6 +63,7 @@ _internal:
   uses_uwsgi: false
   uses_bluenove_actionable: false
   is_production_env: false
+  cloud: false
   wsginame: dev.wsgi
   gitbranch: develop
   requirement_inputs: requirements.in requirements-chrouter.in requirements-dev.in requirements-doc.in requirements-tests.in

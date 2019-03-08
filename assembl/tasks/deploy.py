@@ -334,9 +334,13 @@ def create_local_ini(c):
 def generate_nginx_conf(c):
     if is_cloud_env(c):
         path = os.path.join(get_venv_site_packages(c), 'templates/system/')
+        code_root = os.path.join(c.config.code_root, get_venv_site_packages(c))
     else:
         path = None
-    fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx', default_dir=path)
+        code_root = c.config.code_root
+    fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx',
+                  default_dir=path,
+                  extra={'code_root': code_root})
 
 
 @task(create_local_ini)

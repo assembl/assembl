@@ -118,10 +118,18 @@ def get_venv_site_packages(c):
 
 
 def is_cloud_env(c):
-    # Be explicit about cloud vs local env. Lack of existence of key will assume cloud on default
-    # Because sudoers are only called on cloud solution
+    # Attempts to find the key from the configurations. However, due to the recursive nature
+    # of configuration files, if it is not yet in the config, makes a calculated guess of cloud vs non-cloud
+    # Assumption: In AWS cloud, assembl is installed as a wheel, and it is available under the venv site-packages
+    # To bypass the calculation, ensure the *highest* level of invoke.yaml includes the _internal: cloud: true/false.
     _internal = c.config.get('_internal') or {}
-    return _internal.get('cloud', True)
+    result = _internal.get('cloud', False)
+    if not result:
+        # Calculated attempt
+        cloud_assembl_path = get_venv_site_packages(c)
+        if os.path.exists(cloud_assembl_path):
+            return True
+    return result
 
 
 def setup_ctx(c):
