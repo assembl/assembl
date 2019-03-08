@@ -4,16 +4,11 @@ import Masonry from 'react-masonry-component';
 import Animated from 'react-animated-transitions';
 import { Grid } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
-// Route helpers imports
-// import { get } from '../../../utils/routeMap';
-// Utils imports
+
 // import { getDiscussionSlug, getConnectedUserId } from '../../../utils/globalFunctions';
 import SynthesisPreview from './synthesisPreview';
+import { displayAlert } from '../../utils/utilityManager';
 // import Permissions, { connectedUserCan } from '../../../utils/permissions';
-// import { displayAlert } from '../../../utils/utilityManager';
-// Constant imports
-// import { EMPTY_STRING, PICTURES_LENGTH } from '../../../constants';
-// Type imports
 
 export type Props = {
   syntheses: Array<SynthesisPreviw>,
@@ -26,9 +21,8 @@ const masonryOptions = {
   horizontalOrder: true
 };
 
-// Define callback functions
-const deleteFictionHandler = () => {
-  displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
+const deleteSynthesisHandler = () => {
+  displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg')); // TODO: add proper translation
 };
 
 const publicationStateCreationDateComparator = (a, b) => {
@@ -46,13 +40,10 @@ const publicationStateCreationDateComparator = (a, b) => {
 };
 
 const SynthesesList = ({ syntheses, lang }: Props) => {
-  // const slug = getDiscussionSlug() || EMPTY_STRING;
-
   // const connectedUserId = getConnectedUserId();
 
   const childElements = syntheses.sort(publicationStateCreationDateComparator).reduce((result, synthesis) => {
     // Define user permissions
-    const authorName = '';
     const userCanEdit = false;
     const userCanDelete = false;
 

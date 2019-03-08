@@ -1,2 +1,1 @@
-export const load = async () => {};
-export const postLoadFormat = () => {};
+export const load = async (client, fetchPolicy, lang) => ({});
