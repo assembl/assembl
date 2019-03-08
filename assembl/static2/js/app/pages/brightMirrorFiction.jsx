@@ -12,6 +12,8 @@ import BrightMirrorFictionQuery from '../graphql/BrightMirrorFictionQuery.graphq
 import CreateBrightMirrorCommentMutation from '../graphql/mutations/createPost.graphql';
 // Optimization: Should create ideaWithCommentsQuery.graphql and adapt the query
 import IdeaWithCommentsQuery from '../graphql/IdeaWithPostsQuery.graphql';
+import TagsQuery from '../graphql/TagsQuery.graphql';
+import { updateTags } from '../actions/tagActions';
 // Route helpers imports
 import { browserHistory } from '../router';
 import { get } from '../utils/routeMap';
@@ -25,12 +27,13 @@ import BackButton from '../components/debate/common/backButton';
 import FictionCommentHeader from '../components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../components/debate/brightMirror/fictionCommentList';
+import TagOnPost from '../components/tagOnPost/tagOnPost';
 import { withScreenWidth } from '../components/common/screenDimensions';
 // Utils imports
 import { transformPosts, getDebateTotalMessages } from './idea';
 import { displayAlert } from '../utils/utilityManager';
-import { getConnectedUserId, compareByTextPosition } from '../utils/globalFunctions';
-import Permissions, { connectedUserCan } from '../utils/permissions';
+import { getConnectedUserId, compareByTextPosition, formatedSuggestedTagList, formatedTagList } from '../utils/globalFunctions';
+import Permissions, { connectedUserCan, connectedUserIsAdmin } from '../utils/permissions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 // Constant imports
 import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND } from '../constants';
@@ -43,6 +46,7 @@ import type { Props as FictionBodyProps } from '../components/debate/brightMirro
 import type { FictionCommentHeaderProps } from '../components/debate/brightMirror/fictionCommentHeader';
 import type { FictionCommentFormProps } from '../components/debate/brightMirror/fictionCommentForm';
 import type { FictionCommentListProps } from '../components/debate/brightMirror/fictionCommentList';
+import type { Props as TagOnPostProps } from '../components/tagOnPost/tagOnPost';
 import type { CreateCommentInputs } from '../components/debate/brightMirror/fictionComment';
 
 // Define types
@@ -77,7 +81,9 @@ type BrightMirrorFictionReduxProps = {
   /** Fiction locale fetched from mapStateToProps */
   contentLocale: string,
   /** Fiction locale mapping fetched from mapStateToProps */
-  contentLocaleMapping: ContentLocaleMapping
+  contentLocaleMapping: ContentLocaleMapping,
+  /** Function to call action to store tags on store */
+  putTagsInStore: Function
 };
 
 export type IdeaWithCommentsData = {
@@ -97,7 +103,9 @@ type BrightMirrorFictionGraphQLProps = {
   /** Create comment mutation from GraphQL */
   createComment: Function,
   /** Fiction data information fetched from GraphQL */
-  ideaWithCommentsData: IdeaWithCommentsData
+  ideaWithCommentsData: IdeaWithCommentsData,
+  /** List of existing tags in the overall discussion fetched and updated from the general store */
+  existingTags: Array<Tag>
 };
 
 type LocalBrightMirrorFictionProps = AdditionalProps &
@@ -129,7 +137,11 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     const { loading } = nextProps.brightMirrorFictionData;
     if (loading) return null;
 
-    const { subject, body, publicationState } = nextProps.brightMirrorFictionData.fiction;
+    const { body, publicationState, subject } = nextProps.brightMirrorFictionData.fiction;
+
+    const { existingTags, putTagsInStore } = nextProps;
+    // Store tag suggestions in store
+    putTagsInStore(existingTags);
 
     return {
       title: subject || EMPTY_STRING,
@@ -353,6 +365,13 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       onSubmitHandler: this.submitCommentHandler
     };
 
+    const tagOnPostProps: TagOnPostProps = {
+      isAdmin: connectedUserIsAdmin(),
+      postId: fictionId,
+      tagList: formatedTagList(fiction.tags),
+      suggestedTagList: formatedSuggestedTagList(fiction.keywords)
+    };
+
     const displayFictionCommentForm = userCanPost ? <FictionCommentForm {...fictionCommentFormProps} /> : null;
 
     return (
@@ -367,6 +386,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
                   <FictionToolbar {...fictionToolbarProps} />
                   <FictionBody {...fictionBodyProps} />
                 </article>
+                <TagOnPost {...tagOnPostProps} />
               </Col>
             </Row>
           </Grid>
@@ -404,8 +424,12 @@ const withData: OperationComponent<Response> = graphql(BrightMirrorFictionQuery,
   })
 });
 
+const mapDispatchToProps = dispatch => ({
+  putTagsInStore: tags => dispatch(updateTags(tags))
+});
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   withData,
   withScreenWidth,
   graphql(IdeaWithCommentsQuery, {
@@ -423,6 +447,9 @@ export default compose(
   graphql(CreateBrightMirrorCommentMutation, {
     // GraphQL custom function name
     name: 'createComment'
+  }),
+  graphql(TagsQuery, {
+    props: ({ data }) => ({ existingTags: data.tags })
   }),
   manageErrorAndLoading({ displayLoader: true })
 )(BrightMirrorFiction);

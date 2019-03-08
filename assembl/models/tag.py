@@ -128,3 +128,18 @@ class ExtractsTagsAssociation(TagsAssociation):
         'polymorphic_identity': 'extracts_tags_association',
         'with_polymorphic': '*',
     }
+
+
+class PostsTagsAssociation(TagsAssociation):
+    __tablename__ = 'posts_tags_association'
+    id = Column(Integer, ForeignKey(
+        'tags_association.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'
+    ), primary_key=True)
+    post_id = Column(Integer, ForeignKey('post.id'), nullable=False,)
+    post = relationship("Post", back_populates="tags_associations")
+    __mapper_args__ = {
+        'polymorphic_identity': 'posts_tags_association',
+        'with_polymorphic': '*',
+    }

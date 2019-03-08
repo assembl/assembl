@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 /* eslint-enable */
 
 import SharePostButton from '../../../../components/debate/common/sharePostButton';
@@ -23,4 +22,4 @@ export const defaultSharePostButtonProps: SharePostButtonProps = {
   type: 'brightMirrorFiction'
 };
 
-storiesOf('SharePostButton', module).add('default', withInfo()(() => <SharePostButton {...defaultSharePostButtonProps} />));
+storiesOf('SharePostButton', module).add('default', () => <SharePostButton {...defaultSharePostButtonProps} />);

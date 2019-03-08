@@ -8,6 +8,7 @@ import Synthesis from './synthesisReducer';
 import Auth from './authenticationReducer';
 import Timeline from './timelineReducers';
 import Admin from './adminReducer';
+import Tags from './tagReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
 import * as screenDimensions from './screenDimensionsReducers';
 
@@ -22,6 +23,7 @@ const reducers = {
   auth: Auth,
   timeline: Timeline,
   admin: Admin,
+  tags: Tags,
   ...screenDimensions
 };
 

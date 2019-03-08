@@ -69,7 +69,9 @@ const Translations = {
           placeholder: "Sélectionner des tags",
           noOptions: "Aucun tag trouvé",
           newOption: "Ajouter ce tag '%{option}'"
-        }
+        },
+        addTagSuccessMsg: "Le tag \"%{tag}\" a été ajouté avec succès.",
+        removeTagSuccessMsg: "Le tag \"%{tag}\" a été retiré avec succès."
       }
     },
     cookies: {
@@ -462,6 +464,12 @@ const Translations = {
         sentimentAnalysis: "Analyse du sentiment",
         sentimentAnalysisDefinition:
           "L'analyse du sentiment caractérise la tonalité positive ou négative des échanges du débat (ou \"des échanges relatifs à la thématique en question\")."
+      },
+      tagOnPost: {
+        suggestionContainerTitle: "Suggestions de mots-clés :",
+        tagContainerAdminTitle: "Ajoutez des mots-clés relatifs à ce post :",
+        tagContainerTitle: "Mots-clés relatifs à ce post :",
+        alreadyAddedWarningMessage: "Déja ajouté"
       },
       brightMirror: {
         deleteFiction: "Supprimez votre texte",
@@ -1085,7 +1093,9 @@ const Translations = {
           placeholder: "Select tags",
           noOptions: "No tags",
           newOption: "Create this tag '%{option}'"
-        }
+        },
+        addTagSuccessMsg: "Tag \"%{tag}\" has been successfully added.",
+        removeTagSuccessMsg: "Tag \"%{tag}\" has been successfully removed."
       }
     },
     cookies: {
@@ -1476,6 +1486,12 @@ const Translations = {
         sentimentAnalysis: "Sentiment analysis",
         sentimentAnalysisDefinition:
           "The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed)."
+      },
+      tagOnPost: {
+        suggestionContainerTitle: "Suggested keywords:",
+        tagContainerAdminTitle: "Add post-related keywords:",
+        tagContainerTitle: "Keywords in post:",
+        alreadyAddedWarningMessage: "Already added"
       },
       brightMirror: {
         deleteFiction: "Delete your text",

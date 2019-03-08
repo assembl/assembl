@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 
 import { PublicationStates } from '../../../../constants';
 import FictionsList, { type Props as FictionsListProps } from '../../../../components/debate/brightMirror/fictionsList';
@@ -67,4 +66,4 @@ export const customFictionsList: FictionsListProps = {
   lang: 'en'
 };
 
-storiesOf('FictionsList', module).add('default', withInfo()(() => <FictionsList {...customFictionsList} />));
+storiesOf('FictionsList', module).add('default', () => <FictionsList {...customFictionsList} />);

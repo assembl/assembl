@@ -33,7 +33,7 @@ from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract)
 from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
-from assembl.graphql.tag import UpdateTag
+from assembl.graphql.tag import Tag, AddTag, RemoveTag, UpdateTag
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
@@ -41,7 +41,6 @@ from assembl.graphql.section import (CreateSection, DeleteSection, Section,
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
-from assembl.graphql.tag import Tag
 from .configurable_fields import (
     ConfigurableFieldUnion, CreateTextField, UpdateTextField,
     DeleteTextField, ProfileField, UpdateProfileFields)
@@ -140,17 +139,22 @@ class Query(graphene.ObjectType):
     tags = graphene.List(
         lambda: Tag,
         filter=graphene.String(description=docs.SchemaTags.filter),
+        limit=graphene.Int(description=docs.SchemaTags.limit),
         description=docs.SchemaTags.__doc__)
 
     def resolve_tags(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         _filter = args.get('filter', '')
+        limit = args.get('limit', 0)
         model = models.Keyword
         query = get_query(model, context).filter(
             model.discussion_id == discussion_id)
 
         if not _filter:
-            return query.limit(30).all()
+            if limit == 0:
+                return query.all()
+            else:
+                return query.limit(limit).all()
 
         _filter = '%{}%'.format(_filter)
         return query.filter(model.value.ilike(_filter)).all()
@@ -528,6 +532,8 @@ class Mutations(graphene.ObjectType):
     update_discussion_phase = UpdateDiscussionPhase.Field(description=docs.CreateDiscussionPhase.__doc__)
     delete_discussion_phase = DeleteDiscussionPhase.Field(description=docs.DeleteDiscussionPhase.__doc__)
     update_harvesting_translation_preference = UpdateHarvestingTranslationPreference.Field(description=docs.UpdateHarvestingTranslationPreference.__doc__)
+    add_tag = AddTag.Field(description=docs.AddTag.__doc__)
+    remove_tag = RemoveTag.Field(description=docs.RemoveTag.__doc__)
 
 
 Schema = graphene.Schema(query=Query, mutation=Mutations)

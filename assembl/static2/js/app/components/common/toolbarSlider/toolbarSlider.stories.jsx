@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { action } from '@storybook/addon-actions';
 import { color, number, withKnobs } from '@storybook/addon-knobs';
 /* eslint-enable */
@@ -24,24 +23,18 @@ const playground = {
 
 storiesOf('Semantic Analysis|ToolbarSlider', module)
   .addDecorator(withKnobs)
-  .add(
-    'default',
-    withInfo()(() => (
-      <ToolbarSlider
-        defaultValue={defaultToolbarSliderProps.defaultValue}
-        onSliderChange={defaultToolbarSliderProps.onSliderChange}
-      />
-    ))
-  )
-  .add(
-    'playground',
-    withInfo()(() => (
-      <ToolbarSlider
-        color={color('color', playground.color)}
-        defaultValue={number('defaultValue', playground.defaultValue)}
-        maxValue={number('maxValue', playground.maxValue)}
-        minValue={number('minValue', playground.minValue)}
-        onSliderChange={playground.onSliderChange}
-      />
-    ))
-  );
+  .add('default', () => (
+    <ToolbarSlider
+      defaultValue={defaultToolbarSliderProps.defaultValue}
+      onSliderChange={defaultToolbarSliderProps.onSliderChange}
+    />
+  ))
+  .add('playground', () => (
+    <ToolbarSlider
+      color={color('color', playground.color)}
+      defaultValue={number('defaultValue', playground.defaultValue)}
+      maxValue={number('maxValue', playground.maxValue)}
+      minValue={number('minValue', playground.minValue)}
+      onSliderChange={playground.onSliderChange}
+    />
+  ));

@@ -1,0 +1,8 @@
+mutation addTag($taggableId: ID!, $value: String!) {
+  addTag(taggableId: $taggableId, value: $value) {
+    tag {
+      id
+      value
+    }
+  }
+}

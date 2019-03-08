@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 /* eslint-enable */
@@ -19,4 +18,4 @@ export const defaultSideCommentAnchor: SideCommentAnchorProps = {
 
 storiesOf('SideCommentAnchor', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <SideCommentAnchor {...defaultSideCommentAnchor} />));
+  .add('default', () => <SideCommentAnchor {...defaultSideCommentAnchor} />);

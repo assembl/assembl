@@ -1,5 +1,5 @@
-query Tags($filter: String) {
-  tags(filter: $filter) {
+query Tags($filter: String, $limit: Int) {
+  tags(filter: $filter, limit: $limit) {
     id
     value
   }

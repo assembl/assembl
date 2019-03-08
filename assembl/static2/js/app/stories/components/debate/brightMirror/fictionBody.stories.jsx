@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 /* eslint-enable */
@@ -70,27 +69,24 @@ const playgroundFictionBody = { ...defaultFictionBody };
 
 storiesOf('FictionBody', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <FictionBody {...defaultFictionBody} />))
-  .add('no content ', withInfo()(() => <FictionBody {...noFictionBody} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <FictionBody
-        postId={text('id', playgroundFictionBody.postId)}
-        title={text('title', playgroundFictionBody.title)}
-        content={text('content', playgroundFictionBody.content)}
-        contentLocale={text('contentLocale', playgroundFictionBody.contentLocale)}
-        lang={text('lang', playgroundFictionBody.lang)}
-        extracts={playgroundFictionBody.extracts}
-        dbId={playgroundFictionBody.dbId}
-        bodyMimeType={playgroundFictionBody.bodyMimeType}
-        refetchPost={playgroundFictionBody.refetchPost}
-        ideaId={playgroundFictionBody.ideaId}
-        userCanReply={playgroundFictionBody.userCanReply}
-        mySentiment={playgroundFictionBody.mySentiment}
-        sentimentCounts={playgroundFictionBody.sentimentCounts}
-        isPhaseCompleted={playgroundFictionBody.isPhaseCompleted}
-        screenWidth={playgroundFictionBody.screenWidth}
-      />
-    ))
-  );
+  .add('default', () => <FictionBody {...defaultFictionBody} />)
+  .add('no content ', () => <FictionBody {...noFictionBody} />)
+  .add('playground', () => (
+    <FictionBody
+      postId={text('id', playgroundFictionBody.postId)}
+      title={text('title', playgroundFictionBody.title)}
+      content={text('content', playgroundFictionBody.content)}
+      contentLocale={text('contentLocale', playgroundFictionBody.contentLocale)}
+      lang={text('lang', playgroundFictionBody.lang)}
+      extracts={playgroundFictionBody.extracts}
+      dbId={playgroundFictionBody.dbId}
+      bodyMimeType={playgroundFictionBody.bodyMimeType}
+      refetchPost={playgroundFictionBody.refetchPost}
+      ideaId={playgroundFictionBody.ideaId}
+      userCanReply={playgroundFictionBody.userCanReply}
+      mySentiment={playgroundFictionBody.mySentiment}
+      sentimentCounts={playgroundFictionBody.sentimentCounts}
+      isPhaseCompleted={playgroundFictionBody.isPhaseCompleted}
+      screenWidth={playgroundFictionBody.screenWidth}
+    />
+  ));

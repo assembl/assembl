@@ -1,0 +1,144 @@
+.ReactTags__tags {
+  color: $first-color;
+  font-size: $font-size-xs;
+  font-weight: 300;
+
+  .ReactTags__selected {
+    display: flex;
+    flex-flow: row wrap;
+    flex-basis: 100%;
+
+    .ReactTags__tag {
+      background-color: $first-color-light;
+      border-radius: 11px;
+      border: none;
+      height: 22px;
+      margin-top: 5px;
+      margin-right: 10px;
+      padding: 0 10px 2px 10px;
+      transition: background-color 0.5s ease, transform 0.3s;
+
+      &:focus {
+        outline: none;
+      }
+    }
+  }
+
+  /* no actions allowed for not admin */
+
+  /* use react-tags-wrapper-admin to style hover */
+  &.react-tags-wrapper-admin {
+    .ReactTags__selected {
+      .ReactTags__tag {
+        .icon-delete {
+          margin-left: 10px;
+          background-color: transparent;
+          border: none;
+          padding: 0;
+        }
+
+        &:hover {
+          background-color: $red;
+          color: $white;
+
+          .cross-icon-path {
+            fill: $white;
+          }
+
+          .ReactTags__remove {
+            color: $white;
+          }
+        }
+      }
+
+      .ReactTags__tagInput {
+        background-color: $first-color;
+        border-radius: 11px;
+        border: none;
+        width: 22px;
+        height: 22px;
+        margin-top: 5px;
+        margin-right: 10px;
+        position: relative;
+        z-index: 333;
+        transition: background-color 0.4s ease, width 0.6s ease;
+
+        .icon-add {
+          z-index: 2;
+        }
+
+        .ReactTags__tagInputField {
+          background-color: transparent;
+          box-shadow: none;
+          border: none;
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 22px;
+          height: 22px;
+
+          &:focus {
+            border: none;
+            outline: 0;
+            width: initial;
+            position: relative;
+          }
+        }
+      }
+
+      .ReactTags__tagInput:has(> .ReactTags__suggestions) {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+    }
+
+    .ReactTags__tagInput:focus-within {
+      background-color: $first-color-light;
+      padding-left: 10px;
+      padding-right: 5px;
+      width: 150px;
+      height: auto;
+
+      .icon-add {
+        display: none;
+      }
+    }
+
+    .ReactTags__suggestions {
+      background-color: $first-color-light;
+      border-bottom-left-radius: 11px;
+      border-bottom-right-radius: 11px;
+      z-index: -1;
+      padding: 5px 10px;
+      position: absolute;
+      top: 14px;
+      left: 0;
+      right: 0;
+
+      ul {
+        margin: 0;
+        padding: 0;
+      }
+
+      li {
+        list-style-type: none;
+        padding-top: 2px;
+        padding-left: 0;
+
+        &:hover {
+          span {
+            text-decoration: underline;
+            cursor: pointer;
+          }
+        }
+
+        mark {
+          background: none;
+          color: $first-color;
+          margin-right: 0;
+          padding-right: 0;
+        }
+      }
+    }
+  }
+}

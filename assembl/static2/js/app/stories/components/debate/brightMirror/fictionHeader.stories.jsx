@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, object } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -25,15 +24,12 @@ const playground = {
 
 storiesOf('FictionHeader', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <FictionHeader {...defaultFictionHeader} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <FictionHeader
-        authorFullname={text('authorFullname', playground.authorFullname)}
-        publishedDate={text('publishedDate', playground.publishedDate)}
-        displayedPublishedDate={text('displayedPublishedDate', playground.displayedPublishedDate)}
-        circleAvatar={object('circleAvatar', playground.circleAvatar)}
-      />
-    ))
-  );
+  .add('default', () => <FictionHeader {...defaultFictionHeader} />)
+  .add('playground', () => (
+    <FictionHeader
+      authorFullname={text('authorFullname', playground.authorFullname)}
+      publishedDate={text('publishedDate', playground.publishedDate)}
+      displayedPublishedDate={text('displayedPublishedDate', playground.displayedPublishedDate)}
+      circleAvatar={object('circleAvatar', playground.circleAvatar)}
+    />
+  ));

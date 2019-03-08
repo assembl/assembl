@@ -5,6 +5,8 @@ import { configure, mount } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
 import Adapter from 'enzyme-adapter-react-16.3';
 import { Map } from 'immutable';
+import configureStore from 'redux-mock-store';
+
 // Graphql imports
 import BrightMirrorFictionQuery from '../../../js/app/graphql/BrightMirrorFictionQuery.graphql';
 import IdeaWithCommentsQuery from '../../../js/app/graphql/IdeaWithPostsQuery.graphql';
@@ -16,6 +18,7 @@ import FictionBody from '../../../js/app/components/debate/brightMirror/fictionB
 import FictionCommentHeader from '../../../js/app/components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../../../js/app/components/debate/brightMirror/fictionCommentForm';
 import FictionCommentList from '../../../js/app/components/debate/brightMirror/fictionCommentList';
+import TagOnPost from '../../../js/app/components/tagOnPost/tagOnPost';
 // Constant imports
 import { PublicationStates } from '../../../js/app/constants';
 // Type imports
@@ -72,7 +75,25 @@ const brightMirrorFictionDataTemplate = {
       dontUnderstand: 0,
       like: 0,
       moreInfo: 0
-    }
+    },
+    keywords: [
+      {
+        count: 1,
+        score: 0.6075,
+        value: 'complete account of the system'
+      },
+      {
+        count: 1,
+        score: 0.600927,
+        value: 'great pleasure'
+      },
+      {
+        count: 1,
+        score: 0.607114,
+        value: 'actual teachings of the great explorer of the truth'
+      }
+    ],
+    tags: [{ id: '0', value: 'Habitat et SDF' }, { id: '1', value: 'Facilitation' }]
   },
   error: null,
   refetch: () => {}
@@ -100,7 +121,9 @@ const brightMirrorFictionPropsTemplate = {
   contentLocale: 'en',
   contentLocaleMapping: Map(),
   // Mutation function
-  createComment: undefined
+  createComment: undefined,
+  existingTags: [],
+  putTagsInStore: jest.fn()
 };
 
 const timeline = [
@@ -119,6 +142,9 @@ describe('<BrightMirrorFiction /> - with mount', () => {
   let brightMirrorFictionData: BrightMirrorFictionData;
   let ideaWithCommentsData: IdeaWithCommentsData;
   let brightMirrorFictionProps: BrightMirrorFictionProps;
+
+  const initialState = { tags: [] };
+  const mockStore = configureStore();
 
   const displayNothing = () => {
     expect(wrapper.find(FictionBody)).toHaveLength(0);
@@ -173,6 +199,8 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      const store = mockStore(initialState);
+
       // Create DOM to allow document.getElementById function
       const div = document.createElement('div');
       window.domNode = div;
@@ -180,7 +208,7 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       document.body.appendChild(div);
 
       wrapper = mount(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} store={store}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
         </MockedProvider>,
         { attachTo: window.domNode }
@@ -205,6 +233,10 @@ describe('<BrightMirrorFiction /> - with mount', () => {
 
     it('should render a FictionCommentList', () => {
       expect(wrapper.find(FictionCommentList)).toHaveLength(1);
+    });
+
+    it('should render a TagOnPost', () => {
+      expect(wrapper.find(TagOnPost)).toHaveLength(1);
     });
   });
 
@@ -245,6 +277,8 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      const store = mockStore(initialState);
+
       // Create DOM to allow document.getElementById function
       const div = document.createElement('div');
       window.domNode = div;
@@ -252,7 +286,7 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       document.body.appendChild(div);
 
       wrapper = mount(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} store={store}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
         </MockedProvider>,
         { attachTo: window.domNode }
@@ -302,6 +336,8 @@ describe('<BrightMirrorFiction /> - with mount', () => {
         }
       ];
 
+      const store = mockStore(initialState);
+
       // Create DOM to allow document.getElementById function
       const div = document.createElement('div');
       window.domNode = div;
@@ -309,7 +345,7 @@ describe('<BrightMirrorFiction /> - with mount', () => {
       document.body.appendChild(div);
 
       wrapper = mount(
-        <MockedProvider mocks={mocks}>
+        <MockedProvider mocks={mocks} store={store}>
           <BrightMirrorFiction {...brightMirrorFictionProps} />
         </MockedProvider>,
         { attachTo: window.domNode }

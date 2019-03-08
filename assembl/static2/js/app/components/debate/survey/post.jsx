@@ -5,8 +5,8 @@ import { compose, graphql, withApollo } from 'react-apollo';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
 
-import { getConnectedUserId } from '../../../utils/globalFunctions';
-import Permissions, { connectedUserCan, connectedUserIsModerator } from '../../../utils/permissions';
+import { getConnectedUserId, formatedSuggestedTagList, formatedTagList } from '../../../utils/globalFunctions';
+import Permissions, { connectedUserCan, connectedUserIsModerator, connectedUserIsAdmin } from '../../../utils/permissions';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
@@ -32,8 +32,12 @@ import PostBody from '../common/post/postBody';
 import hashLinkScroll from '../../../utils/hashLinkScroll';
 import DeletePostButton from '../common/deletePostButton';
 import ValidatePostButton from '../common/validatePostButton';
+import TagOnPost from '../../tagOnPost/tagOnPost';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
+
+// Import types
+import type { Props as TagOnPostProps } from '../../../components/tagOnPost/tagOnPost';
 
 type Props = {
   isPhaseCompleted: boolean,
@@ -278,6 +282,14 @@ class Post extends React.Component<Props> {
     const validatePostButton = (
       <ValidatePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />
     );
+
+    const tagOnPostProps: TagOnPostProps = {
+      isAdmin: connectedUserIsAdmin(),
+      postId: post.id,
+      tagList: formatedTagList(post.tags),
+      suggestedTagList: formatedSuggestedTagList(post.keywords)
+    };
+
     return (
       <div className={classnames('shown box', { pending: isPending })} id={post.id}>
         <div className="content">
@@ -295,6 +307,7 @@ class Post extends React.Component<Props> {
             bodyMimeType={post.bodyMimeType}
             isHarvesting={isHarvesting}
           />
+          <TagOnPost {...tagOnPostProps} />
           <div className={classnames('post-footer', { pending: isPending })}>
             {!isPending ? (
               <div className="sentiments">

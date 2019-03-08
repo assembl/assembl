@@ -363,7 +363,8 @@ from .nlp import (  # noqa: E402, F401
 from .tag import (  # noqa: E402, F401
     TaggableEntity,
     Keyword,
-    ExtractsTagsAssociation
+    ExtractsTagsAssociation,
+    PostsTagsAssociation
 )
 
 from .resource import Resource  # noqa: E402, F401

@@ -25,7 +25,7 @@ export const tagsLoader = (client: ApolloClient, exclude: Array<string> = []) =>
   client
     .query({
       query: Tags,
-      variables: { filter: inputValue },
+      variables: { filter: inputValue, limit: 30 },
       fetchPolicy: 'network-only'
     })
     .then((value) => {

@@ -62,12 +62,12 @@
   }
 
   .translate {
-    padding: 20px 0 0 75px;
+    padding: 20px 0 0 50px;
   }
 
   .post-footer {
     border-top: $navbar-border;
-    padding: 15px 0 0;
+    padding: 0;
     display: flex;
     justify-content: space-between;
 
@@ -78,10 +78,11 @@
 
     .sentiments {
       font-family: $font-family4;
+      padding-top: 15px;
     }
 
     .actions {
-      margin: 5px;
+      margin: 15px;
     }
   }
 
@@ -285,33 +286,6 @@ $deleted-post-border: 1px solid $light-grey !default;
     p {
       margin: 0;
       min-height: 1em; /* so that empty paragraphs (created by multiple line returns) still have height */
-    }
-  }
-
-  .link-idea {
-    border-bottom: $navbar-border;
-    border-top: $navbar-border;
-    margin: 0 0 5px 0;
-    padding: 5px 0;
-
-    .label {
-      color: $grey;
-      font-size: $font-size-xs;
-      font-family: $font-family4;
-    }
-
-    .badges {
-      padding: 5px 0;
-
-      .badge {
-        display: inline;
-        background-color: $light-grey;
-        color: $grey;
-        text-align: left;
-        white-space: normal;
-        word-wrap: break-word;
-        font-family: $font-family4;
-      }
     }
   }
 
@@ -546,11 +520,11 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .body {
-      padding: 20px 50px 0 73px;
+      padding: 20px 50px;
     }
 
     .post-footer {
-      margin: 10px 50px 10px 73px;
+      margin: 0 50px;
     }
 
     .box {
@@ -599,7 +573,7 @@ $deleted-post-border: 1px solid $light-grey !default;
   .proposals {
     .content {
       .post-footer {
-        margin: 25px 20px 10px 25px;
+        margin: 5px 20px 0 25px;
 
         div {
           display: none;
@@ -609,7 +583,6 @@ $deleted-post-border: 1px solid $light-grey !default;
 
     .statistic {
       text-align: right;
-      margin-bottom: 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -620,8 +593,8 @@ $deleted-post-border: 1px solid $light-grey !default;
         flex-direction: row;
         justify-content: center;
         padding: 0;
-        padding-top: 12px;
-        padding-left: 10px;
+        padding-left: 25px;
+        padding-right: 20px;
 
         .custom-overlay {
           display: flex;
@@ -687,7 +660,7 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .translate {
-      padding: 20px 0 0 54px;
+      padding: 20px 20px 0 25px;
     }
 
     .statistics-container {
@@ -707,7 +680,7 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .body {
-      padding: 20px 20px 0 25px;
+      padding: 20px 20px 20px 25px;
     }
 
     .min-sentiment {
@@ -793,12 +766,6 @@ $deleted-post-border: 1px solid $light-grey !default;
           }
         }
       }
-    }
-
-    .link-idea {
-      border-bottom: none;
-      margin: 0;
-      padding: 20px 0 0;
     }
 
     .sentiments-count {

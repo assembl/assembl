@@ -33,6 +33,7 @@ from .langstrings import LangString, LangStringEntry
 from assembl.views.traversal import AbstractCollectionDefinition
 import assembl.graphql.docstrings as docs
 from assembl.models.idea import MessageView
+from .tag import TaggableEntity, PostsTagsAssociation
 
 log = logging.getLogger()
 
@@ -85,7 +86,7 @@ countable_publication_states = {
 }
 
 
-class Post(Content):
+class Post(Content, TaggableEntity):
     """
     A Post represents input into the broader discussion taking place on
     Assembl. It may be a response to another post, it may have responses, and
@@ -156,6 +157,8 @@ class Post(Content):
         Integer, ForeignKey('agent_profile.id'), nullable=False, index=True)
     creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created",
                            doc=docs.PostInterface.creator)
+
+    tags_associations_cls = PostsTagsAssociation
 
     __mapper_args__ = {
         'polymorphic_identity': 'post',

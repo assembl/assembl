@@ -1,0 +1,61 @@
+.tag-container {
+  border-top: solid 1px $light-grey;
+  color: $grey;
+  padding-bottom: 8px;
+  padding-top: 5px;
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .tag-list {
+    font-family: $font-family4;
+
+    span {
+      display: inline-block;
+      font-size: 1rem;
+      letter-spacing: normal;
+
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.bright-mirror-fiction {
+  .tag-container {
+    border-top: none;
+    padding-top: 25px;
+
+    .tag-list {
+      .ReactTags__tag,
+      .ReactTags__suggestions,
+      .ReactTags__tagInput:focus-within {
+        background-color: $white;
+      }
+    }
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .bright-mirror-fiction {
+    .tag-container {
+      padding-bottom: 10px;
+
+      .title {
+        font-size: 1.33rem;
+      }
+
+      .ReactTags__tagInput {
+        font-size: 1.17rem;
+      }
+
+      .tag-list {
+        span {
+          font-size: 1.17rem;
+        }
+      }
+    }
+  }
+}

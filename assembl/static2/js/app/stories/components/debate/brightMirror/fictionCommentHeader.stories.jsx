@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, number } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -23,16 +22,13 @@ const playground = {
 
 storiesOf('FictionCommentHeader', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <FictionCommentHeader {...defaultFictionCommentHeader} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <FictionCommentHeader
-        strongTitle={text('Strong title', playground.strongTitle)}
-        title={text('Title', playground.title)}
-        imgSrc={text('Image source', playground.imgSrc)}
-        imgAlt={text('Image alt description', playground.imgAlt)}
-        commentsCount={number('Number of comments', playground.commentsCount)}
-      />
-    ))
-  );
+  .add('default', () => <FictionCommentHeader {...defaultFictionCommentHeader} />)
+  .add('playground', () => (
+    <FictionCommentHeader
+      strongTitle={text('Strong title', playground.strongTitle)}
+      title={text('Title', playground.title)}
+      imgSrc={text('Image source', playground.imgSrc)}
+      imgAlt={text('Image alt description', playground.imgAlt)}
+      commentsCount={number('Number of comments', playground.commentsCount)}
+    />
+  ));

@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { number, withKnobs } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -18,27 +17,21 @@ const playground = {
 
 storiesOf('Semantic Analysis|SentimentBar', module)
   .addDecorator(withKnobs)
-  .add(
-    'default',
-    withInfo()(() => (
-      <div
-        style={
-          { width: '200px' } // eslint-disable-line comma-dangle
-        }
-      >
-        <SentimentBar value={defaultSentimentBarProps.value} />
-      </div>
-    ))
-  )
-  .add(
-    'playground',
-    withInfo()(() => (
-      <div
-        style={
-          { width: '200px' } // eslint-disable-line comma-dangle
-        }
-      >
-        <SentimentBar value={number('value', playground.value)} />
-      </div>
-    ))
-  );
+  .add('default', () => (
+    <div
+      style={
+        { width: '200px' } // eslint-disable-line comma-dangle
+      }
+    >
+      <SentimentBar value={defaultSentimentBarProps.value} />
+    </div>
+  ))
+  .add('playground', () => (
+    <div
+      style={
+        { width: '200px' } // eslint-disable-line comma-dangle
+      }
+    >
+      <SentimentBar value={number('value', playground.value)} />
+    </div>
+  ));

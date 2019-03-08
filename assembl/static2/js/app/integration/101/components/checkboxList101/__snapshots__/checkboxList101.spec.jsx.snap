@@ -139,7 +139,19 @@ exports[`Storyshots CheckboxList101 Empty list 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-r8d96o eyvlbql0"
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fafafa",
+                "display": "flex",
+                "fontFamily": "Menlo, Monaco, \\"Courier New\\", monospace",
+                "fontSize": ".88em",
+                "justifyContent": "space-between",
+                "lineHeight": 1.5,
+                "overflowX": "scroll",
+                "padding": ".5rem",
+              }
+            }
           >
             <div>
               <div
@@ -202,25 +214,26 @@ exports[`Storyshots CheckboxList101 Empty list 1`] = `
               </div>
             </div>
             <button
-              className="css-1naocv3 eva467m0"
               onClick={[Function]}
+              style={
+                Object {
+                  "alignSelf": "flex-start",
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderColor": "rgb(238, 238, 238)",
+                  "borderImage": "initial",
+                  "borderRadius": "3px",
+                  "borderStyle": "solid",
+                  "borderWidth": "1px",
+                  "cursor": "pointer",
+                  "flexShrink": "0",
+                  "fontSize": "13px",
+                  "overflow": "hidden",
+                  "padding": "3px 10px",
+                }
+              }
+              type="button"
             >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
+              Copy
             </button>
           </pre>
         </div>
@@ -473,7 +486,19 @@ exports[`Storyshots CheckboxList101 List of 5 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-r8d96o eyvlbql0"
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fafafa",
+                "display": "flex",
+                "fontFamily": "Menlo, Monaco, \\"Courier New\\", monospace",
+                "fontSize": ".88em",
+                "justifyContent": "space-between",
+                "lineHeight": 1.5,
+                "overflowX": "scroll",
+                "padding": ".5rem",
+              }
+            }
           >
             <div>
               <div
@@ -800,25 +825,26 @@ exports[`Storyshots CheckboxList101 List of 5 1`] = `
               </div>
             </div>
             <button
-              className="css-1naocv3 eva467m0"
               onClick={[Function]}
+              style={
+                Object {
+                  "alignSelf": "flex-start",
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderColor": "rgb(238, 238, 238)",
+                  "borderImage": "initial",
+                  "borderRadius": "3px",
+                  "borderStyle": "solid",
+                  "borderWidth": "1px",
+                  "cursor": "pointer",
+                  "flexShrink": "0",
+                  "fontSize": "13px",
+                  "overflow": "hidden",
+                  "padding": "3px 10px",
+                }
+              }
+              type="button"
             >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
+              Copy
             </button>
           </pre>
         </div>
@@ -1071,7 +1097,19 @@ exports[`Storyshots CheckboxList101 playground 1`] = `
             Story Source
           </h1>
           <pre
-            className="css-r8d96o eyvlbql0"
+            style={
+              Object {
+                "alignItems": "center",
+                "backgroundColor": "#fafafa",
+                "display": "flex",
+                "fontFamily": "Menlo, Monaco, \\"Courier New\\", monospace",
+                "fontSize": ".88em",
+                "justifyContent": "space-between",
+                "lineHeight": 1.5,
+                "overflowX": "scroll",
+                "padding": ".5rem",
+              }
+            }
           >
             <div>
               <div
@@ -1398,25 +1436,26 @@ exports[`Storyshots CheckboxList101 playground 1`] = `
               </div>
             </div>
             <button
-              className="css-1naocv3 eva467m0"
               onClick={[Function]}
+              style={
+                Object {
+                  "alignSelf": "flex-start",
+                  "backgroundColor": "rgb(255, 255, 255)",
+                  "borderColor": "rgb(238, 238, 238)",
+                  "borderImage": "initial",
+                  "borderRadius": "3px",
+                  "borderStyle": "solid",
+                  "borderWidth": "1px",
+                  "cursor": "pointer",
+                  "flexShrink": "0",
+                  "fontSize": "13px",
+                  "overflow": "hidden",
+                  "padding": "3px 10px",
+                }
+              }
+              type="button"
             >
-              <div
-                className="css-lvl6aa eva467m1"
-              >
-                <div
-                  style={
-                    Object {
-                      "marginBottom": 6,
-                    }
-                  }
-                >
-                  Copied!
-                </div>
-                <div>
-                  Copy
-                </div>
-              </div>
+              Copy
             </button>
           </pre>
         </div>

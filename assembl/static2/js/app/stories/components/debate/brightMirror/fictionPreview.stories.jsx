@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, text, boolean, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -38,25 +37,22 @@ export const customFictionPreview: FictionPreviewProps = {
 
 storiesOf('FictionPreview', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <FictionPreview {...customFictionPreview} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <FictionPreview
-        id={customFictionPreview.id}
-        title={text('title', customFictionPreview.title)}
-        authorName={text('author name', customFictionPreview.authorName)}
-        creationDate={text('creation date', customFictionPreview.creationDate)}
-        link={text('url', customFictionPreview.link)}
-        originalBody={text('original body', customFictionPreview.originalBody)}
-        refetchIdea={customFictionPreview.refetchIdea}
-        lang={text('original locale', customFictionPreview.lang)}
-        userCanEdit={boolean('User can edit', customFictionPreview.userCanEdit)}
-        userCanDelete={boolean('User can delete', customFictionPreview.userCanDelete)}
-        deleteFictionHandler={customFictionPreview.deleteFictionHandler}
-        publicationState={select('publicationState', PublicationStates, PublicationStates.PUBLISHED)}
-        fictionMetaInfo={customFictionPreview.fictionMetaInfo}
-        pictureId={customFictionPreview.pictureId}
-      />
-    ))
-  );
+  .add('default', () => <FictionPreview {...customFictionPreview} />)
+  .add('playground', () => (
+    <FictionPreview
+      id={customFictionPreview.id}
+      title={text('title', customFictionPreview.title)}
+      authorName={text('author name', customFictionPreview.authorName)}
+      creationDate={text('creation date', customFictionPreview.creationDate)}
+      link={text('url', customFictionPreview.link)}
+      originalBody={text('original body', customFictionPreview.originalBody)}
+      refetchIdea={customFictionPreview.refetchIdea}
+      lang={text('original locale', customFictionPreview.lang)}
+      userCanEdit={boolean('User can edit', customFictionPreview.userCanEdit)}
+      userCanDelete={boolean('User can delete', customFictionPreview.userCanDelete)}
+      deleteFictionHandler={customFictionPreview.deleteFictionHandler}
+      publicationState={select('publicationState', PublicationStates, PublicationStates.PUBLISHED)}
+      fictionMetaInfo={customFictionPreview.fictionMetaInfo}
+      pictureId={customFictionPreview.pictureId}
+    />
+  ));

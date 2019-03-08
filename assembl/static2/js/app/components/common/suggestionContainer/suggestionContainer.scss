@@ -1,0 +1,49 @@
+.suggestion-container {
+  border-top: solid 1px $light-grey;
+  color: $grey;
+  padding-bottom: 5px;
+  padding-top: 5px;
+
+  .title {
+    font-size: 1.1rem;
+  }
+
+  .suggestion-list {
+    font-family: $font-family4;
+
+    span {
+      display: inline-block;
+      font-size: 1rem;
+      letter-spacing: normal;
+      margin-right: 15px;
+
+      &::first-letter {
+        text-transform: uppercase;
+      }
+    }
+  }
+}
+
+.bright-mirror-fiction {
+  .suggestion-container {
+    border-top: none;
+  }
+}
+
+@media screen and (min-width: $screen-sm-min) {
+  .bright-mirror-fiction {
+    .suggestion-container {
+      padding-top: 10px;
+
+      .title {
+        font-size: 1.33rem;
+      }
+
+      .suggestion-list {
+        span {
+          font-size: 1.17rem;
+        }
+      }
+    }
+  }
+}

@@ -7,7 +7,11 @@ import FictionBody from '../../../components/debate/brightMirror/fictionBody';
 import BackButton, { type Props as BackButtonProps } from '../../../components/debate/common/backButton';
 import FictionCommentHeader from '../../../components/debate/brightMirror/fictionCommentHeader';
 import FictionCommentForm from '../../../components/debate/brightMirror/fictionCommentForm';
+import TagOnPost from '../../../components/tagOnPost/tagOnPost';
 import { FictionComment } from '../../../components/debate/brightMirror/fictionComment';
+
+// Import types
+import type { Props as TagOnPostProps } from '../../../components/tagOnPost/tagOnPost';
 
 // Import existing storybook data
 import { defaultFictionHeader } from '../../../stories/components/debate/brightMirror/fictionHeader.stories';
@@ -23,6 +27,13 @@ import {
 const defaultBackBtnProps: BackButtonProps = {
   handleClick: Function,
   linkClassName: 'back-btn'
+};
+
+const tagOnPostProps: TagOnPostProps = {
+  isAdmin: true,
+  postId: '0',
+  tagList: [{ id: '0', text: 'Habitat et SDF' }, { id: '1', text: 'Facilitation' }],
+  suggestedTagList: ['complete account of the system', 'great pleasure', 'actual teachings of the great explorer of the truth']
 };
 
 const fictionComments = (
@@ -61,6 +72,7 @@ const BrightMirrorFiction = () => (
               <FictionToolbar {...defaultFictionToolbar} />
               <FictionBody {...defaultFictionBody} />
             </article>
+            <TagOnPost {...tagOnPostProps} />
           </Col>
         </Row>
       </Grid>

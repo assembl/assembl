@@ -3,7 +3,6 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs, boolean } from '@storybook/addon-knobs';
 /* eslint-enable */
 
@@ -38,14 +37,11 @@ const playground = {
 
 storiesOf('FictionToolbar', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <FictionToolbar {...defaultFictionToolbar} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <FictionToolbar
-        {...playground}
-        userCanDelete={boolean('userCanDelete', playground.userCanDelete)}
-        userCanEdit={boolean('userCanEdit', playground.userCanEdit)}
-      />
-    ))
-  );
+  .add('default', () => <FictionToolbar {...defaultFictionToolbar} />)
+  .add('playground', () => (
+    <FictionToolbar
+      {...playground}
+      userCanDelete={boolean('userCanDelete', playground.userCanDelete)}
+      userCanEdit={boolean('userCanEdit', playground.userCanEdit)}
+    />
+  ));

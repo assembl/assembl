@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { action } from '@storybook/addon-actions';
 import { array, number, text, withKnobs } from '@storybook/addon-knobs';
 /* eslint-enable */
@@ -26,17 +25,14 @@ const playground = {
 
 storiesOf('Semantic Analysis|ResponsiveWordCloud', module)
   .addDecorator(withKnobs)
-  .add('default', withInfo()(() => <ResponsiveWordCloud keywords={defaultResponsiveWordCloudProps.keywords} />))
-  .add(
-    'playground',
-    withInfo()(() => (
-      <ResponsiveWordCloud
-        keywordsAngle={number('keywordsAngle', playground.keywordsAngle)}
-        keywordsColor={text('keywordsColor', playground.keywordsColor)}
-        keywordsColorActive={text('keywordsColorActive', playground.keywordsColorActive)}
-        keywords={array('keywords', playground.keywords)}
-        numberOfKeywordsToDisplay={number('numberOfKeywordsToDisplay', playground.numberOfKeywordsToDisplay)}
-        onWordClick={playground.onWordClick}
-      />
-    ))
-  );
+  .add('default', () => <ResponsiveWordCloud keywords={defaultResponsiveWordCloudProps.keywords} />)
+  .add('playground', () => (
+    <ResponsiveWordCloud
+      keywordsAngle={number('keywordsAngle', playground.keywordsAngle)}
+      keywordsColor={text('keywordsColor', playground.keywordsColor)}
+      keywordsColorActive={text('keywordsColorActive', playground.keywordsColorActive)}
+      keywords={array('keywords', playground.keywords)}
+      numberOfKeywordsToDisplay={number('numberOfKeywordsToDisplay', playground.numberOfKeywordsToDisplay)}
+      onWordClick={playground.onWordClick}
+    />
+  ));

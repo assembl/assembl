@@ -29,4 +29,13 @@ fragment BrightMirrorFiction on Post {
   extracts {
     ...FictionExtract
   }
+  keywords {
+    score
+    count
+    value
+  }
+  tags {
+    id
+    value
+  }
 }

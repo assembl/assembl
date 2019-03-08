@@ -17,6 +17,8 @@ import Header from '../components/common/header';
 import IdeaQuery from '../graphql/IdeaQuery.graphql';
 import IdeaWithPostsQuery from '../graphql/IdeaWithPostsQuery.graphql';
 import SemanticAnalysisForThematicQuery from '../graphql/SemanticAnalysisForThematicQuery.graphql';
+import TagsQuery from '../graphql/TagsQuery.graphql';
+import { updateTags } from '../actions/tagActions';
 import GoUp from '../components/common/goUp';
 import Loader from '../components/common/loader';
 import { getConnectedUserId } from '../utils/globalFunctions';
@@ -57,7 +59,11 @@ type Props = {
   title: string,
   description: string,
   toggleHarvesting: Function,
-  isHarvesting: boolean
+  isHarvesting: boolean,
+  /** Tags information fetched from GraphQL */
+  tags: Array<Tag>,
+  /** Function to call action to store tags on store */
+  putTagsInStore: Function
 } & SemanticAnalysisForThematicQuery;
 
 type PostWithChildren = {
@@ -170,6 +176,11 @@ export const noRowsRenderer = () => (
 );
 
 class Idea extends React.Component<Props> {
+  componentWillMount() {
+    const { tags, putTagsInStore } = this.props;
+    putTagsInStore(tags);
+  }
+
   componentDidMount() {
     const { toggleHarvesting, isHarvesting } = this.props;
     this.displayBrightMirrorDeleteFictionMessage();
@@ -372,7 +383,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateContentLocaleMapping: info => dispatch(updateContentLocale(info)),
-  toggleHarvesting: () => dispatch(toggleHarvestingAction())
+  toggleHarvesting: () => dispatch(toggleHarvestingAction()),
+  putTagsInStore: tags => dispatch(updateTags(tags))
 });
 
 const IdeaWithPosts = compose(
@@ -442,7 +454,7 @@ const mapStateToPropsForIdeaQuery = state => ({
 });
 
 export default compose(
-  connect(mapStateToPropsForIdeaQuery),
+  connect(mapStateToPropsForIdeaQuery, mapDispatchToProps),
   graphql(IdeaQuery, {
     options: { notifyOnNetworkStatusChange: true },
     // ideaData.loading stays to true when switching interface language (IdeaQuery is using lang variable)
@@ -468,6 +480,9 @@ export default compose(
         messageViewOverride: data.idea.messageViewOverride
       };
     }
+  }),
+  graphql(TagsQuery, {
+    props: ({ data }) => ({ tags: data.tags })
   }),
   semanticAnalysisForThematicQuery,
   manageErrorAndLoading({ displayLoader: true })

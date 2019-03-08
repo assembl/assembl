@@ -1,6 +1,7 @@
 import React from 'react';
 import { configure, addDecorator } from '@storybook/react';
 import { setOptions } from '@storybook/addon-options';
+import { withInfo } from '@storybook/addon-info';
 import { I18n } from 'react-i18nify';
 import { Grid, Row, Col } from 'react-bootstrap';
 import messages from '../js/app/utils/translations';
@@ -17,6 +18,8 @@ import '../css/themes/default/assembl_web.scss';
 //   </Grid>
 // );
 // addDecorator(bootstrapWrapperDecorator);
+
+addDecorator(withInfo);
 
 // Option defaults:
 setOptions({
@@ -68,6 +71,9 @@ function loadStories() {
   require('../js/app/components/common/keywordInfo/keywordInfo.stories');
   require('../js/app/components/common/sentimentBar/sentimentBar.stories.jsx');
   require('../js/app/components/common/wordCountInformation/wordCountInformation.stories.jsx');
+
+  require('../js/app/components/common/tagContainer/tagContainer.stories.jsx');
+  require('../js/app/components/common/suggestionContainer/suggestionContainer.stories.jsx');
 }
 
 configure(loadStories, module);

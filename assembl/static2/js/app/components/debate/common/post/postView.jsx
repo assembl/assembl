@@ -2,19 +2,29 @@
 import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
-import { getDomElementOffset, elementContainsSelection } from '../../../../utils/globalFunctions';
-import { connectedUserIsModerator } from '../../../../utils/permissions';
+import {
+  getDomElementOffset,
+  elementContainsSelection,
+  formatedSuggestedTagList,
+  formatedTagList
+} from '../../../../utils/globalFunctions';
+import { connectedUserIsModerator, connectedUserIsAdmin } from '../../../../utils/permissions';
 import Attachments from '../../../common/attachments';
 import ProfileLine from '../../../common/profileLine';
 import PostActions from '../../common/postActions';
 import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
-import RelatedIdeas from './relatedIdeas';
+import TagOnPost from '../../../tagOnPost/tagOnPost';
+import SuggestionContainer from '../../../common/suggestionContainer/suggestionContainer';
 import PostBody from './postBody';
 import HarvestingMenu from '../../../harvesting/harvestingMenu';
-import type { Props as PostProps } from './index';
 import { getExtractTagId } from '../../../../utils/extract';
 import { PublicationStates, pendingOrange, MESSAGE_VIEW } from '../../../../constants';
+
+// Type imports
+import type { Props as PostProps } from './index';
+import type { Props as SuggestionContainerProps } from '../../../common/suggestionContainer/suggestionContainer';
+import type { Props as TagOnPostProps } from '../../../tagOnPost/tagOnPost';
 
 type Props = PostProps & {
   body: string,
@@ -131,7 +141,9 @@ class PostView extends React.PureComponent<Props, State> {
       mySentiment,
       attachments,
       extracts,
-      publicationState
+      publicationState,
+      keywords,
+      tags
     } = this.props.data.post;
     const {
       borderLeftColor,
@@ -193,6 +205,19 @@ class PostView extends React.PureComponent<Props, State> {
       userName = I18n.t('deletedUser');
     }
     const userNameClasses = classnames({ pending: isPending });
+
+    const tagOnPostProps: TagOnPostProps = {
+      isAdmin: connectedUserIsAdmin(),
+      postId: id,
+      tagList: formatedTagList(tags),
+      suggestedTagList: formatedSuggestedTagList(keywords)
+    };
+
+    const suggestionContainerProps: SuggestionContainerProps = {
+      suggestionList: relatedIdeasTitles,
+      suggestionContainerTitle: I18n.t('debate.thread.linkIdea')
+    };
+
     return (
       <div
         ref={(p) => {
@@ -254,7 +279,8 @@ class PostView extends React.PureComponent<Props, State> {
 
               {!multiColumns ? (
                 <React.Fragment>
-                  {hasRelatedIdeas ? <RelatedIdeas relatedIdeasTitles={relatedIdeasTitles} /> : null}
+                  <TagOnPost {...tagOnPostProps} />
+                  {hasRelatedIdeas ? <SuggestionContainer {...suggestionContainerProps} /> : null}
                   <div className="answers annotation">
                     <Translate value="debate.thread.numberOfResponses" count={numChildren} />
                   </div>

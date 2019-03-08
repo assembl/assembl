@@ -2,7 +2,6 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { storiesOf } from '@storybook/react';
-import { withInfo } from '@storybook/addon-info';
 import { withKnobs } from '@storybook/addon-knobs';
 import { action } from '@storybook/addon-actions';
 import { getExtractTagId } from '../../../../../utils/extract';
@@ -231,8 +230,8 @@ export const withReplySideCommentBoxProps: SideCommentBoxProps = {
 
 storiesOf('SideCommentBox', module)
   .addDecorator(withKnobs)
-  .add('single comment', withInfo()(() => <DumbSideCommentBox {...defaultSideCommentBoxProps} />))
-  .add('multiple comments', withInfo()(() => <DumbSideCommentBox {...multipleSideCommentBoxProps} />))
-  .add('submitting', withInfo()(() => <DumbSideCommentBox {...submittingSideCommentBoxProps} />))
-  .add('can reply', withInfo()(() => <DumbSideCommentBox {...canReplySideCommentBoxProps} />))
-  .add('with reply', withInfo()(() => <DumbSideCommentBox {...withReplySideCommentBoxProps} />));
+  .add('single comment', () => <DumbSideCommentBox {...defaultSideCommentBoxProps} />)
+  .add('multiple comments', () => <DumbSideCommentBox {...multipleSideCommentBoxProps} />)
+  .add('submitting', () => <DumbSideCommentBox {...submittingSideCommentBoxProps} />)
+  .add('can reply', () => <DumbSideCommentBox {...canReplySideCommentBoxProps} />)
+  .add('with reply', () => <DumbSideCommentBox {...withReplySideCommentBoxProps} />);

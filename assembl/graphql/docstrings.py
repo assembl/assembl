@@ -54,6 +54,7 @@ class Schema:
     text_fields = """A list of ConfigurableField union, where each text field represents a field on a bound entity."""
     profile_fields = """A list of ConfigurableField union, where each text field represents a field on a profile only."""
     timeline = """A list of DiscussionPhase objects, descriping the timeline objects on the debate."""
+    tags = """A list of abstract tags associated to Posts"""
 
 
 class SchemaPosts:
@@ -66,6 +67,7 @@ class SchemaPosts:
 class SchemaTags:
     __doc__ = """The list of filtered tags available on the discussion."""
     filter = "A string used to filter the list of tags."
+    limit = "An integer to define the number of tags to retrieve"
 
 
 class Discussion:
@@ -249,6 +251,18 @@ class ExtractInterface:
 class TagInterface:
     __doc__ = """A tag is a string. It allows to classify objects such as extracts."""
     value = """The value of the tag. This is not language dependent, but rather just unicode text."""
+
+
+class AddTag:
+    __doc__ = """A mutation to add a Tag to a Post."""
+    taggable_id = """The Relay.Node ID type of the TaggableEntity object representing the context of the mutation."""
+    value = """The value of the keyword"""
+
+
+class RemoveTag:
+    __doc__ = """A mutation to create a Tag association to a Post."""
+    id = """The Relay.Node ID type of the Tag object to the updated."""
+    taggable_id = """The Relay.Node ID type of the TaggableEntity object representing the context of the mutation."""
 
 
 class PostExtract:
@@ -588,6 +602,7 @@ class PostInterface:
     modified = """A boolean flag to say whether the post is modified or not."""
     parent_post_creator = "The User or AgentProfile who created the parent post."
     parent_extract_id = "The Extract id to which the post is associated with"
+    tags = """A list of abstract tags associated to the post."""
 
 
 class Post:
