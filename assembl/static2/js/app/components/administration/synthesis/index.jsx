@@ -49,16 +49,20 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
                     label={I18n.t('debate.syntheses.title')}
                     required
                   />
-                  <Field
-                    editLocale={editLocale}
-                    name="url"
-                    component={MultilingualTextFieldAdapter}
-                    label={I18n.t('debate.syntheses.url')}
-                    required
-                  />
+                  <div className="flex">
+                    <Field
+                      editLocale={editLocale}
+                      name="url"
+                      component={MultilingualTextFieldAdapter}
+                      label={I18n.t('debate.syntheses.url')}
+                      required
+                    />
+                    <Helper helperText={I18n.t('debate.synthesis.urlHelper')} popOverClass=" " />
+                  </div>
                   <div className="flex">
                     <Field name="picture" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
-                    <Helper helperText="Photo de l'encarté dans la page des synthèses" popOverClass=" " />
+                    <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" " />
+                    {/* TODO: add image to the helper */}
                   </div>
                 </Section>
               </div>

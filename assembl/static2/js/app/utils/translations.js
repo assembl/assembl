@@ -392,7 +392,9 @@ const Translations = {
         publishedOn: "Publiée le ",
         title: "Titre de la synthèse",
         url: "URL de la synthèse",
-        picture: "Image de l'encarté de la synthèse"
+        picture: "Image de l'encarté de la synthèse",
+        urlHelper: "Insérez l'URL de votre story sur storychief",
+        pictureHelper: "Cette image illustrera votre synthèse dans la page des synthèses"
       },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
@@ -1449,7 +1451,9 @@ const Translations = {
         publishedOn: "Published on ",
         title: "Title of the synthesis",
         url: "URL of the synthesis",
-        picture: "Picture of the synthesis' frame"
+        picture: "Picture of the synthesis' frame",
+        urlHelper: "Insert the url of your story on storychief",
+        pictureHelper: "This is the picture that will be shown to illustrate your synthesis in the syntheses page"
       },
       validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {
