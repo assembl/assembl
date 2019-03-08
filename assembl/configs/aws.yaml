@@ -58,4 +58,4 @@ csp_header: |-
 wheelhouse: s3://bluenove-assembl-wheelhouse
 secure_proxy: true
 alembic:
-  script_location: %(code_root)s/alembic
+  script_location: "%(code_root)s/alembic"
