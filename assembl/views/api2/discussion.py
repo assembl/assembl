@@ -640,7 +640,7 @@ def multi_module_csv_export(request):
 
     from assembl.views.api2.votes import extract_voters
     phase_results, phase_fieldnames = extract_voters(request)
-    import pdb; pdb.set_trace()
+
     results['vote_users_data'] = phase_results
     fieldnames['vote_users_data'] = phase_fieldnames
     return csv_response_multiple_sheets(results, fieldnames, content_disposition='attachment; filename=multimodule_excel_export.csv')
@@ -653,7 +653,7 @@ def csv_response_multiple_sheets(results, fieldnames, content_disposition):
     from openpyxl.workbook import Workbook
     workbook = Workbook(True)
     archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
-    import pdb; pdb.set_trace()
+
     writerow = [None] * len(fieldnames)
     for key, elem in enumerate(fieldnames):
         worksheet = workbook.create_sheet()
