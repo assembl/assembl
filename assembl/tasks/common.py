@@ -136,7 +136,7 @@ def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
     if is_cloud_env(c):
-        code_root = get_venv_site_packages(c)
+        code_root = os.path.join(os.getcwd(), get_venv_site_packages(c))
         config_prefix = code_root + '/configs/'
     else:
         code_root = project_prefix
