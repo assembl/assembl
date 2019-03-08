@@ -9,15 +9,17 @@ import createDiscussionPhaseMutation from '../../../../graphql/mutations/createD
 import updateDiscussionPhaseMutation from '../../../../graphql/mutations/updateDiscussionPhase.graphql';
 import deleteDiscussionPhaseMutation from '../../../../graphql/mutations/deleteDiscussionPhase.graphql';
 
-async function getPhasesVariables(client, phase, initialPhase, order) {
+async function getPhaseVariables(client, phase, initialPhase, order) {
   const initialImg = initialPhase ? initialPhase.image : null;
   return {
-    image: getFileVariable(phase.img, initialImg),
+    id: phase.id,
+    identifier: phase.identifier,
+    image: getFileVariable(phase.image, initialImg),
     titleEntries: convertToEntries(phase.title),
     descriptionEntries: convertToEntries(phase.description),
-    start: convertDateTimeToISO8601String(phase.headerStartDate),
-    end: convertDateTimeToISO8601String(phase.headerEndDate),
-    order: order
+    start: convertDateTimeToISO8601String(phase.start),
+    end: convertDateTimeToISO8601String(phase.end),
+    order: order || phase.order
   };
 }
 
@@ -26,12 +28,6 @@ export const createMutationsPromises = (client: ApolloClient, lang: string) => (
   initialValues: PhasesValues
 ) => {
   const allMutations = [];
-  allMutations.push(() =>
-    client.mutate({
-      mutation: updateDiscussionPhaseMutation,
-      variables: getPhasesVariables(values)
-    })
-  );
 
   const initialIds = initialValues.phases.map(t => t.id);
   const currentIds = values.phases.map(t => t.id);
@@ -41,7 +37,7 @@ export const createMutationsPromises = (client: ApolloClient, lang: string) => (
   const deleteMutations = idsToDelete.map(id => () =>
     client.mutate({
       mutation: deleteDiscussionPhaseMutation,
-      variables: { resourceId: id }
+      variables: { id: id }
     })
   );
   allMutations.push(...deleteMutations);
@@ -51,7 +47,7 @@ export const createMutationsPromises = (client: ApolloClient, lang: string) => (
     const order = idx !== initialIds.indexOf(phase.id) ? idx + 1 : null;
     if (idsToCreate.indexOf(phase.id) > -1) {
       return () =>
-        getPhasesVariables(client, phase, initialPhase, order).then(variables =>
+        getPhaseVariables(client, phase, initialPhase, order).then(variables =>
           client.mutate({
             mutation: createDiscussionPhaseMutation,
             variables: {
@@ -66,7 +62,7 @@ export const createMutationsPromises = (client: ApolloClient, lang: string) => (
     const hasChanged = orderHasChanged || !isEqual(initialPhase, phase);
     if (hasChanged) {
       return () =>
-        getPhasesVariables(client, phase, initialPhase, order).then(variables =>
+        getPhaseVariables(client, phase, initialPhase, order).then(variables =>
           client.mutate({
             mutation: updateDiscussionPhaseMutation,
             variables: {

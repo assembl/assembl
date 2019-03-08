@@ -21,7 +21,9 @@ export const postLoadFormat = (data: PhasesValues) => ({
     description: convertEntriesToI18nValue(phase.descriptionEntries),
     image: phase.image,
     id: phase.id,
+    identifier: phase.identifier,
     start: convertISO8601StringToDateTime(phase.start),
-    end: convertISO8601StringToDateTime(phase.end)
+    end: convertISO8601StringToDateTime(phase.end),
+    order: phase.order
   }))
 });

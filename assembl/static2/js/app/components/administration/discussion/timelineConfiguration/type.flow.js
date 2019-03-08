@@ -9,10 +9,13 @@ export type PhaseValue = {
   description: I18nValue,
   image: FileValue,
   id: string,
+  identifier: string,
   start: string,
-  end: string
+  end: string,
+  order: number
 };
 
 export type PhasesValues = {
+  phases: Array<PhaseValue>,
   timeline: Array<PhaseValue>
 };
