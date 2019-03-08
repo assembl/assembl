@@ -7,6 +7,7 @@ DEFAULT:
 hosts: localhost
 _internal:
   webmaster_user:
+theme_base: "https://s3-eu-west-1.amazonaws.com/bluenove-client-themes/default/"
 attachment_service: s3
 celery_tasks.broker: sqs://
 rds_certificate: rds-combined-ca-bundle.pem
