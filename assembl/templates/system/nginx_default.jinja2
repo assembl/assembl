@@ -108,7 +108,11 @@ server {
         #Nor will it help your performance after the first hour...
         autoindex off;
         add_header Cache-Control "public, max-age=3600";
-        alias {{code_root}}/assembl/static;
+        {% if is_cloud %}
+            alias {{code_root}}/static;
+        {% else %}
+            alias {{code_root}}/assembl/static
+        {% endif %}
     }
 
     location ~ ^/private_uploads/(.*) {
