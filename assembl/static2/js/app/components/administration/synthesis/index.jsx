@@ -43,7 +43,7 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
           <Row>
             <Col xs={12} md={10}>
               <div className="admin-box">
-                <BackButton handleClick={redirectToPreviousPage} linkClassName="btn-default" />
+                <BackButton handleClick={redirectToPreviousPage} />
                 <Section title="debate.syntheses.createNewSynthesis" translate>
                   <Field
                     editLocale={editLocale}
@@ -52,7 +52,7 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
                     label={I18n.t('debate.syntheses.title')}
                     required
                   />
-                  <div className="flex">
+                  <div className="flex url-field">
                     <Field
                       editLocale={editLocale}
                       name="url"
