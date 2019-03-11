@@ -591,57 +591,40 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = args.get('tab_title', None)
         favicon = args.get('favicon', None)
         with_moderation = args.get('with_moderation', None)
-        with cls.default_db.no_autoflush as db:
-            if languages is not None:
-                if not languages:
-                    error = _("Must pass at least one language to be saved")
-                    raise Exception(context.localizer.translate(error))
-
-        old_slugs = discussion.preferences.old_slugs
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = cls.user_can_cls(
-            user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-            raise HTTPUnauthorized()
+        if not languages:
+            discussion.discussion_locales = languages
 
         db = discussion.db
-        prefs_to_save = args.get('languages', [])
         tab_title = args.get('tab_title', None)
         favicon = args.get('favicon', None)
         with_moderation = args.get('with_moderation', None)
         slug = args.get('slug', None)
-        for old_slug in old_slugs:
-            if slug == old_slug.slug:
-                raise Exception(context.localizer.translate(_("Cannot set discussion slug to this value. This slug value has been used before")))
 
+        if tab_title:
+            discussion.preferences['tab_title'] = tab_title
 
-                discussion.discussion_locales = languages
+        if favicon:
+            update_attachment(
+                discussion,
+                models.DiscussionAttachment,
+                favicon,
+                discussion.attachments,
+                models.AttachmentPurpose.FAVICON.value,
+                db,
+                context
+            )
 
-            if tab_title:
-                discussion.preferences['tab_title'] = tab_title
+        if with_moderation is not None:
+            discussion.preferences['with_moderation'] = with_moderation
 
-            if favicon:
-                update_attachment(
-                    discussion,
-                    models.DiscussionAttachment,
-                    favicon,
-                    discussion.attachments,
-                    models.AttachmentPurpose.FAVICON.value,
-                    db,
-                    context
-                )
+        if slug != discussion.slug:
+            db.add(models.OldSlug(
+                discussion=discussion,
+                slug=discussion.slug,
+                redirection_slug=slug))
 
-            if with_moderation is not None:
-                discussion.preferences['with_moderation'] = with_moderation
-
-            if slug != discussion.slug:
-                db.add(models.OldSlug(
-                    discussion=discussion,
-                    slug=discussion.slug,
-                    redirection_slug=slug))
-
-            if slug is not None:
-                discussion.slug = slug
+        if slug is not None:
+            discussion.slug = slug
 
         db.flush()
 
