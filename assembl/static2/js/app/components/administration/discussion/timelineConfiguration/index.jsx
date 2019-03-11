@@ -146,59 +146,64 @@ class TimelineFields extends React.Component<Props, State> {
                       };
                     })}
                     renderTooltip={phaseTooltip}
-                    renderBody={(phase, index) => (
-                      <div className="form-container">
-                        <Translate value="administration.timelineAdmin.instruction3" className="admin-paragraph" />
-                        <Field
-                          name={`phases[${phase.index}].start`}
-                          component={DatePickerFieldAdapter}
-                          picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
-                          editLocale={editLocale}
-                          placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
-                          showTime={false}
-                          hasConflictingDate={false}
-                          onDateChange={e => this.onStartChange(e, index, values)}
-                          dateFormat="LL"
-                        />
-                        <Field
-                          name={`phases[${phase.index}].end`}
-                          component={DatePickerFieldAdapter}
-                          picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}
-                          editLocale={editLocale}
-                          placeHolder={I18n.t('administration.landingPage.header.timePlaceholder')}
-                          showTime={false}
-                          hasConflictingDate={false}
-                          onDateChange={e => this.onEndChange(e, index, values)}
-                          dateFormat="LL"
-                        />
-                        <Helper
-                          label={I18n.t('administration.timelineAdmin.instruction4')}
-                          helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
-                          helperText={I18n.t('administration.helpers.timelinePhases')}
-                          classname="title"
-                        />
-                        <Field
-                          className="admin-content"
-                          name={`phases[${phase.index}].image`}
-                          component={FileUploaderFieldAdapter}
-                          label={I18n.t('administration.landingPage.timeline.imageDescription')}
-                        />
-                        <Helper
-                          label={I18n.t('administration.timelineAdmin.instruction5')}
-                          helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
-                          helperText={I18n.t('administration.helpers.timelinePhases')}
-                          classname="title"
-                        />
-                        <Field
-                          className="form-control"
-                          editLocale={editLocale}
-                          name={`phases[${phase.index}].description`}
-                          component={MultilingualTextFieldAdapter}
-                          label={I18n.t('administration.timelineAdmin.descriptionPhaseLabel')}
-                          required
-                        />
-                      </div>
-                    )}
+                    renderBody={(phase, index) => {
+                      const phaseNumber = index + 1;
+                      const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', {
+                        count: phaseNumber
+                      });
+                      const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
+                      return (
+                        <div className="form-container">
+                          <Translate value="administration.timelineAdmin.instruction3" className="admin-paragraph" />
+                          <Field
+                            name={`phases[${phase.index}].start`}
+                            component={DatePickerFieldAdapter}
+                            picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
+                            editLocale={editLocale}
+                            placeHolder={startDatePickerPlaceholder}
+                            showTime={false}
+                            onDateChange={e => this.onStartChange(e, index, values)}
+                            dateFormat="LL"
+                          />
+                          <Field
+                            name={`phases[${phase.index}].end`}
+                            component={DatePickerFieldAdapter}
+                            picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}
+                            editLocale={editLocale}
+                            placeHolder={endDatePickerPlaceholder}
+                            showTime={false}
+                            onDateChange={e => this.onEndChange(e, index, values)}
+                            dateFormat="LL"
+                          />
+                          <Helper
+                            label={I18n.t('administration.timelineAdmin.instruction4')}
+                            helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
+                            helperText={I18n.t('administration.helpers.timelinePhases')}
+                            classname="title"
+                          />
+                          <Field
+                            className="admin-content"
+                            name={`phases[${phase.index}].image`}
+                            component={FileUploaderFieldAdapter}
+                            label={I18n.t('administration.landingPage.timeline.imageDescription')}
+                          />
+                          <Helper
+                            label={I18n.t('administration.timelineAdmin.instruction5')}
+                            helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
+                            helperText={I18n.t('administration.helpers.timelinePhases')}
+                            classname="title"
+                          />
+                          <Field
+                            className="form-control"
+                            editLocale={editLocale}
+                            name={`phases[${phase.index}].description`}
+                            component={MultilingualTextFieldAdapter}
+                            label={I18n.t('administration.timelineAdmin.descriptionPhaseLabel')}
+                            required
+                          />
+                        </div>
+                      );
+                    }}
                   />
                 </div>
               </AdminForm>
