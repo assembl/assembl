@@ -8,6 +8,8 @@ import { I18n } from 'react-redux-i18n';
 import SynthesisPreview from './synthesisPreview';
 import { displayAlert } from '../../utils/utilityManager';
 import { connectedUserIsAdmin } from '../../utils/permissions';
+import { get } from '../../utils/routeMap';
+import { getDiscussionSlug } from '../../utils/globalFunctions';
 
 export type Props = {
   syntheses: Array<SynthesisPreviw>
@@ -41,11 +43,13 @@ const SynthesesList = ({ syntheses }: Props) => {
   const childElements = syntheses.sort(publicationStateCreationDateComparator).reduce((result, synthesis) => {
     const userCanEdit = connectedUserIsAdmin() || false;
     const userCanDelete = connectedUserIsAdmin() || false;
+    const slug = getDiscussionSlug();
 
     result.push(
       <Animated key={synthesis.id} preset="scalein">
         <SynthesisPreview
           {...synthesis}
+          link={get('newSynthesis', { slug: slug })}
           deleteSynthesisHandler={deleteSynthesisHandler}
           userCanDelete={userCanDelete}
           userCanEdit={userCanEdit}

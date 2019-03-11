@@ -45,6 +45,7 @@ import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirro
 import IntSemanticAnalysis from './integration/semanticAnalysis/pages/semanticAnalysis';
 import IntTagOnPost from './integration/tagOnPost/pages/tagOnPost';
 import CreateSynthesisForm from './components/administration/synthesis/index';
+import NewSynthesis from './pages/synthesisStoryChief';
 
 const DebateHome = (props) => {
   switch (props.params.phase) {
@@ -133,6 +134,7 @@ export default [
         <Route path={routeForRouter('syntheses')} component={Syntheses} />
         <Route path={routeForRouter('createSynthesis')} components={CreateSynthesisForm} />
         <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
+        <Route path={routeForRouter('newSynthesis')} component={NewSynthesis} />
         <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
         <Route path={routeForRouter('semanticAnalysis')} component={SemanticAnalysisForDiscussion} />
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
