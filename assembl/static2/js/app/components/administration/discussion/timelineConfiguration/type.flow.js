@@ -1,8 +1,7 @@
 // @flow
+import type { FileValue, I18nValue, DatePickerInput } from '../../../form/types.flow';
 
-import type { FileValue, I18nValue } from '../../../form/types.flow';
-
-export type PhaseValue = {
+export type PhaseValueFromQuery = {
   title: I18nValue,
   titleEntries: LangstringEntries,
   descriptionEntries: LangstringEntries,
@@ -15,7 +14,21 @@ export type PhaseValue = {
   order: number
 };
 
+export type PhasesValuesFromQuery = {
+  timeline: Array<PhaseValueFromQuery>
+};
+
+export type PhaseValue = {
+  title: I18nValue,
+  description: I18nValue,
+  image: FileValue,
+  id: string,
+  identifier: string,
+  start: DatePickerInput,
+  end: DatePickerInput,
+  order: number
+};
+
 export type PhasesValues = {
-  phases: Array<PhaseValue>,
-  timeline: Array<PhaseValue>
+  phases: Array<PhaseValue>
 };
