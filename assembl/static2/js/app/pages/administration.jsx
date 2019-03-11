@@ -27,9 +27,9 @@ import { getPhaseId } from '../utils/timeline';
 import { fromGlobalId } from '../utils/globalFunctions';
 import { addEnumSuffixToModuleTitles } from '../components/administration/landingPage/addEnumSuffixToModuleTitles';
 
-import { SECTION_PROFILE_OPTIONS } from './../constants';
+import { SECTION_PERSONALIZE_INTERFACE, SECTION_DISCUSSION_PREFERENCES, SECTION_PROFILE_OPTIONS } from './../constants';
 
-const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
+const SECTIONS_WITHOUT_LANGUAGEMENU = [SECTION_PERSONALIZE_INTERFACE, SECTION_DISCUSSION_PREFERENCES];
 
 type Props = {
   sections: Array<Object>,
