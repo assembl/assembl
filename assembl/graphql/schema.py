@@ -195,14 +195,7 @@ class Query(graphene.ObjectType):
             if root_thematic is None:
                 continue
 
-            proposals = root_thematic.get_children()
-            for proposal in proposals:
-                for module in proposal.criterion_for:
-                    num_votes = module.db.query(
-                        getattr(module.get_vote_class(), "voter_id")).filter_by(
-                        vote_spec_id=module.id,
-                        tombstone_date=None).count()
-                    total += num_votes
+            total += vote_session.get_num_votes()
         return total
 
     def resolve_root_idea(self, args, context, info):

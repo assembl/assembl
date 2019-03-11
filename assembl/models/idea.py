@@ -1205,6 +1205,38 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         query = query.filter(Post.id.in_(post_ids))
         return query.count()
 
+    def get_vote_proposals(self):
+        from . import VoteProposal
+        return [child for child in self.get_children()
+                if isinstance(child, VoteProposal)]
+
+    def get_voter_ids_query(self):
+        from .votes import AbstractIdeaVote
+        vote_specifications = self.criterion_for
+        vote_class = with_polymorphic(AbstractIdeaVote, AbstractIdeaVote)
+        query = self.db.query(vote_class.voter_id
+            ).filter_by(tombstone_date=None
+            ).filter(vote_class.vote_spec_id.in_(
+                [vote_spec.id for vote_spec in vote_specifications])
+            ).distinct()
+        return query
+
+    def get_voter_ids(self):
+        from pyramid.threadlocal import get_current_request
+        req = get_current_request()
+        cache = getattr(req, 'idea_get_voter_ids', None) if req else None
+        if cache is not None:
+            participant_ids = cache.get(self.id, None)
+            if participant_ids is not None:
+                return participant_ids
+        query = self.get_voter_ids_query()
+        participant_ids = [row[0] for row in query]
+        if req:
+            if cache is None:
+                req.idea_get_voter_ids = {}
+            req.idea_get_voter_ids[self.id] = participant_ids
+        return participant_ids
+
     crud_permissions = CrudPermissions(
         P_ADD_IDEA, P_READ, P_EDIT_IDEA, P_ADMIN_DISC, P_ADMIN_DISC,
         P_ADMIN_DISC)

@@ -11,9 +11,11 @@ type PostsAndContributorsCountProps = {
   vertical: boolean,
   numContributors: number,
   numPosts: number,
+  numVotes: number,
   className: string,
   showNumPosts: boolean,
-  showNumContributors: boolean
+  showNumContributors: boolean,
+  showNumVotes: boolean
 };
 
 export const Counter = ({ num, elemClassName, className }: CounterProps) => (
@@ -31,12 +33,15 @@ const PostsAndContributorsCount = ({
   vertical,
   numContributors,
   numPosts,
+  numVotes,
   className,
   showNumPosts,
-  showNumContributors
+  showNumContributors,
+  showNumVotes
 }: PostsAndContributorsCountProps) => (
   <div className={`counters ${className}`}>
     {showNumPosts && <Counter num={numPosts} className="assembl-icon assembl-icon-message" />}
+    {showNumVotes && <Counter num={numVotes} className="assembl-icon-participation-vote" />}
     {vertical || ' - '}
     {showNumContributors && <Counter num={numContributors} className="assembl-icon assembl-icon-profil" />}
   </div>
@@ -46,7 +51,9 @@ PostsAndContributorsCount.defaultProps = {
   className: '',
   vertical: false,
   showNumPosts: true,
-  showNumContributors: true
+  showNumContributors: true,
+  showNumVotes: false,
+  numVotes: 0
 };
 
 export default PostsAndContributorsCount;

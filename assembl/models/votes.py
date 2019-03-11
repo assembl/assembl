@@ -149,13 +149,6 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
         return results
 
-    def get_voter_ids_query(self):
-        query = self.db.query(
-            getattr(self.get_vote_class(), "voter_id")).filter_by(
-            vote_spec_id=self.id,
-            tombstone_date=None).distinct()
-        return query
-
     @abstractmethod
     def csv_results(self, csv_file):
         pass

@@ -249,11 +249,7 @@ def global_vote_results_csv(request):
     # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
     num_participants_by_idea_id = {}
     for idea in ideas:
-        vote_specifications = idea.criterion_for
-        query = vote_specifications[0].get_voter_ids_query()
-        for vote_spec in vote_specifications[1:]:
-            query = query.union(vote_spec.get_voter_ids_query())
-        num_participants_by_idea_id[idea.id] = query.count()
+        num_participants_by_idea_id[idea.id] = idea.get_voter_ids_query().count()
 
     # construct a query with each votespec creating columns for:
     # either each token count (for token votes) OR

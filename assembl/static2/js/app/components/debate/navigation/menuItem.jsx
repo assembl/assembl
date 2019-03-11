@@ -17,7 +17,8 @@ type ItemNode = {
   },
   messageViewOverride: string,
   numContributors: number,
-  numPosts: number
+  numPosts: number,
+  numVotes: number
 };
 
 type MenuItemProps = {
@@ -51,7 +52,7 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
 
   render() {
     const { item, selected, hasSubItems } = this.props;
-    const { title, img, messageViewOverride, numContributors, numPosts } = item;
+    const { title, img, messageViewOverride, numContributors, numPosts, numVotes } = item;
     // The first touch show the menu and the second activate the link
     const isTouchScreenDevice = isMobile.any();
     const displayArrow = selected && hasSubItems;
@@ -78,8 +79,15 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
             <div title={title} className="thumb-title">
               {title}
             </div>
-            {messageViewOverride !== MESSAGE_VIEW.noModule && messageViewOverride !== MESSAGE_VIEW.voteSession ? (
-              <PostsAndContributorsCount className="menu-stats" numContributors={numContributors} numPosts={numPosts} />
+            {messageViewOverride !== MESSAGE_VIEW.noModule ? (
+              <PostsAndContributorsCount
+                className="menu-stats"
+                showNumPosts={messageViewOverride !== MESSAGE_VIEW.voteSession}
+                showNumVotes={messageViewOverride === MESSAGE_VIEW.voteSession}
+                numPosts={numPosts}
+                numContributors={numContributors}
+                numVotes={numVotes}
+              />
             ) : null}
           </div>
           {displayArrow && <span className="thumb-arrow assembl-icon assembl-icon-right-dir" />}

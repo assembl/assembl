@@ -1,6 +1,8 @@
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
+
+from sqlalchemy.orm import with_polymorphic
 from sqlalchemy.sql import func
 
 from assembl import models
@@ -42,13 +44,21 @@ class VoteSession(SecureObjectType, SQLAlchemyObjectType):
     vote_specifications = graphene.List(lambda: VoteSpecificationUnion, required=True, description=docs.VoteSession.vote_specifications)
     proposals = graphene.List(lambda: Idea, required=True, description=docs.VoteSession.proposals)
     see_current_votes = graphene.Boolean(required=True, description=docs.VoteSession.see_current_votes)
+    num_participants = graphene.Int(required=True, description=docs.VoteSession.num_participants)
 
     def resolve_proposals(self, args, context, info):
-        return [child for child in self.idea.get_children() if isinstance(child, models.VoteProposal)]
+        return self.idea.get_vote_proposals()
 
     def resolve_vote_specifications(self, args, context, info):
         # return only vote specifications not associated to a proposal
         return [vote_spec for vote_spec in self.vote_specifications if vote_spec.criterion_idea_id is None]
+
+    def resolve_num_participants(self, args, context, info):
+        all_participant_ids = set()
+        for proposal in self.idea.get_vote_proposals():
+            participant_ids = proposal.get_voter_ids()
+            all_participant_ids = all_participant_ids.union(participant_ids)
+        return len(all_participant_ids)
 
 
 class UpdateVoteSession(graphene.Mutation):
@@ -140,8 +150,9 @@ class VoteSpecificationInterface(graphene.Interface):
             vote_spec_id=self.id, tombstone_date=None, voter_id=user_id, idea_id=self.criterion_idea_id).all()
 
     def resolve_num_votes(self, args, context, info):
+        vote_class = with_polymorphic(models.AbstractIdeaVote, models.AbstractIdeaVote)
         res = self.db.query(
-            getattr(self.get_vote_class(), "voter_id")).filter_by(
+            vote_class.voter_id).filter_by(
             vote_spec_id=self.id,
             tombstone_date=None).count()
         # There is no distinct on purpose here.

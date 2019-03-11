@@ -65,6 +65,7 @@ class IdeaInterface(graphene.Interface):
     num_posts = graphene.Int(description=docs.IdeaInterface.num_posts)
     num_total_posts = graphene.Int(description=docs.IdeaInterface.num_total_posts)
     num_contributors = graphene.Int(description=docs.IdeaInterface.num_contributors)
+    num_votes = graphene.Int(description=docs.IdeaInterface.num_votes)
     num_children = graphene.Int(discussion_phase_id=graphene.Int(), description=docs.IdeaInterface.num_children)
     img = graphene.Field(Document, description=docs.IdeaInterface.img)
     order = graphene.Float(description=docs.IdeaInterface.order)
@@ -179,6 +180,22 @@ class IdeaInterface(graphene.Interface):
     def resolve_announcement(self, args, context, info):
         return self.get_applicable_announcement()
 
+    def resolve_num_contributors(self, args, context, info):
+        if self.message_view_override != MessageView.voteSession.value:
+            return self.num_contributors
+
+        if not self.vote_session:
+            return 0
+
+        query = self.vote_session.get_voter_ids_query()
+        return query.count()
+
+    def resolve_num_votes(self, args, context, info):
+        if not self.vote_session:
+            return 0
+
+        return self.vote_session.get_num_votes()
+
 
 class IdeaAnnouncementInput(graphene.InputObjectType):
     __doc__ = docs.IdeaAnnouncement.__doc__
@@ -291,6 +308,14 @@ class VoteResults(graphene.ObjectType):
     num_participants = graphene.Int(required=True, description=docs.VoteResults.num_participants)
     participants = graphene.List(AgentProfile, required=True, description=docs.VoteResults.participants)
 
+    def resolve_num_participants(self, args, context, info):
+        return len(self.participant_ids)
+
+    def resolve_participants(self, args, context, info):
+        participants = [models.AgentProfile.get(participant_id)
+                        for participant_id in self.participant_ids]
+        return participants
+
 
 class Idea(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.IdeaInterface.__doc__
@@ -311,18 +336,14 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     def resolve_vote_results(self, args, context, info):
         vote_specifications = self.criterion_for
         if not vote_specifications:
-            return VoteResults(num_participants=0, participants=[])
+            vote_results = VoteResults()
+            vote_results.participant_ids = []
+            return vote_results
 
-        query = vote_specifications[0].get_voter_ids_query()
-        for vote_spec in vote_specifications[1:]:
-            query = query.union(vote_spec.get_voter_ids_query())
-
-        participant_ids = [row[0] for row in query]
-        num_participants = len(participant_ids)
-        participants = [models.AgentProfile.get(participant_id) for participant_id in participant_ids]
-        return VoteResults(
-            num_participants=num_participants,
-            participants=participants)
+        participant_ids = self.get_voter_ids()
+        vote_results = VoteResults()
+        vote_results.participant_ids = participant_ids
+        return vote_results
 
     @classmethod
     def is_type_of(cls, root, context, info):

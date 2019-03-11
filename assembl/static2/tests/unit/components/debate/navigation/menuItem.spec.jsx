@@ -13,7 +13,9 @@ describe('DumbMenuItem component', () => {
           externalUrl: 'https://foo.bar/img'
         },
         numContributors: 10,
-        numPosts: 123
+        numPosts: 123,
+        numVotes: 0,
+        messageViewOverride: 'thread'
       },
       identifier: 'survey',
       selected: true,
@@ -35,10 +37,36 @@ describe('DumbMenuItem component', () => {
           externalUrl: 'https://foo.bar/img'
         },
         numContributors: 10,
-        numPosts: 123
+        numPosts: 123,
+        numVotes: 0,
+        messageViewOverride: 'thread'
       },
       identifier: 'survey',
       selected: false,
+      hasSubItems: true,
+      slug: 'slug'
+    };
+    const renderer = new ShallowRenderer();
+    renderer.render(<DumbMenuItem {...props} />);
+    const rendered = renderer.getRenderOutput();
+    expect(rendered).toMatchSnapshot();
+  });
+
+  it('should match a selected menu item of type vote session', () => {
+    const props = {
+      item: {
+        id: 'fooId',
+        title: 'Foo',
+        img: {
+          externalUrl: 'https://foo.bar/img'
+        },
+        numContributors: 10,
+        numPosts: 0,
+        numVotes: 123,
+        messageViewOverride: 'voteSession'
+      },
+      identifier: 'survey',
+      selected: true,
       hasSubItems: true,
       slug: 'slug'
     };
