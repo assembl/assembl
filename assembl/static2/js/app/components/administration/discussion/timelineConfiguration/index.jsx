@@ -190,7 +190,6 @@ class TimelineFields extends React.Component<Props, State> {
                         <Field
                           className="form-control"
                           editLocale={editLocale}
-                          withAttachmentButton={false}
                           name={`phases[${phase.index}].description`}
                           component={MultilingualTextFieldAdapter}
                           label={I18n.t('administration.timelineAdmin.descriptionPhaseLabel')}
