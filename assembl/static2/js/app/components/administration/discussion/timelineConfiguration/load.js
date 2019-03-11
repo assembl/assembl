@@ -4,8 +4,6 @@ import TimelineQuery from '../../../../graphql/Timeline.graphql';
 import type { PhasesValuesFromQuery, PhasesValues } from './type.flow';
 import { convertEntriesToI18nValue, convertISO8601StringToDateTime } from '../../../form/utils';
 
-// import type { LegalContentsFormValues } from './../types.flow';
-
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, lang: string) => {
   const { data } = await client.query({
     query: TimelineQuery,
