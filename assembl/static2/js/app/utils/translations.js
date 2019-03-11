@@ -690,7 +690,6 @@ const Translations = {
         annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
         phaseLabel: "Titre de la phase",
         descriptionPhaseLabel: "Description de la phase",
-
         addPhase: "Ajouter une phase",
         deletePhase: "Supprimer la phase",
         instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
@@ -971,7 +970,6 @@ const Translations = {
         timeline: {
           title: "Timeline de la page d'accueil",
           image: "Choisir l'image pour cette phase",
-          phaseSection: "Configurer la timeline du débat sur la page d'accueil",
           imageDescription: "L'image doit avoir une hauteur de 500px et une largeur de 400px.",
           sectionTitle: "Configurer le titre et sous-titre de la section"
         },
@@ -1984,7 +1982,6 @@ const Translations = {
           title: "Timeline on the landing page",
           image: "Choose the image for this phase",
           sectionTitle: "Configure the title and the subtitle of the section",
-          phaseSection: "Configure the timeline of the debate on the landing page",
           imageDescription: "The image must have a height of 500px and a width of 400px."
         },
         successSave: "The modules have been saved with success!",

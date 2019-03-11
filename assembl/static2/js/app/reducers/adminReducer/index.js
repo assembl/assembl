@@ -3,7 +3,6 @@ import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 
 import { type Action } from '../../actions/actionTypes';
-import timeline from './timeline';
 import sections from './adminSections';
 import voteSession from './voteSession';
 import landingPage from './landingPage';
@@ -40,8 +39,7 @@ const reducers = {
   sections: sections,
   voteSession: voteSession,
   landingPage: landingPage,
-  profileOptions: profileOptions,
-  timeline: timeline
+  profileOptions: profileOptions
 };
 
 export default combineReducers(reducers);

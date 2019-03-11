@@ -21,9 +21,6 @@ import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import createTextFieldMutation from '../graphql/mutations/createTextField.graphql';
 import updateTextFieldMutation from '../graphql/mutations/updateTextField.graphql';
 import deleteTextFieldMutation from '../graphql/mutations/deleteTextField.graphql';
-import updateDiscussionPhaseMutation from '../graphql/mutations/updateDiscussionPhase.graphql';
-import createDiscussionPhaseMutation from '../graphql/mutations/createDiscussionPhase.graphql';
-import deleteDiscussionPhaseMutation from '../graphql/mutations/deleteDiscussionPhase.graphql';
 import { type State as ReduxState } from '../reducers/rootReducer';
 
 import {
@@ -270,9 +267,8 @@ class DiscussionAdmin extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps: ReduxState => Object = ({ admin: { editLocale, sections, profileOptions, timeline }, i18n }) => {
+const mapStateToProps: ReduxState => Object = ({ admin: { editLocale, sections, profileOptions }, i18n }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
-  const { phasesById, phasesHaveChanged } = timeline;
   const { profileOptionsHasChanged, textFieldsById } = profileOptions;
   const textFields = textFieldsById
     .map(textField => textField)
@@ -311,12 +307,7 @@ const mapStateToProps: ReduxState => Object = ({ admin: { editLocale, sections, 
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
     profileOptionsHasChanged: profileOptionsHasChanged,
-    textFields: textFields,
-    phases: phasesById
-      .sortBy(phase => phase.get('order'))
-      .valueSeq()
-      .toJS(),
-    phasesHaveChanged: phasesHaveChanged
+    textFields: textFields
   };
 };
 
@@ -329,15 +320,6 @@ export default compose(
   }),
   graphql(updateSectionMutation, {
     name: 'updateSection'
-  }),
-  graphql(createDiscussionPhaseMutation, {
-    name: 'createDiscussionPhase'
-  }),
-  graphql(deleteDiscussionPhaseMutation, {
-    name: 'deleteDiscussionPhase'
-  }),
-  graphql(updateDiscussionPhaseMutation, {
-    name: 'updateDiscussionPhase'
   }),
   graphql(createTextFieldMutation, {
     name: 'createTextField'

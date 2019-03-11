@@ -187,18 +187,14 @@ export const ADMIN_MENU = {
     title: 'administration.landingpage',
     sectionId: '1',
     subMenu: {
-      // manageModules: {
-      //   title: 'administration.landingPage.manageModules.title',
-      //   sectionId: '3'
-      // },
       header: {
         title: 'administration.landingPage.header.title',
         sectionId: '1'
-      },
-      timeline: {
-        title: 'administration.landingPage.timeline.title',
-        sectionId: '2'
       }
+      // manageModules: {
+      //   title: 'administration.landingPage.manageModules.title',
+      //   sectionId: '2'
+      // }
     }
   },
   resourcesCenter: {

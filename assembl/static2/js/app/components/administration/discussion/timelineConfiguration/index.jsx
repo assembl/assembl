@@ -20,10 +20,11 @@ import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAda
 import DatePickerFieldAdapter from '../../../form/datePickerFieldAdapter';
 import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
 import { deletePhaseTooltip, addPhaseTooltip, phaseTooltip } from '../../../common/tooltips';
-import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
+// import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
 import { validStartDate, validEndDate } from '../../landingPage/header/validate';
 import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 import { compareEditorState } from '../../../form/utils';
+import type { PhasesValues } from './type.flow';
 
 import Helper from '../../../common/helper';
 
@@ -36,25 +37,26 @@ type Props = {
 };
 
 type State = {
-  phases: Array<Object>,
+  phases: PhasesValues,
   startDateConflict: boolean,
   endDateConflict: boolean
 };
 
 class TimelineFields extends React.Component<Props, State> {
-  static getDerivedStateFromProps(props) {
-    const phases = props.phases.map(({ start, end }) => ({
-      start: start ? convertISO8601StringToDate(start) : null,
-      end: end ? convertISO8601StringToDate(end) : null
-    }));
-    return {
-      phases: phases,
-      startDateConflict: false,
-      endDateConflict: false
-    };
-  }
+  // static getDerivedStateFromProps(props) {
+  //   const phases = props.phases.map(({ start, end }) => ({
+  //     start: start ? convertISO8601StringToDate(start) : null,
+  //     end: end ? convertISO8601StringToDate(end) : null
+  //   }));
+  //   return {
+  //     phases: phases,
+  //     startDateConflict: false,
+  //     endDateConflict: false
+  //   };
+  // }
 
   state = {
+    // $FlowFixMe
     phases: [],
     startDateConflict: false,
     endDateConflict: false
