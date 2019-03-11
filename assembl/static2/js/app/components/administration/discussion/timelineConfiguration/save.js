@@ -81,4 +81,4 @@ export const createMutationsPromises = (client: ApolloClient, lang: string) => (
   return allMutations;
 };
 
-export const save = createSave('administration.resourcesCenter.successSave');
+export const save = createSave('administration.timelineAdmin.successSave');
