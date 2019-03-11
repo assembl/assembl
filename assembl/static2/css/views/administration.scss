@@ -1,6 +1,7 @@
 .warning-message {
   color: $orange2;
   font-size: $font-size-xs;
+  margin-bottom: 2em;
 }
 
 .tabbed-content {
@@ -13,13 +14,6 @@
     padding: 10px 40px 40px;
     text-align: center;
     margin-bottom: 20px;
-  }
-
-  .warning-label {
-    width: 250px;
-    font-size: $font-size-xs;
-    color: $orange2;
-    text-align: left;
   }
 
   .tab-title {

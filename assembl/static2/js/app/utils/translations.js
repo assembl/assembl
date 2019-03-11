@@ -705,7 +705,7 @@ const Translations = {
         singleModule: "Module unique de participation",
         selectStart: "Date de démarrage de la phase %{count}",
         selectEnd: "Date de fin de la phase %{count}",
-        warningLabel: "Les dates que vous avez configuré entrent en conflit."
+        warningLabel: "La période de cette phase chevauche la période de la phase précédente ou de la phase suivante."
       },
       modules: {
         noModule: "Aucun module",
@@ -1725,7 +1725,7 @@ const Translations = {
         singleModule: "Single participation module",
         selectStart: "Phase %{count}'s start date",
         selectEnd: "Phase %{count}'s end date",
-        warningLabel: "The dates you have set are in conflict"
+        warningLabel: "The dates you have set for this phase are overlapping previous phase or next phase"
       },
       modules: {
         noModule: "No module",

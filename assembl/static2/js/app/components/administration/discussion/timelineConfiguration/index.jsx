@@ -4,6 +4,7 @@ import { Field } from 'react-final-form';
 import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import arrayMutators from 'final-form-arrays';
+import setFieldTouched from 'final-form-set-field-touched';
 import { type ApolloClient, graphql, compose, withApollo } from 'react-apollo';
 import isEqualWith from 'lodash/isEqualWith';
 
@@ -14,17 +15,15 @@ import AdminForm from '../../../../components/form/adminForm';
 import LoadSaveReinitializeForm from '../../../../components/form/LoadSaveReinitializeForm';
 import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
+import validate from './validate';
 import Loader from '../../../common/loader';
 import FieldArrayWithActions from '../../../form/fieldArrayWithActions';
 import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAdapter';
 import DatePickerFieldAdapter from '../../../form/datePickerFieldAdapter';
 import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
 import { deletePhaseTooltip, addPhaseTooltip, phaseTooltip } from '../../../common/tooltips';
-// import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
-import { validStartDate, validEndDate } from '../../landingPage/header/validate';
 import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 import { compareEditorState } from '../../../form/utils';
-import type { PhasesValues } from './type.flow';
 
 import Helper from '../../../common/helper';
 
@@ -36,52 +35,21 @@ type Props = {
   lang: string
 };
 
-type State = {
-  phases: PhasesValues,
-  startDateConflict: boolean,
-  endDateConflict: boolean
+const hasConflictingDates = (phase, phases) => {
+  // $FlowFixMe start is missing in Tab
+  const start = phase.start.time;
+  // $FlowFixMe start is missing in Tab
+  const end = phase.end.time;
+  const id = phase.id;
+  const phaseIndex = phases.findIndex(p => p.id === id);
+  const previousPhase = phases[phaseIndex - 1];
+  const nextPhase = phases[phaseIndex + 1];
+  const res =
+    (start && previousPhase && start.isBefore(previousPhase.end.time)) || (end && nextPhase && end.isAfter(nextPhase.start.time));
+  return res || false;
 };
 
-class TimelineFields extends React.Component<Props, State> {
-  // static getDerivedStateFromProps(props) {
-  //   const phases = props.phases.map(({ start, end }) => ({
-  //     start: start ? convertISO8601StringToDate(start) : null,
-  //     end: end ? convertISO8601StringToDate(end) : null
-  //   }));
-  //   return {
-  //     phases: phases,
-  //     startDateConflict: false,
-  //     endDateConflict: false
-  //   };
-  // }
-
-  state = {
-    // $FlowFixMe
-    phases: [],
-    startDateConflict: false,
-    endDateConflict: false
-  };
-
-  onStartChange = (newStart: moment$Moment, index: number, values) => {
-    const startDateConflict = validStartDate(newStart, values.phases[index].end);
-    const updatedPhases = [...values.phases];
-    updatedPhases[index].start = newStart;
-    this.setState({
-      phases: updatedPhases,
-      startDateConflict: startDateConflict
-    });
-  };
-
-  onEndChange = (newEnd: moment$Moment, index: number, values) => {
-    const endDateConflict = validEndDate(values.phases[index].start, newEnd);
-    const updatedPhases = [...values.phases];
-    updatedPhases[index].end = newEnd;
-    this.setState({
-      phases: updatedPhases,
-      endDateConflict: endDateConflict
-    });
-  };
-
+class TimelineFields extends React.Component<Props> {
   render() {
     const { client, editLocale, lang } = this.props;
     return (
@@ -96,11 +64,12 @@ class TimelineFields extends React.Component<Props, State> {
           postLoadFormat={postLoadFormat}
           createMutationsPromises={createMutationsPromises(client, lang)}
           save={save}
-          validate={() => {}}
+          validate={validate}
           mutators={{
-            ...arrayMutators
+            ...arrayMutators,
+            setFieldTouched: setFieldTouched
           }}
-          render={({ values, handleSubmit, submitting, initialValues }) => {
+          render={({ values, handleSubmit, submitting, initialValues, form }) => {
             const pristine = isEqualWith(initialValues, values, compareEditorState);
             return (
               <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
@@ -152,6 +121,7 @@ class TimelineFields extends React.Component<Props, State> {
                         count: phaseNumber
                       });
                       const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
+                      const conflictingDates = hasConflictingDates(phase, values.phases);
                       return (
                         <div className="form-container">
                           <Translate value="administration.timelineAdmin.instruction3" className="admin-paragraph" />
@@ -162,8 +132,9 @@ class TimelineFields extends React.Component<Props, State> {
                             editLocale={editLocale}
                             placeHolder={startDatePickerPlaceholder}
                             showTime={false}
-                            onDateChange={e => this.onStartChange(e, index, values)}
                             dateFormat="LL"
+                            form={form}
+                            hasConflictingDates={conflictingDates}
                           />
                           <Field
                             name={`phases[${phase.index}].end`}
@@ -172,9 +143,15 @@ class TimelineFields extends React.Component<Props, State> {
                             editLocale={editLocale}
                             placeHolder={endDatePickerPlaceholder}
                             showTime={false}
-                            onDateChange={e => this.onEndChange(e, index, values)}
                             dateFormat="LL"
+                            form={form}
+                            hasConflictingDates={conflictingDates}
                           />
+                          {conflictingDates && (
+                            <div className="warning-message">
+                              <Translate value="administration.timelineAdmin.warningLabel" />
+                            </div>
+                          )}
                           <Helper
                             label={I18n.t('administration.timelineAdmin.instruction4')}
                             helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
@@ -199,7 +176,6 @@ class TimelineFields extends React.Component<Props, State> {
                             name={`phases[${phase.index}].description`}
                             component={MultilingualTextFieldAdapter}
                             label={I18n.t('administration.timelineAdmin.descriptionPhaseLabel')}
-                            required
                           />
                         </div>
                       );
