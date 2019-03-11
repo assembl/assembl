@@ -652,23 +652,27 @@ def csv_response_multiple_sheets(results, fieldnames, content_disposition):
     from zipfile import ZipFile, ZIP_DEFLATED
     from openpyxl.workbook import Workbook
     workbook = Workbook(True)
+    worksheet = workbook.create_sheet()
     archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
+    format = XSLX_MIMETYPE
 
-    writerow = [None] * len(fieldnames)
+    # writerow = [None] * len(fieldnames)
     for key, elem in enumerate(fieldnames):
         worksheet = workbook.create_sheet()
-        writerow[key] = worksheet.append
+        writerow = worksheet.append
         empty = None
-
-        if fieldnames[elem]:
+        import pdb; pdb.set_trace()
+        if fieldnames[elem] is not None:
             # TODO: i18n
-            writerow[key]([' '.join(fn.split('_')).title() for fn in fieldnames[elem]])
-            for r in results:
-                writerow[key]([r.get(f, empty) for f in fieldnames[elem]])
+            for result in results:
+                if results[result]:
+                    for r in results[result]:
+                        writerow([r.get(f, empty) for f in fieldnames[elem]])
         else:
             if results[elem]:
                 for r in results[elem]:
-                    writerow[key](r)
+                    writerow(r)
+
     output.seek(0)
     return Response(body_file=output, content_type=format, content_disposition=content_disposition)
 
@@ -690,21 +694,18 @@ def csv_response(results, format, number_of_sheets=1, fieldnames=None, content_d
         from openpyxl.workbook import Workbook
         workbook = Workbook(True)
         archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
-        # import pdb; pdb.set_trace()
-        writerow = [None] * number_of_sheets
-        for i in range(number_of_sheets):
-            worksheet = workbook.create_sheet()
-            writerow[i] = worksheet.append
-            empty = None
+        worksheet = workbook.create_sheet()
+        writerow = worksheet.append
+        empty = None
 
-            if fieldnames:
-                # TODO: i18n
-                writerow[i]([' '.join(fn.split('_')).title() for fn in fieldnames])
-                for r in results:
-                    writerow[i]([r.get(f, empty) for f in fieldnames])
-            else:
-                for r in results:
-                    writerow[i](r)
+    if fieldnames:
+        # TODO: i18n
+        writerow([' '.join(fn.split('_')).title() for fn in fieldnames])
+        for r in results:
+            writerow([r.get(f, empty) for f in fieldnames])
+    else:
+        for r in results:
+            writerow(r)
 
     if format == XSLX_MIMETYPE:
         from openpyxl.writer.excel import ExcelWriter
