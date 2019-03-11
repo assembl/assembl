@@ -41,21 +41,6 @@
 }
 
 .administration {
-  .admin-phase-box {
-    border: 1px solid #ccc;
-    padding: 25px 20px 5px;
-    margin-bottom: 25px;
-
-    .phase-title {
-      margin-bottom: 20px;
-    }
-
-    textarea {
-      height: 80px;
-      border-color: #ccc;
-    }
-  }
-
   .preferences-section,
   .legal-contents-administration {
     input[type='checkbox'] {
@@ -692,55 +677,6 @@
     .phases-creation,
     .phase-configuration-section {
       margin: 30px 0;
-    }
-  }
-
-  .phase-form {
-    .admin-dropdown {
-      width: 224px;
-      font-size: $font-size-xs;
-      height: 34px;
-      text-align: left;
-      font-family: $font-family4;
-    }
-
-    .open > .dropdown-menu {
-      font-size: $font-size-xs;
-      font-family: $font-family4;
-      width: 224px;
-    }
-
-    .dropdown-menu > li > a {
-      letter-spacing: 0;
-    }
-
-    .module-selection-text {
-      width: 330px;
-      font-size: $font-size-s;
-      text-align: left;
-      margin: 40px auto 0 auto;
-    }
-
-    .configure-module-text {
-      margin: 40px auto 0 auto;
-      width: 330px;
-      text-align: left;
-      padding-left: 40px;
-    }
-
-    .date-picker-field {
-      input {
-        font-size: $font-size-xs;
-      }
-    }
-
-    .configure-module-link {
-      cursor: pointer;
-      text-decoration: underline;
-
-      &:hover {
-        text-decoration: none;
-      }
     }
   }
 }
