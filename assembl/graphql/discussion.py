@@ -591,8 +591,16 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = args.get('tab_title', None)
         favicon = args.get('favicon', None)
         with_moderation = args.get('with_moderation', None)
-        if not languages:
-            discussion.discussion_locales = languages
+        with cls.default_db.no_autoflush as db:
+            if languages is not None:
+                if not languages:
+                    discussion.discussion_locales = languages
+
+        # permissions = get_permissions(user_id, discussion_id)
+        # allowed = cls.user_can_cls(
+        #     user_id, CrudPermissions.UPDATE, permissions)
+        # if not allowed or (allowed == IF_OWNED and user_id == Everyone):
+        #     raise HTTPUnauthorized()
 
         db = discussion.db
         tab_title = args.get('tab_title', None)
