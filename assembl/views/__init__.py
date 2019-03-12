@@ -167,7 +167,7 @@ def get_resources_hash(theme_name):
     if os.path.exists(resources_path):
         with open(resources_path) as fp:
             result = extract_resources_hash(fp, theme_name)
-    
+
     RESOURCES[theme_name] = result
     return result
 
@@ -546,6 +546,10 @@ def get_description(request):
     If the discussion does not have a description corresponding to this locale,
     returns the description corresponding to the first preferred locale of the discussion
     """
+    # TODO: 1. alter this code to look at a new objectives model, rather than the
+    # extra json, as the work is started in
+    # [67a9815](https://github.com/assembl/assembl/commit/67a9815147830888c080c0e1225e7c9bd5819bcd)
+    # on branch https://github.com/assembl/assembl/compare/admin_text_multimedia_DEVAS-1251.
     opengraph_locale = get_opengraph_locale(request)
     from ..auth.util import get_current_discussion
     discussion = get_current_discussion()
@@ -557,7 +561,14 @@ def get_description(request):
         else:
             objectives_dict = objectives_dict["descriptionEntries"]
             locale = discussion.preferences['preferred_locales'][0]
-            return adapt_to_html_content(objectives_dict.get(opengraph_locale, objectives_dict[locale]))
+            if locale in objectives_dict:
+                return adapt_to_html_content(objectives_dict.get(opengraph_locale, objectives_dict[locale]))
+            elif len(objectives_dict) != 0:
+                return adapt_to_html_content(objectives_dict.get(objectives_dict.keys()[0]))
+            else:
+                return ""
+    else:
+        return "Assembl is a collective intelligence platform capable of hosting massive structured conversations online."
 
 
 def get_topic(request):
@@ -577,7 +588,14 @@ def get_topic(request):
         else:
             topic_dict = topic_dict["titleEntries"]
             locale = discussion.preferences["preferred_locales"][0]
-            return adapt_to_html_content(topic_dict.get(opengraph_locale, topic_dict[locale]))
+            if locale in topic_dict:
+                return adapt_to_html_content(topic_dict.get(opengraph_locale, topic_dict[locale]))
+            elif len(topic_dict) != 0:
+                return adapt_to_html_content(topic_dict.get(topic_dict.keys()[0]))
+            else:
+                return ""
+    else:
+        return "Assembl is a collective intelligence platform capable of hosting massive structured conversations online."
 
 
 def discussion_title():
