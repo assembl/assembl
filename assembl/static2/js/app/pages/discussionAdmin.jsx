@@ -7,7 +7,7 @@ import { I18n } from 'react-redux-i18n';
 
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalContentsForm from '../components/administration/legalContents/index';
-import TimelineForm from '../components/administration/discussion/timelineConfiguration/';
+import TimelineForm from '../components/administration/discussion/timelineConfiguration';
 import PreferencesSection from '../components/administration/discussion/preferences/index';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import PersonalizeInterface from '../components/administration/discussion/personalizeInterface';
