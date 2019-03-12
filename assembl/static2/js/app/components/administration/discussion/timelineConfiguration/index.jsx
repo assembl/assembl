@@ -166,6 +166,7 @@ class TimelineFields extends React.Component<Props> {
                             />
                             <Field
                               className="form-control"
+                              componentClass="textarea"
                               editLocale={editLocale}
                               name={`${name}.description`}
                               component={MultilingualTextFieldAdapter}
