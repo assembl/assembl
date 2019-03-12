@@ -144,9 +144,11 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
     this.setState(
       prevState => ({ activePanel: prevState.activePanel === idx ? null : idx }),
       () => {
-        const panel = document.getElementById(`panel${idx}`);
-        const scrollY = panel ? getDomElementOffset(panel).top : 0;
-        window.scrollTo({ top: scrollY - 170, left: 0, behavior: 'smooth' });
+        setTimeout(() => {
+          const panel = document.getElementById(`panel${idx}`);
+          const scrollY = panel ? getDomElementOffset(panel).top : 0;
+          window.scrollTo({ top: scrollY - 170, left: 0, behavior: 'smooth' });
+        }, 20);
       }
     );
   };
