@@ -11,10 +11,14 @@ type Errors = {
 
 const validatePhase = (phase: PhaseValue): Errors => ({
   title: i18nValueIsEmpty(phase.title) ? I18n.t('error.required') : undefined,
-  start: validStartDate(phase.start.time, phase.end.time)
-    ? undefined
-    : I18n.t('administration.landingPage.header.startDateError'),
-  end: validEndDate(phase.start.time, phase.end.time) ? undefined : I18n.t('administration.landingPage.header.endDateError')
+  start:
+    phase.start && phase.end && validStartDate(phase.start.time, phase.end.time)
+      ? undefined
+      : I18n.t('administration.landingPage.header.startDateError'),
+  end:
+    phase.start && phase.end && validEndDate(phase.start.time, phase.end.time)
+      ? undefined
+      : I18n.t('administration.landingPage.header.endDateError')
 });
 
 export default function validate(values: PhasesValues): { phases: Array<Errors> } {

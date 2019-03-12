@@ -4,6 +4,7 @@ import { Field } from 'react-final-form';
 import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import arrayMutators from 'final-form-arrays';
+import { FieldArray } from 'react-final-form-arrays';
 import setFieldTouched from 'final-form-set-field-touched';
 import { type ApolloClient, graphql, compose, withApollo } from 'react-apollo';
 import isEqualWith from 'lodash/isEqualWith';
@@ -36,16 +37,15 @@ type Props = {
 };
 
 const hasConflictingDates = (phase, phases) => {
-  // $FlowFixMe start is missing in Tab
-  const start = phase.start.time;
-  // $FlowFixMe start is missing in Tab
-  const end = phase.end.time;
+  const start = phase.start ? phase.start.time : null;
+  const end = phase.end ? phase.end.time : null;
   const id = phase.id;
   const phaseIndex = phases.findIndex(p => p.id === id);
   const previousPhase = phases[phaseIndex - 1];
   const nextPhase = phases[phaseIndex + 1];
   const res =
-    (start && previousPhase && start.isBefore(previousPhase.end.time)) || (end && nextPhase && end.isAfter(nextPhase.start.time));
+    (start && previousPhase && previousPhase.end && start.isBefore(previousPhase.end.time)) ||
+    (end && nextPhase && nextPhase.start && end.isAfter(nextPhase.start.time));
   return res || false;
 };
 
@@ -99,88 +99,97 @@ class TimelineFields extends React.Component<Props> {
                 </div>
                 <Translate value="administration.timelineAdmin.instruction2" className="admin-instruction" />
                 <div className="phase-configuration-section">
-                  <TabbedContent
-                    type="phase"
-                    divClassName=""
-                    tabTitleMsgId="administration.timelineAdmin.phase"
-                    tabs={values.phases.map((phase, index) => {
-                      const tabTitle = `${I18n.t('administration.timelineAdmin.phase', { count: index + 1 })}`;
-                      return {
-                        id: phase.id,
-                        title: tabTitle,
-                        description: phase.description,
-                        start: phase.start,
-                        end: phase.end,
-                        index: index
-                      };
-                    })}
-                    renderTooltip={phaseTooltip}
-                    renderBody={(phase, index) => {
-                      const phaseNumber = index + 1;
-                      const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', {
-                        count: phaseNumber
-                      });
-                      const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', { count: phaseNumber });
-                      const conflictingDates = hasConflictingDates(phase, values.phases);
-                      return (
-                        <div className="form-container">
-                          <Translate value="administration.timelineAdmin.instruction3" className="admin-paragraph" />
-                          <Field
-                            name={`phases[${phase.index}].start`}
-                            component={DatePickerFieldAdapter}
-                            picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
-                            editLocale={editLocale}
-                            placeHolder={startDatePickerPlaceholder}
-                            showTime={false}
-                            dateFormat="LL"
-                            form={form}
-                            hasConflictingDates={conflictingDates}
-                          />
-                          <Field
-                            name={`phases[${phase.index}].end`}
-                            component={DatePickerFieldAdapter}
-                            picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}
-                            editLocale={editLocale}
-                            placeHolder={endDatePickerPlaceholder}
-                            showTime={false}
-                            dateFormat="LL"
-                            form={form}
-                            hasConflictingDates={conflictingDates}
-                          />
-                          {conflictingDates && (
-                            <div className="warning-message">
-                              <Translate value="administration.timelineAdmin.warningLabel" />
+                  <FieldArray name="phases">
+                    {({ fields }) => (
+                      <TabbedContent
+                        type="phase"
+                        divClassName=""
+                        tabTitleMsgId="administration.timelineAdmin.phase"
+                        tabs={fields.map((name, index) => {
+                          const phase = fields.value[index];
+                          const tabTitle = `${I18n.t('administration.timelineAdmin.phase', { count: index + 1 })}`;
+                          return {
+                            id: phase.id,
+                            title: tabTitle,
+                            name: name,
+                            phase: phase
+                          };
+                        })}
+                        renderTooltip={phaseTooltip}
+                        renderBody={(tab, index) => {
+                          // $FlowFixMe name is missing in Tab
+                          const name = tab.name;
+                          // $FlowFixMe phase is missing in Tab
+                          const phase = tab.phase;
+                          const phaseNumber = index + 1;
+                          const startDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectStart', {
+                            count: phaseNumber
+                          });
+                          const endDatePickerPlaceholder = I18n.t('administration.timelineAdmin.selectEnd', {
+                            count: phaseNumber
+                          });
+                          const conflictingDates = hasConflictingDates(phase, values.phases);
+                          return (
+                            <div className="form-container" key={phase.id || index}>
+                              <Translate value="administration.timelineAdmin.instruction3" className="admin-paragraph" />
+                              <Field
+                                name={`${name}.start`}
+                                component={DatePickerFieldAdapter}
+                                picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
+                                editLocale={editLocale}
+                                placeHolder={startDatePickerPlaceholder}
+                                showTime={false}
+                                dateFormat="LL"
+                                form={form}
+                                hasConflictingDates={conflictingDates}
+                              />
+                              <Field
+                                name={`${name}.end`}
+                                component={DatePickerFieldAdapter}
+                                picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}
+                                editLocale={editLocale}
+                                placeHolder={endDatePickerPlaceholder}
+                                showTime={false}
+                                dateFormat="LL"
+                                form={form}
+                                hasConflictingDates={conflictingDates}
+                              />
+                              {conflictingDates && (
+                                <div className="warning-message">
+                                  <Translate value="administration.timelineAdmin.warningLabel" />
+                                </div>
+                              )}
+                              <Helper
+                                label={I18n.t('administration.timelineAdmin.instruction4')}
+                                helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
+                                helperText={I18n.t('administration.helpers.timelinePhases')}
+                                classname="title"
+                              />
+                              <Field
+                                className="admin-content"
+                                name={`${name}.image`}
+                                component={FileUploaderFieldAdapter}
+                                label={I18n.t('administration.landingPage.timeline.imageDescription')}
+                              />
+                              <Helper
+                                label={I18n.t('administration.timelineAdmin.instruction5')}
+                                helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
+                                helperText={I18n.t('administration.helpers.timelinePhases')}
+                                classname="title"
+                              />
+                              <Field
+                                className="form-control"
+                                editLocale={editLocale}
+                                name={`${name}.description`}
+                                component={MultilingualTextFieldAdapter}
+                                label={I18n.t('administration.timelineAdmin.descriptionPhaseLabel')}
+                              />
                             </div>
-                          )}
-                          <Helper
-                            label={I18n.t('administration.timelineAdmin.instruction4')}
-                            helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
-                            helperText={I18n.t('administration.helpers.timelinePhases')}
-                            classname="title"
-                          />
-                          <Field
-                            className="admin-content"
-                            name={`phases[${phase.index}].image`}
-                            component={FileUploaderFieldAdapter}
-                            label={I18n.t('administration.landingPage.timeline.imageDescription')}
-                          />
-                          <Helper
-                            label={I18n.t('administration.timelineAdmin.instruction5')}
-                            helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
-                            helperText={I18n.t('administration.helpers.timelinePhases')}
-                            classname="title"
-                          />
-                          <Field
-                            className="form-control"
-                            editLocale={editLocale}
-                            name={`phases[${phase.index}].description`}
-                            component={MultilingualTextFieldAdapter}
-                            label={I18n.t('administration.timelineAdmin.descriptionPhaseLabel')}
-                          />
-                        </div>
-                      );
-                    }}
-                  />
+                          );
+                        }}
+                      />
+                    )}
+                  </FieldArray>
                 </div>
               </AdminForm>
             );
