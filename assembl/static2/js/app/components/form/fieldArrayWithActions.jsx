@@ -8,7 +8,7 @@ import range from 'lodash/range';
 
 import { displayModal, closeModal } from '../../utils/utilityManager';
 import { upTooltip, downTooltip } from '../common/tooltips';
-import { createRandomId } from '../../utils/globalFunctions';
+import { createRandomId, getDomElementOffset } from '../../utils/globalFunctions';
 import { MAX_TREE_FORM_LEVEL } from '../../constants';
 
 type ConfirmationMessageType = {
@@ -17,6 +17,7 @@ type ConfirmationMessageType = {
 };
 
 type Props = {
+  usePanels: boolean,
   renderFields: Function,
   titleMsgId?: string, // eslint-disable-line react/require-default-props
   tooltips: {
@@ -37,6 +38,10 @@ type Props = {
     confirmDeletionTitle: (props: ConfirmationMessageType) => React.Node,
     confirmDeletionBody: (props: ConfirmationMessageType) => React.Node
   }
+};
+
+type State = {
+  activePanel: number | null
 };
 
 type FieldsProps = {
@@ -70,11 +75,13 @@ export function confirmDeletionModal(title: React.Node, body: React.Node, remove
   return displayModal(title, body, true, footer);
 }
 
-export class Fields extends React.PureComponent<FieldsProps> {
+export class Fields extends React.PureComponent<FieldsProps, State> {
   constructor(props: FieldsProps) {
     super(props);
     this.initialize();
   }
+
+  state = { activePanel: null };
 
   initialize = () => {
     const { fields, minItems, level, onAdd, parentId } = this.props;
@@ -125,10 +132,23 @@ export class Fields extends React.PureComponent<FieldsProps> {
   add = () => {
     const { fields, onAdd, parentId } = this.props;
     const id = createRandomId();
+    const idx = fields.length || 0;
     if (onAdd) {
-      onAdd(id, parentId, fields.length || 0);
+      onAdd(id, parentId, idx);
     }
     fields.push({ id: id });
+    this.setActivePanel(idx);
+  };
+
+  setActivePanel = (idx: number) => {
+    this.setState(
+      prevState => ({ activePanel: prevState.activePanel === idx ? null : idx }),
+      () => {
+        const panel = document.getElementById(`panel${idx}`);
+        const scrollY = panel ? getDomElementOffset(panel).top : 0;
+        window.scrollTo({ top: scrollY - 170, left: 0, behavior: 'smooth' });
+      }
+    );
   };
 
   render() {
@@ -149,7 +169,8 @@ export class Fields extends React.PureComponent<FieldsProps> {
       onAdd,
       onRemove,
       onUp,
-      onDown
+      onDown,
+      usePanels
     } = this.props;
     // /* Hack to fix issue with richtext field:
     // when clicking on delete action, the value of richtext field becomes '' and so
@@ -198,9 +219,16 @@ export class Fields extends React.PureComponent<FieldsProps> {
               )
             : removeField;
           return (
-            <div className="form-container" key={fieldname}>
+            <div
+              className={classNames('form-container', { 'panel panel-default': usePanels })}
+              id={usePanels ? `panel${idx}` : undefined}
+              key={fieldname}
+            >
               {titleMsgId ? (
-                <div className="title left">
+                <div
+                  className={classNames({ title: !usePanels, 'panel-heading pointer': usePanels, left: true })}
+                  onClick={usePanels ? () => this.setActivePanel(idx) : undefined}
+                >
                   <Translate value={titleMsgId} count={idx + 1} />
                 </div>
               ) : null}
@@ -233,7 +261,13 @@ export class Fields extends React.PureComponent<FieldsProps> {
                 </div>
               </div>
               <div className="clear" />
-              <div className={classNames({ 'form-tree-item': isTree })}>
+              <div
+                className={classNames({
+                  'form-tree-item': isTree,
+                  'panel-body': usePanels,
+                  hidden: usePanels && idx !== this.state.activePanel
+                })}
+              >
                 {renderFields({ name: fieldname, idx: idx, fieldIndex: fieldIndex })}
                 {isTree && subFieldName ? (
                   <FieldArrayWithActions
@@ -281,6 +315,7 @@ const FieldArrayWithActions = (props: FieldArrayProps) => {
 };
 
 FieldArrayWithActions.defaultProps = {
+  usePanels: false,
   withSeparators: true,
   subFieldName: '',
   isTree: false,
