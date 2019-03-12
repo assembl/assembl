@@ -115,14 +115,14 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
     fields.swap(index, index - 1);
   };
 
-  // removedIndex: ?number = null;
+  removedId: ?number = null;
 
   remove = (index: number) => {
     const { fields, onRemove, isTree, subFieldName } = this.props;
     const fieldValue = fields.value[index];
     const children = subFieldName && isTree && fieldValue[subFieldName];
     if (!children || children.length === 0) {
-      // this.removedIndex = index;
+      this.removedId = fieldValue.id;
       if (onRemove) {
         onRemove(fieldValue.id);
       }
@@ -178,17 +178,11 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
       onDown,
       usePanels
     } = this.props;
-    // /* Hack to fix issue with richtext field:
-    // when clicking on delete action, the value of richtext field becomes '' and so
-    // new EditorState.createEmpty() is created triggering onChange event on first render of the field)
-    // preventing the whole block to be removed */
-    // // console.log(fields.length);
-    // const removedIndex = this.removedIndex;
-    // if (this.removedIndex) {
-    //   setTimeout(() => {
-    //     this.removedIndex = null;
-    //   }, 2000);
-    // }
+    /* Hack to fix issue with richtext field:
+    when clicking on delete action, the value of richtext field becomes '' and so
+    new EditorState.createEmpty() is created triggering onChange event on first render of the field)
+    preventing the whole block to be removed */
+    const removedId = this.removedId;
     const isRoot = level === 0;
     const className = level > 0 ? 'form-branch' : 'form-tree';
     const addBtnTop = isTree && !isRoot;
@@ -204,9 +198,9 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
       <div className={classNames({ [className]: isTree })}>
         {addBtnTop ? addBtn : null}
         {fields.map((fieldname, idx) => {
-          // if (idx === removedIndex) {
-          //   return null;
-          // }
+          if (fields.value[idx].id === removedId) {
+            return null;
+          }
           const fieldValue = fields.value[idx];
           const hasChildren = fieldValue.children && fieldValue.children.length;
           const enableDeleteBtn = fields.length > minItems && ((isTree && !hasChildren) || !isTree);
