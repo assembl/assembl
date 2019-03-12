@@ -227,8 +227,7 @@ def react_base_view(request, required_permission=P_READ):
             if discussion:
                 destination = path.replace(base_slug, discussion.slug)
                 get_routes = create_get_route(request, discussion)
-                path = get_routes('home')
-                return HTTPFound(location=path)
+                return HTTPFound(location=destination)
         else:
             return react_view(request, required_permission)
 

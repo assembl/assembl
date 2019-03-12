@@ -83,6 +83,7 @@ def get_permissions(user_id, discussion_id):
 def discussion_from_request(request):
     from ..models import Discussion
     from assembl.views.traversal import TraversalContext
+    from assembl.views.discussion import find_discussion_from_slug
     if request.matchdict:
         if 'discussion_id' in request.matchdict:
             discussion_id = int(request.matchdict['discussion_id'])
@@ -93,8 +94,7 @@ def discussion_from_request(request):
         elif 'discussion_slug' in request.matchdict:
             slug = request.matchdict['discussion_slug']
             session = get_session_maker()()
-            discussion = session.query(Discussion).filter_by(
-                slug=slug).first()
+            discussion = find_discussion_from_slug(request, slug)
             if not discussion:
                 raise HTTPNotFound("No discussion named %s" % (slug,))
             return discussion

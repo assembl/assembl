@@ -1138,10 +1138,9 @@ def root_factory(request):
     elif request.matchdict and 'discussion_slug' in request.matchdict:
         discussion_slug = request.matchdict['discussion_slug']
         db = Discussion.default_db
-        discussion = db.query(Discussion).filter_by(
-            slug=discussion_slug).first()
+        discussion = find_discussion_from_slug(request, discussion_slug)
         if not discussion:
-            discussion = find_discussion_from_slug(request, slug)
+            raise HTTPNotFound("No discussion slug %s" % (discussion_slug,))
         return discussion
     # fallthrough: Use traversal
     return AppRoot()
