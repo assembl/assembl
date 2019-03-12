@@ -81,6 +81,15 @@ class TimelineFields extends React.Component<Props> {
                       name="phases"
                       withSeparators={false}
                       titleMsgId="administration.timelineAdmin.phase"
+                      renderTitleMsg={({ titleMsgId, idx, fieldValue }) => {
+                        // $FlowFixMe
+                        const title = fieldValue && fieldValue.title ? fieldValue.title[editLocale] || '' : '';
+                        return (
+                          <span>
+                            <Translate value={titleMsgId} count={idx + 1} /> &mdash; {title}
+                          </span>
+                        );
+                      }}
                       tooltips={{
                         addTooltip: addPhaseTooltip,
                         deleteTooltip: deletePhaseTooltip

@@ -19,7 +19,8 @@ type ConfirmationMessageType = {
 type Props = {
   usePanels: boolean,
   renderFields: Function,
-  titleMsgId?: string, // eslint-disable-line react/require-default-props
+  titleMsgId?: string,
+  renderTitleMsg: ({ titleMsgId: string, idx: number, fieldValue: mixed }) => React.Node,
   tooltips: {
     addTooltip: (props: { level: number }) => React.Node,
     deleteTooltip: () => React.Node,
@@ -158,6 +159,7 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
       fields,
       renderFields,
       titleMsgId,
+      renderTitleMsg,
       isTree,
       level,
       subFieldName,
@@ -231,7 +233,7 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
                   className={classNames({ title: !usePanels, 'panel-heading pointer': usePanels, left: true })}
                   onClick={usePanels ? () => this.setActivePanel(idx) : undefined}
                 >
-                  <Translate value={titleMsgId} count={idx + 1} />
+                  {renderTitleMsg({ titleMsgId: titleMsgId, idx: idx, fieldValue: fieldValue })}
                 </div>
               ) : null}
               <div className="pointer right">
@@ -278,6 +280,7 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
                     subFieldName={subFieldName}
                     renderFields={renderFields}
                     titleMsgId={titleMsgId}
+                    renderTitleMsg={renderTitleMsg}
                     tooltips={{
                       addTooltip: addTooltip,
                       deleteTooltip: deleteTooltip,
@@ -318,6 +321,7 @@ const FieldArrayWithActions = (props: FieldArrayProps) => {
 
 FieldArrayWithActions.defaultProps = {
   usePanels: false,
+  renderTitleMsg: ({ titleMsgId, idx }) => <Translate value={titleMsgId} count={idx + 1} />,
   withSeparators: true,
   subFieldName: '',
   isTree: false,
