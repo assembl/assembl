@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
-import moment from 'moment';
 
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalContentsForm from '../components/administration/legalContents/index';
@@ -54,30 +53,6 @@ const createVariablesForDeleteSectionMutation = section => ({ sectionId: section
 
 const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.id });
 
-const createVariablesForDiscussionPhaseMutation = (phase) => {
-  if (phase.endIsBeforeStart) {
-    return displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
-  }
-  if (phase.start === null || phase.end === null) {
-    return displayAlert('danger', I18n.t('administration.timelineAdmin.startOrEndDateIsEmpty'));
-  }
-  if (phase.titleEntries.length === 0) {
-    return displayAlert('danger', I18n.t('administration.timelineAdmin.titleEntriesIsEmpty'));
-  }
-
-  return {
-    identifier: phase.identifier,
-    start: moment(phase.start, moment.ISO_8601),
-    end: moment(phase.end, moment.ISO_8601),
-    order: phase.order,
-    titleEntries: phase.titleEntries
-  };
-};
-
-const createVariablesForDeleteDiscussionPhaseMutation = phase => ({
-  id: phase.id
-});
-
 type Props = {
   changeLocale: Function,
   client: ApolloClient,
@@ -101,13 +76,7 @@ type Props = {
   deleteTextField: Function,
   profileOptionsHasChanged: boolean,
   refetchTextFields: Function,
-  textFields: Array<Object>,
-  updateDiscussionPhase: Function,
-  createDiscussionPhase: Function,
-  deleteDiscussionPhase: Function,
-  refetchTimeline: Function,
-  phasesHaveChanged: boolean,
-  phases: Array<Object>
+  textFields: Array<Object>
 };
 
 type State = {
@@ -138,7 +107,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
     return null;
   };
 
-  dataHaveChanged = () => this.props.sectionsHaveChanged || this.props.profileOptionsHasChanged || this.props.phasesHaveChanged;
+  dataHaveChanged = () => this.props.sectionsHaveChanged || this.props.profileOptionsHasChanged;
 
   saveAction = () => {
     const {
@@ -154,14 +123,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
       deleteTextField,
       profileOptionsHasChanged,
       textFields,
-      refetchTextFields,
-      phases,
-      phasesHaveChanged,
-      refetchTimeline,
-      updateDiscussionPhase,
-      createDiscussionPhase,
-      deleteDiscussionPhase,
-      editLocale
+      refetchTextFields
     } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`, false, -1);
 
@@ -180,31 +142,6 @@ class DiscussionAdmin extends React.Component<Props, State> {
           this.setState({ refetching: true }, () => {
             refetchSections().then(() => {
               displayAlert('success', I18n.t('administration.sections.successSave'));
-              this.setState({ refetching: false });
-            });
-          });
-        })
-        .catch((error) => {
-          displayAlert('danger', `${error}`, false, 30000);
-        });
-    }
-
-    if (phasesHaveChanged) {
-      const mutationPromises = getMutationsPromises({
-        items: phases,
-        variablesCreator: createVariablesForDiscussionPhaseMutation,
-        deleteVariablesCreator: createVariablesForDeleteDiscussionPhaseMutation,
-        createMutation: createDiscussionPhase,
-        deleteMutation: deleteDiscussionPhase,
-        updateMutation: updateDiscussionPhase,
-        lang: editLocale
-      });
-
-      runSerial(mutationPromises)
-        .then(() => {
-          this.setState({ refetching: true }, () => {
-            refetchTimeline().then(() => {
-              displayAlert('success', I18n.t('administration.timelineAdmin.successSave'));
               this.setState({ refetching: false });
             });
           });

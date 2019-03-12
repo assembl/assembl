@@ -697,12 +697,7 @@ const Translations = {
         instruction3: "Choisissez la date de début et de fin de votre phase",
         instruction4: "Télécharger l'image de couverture de votre phase présente sur la page d'accueil",
         instruction5: "Renseignez la description de votre phase.",
-        configureThematicsTableLink: "Configurer Phase %{count}",
         successSave: "La ligne de temps a été sauvegardée avec succès",
-        startOrEndDateIsEmpty: "Veuillez sélectionner une date de début et une date de fin pour toutes les phases",
-        titleEntriesIsEmpty: "Un titre pour votre phase est requis",
-        endIsBeforeStart: "Veuillez sélectionner une date de fin postérieure à celle de début",
-        singleModule: "Module unique de participation",
         selectStart: "Date de démarrage de la phase %{count}",
         selectEnd: "Date de fin de la phase %{count}",
         warningLabel: "La période de cette phase chevauche la période de la phase précédente ou de la phase suivante."
@@ -849,7 +844,6 @@ const Translations = {
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Les champs * sont requis.",
-      themeNum: "Thématique %{index}",
       discussion: {
         "0": "Préférences de la discussion",
         "3": "Options d'inscription",
@@ -1717,12 +1711,7 @@ const Translations = {
         instruction3: "Choose the start and the end of your phase.",
         instruction4: "Download the phase image for the timeline in the landing page.",
         instruction5: "Write the phase description.",
-        configureThematicsTableLink: "Configure Phase %{count}",
         successSave: "The timeline has been sucessfully saved",
-        titleEntriesIsEmpty: "The phase title is required",
-        startOrEndDateIsEmpty: "Please select a start date and an end date for all your phases",
-        endIsBeforeStart: "Please select an end date posterior to the start",
-        singleModule: "Single participation module",
         selectStart: "Phase %{count}'s start date",
         selectEnd: "Phase %{count}'s end date",
         warningLabel: "The dates you have set for this phase are overlapping previous phase or next phase"
@@ -1863,7 +1852,6 @@ const Translations = {
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "* Fields are required.",
-      themeNum: "Theme %{index}",
       discussion: {
         "0": "Discussion preferences",
         "3": "Registration options",
