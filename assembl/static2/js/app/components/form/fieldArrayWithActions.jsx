@@ -131,14 +131,16 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
   };
 
   add = () => {
-    const { fields, onAdd, parentId } = this.props;
+    const { fields, onAdd, parentId, usePanels } = this.props;
     const id = createRandomId();
     const idx = fields.length || 0;
     if (onAdd) {
       onAdd(id, parentId, idx);
     }
     fields.push({ id: id });
-    this.setActivePanel(idx);
+    if (usePanels) {
+      this.setActivePanel(idx);
+    }
   };
 
   setActivePanel = (idx: number) => {
