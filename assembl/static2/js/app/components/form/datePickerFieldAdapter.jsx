@@ -23,7 +23,7 @@ type Props = {
   picker?: DatePickerType,
   placeHolder: string,
   showTime: boolean,
-  hasConflictingDate: boolean,
+  hasConflictingDates: boolean,
   input: {
     name: string,
     onChange: ({ time: moment$Moment }) => void,
@@ -43,7 +43,7 @@ const DatePickerFieldAdapter = ({
   input: { name, value, onChange },
   meta: { error, touched },
   required,
-  hasConflictingDate,
+  hasConflictingDates,
   onDateChange,
   children,
   form,
@@ -77,7 +77,7 @@ const DatePickerFieldAdapter = ({
             dateFormat={dateFormat}
             locale={editLocale}
             shouldCloseOnSelect
-            className={hasConflictingDate ? 'warning' : ''}
+            className={hasConflictingDates ? 'warning' : ''}
             {...rest}
           />
           <div className="icon-schedule-container">

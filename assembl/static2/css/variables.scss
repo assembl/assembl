@@ -99,8 +99,7 @@ $img-dir: '/static2/img';
 @font-face {
   font-family: 'LatoSemiBold';
   src: url('#{$fonts-dir}/Lato-Semibold.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Semibold.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Semibold.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Semibold.woff') format('woff'), url('#{$fonts-dir}/Lato-Semibold.ttf') format('truetype');
 }
 
 @font-face {
@@ -112,15 +111,13 @@ $img-dir: '/static2/img';
 @font-face {
   font-family: 'LatoLightItalic';
   src: url('#{$fonts-dir}/Lato-LightItalic.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-LightItalic.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-LightItalic.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-LightItalic.woff') format('woff'), url('#{$fonts-dir}/Lato-LightItalic.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoHairline';
   src: url('#{$fonts-dir}/Lato-Hairline.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Hairline.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Hairline.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Hairline.woff') format('woff'), url('#{$fonts-dir}/Lato-Hairline.ttf') format('truetype');
 }
 
 $font-family: 'latoRegular';
