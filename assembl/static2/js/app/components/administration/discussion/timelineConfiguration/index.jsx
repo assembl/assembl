@@ -172,6 +172,7 @@ class TimelineFields extends React.Component<Props> {
                               name={`${name}.description`}
                               component={MultilingualTextFieldAdapter}
                               label={I18n.t('administration.timelineAdmin.descriptionPhaseLabel')}
+                              required
                             />
                           </div>
                         );
