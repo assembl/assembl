@@ -12,21 +12,18 @@ down_revision = '3f239cc82989'
 
 from alembic import context, op
 import sqlalchemy as sa
-import transaction
-
-
-from assembl.lib import config
 
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
-        op.create_table('old_slug',
-        sa.Column('id', sa.Integer, primary_key=True),
-        sa.Column('discussion_id', sa.Integer,
-                  sa.ForeignKey('discussion.id', ondelete="CASCADE",
-                                onupdate="CASCADE"),nullable=False),
-        sa.Column('slug', sa.Unicode,nullable=False, unique=True, index=True),
-        sa.Column('redirection_slug', sa.Unicode, nullable=False, unique=True, index=True))
+        op.create_table(
+            'old_slug',
+            sa.Column('id', sa.Integer, primary_key=True),
+            sa.Column('discussion_id', sa.Integer,
+                      sa.ForeignKey('discussion.id', ondelete="CASCADE",
+                                    onupdate="CASCADE"), nullable=False),
+            sa.Column('slug', sa.Unicode, nullable=False, unique=True, index=True),
+            sa.Column('redirection_slug', sa.Unicode, nullable=False, unique=True, index=True))
 
 
 def downgrade(pyramid_env):
