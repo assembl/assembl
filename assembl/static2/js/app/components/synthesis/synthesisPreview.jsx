@@ -39,15 +39,16 @@ const SynthesisPreview = ({ img, subject, creationDate, link }: Props) => {
       </ResponsiveOverlayTrigger>
     </li>
   );
+
+  const previewStyle = img ? { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${img})` } : null;
   return (
-    <div className="fiction-preview" style={img ? { backgroundImage: `url(${img})` } : null}>
+    <div className="fiction-preview" style={previewStyle}>
       <div className="content-box">
         <ul className="actions">
           {editButton}
           {deleteButton}
         </ul>
         <Link className="link" to={link}>
-          {/* {isDraft ? <div className="draft-label">{I18n.t('debate.brightMirror.draftLabel')}</div> : null} */}
           <div className="inner-box">
             <h3>{subject}</h3>
             <p className="info">

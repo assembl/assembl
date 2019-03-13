@@ -8,24 +8,25 @@ type Props = {
   url: string
 };
 
-class Synthesis extends React.Component {
-  componentDidMount() {
-    window.addEventListener('load', this.handleLoad);
-  }
-
-  handleLoad = () => {
-    const storyChiefNavbar = document.querySelector(
-      'body > main > main > div > div > div.story-hero__left.text-center.hidden-sm.hidden-xs > div.story__social.story__social--absolute > div'
-    );
-    storyChiefNavbar.remove();
-  };
+class Synthesis extends React.Component<Props> {
+  handleLoad = () => {};
 
   render() {
     const { title, url } = this.props;
     return (
       <Section title={title}>
         <div className="synthesis">
-          <iframe src={url} title="storychief-iframe" frameBorder="0" className="synthesis-iframe" />
+          <iframe
+            ref={(iframe) => {
+              if (iframe) {
+                this.iframe = iframe;
+              }
+            }}
+            src={url}
+            title="storychief-iframe"
+            frameBorder="0"
+            className="synthesis-iframe"
+          />
         </div>
       </Section>
     );
