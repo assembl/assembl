@@ -591,50 +591,42 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = args.get('tab_title', None)
         favicon = args.get('favicon', None)
         with_moderation = args.get('with_moderation', None)
+        slug = args.get('slug', None)
         with cls.default_db.no_autoflush as db:
             if languages is not None:
                 if not languages:
-                    discussion.discussion_locales = languages
+                    error = _("Must pass at least one language to be saved")
+                    raise Exception(context.localizer.translate(error))
 
-        # permissions = get_permissions(user_id, discussion_id)
-        # allowed = cls.user_can_cls(
-        #     user_id, CrudPermissions.UPDATE, permissions)
-        # if not allowed or (allowed == IF_OWNED and user_id == Everyone):
-        #     raise HTTPUnauthorized()
+                discussion.discussion_locales = languages
 
-        db = discussion.db
-        tab_title = args.get('tab_title', None)
-        favicon = args.get('favicon', None)
-        with_moderation = args.get('with_moderation', None)
-        slug = args.get('slug', None)
+            if tab_title:
+                discussion.preferences['tab_title'] = tab_title
 
-        if tab_title:
-            discussion.preferences['tab_title'] = tab_title
+            if favicon:
+                update_attachment(
+                    discussion,
+                    models.DiscussionAttachment,
+                    favicon,
+                    discussion.attachments,
+                    models.AttachmentPurpose.FAVICON.value,
+                    db,
+                    context
+                )
 
-        if favicon:
-            update_attachment(
-                discussion,
-                models.DiscussionAttachment,
-                favicon,
-                discussion.attachments,
-                models.AttachmentPurpose.FAVICON.value,
-                db,
-                context
-            )
+            if with_moderation is not None:
+                discussion.preferences['with_moderation'] = with_moderation
 
-        if with_moderation is not None:
-            discussion.preferences['with_moderation'] = with_moderation
+            if slug != discussion.slug:
+                db.add(models.OldSlug(
+                    discussion=discussion,
+                    slug=discussion.slug,
+                    redirection_slug=slug))
 
-        if slug != discussion.slug:
-            db.add(models.OldSlug(
-                discussion=discussion,
-                slug=discussion.slug,
-                redirection_slug=slug))
+            if slug is not None:
+                discussion.slug = slug
 
-        if slug is not None:
-            discussion.slug = slug
-
-        db.flush()
+            db.flush()
 
         return UpdateDiscussionPreferences(preferences=discussion.preferences)
 
