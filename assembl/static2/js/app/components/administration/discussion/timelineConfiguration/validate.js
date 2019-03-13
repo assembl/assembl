@@ -12,6 +12,7 @@ type Errors = {
 const validatePhase = (phase: PhaseValue): Errors => {
   const errors = {
     title: i18nValueIsEmpty(phase.title) ? I18n.t('error.required') : undefined,
+    description: i18nValueIsEmpty(phase.description) ? I18n.t('error.required') : undefined,
     start: undefined,
     end: undefined
   };
