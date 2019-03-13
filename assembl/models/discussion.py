@@ -44,9 +44,9 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
     __tablename__ = "old_slug"
     id = Column(Integer, primary_key=True)
     discussion_id = Column(Integer, ForeignKey(
-        'discussion.id'),
-        # ondelete='CASCADE',
-        # onupdate='CASCADE'),
+        'discussion.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'),
         nullable=False,
         index=True)
     discussion = relationship(
