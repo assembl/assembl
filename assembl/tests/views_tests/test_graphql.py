@@ -1791,16 +1791,16 @@ def test_mutation_update_discussion_preferences_change_slug(graphql_registry, gr
     variable_values = {'slug': 'TestSlug_new'})
     assert res.errors == None
     assert discussion.slug == "TestSlug_new"
-    assert len(discussion.oldslug) == 2
-    assert discussion.oldslug[0].slug == "jacklayton2"
-    assert discussion.oldslug[0].redirection_slug == "TestSlug_new"
+    assert len(discussion.old_slugs) == 2
+    assert discussion.old_slugs[0].slug == "jacklayton2"
+    assert discussion.old_slugs[0].redirection_slug == "TestSlug_new"
 
     # Testing if I can set it back to the old slug
     res = schema.execute(graphql_registry['updateDiscussionPreference'],
     context_value= graphql_request,
     variable_values = {'slug': 'TestSlug'})
     assert res.errors == None
-    assert len(discussion.oldslug) == 3
+    assert len(discussion.old_slugs) == 3
     assert discussion.slug == "TestSlug"
     assert res.errors == None
 

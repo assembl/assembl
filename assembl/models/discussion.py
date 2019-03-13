@@ -52,7 +52,7 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
     discussion = relationship(
         "Discussion",
         backref=backref(
-            'oldslug',
+            'old_slugs',
             cascade="all, delete-orphan"),
     )
     slug = Column(CoerceUnicode, nullable=False, doc=docs.OldSlug.slug)
