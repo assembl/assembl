@@ -1,5 +1,5 @@
 .warning-message {
-  color: $orange2;
+  color: #f00;
   font-size: $font-size-xs;
   margin-bottom: 2em;
 }
@@ -95,11 +95,11 @@
   }
 
   .help-block {
-    color: #f00 !important;
+    color: $error !important;
   }
 
   .has-error > input {
-    border-color: #f00 !important;
+    border-color: $error !important;
   }
 
   .block-picker {
