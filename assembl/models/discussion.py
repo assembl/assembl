@@ -55,8 +55,8 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
             'old_slugs',
             cascade="all, delete-orphan"),
     )
-    slug = Column(CoerceUnicode, nullable=False, doc=docs.OldSlug.slug)
-    redirection_slug = Column(CoerceUnicode, nullable=False, doc=docs.OldSlug.redirection_slug)
+    slug = Column(CoerceUnicode, nullable=False, unique=True, index=True, doc=docs.OldSlug.slug)
+    redirection_slug = Column(CoerceUnicode, nullable=False, unique=True, index=True, doc=docs.OldSlug.redirection_slug)
 
     @classmethod
     def get_discussion_id(self):
