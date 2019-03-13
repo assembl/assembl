@@ -1709,12 +1709,12 @@ const Translations = {
         instruction1: "Choose the number of phases for your debate",
         instruction2: "Fill in the required fields for each phase by selecting each tab",
         instruction3: "Choose the start and the end of your phase.",
-        instruction4: "Download the phase image for the timeline in the landing page.",
+        instruction4: "Choose the phase image for the timeline in the landing page.",
         instruction5: "Write the phase description.",
         successSave: "The timeline has been sucessfully saved",
         selectStart: "Phase %{count}'s start date",
         selectEnd: "Phase %{count}'s end date",
-        warningLabel: "The dates you have set for this phase are overlapping previous phase or next phase"
+        warningLabel: "The dates you have set for this phase are overlapping the previous phase or the next phase"
       },
       modules: {
         noModule: "No module",
