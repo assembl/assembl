@@ -33,18 +33,6 @@ class URLMeta(graphene.ObjectType):
     url = graphene.String(required=True)
 
 
-class OldSlug(SecureObjectType, SQLAlchemyObjectType):
-    __doc__ = docs.OldSlug.__doc__
-
-    class Meta:
-        model = models.OldSlug
-        interfaces = (Node, )
-        only_fields = ('id',)
-
-    slug = graphene.String(required=True)
-    discussion = graphene.Field(lambda: Discussion)
-
-
 # Mostly fields related to the discussion title and landing page
 class Discussion(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.Discussion.__doc__
@@ -323,8 +311,8 @@ class DiscussionPreferences(graphene.ObjectType):
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
     with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
-    slug = graphene.String(description=docs.DiscussionPreferences.slug)
-    old_slugs = graphene.List(OldSlug, description=docs.DiscussionPreferences.slug)
+    slug = graphene.String(required=True, description=docs.DiscussionPreferences.slug)
+    old_slugs = graphene.List(graphene.String, required=True, description=docs.DiscussionPreferences.old_slugs)
 
     def resolve_tab_title(self, args, context, info):
         return self.get('tab_title', 'Assembl')
@@ -351,7 +339,7 @@ class DiscussionPreferences(graphene.ObjectType):
     def resolve_old_slugs(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        return discussion.old_slugs
+        return [old_slug.slug for old_slug in discussion.old_slugs]
 
 
 class ResourcesCenter(graphene.ObjectType):

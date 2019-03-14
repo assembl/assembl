@@ -70,13 +70,6 @@ class SchemaTags:
     limit = "An integer to define the number of tags to retrieve"
 
 
-class OldSlug:
-    __doc__ = """If the administrator of a discussion changes the slug. The old slug is stored in an instance of this class."""
-    id = Default.object_id % ("OldSlug")
-    discussion = """The discussion to which the slug is associated to."""
-    slug = Default.string_entry % ("The old slug to be stored.")
-
-
 class Discussion:
     __doc__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     id = Default.object_id % ("Discussion",)
@@ -126,6 +119,7 @@ class DiscussionPreferences:
     favicon = Default.document % ("""The site favicon.""",)
     with_moderation = """A Boolean flag indicating whether the moderation is activated or not."""
     slug = Discussion.slug
+    old_slugs = """List of previous used slugs for this discussion"""
 
 
 class ResourcesCenter:
