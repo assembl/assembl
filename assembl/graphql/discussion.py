@@ -41,9 +41,9 @@ class OldSlug(SecureObjectType, SQLAlchemyObjectType):
         interfaces = (Node, )
         only_fields = ('id',)
 
-    slug = graphene.String()
-    discussion = graphene.Field(lambda: Discussion)
-    redirection_slug = graphene.String()
+    slug = graphene.String(required=True)
+    discussion = graphene.Field(lambda: Discussion, required=True)
+    redirection_slug = graphene.String(required=True)
 
 
 # Mostly fields related to the discussion title and landing page
