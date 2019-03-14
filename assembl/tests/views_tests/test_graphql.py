@@ -1771,38 +1771,45 @@ mutation myMutation($languages: [String]!) {
     assert res.errors is not None
     assert res.errors[0].message == 'Must pass at least one language to be saved'
 
-def test_mutation_update_discussion_preferences_slug(graphql_registry, graphql_request, discussion):
-    res = schema.execute(graphql_registry['updateDiscussionPreference'],
-    context_value= graphql_request,
-    variable_values = {'slug': 'TestSlug'})
-    assert res.errors == None
-    assert discussion.slug == "TestSlug"
 
 def test_mutation_update_discussion_preferences_change_slug(graphql_registry, graphql_request, discussion):
-    res = schema.execute(graphql_registry['updateDiscussionPreference'],
-    context_value= graphql_request,
-    variable_values = {'slug': 'TestSlug'})
-    assert res.errors == None
+    assert discussion.slug == "jacklayton2"
+
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'TestSlug'})
+    assert res.errors is None
     assert discussion.slug == "TestSlug"
 
     # Setting new slug for the same discussion
-    res = schema.execute(graphql_registry['updateDiscussionPreference'],
-    context_value= graphql_request,
-    variable_values = {'slug': 'TestSlug_new'})
-    assert res.errors == None
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values = {'slug': 'TestSlug_new'})
+    assert res.errors is None
     assert discussion.slug == "TestSlug_new"
     assert len(discussion.old_slugs) == 2
     assert discussion.old_slugs[0].slug == "jacklayton2"
-    assert discussion.old_slugs[0].redirection_slug == "TestSlug_new"
+    assert discussion.old_slugs[0].discussion.slug == "TestSlug_new"
 
     # Testing if I can set it back to the old slug
-    res = schema.execute(graphql_registry['updateDiscussionPreference'],
-    context_value= graphql_request,
-    variable_values = {'slug': 'TestSlug'})
-    assert res.errors == None
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'TestSlug'})
+    assert res.errors is None
     assert len(discussion.old_slugs) == 3
     assert discussion.slug == "TestSlug"
-    assert res.errors == None
+
+    # and back again
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'TestSlug_new'})
+    assert res.errors is None
+    assert len(discussion.old_slugs) == 3
+    assert discussion.slug == "TestSlug_new"
 
 
 def test_query_post_message_classifier(graphql_request,

@@ -18,6 +18,7 @@ from abc import ABCMeta, abstractmethod
 
 from assembl.auth import P_READ, R_SYSADMIN
 from assembl.auth.util import get_permissions
+from assembl.auth.util import find_discussion_from_slug
 from assembl.lib.sqla import *
 from assembl.lib.logging import getLogger
 from assembl.lib.decl_enums import DeclEnumType
@@ -1121,7 +1122,6 @@ def root_factory(request):
     """The factory function for the root context"""
     # OK, this is the old code... I need to do better, but fix first.
     from ..models import Discussion, OldSlug
-    from assembl.views.discussion.__init__ import find_discussion_from_slug
     if request.matchdict and 'traverse' in request.matchdict:
         # hack: reset request as if pure traversal
         from pyramid.interfaces import IRequest
@@ -1137,10 +1137,9 @@ def root_factory(request):
         return discussion
     elif request.matchdict and 'discussion_slug' in request.matchdict:
         discussion_slug = request.matchdict['discussion_slug']
-        db = Discussion.default_db
-        discussion = find_discussion_from_slug(request, discussion_slug)
+        discussion = find_discussion_from_slug(discussion_slug)
         if not discussion:
-            raise HTTPNotFound("No discussion slug %s" % (discussion_slug,))
+            raise HTTPNotFound("No discussion found for slug=%s" % (discussion_slug,))
         return discussion
     # fallthrough: Use traversal
     return AppRoot()

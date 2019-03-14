@@ -80,10 +80,24 @@ def get_permissions(user_id, discussion_id):
     return [x[0] for x in permissions.distinct()]
 
 
+def find_discussion_from_slug(slug):
+    from assembl.models import Discussion, OldSlug
+    discussion = Discussion.query.filter(Discussion.slug == slug).first()
+    if discussion is not None:
+        return discussion
+
+    # slug not found, maybe it was renamed
+    oldslug = OldSlug.query.filter(OldSlug.slug == slug).first()
+    if oldslug is not None:
+        return oldslug.discussion
+
+    # slug not found
+    return None
+
+
 def discussion_from_request(request):
     from ..models import Discussion
     from assembl.views.traversal import TraversalContext
-    from assembl.views.discussion import find_discussion_from_slug
     if request.matchdict:
         if 'discussion_id' in request.matchdict:
             discussion_id = int(request.matchdict['discussion_id'])
@@ -93,10 +107,9 @@ def discussion_from_request(request):
             return discussion
         elif 'discussion_slug' in request.matchdict:
             slug = request.matchdict['discussion_slug']
-            session = get_session_maker()()
-            discussion = find_discussion_from_slug(request, slug)
+            discussion = find_discussion_from_slug(slug)
             if not discussion:
-                raise HTTPNotFound("No discussion named %s" % (slug,))
+                raise HTTPNotFound("No discussion found for slug=%s" % (slug,))
             return discussion
     if getattr(request, "context", None) and isinstance(
             request.context, TraversalContext):
@@ -105,11 +118,9 @@ def discussion_from_request(request):
             return Discussion.get(discussion_id)
     if request.session.get("discussion", None):
         slug = request.session["discussion"]
-        session = get_session_maker()()
-        discussion = session.query(Discussion).filter_by(
-            slug=slug).first()
+        discussion = find_discussion_from_slug(slug)
         if not discussion:
-            raise HTTPNotFound("No discussion named %s" % (slug,))
+            raise HTTPNotFound("No discussion found for slug=%s" % (slug,))
         return discussion
 
 

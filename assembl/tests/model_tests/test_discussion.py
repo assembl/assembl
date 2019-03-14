@@ -145,13 +145,3 @@ def test_adding_a_discussion_automatically_adds_participant_user_template_for_no
     participant_role = test_session.query(Role).filter_by(name=R_PARTICIPANT).one()
     user_templates_for_role_participant = test_session.query(UserTemplate).filter_by(discussion=discussion, for_role=participant_role).all()
     assert len(user_templates_for_role_participant) > 0
-
-
-def test_push_old_slug(test_session, discussion):
-    OldSlug.push_old_slug(discussion.id, "new_test_slug")
-    from assembl import models as m
-    old_slugs = test_session.query(m.OldSlug).all()
-    assert len(old_slugs) == 1
-    assert old_slugs[0].redirection_slug == 'new_test_slug'
-    assert old_slugs[0].slug == "jacklayton2"
-    assert old_slugs[0].discussion_id == discussion.id

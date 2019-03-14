@@ -56,7 +56,6 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
             cascade="all, delete-orphan"),
     )
     slug = Column(CoerceUnicode, nullable=False, unique=True, index=True, doc=docs.OldSlug.slug)
-    redirection_slug = Column(CoerceUnicode, nullable=False, unique=True, index=True, doc=docs.OldSlug.redirection_slug)
 
     @classmethod
     def get_discussion_id(self):
@@ -65,15 +64,6 @@ class OldSlug(DiscussionBoundBase, NamedClassMixin):
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
         return (cls.discussion_id == discussion_id,)
-
-    @classmethod
-    def push_old_slug(cls, discussion_id, slug):
-        all_slugs = cls.default_db.query(cls.slug).all()
-        discussion = cls.default_db.query(Discussion).get(discussion_id)
-        if slug not in all_slugs:
-            new_slug = cls(discussion_id=discussion_id, slug=discussion.slug, redirection_slug=slug)
-            cls.default_db.add(new_slug)
-            cls.default_db.flush()
 
 
 class Discussion(DiscussionBoundBase, NamedClassMixin):

@@ -42,8 +42,7 @@ class OldSlug(SecureObjectType, SQLAlchemyObjectType):
         only_fields = ('id',)
 
     slug = graphene.String(required=True)
-    discussion = graphene.Field(lambda: Discussion, required=True)
-    redirection_slug = graphene.String(required=True)
+    discussion = graphene.Field(lambda: Discussion)
 
 
 # Mostly fields related to the discussion title and landing page
@@ -621,10 +620,11 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 
             if slug is not None:
                 if slug != discussion.slug:
-                    db.add(models.OldSlug(
-                        discussion=discussion,
-                        slug=discussion.slug,
-                        redirection_slug=slug))
+                    if models.OldSlug.query.filter(
+                            models.OldSlug.slug == discussion.slug).first() is None:
+                        db.add(models.OldSlug(
+                            discussion=discussion,
+                            slug=discussion.slug))
 
                 discussion.slug = slug
 

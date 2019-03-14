@@ -22,6 +22,7 @@ from ...lib.sqla import get_named_object
 from ...lib.frontend_urls import FrontendUrls
 from ...auth import P_READ, P_ADD_EXTRACT, P_ADMIN_DISC
 from ...auth.util import user_has_permission, get_non_expired_user_id
+from assembl.auth.util import find_discussion_from_slug
 from ...models import (
     Discussion,
     User,
@@ -50,11 +51,8 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 def get_default_context(request):
     base = base_default_context(request)
     slug = request.matchdict['discussion_slug']
-    try:
-        discussion = Discussion.default_db.query(Discussion).filter(Discussion.slug==slug).first()
-        if not discussion:
-            discussion = find_discussion_from_slug(request, slug)
-    except NoResultFound:
+    discussion = find_discussion_from_slug(slug)
+    if discussion is None:
         raise HTTPNotFound(_("No discussion found for slug=%s") % slug)
     return dict(base, discussion=discussion)
 
@@ -200,7 +198,7 @@ def react_admin_view(request):
     """
     Checks that user is logged in and is admin of discussion
     """
-    return react_view(request, required_permission=P_ADMIN_DISC)
+    return react_base_view(request, required_permission=P_ADMIN_DISC)
 
 
 def react_base_view(request, required_permission=P_READ):
@@ -209,29 +207,16 @@ def react_base_view(request, required_permission=P_READ):
     from assembl.views import create_get_route
     if 'discussion_slug' in request.matchdict:
         path = request.path
-        requested_slug = base_slug = request.matchdict['discussion_slug']
-        from assembl.views.discussion.__init__ import find_discussion_from_slug
-        db = Discussion.default_db
-        old_slugs = {o.slug: o for o in db.query(OldSlug)}
-        if requested_slug in old_slugs:
-            discussion = None
-            found = False
-            while not found:
-                redirection_slug = old_slugs[requested_slug].redirection_slug
-                if redirection_slug in old_slugs:
-                    requested_slug = redirection_slug
-                    del old_slugs[redirection_slug]
-                else:
-                    found = True
-                    discussion = db.query(Discussion).filter_by(slug=redirection_slug).first()
-            if discussion:
-                destination = path.replace(base_slug, discussion.slug)
-                get_routes = create_get_route(request, discussion)
-                return HTTPFound(location=destination)
+        requested_slug = request.matchdict['discussion_slug']
+        discussion = find_discussion_from_slug(requested_slug)
+        if discussion.slug != requested_slug:
+            destination = path.replace(requested_slug, discussion.slug)
+            get_routes = create_get_route(request, discussion)
+            return HTTPMovedPermanently(destination)
         else:
             return react_view(request, required_permission)
 
-    raise HTTPNotFound("No discussion named %s" % (base_slug,))
+    raise HTTPNotFound("No discussion found for slug=%s" % (requested_slug,))
 
 
 def react_view(request, required_permission=P_READ):
@@ -246,8 +231,6 @@ def react_view(request, required_permission=P_READ):
     old_context = base_default_context(request)
     user_id = get_non_expired_user_id(request) or Everyone
     discussion = old_context["discussion"] or None
-    if not discussion:
-        discussion = find_discussion_from_slug(request, slug)
     get_route = old_context["get_route"]
     theme_name, theme_relative_path = get_theme_info(discussion, frontend_version=2)
     node_env = os.getenv('NODE_ENV', 'production')

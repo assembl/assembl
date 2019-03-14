@@ -75,7 +75,6 @@ class OldSlug:
     id = Default.object_id % ("OldSlug")
     discussion = """The discussion to which the slug is associated to."""
     slug = Default.string_entry % ("The old slug to be stored.")
-    redirection_slug = Default.string_entry % ("The slug to which the user will be redirected to if he tries the old slug.")
 
 
 class Discussion:
