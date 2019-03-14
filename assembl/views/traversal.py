@@ -1121,7 +1121,7 @@ class DiscussionPreferenceCollection(AbstractCollectionDefinition):
 def root_factory(request):
     """The factory function for the root context"""
     # OK, this is the old code... I need to do better, but fix first.
-    from ..models import Discussion, OldSlug
+    from ..models import Discussion
     if request.matchdict and 'traverse' in request.matchdict:
         # hack: reset request as if pure traversal
         from pyramid.interfaces import IRequest

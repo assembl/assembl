@@ -9,7 +9,7 @@ from pyramid.response import Response
 from pyramid.renderers import render_to_response
 from pyramid.security import Everyone, forget
 from pyramid.httpexceptions import (
-    HTTPOk, HTTPFound, HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
+    HTTPOk, HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm.exc import NoResultFound
 from urllib import quote_plus
