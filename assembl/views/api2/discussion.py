@@ -69,6 +69,13 @@ from assembl.models.timeline import Phases, get_phase_by_identifier
 
 no_thematic_associated = "no thematic associated"
 
+sheet_names = ["export_phase",
+               "export_module_survey",
+               "export_module_thread",
+               "export_module_multicolumn",
+               "export_module_vote",
+               "vote_users_data",
+               "export_module_bright_mirror"]
 
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Discussion, permission=P_READ,
@@ -608,7 +615,6 @@ def extract_taxonomy_csv(request):
             "Harvested on": harvested_on.encode('utf-8'),
             "Nugget": nugget.encode('utf-8'),
             "State": state.encode('utf-8')
-
         }
         len_tags = len(tags)
         extract_info.update(
@@ -622,65 +628,47 @@ def extract_taxonomy_csv(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def multi_module_csv_export(request):
-    results = {"export_phase": None,
-               "export_module_survey": None,
-               "export_module_thread": None,
-               "export_module_multicolumn": None,
-               "export_module_vote": None,
-               "vote_users_data": None,
-               "export_module_bright_mirror": None}
-
-    fieldnames = {"export_phase": None,
-               "export_module_survey": None,
-               "export_module_thread": None,
-               "export_module_multicolumn": None,
-               "export_module_vote": None,
-               "vote_users_data": None,
-               "export_module_bright_mirror": None}
-
+    results = { sheet_name: None for sheet_name in sheet_names}
+    fieldnames = {sheet_name: None for sheet_name in sheet_names}
     from assembl.views.api2.votes import extract_voters
     phase_results, phase_fieldnames = extract_voters(request)
-
     results['vote_users_data'] = phase_results
     fieldnames['vote_users_data'] = phase_fieldnames
-    return csv_response_multiple_sheets(results, fieldnames, content_disposition='attachment; filename=multimodule_excel_export.csv')
+    return csv_response_multiple_sheets(results, fieldnames)
 
 
-def csv_response_multiple_sheets(results, fieldnames, content_disposition):
+# def csv_response_multiple_sheets(results, fieldnames, content_disposition):
+#     output = StringIO()
+#
+#     from zipfile import ZipFile, ZIP_DEFLATED
+#     from openpyxl.workbook import Workbook
+#     workbook = Workbook(True)
+#     worksheet = workbook.create_sheet()
+#     archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
+#     format = XSLX_MIMETYPE
+#
+#     # writerow = [None] * len(fieldnames)
+#     for key, elem in enumerate(fieldnames):
+#         worksheet = workbook.create_sheet()
+#         writerow = worksheet.append
+#         empty = None
+#         if fieldnames[elem] is not None:
+#             # TODO: i18n
+#             for result in results:
+#                 if results[result]:
+#                     for r in results[result]:
+#                         writerow([r.get(f, empty) for f in fieldnames[elem]])
+#         else:
+#             if results[elem]:
+#                 for r in results[elem]:
+#                     writerow(r)
+#
+#     output.seek(0)
+#     return Response(body_file=output, content_type=format, content_disposition=content_disposition)
+
+
+def csv_response(results, format, fieldnames=None, content_disposition=None):
     output = StringIO()
-
-    from zipfile import ZipFile, ZIP_DEFLATED
-    from openpyxl.workbook import Workbook
-    workbook = Workbook(True)
-    worksheet = workbook.create_sheet()
-    archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
-    format = XSLX_MIMETYPE
-
-    # writerow = [None] * len(fieldnames)
-    for key, elem in enumerate(fieldnames):
-        worksheet = workbook.create_sheet()
-        writerow = worksheet.append
-        empty = None
-        import pdb; pdb.set_trace()
-        if fieldnames[elem] is not None:
-            # TODO: i18n
-            for result in results:
-                if results[result]:
-                    for r in results[result]:
-                        writerow([r.get(f, empty) for f in fieldnames[elem]])
-        else:
-            if results[elem]:
-                for r in results[elem]:
-                    writerow(r)
-
-    output.seek(0)
-    return Response(body_file=output, content_type=format, content_disposition=content_disposition)
-
-
-def csv_response(results, format, number_of_sheets=1, fieldnames=None, content_disposition=None):
-    output = StringIO()
-
-    format = XSLX_MIMETYPE
     if format == CSV_MIMETYPE:
         from csv import writer
         # include BOM for Excel to open the file in UTF-8 properly
@@ -688,7 +676,6 @@ def csv_response(results, format, number_of_sheets=1, fieldnames=None, content_d
         csv = writer(output, dialect='excel', delimiter=';')
         writerow = csv.writerow
         empty = ''
-
     elif format == XSLX_MIMETYPE:
         from zipfile import ZipFile, ZIP_DEFLATED
         from openpyxl.workbook import Workbook
@@ -714,6 +701,42 @@ def csv_response(results, format, number_of_sheets=1, fieldnames=None, content_d
 
     output.seek(0)
     return Response(body_file=output, content_type=format, content_disposition=content_disposition)
+
+
+def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.csv'):
+    """
+    Returns a multiple sheet excel files
+    @param: results  A dict of lists. Each list contains dicts.
+    @param: fieldnames A dict of lists. Each list contains a string.
+    """
+    output = StringIO()
+    from zipfile import ZipFile, ZIP_DEFLATED
+    from openpyxl.workbook import Workbook
+    workbook = Workbook(True)
+    archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
+    for sheet_name in sheet_names:
+        workbook.create_sheet(sheet_name)
+
+    for worksheet in workbook.worksheets:
+        writerow = worksheet.append
+        empty=None
+        if fieldnames[worksheet.title] is not None:
+            # TODO: i18n
+            writerow([' '.join(fn.split('_')).title() for fn in fieldnames[worksheet.title]])
+            if results[worksheet.title] is not None:
+                for r in results[worksheet.title]:
+                    writerow([r.get(f, empty) for f in fieldnames])
+        else:
+            if results[worksheet.title] is not None:
+                for r in results[worksheet.title]:
+                    writerow(r)
+
+    from openpyxl.writer.excel import ExcelWriter
+    writer = ExcelWriter(workbook, archive)
+    writer.save('')
+
+    output.seek(0)
+    return Response(body_file=output, content_type=XSLX_MIMETYPE, content_disposition=content_disposition)
 
 
 @view_config(context=InstanceContext, name="contribution_count",

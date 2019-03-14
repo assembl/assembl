@@ -353,7 +353,6 @@ def global_vote_results_csv(request):
 #              ctx_instance_class=VotingWidget, request_method='GET',
 #              permission=P_DISC_STATS)
 def extract_voters(request):
-    # import pdb; pdb.set_trace()
     extract_votes = []
     ctx = request.context
     user_id = request.authenticated_userid
