@@ -14,11 +14,6 @@ export const CREATE_SECTION: 'CREATE_SECTION' = 'CREATE_SECTION';
 export const DELETE_SECTION: 'DELETE_SECTION' = 'DELETE_SECTION';
 export const MOVE_UP_SECTION: 'MOVE_UP_SECTION' = 'MOVE_UP_SECTION';
 export const MOVE_DOWN_SECTION: 'MOVE_DOWN_SECTION' = 'MOVE_DOWN_SECTION';
-export const UPDATE_LEGAL_NOTICE_ENTRY: 'UPDATE_LEGAL_NOTICE_ENTRY' = 'UPDATE_LEGAL_NOTICE_ENTRY';
-export const UPDATE_TERMS_AND_CONDITIONS_ENTRY: 'UPDATE_TERMS_AND_CONDITIONS_ENTRY' = 'UPDATE_TERMS_AND_CONDITIONS_ENTRY';
-export const UPDATE_LEGAL_CONTENTS: 'UPDATE_LEGAL_CONTENTS' = 'UPDATE_LEGAL_CONTENTS';
-export const UPDATE_COOKIES_POLICY_ENTRY: 'UPDATE_COOKIES_POLICY_ENTRY' = 'UPDATE_COOKIES_POLICY_ENTRY';
-export const UPDATE_PRIVACY_POLICY_ENTRY: 'UPDATE_PRIVACY_POLICY_ENTRY' = 'UPDATE_PRIVACY_POLICY_ENTRY';
 export const UPDATE_VOTE_SESSION_PAGE: 'UPDATE_VOTE_SESSION_PAGE' = 'UPDATE_VOTE_SESSION_PAGE';
 export const UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES: 'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES' =
   'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES';
@@ -63,16 +58,6 @@ export const MARK_ALL_DEPENDENCIES_AS_CHANGED: 'MARK_ALL_DEPENDENCIES_AS_CHANGED
 export const SET_VALIDATION_ERRORS: 'SET_VALIDATION_ERRORS' = 'SET_VALIDATION_ERRORS';
 export const CANCEL_MODULE_CUSTOMIZATION: 'CANCEL_MODULE_CUSTOMIZATION' = 'CANCEL_MODULE_CUSTOMIZATION';
 export const UPDATE_VOTE_MODULE: 'UPDATE_VOTE_MODULE' = 'UPDATE_VOTE_MODULE';
-export const CREATE_PHASE: 'CREATE_PHASE' = 'CREATE_PHASE';
-export const UPDATE_PHASES: 'UPDATE_PHASES' = 'UPDATE_PHASES';
-export const DELETE_PHASE: 'DELETE_PHASE' = 'DELETE_PHASE';
-export const UPDATE_PHASE_TITLE: 'UPDATE_PHASE_TITLE' = 'UPDATE_PHASE_TITLE';
-export const UPDATE_PHASE_DESCRIPTION: 'UPDATE_PHASE_DESCRIPTION' = 'UPDATE_PHASE_DESCRIPTION';
-export const UPDATE_PHASE_IMAGE: 'UPDATE_PHASE_IMAGE' = 'UPDATE_PHASE_IMAGE';
-export const UPDATE_PHASE_START: 'UPDATE_PHASE_START' = 'UPDATE_PHASE_START';
-export const UPDATE_PHASE_END: 'UPDATE_PHASE_END' = 'UPDATE_PHASE_END';
-export const MOVE_PHASE_UP: 'MOVE_PHASE_UP' = 'MOVE_PHASE_UP';
-export const MOVE_PHASE_DOWN: 'MOVE_PHASE_DOWN' = 'MOVE_PHASE_DOWN';
 
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
@@ -150,38 +135,6 @@ export type UpSection = {
 export type DownSection = {
   id: string,
   type: typeof MOVE_DOWN_SECTION
-};
-
-export type UpdateLegalNoticeEntry = {
-  type: typeof UPDATE_LEGAL_NOTICE_ENTRY,
-  locale: string,
-  value: string
-};
-
-export type UpdateTermsAndConditionsEntry = {
-  type: typeof UPDATE_TERMS_AND_CONDITIONS_ENTRY,
-  locale: string,
-  value: string
-};
-
-export type UpdateCookiesPolicyEntry = {
-  type: typeof UPDATE_COOKIES_POLICY_ENTRY,
-  locale: string,
-  value: string
-};
-
-export type UpdatePrivacyPolicyEntry = {
-  type: typeof UPDATE_PRIVACY_POLICY_ENTRY,
-  locale: string,
-  value: string
-};
-
-export type UpdateLegalContents = {
-  legalNoticeEntries: Array<LangStringEntryInput>,
-  termsAndConditionsEntries: Array<LangStringEntryInput>,
-  cookiesPolicyEntries: Array<LangStringEntryInput>,
-  privacyPolicyEntries: Array<LangStringEntryInput>,
-  type: typeof UPDATE_LEGAL_CONTENTS
 };
 
 export type UpdateVoteSessionPageSeeCurrentVotes = {
@@ -444,88 +397,13 @@ export type CustomizeVoteModule = {
   type: typeof UPDATE_VOTE_MODULE
 };
 
-export type CreatePhase = {
-  id: string,
-  type: typeof CREATE_PHASE
-};
-
-export type PhaseInfo = {
-  id: string
-};
-
-export type PhasesArray = Array<PhaseInfo>;
-
-export type UpdatePhases = {
-  phases: PhasesArray,
-  type: typeof UPDATE_PHASES
-};
-
-export type DeletePhase = {
-  id: string,
-  type: typeof DELETE_PHASE
-};
-
-export type UpdatePhaseTitle = {
-  id: string,
-  locale: string,
-  value: string,
-  type: typeof UPDATE_PHASE_TITLE
-};
-
-export type UpdatePhaseDescription = {
-  id: string,
-  locale: string,
-  value: string,
-  type: typeof UPDATE_PHASE_DESCRIPTION
-};
-
-export type UpdatePhaseImage = {
-  id: string,
-  value: File,
-  type: typeof UPDATE_PHASE_IMAGE
-};
-
-export type UpdatePhaseStart = {
-  id: string,
-  value: moment$Moment,
-  type: typeof UPDATE_PHASE_START
-};
-
-export type UpdatePhaseEnd = {
-  id: string,
-  value: moment$Moment,
-  type: typeof UPDATE_PHASE_END
-};
-
-export type MovePhaseUp = {
-  id: string,
-  type: typeof MOVE_PHASE_UP
-};
-
-export type MovePhaseDown = {
-  id: string,
-  type: typeof MOVE_PHASE_DOWN
-};
-
 type BasicAction = {
   type: string
 };
 
 // TODO: create type for all possible action types
 
-type LegalContentsActions = UpdateLegalNoticeEntry | UpdateTermsAndConditionsEntry | UpdateLegalContents;
-
 type SectionActions = CreateSection | DeleteSection | UpSection | DownSection;
-
-type TimelineActions =
-  | CreatePhase
-  | UpdatePhases
-  | DeletePhase
-  | UpdatePhaseTitle
-  | UpdatePhaseStart
-  | UpdatePhaseEnd
-  | MovePhaseUp
-  | MovePhaseDown;
 
 type VoteSessionActions =
   | UpdateVoteSessionPageSeeCurrentVotes
@@ -565,9 +443,7 @@ type VoteSessionActions =
 export type Action =
   | UpdateContentLocaleById
   | UpdateContentLocaleByOriginalLocale
-  | LegalContentsActions
   | SectionActions
   | VoteSessionActions
   | AdminActions
-  | TimelineActions
   | BasicAction;

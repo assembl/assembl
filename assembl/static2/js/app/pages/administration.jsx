@@ -5,11 +5,9 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import { Grid, Row, Col } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import moment from 'moment';
 
 import { displayLanguageMenu } from '../actions/adminActions';
 import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
-import { updatePhases } from '../actions/adminActions/timeline';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLandingPageModules } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
@@ -21,13 +19,14 @@ import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TextFields from '../graphql/TextFields.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
 import LandingPageModules from '../graphql/LandingPageModules.graphql';
-import TimelineQuery from '../graphql/Timeline.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import { fromGlobalId } from '../utils/globalFunctions';
 import { addEnumSuffixToModuleTitles } from '../components/administration/landingPage/addEnumSuffixToModuleTitles';
 
-const SECTIONS_WITHOUT_LANGUAGEMENU = ['1', '6'];
+import { SECTION_PERSONALIZE_INTERFACE, SECTION_DISCUSSION_PREFERENCES, SECTION_PROFILE_OPTIONS } from './../constants';
+
+const SECTIONS_WITHOUT_LANGUAGEMENU = [SECTION_PERSONALIZE_INTERFACE, SECTION_DISCUSSION_PREFERENCES];
 
 type Props = {
   sections: Array<Object>,
@@ -51,7 +50,6 @@ type Props = {
   displayLanguageMenu: Function,
   updateLandingPageModules: Function,
   updateTextFields: Function,
-  updatePhases: Function,
   timeline: Timeline,
   identifier: string
 };
@@ -77,7 +75,6 @@ class Administration extends React.Component<Props, State> {
     this.props.displayLanguageMenu(isHidden);
     this.putLandingPageModulesInStore(this.props.landingPageModules);
     this.putTextFieldsInStore(this.props.textFields);
-    this.putTimelinePhasesInStore(this.props.timeline);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -102,10 +99,6 @@ class Administration extends React.Component<Props, State> {
     if (nextProps.textFields !== this.props.textFields) {
       this.putTextFieldsInStore(nextProps.textFields);
     }
-
-    if (nextProps.timeline !== this.props.timeline) {
-      this.putTimelinePhasesInStore(nextProps.timeline);
-    }
   }
 
   putVoteSessionInStore = (voteSession) => {
@@ -117,18 +110,6 @@ class Administration extends React.Component<Props, State> {
     };
     const filteredVoteSession = filter(VoteSessionQuery, { voteSession: voteSession || emptyVoteSession });
     this.props.updateVoteSessionPage(filteredVoteSession.voteSession);
-  };
-
-  putTimelinePhasesInStore = (timeline) => {
-    if (timeline) {
-      const filteredPhases = filter(TimelineQuery, { timeline: timeline });
-      const phasesForStore = filteredPhases.timeline.map(phase => ({
-        ...phase,
-        start: moment(phase.start),
-        end: moment(phase.end)
-      }));
-      this.props.updatePhases(phasesForStore);
-    }
   };
 
   putVoteModulesInStore = (voteSession) => {
@@ -261,8 +242,7 @@ const mapDispatchToProps = dispatch => ({
   updateVoteProposals: voteProposals => dispatch(updateVoteProposals(voteProposals)),
   displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
   updateLandingPageModules: landingPageModules => dispatch(updateLandingPageModules(landingPageModules)),
-  updateTextFields: textFields => dispatch(updateTextFields(textFields)),
-  updatePhases: phases => dispatch(updatePhases(phases))
+  updateTextFields: textFields => dispatch(updateTextFields(textFields))
 });
 
 const isNotInAdminSection = adminSectionName => props => !props.router.getCurrentLocation().pathname.endsWith(adminSectionName);
@@ -319,31 +299,6 @@ export default compose(
     },
     skip: isNotInDiscussionAdmin
   }),
-  graphql(TimelineQuery, {
-    options: ({ locale }) => ({
-      variables: { lang: locale }
-    }),
-    props: ({ data }) => {
-      if (data.error || data.loading) {
-        return {
-          timelineMetadata: {
-            error: data.error,
-            loading: data.loading
-          }
-        };
-      }
-
-      return {
-        timelineMetadata: {
-          error: data.error,
-          loading: data.loading
-        },
-        refetchTimeline: data.refetch,
-        timeline: data.timeline
-      };
-    },
-    skip: props => isNotInLandingPageAdmin(props) && isNotInDiscussionAdmin(props)
-  }),
   graphql(LandingPageModules, {
     options: ({ locale }) => ({
       variables: { lang: locale }
@@ -393,14 +348,9 @@ export default compose(
         textFields: data.textFields
       };
     },
-    skip: props => isNotInDiscussionAdmin(props) || props.router.getCurrentLocation().search !== '?section=3'
+    skip: props =>
+      isNotInDiscussionAdmin(props) || props.router.getCurrentLocation().search !== `?section=${SECTION_PROFILE_OPTIONS}`
   }),
-  mergeLoadingAndError([
-    'voteSessionMetadata',
-    'sectionsMetadata',
-    'timelineMetadata',
-    'landingPageModulesMetadata',
-    'textFieldsMetadata'
-  ]),
+  mergeLoadingAndError(['voteSessionMetadata', 'sectionsMetadata', 'landingPageModulesMetadata', 'textFieldsMetadata']),
   manageErrorAndLoading({ displayLoader: true })
 )(Administration);

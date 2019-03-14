@@ -5,7 +5,7 @@ exports[`TabbedContent component should match snapshot 1`] = `
   className="tabbed-content"
 >
   <div
-    className="row"
+    className="tabs-section row"
   >
     <div
       className="col-md-4 col-xs-12"
@@ -81,7 +81,7 @@ exports[`TabbedContent component should match snapshot with bodyRowClassName 1`]
   className="tabbed-content"
 >
   <div
-    className="row"
+    className="tabs-section row"
   >
     <div
       className="col-md-4 col-xs-12"
@@ -157,7 +157,7 @@ exports[`TabbedContent component should match snapshot with divClassName 1`] = `
   className="tabbed-content right"
 >
   <div
-    className="row"
+    className="tabs-section row"
   >
     <div
       className="col-md-4 col-xs-12"

@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
-import moment from 'moment';
 
 import ManageSectionsForm from '../components/administration/discussion/manageSectionsForm';
 import LegalContentsForm from '../components/administration/legalContents/index';
-import TimelineForm from '../components/administration/discussion/timelineForm';
+import TimelineForm from '../components/administration/discussion/timelineConfiguration';
 import PreferencesSection from '../components/administration/discussion/preferences/index';
 import ManageProfileOptionsForm from '../components/administration/discussion/manageProfileOptionsForm';
 import PersonalizeInterface from '../components/administration/discussion/personalizeInterface';
@@ -21,10 +20,16 @@ import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import createTextFieldMutation from '../graphql/mutations/createTextField.graphql';
 import updateTextFieldMutation from '../graphql/mutations/updateTextField.graphql';
 import deleteTextFieldMutation from '../graphql/mutations/deleteTextField.graphql';
-import updateDiscussionPhaseMutation from '../graphql/mutations/updateDiscussionPhase.graphql';
-import createDiscussionPhaseMutation from '../graphql/mutations/createDiscussionPhase.graphql';
-import deleteDiscussionPhaseMutation from '../graphql/mutations/deleteDiscussionPhase.graphql';
 import { type State as ReduxState } from '../reducers/rootReducer';
+
+import {
+  SECTION_PERSONALIZE_INTERFACE,
+  SECTION_DISCUSSION_PREFERENCES,
+  SECTION_TIMELINE,
+  SECTION_PROFILE_OPTIONS,
+  SECTION_MENU_SECTION,
+  SECTION_LEGAL_CONTENTS
+} from './../constants';
 
 type Section = Object;
 
@@ -47,30 +52,6 @@ const createVariablesForTextFieldMutation = textField => ({
 const createVariablesForDeleteSectionMutation = section => ({ sectionId: section.id });
 
 const createVariablesForDeleteTextFieldMutation = textField => ({ id: textField.id });
-
-const createVariablesForDiscussionPhaseMutation = (phase) => {
-  if (phase.endIsBeforeStart) {
-    return displayAlert('danger', I18n.t('administration.timelineAdmin.endIsBeforeStart'));
-  }
-  if (phase.start === null || phase.end === null) {
-    return displayAlert('danger', I18n.t('administration.timelineAdmin.startOrEndDateIsEmpty'));
-  }
-  if (phase.titleEntries.length === 0) {
-    return displayAlert('danger', I18n.t('administration.timelineAdmin.titleEntriesIsEmpty'));
-  }
-
-  return {
-    identifier: phase.identifier,
-    start: moment(phase.start, moment.ISO_8601),
-    end: moment(phase.end, moment.ISO_8601),
-    order: phase.order,
-    titleEntries: phase.titleEntries
-  };
-};
-
-const createVariablesForDeleteDiscussionPhaseMutation = phase => ({
-  id: phase.id
-});
 
 type Props = {
   changeLocale: Function,
@@ -95,13 +76,7 @@ type Props = {
   deleteTextField: Function,
   profileOptionsHasChanged: boolean,
   refetchTextFields: Function,
-  textFields: Array<Object>,
-  updateDiscussionPhase: Function,
-  createDiscussionPhase: Function,
-  deleteDiscussionPhase: Function,
-  refetchTimeline: Function,
-  phasesHaveChanged: boolean,
-  phases: Array<Object>
+  textFields: Array<Object>
 };
 
 type State = {
@@ -132,7 +107,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
     return null;
   };
 
-  dataHaveChanged = () => this.props.sectionsHaveChanged || this.props.profileOptionsHasChanged || this.props.phasesHaveChanged;
+  dataHaveChanged = () => this.props.sectionsHaveChanged || this.props.profileOptionsHasChanged;
 
   saveAction = () => {
     const {
@@ -148,14 +123,7 @@ class DiscussionAdmin extends React.Component<Props, State> {
       deleteTextField,
       profileOptionsHasChanged,
       textFields,
-      refetchTextFields,
-      phases,
-      phasesHaveChanged,
-      refetchTimeline,
-      updateDiscussionPhase,
-      createDiscussionPhase,
-      deleteDiscussionPhase,
-      editLocale
+      refetchTextFields
     } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`, false, -1);
 
@@ -174,31 +142,6 @@ class DiscussionAdmin extends React.Component<Props, State> {
           this.setState({ refetching: true }, () => {
             refetchSections().then(() => {
               displayAlert('success', I18n.t('administration.sections.successSave'));
-              this.setState({ refetching: false });
-            });
-          });
-        })
-        .catch((error) => {
-          displayAlert('danger', `${error}`, false, 30000);
-        });
-    }
-
-    if (phasesHaveChanged) {
-      const mutationPromises = getMutationsPromises({
-        items: phases,
-        variablesCreator: createVariablesForDiscussionPhaseMutation,
-        deleteVariablesCreator: createVariablesForDeleteDiscussionPhaseMutation,
-        createMutation: createDiscussionPhase,
-        deleteMutation: deleteDiscussionPhase,
-        updateMutation: updateDiscussionPhase,
-        lang: editLocale
-      });
-
-      runSerial(mutationPromises)
-        .then(() => {
-          this.setState({ refetching: true }, () => {
-            refetchTimeline().then(() => {
-              displayAlert('success', I18n.t('administration.timelineAdmin.successSave'));
               this.setState({ refetching: false });
             });
           });
@@ -242,24 +185,27 @@ class DiscussionAdmin extends React.Component<Props, State> {
     const { section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     // @TODO use final-form logic
-    const showSaveButton = section !== '6' && section !== '4' && section !== '1';
+    const showSaveButton =
+      section !== SECTION_PERSONALIZE_INTERFACE &&
+      section !== SECTION_DISCUSSION_PREFERENCES &&
+      section !== SECTION_TIMELINE &&
+      section !== SECTION_LEGAL_CONTENTS;
     return (
       <div className="discussion-admin">
         {showSaveButton && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
-        {section === '1' && <PreferencesSection {...this.props} />}
-        {section === '2' && <ManageSectionsForm {...this.props} />}
-        {section === '3' && <ManageProfileOptionsForm />}
-        {section === '4' && <LegalContentsForm {...this.props} />}
-        {section === '5' && <TimelineForm {...this.props} />}
-        {section === '6' && <PersonalizeInterface {...this.props} />}
+        {section === SECTION_PERSONALIZE_INTERFACE && <PersonalizeInterface {...this.props} />}
+        {section === SECTION_DISCUSSION_PREFERENCES && <PreferencesSection {...this.props} />}
+        {section === SECTION_TIMELINE && <TimelineForm {...this.props} />}
+        {section === SECTION_PROFILE_OPTIONS && <ManageProfileOptionsForm />}
+        {section === SECTION_MENU_SECTION && <ManageSectionsForm {...this.props} />}
+        {section === SECTION_LEGAL_CONTENTS && <LegalContentsForm {...this.props} />}
       </div>
     );
   }
 }
 
-const mapStateToProps: ReduxState => Object = ({ admin: { editLocale, sections, profileOptions, timeline }, i18n }) => {
+const mapStateToProps: ReduxState => Object = ({ admin: { editLocale, sections, profileOptions }, i18n }) => {
   const { sectionsById, sectionsHaveChanged, sectionsInOrder } = sections;
-  const { phasesById, phasesHaveChanged } = timeline;
   const { profileOptionsHasChanged, textFieldsById } = profileOptions;
   const textFields = textFieldsById
     .map(textField => textField)
@@ -298,12 +244,7 @@ const mapStateToProps: ReduxState => Object = ({ admin: { editLocale, sections, 
       .valueSeq() // convert to array of Map
       .toJS(), // convert to array of objects
     profileOptionsHasChanged: profileOptionsHasChanged,
-    textFields: textFields,
-    phases: phasesById
-      .sortBy(phase => phase.get('order'))
-      .valueSeq()
-      .toJS(),
-    phasesHaveChanged: phasesHaveChanged
+    textFields: textFields
   };
 };
 
@@ -316,15 +257,6 @@ export default compose(
   }),
   graphql(updateSectionMutation, {
     name: 'updateSection'
-  }),
-  graphql(createDiscussionPhaseMutation, {
-    name: 'createDiscussionPhase'
-  }),
-  graphql(deleteDiscussionPhaseMutation, {
-    name: 'deleteDiscussionPhase'
-  }),
-  graphql(updateDiscussionPhaseMutation, {
-    name: 'updateDiscussionPhase'
   }),
   graphql(createTextFieldMutation, {
     name: 'createTextField'

@@ -689,21 +689,18 @@ const Translations = {
         phase: "Phase %{count}",
         annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
         phaseLabel: "Titre de la phase",
+        descriptionPhaseLabel: "Description de la phase",
         addPhase: "Ajouter une phase",
         deletePhase: "Supprimer la phase",
         instruction1: "Choisissez le nombre de phases qui jalonneront votre débat",
         instruction2: "Renseignez les champs requis pour chaque phase en sélectionnant chaque onglet",
-        configureThematicsTable:
-          "Après avoir sauvegardé, configurez la table des thématiques en cliquant dans le menu vertical gauche ou sur le lien suivant : ",
-        configureThematicsTableLink: "Configurer Phase %{count}",
+        instruction3: "Choisissez la date de début et de fin de votre phase",
+        instruction4: "Télécharger l'image de couverture de votre phase présente sur la page d'accueil",
+        instruction5: "Renseignez la description de votre phase.",
         successSave: "La ligne de temps a été sauvegardée avec succès",
-        startOrEndDateIsEmpty: "Veuillez sélectionner une date de début et une date de fin pour toutes les phases",
-        titleEntriesIsEmpty: "Un titre pour votre phase est requis",
-        endIsBeforeStart: "Veuillez sélectionner une date de fin postérieure à celle de début",
-        singleModule: "Module unique de participation",
         selectStart: "Date de démarrage de la phase %{count}",
         selectEnd: "Date de fin de la phase %{count}",
-        warningLabel: "Les dates que vous avez configuré entrent en conflit."
+        warningLabel: "La période de cette phase chevauche la période de la phase précédente ou de la phase suivante."
       },
       modules: {
         noModule: "Aucun module",
@@ -847,12 +844,11 @@ const Translations = {
       videoHelp:
         "*Liens vidéo autorisés : \"https://www.youtube.com/embed/[videoId]\" ou \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "Les champs * sont requis.",
-      themeNum: "Thématique %{index}",
       discussion: {
         "0": "Préférences de la discussion",
         "3": "Options d'inscription",
         "4": "Contenus juridiques",
-        "5": "Édition des phases et modules",
+        "5": "Édition des phases",
         "6": "Personnaliser l'interface"
       },
       languageChoice: "Sélection des langues du débat",
@@ -894,7 +890,7 @@ const Translations = {
         createResource: "Ajouter un média",
         menuTitle: "Éditer le centre de ressources",
         title: "Centre de ressources",
-        editResourceFormTitle: "Média %{index}",
+        editResourceFormTitle: "Média %{count}",
         textLabel: "Texte",
         titleLabel: "Titre",
         embedCodeLabel: "Vidéo/Slides",
@@ -966,13 +962,10 @@ const Translations = {
           endDateError: "La date de fin ne peut pas être antérieure à la date de début"
         },
         timeline: {
-          title: "Timeline",
+          title: "Timeline de la page d'accueil",
           image: "Choisir l'image pour cette phase",
-          phaseSection: "Configurer les phases du débat",
           imageDescription: "L'image doit avoir une hauteur de 500px et une largeur de 400px.",
-          sectionTitle: "Configurer le titre et sous-titre de la section",
-          linkToTimeline: "Configurer le nombre phases souhaitées pour le débat",
-          linkToLandingPage: "Configurer la description et l'image pour chaque phase"
+          sectionTitle: "Configurer le titre et sous-titre de la section"
         },
         successSave: "Les modules ont été enregistrés avec succès !",
         headerSuccessSave: "Le bandeau de la page d'accueil a été sauvegardé avec succès !"
@@ -1710,21 +1703,18 @@ const Translations = {
         phase: "Phase %{count}",
         annotation: "This module has to be filled. * Fields are required",
         phaseLabel: "Phase title",
+        descriptionPhaseLabel: "Phase description",
         addPhase: "Add a phase",
         deletePhase: "Delete the phase",
         instruction1: "Choose the number of phases for your debate",
         instruction2: "Fill in the required fields for each phase by selecting each tab",
-        configureThematicsTable:
-          "Once you saved your work, configure the thematics table by clicking on the vertical menu on the left or on the following link: ",
-        configureThematicsTableLink: "Configure Phase %{count}",
+        instruction3: "Choose the start and the end of your phase.",
+        instruction4: "Choose the phase image for the timeline in the landing page.",
+        instruction5: "Write the phase description.",
         successSave: "The timeline has been sucessfully saved",
-        titleEntriesIsEmpty: "The phase title is required",
-        startOrEndDateIsEmpty: "Please select a start date and an end date for all your phases",
-        endIsBeforeStart: "Please select an end date posterior to the start",
-        singleModule: "Single participation module",
         selectStart: "Phase %{count}'s start date",
         selectEnd: "Phase %{count}'s end date",
-        warningLabel: "The dates you have set are in conflict"
+        warningLabel: "The dates you have set for this phase are overlapping the previous phase or the next phase"
       },
       modules: {
         noModule: "No module",
@@ -1862,12 +1852,11 @@ const Translations = {
       videoHelp:
         "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
       annotation: "* Fields are required.",
-      themeNum: "Theme %{index}",
       discussion: {
         "0": "Discussion preferences",
         "3": "Registration options",
         "4": "Legal contents",
-        "5": "Edition of the phases and modules",
+        "5": "Edition of the phases",
         "6": "Personalize the interface"
       },
       languageChoice: "Select desired languages below",
@@ -1908,7 +1897,7 @@ const Translations = {
         createResource: "Add a media",
         menuTitle: "Edit the resources center",
         title: "Resources center",
-        editResourceFormTitle: "Edit resource number %{index}",
+        editResourceFormTitle: "Edit resource number %{count}",
         textLabel: "Text",
         titleLabel: "Title",
         embedCodeLabel: "Video/Slides",
@@ -1978,13 +1967,10 @@ const Translations = {
           endDateError: "The end date cannot be after the start date"
         },
         timeline: {
-          title: "Timeline",
+          title: "Timeline on the landing page",
           image: "Choose the image for this phase",
           sectionTitle: "Configure the title and the subtitle of the section",
-          phaseSection: "Configure each phase of the debate",
-          imageDescription: "The image must have a height of 500px and a width of 400px.",
-          linkToTimeline: "Set the number of phases for the debate",
-          linkToLandingPage: "Set the description and the image for each phase"
+          imageDescription: "The image must have a height of 500px and a width of 400px."
         },
         successSave: "The modules have been saved with success!",
         headerSuccessSave: "The home page header have been saved with success!"

@@ -8,7 +8,7 @@ import range from 'lodash/range';
 
 import { displayModal, closeModal } from '../../utils/utilityManager';
 import { upTooltip, downTooltip } from '../common/tooltips';
-import { createRandomId } from '../../utils/globalFunctions';
+import { createRandomId, getDomElementOffset } from '../../utils/globalFunctions';
 import { MAX_TREE_FORM_LEVEL } from '../../constants';
 
 type ConfirmationMessageType = {
@@ -17,8 +17,10 @@ type ConfirmationMessageType = {
 };
 
 type Props = {
+  usePanels: boolean,
   renderFields: Function,
-  titleMsgId?: string, // eslint-disable-line react/require-default-props
+  titleMsgId?: string,
+  renderTitleMsg: ({ titleMsgId: string, idx: number, fieldValue: mixed }) => React.Node,
   tooltips: {
     addTooltip: (props: { level: number }) => React.Node,
     deleteTooltip: () => React.Node,
@@ -37,6 +39,10 @@ type Props = {
     confirmDeletionTitle: (props: ConfirmationMessageType) => React.Node,
     confirmDeletionBody: (props: ConfirmationMessageType) => React.Node
   }
+};
+
+type State = {
+  activePanel: number | null
 };
 
 type FieldsProps = {
@@ -70,11 +76,13 @@ export function confirmDeletionModal(title: React.Node, body: React.Node, remove
   return displayModal(title, body, true, footer);
 }
 
-export class Fields extends React.PureComponent<FieldsProps> {
+export class Fields extends React.PureComponent<FieldsProps, State> {
   constructor(props: FieldsProps) {
     super(props);
     this.initialize();
   }
+
+  state = { activePanel: null };
 
   initialize = () => {
     const { fields, minItems, level, onAdd, parentId } = this.props;
@@ -107,14 +115,14 @@ export class Fields extends React.PureComponent<FieldsProps> {
     fields.swap(index, index - 1);
   };
 
-  removedIndex: ?number = null;
+  removedId: ?number = null;
 
   remove = (index: number) => {
     const { fields, onRemove, isTree, subFieldName } = this.props;
     const fieldValue = fields.value[index];
     const children = subFieldName && isTree && fieldValue[subFieldName];
     if (!children || children.length === 0) {
-      this.removedIndex = index;
+      this.removedId = fieldValue.id;
       if (onRemove) {
         onRemove(fieldValue.id);
       }
@@ -123,12 +131,29 @@ export class Fields extends React.PureComponent<FieldsProps> {
   };
 
   add = () => {
-    const { fields, onAdd, parentId } = this.props;
+    const { fields, onAdd, parentId, usePanels } = this.props;
     const id = createRandomId();
+    const idx = fields.length || 0;
     if (onAdd) {
-      onAdd(id, parentId, fields.length || 0);
+      onAdd(id, parentId, idx);
     }
     fields.push({ id: id });
+    if (usePanels) {
+      this.setActivePanel(idx);
+    }
+  };
+
+  setActivePanel = (idx: number) => {
+    this.setState(
+      prevState => ({ activePanel: prevState.activePanel === idx ? null : idx }),
+      () => {
+        setTimeout(() => {
+          const panel = document.getElementById(`panel${idx}`);
+          const scrollY = panel ? getDomElementOffset(panel).top : 0;
+          window.scrollTo({ top: scrollY - 170, left: 0, behavior: 'smooth' });
+        }, 20);
+      }
+    );
   };
 
   render() {
@@ -136,6 +161,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
       fields,
       renderFields,
       titleMsgId,
+      renderTitleMsg,
       isTree,
       level,
       subFieldName,
@@ -149,19 +175,14 @@ export class Fields extends React.PureComponent<FieldsProps> {
       onAdd,
       onRemove,
       onUp,
-      onDown
+      onDown,
+      usePanels
     } = this.props;
     /* Hack to fix issue with richtext field:
     when clicking on delete action, the value of richtext field becomes '' and so
     new EditorState.createEmpty() is created triggering onChange event on first render of the field)
     preventing the whole block to be removed */
-    // console.log(fields.length);
-    const removedIndex = this.removedIndex;
-    if (this.removedIndex) {
-      setTimeout(() => {
-        this.removedIndex = null;
-      }, 2000);
-    }
+    const removedId = this.removedId;
     const isRoot = level === 0;
     const className = level > 0 ? 'form-branch' : 'form-tree';
     const addBtnTop = isTree && !isRoot;
@@ -177,7 +198,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
       <div className={classNames({ [className]: isTree })}>
         {addBtnTop ? addBtn : null}
         {fields.map((fieldname, idx) => {
-          if (idx === removedIndex) {
+          if (fields.value[idx].id === removedId) {
             return null;
           }
           const fieldValue = fields.value[idx];
@@ -198,10 +219,17 @@ export class Fields extends React.PureComponent<FieldsProps> {
               )
             : removeField;
           return (
-            <div className="form-container" key={fieldname}>
+            <div
+              className={classNames('form-container', { 'panel panel-default': usePanels })}
+              id={usePanels ? `panel${idx}` : undefined}
+              key={fieldname}
+            >
               {titleMsgId ? (
-                <div className="title left">
-                  <Translate value={titleMsgId} index={idx + 1} />
+                <div
+                  className={classNames({ title: !usePanels, 'panel-heading pointer': usePanels, left: true })}
+                  onClick={usePanels ? () => this.setActivePanel(idx) : undefined}
+                >
+                  {renderTitleMsg({ titleMsgId: titleMsgId, idx: idx, fieldValue: fieldValue })}
                 </div>
               ) : null}
               <div className="pointer right">
@@ -233,7 +261,13 @@ export class Fields extends React.PureComponent<FieldsProps> {
                 </div>
               </div>
               <div className="clear" />
-              <div className={classNames({ 'form-tree-item': isTree })}>
+              <div
+                className={classNames({
+                  'form-tree-item': isTree,
+                  'panel-body': usePanels,
+                  hidden: usePanels && idx !== this.state.activePanel
+                })}
+              >
                 {renderFields({ name: fieldname, idx: idx, fieldIndex: fieldIndex })}
                 {isTree && subFieldName ? (
                   <FieldArrayWithActions
@@ -242,6 +276,7 @@ export class Fields extends React.PureComponent<FieldsProps> {
                     subFieldName={subFieldName}
                     renderFields={renderFields}
                     titleMsgId={titleMsgId}
+                    renderTitleMsg={renderTitleMsg}
                     tooltips={{
                       addTooltip: addTooltip,
                       deleteTooltip: deleteTooltip,
@@ -281,6 +316,8 @@ const FieldArrayWithActions = (props: FieldArrayProps) => {
 };
 
 FieldArrayWithActions.defaultProps = {
+  usePanels: false,
+  renderTitleMsg: ({ titleMsgId, idx }) => <Translate value={titleMsgId} count={idx + 1} />,
   withSeparators: true,
   subFieldName: '',
   isTree: false,

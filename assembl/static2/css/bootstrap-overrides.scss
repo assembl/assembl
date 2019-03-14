@@ -107,6 +107,18 @@
   }
 }
 
+.panel-heading {
+  background-color: $white !important;
+}
+
+.has-error .control-label {
+  color: $error !important;
+}
+
+.has-error .form-control {
+  border-color: $error !important;
+}
+
 @media screen and (min-width: $screen-sm-min) {
   .nav {
     font-family: $font-family4;

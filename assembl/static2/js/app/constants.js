@@ -43,6 +43,13 @@ export const SENTIMENT_BAR_TOP_POSITION_OFFSET = 78;
 
 export const MAX_TREE_FORM_LEVEL = 4;
 
+export const SECTION_PERSONALIZE_INTERFACE = '1';
+export const SECTION_DISCUSSION_PREFERENCES = '2';
+export const SECTION_TIMELINE = '3';
+export const SECTION_PROFILE_OPTIONS = '4';
+export const SECTION_MENU_SECTION = '5';
+export const SECTION_LEGAL_CONTENTS = '6';
+
 export const APOLLO_NETWORK_STATUS = {
   /**
    * The query has never been run before and the query is now currently running. A query will still
@@ -146,29 +153,29 @@ export const ADMIN_MENU = {
     title: 'administration.edition',
     sectionId: '1',
     subMenu: {
-      language: {
+      personalizeInterface: {
+        title: 'administration.menu.personalizeInterface',
+        sectionId: SECTION_PERSONALIZE_INTERFACE
+      },
+      preferences: {
         title: 'administration.menu.preferences',
-        sectionId: '1'
-      },
-      sections: {
-        title: 'administration.menu.sections',
-        sectionId: '2'
-      },
-      manageProfileOptions: {
-        title: 'administration.menu.manageProfileOptions',
-        sectionId: '3'
-      },
-      legalContents: {
-        title: 'administration.menu.legalContents',
-        sectionId: '4'
+        sectionId: SECTION_DISCUSSION_PREFERENCES
       },
       timeline: {
         title: 'administration.menu.timeline',
-        sectionId: '5'
+        sectionId: SECTION_TIMELINE
       },
-      personalizeInterface: {
-        title: 'administration.menu.personalizeInterface',
-        sectionId: '6'
+      manageProfileOptions: {
+        title: 'administration.menu.manageProfileOptions',
+        sectionId: SECTION_PROFILE_OPTIONS
+      },
+      sections: {
+        title: 'administration.menu.sections',
+        sectionId: SECTION_MENU_SECTION
+      },
+      legalContents: {
+        title: 'administration.menu.legalContents',
+        sectionId: SECTION_LEGAL_CONTENTS
       }
     }
   },
@@ -180,18 +187,14 @@ export const ADMIN_MENU = {
     title: 'administration.landingpage',
     sectionId: '1',
     subMenu: {
-      // manageModules: {
-      //   title: 'administration.landingPage.manageModules.title',
-      //   sectionId: '3'
-      // },
       header: {
         title: 'administration.landingPage.header.title',
         sectionId: '1'
-      },
-      timeline: {
-        title: 'administration.landingPage.timeline.title',
-        sectionId: '2'
       }
+      // manageModules: {
+      //   title: 'administration.landingPage.manageModules.title',
+      //   sectionId: '2'
+      // }
     }
   },
   resourcesCenter: {

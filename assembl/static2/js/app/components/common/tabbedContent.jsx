@@ -65,7 +65,7 @@ class TabbedContent extends React.Component<Props, State> {
     const { activeIdx } = this.state;
     return (
       <div className={classNames('tabbed-content', divClassName)}>
-        <Row>{this.renderTabs()}</Row>
+        <Row className="tabs-section">{this.renderTabs()}</Row>
         {tabs.map(
           (tab, idx) =>
             (idx === activeIdx ? (
