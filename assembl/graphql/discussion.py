@@ -609,12 +609,23 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             if slug is not None:
                 if slug != discussion.slug:
                     if models.OldSlug.query.filter(
-                            models.OldSlug.slug == discussion.slug).first() is None:
+                            models.OldSlug.slug == slug
+                            ).filter(models.OldSlug.discussion_id != discussion.id).first() is not None:
+                        error = _("This slug is an old slug of another debate, you can't use it.")
+                        raise Exception(context.localizer.translate(error))
+
+                    if models.Discussion.query.filter(
+                            models.Discussion.slug == slug
+                            ).first() is not None:
+                        error = _("This slug is already used by another debate, you can't use it.")
+                        raise Exception(context.localizer.translate(error))
+
+                    if discussion.slug not in [old_slug.slug for old_slug in discussion.old_slugs]:
                         db.add(models.OldSlug(
                             discussion=discussion,
                             slug=discussion.slug))
 
-                discussion.slug = slug
+                    discussion.slug = slug
 
             db.flush()
 
