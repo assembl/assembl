@@ -2,6 +2,7 @@
 import React from 'react';
 import { DateRangePicker } from 'react-dates';
 import moment from 'moment';
+import { I18n } from 'react-redux-i18n';
 import PresetsList from './presetsList';
 
 type Props = {
@@ -43,8 +44,10 @@ class CustomDateRangePicker extends React.PureComponent<Props, State> {
         <DateRangePicker
           startDate={start}
           endDate={end}
-          startDateId="foo"
-          endDateId="bar"
+          startDateId="startDateInput"
+          endDateId="endDateInput"
+          startDatePlaceholderText={I18n.t('administration.export.startDate')}
+          endDatePlaceholderText={I18n.t('administration.export.endDate')}
           onDatesChange={this.handleDatesChange}
           focusedInput={focusedInput}
           onFocusChange={this.handleFocusChange}

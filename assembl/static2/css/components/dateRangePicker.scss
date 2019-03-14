@@ -12,9 +12,10 @@
   .DateInput_input,
   .DateInput_input__focused {
     width: 68%;
+    border: none;
   }
 
-  input[aria-label='Start Date'] {
+  #startDateInput {
     margin-left: 40px;
 
     &[value=''] {
@@ -22,7 +23,7 @@
     }
   }
 
-  input[aria-label='End Date'] {
+  #startDate {
     margin-left: 10px;
 
     &[value=''] {

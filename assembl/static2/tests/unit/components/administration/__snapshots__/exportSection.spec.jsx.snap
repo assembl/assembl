@@ -87,17 +87,17 @@ exports[`DumbExportSection component should render an DumbExportSection componen
                     className="DateInput DateInput_1 DateInput__small DateInput__small_2"
                   >
                     <input
-                      aria-describedby="DateInput__screen-reader-message-foo"
-                      aria-label="Start Date"
+                      aria-describedby="DateInput__screen-reader-message-startDateInput"
+                      aria-label="Start date"
                       autoComplete="off"
                       className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                       disabled={false}
-                      id="foo"
-                      name="foo"
+                      id="startDateInput"
+                      name="startDateInput"
                       onChange={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
-                      placeholder="Start Date"
+                      placeholder="Start date"
                       readOnly={false}
                       required={false}
                       type="text"
@@ -105,7 +105,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
                     />
                     <p
                       className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-foo"
+                      id="DateInput__screen-reader-message-startDateInput"
                     >
                       Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
@@ -122,17 +122,17 @@ exports[`DumbExportSection component should render an DumbExportSection componen
                     className="DateInput DateInput_1 DateInput__small DateInput__small_2"
                   >
                     <input
-                      aria-describedby="DateInput__screen-reader-message-bar"
-                      aria-label="End Date"
+                      aria-describedby="DateInput__screen-reader-message-endDateInput"
+                      aria-label="End date"
                       autoComplete="off"
                       className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                       disabled={false}
-                      id="bar"
-                      name="bar"
+                      id="endDateInput"
+                      name="endDateInput"
                       onChange={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
-                      placeholder="End Date"
+                      placeholder="End date"
                       readOnly={false}
                       required={false}
                       type="text"
@@ -140,7 +140,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
                     />
                     <p
                       className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-bar"
+                      id="DateInput__screen-reader-message-endDateInput"
                     >
                       Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
@@ -220,17 +220,17 @@ exports[`DumbExportSection component should render an DumbExportSection componen
                     className="DateInput DateInput_1 DateInput__small DateInput__small_2"
                   >
                     <input
-                      aria-describedby="DateInput__screen-reader-message-foo"
-                      aria-label="Start Date"
+                      aria-describedby="DateInput__screen-reader-message-startDateInput"
+                      aria-label="Start date"
                       autoComplete="off"
                       className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                       disabled={false}
-                      id="foo"
-                      name="foo"
+                      id="startDateInput"
+                      name="startDateInput"
                       onChange={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
-                      placeholder="Start Date"
+                      placeholder="Start date"
                       readOnly={false}
                       required={false}
                       type="text"
@@ -238,7 +238,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
                     />
                     <p
                       className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-foo"
+                      id="DateInput__screen-reader-message-startDateInput"
                     >
                       Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
@@ -255,17 +255,17 @@ exports[`DumbExportSection component should render an DumbExportSection componen
                     className="DateInput DateInput_1 DateInput__small DateInput__small_2"
                   >
                     <input
-                      aria-describedby="DateInput__screen-reader-message-bar"
-                      aria-label="End Date"
+                      aria-describedby="DateInput__screen-reader-message-endDateInput"
+                      aria-label="End date"
                       autoComplete="off"
                       className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                       disabled={false}
-                      id="bar"
-                      name="bar"
+                      id="endDateInput"
+                      name="endDateInput"
                       onChange={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
-                      placeholder="End Date"
+                      placeholder="End date"
                       readOnly={false}
                       required={false}
                       type="text"
@@ -273,7 +273,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
                     />
                     <p
                       className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-bar"
+                      id="DateInput__screen-reader-message-endDateInput"
                     >
                       Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
@@ -392,17 +392,17 @@ exports[`DumbExportSection component should render an export section that handle
                     className="DateInput DateInput_1 DateInput__small DateInput__small_2"
                   >
                     <input
-                      aria-describedby="DateInput__screen-reader-message-foo"
-                      aria-label="Start Date"
+                      aria-describedby="DateInput__screen-reader-message-startDateInput"
+                      aria-label="Start date"
                       autoComplete="off"
                       className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                       disabled={false}
-                      id="foo"
-                      name="foo"
+                      id="startDateInput"
+                      name="startDateInput"
                       onChange={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
-                      placeholder="Start Date"
+                      placeholder="Start date"
                       readOnly={false}
                       required={false}
                       type="text"
@@ -410,7 +410,7 @@ exports[`DumbExportSection component should render an export section that handle
                     />
                     <p
                       className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-foo"
+                      id="DateInput__screen-reader-message-startDateInput"
                     >
                       Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
@@ -427,17 +427,17 @@ exports[`DumbExportSection component should render an export section that handle
                     className="DateInput DateInput_1 DateInput__small DateInput__small_2"
                   >
                     <input
-                      aria-describedby="DateInput__screen-reader-message-bar"
-                      aria-label="End Date"
+                      aria-describedby="DateInput__screen-reader-message-endDateInput"
+                      aria-label="End date"
                       autoComplete="off"
                       className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
                       disabled={false}
-                      id="bar"
-                      name="bar"
+                      id="endDateInput"
+                      name="endDateInput"
                       onChange={[Function]}
                       onFocus={[Function]}
                       onKeyDown={[Function]}
-                      placeholder="End Date"
+                      placeholder="End date"
                       readOnly={false}
                       required={false}
                       type="text"
@@ -445,7 +445,7 @@ exports[`DumbExportSection component should render an export section that handle
                     />
                     <p
                       className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-bar"
+                      id="DateInput__screen-reader-message-endDateInput"
                     >
                       Press the down arrow key to interact with the calendar and
   select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
