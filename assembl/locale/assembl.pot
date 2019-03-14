@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.22.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-02-11 12:06+0100\n"
+"POT-Creation-Date: 2019-03-14 15:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,26 +17,42 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: assembl/auth/util.py:140
+#: assembl/auth/util.py:151
 msgid "Your session has expired, you need to login again"
 msgstr ""
 
-#: assembl/auth/util.py:519
+#: assembl/auth/util.py:530
 msgid "The CSV file must have two columns"
 msgstr ""
 
-#: assembl/auth/util.py:526
+#: assembl/auth/util.py:537
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr ""
 
-#: assembl/auth/util.py:529
+#: assembl/auth/util.py:540
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr ""
 
-#: assembl/graphql/discussion.py:572
+#: assembl/graphql/configurable_fields.py:331 assembl/views/api2/auth.py:500
+msgid "We already have a user with this username."
+msgstr ""
+
+#: assembl/graphql/configurable_fields.py:334 assembl/views/api2/auth.py:511
+msgid "The username must be less than 20 characters."
+msgstr ""
+
+#: assembl/graphql/discussion.py:587
 msgid "Must pass at least one language to be saved"
+msgstr ""
+
+#: assembl/graphql/discussion.py:614
+msgid "This slug is an old slug of another debate, you can't use it."
+msgstr ""
+
+#: assembl/graphql/discussion.py:620
+msgid "This slug is already used by another debate, you can't use it."
 msgstr ""
 
 #: assembl/graphql/permissions_helpers.py:9
@@ -45,7 +61,7 @@ msgid ""
 " an error, please reconnect to the platform and try again."
 msgstr ""
 
-#: assembl/graphql/post.py:362
+#: assembl/graphql/post.py:367
 msgid "Proposal"
 msgstr ""
 
@@ -81,407 +97,407 @@ msgstr ""
 msgid "SYNTHESIS: "
 msgstr ""
 
-#: assembl/models/preferences.py:115 assembl/models/preferences.py:651
+#: assembl/models/preferences.py:116 assembl/models/preferences.py:652
 msgid "No special authentication"
 msgstr ""
 
-#: assembl/models/preferences.py:409
+#: assembl/models/preferences.py:410
 msgid "Languages used"
 msgstr ""
 
-#: assembl/models/preferences.py:410
+#: assembl/models/preferences.py:411
 msgid "All languages expected in the discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:420
+#: assembl/models/preferences.py:421
 msgid "Use landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:421
+#: assembl/models/preferences.py:422
 msgid ""
 "Are users directed to the landing page and phases at login, or diretly to the"
 " debate"
 msgstr ""
 
-#: assembl/models/preferences.py:429 assembl/models/preferences.py:443
+#: assembl/models/preferences.py:430 assembl/models/preferences.py:444
 msgid "Translation service"
 msgstr ""
 
-#: assembl/models/preferences.py:432
+#: assembl/models/preferences.py:433
 msgid "No translation"
 msgstr ""
 
-#: assembl/models/preferences.py:434
+#: assembl/models/preferences.py:435
 msgid "Dummy translation service (two steps)"
 msgstr ""
 
-#: assembl/models/preferences.py:436
+#: assembl/models/preferences.py:437
 msgid "Dummy translation service (one step)"
 msgstr ""
 
-#: assembl/models/preferences.py:438
+#: assembl/models/preferences.py:439
 msgid "Dummy translation service (two steps) with errors"
 msgstr ""
 
-#: assembl/models/preferences.py:440
+#: assembl/models/preferences.py:441
 msgid "Dummy translation service (one step) with errors"
 msgstr ""
 
-#: assembl/models/preferences.py:442
+#: assembl/models/preferences.py:443
 msgid "Google Translate"
 msgstr ""
 
-#: assembl/models/preferences.py:455
+#: assembl/models/preferences.py:456
 msgid "Panel order in simple view"
 msgstr ""
 
-#: assembl/models/preferences.py:458
+#: assembl/models/preferences.py:459
 msgid "Navigation, Idea, Messages"
 msgstr ""
 
-#: assembl/models/preferences.py:459
+#: assembl/models/preferences.py:460
 msgid "Navigation, Messages, Idea"
 msgstr ""
 
-#: assembl/models/preferences.py:460
+#: assembl/models/preferences.py:461
 msgid "Order of panels"
 msgstr ""
 
-#: assembl/models/preferences.py:472
+#: assembl/models/preferences.py:473
 msgid "Extra JSON parameters"
 msgstr ""
 
-#: assembl/models/preferences.py:474
+#: assembl/models/preferences.py:475
 msgid "Parameters for quick frontend settings"
 msgstr ""
 
-#: assembl/models/preferences.py:483
+#: assembl/models/preferences.py:484
 msgid "Terms of use URL"
 msgstr ""
 
-#: assembl/models/preferences.py:485
+#: assembl/models/preferences.py:486
 msgid "URL of a document presenting terms of use for the discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:494
+#: assembl/models/preferences.py:495
 msgid "Video URL"
 msgstr ""
 
-#: assembl/models/preferences.py:496
+#: assembl/models/preferences.py:497
 msgid "URL of a video presenting the discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:505
+#: assembl/models/preferences.py:506
 msgid "Tab title"
 msgstr ""
 
-#: assembl/models/preferences.py:507
+#: assembl/models/preferences.py:508
 msgid "Title which appears on the tab, by default assembl"
 msgstr ""
 
-#: assembl/models/preferences.py:515
+#: assembl/models/preferences.py:516
 msgid "Mandatory legal contents validation"
 msgstr ""
 
-#: assembl/models/preferences.py:517
+#: assembl/models/preferences.py:518
 msgid "Activate or not mandatory validation of legal contents after SSO login."
 msgstr ""
 
-#: assembl/models/preferences.py:526
+#: assembl/models/preferences.py:527
 msgid "Video description"
 msgstr ""
 
-#: assembl/models/preferences.py:528
+#: assembl/models/preferences.py:529
 msgid "Description of the video presenting the discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:537
+#: assembl/models/preferences.py:538
 msgid "Social sharing"
 msgstr ""
 
-#: assembl/models/preferences.py:540
+#: assembl/models/preferences.py:541
 msgid "Show the share button on posts and ideas"
 msgstr ""
 
-#: assembl/models/preferences.py:551
+#: assembl/models/preferences.py:552
 msgid "Private social sharing"
 msgstr ""
 
-#: assembl/models/preferences.py:553
+#: assembl/models/preferences.py:554
 msgid "Publicizing or privatizing social sharing"
 msgstr ""
 
-#: assembl/models/preferences.py:562
+#: assembl/models/preferences.py:563
 msgid "Generic Errors"
 msgstr ""
 
-#: assembl/models/preferences.py:564
+#: assembl/models/preferences.py:565
 msgid "Display a generic error message."
 msgstr ""
 
-#: assembl/models/preferences.py:573
+#: assembl/models/preferences.py:574
 msgid "Extra data for CSV reports"
 msgstr ""
 
-#: assembl/models/preferences.py:576
+#: assembl/models/preferences.py:577
 msgid "data taken from social_auth's extra_data to add to CSV reports"
 msgstr ""
 
-#: assembl/models/preferences.py:588
+#: assembl/models/preferences.py:589
 msgid "Require anti-virus check"
 msgstr ""
 
-#: assembl/models/preferences.py:591
+#: assembl/models/preferences.py:592
 msgid "Run an anti-virus on file attachments"
 msgstr ""
 
-#: assembl/models/preferences.py:602
+#: assembl/models/preferences.py:603
 msgid "Get keywords from Watson"
 msgstr ""
 
-#: assembl/models/preferences.py:604
+#: assembl/models/preferences.py:605
 msgid "Use Watson to identify keywords"
 msgstr ""
 
-#: assembl/models/preferences.py:611
+#: assembl/models/preferences.py:612
 msgid "Get concepts from Watson"
 msgstr ""
 
-#: assembl/models/preferences.py:613
+#: assembl/models/preferences.py:614
 msgid "Use Watson to identify concepts"
 msgstr ""
 
-#: assembl/models/preferences.py:620
+#: assembl/models/preferences.py:621
 msgid "Get categories from Watson"
 msgstr ""
 
-#: assembl/models/preferences.py:622
+#: assembl/models/preferences.py:623
 msgid "Use Watson to identify categories"
 msgstr ""
 
-#: assembl/models/preferences.py:629
+#: assembl/models/preferences.py:630
 msgid "Get sentiments from Watson"
 msgstr ""
 
-#: assembl/models/preferences.py:631
+#: assembl/models/preferences.py:632
 msgid "Use Watson to identify sentiments"
 msgstr ""
 
-#: assembl/models/preferences.py:638
+#: assembl/models/preferences.py:639
 msgid "Get emotions from Watson"
 msgstr ""
 
-#: assembl/models/preferences.py:640
+#: assembl/models/preferences.py:641
 msgid "Use Watson to identify emotions"
 msgstr ""
 
-#: assembl/models/preferences.py:653
+#: assembl/models/preferences.py:654
 msgid "Authentication service type"
 msgstr ""
 
-#: assembl/models/preferences.py:655
+#: assembl/models/preferences.py:656
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, and "
 "discussion auto-subscription will require an account from this backend."
 msgstr ""
 
-#: assembl/models/preferences.py:670
+#: assembl/models/preferences.py:671
 msgid "Allow access to moderated text"
 msgstr ""
 
-#: assembl/models/preferences.py:673
+#: assembl/models/preferences.py:674
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr ""
 
-#: assembl/models/preferences.py:686
+#: assembl/models/preferences.py:687
 msgid "Idea panel opens automatically"
 msgstr ""
 
-#: assembl/models/preferences.py:689
+#: assembl/models/preferences.py:690
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and close "
 "when a special section is clicked)"
 msgstr ""
 
-#: assembl/models/preferences.py:701
+#: assembl/models/preferences.py:702
 msgid "Ids of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:703
+#: assembl/models/preferences.py:704
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr ""
 
-#: assembl/models/preferences.py:716
+#: assembl/models/preferences.py:717
 msgid "Default colors of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:718
+#: assembl/models/preferences.py:719
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr ""
 
-#: assembl/models/preferences.py:730
+#: assembl/models/preferences.py:731
 msgid "Names of columns in column view"
 msgstr ""
 
-#: assembl/models/preferences.py:732
+#: assembl/models/preferences.py:733
 msgid ""
 "What are (default) names of columns in multi-column views, in each discussion"
 " language?"
 msgstr ""
 
-#: assembl/models/preferences.py:745
+#: assembl/models/preferences.py:746
 msgid "Default permissions"
 msgstr ""
 
-#: assembl/models/preferences.py:748
+#: assembl/models/preferences.py:749
 msgid "The basic permissions for a new discussion"
 msgstr ""
 
-#: assembl/models/preferences.py:830
+#: assembl/models/preferences.py:835
 msgid "Require Email Domain"
 msgstr ""
 
-#: assembl/models/preferences.py:833
+#: assembl/models/preferences.py:838
 msgid ""
 "List of domain names of user email address required for self-registration. "
 "Only accounts with at least an email from those domains can self-register to "
 "this discussion. Anyone can self-register if this is empty."
 msgstr ""
 
-#: assembl/models/preferences.py:849
+#: assembl/models/preferences.py:854
 msgid "Whitelist on authentication service"
 msgstr ""
 
-#: assembl/models/preferences.py:852
+#: assembl/models/preferences.py:857
 msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
-#: assembl/models/preferences.py:864
+#: assembl/models/preferences.py:869
 msgid "Whitelist on standard registration"
 msgstr ""
 
-#: assembl/models/preferences.py:867
+#: assembl/models/preferences.py:872
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:879
+#: assembl/models/preferences.py:884
 msgid "Discussion administrators"
 msgstr ""
 
-#: assembl/models/preferences.py:882
+#: assembl/models/preferences.py:887
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
 
-#: assembl/models/preferences.py:895
+#: assembl/models/preferences.py:900
 msgid "Show CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:898
+#: assembl/models/preferences.py:903
 msgid "Show the CI Dashboard in the panel group window"
 msgstr ""
 
-#: assembl/models/preferences.py:910
+#: assembl/models/preferences.py:915
 msgid "URL of CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:912
+#: assembl/models/preferences.py:917
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr ""
 
-#: assembl/models/preferences.py:930
+#: assembl/models/preferences.py:935
 msgid "Catalyst Visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:933
+#: assembl/models/preferences.py:938
 msgid "A JSON description of available Catalyst visualizations"
 msgstr ""
 
-#: assembl/models/preferences.py:945
+#: assembl/models/preferences.py:950
 msgid "Navigation sections"
 msgstr ""
 
-#: assembl/models/preferences.py:948
+#: assembl/models/preferences.py:953
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation "
 "section"
 msgstr ""
 
-#: assembl/models/preferences.py:961
+#: assembl/models/preferences.py:966
 msgid "Catalyst translations"
 msgstr ""
 
-#: assembl/models/preferences.py:964
+#: assembl/models/preferences.py:969
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr ""
 
-#: assembl/models/preferences.py:981
+#: assembl/models/preferences.py:986
 msgid "Default Table of Ideas Collapsed state"
 msgstr ""
 
-#: assembl/models/preferences.py:984
+#: assembl/models/preferences.py:989
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A user "
 "can override it by opening/closing an idea"
 msgstr ""
 
-#: assembl/models/preferences.py:999
+#: assembl/models/preferences.py:1004
 msgid "Preference data"
 msgstr ""
 
-#: assembl/models/preferences.py:1002
+#: assembl/models/preferences.py:1007
 msgid "The preference configuration; override only with care"
 msgstr ""
 
-#: assembl/models/preferences.py:1014
+#: assembl/models/preferences.py:1019
 msgid "Cookies banner"
 msgstr ""
 
-#: assembl/models/preferences.py:1017
+#: assembl/models/preferences.py:1022
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr ""
 
-#: assembl/models/preferences.py:1029
+#: assembl/models/preferences.py:1034
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:1032
+#: assembl/models/preferences.py:1037
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the debate, "
 "right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:1042
+#: assembl/models/preferences.py:1047
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:1045
+#: assembl/models/preferences.py:1050
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of the"
 " debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:1055 assembl/models/preferences.py:1058
+#: assembl/models/preferences.py:1060 assembl/models/preferences.py:1063
 msgid "Harvesting translation"
 msgstr ""
 
-#: assembl/models/preferences.py:1066
+#: assembl/models/preferences.py:1071
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr ""
 
-#: assembl/models/preferences.py:1069
+#: assembl/models/preferences.py:1074
 msgid ""
 "A list of valid domain names or IP addresses that are allowed to make CORS "
 "api calls to the GraphQL API"
 msgstr ""
 
-#: assembl/models/preferences.py:1079
+#: assembl/models/preferences.py:1084
 msgid "Use moderation"
 msgstr ""
 
-#: assembl/models/preferences.py:1080
+#: assembl/models/preferences.py:1085
 msgid "Is the moderation activated or not"
 msgstr ""
 
@@ -4437,21 +4453,21 @@ msgstr ""
 msgid "unsubscribed"
 msgstr ""
 
-#: assembl/views/__init__.py:755
+#: assembl/views/__init__.py:773
 msgid "error"
 msgstr ""
 
-#: assembl/views/__init__.py:756
+#: assembl/views/__init__.py:774
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
 "accessible."
 msgstr ""
 
-#: assembl/views/__init__.py:757
+#: assembl/views/__init__.py:775
 msgid "We apologize for the inconvenience"
 msgstr ""
 
-#: assembl/views/__init__.py:758
+#: assembl/views/__init__.py:776
 msgid "Homepage"
 msgstr ""
 
@@ -4535,21 +4551,13 @@ msgstr ""
 msgid "No email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:498
-msgid "We already have a user with this username."
-msgstr ""
-
-#: assembl/views/api2/auth.py:509
-msgid "The username must be less than 20 characters."
-msgstr ""
-
-#: assembl/views/api2/auth.py:523
+#: assembl/views/api2/auth.py:525
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
 msgstr ""
 
-#: assembl/views/api2/auth.py:524
+#: assembl/views/api2/auth.py:526
 msgid ""
 "Your email domain has not been approved for registration. Please contact one "
 "of ${emails} for support."
