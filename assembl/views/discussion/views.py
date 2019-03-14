@@ -198,28 +198,26 @@ def react_admin_view(request):
     """
     Checks that user is logged in and is admin of discussion
     """
-    return react_base_view(request, required_permission=P_ADMIN_DISC)
-
-
-def react_base_view(request, required_permission=P_READ):
-    # This will make slug redirections as needed
-    from assembl.models import Discussion, OldSlug
-    from assembl.views import create_get_route
-    if 'discussion_slug' in request.matchdict:
-        path = request.path
-        requested_slug = request.matchdict['discussion_slug']
-        discussion = find_discussion_from_slug(requested_slug)
-        if discussion.slug != requested_slug:
-            destination = path.replace(requested_slug, discussion.slug)
-            get_routes = create_get_route(request, discussion)
-            return HTTPMovedPermanently(destination)
-        else:
-            return react_view(request, required_permission)
-
-    raise HTTPNotFound("No discussion found for slug=%s" % (requested_slug,))
+    return react_view(request, required_permission=P_ADMIN_DISC)
 
 
 def react_view(request, required_permission=P_READ):
+    # This will make slug redirections as needed
+    from assembl.models import OldSlug
+    if 'discussion_slug' in request.matchdict:
+        path = request.path
+        slug = request.matchdict['discussion_slug']
+        discussion = find_discussion_from_slug(slug)
+        if discussion.slug != slug:
+            destination = path.replace(slug, discussion.slug)
+            return HTTPMovedPermanently(destination)
+
+        return react_base_view(request, required_permission)
+
+    raise HTTPNotFound("No discussion found for slug=%s" % (slug,))
+
+
+def react_base_view(request, required_permission=P_READ):
     """
     The view rendered by any react-based URL requested
     """
@@ -481,8 +479,8 @@ def purl_ideas(request):
     )
 
 
-def register_react_views(config, routes, view=react_base_view):
-    """Add list of routes to the `assembl.views.discussion.views.react_base_view` method."""
+def register_react_views(config, routes, view=react_view):
+    """Add list of routes to the `assembl.views.discussion.views.react_view` method."""
     if not routes:
         return
     for route in routes:
