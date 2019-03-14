@@ -38,6 +38,8 @@ class OldSlug(SecureObjectType, SQLAlchemyObjectType):
 
     class Meta:
         model = models.OldSlug
+        interfaces = (Node, )
+        only_fields = ('id',)
 
     slug = graphene.String()
     discussion = graphene.Field(lambda: Discussion)
