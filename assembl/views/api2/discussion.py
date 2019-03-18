@@ -57,7 +57,7 @@ from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions, discussions_with_access
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
-from assembl.utils import format_date, get_published_posts, get_ideas, get_multicolumns_ideas
+from assembl.utils import format_date, get_published_posts, get_ideas, get_multicolumns_ideas, get_survey_ideas
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
@@ -1572,7 +1572,7 @@ def phase1_csv_export(request):
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
     survey_phase = get_phase_by_identifier(discussion, Phases.survey.value)
-    thematics = get_thread_ideas(discussion)
+    thematics = get_survey_ideas(discussion)
     row_list = list()
     for thematic in thematics:
         row = {}
@@ -1621,14 +1621,6 @@ def phase1_csv_export(request):
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
                     row_list.append(convert_to_utf8(row))
-
-    # output.seek(0)
-    # response = request.response
-    # filename = 'phase1_export'
-    # response.content_type = 'application/vnd.ms-excel'
-    # response.content_disposition = 'attachment; filename="{}.csv"'.format(
-    #     filename)
-    # response.app_iter = FileIter(output)
     return fieldnames, row_list
 
 
@@ -1759,9 +1751,8 @@ def phase2_csv_export(request):
                 row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                 row[SENTIMENT_CREATION_DATE] = format_date(
                     sentiment.creation_date)
-
                 row_list.append(convert_to_utf8(row))
-    return row_list, fieldnames
+    return fieldnames, row_list
 
 
 @view_config(context=InstanceContext, name="update_notification_subscriptions",

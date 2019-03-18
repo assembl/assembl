@@ -8,6 +8,15 @@ from assembl.models.timeline import Phases
 from assembl.graphql.utils import get_root_thematic_for_phase
 
 
+def filter_with_date(data, start_date, end_date):
+    """
+    Returns an array of objects(could be ideas or posts) filtered by start and end date.
+    @param: start_date datetime
+    @param: end_date datetime
+    """
+    return [i for i in data if i.creation_date >= start_date and i.creation_date <= end_date]
+
+
 def format_date(datetime_to_format):
     return datetime_to_format.strftime('%d/%m/%Y %H:%M')
 
@@ -46,9 +55,14 @@ def get_descendants(ideas):
     return descendants
 
 
-def get_multicolumns_ideas(discussion):
+def get_multicolumns_ideas(discussion, start_date, end_date):
     ideas = discussion.db.query(models.Idea).join(models.IdeaMessageColumn).all()
-    return ideas
+    return filter_with_date(ideas, start_date, end_date)
+
+
+def get_survey_ideas(discussion, start_date, end_date):
+    ideas = discussion.db.query(models.Idea).filter(models.Idea.message_view_override == 'survey').all()
+    return filter_with_date(ideas, start_date, end_date)
 
 
 def get_ideas(phase, options=None):
