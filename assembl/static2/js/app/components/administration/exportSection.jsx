@@ -21,7 +21,8 @@ type Props = {
   translate: boolean,
   annotation: string,
   sectionTitle: string,
-  phasesPresets: Array<Preset>
+  phasesPresets: Array<Preset>,
+  locale: string
 };
 
 type State = {
@@ -148,13 +149,13 @@ export class DumbExportSection extends React.Component<Props, State> {
   };
 
   renderDatePicker = () => {
-    const { phasesPresets } = this.props;
+    const { phasesPresets, locale } = this.props;
     const fullDebatePreset = phasesPresets && phasesPresets.length > 0 && getFullDebatePreset(phasesPresets);
     const presets = fullDebatePreset ? [...datePickerPresets, ...phasesPresets, fullDebatePreset] : [...datePickerPresets];
     return presets ? (
       <div className="export-date">
         <Translate value="administration.export.exportDate" />
-        <CustomDateRangePicker presets={presets} />
+        <CustomDateRangePicker presets={presets} locale={locale} />
       </div>
     ) : null;
   };
@@ -206,7 +207,8 @@ const mapStateToProps = (state) => {
     };
   });
   return {
-    phasesPresets: phasesPresets
+    phasesPresets: phasesPresets,
+    locale: state.i18n.locale
   };
 };
 

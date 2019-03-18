@@ -6,7 +6,8 @@ import { I18n } from 'react-redux-i18n';
 import PresetsList from './presetsList';
 
 type Props = {
-  presets?: Array<Preset>
+  presets?: Array<Preset>,
+  locale: string
 };
 
 type State = {
@@ -38,7 +39,9 @@ class CustomDateRangePicker extends React.PureComponent<Props, State> {
 
   render() {
     const { start, end, focusedInput, selectedPreset } = this.state;
-    const { presets } = this.props;
+    const { presets, locale } = this.props;
+    // Required to have the proper date format in the calendar
+    moment.locale(locale);
     return (
       <div className="date-range-picker">
         <DateRangePicker
