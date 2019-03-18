@@ -11,25 +11,7 @@
 
   .DateInput_input,
   .DateInput_input__focused {
-    width: 68%;
-    border: none;
-  }
-
-  #startDateInput {
-    margin-left: 40px;
-
-    &[value=''] {
-      width: 55%;
-    }
-  }
-
-  #startDate {
-    margin-left: 10px;
-
-    &[value=''] {
-      width: 50%;
-      margin-left: 30px;
-    }
+    text-align: center;
   }
 
   .dropdown {
