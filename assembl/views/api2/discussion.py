@@ -57,7 +57,7 @@ from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions, discussions_with_access
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
-from assembl.utils import format_date, get_published_posts, get_ideas
+from assembl.utils import format_date, get_published_posts, get_ideas, get_multicolumns_ideas
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
@@ -632,39 +632,12 @@ def multi_module_csv_export(request):
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
     from assembl.views.api2.votes import extract_voters
     phase_results, phase_fieldnames = extract_voters(request)
-    results['vote_users_data'] = phase_results
     fieldnames['vote_users_data'] = phase_fieldnames
+    results['vote_users_data'] = phase_results
+    phase_results, phase_fieldnames = phase2_csv_export(request)
+    fieldnames['export_module_multi_column'] = phase_fieldnames
+    results['export_module_multi_column'] = phase_results
     return csv_response_multiple_sheets(results, fieldnames)
-
-
-# def csv_response_multiple_sheets(results, fieldnames, content_disposition):
-#     output = StringIO()
-#
-#     from zipfile import ZipFile, ZIP_DEFLATED
-#     from openpyxl.workbook import Workbook
-#     workbook = Workbook(True)
-#     worksheet = workbook.create_sheet()
-#     archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
-#     format = XSLX_MIMETYPE
-#
-#     # writerow = [None] * len(fieldnames)
-#     for key, elem in enumerate(fieldnames):
-#         worksheet = workbook.create_sheet()
-#         writerow = worksheet.append
-#         empty = None
-#         if fieldnames[elem] is not None:
-#             # TODO: i18n
-#             for result in results:
-#                 if results[result]:
-#                     for r in results[result]:
-#                         writerow([r.get(f, empty) for f in fieldnames[elem]])
-#         else:
-#             if results[elem]:
-#                 for r in results[elem]:
-#                     writerow(r)
-#
-#     output.seek(0)
-#     return Response(body_file=output, content_type=format, content_disposition=content_disposition)
 
 
 def csv_response(results, format, fieldnames=None, content_disposition=None):
@@ -1526,9 +1499,6 @@ def get_entries_locale_original(lang_string):
     }
 
 
-@view_config(context=InstanceContext, request_method='GET',
-             ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
-             name="phase1_csv_export")
 def phase1_csv_export(request):
     """CSV export for phase 1."""
     from assembl.models import Locale, Idea
@@ -1602,7 +1572,8 @@ def phase1_csv_export(request):
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
     survey_phase = get_phase_by_identifier(discussion, Phases.survey.value)
-    thematics = get_ideas(survey_phase)
+    thematics = get_thread_ideas(discussion)
+    row_list = list()
     for thematic in thematics:
         row = {}
         row[THEMATIC_NAME] = get_entries_locale_original(thematic.title).get('entry')
@@ -1649,21 +1620,18 @@ def phase1_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                    writer.writerow(convert_to_utf8(row))
+                    row_list.append(convert_to_utf8(row))
 
-    output.seek(0)
-    response = request.response
-    filename = 'phase1_export'
-    response.content_type = 'application/vnd.ms-excel'
-    response.content_disposition = 'attachment; filename="{}.csv"'.format(
-        filename)
-    response.app_iter = FileIter(output)
-    return response
+    # output.seek(0)
+    # response = request.response
+    # filename = 'phase1_export'
+    # response.content_type = 'application/vnd.ms-excel'
+    # response.content_disposition = 'attachment; filename="{}.csv"'.format(
+    #     filename)
+    # response.app_iter = FileIter(output)
+    return fieldnames, row_list
 
 
-@view_config(context=InstanceContext, request_method='GET',
-             ctx_instance_class=Discussion, permission=P_ADMIN_DISC,
-             name="phase2_csv_export")
 def phase2_csv_export(request):
     """CSV export for phase 2."""
     from assembl.models import Locale, Idea
@@ -1740,7 +1708,8 @@ def phase2_csv_export(request):
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
     thread_phase = get_phase_by_identifier(discussion, Phases.thread.value)
-    ideas = get_ideas(thread_phase)
+    ideas = get_multicolumns_ideas(discussion)
+    row_list = list()
     for idea in ideas:
         row = {}
         row[IDEA_ID] = idea.id
@@ -1790,16 +1759,9 @@ def phase2_csv_export(request):
                 row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                 row[SENTIMENT_CREATION_DATE] = format_date(
                     sentiment.creation_date)
-                writer.writerow(convert_to_utf8(row))
 
-    output.seek(0)
-    response = request.response
-    filename = 'phase2_export'
-    response.content_type = 'application/vnd.ms-excel'
-    response.content_disposition = 'attachment; filename="{}.csv"'.format(
-        filename)
-    response.app_iter = FileIter(output)
-    return response
+                row_list.append(convert_to_utf8(row))
+    return row_list, fieldnames
 
 
 @view_config(context=InstanceContext, name="update_notification_subscriptions",

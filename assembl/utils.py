@@ -46,6 +46,11 @@ def get_descendants(ideas):
     return descendants
 
 
+def get_multicolumns_ideas(discussion):
+    ideas = discussion.db.query(models.Idea).join(models.IdeaMessageColumn).all()
+    return ideas
+
+
 def get_ideas(phase, options=None):
     root_thematic = get_root_thematic_for_phase(phase)
     discussion = phase.discussion

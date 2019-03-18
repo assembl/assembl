@@ -349,9 +349,6 @@ def global_vote_results_csv(request):
     return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
 
 
-# @view_config(context=InstanceContext, name="extract_csv_voters",
-#              ctx_instance_class=VotingWidget, request_method='GET',
-#              permission=P_DISC_STATS)
 def extract_voters(request):
     extract_votes = []
     ctx = request.context
