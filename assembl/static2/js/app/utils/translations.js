@@ -690,6 +690,10 @@ const Translations = {
         personalizeInterface: "Personnaliser l'interface",
         configureThematic: "Configurer la thématique %{index}"
       },
+      discussionPreferences: {
+        debateLogo: "Selectionner le logo du débat",
+        debateLogoLabel: "Logo du débat"
+      },
       timelineAdmin: {
         phase: "Phase %{count}",
         annotation: "Module à renseigner obligatoirement. Les champs * sont requis.",
@@ -1708,6 +1712,10 @@ const Translations = {
         manageProfileOptions: "Registration options",
         personalizeInterface: "Personalize the interface",
         configureThematic: "Configure the theme %{index}"
+      },
+      discussionPreferences: {
+        debateLogo: "Select debate logo below",
+        debateLogoLabel: "Debate logo"
       },
       timelineAdmin: {
         phase: "Phase %{count}",

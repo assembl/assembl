@@ -11,6 +11,7 @@ import LoadSaveReinitializeForm from '../../../form/LoadSaveReinitializeForm';
 import AdminForm from '../../../../components/form/adminForm';
 import CheckboxFieldAdapter from '../../../../components/form/checkboxFieldAdapter';
 import CheckboxListFieldAdapter from '../../../form/checkboxListFieldAdapter';
+import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
 import SectionTitle from '../../../../components/administration/sectionTitle';
 import { load, postLoadFormat } from './load';
 import { save, createMutationsPromises } from './save';
@@ -29,6 +30,7 @@ type State = {
 
 const loading = <Loader />;
 
+<<<<<<< HEAD
 class DiscussionPreferencesForm extends React.Component<Props, State> {
   state = {
     slugIsInvalid: false
@@ -97,6 +99,51 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                   />
                 </div>
               </AdminForm>
+=======
+const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesFormProps) => (
+  <div className="discussion-admin admin-box admin-content">
+    <SectionTitle title={I18n.t('administration.menu.preferences')} annotation="" />
+    <LoadSaveReinitializeForm
+      load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, locale)}
+      loading={loading}
+      postLoadFormat={postLoadFormat}
+      createMutationsPromises={createMutationsPromises(client)}
+      save={save}
+      validate={validate}
+      mutators={{
+        ...arrayMutators
+      }}
+      render={({ handleSubmit, pristine, submitting, values }) => (
+        <div className="preferences-section admin-content">
+          <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+            <div className="form-container">
+              <div className="title">
+                <Translate value="administration.discussionPreferences.debateLogo" />
+              </div>
+              <div className="margin-l" />
+              <Field
+                component={FileUploaderFieldAdapter}
+                name=""
+                label={I18n.t('administration.discussionPreferences.debateLogoLabel')}
+              />
+              <div className="separator" />
+              <div className="title">
+                <Translate value="administration.languageChoice" />
+              </div>
+              <div className="margin-l" />
+              <Field component={CheckboxListFieldAdapter} name="languages" />
+              <div className="separator" />
+              <div className="title">
+                <Translate value="administration.moderation" />
+              </div>
+              <Field
+                component={CheckboxFieldAdapter}
+                name="withModeration"
+                isChecked={values.withModeration}
+                label={I18n.t('administration.activateModeration')}
+                type="checkbox"
+              />
+>>>>>>> add fileUploaderAdapter to discussion preferences and translations
             </div>
           )}
         />
