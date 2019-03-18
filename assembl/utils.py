@@ -58,12 +58,12 @@ def get_descendants(ideas):
     return descendants
 
 
-def get_multicolumns_ideas(discussion, start_date, end_date):
+def get_multicolumns_ideas(discussion, start_date=None, end_date=None):
     ideas = discussion.db.query(models.Idea).join(models.IdeaMessageColumn).all()
     return filter_with_date(ideas, start_date, end_date)
 
 
-def get_survey_ideas(discussion, start_date, end_date):
+def get_survey_ideas(discussion, start_date=None, end_date=None):
     ideas = discussion.db.query(models.Idea).filter(models.Idea.message_view_override == 'survey').all()
     return filter_with_date(ideas, start_date, end_date)
 

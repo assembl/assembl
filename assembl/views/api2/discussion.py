@@ -631,12 +631,12 @@ def multi_module_csv_export(request):
     results = { sheet_name: None for sheet_name in sheet_names}
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
     from assembl.views.api2.votes import extract_voters
-    phase_results, phase_fieldnames = extract_voters(request)
-    fieldnames['vote_users_data'] = phase_fieldnames
-    results['vote_users_data'] = phase_results
-    phase_results, phase_fieldnames = phase2_csv_export(request)
-    fieldnames['export_module_multi_column'] = phase_fieldnames
-    results['export_module_multi_column'] = phase_results
+    phase_fieldnames, phase_results = phase1_csv_export(request)
+    fieldnames['export_module_survey'] = phase_fieldnames
+    results['export_module_survey'] = phase_results
+    # phase_results, phase_fieldnames = extract_voters(request)
+    # fieldnames['vote_users_data'] = phase_fieldnames
+    # results['vote_users_data'] = phase_results
     return csv_response_multiple_sheets(results, fieldnames)
 
 
@@ -1620,7 +1620,7 @@ def phase1_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                    row_list.append(convert_to_utf8(row))
+        row_list.append(convert_to_utf8(row))
     return fieldnames, row_list
 
 
@@ -1751,7 +1751,7 @@ def phase2_csv_export(request):
                 row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                 row[SENTIMENT_CREATION_DATE] = format_date(
                     sentiment.creation_date)
-                row_list.append(convert_to_utf8(row))
+        row_list.append(convert_to_utf8(row))
     return fieldnames, row_list
 
 
