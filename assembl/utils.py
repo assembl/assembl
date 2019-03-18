@@ -8,13 +8,16 @@ from assembl.models.timeline import Phases
 from assembl.graphql.utils import get_root_thematic_for_phase
 
 
-def filter_with_date(data, start_date, end_date):
+def filter_with_date(data, start_date=None, end_date=None):
     """
     Returns an array of objects(could be ideas or posts) filtered by start and end date.
     @param: start_date datetime
     @param: end_date datetime
     """
-    return [i for i in data if i.creation_date >= start_date and i.creation_date <= end_date]
+    if start_date is not None and end_date is not None:
+        return [i for i in data if i.creation_date >= start_date and i.creation_date <= end_date]
+    else:
+        return data
 
 
 def format_date(datetime_to_format):
