@@ -212,9 +212,9 @@ def range_float(minimum, maximum, nb_ticks):
         yield i
 
 
-@view_config(context=InstanceContext, request_method='GET',
-             ctx_instance_class=VotingWidget,
-             name="vote_results_csv", permission=P_DISC_STATS)
+# @view_config(context=InstanceContext, request_method='GET',
+#              ctx_instance_class=VotingWidget,
+#              name="vote_results_csv", permission=P_DISC_STATS)
 def global_vote_results_csv(request):
     ctx = request.context
     user_id = request.authenticated_userid
@@ -273,6 +273,7 @@ def global_vote_results_csv(request):
     # include BOM for Excel to open the file in UTF-8 properly
     output.write(u'\ufeff'.encode('utf-8'))
     csvw = csv.writer(output)
+    row_list = []
     csvw.writerow(coltitles)
     from assembl.graphql.vote_session import get_avg_choice
     for title, idea_id in rowtitles:
@@ -345,8 +346,10 @@ def global_vote_results_csv(request):
                     tombstone_date=None).count()
                 row.append(num_votes)
         csvw.writerow(row)
+        row_list.append(row)
     output.seek(0)
-    return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
+    return coltitle, row_list
+    # return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
 
 
 def extract_voters(request):
