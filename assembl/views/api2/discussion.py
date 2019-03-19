@@ -630,13 +630,12 @@ def extract_taxonomy_csv(request):
 def multi_module_csv_export(request):
     results = { sheet_name: None for sheet_name in sheet_names}
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
-    from assembl.views.api2.votes import extract_voters
-    phase_fieldnames, phase_results = phase1_csv_export(request)
-    fieldnames['export_module_survey'] = phase_fieldnames
-    results['export_module_survey'] = phase_results
-    phase_results, phase_fieldnames = extract_voters(request)
-    fieldnames['vote_users_data'] = phase_fieldnames
-    results['vote_users_data'] = phase_results
+    from assembl.views.api2.votes import extract_voters, global_vote_results_csv
+    fieldnames['export_module_survey'], results['export_module_survey'] = phase1_csv_export(request)
+    fieldnames['export_module_thread'], results['export_module_thread'] = phase2_csv_export(request)
+    fieldnames['vote_users_data'], results['vote_users_data'] = extract_voters(request)
+    # fieldnames['export_module_vote'], results['export_module_vote'] = global_vote_results_csv(request)
+    import pdb; pdb.set_trace()
     return csv_response_multiple_sheets(results, fieldnames)
 
 
@@ -686,19 +685,19 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
     from zipfile import ZipFile, ZIP_DEFLATED
     from openpyxl.workbook import Workbook
     workbook = Workbook(True)
+    empty=None
     archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
     for sheet_name in sheet_names:
         workbook.create_sheet(sheet_name)
 
     for worksheet in workbook.worksheets:
         writerow = worksheet.append
-        empty=None
         if fieldnames[worksheet.title] is not None:
             # TODO: i18n
             writerow([' '.join(fn.split('_')).title() for fn in fieldnames[worksheet.title]])
             if results[worksheet.title] is not None:
                 for r in results[worksheet.title]:
-                    writerow([r.get(f, empty) for f in fieldnames])
+                    writerow([r.get(f, empty) for f in fieldnames[worksheet.title]])
         else:
             if results[worksheet.title] is not None:
                 for r in results[worksheet.title]:
