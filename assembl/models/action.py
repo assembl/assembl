@@ -228,6 +228,21 @@ class UniqueActionOnPost(ActionOnPost):
             actor=User.uri_generic(self.actor_id))
 
 
+class SharePost(UniqueActionOnPost):
+    """
+    Created in order to count the number of shares on a post.
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:ShareStatusChange_P'
+    }
+    post_from_share = relationship(
+        'Content',
+        backref=backref('shares'),
+    )
+
+    verb = 'shared'
+
+
 class ViewPost(UniqueActionOnPost):
     """
     A view action on a post.
@@ -360,6 +375,28 @@ Content.disagree_count = column_property(
         (_actt2.c.type == DisagreeSentimentOfPost.__mapper_args__['polymorphic_identity']) &
         (_actt2.c.tombstone_date == None)  # noqa: E711
         ).correlate_except(_actt2, _dpt), deferred=True)
+
+
+_dupt = DontUnderstandSentimentOfPost.__table__
+_actt3 = Action.__table__
+Content.dont_understand_count = column_property(
+    select([func.count(_actt3.c.id)]).where(
+        (_dupt.c.id == _actt3.c.id) &
+        (_dupt.c.post_id == Content.__table__.c.id) &
+        (_actt3.c.type == DontUnderstandSentimentOfPost.__mapper_args__['polymorphic_identity']) &
+        (_actt3.c.tombstone_date == None)  # noqa: E711
+        ).correlate_except(_actt3, _dupt), deferred=True)
+
+
+_mipt = MoreInfoSentimentOfPost.__table__
+_actt4 = Action.__table__
+Content.more_info_count = column_property(
+    select([func.count(_actt4.c.id)]).where(
+        (_mipt.c.id == _actt4.c.id) &
+        (_mipt.c.post_id == Content.__table__.c.id) &
+        (_actt4.c.type == MoreInfoSentimentOfPost.__mapper_args__['polymorphic_identity']) &
+        (_actt4.c.tombstone_date == None)  # noqa: E711
+        ).correlate_except(_actt4, _mipt), deferred=True)
 
 
 class ExpandPost(UniqueActionOnPost):

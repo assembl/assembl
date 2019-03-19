@@ -570,6 +570,9 @@ class Post(Content, TaggableEntity):
 
         return parent_ideas[0].message_view_override == MessageView.brightMirror.value
 
+    def get_number_of_shares(self):
+        return len(self.shares)
+
     def get_ideas(self):
         ideas = [
             link.idea for link in self.indirect_idea_content_links_without_cache()
