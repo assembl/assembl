@@ -17,7 +17,7 @@ type State = {
   selectedPreset: ?Preset
 };
 
-// A custom DatePicker component to use presets
+// A custom DateRangePicker component to use presets
 class CustomDateRangePicker extends React.PureComponent<Props, State> {
   state = {
     start: null,
@@ -40,8 +40,7 @@ class CustomDateRangePicker extends React.PureComponent<Props, State> {
   render() {
     const { start, end, focusedInput, selectedPreset } = this.state;
     const { presets, locale } = this.props;
-    // Required to have the proper date format in the calendar
-    moment.locale(locale);
+    moment.locale(locale); // Required to have the proper date format in the calendar
     return (
       <div className="date-range-picker">
         <DateRangePicker
