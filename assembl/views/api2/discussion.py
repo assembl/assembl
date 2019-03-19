@@ -634,9 +634,9 @@ def multi_module_csv_export(request):
     phase_fieldnames, phase_results = phase1_csv_export(request)
     fieldnames['export_module_survey'] = phase_fieldnames
     results['export_module_survey'] = phase_results
-    # phase_results, phase_fieldnames = extract_voters(request)
-    # fieldnames['vote_users_data'] = phase_fieldnames
-    # results['vote_users_data'] = phase_results
+    phase_results, phase_fieldnames = extract_voters(request)
+    fieldnames['vote_users_data'] = phase_fieldnames
+    results['vote_users_data'] = phase_results
     return csv_response_multiple_sheets(results, fieldnames)
 
 
