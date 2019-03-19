@@ -117,6 +117,7 @@ class DiscussionPreferences:
     languages = """A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate."""
     tab_title = """The title in the tab."""
     favicon = Default.document % ("""The site favicon.""",)
+    logo = Default.document % ("""The site logo.""",)
     with_moderation = """A Boolean flag indicating whether the moderation is activated or not."""
     slug = Discussion.slug
     old_slugs = """List of previous used slugs for this discussion"""
@@ -161,6 +162,7 @@ class UpdateDiscussionPreferences:
     languages = """The list of languages in ISO 639-1 locale code that the debate should support."""
     tab_title = DiscussionPreferences.tab_title
     favicon = DiscussionPreferences.favicon
+    logog = DiscussionPreferences.logo
     with_moderation = DiscussionPreferences.with_moderation
     slug = DiscussionPreferences.slug
 

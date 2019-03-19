@@ -310,6 +310,7 @@ class DiscussionPreferences(graphene.ObjectType):
     languages = graphene.List(LocalePreference, description=docs.DiscussionPreferences.languages)
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
+    logo = graphene.Field(Document, description=docs.DiscussionPreferences.logo)
     with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
     slug = graphene.String(required=True, description=docs.DiscussionPreferences.slug)
     old_slugs = graphene.List(graphene.String, required=True, description=docs.DiscussionPreferences.old_slugs)
@@ -326,6 +327,13 @@ class DiscussionPreferences(graphene.ObjectType):
         discussion = models.Discussion.get(discussion_id)
         attachment = get_attachment_with_purpose(
             discussion.attachments, models.AttachmentPurpose.FAVICON.value)
+        return attachment and attachment.document
+
+    def resolve_logo(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        attachment = get_attachment_with_purpose(
+            discussion.attachments, models.AttachmentPurpose.LOGO.value)
         return attachment and attachment.document
 
     def resolve_with_moderation(self, args, context, info):
@@ -564,6 +572,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = graphene.String(description=docs.UpdateDiscussionPreferences.tab_title)
         # this is the identifier of the part in a multipart POST
         favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
+        logo = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
         with_moderation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_moderation)
         slug = graphene.String(description=docs.UpdateDiscussionPreferences.slug)
 
@@ -579,6 +588,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         languages = args.get('languages', None)
         tab_title = args.get('tab_title', None)
         favicon = args.get('favicon', None)
+        logo = args.get('logo', None)
         with_moderation = args.get('with_moderation', None)
         slug = args.get('slug', None)
         with cls.default_db.no_autoflush as db:
@@ -599,6 +609,17 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                     favicon,
                     discussion.attachments,
                     models.AttachmentPurpose.FAVICON.value,
+                    db,
+                    context
+                )
+
+            if logo:
+                update_attachment(
+                    discussion,
+                    models.DiscussionAttachment,
+                    logo,
+                    discussion.attachments,
+                    models.AttachmentPurpose.LOGO.value,
                     db,
                     context
                 )
