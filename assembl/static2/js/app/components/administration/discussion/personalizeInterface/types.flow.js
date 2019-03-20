@@ -3,5 +3,6 @@ import type { FileValue } from '../../../form/types.flow';
 
 export type PersonalizeInterfaceValues = {
   title: ?string,
-  favicon: FileValue
+  favicon: FileValue,
+  logo: FileValue
 };

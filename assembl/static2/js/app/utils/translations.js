@@ -691,7 +691,6 @@ const Translations = {
         configureThematic: "Configurer la thématique %{index}"
       },
       discussionPreferences: {
-        debateLogo: "Selectionner le logo du débat",
         debateLogoLabel: "Logo du débat"
       },
       timelineAdmin: {
@@ -1714,7 +1713,6 @@ const Translations = {
         configureThematic: "Configure the theme %{index}"
       },
       discussionPreferences: {
-        debateLogo: "Select debate logo below",
         debateLogoLabel: "Debate logo"
       },
       timelineAdmin: {

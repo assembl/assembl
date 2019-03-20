@@ -11,7 +11,6 @@ import LoadSaveReinitializeForm from '../../../form/LoadSaveReinitializeForm';
 import AdminForm from '../../../../components/form/adminForm';
 import CheckboxFieldAdapter from '../../../../components/form/checkboxFieldAdapter';
 import CheckboxListFieldAdapter from '../../../form/checkboxListFieldAdapter';
-import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
 import SectionTitle from '../../../../components/administration/sectionTitle';
 import { load, postLoadFormat } from './load';
 import { save, createMutationsPromises } from './save';
@@ -117,16 +116,6 @@ const DiscussionPreferencesForm = ({ client, locale }: DiscussionPreferencesForm
         <div className="preferences-section admin-content">
           <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
             <div className="form-container">
-              <div className="title">
-                <Translate value="administration.discussionPreferences.debateLogo" />
-              </div>
-              <div className="margin-l" />
-              <Field
-                component={FileUploaderFieldAdapter}
-                name=""
-                label={I18n.t('administration.discussionPreferences.debateLogoLabel')}
-              />
-              <div className="separator" />
               <div className="title">
                 <Translate value="administration.languageChoice" />
               </div>

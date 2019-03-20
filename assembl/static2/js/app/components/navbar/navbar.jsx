@@ -13,6 +13,7 @@ import { withScreenWidth } from '../common/screenDimensions';
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
+import DiscussionPreferencesQuery from '../../graphql/DiscussionPreferencesQuery.graphql';
 import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
@@ -132,10 +133,10 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   };
 
   render = () => {
-    const { screenWidth, debate, phase, timeline, sectionData } = this.props;
+    const { screenWidth, debate, phase, timeline, sectionData, logoData } = this.props;
     const sections = sectionData.sections;
     const { debateData } = debate;
-    const { logo, slug, isLargeLogo } = debateData;
+    const { slug, isLargeLogo } = debateData;
     const flatWidth = this.state.flatWidth;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
@@ -150,11 +151,10 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
     const commonProps = {
       elements: filteredSections.map(bind(mapSectionToElement, null, bind.placeholder, mapOptions)),
       slug: slug,
-      logoSrc: logo,
+      logoSrc: logoData ? logoData.externalUrl : null,
       logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : '',
       renderUserMenu: this.renderUserMenu
     };
-
     return (
       <div className="background-light">
         <Navbar fixedTop fluid className="no-padding">
@@ -210,6 +210,26 @@ export default compose(
           loading: data.loading
         },
         discussionData: data.discussion
+      };
+    }
+  }),
+  graphql(DiscussionPreferencesQuery, {
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          DiscussionPreferencesQueryMetadata: {
+            error: data.error,
+            loading: data.loading
+          },
+          logoData: null
+        };
+      }
+      return {
+        DiscussionPreferencesQueryMetadata: {
+          error: data.error,
+          loading: data.loading
+        },
+        logoData: data.discussionPreferences.logo
       };
     }
   }),

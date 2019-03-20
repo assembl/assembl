@@ -4,6 +4,7 @@ mutation updateDiscussionPreference(
   $tabTitle: String
   $favicon: String
   $slug: String
+  $logo: String
 ) {
   updateDiscussionPreferences(
     languages: $languages
@@ -11,6 +12,7 @@ mutation updateDiscussionPreference(
     tabTitle: $tabTitle
     favicon: $favicon
     slug: $slug
+    logo: $logo
   ) {
     preferences {
       languages {

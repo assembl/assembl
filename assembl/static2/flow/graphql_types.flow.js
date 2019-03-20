@@ -570,6 +570,15 @@ export type DiscussionPreferencesQueryQuery = {|
       // The MIME-Type of the file uploaded.
       mimeType: ?string
     |},
+    // The logo from the navbar. A file metadata object, described by the Document object.
+    logo: ?{|
+      // The filename title.
+      title: ?string,
+      // A url to an image or a document to be attached.
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string
+    |},
     // A Boolean flag indicating whether the moderation is activated or not.
     withModeration: ?boolean
   |}
