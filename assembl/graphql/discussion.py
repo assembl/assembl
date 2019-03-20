@@ -1,5 +1,4 @@
 import os.path
-
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
@@ -312,6 +311,8 @@ class DiscussionPreferences(graphene.ObjectType):
     tab_title = graphene.String(description=docs.DiscussionPreferences.tab_title)
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
     with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
+    slug = graphene.String(required=True, description=docs.DiscussionPreferences.slug)
+    old_slugs = graphene.List(graphene.String, required=True, description=docs.DiscussionPreferences.old_slugs)
 
     def resolve_tab_title(self, args, context, info):
         return self.get('tab_title', 'Assembl')
@@ -329,6 +330,16 @@ class DiscussionPreferences(graphene.ObjectType):
 
     def resolve_with_moderation(self, args, context, info):
         return self.get('with_moderation')
+
+    def resolve_slug(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.slug
+
+    def resolve_old_slugs(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return [old_slug.slug for old_slug in discussion.old_slugs]
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -554,6 +565,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         # this is the identifier of the part in a multipart POST
         favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
         with_moderation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_moderation)
+        slug = graphene.String(description=docs.UpdateDiscussionPreferences.slug)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
@@ -568,6 +580,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = args.get('tab_title', None)
         favicon = args.get('favicon', None)
         with_moderation = args.get('with_moderation', None)
+        slug = args.get('slug', None)
         with cls.default_db.no_autoflush as db:
             if languages is not None:
                 if not languages:
@@ -593,7 +606,28 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             if with_moderation is not None:
                 discussion.preferences['with_moderation'] = with_moderation
 
-        db.flush()
+            if slug is not None:
+                if slug != discussion.slug:
+                    if models.OldSlug.query.filter(
+                            models.OldSlug.slug == slug
+                            ).filter(models.OldSlug.discussion_id != discussion.id).first() is not None:
+                        error = _("This slug is an old slug of another debate, you can't use it.")
+                        raise Exception(context.localizer.translate(error))
+
+                    if models.Discussion.query.filter(
+                            models.Discussion.slug == slug
+                            ).first() is not None:
+                        error = _("This slug is already used by another debate, you can't use it.")
+                        raise Exception(context.localizer.translate(error))
+
+                    if discussion.slug not in [old_slug.slug for old_slug in discussion.old_slugs]:
+                        db.add(models.OldSlug(
+                            discussion=discussion,
+                            slug=discussion.slug))
+
+                    discussion.slug = slug
+
+            db.flush()
 
         return UpdateDiscussionPreferences(preferences=discussion.preferences)
 

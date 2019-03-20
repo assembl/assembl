@@ -386,3 +386,5 @@ export const ANNOUNCEMENT_TAB_ITEM_ID = {
   SUMMARY: 1,
   SEMANTIC_ANALYSIS: 2
 };
+
+export const slugAllowedCharacters = /^[a-zA-Z0-9(-]+$/g;

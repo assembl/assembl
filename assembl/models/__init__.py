@@ -144,7 +144,10 @@ from .langstrings import (  # noqa: E402, F401
     LangString,
     LangStringEntry,
 )
-from .discussion import Discussion  # noqa: E402, F401
+from .discussion import (  # noqa: E402, F401
+    Discussion,
+    OldSlug,
+)
 from .user_key_values import (  # noqa: E402, F401
     # AbstractNamespacedKeyValue,
     # AbstractPerUserNamespacedKeyValue,

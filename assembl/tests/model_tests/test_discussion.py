@@ -1,4 +1,4 @@
-from assembl.models import Discussion, LangString, Role, UserTemplate
+from assembl.models import Discussion, LangString, Role, UserTemplate, OldSlug
 from assembl.auth import R_PARTICIPANT
 
 

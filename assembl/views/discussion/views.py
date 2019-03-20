@@ -22,6 +22,7 @@ from ...lib.sqla import get_named_object
 from ...lib.frontend_urls import FrontendUrls
 from ...auth import P_READ, P_ADD_EXTRACT, P_ADMIN_DISC
 from ...auth.util import user_has_permission, get_non_expired_user_id
+from assembl.auth.util import find_discussion_from_slug
 from ...models import (
     Discussion,
     User,
@@ -50,9 +51,8 @@ TEMPLATE_PATH = os.path.join(os.path.dirname(__file__), '..', '..', 'templates')
 def get_default_context(request):
     base = base_default_context(request)
     slug = request.matchdict['discussion_slug']
-    try:
-        discussion = Discussion.default_db.query(Discussion).filter(Discussion.slug==slug).one()
-    except NoResultFound:
+    discussion = find_discussion_from_slug(slug)
+    if discussion is None:
         raise HTTPNotFound(_("No discussion found for slug=%s") % slug)
     return dict(base, discussion=discussion)
 
@@ -202,6 +202,22 @@ def react_admin_view(request):
 
 
 def react_view(request, required_permission=P_READ):
+    # This will make slug redirections as needed
+    from assembl.models import OldSlug
+    if 'discussion_slug' in request.matchdict:
+        path = request.path
+        slug = request.matchdict['discussion_slug']
+        discussion = find_discussion_from_slug(slug)
+        if discussion.slug != slug:
+            destination = path.replace(slug, discussion.slug)
+            return HTTPMovedPermanently(destination)
+
+        return react_base_view(request, required_permission)
+
+    raise HTTPNotFound("No discussion found for slug=%s" % (slug,))
+
+
+def react_base_view(request, required_permission=P_READ):
     """
     The view rendered by any react-based URL requested
     """

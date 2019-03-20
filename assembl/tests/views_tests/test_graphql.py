@@ -1772,6 +1772,68 @@ mutation myMutation($languages: [String]!) {
     assert res.errors[0].message == 'Must pass at least one language to be saved'
 
 
+def test_mutation_update_discussion_preferences_change_slug(graphql_registry, graphql_request, discussion):
+    assert discussion.slug == "jacklayton2"
+
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'TestSlug'})
+    assert res.errors is None
+    assert discussion.slug == "TestSlug"
+
+    # Setting new slug for the same discussion
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values = {'slug': 'TestSlug_new'})
+    assert res.errors is None
+    assert discussion.slug == "TestSlug_new"
+    assert len(discussion.old_slugs) == 2
+    assert discussion.old_slugs[0].slug == "jacklayton2"
+    assert discussion.old_slugs[0].discussion.slug == "TestSlug_new"
+
+    # Testing if I can set it back to the old slug
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'TestSlug'})
+    assert res.errors is None
+    assert len(discussion.old_slugs) == 3
+    assert discussion.slug == "TestSlug"
+
+    # and back again
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'TestSlug_new'})
+    assert res.errors is None
+    assert len(discussion.old_slugs) == 3
+    assert discussion.slug == "TestSlug_new"
+
+
+def test_mutation_update_discussion_preferences_change_slug_errors(graphql_registry, graphql_request, discussion, discussion2):
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'TestSlug'})
+    assert res.errors is None
+    assert discussion.slug == "TestSlug"
+
+    graphql_request.matchdict = {"discussion_id": discussion2.id}
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'TestSlug'})
+    assert res.errors[0].message == "This slug is already used by another debate, you can't use it."
+    graphql_request.matchdict = {"discussion_id": discussion2.id}
+    res = schema.execute(
+        graphql_registry['updateDiscussionPreference'],
+        context_value=graphql_request,
+        variable_values={'slug': 'jacklayton2'})
+    assert res.errors[0].message == "This slug is an old slug of another debate, you can't use it."
+
+
 def test_query_post_message_classifier(graphql_request,
                                        root_post_1_with_positive_message_classifier):
     post_id = to_global_id('Post',

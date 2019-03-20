@@ -11,8 +11,8 @@ https://github.com/final-form/react-final-form#loading-normalizing-saving-and-re
 import * as React from 'react';
 import { type Mutator } from 'final-form';
 import { Form } from 'react-final-form';
-
 import type { MutationsPromises, SaveStatus } from './types.flow';
+import { displayConfirmationModal } from '../../utils/administration/displayConfirmationModal';
 
 type TOriginalValues = {| [string]: any |};
 
@@ -25,7 +25,10 @@ type Props = {
   createMutationsPromises: (TInitialValues, TInitialValues) => MutationsPromises,
   save: MutationsPromises => Promise<SaveStatus>,
   afterSave?: TInitialValues => void,
-  mutators?: { [string]: Mutator }
+  mutators?: { [string]: Mutator },
+  warningMessageKey?: string,
+  withWarningModal?: boolean,
+  warningValues?: Array<string>
 };
 
 type State = {
@@ -56,7 +59,7 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     });
   };
 
-  save = async (values: TInitialValues) => {
+  runMutations = async (values: TInitialValues) => {
     const { createMutationsPromises, save, afterSave } = this.props;
     if (this.state.initialValues) {
       const mutationPromises = createMutationsPromises(values, this.state.initialValues);
@@ -67,6 +70,18 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
         if (afterSave) afterSave(values);
       }
     }
+  };
+
+  save = (values: TInitialValues) => {
+    const { withWarningModal, warningValues, warningMessageKey } = this.props;
+    const { initialValues } = this.state;
+    // We check if any of the values that need to be warned about have been changed
+    const warningValuesHaveChanged =
+      warningValues && initialValues && warningValues.some(value => values[value] !== initialValues[value]);
+    if (withWarningModal && warningValuesHaveChanged && warningMessageKey) {
+      return displayConfirmationModal(() => this.runMutations(values), warningMessageKey);
+    }
+    return this.runMutations(values);
   };
 
   render() {

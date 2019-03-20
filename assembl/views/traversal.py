@@ -18,6 +18,7 @@ from abc import ABCMeta, abstractmethod
 
 from assembl.auth import P_READ, R_SYSADMIN
 from assembl.auth.util import get_permissions
+from assembl.auth.util import find_discussion_from_slug
 from assembl.lib.sqla import *
 from assembl.lib.logging import getLogger
 from assembl.lib.decl_enums import DeclEnumType
@@ -1136,10 +1137,9 @@ def root_factory(request):
         return discussion
     elif request.matchdict and 'discussion_slug' in request.matchdict:
         discussion_slug = request.matchdict['discussion_slug']
-        discussion = Discussion.default_db.query(Discussion).filter_by(
-            slug=discussion_slug).first()
+        discussion = find_discussion_from_slug(discussion_slug)
         if not discussion:
-            raise HTTPNotFound("No discussion named %s" % (discussion_slug,))
+            raise HTTPNotFound("No discussion found for slug=%s" % (discussion_slug,))
         return discussion
     # fallthrough: Use traversal
     return AppRoot()

@@ -31,10 +31,38 @@ from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
 from .langstrings import LangString
 from .preferences import Preferences
 from assembl.lib.caching import create_analytics_region
-
 resolver = DottedNameResolver(__package__)
 log = logging.getLogger()
 visit_analytics_region = create_analytics_region()
+
+
+class OldSlug(DiscussionBoundBase, NamedClassMixin):
+    """
+    The old slug of a debate. Used in case the administrator changes the slug of a debate.
+    """
+    __tablename__ = "old_slug"
+    id = Column(Integer, primary_key=True)
+    discussion_id = Column(Integer, ForeignKey(
+        'discussion.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE'),
+        nullable=False,
+        index=True)
+    discussion = relationship(
+        "Discussion",
+        backref=backref(
+            'old_slugs',
+            cascade="all, delete-orphan"),
+    )
+    slug = Column(CoerceUnicode, nullable=False, unique=True, index=True)
+
+    @classmethod
+    def get_discussion_id(self):
+        return self.discussion_id or self.discussion.id
+
+    @classmethod
+    def get_discussion_conditions(cls, discussion_id, alias_maker=None):
+        return (cls.discussion_id == discussion_id,)
 
 
 class Discussion(DiscussionBoundBase, NamedClassMixin):

@@ -6,9 +6,9 @@ from graphql_wsgi import graphql_wsgi as graphql_wsgi_wrapper
 from graphql_wsgi.main import get_graphql_params as original_get_graphql_params
 import graphql_wsgi.main
 
-from assembl import models
 from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
+from assembl.auth.util import find_discussion_from_slug
 from assembl.graphql.schema import Schema
 from assembl.lib.logging import getLogger
 
@@ -58,8 +58,7 @@ graphql_wsgi.main.get_graphql_params = get_graphql_params
 def graphql_api(request):
     slug = request.matchdict['discussion_slug']
     # Check permission
-    discussion = models.Discussion.query.filter(
-        models.Discussion.slug == slug).one()
+    discussion = find_discussion_from_slug(slug)
     if discussion is None:
         raise HTTPUnauthorized()
 

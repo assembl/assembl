@@ -674,6 +674,11 @@ const Translations = {
       down: "Descendre",
       nextStep: "Étape suivante",
       previousStep: "Étape précédente",
+      nameOfTheDebate: "Nom de la discussion",
+      discussionSlug: "Slug de la discussion",
+      slugWarning:
+        "Cette modification entraine un changement de l'adresse de la consultation. Intégrez ce changement dans vos prochaines communications. Pour assurer la continuité du service, la précédente adresse sera toujours opérationnelle.",
+      invalidSlug: "Les caractères spéciaux ne sont pas autorisés",
       menu: {
         phase: "Phase %{count} - %{description}",
         preferences: "Préférences de la discussion",
@@ -1688,6 +1693,11 @@ const Translations = {
       down: "Down",
       nextStep: "Next step",
       previousStep: "Previous step",
+      nameOfTheDebate: "Name of the debate",
+      discussionSlug: "Slug of the debate",
+      slugWarning:
+        "This modification causes a change in the address of the debate. Please take this change into account in further communications. To insure the continuity of the service, the previous address will still be operating.",
+      invalidSlug: "Special characters are not allowed",
       menu: {
         phase: "Phase %{count} - %{description}",
         preferences: "Discussion preferences",
