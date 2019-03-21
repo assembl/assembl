@@ -8,22 +8,21 @@
   }
 }
 
-.modal-content {
-  .modal-title {
-    font-family: $font-family3;
-    font-size: $font-size-sm;
-    line-height: 2;
-    padding-right: 20px;
-  }
+// .modal-content {
+//   .modal-title {
+//     font-family: $font-family3;
+//     font-size: $font-size-sm;
+//     line-height: 2;
+//     padding-right: 20px;
+//   }
 
-  .modal-body {
-    text-align: left;
-    padding-left: 20px;
-    padding-right: 20px;
-    font-size: $font-size-sm;
-    letter-spacing: 1.1px;
-  }
-}
+//   .modal-body {
+//     padding-left: 20px;
+//     padding-right: 20px;
+//     font-size: $font-size-sm;
+//     letter-spacing: 1.1px;
+//   }
+// }
 
 @media screen and (min-width: $screen-sm-min) {
   .titleWithTooltip-container {
