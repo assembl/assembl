@@ -78,7 +78,7 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                       <Translate value="administration.invalidSlug" />
                     </div>
                   ) : null}
-                  <div className="separator" />
+                  <div className="separator" style={{ borderBottomWidth: '2px' }} />
                   <div className="title">
                     <Translate value="administration.languageChoice" />
                   </div>
