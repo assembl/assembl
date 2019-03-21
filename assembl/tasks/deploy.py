@@ -133,27 +133,23 @@ def install_wheel(c, allow_index=False):
     if wheelhouse.startswith('s3://'):
         wheelhouse = wheelhouse[5:]
         with venv(c, True):
-            region = get_and_set_region(c)
-            assert region
             if '(' in wheel:
                 import requests
                 from semantic_version import Version
-                r = requests.get('http://{wheelhouse}.s3-website-{region}.amazonaws.com/'.format(
-                    wheelhouse=wheelhouse, region=region))
+                r = requests.get('http://{wheelhouse}.s3-website-eu-west-1.amazonaws.com/'.format(
+                    wheelhouse=wheelhouse))
                 assert r.ok
                 exp = '>(' + wheel + ')<'
                 matches = list(re.finditer(exp, r.content))
                 # assumption: The first * follows semver, more or less.
                 matches.sort(reverse=True, key=as_semantic)
                 wheel = matches[0].group(1)
-            host = '{wheelhouse}.s3-website-{region}.amazonaws.com'.format(
-                region=region, wheelhouse=wheelhouse)
+            host = '{wheelhouse}.s3-website-eu-west-1.amazonaws.com'.format(wheelhouse=wheelhouse)
             c.run('./venv/bin/pip --trusted-host {host} install {allow_index}'
                   ' --find-links http://{host}/ http://{host}/{wheel}'.format(
                       host=host, wheel=wheel, allow_index=allow_index))
     else:
         with venv(c, True):
-            region = c.config.region
             if '(' in wheel:
                 wheelre = re.compile('(%s)$' % wheel)
                 wheels = [wheelre.match(name) for name in os.listdir(wheelhouse)]
