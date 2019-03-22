@@ -495,3 +495,20 @@ class ViewIdea(ActionOnIdea):
             actor=User.uri_generic(self.actor_id))
 
     verb = 'viewed'
+
+
+class ShareIdea(ActionOnIdea):
+    """
+    A share action on an idea.
+    """
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:ShareStatusChange_I'
+    }
+
+    def tombstone(self):
+        from .generic import Content
+        return DiscussionBoundTombstone(
+            self, idea=Content.uri_generic(self.idea_id),
+            actor=User.uri_generic(self.actor_id))
+
+    verb = 'shared'
