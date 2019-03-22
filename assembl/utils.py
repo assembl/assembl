@@ -21,7 +21,7 @@ def filter_with_date(data, start_date=None, end_date=None):
 
 
 def format_date(datetime_to_format):
-    return datetime_to_format.strftime('%d/%m/%Y %H:%M')
+    return datetime_to_format.strftime('%d/%m/%Y')
 
 
 def get_published_posts(idea):
@@ -64,45 +64,48 @@ def get_multicolumns_ideas(discussion, start_date=None, end_date=None):
 
 
 def get_survey_ideas(discussion, start_date=None, end_date=None):
-    ideas = discussion.db.query(models.Idea).filter(models.Idea.message_view_override == 'survey').all()
+    ideas = get_ideas(discussion, "survey")
     return filter_with_date(ideas, start_date, end_date)
 
 
 def get_thread_ideas(discussion, start_date=None, end_date=None):
-    ideas = discussion.db.query(models.Idea).filter(models.Idea.message_view_override == "thread").all()
+    ideas = get_ideas(discussion, "thread")
     return filter_with_date(ideas, start_date, end_date)
 
 
 def get_bright_mirror_ideas(discussion, start_date=None, end_date=None):
-    ideas = discussion.db.query(models.Idea).filter(models.Idea.message_view_override == "brightMirror").all()
+    ideas = get_ideas(discussion, "brightMirror")
     return filter_with_date(ideas, start_date, end_date)
 
 
-def get_ideas(phase, options=None):
-    root_thematic = get_root_thematic_for_phase(phase)
-    discussion = phase.discussion
-    if root_thematic is None:
-        return []
+def get_ideas(discussion, module_type, options=None):
+    # root_thematic = get_root_thematic_for_phase(phase)
+    # discussion = phase.discussion
+    # if root_thematic is None:
+    #     return []
 
     model = models.Idea
     query = model.query
-    if discussion.root_idea == root_thematic:
-        # thread phase is directly on discussion.root_idea,
-        # we need to remove all descendants of all the other phases
-        descendants_to_ignore = get_descendants(get_all_phase_root_ideas(discussion))
-        descendants = root_thematic.get_all_descendants(id_only=True, inclusive=False)
-        descendants = set(descendants) - set(descendants_to_ignore)
-        query = query.filter(model.id.in_(descendants))
-    else:
-        descendants_query = root_thematic.get_descendants_query(inclusive=False)
-        query = query.filter(model.id.in_(descendants_query))
+    # if discussion.root_idea == root_thematic:
+    #     # thread phase is directly on discussion.root_idea,
+    #     # we need to remove all descendants of all the other phases
+    #     descendants_to_ignore = get_descendants(get_all_phase_root_ideas(discussion))
+    #     descendants = root_thematic.get_all_descendants(id_only=True, inclusive=False)
+    #     descendants = set(descendants) - set(descendants_to_ignore)
+    #     query = query.filter(model.id.in_(descendants))
+    # else:
+    #     descendants_query = root_thematic.get_descendants_query(inclusive=False)
+    #     query = query.filter(model.id.in_(descendants_query))
 
     query = query.outerjoin(
             models.Idea.source_links
         ).filter(
             ~model.sqla_type.in_(('question', 'vote_proposal')),
             model.hidden == False,  # noqa: E712
-            model.tombstone_date == None  # noqa: E711
+            model.tombstone_date == None,  # noqa: E711
+            model.sqla_type != "root_idea",
+            model.discussion_id == discussion.id,
+            model.message_view_override == module_type
         ).options(
             contains_eager(models.Idea.source_links),
             joinedload(models.Idea.title).joinedload("entries"),
