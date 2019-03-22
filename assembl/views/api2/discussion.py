@@ -1479,6 +1479,10 @@ def get_idea_parent_ids(idea):
     return ", ".join([str(i.id) for i in idea.get_parents() if i.sqla_type != u'root_idea'])
 
 
+def get_idea_parents(idea, user_prefs):
+    return ", ".join([str(i.title.best_lang(user_prefs).value.encode("utf-8")) for i in idea.get_parents() if i.sqla_type != u'root_idea'])
+
+
 def get_entries_locale_original(lang_string):
     if lang_string is None:
         return {
@@ -1781,7 +1785,7 @@ def thread_csv_export(request):
     discussion = request.context._instance
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
-    # Ensure additions to the header are reflected in the 
+    # Ensure additions to the header are reflected in the
     IDEA_NAME = u"Nom de la thématique"
     IDEA_PARENT = u"Thématique parent"
     IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1"
