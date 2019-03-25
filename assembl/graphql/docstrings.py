@@ -162,7 +162,7 @@ class UpdateDiscussionPreferences:
     languages = """The list of languages in ISO 639-1 locale code that the debate should support."""
     tab_title = DiscussionPreferences.tab_title
     favicon = DiscussionPreferences.favicon
-    logog = DiscussionPreferences.logo
+    logo = DiscussionPreferences.logo
     with_moderation = DiscussionPreferences.with_moderation
     slug = DiscussionPreferences.slug
 

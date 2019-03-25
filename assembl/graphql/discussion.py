@@ -572,7 +572,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         tab_title = graphene.String(description=docs.UpdateDiscussionPreferences.tab_title)
         # this is the identifier of the part in a multipart POST
         favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
-        logo = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
+        logo = graphene.String(description=docs.UpdateDiscussionPreferences.logo)
         with_moderation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_moderation)
         slug = graphene.String(description=docs.UpdateDiscussionPreferences.slug)
 
