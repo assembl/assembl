@@ -16,6 +16,7 @@ export function postLoadFormat(data: DiscussionPreferencesQueryQuery): Personali
   const { discussionPreferences } = data;
   return {
     title: discussionPreferences && discussionPreferences.tabTitle,
-    favicon: (discussionPreferences && discussionPreferences.favicon) || null
+    favicon: (discussionPreferences && discussionPreferences.favicon) || null,
+    logo: (discussionPreferences && discussionPreferences.logo) || null
   };
 }

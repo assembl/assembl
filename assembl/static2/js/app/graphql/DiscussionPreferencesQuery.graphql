@@ -6,6 +6,11 @@ query DiscussionPreferencesQuery {
       externalUrl
       mimeType
     }
+    logo {
+      title
+      externalUrl
+      mimeType
+    }
     withModeration
   }
 }

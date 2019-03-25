@@ -1691,6 +1691,7 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
     assert res_data == {
         u'discussionPreferences': {
             u'favicon': None,
+            u'logo': None,
             u'tabTitle': '',
             u'withModeration': False
         }
@@ -1704,6 +1705,7 @@ def test_query_discussion_preferences_moderation(graphql_registry, graphql_reque
     assert res_data == {
         u'discussionPreferences': {
             u'favicon': None,
+            u'logo': None,
             u'tabTitle': '',
             u'withModeration': True
         }

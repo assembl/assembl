@@ -67,12 +67,20 @@ const PersonalizeInterface = ({ client }: Props) => (
                 component={TextFieldAdapter}
                 label={I18n.t('administration.personalizeInterface.title')}
               />
+              <div className="separator" />
               <Field
                 name="favicon"
                 component={FileUploaderFieldAdapter}
                 label={I18n.t('administration.personalizeInterface.favicon')}
               />
               <p className="annotation no-margin">{I18n.t('administration.personalizeInterface.faviconInstruction')}</p>
+              <div className="separator" />
+              <Field
+                component={FileUploaderFieldAdapter}
+                name="logo"
+                label={I18n.t('administration.discussionPreferences.debateLogoLabel')}
+              />
+              <p className="annotation no-margin">{I18n.t('administration.personalizeInterface.logoInstruction')}</p>
             </form>
           </React.Fragment>
         )}

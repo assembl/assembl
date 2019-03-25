@@ -29,11 +29,17 @@ const data = {
       }
     ]
   },
+  debate: {
+    debateData: {}
+  },
   discussionData: {
     loginData: {
       route: 'http://www.mycoolsite.com/login',
       local: false
     }
+  },
+  logoData: {
+    externalUrl: 'http://www.example.com/bar.jpg'
   },
   discussionLoading: false,
   sectionloading: false

@@ -207,7 +207,11 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     @property
     def logo(self):
-        return self.logo_url
+        from .attachment import AttachmentPurpose
+        from ..graphql.utils import get_attachment_with_purpose
+        attachment = get_attachment_with_purpose(
+            self.attachments, AttachmentPurpose.LOGO.value)
+        return attachment and attachment.document
 
     @logo.setter
     def logo(self, url):

@@ -35,7 +35,6 @@ export function postLoadFormat(data: Data): DiscussionPreferencesFormValues {
     label: language.name,
     value: language.locale
   }));
-
   return {
     languages: languages,
     withModeration: discussionPreferences.withModeration,

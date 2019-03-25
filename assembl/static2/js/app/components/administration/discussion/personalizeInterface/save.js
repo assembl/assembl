@@ -7,9 +7,11 @@ import { getFileVariable, createSave } from '../../../form/utils';
 
 function getVariables(values, initialValues) {
   const initialFavicon = initialValues ? initialValues.favicon : null;
+  const initialLogo = initialValues ? initialValues.logo : null;
   return {
     tabTitle: values.title,
-    favicon: getFileVariable(values.favicon, initialFavicon)
+    favicon: getFileVariable(values.favicon, initialFavicon),
+    logo: getFileVariable(values.logo, initialLogo)
   };
 }
 
