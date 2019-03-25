@@ -78,6 +78,7 @@ class TimelineFields extends React.Component<Props> {
                   <div className="panel-group">
                     <FieldArrayWithActions
                       usePanels
+                      confirmDeletion
                       name="phases"
                       withSeparators={false}
                       titleMsgId="administration.timelineAdmin.phase"

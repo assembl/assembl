@@ -1002,6 +1002,8 @@ const Translations = {
         title: "Titre de la page web (visuel 1)",
         favicon: "Favicon (visuel 2)",
         faviconInstruction: "La favicon doit être au format .ico et avoir une hauteur maximum de 110px.",
+        logoInstruction:
+          "L'image du logo doit avoir une hauteur d'au plus 110px, et une largeur d'au plus 215px. Le fond doit être transparent.",
         icoRequired: "Le favicon doit être un fichier .ico uniquement"
       }
     },
@@ -2014,6 +2016,8 @@ const Translations = {
         title: "Web page Title (visual 1)",
         favicon: "Favicon (visual 2)",
         faviconInstruction: "Favicon should have a maximum height of 110px. Its extension should be .ico",
+        logoInstruction:
+          "Logo should have a maximum height of 110px and a maximum width of 215px. The background must be transparent.",
         icoRequired: "The favicon must be an .ico file only"
       }
     },
