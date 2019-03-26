@@ -388,3 +388,22 @@ export const ANNOUNCEMENT_TAB_ITEM_ID = {
 };
 
 export const slugAllowedCharacters = /^[a-zA-Z0-9(-]+$/g;
+
+export const availableLocales = [
+  'de',
+  'en',
+  'es',
+  'fr',
+  'hu',
+  'it',
+  'ja',
+  'nl',
+  'no',
+  'pl',
+  'pt',
+  'ro',
+  'ru',
+  'th',
+  'tr',
+  'zh_Hans'
+];
