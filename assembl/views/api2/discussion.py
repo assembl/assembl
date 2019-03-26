@@ -681,7 +681,7 @@ def csv_response(results, format, fieldnames=None, content_disposition=None):
 
 def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.csv'):
     """
-    Returns a multiple sheet excel files
+    Return a multiple sheets excel file
     @param: results  A dict of lists. Each list contains dicts.
     @param: fieldnames A dict of lists. Each list contains a string.
     """
@@ -1480,8 +1480,8 @@ def get_idea_parent_ids(idea):
     return ", ".join([str(i.id) for i in idea.get_parents() if i.sqla_type != u'root_idea'])
 
 
-def get_idea_parents(idea, user_prefs):
-    return ", ".join([str(i.title.best_lang(user_prefs).value.encode("utf-8")) for i in idea.get_parents() if i.sqla_type != u'root_idea'])
+def get_idea_parents_titles(idea, user_prefs):
+    return ", ".join([i.title.best_lang(user_prefs).value.encode("utf-8") for i in idea.get_parents() if i.sqla_type != u'root_idea'])
 
 
 def get_entries_locale_original(lang_string):
