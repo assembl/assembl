@@ -73,7 +73,7 @@ no_thematic_associated = "no thematic associated"
 sheet_names = ["export_phase",
                "export_module_survey",
                "export_module_thread",
-               "export_module_multicolumn",
+               "export_module_multicolumns",
                "export_module_vote",
                "vote_users_data",
                "export_module_bright_mirror"]
@@ -629,12 +629,13 @@ def extract_taxonomy_csv(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def multi_module_csv_export(request):
-    results = { sheet_name: None for sheet_name in sheet_names}
+    results = {sheet_name: None for sheet_name in sheet_names}
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
     from assembl.views.api2.votes import extract_voters, global_vote_results_csv
+    fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
     fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(request)
     fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(request)
-    fieldnames['export_module_multicolumn'], results['export_module_multicolumn'] = multicolumn_csv_export(request)
+    fieldnames['export_module_multicolumns'], results['export_module_multicolumns'] = multicolumn_csv_export(request)
     fieldnames['vote_users_data'], results['vote_users_data'] = extract_voters(request)
     fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
     # fieldnames['export_module_vote'], results['export_module_vote'] = global_vote_results_csv(request)
