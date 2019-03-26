@@ -29,6 +29,11 @@ def test_extract_taxonomy_csv(test_session, test_app, discussion, extract_post_1
     assert taxonomy_csv.status_code == 200
 
 
+def test_multi_module_export(test_session, test_app, discussion):
+    multi_module_export = test_app.get('/data/Discussion/%d/multi-module-export' % (discussion.id))
+    assert multi_module_export.status_code == 200
+
+
 def local_to_absolute(uri):
     if uri.startswith('local:'):
         return '/data/' + uri[6:]
