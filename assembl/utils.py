@@ -14,7 +14,11 @@ def filter_with_date(data, start_date=None, end_date=None):
     @param: start_date datetime
     @param: end_date datetime
     """
-    if start_date is not None and end_date is not None:
+    if start_date is not None and end_date is None:
+        return [i for i in data if i.creation_date >= start_date]
+    elif start_date is None and end_date is not None:
+        return [i for i in data if i.creation_date <= end_date]
+    elif start_date is not None and end_date is not None:
         return [i for i in data if i.creation_date >= start_date and i.creation_date <= end_date]
     else:
         return data
