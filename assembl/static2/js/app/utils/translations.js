@@ -862,6 +862,8 @@ const Translations = {
       languageChoice: "Sélection des langues du débat",
       moderation: "Modération à priori",
       activateModeration: "Activer la modération",
+      translation: "Option de traduction pour les utilisateurs",
+      activateTranslation: "Ativer l'option pour les utilisateurs de traduire les messages",
       ph: {
         propositionSectionTitle: "Titre de la section",
         propositionSectionSubtitle: "Sous-titre de la section",
@@ -1880,6 +1882,8 @@ const Translations = {
       languageChoice: "Select desired languages below",
       moderation: "Post pending for moderation",
       activateModeration: "Activate the moderation",
+      translation: "Option to translate messages",
+      activateTranslation: "Activate the options for user to translate the messages",
       ph: {
         propositionSectionTitle: "Section title",
         propositionSectionSubtitle: "Section subtitle",
