@@ -172,15 +172,15 @@
       }
     }
 
-    .burgermenu-icon {
+    .burger-navbar {
       cursor: pointer;
 
-      .assembl-icon-menu-on {
-        font-size: 23px;
+      .assembl-icon-menu-on:before {
+        font-size: 25px;
       }
 
-      .assembl-icon-cancel {
-        font-size: 23px;
+      .assembl-icon-cancel:before {
+        font-size: 25px;
       }
     }
 
@@ -189,7 +189,7 @@
       left: 0;
       position: absolute;
       top: $navbar-height;
-      width: 100%;
+      width: 20%;
       height: 100vh;
       overflow-y: scroll;
     }
@@ -242,6 +242,26 @@
     justify-content: space-between;
     width: 100%;
 
+    .assembl-icon-menu-on:before {
+      font-size: 25px;
+      padding-left: 3px;
+    }
+
+    .assembl-icon-cancel:before {
+      font-size: 25px;
+      padding-left: 5px;
+    }
+
+    .nav-burger-with-text {
+      display: flex;
+      padding-right: 15px;
+      flex-direction: column;
+    }
+
+    .menu-text {
+      margin-top: -4px;
+    }
+
     .navbar-logo {
       padding-right: 15px;
     }
@@ -262,14 +282,6 @@
     }
 
     .navbar-home-item {
-      display: none;
-    }
-
-    .burgermenu-icon {
-      display: none;
-    }
-
-    .nav-burger-menu {
       display: none;
     }
 
