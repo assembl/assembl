@@ -1698,6 +1698,7 @@ def survey_csv_export(request):
 
                 post_entries = get_entries_locale_original(post.body)
                 row[POST_BODY] = sanitize_text(post_entries.get('entry'))
+                row[WORD_COUNT] = str(len(row[POST_BODY].split()))
                 if not has_anon:
                     row[POST_CREATOR_NAME] = post.creator.real_name()
                     row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
@@ -1719,16 +1720,21 @@ def survey_csv_export(request):
                     row[SENTIMENT_ACTOR_NAME] = u''
                     row[SENTIMENT_ACTOR_EMAIL] = u''
                     row[SENTIMENT_CREATION_DATE] = u''
-                    writer.writerow(convert_to_utf8(row))
 
-                for sentiment in post.sentiments:
-                    if not has_anon:
-                        row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
-                    else:
-                        row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
-                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
-                    row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                row_list.append(convert_to_utf8(row))
+                if post.sentiments:
+                    for sentiment in post.sentiments:
+                        if not has_anon:
+                            row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
+                        else:
+                            row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
+                        row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
+                        row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
+                        row_list.append(convert_to_utf8(row))
+                else:
+                    row[SENTIMENT_ACTOR_NAME] = u''
+                    row[SENTIMENT_ACTOR_EMAIL] = u''
+                    row[SENTIMENT_CREATION_DATE] = u''
+                    row_list.append(convert_to_utf8(row))
     return fieldnames, row_list
 
 
@@ -1852,20 +1858,22 @@ def multicolumn_csv_export(request):
                 extra_info = column_info_per_user[post.creator_id]
                 for num, (name, path) in enumerate(extra_columns_info):
                     row[name] = extra_info[num]
-            if not post.sentiments:
+
+            if post.sentiments:
+                for sentiment in post.sentiments:
+                    if not has_anon:
+                        row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
+                    else:
+                        row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
+                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
+                    row[SENTIMENT_CREATION_DATE] = format_date(
+                        sentiment.creation_date)
+                    row_list.append(convert_to_utf8(row))
+            else:
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
-                writer.writerow(convert_to_utf8(row))
-
-            for sentiment in post.sentiments:
-                if not has_anon:
-                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
-                else:
-                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
-                row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
-                row[SENTIMENT_CREATION_DATE] = format_date(
-                    sentiment.creation_date)
+                # writer.writerow(convert_to_utf8(row))
                 row_list.append(convert_to_utf8(row))
     return fieldnames, row_list
 
@@ -2002,20 +2010,21 @@ def thread_csv_export(request):
                 extra_info = column_info_per_user[post.creator_id]
                 for num, (name, path) in enumerate(extra_columns_info):
                     row[name] = extra_info[num]
-            if not post.sentiments:
+
+            if post.sentiments:
+                for sentiment in post.sentiments:
+                    if not has_anon:
+                        row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
+                    else:
+                        row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
+                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
+                    row[SENTIMENT_CREATION_DATE] = format_date(
+                        sentiment.creation_date)
+                    row_list.append(convert_to_utf8(row))
+            else:
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
-                writer.writerow(convert_to_utf8(row))
-
-            for sentiment in post.sentiments:
-                if not has_anon:
-                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
-                else:
-                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
-                row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
-                row[SENTIMENT_CREATION_DATE] = format_date(
-                    sentiment.creation_date)
                 row_list.append(convert_to_utf8(row))
     return fieldnames, row_list
 
@@ -2146,23 +2155,25 @@ def bright_mirror_csv_export(request):
                 extra_info = column_info_per_user[post.creator_id]
                 for num, (name, path) in enumerate(extra_columns_info):
                     row[name] = extra_info[num]
-            if not post.sentiments:
-                row[SENTIMENT_ACTOR_NAME] = u''
-                row[SENTIMENT_ACTOR_EMAIL] = u''
-                row[SENTIMENT_CREATION_DATE] = u''
-                writer.writerow(convert_to_utf8(row))
             if not post.shares:
                 row[NUMBER_OF_SHARES] = u''
             else:
                 row[NUMBER_OF_SHARES] = str(post.get_number_of_shares)
-            for sentiment in post.sentiments:
-                if not has_anon:
-                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
-                else:
-                    row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
-                row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
-                row[SENTIMENT_CREATION_DATE] = format_date(
-                    sentiment.creation_date)
+
+            if post.sentiments:
+                for sentiment in post.sentiments:
+                    if not has_anon:
+                        row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
+                    else:
+                        row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
+                    row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
+                    row[SENTIMENT_CREATION_DATE] = format_date(
+                        sentiment.creation_date)
+                    row_list.append(convert_to_utf8(row))
+            else:
+                row[SENTIMENT_ACTOR_NAME] = u''
+                row[SENTIMENT_ACTOR_EMAIL] = u''
+                row[SENTIMENT_CREATION_DATE] = u''
                 row_list.append(convert_to_utf8(row))
     return fieldnames, row_list
 
