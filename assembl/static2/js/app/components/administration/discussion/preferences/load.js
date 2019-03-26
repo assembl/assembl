@@ -5,7 +5,7 @@ import type { DiscussionPreferencesFormValues } from './types.flow';
 
 import DiscussionPreferencesQuery from '../../../../graphql/DiscussionPreferences.graphql';
 import LocalesQuery from '../../../../graphql/LocalesQuery.graphql';
-import { availableLanguesLocalesList } from '../../../../constants';
+import { availableLocales } from '../../../../constants';
 
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, locale: string) => {
   const { data: availableLanguages } = await client.query({
@@ -32,9 +32,9 @@ export function postLoadFormat(data: Data): DiscussionPreferencesFormValues {
   const { discussionPreferences, locales } = data;
   const isChecked = locale => discussionPreferences.languages.some(language => language.locale === locale);
 
-  const filteredLanguagesList = locales.filter(lang => availableLanguesLocalesList.includes(lang.localeCode));
+  const filteredLanguages = locales.filter(lang => availableLocales.includes(lang.localeCode));
 
-  const languages = filteredLanguagesList.map(language => ({
+  const languages = filteredLanguages.map(language => ({
     isChecked: isChecked(language.localeCode),
     label: language.label,
     value: language.localeCode
