@@ -390,20 +390,20 @@ export const ANNOUNCEMENT_TAB_ITEM_ID = {
 export const slugAllowedCharacters = /^[a-zA-Z0-9(-]+$/g;
 
 export const availableLocales = [
-  'fr',
+  'de',
   'en',
   'es',
-  'it',
-  'de',
-  'zh_Hans',
+  'fr',
   'hu',
-  'no',
-  'ro',
-  'pt',
-  'tr',
-  'th',
-  'nl',
+  'it',
   'ja',
+  'nl',
+  'no',
   'pl',
-  'ru'
+  'pt',
+  'ro',
+  'ru',
+  'th',
+  'tr',
+  'zh_Hans'
 ];
