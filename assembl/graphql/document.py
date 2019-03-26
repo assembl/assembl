@@ -20,10 +20,19 @@ class Document(SecureObjectType, SQLAlchemyObjectType):
     class Meta:
         model = models.Document
         interfaces = (Node, )
-        only_fields = ('id', 'title', 'mime_type')
+        only_fields = ('id', 'mime_type')
 
+    title = graphene.String(description=docs.Document.title)
     external_url = graphene.String(description=docs.Document.external_url)
     av_checked = graphene.String(description=docs.Document.av_checked)
+
+    def resolve_title(self, args, context, info):
+        filename = self.title
+        # For existing documents, be sure to get only the basename,
+        # removing "\" in the path if the document was uploaded on Windows.
+        # This is done now in the uploadDocument mutation for new documents.
+        filename = filename.split('\\')[-1]
+        return filename
 
 
 class UploadDocument(graphene.Mutation):
@@ -49,7 +58,12 @@ class UploadDocument(graphene.Mutation):
 
         uploaded_file = args.get('file')
         if uploaded_file is not None:
+            # Because the server is on GNU/Linux, basename will only work
+            # with path using "/".
             filename = os.path.basename(context.POST[uploaded_file].filename)
+            # we need to remove "\" used by Windows too.
+            filename = filename.split('\\')[-1]
+
             mime_type = context.POST[uploaded_file].type
             document = models.File(
                 discussion=discussion,
