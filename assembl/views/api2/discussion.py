@@ -1679,6 +1679,12 @@ def survey_csv_export(request):
     row_list = list()
     for thematic in thematics:
         row = {}
+        top_key_words = thematic.top_keywords()
+        for index, key_word in enumerate(top_key_words):
+            column_name = "Mots clés {}".format(index+1)
+            if column_name not in fieldnames:
+                fieldnames.append(column_name.encode('utf-8'))
+            row[column_name] = str(key_word)
         row[THEMATIC_NAME] = get_entries_locale_original(thematic.title).get('entry')
         children = thematic.get_children()
         row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if children[0] else ""
@@ -1756,8 +1762,8 @@ def multicolumn_csv_export(request):
     POST_BODY = u"Message"
     WORD_COUNT = u"Nombre de mots"
     POST_CREATOR_NAME = u"Nom de l'auteur"
-    POST_CREATOR_EMAIL = u"Adresse mail de l'auteur"
     POST_CREATOR_USERNAME = u"Nom d'utilisateur de l'auteur"
+    POST_CREATOR_EMAIL = u"Adresse mail de l'auteur"
     POST_CREATION_DATE = u"Date de publication"
     POST_LIKE_COUNT = u"J'aime"
     POST_DISAGREE_COUNT = u"J'aime pas"
@@ -1778,8 +1784,8 @@ def multicolumn_csv_export(request):
         POST_BODY.encode('utf-8'),
         WORD_COUNT.encode('utf-8'),
         POST_CREATOR_NAME.encode('utf-8'),
-        POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATOR_USERNAME.encode('utf-8'),
+        POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
         POST_LIKE_COUNT.encode('utf-8'),
         POST_DISAGREE_COUNT.encode('utf-8'),
@@ -1812,7 +1818,13 @@ def multicolumn_csv_export(request):
     row_list = list()
     for idea in ideas:
         row = {}
-        row[PARENT_IDEA] = get_idea_parents(idea, user_prefs)
+        top_key_words = idea.top_keywords()
+        for index, key_word in enumerate(top_key_words):
+            column_name = "Mots clés {}".format(index+1)
+            if column_name not in fieldnames:
+                fieldnames.append(column_name.encode('utf-8'))
+            row[column_name] = str(key_word)
+        row[PARENT_IDEA] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         posts = get_published_posts(idea)
         for post in posts:
@@ -1951,8 +1963,14 @@ def thread_csv_export(request):
     row_list = list()
     for idea in ideas:
         row = {}
+        top_key_words = idea.top_keywords()
+        for index, key_word in enumerate(top_key_words):
+            column_name = "Mots clés {}".format(index+1)
+            if column_name not in fieldnames:
+                fieldnames.append(column_name.encode('utf-8'))
+            row[column_name] = str(key_word)
         children = idea.get_children()
-        row[IDEA_PARENT] = get_idea_parents(idea, user_prefs)
+        row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if children[0] else ""
         row[IDEA_CHILD_LEVEL_2]= children[1].title.best_lang(user_prefs).value if children[1] else ""
@@ -2090,8 +2108,14 @@ def bright_mirror_csv_export(request):
     row_list = list()
     for idea in ideas:
         row = {}
+        top_key_words = idea.top_keywords()
+        for index, key_word in enumerate(top_key_words):
+            column_name = "Mots clés {}".format(index+1)
+            if column_name not in fieldnames:
+                fieldnames.append(column_name.encode('utf-8'))
+            row[column_name] = str(key_word)
         row[IDEA_ID] = idea.id
-        row[IDEA_PARENT] = get_idea_parents(idea, user_prefs)
+        row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         posts = get_published_posts(idea)
         for post in posts:
