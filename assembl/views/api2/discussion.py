@@ -1506,6 +1506,98 @@ def get_entries_locale_original(lang_string):
     }
 
 
+def phase_csv_export(request):
+    """
+    This is the first sheet of the multi-module export.
+    The sheet is called export phase."""
+    from assembl.models import Locale, Idea
+    from assembl.models.auth import LanguagePreferenceCollection
+    from assembl.utils import get_ideas_for_export
+    has_lang = 'lang' in request.GET
+    has_anon = asbool(request.GET.get('anon', False))
+    if has_lang:
+        language = request.GET['lang']
+        exists = Locale.get_id_of(language, create=False)
+        if not exists:
+            language = u'fr'
+    else:
+        language = u'fr'
+
+    # This is required so that the langstring methods can operate using correct globals
+    # on the request object
+    LanguagePreferenceCollection.setCurrentFromLocale(language, req=request)
+    user_prefs = LanguagePreferenceCollection.getCurrent()
+    discussion = request.context._instance
+    discussion_id = discussion.id
+    Idea.prepare_counters(discussion_id, True)
+
+    THEMATIC_NAME = u"Thématique parent".encode('utf-8')
+    IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1".encode('utf-8')
+    IDEA_CHILD_LEVEL_2 = u"Thématique enfant niveau 2".encode('utf-8')
+    MODULE = u"Module".encode('utf-8')
+    POSTED_MESSAGES_COUNT = u"Nombre de messages postés".encode('utf-8')
+    DELETED_MESSAGES_COUNT = u"Nombre de messages supprimés".encode('utf-8')
+    TOP_POST_COUNT = u"Nombre de Top post".encode('utf-8')
+    NON_TOP_POST_COUNT = u"Nombre de messages (non top post)".encode('utf-8')
+    LIKE = u"J'aime".encode('utf-8')
+    DONT_LIKE = u"J'aime pas".encode('utf-8')
+    DONT_UNDERSTAND = u"Pas tout compris".encode('utf-8')
+    MORE_INFO = u"SVP + dinfos".encode('utf-8')
+    THEMATIC_SHARE_COUNT = u"Nombre de share de la thématique".encode('utf-8')
+    MESSAGE_SHARE_COUNT = u"Nombre de share de message".encode('utf-8')
+    WATSON_SENTIMENT = u"Sentiment (analyse Watson)".encode('utf-8')
+    fieldnames = [
+        THEMATIC_NAME,
+        IDEA_CHILD_LEVEL_1,
+        IDEA_CHILD_LEVEL_2,
+        MODULE,
+        POSTED_MESSAGES_COUNT,
+        DELETED_MESSAGES_COUNT,
+        TOP_POST_COUNT, # In the case of a thread
+        NON_TOP_POST_COUNT,
+        LIKE,
+        DONT_LIKE,
+        DONT_UNDERSTAND,
+        MORE_INFO,
+        THEMATIC_SHARE_COUNT,
+        MESSAGE_SHARE_COUNT,
+        WATSON_SENTIMENT
+    ]
+    ideas = get_ideas_for_export(discussion)
+    row_list = list()
+    for idea in ideas:
+        row = {}
+        row[THEMATIC_NAME] = get_entries_locale_original(idea.title).get('entry')
+        children = idea.get_children()
+        row[IDEA_CHILD_LEVEL_1] = ""
+        row[IDEA_CHILD_LEVEL_2] = ""
+        # if children:
+        #     if children[0]:
+        #         row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if children[0].title else ""
+        #     if children[1]:
+        #         row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if children[1].title else ""
+        row[MODULE] = idea.message_view_override
+        row[POSTED_MESSAGES_COUNT] = idea.num_posts
+        idea_sentiments = idea.sentiments()
+        top_key_words = idea.top_keywords()
+        for index, key_word in enumerate(top_key_words):
+            column_name = "Mots clés {}".format(index+1)
+            if column_name not in fieldnames:
+                fieldnames.append(column_name.encode('utf-8'))
+            row[column_name] = str(key_word)
+
+        posts = get_published_posts(idea)
+        # Not yet implemented
+        # row[THEMATIC_SHARE_COUNT] =
+
+        row[LIKE] = idea.get_total_sentiments("like")
+        row[DONT_LIKE] = idea.get_total_sentiments("dont_like")
+        row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
+        row[MORE_INFO] = idea.get_total_sentiments("more_info")
+        row_list.append(row)
+    return fieldnames, row_list
+
+
 def survey_csv_export(request):
     """CSV export for survey thematics."""
     from assembl.models import Locale, Idea
