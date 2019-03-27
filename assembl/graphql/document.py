@@ -1,4 +1,4 @@
-import os.path
+import ntpath
 
 import graphene
 from graphene.relay import Node
@@ -27,12 +27,10 @@ class Document(SecureObjectType, SQLAlchemyObjectType):
     av_checked = graphene.String(description=docs.Document.av_checked)
 
     def resolve_title(self, args, context, info):
-        filename = self.title
         # For existing documents, be sure to get only the basename,
         # removing "\" in the path if the document was uploaded on Windows.
         # This is done now in the uploadDocument mutation for new documents.
-        filename = filename.split('\\')[-1]
-        return filename
+        return ntpath.basename(self.title)
 
 
 class UploadDocument(graphene.Mutation):
@@ -58,12 +56,9 @@ class UploadDocument(graphene.Mutation):
 
         uploaded_file = args.get('file')
         if uploaded_file is not None:
-            # Because the server is on GNU/Linux, basename will only work
-            # with path using "/".
-            filename = os.path.basename(context.POST[uploaded_file].filename)
-            # we need to remove "\" used by Windows too.
-            filename = filename.split('\\')[-1]
-
+            # Because the server is on GNU/Linux, os.path.basename will only work
+            # with path using "/". Using ntpath works for both Linux and Windows path
+            filename = ntpath.basename(context.POST[uploaded_file].filename)
             mime_type = context.POST[uploaded_file].type
             document = models.File(
                 discussion=discussion,
