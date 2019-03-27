@@ -14,71 +14,50 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
       className="nav-bar max-container"
       id="navbar"
     >
-      <BurgerNavbar
-        elements={
-          Array [
-            <SectionLink
-              options={
-                Object {
-                  "phase": "thread",
-                  "phaseContext": "new",
-                  "phaseId": "",
-                  "screenTooSmall": true,
-                  "slug": undefined,
+      <div
+        className="left-part"
+      >
+         
+        <BurgerNavbar
+          elements={
+            Array [
+              <SectionLink
+                options={
+                  Object {
+                    "phase": "thread",
+                    "phaseContext": "new",
+                    "phaseId": "",
+                    "slug": undefined,
+                  }
                 }
-              }
-              section={
-                Object {
-                  "id": "mysection",
-                  "sectionType": "CUSTOM",
-                  "title": "My section",
-                  "url": "http://www.gnu.org",
+                section={
+                  Object {
+                    "id": "mysection",
+                    "sectionType": "CUSTOM",
+                    "title": "My section",
+                    "url": "http://www.gnu.org",
+                  }
                 }
-              }
-            />,
-          ]
-        }
-        logoLink="http://www.homesweethome.org"
-        logoSrc="http://www.example.com/bar.jpg"
-        renderUserMenu={[Function]}
-      />
-      <FlatNavbar
-        elements={
-          Array [
-            <SectionLink
-              options={
-                Object {
-                  "phase": "thread",
-                  "phaseContext": "new",
-                  "phaseId": "",
-                  "screenTooSmall": true,
-                  "slug": undefined,
-                }
-              }
-              section={
-                Object {
-                  "id": "mysection",
-                  "sectionType": "CUSTOM",
-                  "title": "My section",
-                  "url": "http://www.gnu.org",
-                }
-              }
-            />,
-          ]
-        }
-        logoLink="http://www.homesweethome.org"
-        logoSrc="http://www.example.com/bar.jpg"
-        maxWidth={-20}
-        renderUserMenu={[Function]}
-        setWidth={[Function]}
-        style={
-          Object {
-            "opacity": 0,
-            "position": "absolute",
-            "top": "-200px",
+              />,
+            ]
           }
-        }
-      />
+          renderUserMenu={[Function]}
+        />
+        <Logo />
+      </div>
+      <div
+        className="right-part"
+      >
+        <UserMenu
+          loginData={
+            Object {
+              "local": false,
+              "route": "http://www.mycoolsite.com/login",
+            }
+          }
+          remainingWidth={NaN}
+        />
+      </div>
     </div>
   </Uncontrolled(Navbar)>
 </div>
@@ -98,37 +77,79 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
       className="nav-bar max-container"
       id="navbar"
     >
-      <FlatNavbar
-        elements={
-          Array [
-            <SectionLink
-              options={
-                Object {
-                  "phase": "thread",
-                  "phaseContext": "new",
-                  "phaseId": "",
-                  "screenTooSmall": false,
-                  "slug": undefined,
+      <div
+        className="left-part"
+      >
+         
+        <BurgerNavbar
+          elements={
+            Array [
+              <SectionLink
+                options={
+                  Object {
+                    "phase": "thread",
+                    "phaseContext": "new",
+                    "phaseId": "",
+                    "slug": undefined,
+                  }
                 }
-              }
-              section={
-                Object {
-                  "id": "mysection",
-                  "sectionType": "CUSTOM",
-                  "title": "My section",
-                  "url": "http://www.gnu.org",
+                section={
+                  Object {
+                    "id": "mysection",
+                    "sectionType": "CUSTOM",
+                    "title": "My section",
+                    "url": "http://www.gnu.org",
+                  }
                 }
-              }
-            />,
-          ]
-        }
-        logoLink="http://www.homesweethome.org"
-        logoSrc="http://www.example.com/bar.jpg"
-        maxWidth={1370}
-        renderUserMenu={[Function]}
-        setWidth={[Function]}
-        style={Object {}}
-      />
+              />,
+            ]
+          }
+          renderUserMenu={[Function]}
+        />
+        <Logo />
+        <NavigationMenu
+          elements={
+            Array [
+              <SectionLink
+                options={
+                  Object {
+                    "phase": "thread",
+                    "phaseContext": "new",
+                    "phaseId": "",
+                    "slug": undefined,
+                  }
+                }
+                section={
+                  Object {
+                    "id": "mysection",
+                    "sectionType": "CUSTOM",
+                    "title": "My section",
+                    "url": "http://www.gnu.org",
+                  }
+                }
+              />,
+            ]
+          }
+        />
+      </div>
+      <div
+        className="right-part"
+      >
+        <UserMenu
+          loginData={
+            Object {
+              "local": false,
+              "route": "http://www.mycoolsite.com/login",
+            }
+          }
+          remainingWidth={NaN}
+        />
+        <Connect(Apollo(Component))
+          className="navbar-language"
+          setWidth={[Function]}
+          size="xs"
+        />
+      </div>
     </div>
   </Uncontrolled(Navbar)>
 </div>

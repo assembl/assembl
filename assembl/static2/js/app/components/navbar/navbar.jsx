@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Navbar } from 'react-bootstrap';
 import { compose, graphql } from 'react-apollo';
 import bind from 'lodash/bind';
+import debounce from 'lodash/debounce';
 
 import { getCurrentPhaseData } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
@@ -13,16 +14,15 @@ import { withScreenWidth } from '../common/screenDimensions';
 import Permissions, { connectedUserIsAdmin, connectedUserCan } from '../../utils/permissions';
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
-import DiscussionPreferencesQuery from '../../graphql/DiscussionPreferencesQuery.graphql';
-import FlatNavbar from './FlatNavbar';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { snakeToCamel } from '../../utils/globalFunctions';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import mergeLoadingAndError from '../common/mergeLoadingAndError';
-import DebateLink from '../debate/navigation/debateLink';
+import NavigationMenu from './navigationMenu';
 import Logo from './Logo';
 import UserMenu from './UserMenu';
+import LanguageMenu, { refWidthUpdate } from './languageMenu';
 import { addProtocol } from '../../utils/linkify';
 
 const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses, isSemanticAnalysisEnabled }) => {
@@ -79,12 +79,7 @@ const SectionLink = ({ section, options }) => {
     .join('/')
     .includes(sectionName);
   const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
-
-  return sectionType === 'DEBATE' ? (
-    <DebateLink identifier={options.phase} className={linkClassNames} dataText={title} screenTooSmall={options.screenTooSmall}>
-      {title}
-    </DebateLink>
-  ) : (
+  return (
     <Link to={sectionURL(section, options)} className={linkClassNames} data-text={title}>
       {title}
     </Link>
@@ -123,11 +118,28 @@ type AssemblNavbarState = {
 };
 
 export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, AssemblNavbarState> {
-  state = { flatWidth: 0 };
+  state = {
+    flatWidth: 0,
+    leftWidth: 0,
+    rightWidth: 0,
+    languageMenuWidth: 0
+  };
+
+  setLanguageMenuWidth = (width: number) => this.setState(() => ({ languageMenuWidth: width }));
 
   setFlatWidth = (newWidth: number) => {
     this.setState({ flatWidth: newWidth });
   };
+
+  updateWidth = debounce(() => {
+    const { leftWidth, rightWidth } = this.state;
+    const margin = 10;
+    // This setWidth may trigger a render loop, this is why we use debounce here.
+    // Uncaught Error: Maximum update depth exceeded. This can happen when a component
+    // repeatedly calls setState inside componentWillUpdate or componentDidUpdate.
+    // React limits the number of nested updates to prevent infinite loops.
+    this.setFlatWidth(leftWidth + rightWidth + margin);
+  }, 200);
 
   renderUserMenu = (remainingWidth: number) => {
     const { debate: { debateData: { helpUrl } }, location, discussionData } = this.props;
@@ -139,7 +151,9 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
     const { screenWidth, debate, phase, timeline, sectionData, logoData, isSemanticAnalysisEnabled } = this.props;
     const sections = sectionData.sections;
     const { debateData } = debate;
-    const { slug, isLargeLogo } = debateData;
+    const { logo, slug, isLargeLogo } = debateData;
+    const remainingWidth = maxWidth - this.state.leftWidth + this.state.languageMenuWidth;
+    const sections = sectionData.sections;
     const flatWidth = this.state.flatWidth;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
@@ -171,14 +185,24 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
               </div>
             )}
           <div className="nav-bar max-container" id="navbar">
-            {screenTooSmall && <BurgerNavbar {...commonProps} />}
-            <FlatNavbar
-              {...commonProps}
-              setWidth={this.setFlatWidth}
-              style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
-              maxWidth={maxAppWidth}
-              isLargeLogo={isLargeLogo}
-            />
+            <div
+              className="left-part"
+              ref={refWidthUpdate(newWidth => this.setState(() => ({ leftWidth: newWidth }), this.updateWidth))}
+            >
+              {' '}
+              {!isLargeLogo && (
+                <BurgerNavbar timeline={timeline} elements={commonProps.elements} renderUserMenu={this.renderUserMenu} />
+              )}
+              {!isLargeLogo && <Logo slug={slug} src={logoSrc} url={logoLink} />}
+              {!screenTooSmall && <NavigationMenu elements={commonProps.elements} />}
+            </div>
+            <div
+              className="right-part"
+              ref={refWidthUpdate(newWidth => this.setState(() => ({ rightWidth: newWidth }), this.updateWidth))}
+            >
+              {this.renderUserMenu(remainingWidth)}
+              {!screenTooSmall && <LanguageMenu size="xs" className="navbar-language" setWidth={this.setLanguageMenuWidth} />}
+            </div>
           </div>
         </Navbar>
       </div>

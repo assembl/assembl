@@ -3,6 +3,9 @@
   align-items: center;
   background-color: $navbar-bkg;
   height: $navbar-height;
+  max-height: $navbar-height;
+  justify-content: space-between;
+  width: 100%;
 
   .sk-layout {
     float: none;
@@ -235,68 +238,60 @@
     }
   }
 
-  .flat-navbar {
+  .assembl-icon-menu-on:before {
+    font-size: 25px;
+    padding-left: 3px;
+  }
+
+  .assembl-icon-cancel:before {
+    font-size: 25px;
+    padding-left: 5px;
+  }
+
+  .nav-burger-with-text {
+    display: flex;
+    padding-right: 15px;
+    flex-direction: column;
+  }
+
+  .menu-text {
+    margin-top: -4px;
+  }
+
+  .navbar-logo {
+    padding-right: 15px;
+  }
+
+  .navbar-language {
+    padding: 0;
+  }
+
+  .left-part {
     display: inline-flex;
     align-items: center;
-    max-height: $navbar-height;
-    justify-content: space-between;
-    width: 100%;
+    height: 100%;
+  }
 
-    .assembl-icon-menu-on:before {
-      font-size: 25px;
-      padding-left: 3px;
-    }
+  .nav-menu {
+    display: inline-flex;
+    align-items: center;
+  }
 
-    .assembl-icon-cancel:before {
-      font-size: 25px;
-      padding-left: 5px;
-    }
+  .navbar-home-item {
+    display: none;
+  }
 
-    .nav-burger-with-text {
-      display: flex;
-      padding-right: 15px;
-      flex-direction: column;
-    }
+  .navbar-menu-item {
+    height: $navbar-height;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 
-    .menu-text {
-      margin-top: -4px;
-    }
-
-    .navbar-logo {
-      padding-right: 15px;
-    }
-
-    .navbar-language {
-      padding: 0;
-    }
-
-    .left-part {
-      display: inline-flex;
-      align-items: center;
-      height: 100%;
-    }
-
-    .nav-menu {
-      display: inline-flex;
-      align-items: center;
-    }
-
-    .navbar-home-item {
-      display: none;
-    }
-
-    .navbar-menu-item {
-      height: $navbar-height;
-      display: inline-flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-
-      &.active {
-        border-bottom: $border-active;
-        padding-top: 4px;
-        color: $navbar-active-text-color;
-      }
+    &.active {
+      border-bottom: $border-active;
+      padding-top: 4px;
+      color: $navbar-active-text-color;
     }
 
     .logo-active {
@@ -328,12 +323,12 @@
 
   /* Landscape phones and portrait tablets */
   @media (max-width: $screen-xs-max) {
-    #search {
-      display: none;
+    .left-part {
+      flex: 1;
     }
 
-    .right-part {
-      flex: 1;
+    #search {
+      display: none;
     }
 
     .burger-navbar {
