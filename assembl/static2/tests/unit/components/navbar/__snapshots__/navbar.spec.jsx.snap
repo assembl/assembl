@@ -43,7 +43,9 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
           }
           renderUserMenu={[Function]}
         />
-        <Logo />
+        <Logo
+          src="http://www.example.com/bar.jpg"
+        />
       </div>
       <div
         className="right-part"
@@ -106,7 +108,9 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
           }
           renderUserMenu={[Function]}
         />
-        <Logo />
+        <Logo
+          src="http://www.example.com/bar.jpg"
+        />
         <NavigationMenu
           elements={
             Array [

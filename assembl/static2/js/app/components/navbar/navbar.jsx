@@ -14,6 +14,7 @@ import { withScreenWidth } from '../common/screenDimensions';
 import Permissions, { connectedUserIsAdmin, connectedUserCan } from '../../utils/permissions';
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
+import DiscussionPreferencesQuery from '../../graphql/DiscussionPreferencesQuery.graphql';
 import BurgerNavbar from './BurgerNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { snakeToCamel } from '../../utils/globalFunctions';
@@ -148,10 +149,14 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   };
 
   render = () => {
+<<<<<<< HEAD
     const { screenWidth, debate, phase, timeline, sectionData, logoData, isSemanticAnalysisEnabled } = this.props;
     const sections = sectionData.sections;
+=======
+    const { logoLink, maxWidth, timeline, screenWidth, debate, phase, sectionData, logoData } = this.props;
+>>>>>>> fix bad rebase
     const { debateData } = debate;
-    const { logo, slug, isLargeLogo } = debateData;
+    const { slug, isLargeLogo } = debateData;
     const remainingWidth = maxWidth - this.state.leftWidth + this.state.languageMenuWidth;
     const sections = sectionData.sections;
     const flatWidth = this.state.flatWidth;
@@ -193,7 +198,7 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
               {!isLargeLogo && (
                 <BurgerNavbar timeline={timeline} elements={commonProps.elements} renderUserMenu={this.renderUserMenu} />
               )}
-              {!isLargeLogo && <Logo slug={slug} src={logoSrc} url={logoLink} />}
+              {!isLargeLogo && <Logo slug={slug} src={commonProps.logoSrc} url={logoLink} />}
               {!screenTooSmall && <NavigationMenu elements={commonProps.elements} />}
             </div>
             <div
