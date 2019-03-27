@@ -35,7 +35,10 @@ def parse_reqs(req_files, links=False):
 
 
 def auto_inc_version():
-    tag = check_output('git describe --tags', shell=True).strip()
+    # On travis, the repo is cloned with --depth=100, there may not be enough
+    # commits to include any tags, the option --always will fallback to
+    # the latest commit hash
+    tag = check_output('git describe --tags --always', shell=True).strip()
     parts = tag.rsplit('-', 2)
     if len(parts) == 1:
         # We're on the tag
