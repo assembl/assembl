@@ -37,7 +37,10 @@ def parse_reqs(req_files, links=False):
 def auto_inc_version():
     # On travis, the repo is cloned with --depth=100, there may not be enough
     # commits to include any tags, the option --always will fallback to
-    # the latest commit hash
+    # the latest commit hash.
+    # Retrieving the tag is needed to build the wheel, but we don't build it
+    # on travis, so this is fine to fallback to the commit hash here.
+    # Note: retrieving the full repo on travis increases the time by 1 min.
     tag = check_output('git describe --tags --always', shell=True).strip()
     parts = tag.rsplit('-', 2)
     if len(parts) == 1:
