@@ -1838,7 +1838,7 @@ def connection_url(settings, prefix='db_'):
         query = {'sslmode': 'disable' if db_host == 'localhost' else 'require'}
         password = settings.get(prefix + 'password', None) or settings.get('db_password')
         return URL(
-            'postgresql+psycopg2', db_user, password, db_host, 5432, db_database, query)
+            'postgresql+psycopg2', db_user, password, db_host, None, db_database, query)
 
 
 def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
