@@ -26,7 +26,7 @@ type MenuListState = {
   selected: string
 };
 
-const menuItemHeight = 52;
+const menuItemHeight = 20;
 
 const menuItemMargin = 10;
 
