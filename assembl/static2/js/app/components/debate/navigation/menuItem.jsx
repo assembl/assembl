@@ -90,7 +90,6 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
               />
             ) : null}
           </div>
-          {displayArrow && <span className="thumb-arrow assembl-icon assembl-icon-right-dir" />}
         </div>
       </div>
     );

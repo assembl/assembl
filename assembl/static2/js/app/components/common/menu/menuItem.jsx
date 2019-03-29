@@ -25,18 +25,7 @@ const MenuItem = ({ id, parents, title, toggle, className, openedItem, openedPat
   });
   return (
     <li className={classNames(className, 'menu-item', { active: active })}>
-      <div className="menu-item-title">
-        {childrenElm ? (
-          <span
-            className={classNames({
-              'assembl-icon-angle-down': active,
-              'assembl-icon-angle-right': !active
-            })}
-            onClick={toggle ? () => toggle(id) : null}
-          />
-        ) : null}
-        {title}
-      </div>
+      <div className="menu-item-title">{title}</div>
       {active && childrenElm ? childrenElm : null}
     </li>
   );

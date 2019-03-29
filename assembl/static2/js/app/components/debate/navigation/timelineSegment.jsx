@@ -126,26 +126,11 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
         className={classNames('minimized-timeline', {
           active: active
         })}
-        onMouseOver={!this.isTouchScreenDevice ? this.select : null}
+        // onMouseOver={!this.isTouchScreenDevice ? this.select : null}
       >
-        <div onClick={onClick} className={timelineClass}>
-          {inProgress && <span className="arrow assembl-icon assembl-icon-right-dir" />}
+        <div onClick={() => showSegmentMenu(index)} className={timelineClass}>
           <div className="timeline-link">{title}</div>
         </div>
-        <div className="timeline-graph">
-          <div className="timeline-bars">
-            {barPercent > 0 && (
-              <div className="timeline-bar-filler" style={barPercent < 20 ? { width: '20%' } : { width: `${barPercent}%` }}>
-                &nbsp;
-              </div>
-            )}
-            <div className="timeline-bar-background-container">
-              &nbsp;
-              <div className="timeline-bar-background" />
-            </div>
-          </div>
-        </div>
-        {!this.ignoreMenu && active && <span className="timeline-arrow" />}
       </div>
     );
   }
