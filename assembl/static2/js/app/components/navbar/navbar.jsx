@@ -196,7 +196,12 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
             >
               {' '}
               {!isLargeLogo && (
-                <BurgerNavbar timeline={timeline} elements={commonProps.elements} renderUserMenu={this.renderUserMenu} />
+                <BurgerNavbar
+                  identifier={mapOptions.phase}
+                  timeline={timeline}
+                  elements={commonProps.elements}
+                  renderUserMenu={this.renderUserMenu}
+                />
               )}
               {!isLargeLogo && <Logo slug={slug} src={commonProps.logoSrc} url={logoLink} />}
               {!screenTooSmall && <NavigationMenu elements={commonProps.elements} />}

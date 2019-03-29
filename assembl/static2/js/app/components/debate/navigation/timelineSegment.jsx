@@ -31,7 +31,6 @@ type TimelineSegmentProps = {
   phaseIdentifier: string,
   phaseId: string,
   debate: DebateType,
-  barPercent: number,
   locale: string,
   active: boolean,
   onSelect: Function,
@@ -113,11 +112,8 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
   };
 
   render() {
-    const { barPercent, title, active } = this.props;
-    const inProgress = this.phaseStatus === PHASE_STATUS.inProgress;
+    const { title, active, showSegmentMenu, index } = this.props;
     const timelineClass = 'timeline-title txt-active-light';
-    const touchActive = this.isTouchScreenDevice && !active;
-    const onClick = touchActive ? this.select : this.displayPhase;
     return (
       <div
         ref={(segment) => {

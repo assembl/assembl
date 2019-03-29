@@ -1,8 +1,10 @@
 // @flow
 
 import * as React from 'react';
+import { connect } from 'react-redux';
 import classNames from 'classnames';
 
+import TimelineCpt from '../debate/navigation/timeline';
 import { browserHistory } from '../../router';
 
 type Props = {
@@ -10,10 +12,11 @@ type Props = {
 };
 
 type State = {
-  shouldDisplayMenu: boolean
+  shouldDisplayMenu: boolean,
+  activeSegment: -1
 };
 
-export default class BurgerNavbar extends React.PureComponent<Props, State> {
+class BurgerNavbar extends React.PureComponent<Props, State> {
   unlisten: () => void;
 
   componentWillMount() {
@@ -23,9 +26,40 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
     });
   }
 
+  componentDidMount() {
+    document.addEventListener('click', this.handleClickOutside);
+  }
+
   componentWillUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
     this.unlisten();
   }
+
+  showMenu = () => {
+    this.setState({ shouldDisplayMenu: true });
+  };
+
+  hideMenu = () => {
+    this.setState({ shouldDisplayMenu: false, activeSegment: -1 });
+  };
+
+  handleClickOutside = (event: MouseEvent) => {
+    // Cannot call `this.debateNode.contains` with `event.target` bound to `other`
+    // because `EventTarget` [1] is incompatible with `Node`
+    // $FlowFixMe
+    if (this.state.timeLineActive && this.debateNode && !this.debateNode.contains(event.target)) {
+      this.hideMenu();
+    }
+  };
+
+  showSegmentMenu = (index: number) => {
+    this.setState((prevState) => {
+      const newIndex = prevState.activeSegment !== index ? index : -1;
+      return {
+        activeSegment: newIndex
+      };
+    });
+  };
 
   toggleMenu = () => {
     this.setState(prevState => ({
@@ -34,11 +68,29 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { timeline } = this.props;
-    const { shouldDisplayMenu } = this.state;
+    const { timeline, identifier } = this.props;
+    const { shouldDisplayMenu, activeSegment } = this.state;
+    const activeSegmentPhase = timeline ? timeline[activeSegment] : undefined;
     return (
-      <div className="burger-navbar">
-        {shouldDisplayMenu && <div className="nav-burger-menu">{timeline.map((phase, index) => <p key={index}>lala</p>)}</div>}
+      <div
+        ref={(debateNode) => {
+          this.debateNode = debateNode;
+        }}
+        className="burger-navbar"
+      >
+        {shouldDisplayMenu && (
+          <div className="nav-burger-menu">
+            <TimelineCpt
+              identifier={identifier}
+              timeline={timeline}
+              activeSegment={activeSegment}
+              showSegmentMenu={this.showSegmentMenu}
+              onItemDeselect={this.hideMenu}
+              activeSegmentPhase={activeSegmentPhase}
+              showNavigation
+            />
+          </div>
+        )}
         <div className="nav-burger-with-text">
           <span
             onClick={this.toggleMenu}
