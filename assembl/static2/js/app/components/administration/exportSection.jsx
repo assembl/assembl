@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
 
@@ -191,21 +192,18 @@ export class DumbExportSection extends React.Component<Props, State> {
 }
 
 const mapStateToProps = (state) => {
-  const { phasesById } = state.admin.timeline;
-  const filteredPhases = phasesById.sortBy(phase => phase.get('order'));
-  const filteredPhasesId = filteredPhases.keySeq().toJS();
-  const phasesPresets = filteredPhasesId.map((phaseId, index) => {
-    const phase = phasesById.get(phaseId);
-    return {
+  const phases = state.timeline;
+  const phasesPresets = phases
+    ? phases.map((phase, index) => ({
       id: index + 1,
       labelTranslationKey: 'administration.export.presets.phase',
       range: {
-        startDate: phase.get('start'),
-        endDate: phase.get('end')
+        startDate: moment(phase.start),
+        endDate: moment(phase.end)
       },
       type: 'phase'
-    };
-  });
+    }))
+    : [];
   return {
     phasesPresets: phasesPresets,
     locale: state.i18n.locale
