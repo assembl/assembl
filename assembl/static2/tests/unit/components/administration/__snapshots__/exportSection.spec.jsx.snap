@@ -23,7 +23,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
     className="admin-content"
   >
     <div
-      className="no-margin-bottom form-group"
+      className="form-group"
     >
       <div
         className="export-options"
@@ -327,7 +327,7 @@ exports[`DumbExportSection component should render an export section that handle
     className="admin-content"
   >
     <div
-      className="no-margin-bottom form-group"
+      className="form-group"
     >
       <div
         className="export-options"
