@@ -101,7 +101,7 @@ def test_populate_theme_v2():
     assert 'more information regarding the bundle and themes' in str(exc.value)
 
 
-def xtest_populate_theme_v2_resource_exists_no_config():
+def test_populate_theme_v2_resource_exists_no_config():
     import os
     build_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
