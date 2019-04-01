@@ -9,12 +9,12 @@ class UpgradableSession(Session):
     __metaclass__ = ABCMeta
 
     def __init__(self, request, elevated=False,
-                 cookie_expires=True, elevated_expires=False, **kwargs):
+                 cookie_expires=True, elevated_expires=False, timeout=172800, **kwargs):
         self.elevated_expires = elevated_expires
         self.basic_expires = cookie_expires
         self.elevated = False
         super(UpgradableSession, self).__init__(
-            request, cookie_expires=cookie_expires, **kwargs)
+            request, cookie_expires=cookie_expires, timeout=timeout, **kwargs)
         self.elevated = self.get_is_elevated()
         self._set_cookie_expires(None)
 
