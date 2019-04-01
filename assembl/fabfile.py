@@ -2322,7 +2322,7 @@ def check_if_database_exists():
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
-        return not checkDatabase.failed
+        return not checkDatabase.failed and checkDatabase == '1'
 
 
 def check_if_db_tables_exist():
@@ -2330,7 +2330,7 @@ def check_if_db_tables_exist():
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command="SELECT count(*) from permission", database=env.db_database,
             password=env.db_password, host=env.db_host, user=env.db_user))
-        return not checkDatabase.failed
+        return not checkDatabase.failed and int(checkDatabase.strip('()L,')) > 0
 
 
 def check_if_first_user_exists():
@@ -2485,11 +2485,11 @@ def database_delete():
     execute(check_and_create_database_user)
 
     with settings(warn_only=True), hide('stdout'):
-
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
-    if not checkDatabase.failed:
+
+    if not checkDatabase.failed and checkDatabase == '1':
         print(yellow("Cannot connect to database, trying to create"))
         deleteDatabase = run('PGPASSWORD=%s dropdb --host=%s --username=%s %s' % (
             env.db_password, env.postgres_db_host, env.db_user, env.db_database))
