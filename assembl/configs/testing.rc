@@ -67,3 +67,4 @@ frozen_requirements = requirements-tests.frozen.txt
 _build_docs = false
 _can_test = true
 ini_files = production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl saml_test.ini RC_DATA
+theme_base = %(code_root)s/assembl/static2/build/themes/develop
