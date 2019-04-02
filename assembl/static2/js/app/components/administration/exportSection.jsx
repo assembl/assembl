@@ -149,10 +149,14 @@ export class DumbExportSection extends React.Component<Props, State> {
     const { annotation, sectionTitle, languages } = this.props;
     const { shouldTranslate, shouldBeAnonymous, exportLocale } = this.state;
     const locale = exportLocale || (languages && languages[0].locale);
-    const translation = shouldTranslate && locale ? `?lang=${locale}` : '?'; // FIXME: using '' instead of '?' does not work
-    const anonymous = translation === '?' ? `anon=${shouldBeAnonymous.toString()}` : `&anon=${shouldBeAnonymous.toString()}`;
+    const translation = shouldTranslate && locale ? `?lang=${locale}` : '';
+    const anonymous = `&anon=${shouldBeAnonymous.toString()}`;
     const debateId = getDiscussionId();
-    const exportLink = get('exportDebateData', { debateId: debateId, translation: translation, anonymous: anonymous });
+    const exportLink = get(
+      'exportDebateData',
+      { debateId: debateId },
+      { translation: translation, anonymous: anonymous, startDate: '2019-04-01', endDate: '2019-04-02' }
+    );
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
