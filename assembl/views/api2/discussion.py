@@ -1687,8 +1687,8 @@ def survey_csv_export(request):
             row[column_name] = str(key_word)
         row[THEMATIC_NAME] = get_entries_locale_original(thematic.title).get('entry')
         children = thematic.get_children()
-        row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if children[0] else ""
-        row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if children[1] else ""
+        row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if len(children) > 0 and children[0].title else ""
+        row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if len(children) > 1 and children[1].title else ""
         for question in thematic.get_children():
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
             posts = get_published_posts(question)
@@ -1698,7 +1698,7 @@ def survey_csv_export(request):
 
                 post_entries = get_entries_locale_original(post.body)
                 row[POST_BODY] = sanitize_text(post_entries.get('entry'))
-                row[WORD_COUNT] = str(len(row[POST_BODY].split()))
+                row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else 0
                 if not has_anon:
                     row[POST_CREATOR_NAME] = post.creator.real_name()
                     row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
@@ -1974,8 +1974,8 @@ def thread_csv_export(request):
         children = idea.get_children()
         row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
-        row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if children[0] else ""
-        row[IDEA_CHILD_LEVEL_2]= children[1].title.best_lang(user_prefs).value if children[1] else ""
+        row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if len(children) > 0 and children[0].title else ""
+        row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if len(children) > 1 and children[1].title else ""
         posts = get_published_posts(idea)
         for post in posts:
             if has_lang:
@@ -2128,7 +2128,7 @@ def bright_mirror_csv_export(request):
             body = get_entries_locale_original(post.body)
             row[POST_SUBJECT] = subject.get('entry')
             row[POST_BODY] = sanitize_text(body.get('entry'))
-            row[WORD_COUNT] = str(len(row[POST_BODY].split()))
+            row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else 0
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
                 row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
