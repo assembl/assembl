@@ -1815,7 +1815,6 @@ def multicolumn_csv_export(request):
     writer = csv.DictWriter(
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
-    thread_phase = get_phase_by_identifier(discussion, Phases.thread.value)
     ideas = get_multicolumns_ideas(discussion)
     row_list = list()
     for idea in ideas:
@@ -1833,7 +1832,6 @@ def multicolumn_csv_export(request):
             if has_lang:
                 post.maybe_translate(target_locales=[language])
 
-            subject = get_entries_locale_original(post.subject)
             body = get_entries_locale_original(post.body)
             row[POST_BODY] = sanitize_text(body.get('entry'))
             row[POST_CLASSIFIER] = post.message_classifier if post.message_classifier else ""
@@ -1960,7 +1958,6 @@ def thread_csv_export(request):
     writer = csv.DictWriter(
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
-    thread_phase = get_phase_by_identifier(discussion, Phases.thread.value)
     ideas = get_thread_ideas(discussion)
     row_list = list()
     for idea in ideas:
@@ -2105,7 +2102,6 @@ def bright_mirror_csv_export(request):
     writer = csv.DictWriter(
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
-    thread_phase = get_phase_by_identifier(discussion, Phases.thread.value)
     ideas = get_bright_mirror_ideas(discussion)
     row_list = list()
     for idea in ideas:
