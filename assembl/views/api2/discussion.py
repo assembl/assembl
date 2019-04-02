@@ -1481,7 +1481,7 @@ def get_idea_parent_ids(idea):
 
 
 def get_idea_parents_titles(idea, user_prefs):
-    return ", ".join([i.title.best_lang(user_prefs).value.encode("utf-8") for i in idea.get_parents() if i.sqla_type != u'root_idea'])
+    return ", ".join([i.title.best_lang(user_prefs).value.encode("utf-8") for i in idea.get_parents() if i.sqla_type != u'root_idea' and i.title])
 
 
 def get_entries_locale_original(lang_string):
