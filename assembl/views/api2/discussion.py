@@ -1862,14 +1862,12 @@ def multicolumn_csv_export(request):
                     else:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
-                    row[SENTIMENT_CREATION_DATE] = format_date(
-                        sentiment.creation_date)
+                    row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
                     row_list.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
-                # writer.writerow(convert_to_utf8(row))
                 row_list.append(convert_to_utf8(row))
     return fieldnames, row_list
 
@@ -2014,8 +2012,7 @@ def thread_csv_export(request):
                     else:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
-                    row[SENTIMENT_CREATION_DATE] = format_date(
-                        sentiment.creation_date)
+                    row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
                     row_list.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
@@ -2163,8 +2160,7 @@ def bright_mirror_csv_export(request):
                     else:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
-                    row[SENTIMENT_CREATION_DATE] = format_date(
-                        sentiment.creation_date)
+                    row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
                     row_list.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
