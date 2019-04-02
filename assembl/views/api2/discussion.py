@@ -679,7 +679,7 @@ def csv_response(results, format, fieldnames=None, content_disposition=None):
     return Response(body_file=output, content_type=format, content_disposition=content_disposition)
 
 
-def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.csv'):
+def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.xlsx'):
     """
     Return a multiple sheets excel file
     @param: results  A dict of lists. Each list contains dicts.
