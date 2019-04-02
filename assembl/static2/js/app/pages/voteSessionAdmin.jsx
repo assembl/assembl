@@ -493,14 +493,6 @@ class VoteSessionAdmin extends React.Component<Props, State> {
   render() {
     const { editLocale, goBackPhaseIdentifier, phaseIdentifier, section, thematicId } = this.props;
     const saveDisabled = !this.dataHaveChanged();
-    // const exportLinks = ['vote_results_csv', 'extract_csv_voters'].map(option => ({
-    //   msgId: `vote.${snakeToCamel(option)}`,
-    //   url: get('exportVoteSessionData', {
-    //     debateId: debateId,
-    //     exportRoute: option,
-    //     voteSessionId: voteSessionId
-    //   })
-    // }));
     const configureThematicUrl = get(
       'administration',
       { slug: getDiscussionSlug() || '', id: goBackPhaseIdentifier },
