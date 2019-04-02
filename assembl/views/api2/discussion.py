@@ -1915,7 +1915,7 @@ def thread_csv_export(request):
     SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
     SENTIMENT_CREATION_DATE = u"Date/heure du vote"
     MESSAGE_URL = u"URL du message"
-    WATSON_SENTIMENT = u"Sentiment (Analyse Watson)"
+    WATSON_SENTIMENT = u"Sentiment (analyse Watson)"
     fieldnames = [
         IDEA_NAME.encode('utf-8'),
         IDEA_PARENT.encode('utf-8'),
