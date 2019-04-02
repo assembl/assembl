@@ -1716,10 +1716,6 @@ def survey_csv_export(request):
                     extra_info = column_info_per_user[post.creator_id]
                     for num, (name, path) in enumerate(extra_columns_info):
                         row[name] = extra_info[num]
-                if not post.sentiments:
-                    row[SENTIMENT_ACTOR_NAME] = u''
-                    row[SENTIMENT_ACTOR_EMAIL] = u''
-                    row[SENTIMENT_CREATION_DATE] = u''
 
                 if post.sentiments:
                     for sentiment in post.sentiments:
