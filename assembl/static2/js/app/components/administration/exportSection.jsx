@@ -7,6 +7,7 @@ import { compose, graphql } from 'react-apollo';
 import moment from 'moment';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
+import { get } from '../../utils/routeMap';
 import DiscussionPreferences from '../../graphql/DiscussionPreferences.graphql';
 
 import SectionTitle from './sectionTitle';
@@ -14,6 +15,7 @@ import CustomDateRangePicker from './dateRangePicker/customDateRangePicker';
 import { datePickerPresets } from '../../constants';
 import { getFullDebatePreset } from '../form/utils';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
+import { getDiscussionId } from '../../utils/globalFunctions';
 
 type Props = {
   languages?: Array<Object>,
@@ -147,9 +149,10 @@ export class DumbExportSection extends React.Component<Props, State> {
     const { annotation, sectionTitle, languages } = this.props;
     const { shouldTranslate, shouldBeAnonymous, exportLocale } = this.state;
     const locale = exportLocale || (languages && languages[0].locale);
-    const translation = shouldTranslate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
+    const translation = shouldTranslate && locale ? `?lang=${locale}` : '?'; // FIXME: using '' instead of '?' does not work
     const anonymous = translation === '?' ? `anon=${shouldBeAnonymous.toString()}` : `&anon=${shouldBeAnonymous.toString()}`;
-    const exportLink = '';
+    const debateId = getDiscussionId();
+    const exportLink = get('exportDebateData', { debateId: debateId, translation: translation, anonymous: anonymous });
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
