@@ -78,37 +78,23 @@ def get_bright_mirror_ideas(discussion, start_date=None, end_date=None):
     return filter_with_date(get_ideas_for_export(discussion, MessageView.brightMirror.value), start_date, end_date)
 
 
-def get_ideas_for_export(discussion, module_type=None, options=None):
+def get_ideas_for_export(discussion, module_type=None):
     model = models.Idea
     query = model.query
-
+    query = query.outerjoin(
+            models.Idea.source_links
+        ).filter(
+            ~model.sqla_type.in_(('question', 'vote_proposal', 'root_idea')),
+            model.hidden == False,  # noqa: E712
+            model.tombstone_date == None,  # noqa: E711
+            model.discussion_id == discussion.id,
+        ).options(
+            contains_eager(models.Idea.source_links),
+            joinedload(models.Idea.title).joinedload("entries"),
+            joinedload(models.Idea.description).joinedload("entries"),
+        ).order_by(models.IdeaLink.order, models.Idea.creation_date)
     if module_type is not None:
-        query = query.outerjoin(
-                models.Idea.source_links
-            ).filter(
-                ~model.sqla_type.in_(('question', 'vote_proposal', 'root_idea')),
-                model.hidden == False,  # noqa: E712
-                model.tombstone_date == None,  # noqa: E711
-                model.discussion_id == discussion.id,
-                model.message_view_override == module_type
-            ).options(
-                contains_eager(models.Idea.source_links),
-                joinedload(models.Idea.title).joinedload("entries"),
-                joinedload(models.Idea.description).joinedload("entries"),
-            ).order_by(models.IdeaLink.order, models.Idea.creation_date)
-    else:
-        query = query.outerjoin(
-                models.Idea.source_links
-            ).filter(
-                ~model.sqla_type.in_(('question', 'vote_proposal', 'root_idea')),
-                model.hidden == False,  # noqa: E712
-                model.tombstone_date == None,  # noqa: E711
-                model.discussion_id == discussion.id,
-            ).options(
-                contains_eager(models.Idea.source_links),
-                joinedload(models.Idea.title).joinedload("entries"),
-                joinedload(models.Idea.description).joinedload("entries"),
-            ).order_by(models.IdeaLink.order, models.Idea.creation_date)
+        query = query.filter(model.message_view_override == module_type)
 
     return query.all()
 
