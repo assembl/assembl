@@ -1,4 +1,5 @@
 // @flow
+// TODO: refactor this component into a container and presentation component
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
@@ -13,13 +14,8 @@ import { getFullDebatePreset } from '../form/utils';
 
 type Props = {
   languages?: Array<Object>,
-  handleTranslationChange?: (shouldTranslate: boolean) => void,
-  handleExportLocaleChange?: (locale: string) => void,
-  handleAnonymousChange?: void => void,
-  withLanguageOptions: boolean,
   exportLink: string | Array<{ msgId: string, url: string }>,
   exportLocale?: string,
-  translate: boolean,
   annotation: string,
   sectionTitle: string,
   phasesPresets: Array<Preset>,
@@ -27,19 +23,19 @@ type Props = {
 };
 
 type State = {
-  exportLink: string
+  exportLink: string,
+  shoudTranslate: boolean,
+  exportLocale: string
 };
 
 export class DumbExportSection extends React.Component<Props, State> {
   static defaultProps = {
-    withLanguageOptions: false,
-    translate: false,
     annotation: 'defaultAnnotation',
     sectionTitle: 'defaultSectionTitle'
   };
 
   static getDerivedStateFromProps(props: Props, state: State) {
-    const { exportLink } = props;
+    const exportLink = ''; // TODO: add get function with proper parameters
     return {
       ...state,
       exportLink: typeof exportLink === 'string' ? exportLink : exportLink[0].url
@@ -47,7 +43,9 @@ export class DumbExportSection extends React.Component<Props, State> {
   }
 
   state = {
-    exportLink: ''
+    exportLink: '',
+    exportLocale: '',
+    shouldTranslate: false
   };
 
   handleExportLinkChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
@@ -57,15 +55,13 @@ export class DumbExportSection extends React.Component<Props, State> {
   };
 
   renderAnonymousOption = () => {
-    const { handleAnonymousChange } = this.props;
-    if (!handleAnonymousChange) {
-      return null;
-    }
-
+    const toggleAnonymousOption = () => {
+      this.setState(prevState => ({ shouldBeAnonymous: !prevState.isAnonymous }));
+    };
     return (
       <React.Fragment>
         <Translate value="administration.export.anonymity" />
-        <Checkbox onChange={handleAnonymousChange}>
+        <Checkbox onChange={toggleAnonymousOption} value={this.state.shouldBeAnonymous}>
           <Translate value="administration.export.anonymous" />
         </Checkbox>
       </React.Fragment>
@@ -96,43 +92,35 @@ export class DumbExportSection extends React.Component<Props, State> {
   };
 
   renderLanguageOptions = () => {
-    const {
-      languages,
-      handleTranslationChange,
-      handleExportLocaleChange,
-      withLanguageOptions,
-      translate,
-      exportLocale
-    } = this.props;
-    if (!withLanguageOptions || !handleTranslationChange || !handleExportLocaleChange) {
-      return null;
-    }
+    const { languages, exportLocale } = this.props;
+    const { shouldTranslate } = this.state;
 
     const activeLanguage = languages ? languages.filter(language => language.locale === exportLocale)[0] : null;
+
     return (
       <React.Fragment>
         <Translate value="administration.export.translation" />
         <Radio
-          checked={!translate}
+          checked={!shouldTranslate}
           onChange={() => {
-            handleTranslationChange(false);
+            this.setState({ shouldTranslate: false });
           }}
         >
           <Translate value="administration.export.noExportLanguage" />
         </Radio>
         <Radio
-          checked={translate}
+          checked={shouldTranslate}
           onChange={() => {
-            handleTranslationChange(true);
+            this.setState({ shouldTranslate: true });
           }}
         >
           <Translate value="administration.export.translateTheMessagesIn" />
-          {translate && (
+          {shouldTranslate && (
             <FormControl
               className="export-language-dropdown"
               componentClass="select"
-              onChange={({ target: { value } }) => {
-                handleExportLocaleChange(value);
+              onChange={(e) => {
+                this.setState({ exportLocale: e.target.value });
               }}
               value={activeLanguage ? activeLanguage.locale : ''}
             >

@@ -21,9 +21,6 @@ const ExportData = ({ section }: Props) => (
         annotation="contributions"
         sectionTitle="contributions"
         languages={mockLanguages}
-        handleTranslationChange={() => {}}
-        handleExportLocaleChange={() => {}}
-        handleAnonymousChange={() => {}}
         exportLocale="fr"
         withLanguageOptions
       />
