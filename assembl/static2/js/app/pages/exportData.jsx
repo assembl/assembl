@@ -7,11 +7,6 @@ type Props = {
   section: string
 };
 
-const mockLanguages = [
-  { locale: 'fr', name: 'French', nativeName: 'français', __typename: 'LocalePreference' },
-  { locale: 'en', name: 'English', nativeName: 'English', __typename: 'LocalePreference' }
-];
-
 const ExportData = ({ section }: Props) => (
   <div>
     {section === '1' && (
@@ -20,7 +15,6 @@ const ExportData = ({ section }: Props) => (
         translate
         annotation="contributions"
         sectionTitle="contributions"
-        languages={mockLanguages}
         exportLocale="fr"
         withLanguageOptions
       />

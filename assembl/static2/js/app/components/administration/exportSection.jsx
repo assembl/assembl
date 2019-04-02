@@ -3,14 +3,17 @@
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
+import { compose, graphql } from 'react-apollo';
 import moment from 'moment';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
+import DiscussionPreferences from '../../graphql/DiscussionPreferences.graphql';
 
 import SectionTitle from './sectionTitle';
 import CustomDateRangePicker from './dateRangePicker/customDateRangePicker';
 import { datePickerPresets } from '../../constants';
 import { getFullDebatePreset } from '../form/utils';
+import manageErrorAndLoading from '../common/manageErrorAndLoading';
 
 type Props = {
   languages?: Array<Object>,
@@ -198,4 +201,28 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps)(DumbExportSection);
+export default compose(
+  connect(mapStateToProps),
+  graphql(DiscussionPreferences, {
+    options: ({ locale }) => ({
+      variables: {
+        inLocale: locale
+      }
+    }),
+    props: ({ data }) => {
+      if (data.error || data.loading) {
+        return {
+          error: data.error,
+          loading: data.loading
+        };
+      }
+
+      return {
+        error: data.error,
+        loading: data.loading,
+        languages: data.discussionPreferences.languages
+      };
+    }
+  }),
+  manageErrorAndLoading({ displayLoader: true })
+)(DumbExportSection);
