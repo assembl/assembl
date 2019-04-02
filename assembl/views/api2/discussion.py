@@ -1564,7 +1564,7 @@ def phase_csv_export(request):
         WATSON_SENTIMENT
     ]
     ideas = get_ideas_for_export(discussion)
-    row_list = list()
+    rows = []
     for idea in ideas:
         row = {}
         row[THEMATIC_NAME] = get_entries_locale_original(idea.title).get('entry')
@@ -1592,8 +1592,8 @@ def phase_csv_export(request):
         row[DONT_LIKE] = idea.get_total_sentiments("dont_like")
         row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
         row[MORE_INFO] = idea.get_total_sentiments("more_info")
-        row_list.append(row)
-    return fieldnames, row_list
+        rows.append(row)
+    return fieldnames, rows
 
 
 def survey_csv_export(request):
@@ -1674,7 +1674,7 @@ def survey_csv_export(request):
     writer.writeheader()
     survey_phase = get_phase_by_identifier(discussion, Phases.survey.value)
     thematics = get_survey_ideas(discussion)
-    row_list = list()
+    rows = []
     for thematic in thematics:
         row = {}
         top_key_words = thematic.top_keywords()
@@ -1723,13 +1723,13 @@ def survey_csv_export(request):
                             row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                         row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                         row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                        row_list.append(convert_to_utf8(row))
+                        rows.append(convert_to_utf8(row))
                 else:
                     row[SENTIMENT_ACTOR_NAME] = u''
                     row[SENTIMENT_ACTOR_EMAIL] = u''
                     row[SENTIMENT_CREATION_DATE] = u''
-                    row_list.append(convert_to_utf8(row))
-    return fieldnames, row_list
+                    rows.append(convert_to_utf8(row))
+    return fieldnames, rows
 
 
 def multicolumn_csv_export(request):
@@ -1814,7 +1814,7 @@ def multicolumn_csv_export(request):
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
     ideas = get_multicolumns_ideas(discussion)
-    row_list = list()
+    rows = []
     for idea in ideas:
         row = {}
         top_key_words = idea.top_keywords()
@@ -1859,13 +1859,13 @@ def multicolumn_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                    row_list.append(convert_to_utf8(row))
+                    rows.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
-                row_list.append(convert_to_utf8(row))
-    return fieldnames, row_list
+                rows.append(convert_to_utf8(row))
+    return fieldnames, rows
 
 
 def thread_csv_export(request):
@@ -1957,7 +1957,7 @@ def thread_csv_export(request):
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
     ideas = get_thread_ideas(discussion)
-    row_list = list()
+    rows = []
     for idea in ideas:
         row = {}
         top_key_words = idea.top_keywords()
@@ -2008,13 +2008,13 @@ def thread_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                    row_list.append(convert_to_utf8(row))
+                    rows.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
-                row_list.append(convert_to_utf8(row))
-    return fieldnames, row_list
+                rows.append(convert_to_utf8(row))
+    return fieldnames, rows
 
 
 def bright_mirror_csv_export(request):
@@ -2101,7 +2101,7 @@ def bright_mirror_csv_export(request):
         output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
     writer.writeheader()
     ideas = get_bright_mirror_ideas(discussion)
-    row_list = list()
+    rows = []
     for idea in ideas:
         row = {}
         top_key_words = idea.top_keywords()
@@ -2155,13 +2155,13 @@ def bright_mirror_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                    row_list.append(convert_to_utf8(row))
+                    rows.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
-                row_list.append(convert_to_utf8(row))
-    return fieldnames, row_list
+                rows.append(convert_to_utf8(row))
+    return fieldnames, rows
 
 
 @view_config(context=InstanceContext, name="update_notification_subscriptions",
