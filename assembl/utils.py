@@ -8,28 +8,16 @@ from assembl.models.timeline import Phases
 from assembl.graphql.utils import get_root_thematic_for_phase
 
 
-def filter_with_date(data, start_date=None, end_date=None):
-    """
-    Returns an array of objects(could be ideas or posts) filtered by start and end date.
-    @param: start_date datetime
-    @param: end_date datetime
-    """
-    if start_date is not None and end_date is None:
-        return [i for i in data if i.creation_date >= start_date]
-    elif start_date is None and end_date is not None:
-        return [i for i in data if i.creation_date <= end_date]
-    elif start_date is not None and end_date is not None:
-        return [i for i in data if i.creation_date >= start_date and i.creation_date <= end_date]
-    else:
-        return data
-
-
 def format_date(datetime_to_format):
     return datetime_to_format.strftime('%d/%m/%Y')
 
 
-def get_published_posts(idea):
-    """Get published posts for given idea."""
+def get_published_posts(idea, start=None, end=None):
+    """Get published posts for the given idea filtered by start and end dates.
+    @param: idea Idea
+    @param: start datetime
+    @param: end datetime
+    """
     Post = models.Post
     related = idea.get_related_posts_query(True, include_moderating=False)
     query = Post.query.join(
@@ -38,6 +26,12 @@ def get_published_posts(idea):
         ).order_by(desc(Post.creation_date), Post.id
         ).options(subqueryload(Post.creator),
                   subqueryload(Post.creator, models.AgentProfile.accounts))
+
+    if start is not None:
+        query = query.filter(Post.creation_date >= start)
+
+    if end is not None:
+        query = query.filter(Post.creation_date <= end)
 
     return query
 
@@ -62,20 +56,20 @@ def get_descendants(ideas):
     return descendants
 
 
-def get_multicolumns_ideas(discussion, start_date=None, end_date=None):
-    return filter_with_date(get_ideas_for_export(discussion, MessageView.messageColumns.value), start_date, end_date)
+def get_multicolumns_ideas(discussion):
+    return get_ideas_for_export(discussion, MessageView.messageColumns.value)
 
 
-def get_survey_ideas(discussion, start_date=None, end_date=None):
-    return filter_with_date(get_ideas_for_export(discussion, MessageView.survey.value), start_date, end_date)
+def get_survey_ideas(discussion):
+    return get_ideas_for_export(discussion, MessageView.survey.value)
 
 
-def get_thread_ideas(discussion, start_date=None, end_date=None):
-    return filter_with_date(get_ideas_for_export(discussion, MessageView.thread.value), start_date, end_date)
+def get_thread_ideas(discussion):
+    return get_ideas_for_export(discussion, MessageView.thread.value)
 
 
-def get_bright_mirror_ideas(discussion, start_date=None, end_date=None):
-    return filter_with_date(get_ideas_for_export(discussion, MessageView.brightMirror.value), start_date, end_date)
+def get_bright_mirror_ideas(discussion):
+    return get_ideas_for_export(discussion, MessageView.brightMirror.value)
 
 
 def get_ideas_for_export(discussion, module_type=None):

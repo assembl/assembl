@@ -1600,6 +1600,7 @@ def survey_csv_export(request):
     """CSV export for survey thematics."""
     from assembl.models import Locale, Idea
     from assembl.models.auth import LanguagePreferenceCollection
+    start, end, interval = get_time_series_timing(request)
     has_lang = 'lang' in request.GET
     has_anon = asbool(request.GET.get('anon', False))
     if has_lang:
@@ -1689,7 +1690,7 @@ def survey_csv_export(request):
         row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if len(children) > 1 and children[1].title else ""
         for question in thematic.get_children():
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
-            posts = get_published_posts(question)
+            posts = get_published_posts(question, start, end)
             for post in posts:
                 if has_lang:
                     post.maybe_translate(target_locales=[language])
@@ -1735,6 +1736,7 @@ def survey_csv_export(request):
 def multicolumn_csv_export(request):
     """CSV export for the multicolumn sheet."""
     from assembl.models import Locale, Idea
+    start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
     has_lang = 'lang' in request.GET
     if has_lang:
@@ -1825,7 +1827,7 @@ def multicolumn_csv_export(request):
             row[column_name] = str(key_word)
         row[PARENT_IDEA] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
-        posts = get_published_posts(idea)
+        posts = get_published_posts(idea, start, end)
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
@@ -1871,6 +1873,7 @@ def multicolumn_csv_export(request):
 def thread_csv_export(request):
     """CSV export for phase thread sheet"""
     from assembl.models import Locale, Idea
+    start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
     has_lang = 'lang' in request.GET
     if has_lang:
@@ -1971,7 +1974,7 @@ def thread_csv_export(request):
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if len(children) > 0 and children[0].title else ""
         row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if len(children) > 1 and children[1].title else ""
-        posts = get_published_posts(idea)
+        posts = get_published_posts(idea, start, end)
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
@@ -2020,6 +2023,7 @@ def thread_csv_export(request):
 def bright_mirror_csv_export(request):
     """CSV export for bright mirror sheet."""
     from assembl.models import Locale, Idea
+    start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
     has_lang = 'lang' in request.GET
     if has_lang:
@@ -2113,7 +2117,7 @@ def bright_mirror_csv_export(request):
         row[IDEA_ID] = idea.id
         row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
-        posts = get_published_posts(idea)
+        posts = get_published_posts(idea, start, end)
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
