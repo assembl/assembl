@@ -1578,7 +1578,6 @@ def phase_csv_export(request):
         #         row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if children[1].title else ""
         row[MODULE] = idea.message_view_override
         row[POSTED_MESSAGES_COUNT] = idea.num_posts
-        idea_sentiments = idea.sentiments()
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
             column_name = "Mots clés {}".format(index+1)
@@ -1586,7 +1585,6 @@ def phase_csv_export(request):
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = str(key_word)
 
-        posts = get_published_posts(idea)
         # Not yet implemented
         # row[THEMATIC_SHARE_COUNT] =
 
