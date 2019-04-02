@@ -18,7 +18,6 @@ import manageErrorAndLoading from '../common/manageErrorAndLoading';
 type Props = {
   languages?: Array<Object>,
   exportLink: string | Array<{ msgId: string, url: string }>,
-  exportLocale?: string,
   annotation: string,
   sectionTitle: string,
   phasesPresets: Array<Preset>,
@@ -26,9 +25,9 @@ type Props = {
 };
 
 type State = {
-  exportLink: string,
   shoudTranslate: boolean,
-  exportLocale: string
+  exportLocale: string,
+  shouldBeAnonymous: boolean
 };
 
 export class DumbExportSection extends React.Component<Props, State> {
@@ -37,18 +36,10 @@ export class DumbExportSection extends React.Component<Props, State> {
     sectionTitle: 'defaultSectionTitle'
   };
 
-  static getDerivedStateFromProps(props: Props, state: State) {
-    const exportLink = ''; // TODO: add get function with proper parameters
-    return {
-      ...state,
-      exportLink: typeof exportLink === 'string' ? exportLink : exportLink[0].url
-    };
-  }
-
   state = {
-    exportLink: '',
     exportLocale: '',
-    shouldTranslate: false
+    shouldTranslate: false,
+    shouldBeAnonymous: false
   };
 
   handleExportLinkChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
@@ -59,7 +50,7 @@ export class DumbExportSection extends React.Component<Props, State> {
 
   renderAnonymousOption = () => {
     const toggleAnonymousOption = () => {
-      this.setState(prevState => ({ shouldBeAnonymous: !prevState.isAnonymous }));
+      this.setState(prevState => ({ shouldBeAnonymous: !prevState.shouldBeAnonymous }));
     };
     return (
       <React.Fragment>
@@ -95,8 +86,8 @@ export class DumbExportSection extends React.Component<Props, State> {
   };
 
   renderLanguageOptions = () => {
-    const { languages, exportLocale } = this.props;
-    const { shouldTranslate } = this.state;
+    const { languages } = this.props;
+    const { shouldTranslate, exportLocale } = this.state;
 
     const activeLanguage = languages ? languages.filter(language => language.locale === exportLocale)[0] : null;
 
@@ -153,7 +144,12 @@ export class DumbExportSection extends React.Component<Props, State> {
   };
 
   render() {
-    const { annotation, sectionTitle } = this.props;
+    const { annotation, sectionTitle, languages } = this.props;
+    const { shouldTranslate, shouldBeAnonymous, exportLocale } = this.state;
+    const locale = exportLocale || (languages && languages[0].locale);
+    const translation = shouldTranslate && exportLocale ? `?lang=${exportLocale}` : '?'; // FIXME: using '' instead of '?' does not work
+    const anonymous = translation === '?' ? `anon=${shouldBeAnonymous.toString()}` : `&anon=${shouldBeAnonymous.toString()}`;
+    const exportLink = '';
     return (
       <div className="admin-box admin-export-section">
         <SectionTitle
@@ -172,7 +168,7 @@ export class DumbExportSection extends React.Component<Props, State> {
             </div>
           </FormGroup>
           <div className="center-flex">
-            <Link className="button-link button-dark margin-l" href={this.state.exportLink}>
+            <Link className="button-link button-dark margin-l" href={exportLink}>
               <Translate value="administration.export.link" />
             </Link>
           </div>
