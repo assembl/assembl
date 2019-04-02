@@ -1,128 +1,75 @@
 // @flow
-// TODO: refactor this component into a container and presentation component
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
-import { connect } from 'react-redux';
-import { compose, graphql } from 'react-apollo';
 import moment from 'moment';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
-import { get } from '../../utils/routeMap';
-import DiscussionPreferences from '../../graphql/DiscussionPreferences.graphql';
 
 import SectionTitle from './sectionTitle';
 import CustomDateRangePicker from './dateRangePicker/customDateRangePicker';
 import { datePickerPresets } from '../../constants';
 import { getFullDebatePreset } from '../form/utils';
-import manageErrorAndLoading from '../common/manageErrorAndLoading';
-import { getDiscussionId } from '../../utils/globalFunctions';
 
 type Props = {
-  languages?: Array<Object>,
-  exportLink: string | Array<{ msgId: string, url: string }>,
+  languages: Array<Object>,
+  exportLink: string,
+  exportLocale: string,
+  locale: string,
   annotation: string,
   sectionTitle: string,
-  phasesPresets: Array<Preset>,
-  locale: string
-};
-
-type State = {
-  shoudTranslate: boolean,
-  exportLocale: string,
+  phases: Array<Preset>,
+  handleDatesChange: Function,
+  handleAnonymousChange: Function,
+  handleExportLocaleChange: Function,
   shouldBeAnonymous: boolean,
+  shouldTranslate: boolean,
   start: ?moment,
   end: ?moment
 };
 
-export class DumbExportSection extends React.Component<Props, State> {
-  static defaultProps = {
-    annotation: 'defaultAnnotation',
-    sectionTitle: 'defaultSectionTitle'
-  };
-
-  state = {
-    exportLocale: '',
-    shouldTranslate: false,
-    shouldBeAnonymous: false,
-    start: null,
-    end: null
-  };
-
-  handleExportLinkChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
-    this.setState({
-      exportLink: e.target.value
-    });
-  };
-
-  handleDatesChange = ({ startDate, endDate }: DateRange) => this.setState({ start: startDate, end: endDate });
-
-  renderAnonymousOption = () => {
-    const toggleAnonymousOption = () => {
-      this.setState(prevState => ({ shouldBeAnonymous: !prevState.shouldBeAnonymous }));
-    };
-    return (
+export const ExportSection = ({
+  annotation,
+  sectionTitle,
+  exportLink,
+  exportLocale,
+  handleDatesChange,
+  handleExportLocaleChange,
+  handleShouldTranslate,
+  handleAnonymousChange,
+  shouldBeAnonymous,
+  shouldTranslate,
+  start,
+  end,
+  phases,
+  languages,
+  locale
+}: Props) => {
+  const renderAnonymousOption = () =>
+    (handleAnonymousChange ? (
       <React.Fragment>
         <Translate value="administration.export.anonymity" />
-        <Checkbox onChange={toggleAnonymousOption} value={this.state.shouldBeAnonymous}>
+        <Checkbox onChange={handleAnonymousChange} value={shouldBeAnonymous}>
           <Translate value="administration.export.anonymous" />
         </Checkbox>
       </React.Fragment>
-    );
-  };
+    ) : null);
 
-  renderLinkOptions = () => {
-    const { exportLink } = this.props;
-    if (!Array.isArray(exportLink)) {
-      return null;
-    }
-
-    return (
-      <React.Fragment>
-        {exportLink.map(option => (
-          <Radio
-            key={option.msgId}
-            checked={this.state.exportLink === option.url}
-            name="exportLink"
-            value={option.url}
-            onChange={this.handleExportLinkChange}
-          >
-            <Translate value={`administration.export.${option.msgId}`} />
-          </Radio>
-        ))}
-      </React.Fragment>
-    );
-  };
-
-  renderLanguageOptions = () => {
-    const { languages } = this.props;
-    const { shouldTranslate, exportLocale } = this.state;
-
+  const renderLanguageOptions = () => {
     const activeLanguage = languages ? languages.filter(language => language.locale === exportLocale)[0] : null;
-
-    return (
+    return languages ? (
       <React.Fragment>
         <Translate value="administration.export.translation" />
-        <Radio
-          checked={!shouldTranslate}
-          onChange={() => {
-            this.setState({ shouldTranslate: false });
-          }}
-        >
+        <Radio checked={!shouldTranslate} onChange={() => handleShouldTranslate(false)}>
           <Translate value="administration.export.noExportLanguage" />
         </Radio>
-        <Radio
-          checked={shouldTranslate}
-          onChange={() => {
-            this.setState({ shouldTranslate: true });
-          }}
-        >
+        <Radio checked={shouldTranslate} onChange={() => handleShouldTranslate(true)}>
           <Translate value="administration.export.translateTheMessagesIn" />
           {shouldTranslate && (
             <FormControl
               className="export-language-dropdown"
               componentClass="select"
               onChange={(e) => {
-                this.setState({ exportLocale: e.target.value });
+                handleExportLocaleChange(e.target.value);
               }}
               value={activeLanguage ? activeLanguage.locale : ''}
             >
@@ -136,111 +83,63 @@ export class DumbExportSection extends React.Component<Props, State> {
           )}
         </Radio>
       </React.Fragment>
-    );
+    ) : null;
   };
 
-  renderDatePicker = () => {
-    const { phasesPresets, locale } = this.props;
-    const { start, end } = this.state;
+  const renderDatePicker = () => {
+    if (!phases) {
+      return null;
+    }
+    const phasesPresets = phases
+      ? phases.map((phase, index) => ({
+        id: index + 1,
+        labelTranslationKey: 'administration.export.presets.phase',
+        range: {
+          startDate: moment(phase.start),
+          endDate: moment(phase.end)
+        },
+        type: 'phase'
+      }))
+      : [];
     const fullDebatePreset = phasesPresets && phasesPresets.length > 0 && getFullDebatePreset(phasesPresets);
     const presets = fullDebatePreset ? [...datePickerPresets, ...phasesPresets, fullDebatePreset] : [...datePickerPresets];
     return presets ? (
       <div className="export-date">
         <Translate value="administration.export.exportDate" />
-        <CustomDateRangePicker
-          presets={presets}
-          locale={locale}
-          handleDatesChange={this.handleDatesChange}
-          start={start}
-          end={end}
-        />
+        <CustomDateRangePicker presets={presets} locale={locale} handleDatesChange={handleDatesChange} start={start} end={end} />
       </div>
     ) : null;
   };
 
-  render() {
-    const { annotation, sectionTitle, languages } = this.props;
-    const { shouldTranslate, shouldBeAnonymous, exportLocale, start, end } = this.state;
-    const locale = exportLocale || (languages && languages[0].locale);
-    const translation = shouldTranslate && locale ? `?lang=${locale}` : '';
-    const anonymous = `&anon=${shouldBeAnonymous.toString()}`;
-    const debateId = getDiscussionId();
-    const startDate = start ? start.format('L') : '';
-    const endDate = end ? end.format('L') : '';
-    const exportLink = get(
-      'exportDebateData',
-      { debateId: debateId },
-      { translation: translation, anonymous: anonymous, startDate: startDate, endDate: endDate }
-    );
-    return (
-      <div className="admin-box admin-export-section">
-        <SectionTitle
-          title={I18n.t(`administration.export.${sectionTitle}`)}
-          annotation={I18n.t(`administration.export.${annotation}`)}
-        />
-        <div className="admin-content">
-          <FormGroup>
-            <div className="export-options">
-              <div>
-                {this.renderAnonymousOption()}
-                {this.renderLanguageOptions()}
-                {this.renderLinkOptions()}
-              </div>
-              {this.renderDatePicker()}
+  return (
+    <div className="admin-box admin-export-section">
+      <SectionTitle
+        title={I18n.t(`administration.export.${sectionTitle}`)}
+        annotation={I18n.t(`administration.export.${annotation}`)}
+      />
+      <div className="admin-content">
+        <FormGroup>
+          <div className="export-options">
+            <div>
+              {renderAnonymousOption()}
+              {renderLanguageOptions()}
             </div>
-          </FormGroup>
-          <div className="center-flex">
-            <Link className="button-link button-dark margin-l" href={exportLink}>
-              <Translate value="administration.export.link" />
-            </Link>
+            {renderDatePicker()}
           </div>
+        </FormGroup>
+        <div className="center-flex">
+          <Link className="button-link button-dark margin-l" href={exportLink}>
+            <Translate value="administration.export.link" />
+          </Link>
         </div>
       </div>
-    );
-  }
-}
-
-const mapStateToProps = (state) => {
-  const phases = state.timeline;
-  const phasesPresets = phases
-    ? phases.map((phase, index) => ({
-      id: index + 1,
-      labelTranslationKey: 'administration.export.presets.phase',
-      range: {
-        startDate: moment(phase.start),
-        endDate: moment(phase.end)
-      },
-      type: 'phase'
-    }))
-    : [];
-  return {
-    phasesPresets: phasesPresets,
-    locale: state.i18n.locale
-  };
+    </div>
+  );
 };
 
-export default compose(
-  connect(mapStateToProps),
-  graphql(DiscussionPreferences, {
-    options: ({ locale }) => ({
-      variables: {
-        inLocale: locale
-      }
-    }),
-    props: ({ data }) => {
-      if (data.error || data.loading) {
-        return {
-          error: data.error,
-          loading: data.loading
-        };
-      }
+ExportSection.defaultProps = {
+  annotation: 'defaultAnnotation',
+  sectionTitle: 'defaultSectionTitle'
+};
 
-      return {
-        error: data.error,
-        loading: data.loading,
-        languages: data.discussionPreferences.languages
-      };
-    }
-  }),
-  manageErrorAndLoading({ displayLoader: true })
-)(DumbExportSection);
+export default ExportSection;
