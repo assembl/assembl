@@ -11,8 +11,6 @@ type Props = {
 };
 
 type State = {
-  start: ?moment,
-  end: ?moment,
   focusedInput: ?string,
   selectedPreset: ?Preset
 };
@@ -20,26 +18,22 @@ type State = {
 // A custom DateRangePicker component to use presets
 class CustomDateRangePicker extends React.PureComponent<Props, State> {
   state = {
-    start: null,
-    end: null,
     focusedInput: null,
     // selectedPreset is handled at this level and not in PresetsList
     // so that we keep this info when the DateRangePicker is closed/reopened
     selectedPreset: null
   };
 
-  handleDatesChange = ({ startDate, endDate }: DateRange) => this.setState({ start: startDate, end: endDate });
-
   handleFocusChange = (input: ?string) => this.setState({ focusedInput: input });
 
   handlePresetSelect = (preset: Preset) => {
     this.setState({ selectedPreset: preset });
-    this.handleDatesChange(preset.range);
+    this.props.handleDatesChange(preset.range);
   };
 
   render() {
-    const { start, end, focusedInput, selectedPreset } = this.state;
-    const { presets, locale } = this.props;
+    const { focusedInput, selectedPreset } = this.state;
+    const { presets, locale, handleDatesChange, start, end } = this.props;
     moment.locale(locale); // Required to have the proper date format in the calendar
     return (
       <div className="date-range-picker">
@@ -50,7 +44,7 @@ class CustomDateRangePicker extends React.PureComponent<Props, State> {
           endDateId="endDateInput"
           startDatePlaceholderText={I18n.t('administration.export.startDate')}
           endDatePlaceholderText={I18n.t('administration.export.endDate')}
-          onDatesChange={this.handleDatesChange}
+          onDatesChange={handleDatesChange}
           focusedInput={focusedInput}
           onFocusChange={this.handleFocusChange}
           small

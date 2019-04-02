@@ -29,7 +29,9 @@ type Props = {
 type State = {
   shoudTranslate: boolean,
   exportLocale: string,
-  shouldBeAnonymous: boolean
+  shouldBeAnonymous: boolean,
+  start: ?moment,
+  end: ?moment
 };
 
 export class DumbExportSection extends React.Component<Props, State> {
@@ -41,7 +43,9 @@ export class DumbExportSection extends React.Component<Props, State> {
   state = {
     exportLocale: '',
     shouldTranslate: false,
-    shouldBeAnonymous: false
+    shouldBeAnonymous: false,
+    start: null,
+    end: null
   };
 
   handleExportLinkChange = (e: SyntheticInputEvent<HTMLInputElement>): void => {
@@ -49,6 +53,8 @@ export class DumbExportSection extends React.Component<Props, State> {
       exportLink: e.target.value
     });
   };
+
+  handleDatesChange = ({ startDate, endDate }: DateRange) => this.setState({ start: startDate, end: endDate });
 
   renderAnonymousOption = () => {
     const toggleAnonymousOption = () => {
@@ -135,27 +141,36 @@ export class DumbExportSection extends React.Component<Props, State> {
 
   renderDatePicker = () => {
     const { phasesPresets, locale } = this.props;
+    const { start, end } = this.state;
     const fullDebatePreset = phasesPresets && phasesPresets.length > 0 && getFullDebatePreset(phasesPresets);
     const presets = fullDebatePreset ? [...datePickerPresets, ...phasesPresets, fullDebatePreset] : [...datePickerPresets];
     return presets ? (
       <div className="export-date">
         <Translate value="administration.export.exportDate" />
-        <CustomDateRangePicker presets={presets} locale={locale} />
+        <CustomDateRangePicker
+          presets={presets}
+          locale={locale}
+          handleDatesChange={this.handleDatesChange}
+          start={start}
+          end={end}
+        />
       </div>
     ) : null;
   };
 
   render() {
     const { annotation, sectionTitle, languages } = this.props;
-    const { shouldTranslate, shouldBeAnonymous, exportLocale } = this.state;
+    const { shouldTranslate, shouldBeAnonymous, exportLocale, start, end } = this.state;
     const locale = exportLocale || (languages && languages[0].locale);
     const translation = shouldTranslate && locale ? `?lang=${locale}` : '';
     const anonymous = `&anon=${shouldBeAnonymous.toString()}`;
     const debateId = getDiscussionId();
+    const startDate = start ? start.format('L') : '';
+    const endDate = end ? end.format('L') : '';
     const exportLink = get(
       'exportDebateData',
       { debateId: debateId },
-      { translation: translation, anonymous: anonymous, startDate: '2019-04-01', endDate: '2019-04-02' }
+      { translation: translation, anonymous: anonymous, startDate: startDate, endDate: endDate }
     );
     return (
       <div className="admin-box admin-export-section">
