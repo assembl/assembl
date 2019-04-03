@@ -16,7 +16,7 @@ type Props = {
   sectionTitle: string,
   locale?: string,
   exportLocale?: string,
-  languages?: Array<Object>,
+  languages?: Array<Language>,
   handleDatesChange?: Function,
   handleAnonymousChange?: Function,
   handleExportLocaleChange?: Function,
