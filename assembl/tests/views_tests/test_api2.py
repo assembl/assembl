@@ -1108,7 +1108,7 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.TAG1] == ""
         assert last_row[self.TAG2] == ""
 
-
+"""
 class TestPhase1Export(AbstractExport):
 
     view_name = 'phase1_csv_export'
@@ -1247,7 +1247,7 @@ class TestExtractCsvVoters(AbstractExport):
         assert header[self.PROPOSITION] == b"Proposition"
 
     # TODO: Add more unit tests for votes export API.
-
+"""
 
 def get_resources_html(theme_name="default"):
     return """
