@@ -13,7 +13,7 @@ var _ = require('lodash');
 
 function theme_entries() {
     var entries = {},
-        paths = glob.sync('./css/themes/**/**/*_web.scss'),
+        paths = glob.sync('./css/themes/**/*_web.scss'),
         i, path, parts, name, bucket;
     for (i = 0; i < paths.length; i++) {
         path = paths[i];
