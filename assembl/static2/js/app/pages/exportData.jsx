@@ -62,7 +62,7 @@ class ExportData extends React.Component<Props, State> {
     const exportDataLink = get(
       'exportDebateData',
       { debateId: debateId },
-      { translation: translation, anonymous: anonymous, startDate: startDate, endDate: endDate }
+      { lang: translation, anon: anonymous, start: startDate, end: endDate }
     );
     const exportTaxonomiesLink = get('exportTaxonomiesData', { debateId: debateId });
     return (

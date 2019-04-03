@@ -8,8 +8,8 @@ import PresetsList from './presetsList';
 type Props = {
   presets?: Array<Preset>,
   locale: string,
-  start: ?moment,
-  end: ?moment,
+  start: ?moment$Moment,
+  end: ?moment$Moment,
   handleDatesChange: Function
 };
 

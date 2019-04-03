@@ -23,8 +23,8 @@ type Props = {
   shouldBeAnonymous?: boolean,
   handleShouldTranslate?: Function,
   shouldTranslate?: boolean,
-  start?: ?moment,
-  end?: ?moment,
+  start?: ?moment$Moment,
+  end?: ?moment$Moment,
   phases?: Timeline
 };
 
