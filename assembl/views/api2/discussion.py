@@ -58,7 +58,9 @@ from assembl.auth.util import get_permissions, discussions_with_access
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
 from assembl.utils import format_date, get_published_posts, get_ideas
-from assembl.utils import get_thread_ideas, get_survey_ideas, get_multicolumns_ideas, get_bright_mirror_ideas
+from assembl.utils import (
+    get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
+    get_bright_mirror_ideas, get_vote_session_ideas)
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
@@ -632,12 +634,12 @@ def multi_module_csv_export(request):
     results = {sheet_name: None for sheet_name in sheet_names}
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
     from assembl.views.api2.votes import extract_voters, global_vote_results_csv
-    fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
-    fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(request)
-    fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(request)
-    fieldnames['export_module_multicolumns'], results['export_module_multicolumns'] = multicolumn_csv_export(request)
-    fieldnames['vote_users_data'], results['vote_users_data'] = extract_voters(request)
-    fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
+#    fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
+#    fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(request)
+#    fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(request)
+#    fieldnames['export_module_multicolumns'], results['export_module_multicolumns'] = multicolumn_csv_export(request)
+    fieldnames['vote_users_data'], results['vote_users_data'] = voters_csv_export(request)
+#    fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
     # fieldnames['export_module_vote'], results['export_module_vote'] = global_vote_results_csv(request)
 
     return csv_response_multiple_sheets(results, fieldnames)
@@ -2165,6 +2167,78 @@ def bright_mirror_csv_export(request):
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
                 rows.append(convert_to_utf8(row))
+    return fieldnames, rows
+
+
+def voters_csv_export(request):
+    """CSV export for vote_users_data sheet."""
+    from assembl.views.api2.votes import extract_voters
+    from assembl.models import Locale, Idea
+    start, end, interval = get_time_series_timing(request)
+    has_anon = asbool(request.GET.get('anon', False))
+    # TODO anonymize the export
+    has_lang = 'lang' in request.GET
+    if has_lang:
+        language = request.GET['lang']
+        exists = Locale.get_id_of(language, create=False)
+        if not exists:
+            language = u'fr'
+    else:
+        language = u'fr'
+
+    # This is required so that the langstring methods can operate using correct globals
+    # on the request object
+    LanguagePreferenceCollection.setCurrentFromLocale(language, req=request)
+    user_prefs = LanguagePreferenceCollection.getCurrent()
+    discussion = request.context._instance
+    discussion_id = discussion.id
+    Idea.prepare_counters(discussion_id, True)
+
+    # Ensure additions to the header are reflected in the tests
+    IDEA_ID = u"Numéro de l'idée"
+    IDEA_PARENT = u"Les numéros des parent d'idée"
+    IDEA_NAME = u"Nom de l'idée"
+    fieldnames = [
+#        IDEA_ID.encode('utf-8'),
+        IDEA_PARENT.encode('utf-8'),
+        IDEA_NAME.encode('utf-8'),
+        # TODO idea breadcrumbs instead of IDEA_PARENT IDEA_NAME
+    ]
+    extra_columns_info = (None if 'no_extra_columns' in request.GET else
+                          load_social_columns_info(discussion, language))
+
+    if extra_columns_info:
+        # insert after email
+        fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        column_info_per_user = {}
+        provider_id = get_provider_id_for_discussion(discussion)
+        # TODO fill those extra columns
+
+    ideas = get_vote_session_ideas(discussion)
+    votes_exports = {}
+    for idea in ideas:
+        if not idea.vote_session:
+            continue
+        votes_fieldnames, votes = extract_voters(idea.vote_session)
+        votes_exports[idea.id] = votes
+        for fieldname in votes_fieldnames:
+            if fieldname not in fieldnames:
+                fieldnames.append(fieldname)
+
+    rows = []
+    for idea in ideas:
+        if not idea.vote_session:
+            continue
+        votes = votes_exports.get(idea.id)
+        idea_parent = get_idea_parents_titles(idea, user_prefs)
+        idea_name = get_entries_locale_original(idea.title).get('entry')
+        for vote_row in votes:
+            row = {}
+#            row[IDEA_ID] = idea.id
+            row[IDEA_PARENT] = idea_parent
+            row[IDEA_NAME] = idea_name
+            row.update(vote_row)
+            rows.append(convert_to_utf8(row))
     return fieldnames, rows
 
 

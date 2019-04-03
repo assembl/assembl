@@ -72,6 +72,10 @@ def get_bright_mirror_ideas(discussion):
     return get_ideas_for_export(discussion, MessageView.brightMirror.value)
 
 
+def get_vote_session_ideas(discussion):
+    return get_ideas_for_export(discussion, MessageView.voteSession.value)
+
+
 def get_ideas_for_export(discussion, module_type=None):
     model = models.Idea
     query = model.query

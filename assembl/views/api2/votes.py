@@ -212,19 +212,7 @@ def range_float(minimum, maximum, nb_ticks):
         yield i
 
 
-# @view_config(context=InstanceContext, request_method='GET',
-#              ctx_instance_class=VotingWidget,
-#              name="vote_results_csv", permission=P_DISC_STATS)
-def global_vote_results_csv(request):
-    ctx = request.context
-    user_id = request.authenticated_userid
-    if not user_id:
-        raise HTTPUnauthorized
-    widget = ctx._instance
-    if widget.activity_state != "ended":
-        permissions = get_permissions(user_id, ctx.get_discussion_id())
-        if P_ADMIN_DISC not in permissions:
-            raise HTTPUnauthorized()
+def global_vote_results_csv(widget):
     user_prefs = LanguagePreferenceCollection.getCurrent()
     # first fetch the ideas voted on
     ideas = widget.db.query(Idea
@@ -273,7 +261,7 @@ def global_vote_results_csv(request):
     # include BOM for Excel to open the file in UTF-8 properly
     output.write(u'\ufeff'.encode('utf-8'))
     csvw = csv.writer(output)
-    row_list = []
+    rows = []
     csvw.writerow(coltitles)
     from assembl.graphql.vote_session import get_avg_choice
     for title, idea_id in rowtitles:
@@ -346,24 +334,32 @@ def global_vote_results_csv(request):
                     tombstone_date=None).count()
                 row.append(num_votes)
         csvw.writerow(row)
-        row_list.append(row)
+        rows.append(row)
     output.seek(0)
-    return coltitle, row_list
-    # return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
+    return output, coltitles, rows
 
 
-def extract_voters(request):
-    extract_votes = []
+# url /data/Discussion/${debateId}/widgets/${voteSessionId}/vote_results_csv
+@view_config(context=InstanceContext, request_method='GET',
+              ctx_instance_class=VotingWidget,
+              name="vote_results_csv", permission=P_DISC_STATS)
+def global_vote_results_csv_view(request):
     ctx = request.context
     user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized
     widget = ctx._instance
-    user_id = request.authenticated_userid
-    # if widget.activity_state != "ended":
-    #     permissions = get_permissions(user_id, ctx.get_discussion_id())
-    #     if P_ADMIN_DISC not in permissions:
-    #         raise HTTPUnauthorized()
+    if widget.activity_state != "ended":
+        permissions = get_permissions(user_id, ctx.get_discussion_id())
+        if P_ADMIN_DISC not in permissions:
+            raise HTTPUnauthorized()
+
+    output, coltitles, rows = global_vote_results_csv(widget)
+    return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
+
+
+def extract_voters(widget):  # widget is the vote session
+    extract_votes = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
     votes = widget.db.query(AbstractIdeaVote
@@ -371,25 +367,37 @@ def extract_voters(request):
         ).filter(AbstractIdeaVote.tombstone_date==None
         ).order_by(AbstractIdeaVote.vote_spec_id.desc()
         ).all()
+    voters_by_id = {}
+    proposition_by_id = {}
     for count, vote in enumerate(votes):
-        voter = vote.voter
-        contributor = voter.real_name() or u""
-        contributor_username = voter.username_p or u""
-        contributor_mail = voter.get_preferred_email() or u""
+        extract_info = {}
+        voter_info = voters_by_id.get(vote.voter_id, None)
+        if voter_info is None:
+            voter = User.get(vote.voter_id)
+            contributor = voter.real_name() or u""
+            contributor_username = voter.username_p or u""
+            contributor_mail = voter.get_preferred_email() or u""
+            voter_info = {
+                "Nom du contributeur": contributor.encode('utf-8'),
+                "Nom d'utilisateur du contributeur": contributor_username.encode('utf-8'),
+                "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
+            }
+            voters_by_id[vote.voter_id] = voter_info
+
+        extract_info.update(voter_info)
         vote_date = vote.vote_date or u""
-        proposition = Idea.get(vote.idea_id).title.best_lang(user_prefs).value or u""
+        proposition = proposition_by_id.get(vote.idea_id, None)
+        if proposition is None:
+            proposition = Idea.get(vote.idea_id).title.best_lang(user_prefs).value or u""
+            proposition_by_id[vote.idea_id] = proposition.encode('utf-8')
+
+        extract_info["Proposition"] = proposition
         vote_value = vote.vote_value
 
         if votes[count].vote_spec_id != votes[count-1].vote_spec_id and fieldnames[-1] != "  ":
             fieldnames.append("  ")
 
-        extract_info = {
-            "Nom du contributeur": contributor.encode('utf-8'),
-            "Nom d'utilisateur du contributeur": contributor_username.encode('utf-8'),
-            "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
-            "Date/heure du vote": str(vote_date),
-            "Proposition": proposition.encode('utf-8'),
-        }
+        extract_info["Date/heure du vote"] = str(vote_date)
 
         if vote.type == u'token_idea_vote':
             token_category = vote.token_category.name.best_lang(user_prefs).value or u""
@@ -417,3 +425,23 @@ def extract_voters(request):
             extract_votes.append(extract_info)
     extract_votes.sort(key=operator.itemgetter('Nom du contributeur'))
     return fieldnames, extract_votes
+
+
+# url /data/Discussion/${debateId}/widgets/${voteSessionId}/extract_csv_voters
+@view_config(context=InstanceContext, name="extract_csv_voters",
+             ctx_instance_class=VotingWidget, request_method='GET',
+             permission=P_DISC_STATS)
+def extract_voters_view(request):
+    ctx = request.context
+    user_id = request.authenticated_userid
+    if not user_id:
+        raise HTTPUnauthorized
+    widget = ctx._instance
+    user_id = request.authenticated_userid
+    if widget.activity_state != "ended":
+        permissions = get_permissions(user_id, ctx.get_discussion_id())
+        if P_ADMIN_DISC not in permissions:
+            raise HTTPUnauthorized()
+
+    fieldnames, extract_votes = extract_voters(widget)
+    return csv_response(extract_votes, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="detailed_vote_results.csv"')
