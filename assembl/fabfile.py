@@ -1338,8 +1338,7 @@ def is_integration_env():
     # Centralize checking whether in CI/CD env
     # Travis (https://docs.travis-ci.com/user/environment-variables/)
     # Gitlab (https://docs.gitlab.com/ee/ci/variables/)
-    if getenv('CI', None):
-        return True
+    return getenv('CI', False)
 
 
 @task

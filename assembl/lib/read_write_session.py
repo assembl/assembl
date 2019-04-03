@@ -39,7 +39,7 @@ class ReadWriteSession(orm.Session):
 def readonly(session):
     was_readonly = session.readonly
     try:
-        session.set_readonly(True)
+        session.set_readonly()
         yield session
     finally:
         session.set_readonly(was_readonly)
