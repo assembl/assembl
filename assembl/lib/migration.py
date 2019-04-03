@@ -13,7 +13,7 @@ from alembic.script import ScriptDirectory
 import transaction
 
 from ..lib.sqla import (
-    get_metadata, get_session_maker, mark_changed, is_zopish)
+    get_metadata, get_session_maker, mark_changed)
 from ..lib import config
 
 
@@ -32,7 +32,6 @@ def locked_transaction(db, num):
     cnx = db.session_factory.kw['bind'].connect()
     cnx.execute("select pg_advisory_lock(%d)" % num).first()
     try:
-        session = db()
         with transaction.manager:
             session = db()
             yield session
