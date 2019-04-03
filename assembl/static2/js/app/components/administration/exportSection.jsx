@@ -14,18 +14,18 @@ type Props = {
   exportLink: string,
   annotation: string,
   sectionTitle: string,
-  locale?: string,
-  exportLocale?: string,
+  locale?: ?string,
+  exportLocale?: ?string,
   languages?: Array<Language>,
-  handleDatesChange?: Function,
-  handleAnonymousChange?: Function,
-  handleExportLocaleChange?: Function,
+  handleDatesChange?: ?Function,
+  handleAnonymousChange?: ?Function,
+  handleExportLocaleChange?: ?Function,
   shouldBeAnonymous?: boolean,
-  handleShouldTranslate?: Function,
-  shouldTranslate?: boolean,
+  handleShouldTranslate?: ?Function,
+  shouldTranslate?: ?boolean,
   start?: ?moment$Moment,
   end?: ?moment$Moment,
-  phases?: Timeline
+  phases?: ?Timeline
 };
 
 export const ExportSection = ({
@@ -143,7 +143,19 @@ export const ExportSection = ({
 
 ExportSection.defaultProps = {
   annotation: 'defaultAnnotation',
-  sectionTitle: 'defaultSectionTitle'
+  sectionTitle: 'defaultSectionTitle',
+  locale: null,
+  exportLocale: null,
+  languages: [],
+  handleDatesChange: null,
+  handleAnonymousChange: null,
+  handleExportLocaleChange: null,
+  handleShouldTranslate: null,
+  shouldBeAnonymous: false,
+  shouldTranslate: false,
+  start: null,
+  end: null,
+  phases: []
 };
 
 export default ExportSection;
