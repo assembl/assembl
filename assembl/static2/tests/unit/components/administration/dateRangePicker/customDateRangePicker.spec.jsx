@@ -32,7 +32,11 @@ describe('getFullDebatePreset function', () => {
 });
 
 const dateRangePickerProps = {
-  presets: [...mockPhasesPresets, fullDebatePreset, ...datePickerPresets]
+  presets: [...mockPhasesPresets, fullDebatePreset, ...datePickerPresets],
+  handleDatesChange: jest.fn(() => {}),
+  locale: 'fr',
+  start: null,
+  end: null
 };
 
 describe('<CustomDateRangePicker />', () => {
