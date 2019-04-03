@@ -389,7 +389,7 @@ def extract_voters(widget):  # widget is the vote session
         proposition = proposition_by_id.get(vote.idea_id, None)
         if proposition is None:
             proposition = Idea.get(vote.idea_id).title.best_lang(user_prefs).value or u""
-            proposition = = proposition.encode('utf-8')
+            proposition = proposition.encode('utf-8')
             proposition_by_id[vote.idea_id] = proposition
 
         extract_info["Proposition"] = proposition
