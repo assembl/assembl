@@ -263,7 +263,7 @@ def install_node_and_yarn(c):
     be used in the CI/CD context.
 
     This is different than updating node inside of a virtual environment, and nodeenv is not used. However,
-    the node version's MUST be mactching.
+    the node version's MUST be matching.
     """
     node_version = c.config.get('node_version', '10.13.0')
     node_major_version = node_version.split('.')[0]
@@ -279,7 +279,7 @@ def install_node_and_yarn(c):
 @task()
 def install_chrome_dependencies(c):
     """
-    Installs the requirements for chrome + pupeteer to be run. Assumes to be run on Debian based machines
+    Install the requirements for chrome + puppeteer to be run. Assume to be run on Debian based machines
     """
     # assumes apt up-to-date from previously.
     deps = ['gconf-service', 'libasound2', 'libatk1.0-0', 'libc6', 'libcairo2', 'libcups2', 'libdbus-1-3', 'libexpat1',

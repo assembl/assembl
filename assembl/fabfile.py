@@ -51,6 +51,7 @@ from fabric.context_managers import shell_env
 # logger.setLevel(logging.DEBUG)
 
 
+AMAZON_METADATA_URL = "http://169.254.169.254/latest/meta-data"
 DEFAULT_SECTION = "DEFAULT"
 _local_file = __file__
 if _local_file.endswith('.pyc'):
@@ -1612,7 +1613,7 @@ def get_s3_file(bucket, key, destination=None):
 def get_aws_localrc():
     assert running_locally()
     import requests
-    r = requests.get('http://169.254.169.254/latest/meta-data/iam/info')
+    r = requests.get(AMAZON_METADATA_URL + '/iam/info')
     assert r.ok
     account = r.json()['InstanceProfileArn'].split(':')[4]
     # This introduces a convention: local.rc files
@@ -1640,7 +1641,7 @@ def get_aws_localrc():
 def setup_aws_default_region():
     assert running_locally()
     import requests
-    r = requests.get('http://169.254.169.254/latest/meta-data/placement/availability-zone')
+    r = requests.get(AMAZON_METADATA_URL + '/placement/availability-zone')
     assert r.ok
     region = r.content[:-1]
     run('aws configure set region ' + region)
@@ -1651,7 +1652,7 @@ def aws_instance_startup():
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not env.projectpath:
         # Assumption: Started from project directory
-        env.projectpath = os.cwd()
+        env.projectpath = os.getcwd()
     setup_aws_default_region()
     get_aws_localrc()
     if not exists(env.projectpath + "/local.rc"):
@@ -1740,7 +1741,7 @@ def webservers_start():
         # Nginx
         if exists('/etc/init.d/nginx'):
             # Have to ensure that the env.user has visudo rights to call this
-            run('/etc/init.d/nginx start')
+            sudo('/etc/init.d/nginx start')
         elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
             sudo('/usr/local/nginx/sbin/nginx')
 
