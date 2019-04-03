@@ -1508,6 +1508,43 @@ def get_entries_locale_original(lang_string):
     }
 
 
+IDEA_ID = u"Numéro de l'idée"
+THEMATIC_NAME = u"Thématique parent"
+IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1"
+IDEA_CHILD_LEVEL_2 = u"Thématique enfant niveau 2"
+IDEA_NAME = u"Nom de la thématique"
+IDEA_PARENT = u"Thématique parent"
+QUESTION_TITLE = u"Question"
+POST_SUBJECT = u"Sujet"
+POST_BODY = u"Message"
+WORD_COUNT = u"Nombre de mots"
+POST_CREATOR_NAME = u"Nom de l'auteur"
+POST_CREATOR_USERNAME = u"Nom d'utilisateur de l'auteur"
+POST_CREATOR_EMAIL = u"Adresse mail de l'auteur"
+POST_CREATION_DATE = u"Date de publication"
+POST_LIKE_COUNT = u"J'aime"
+POST_DISAGREE_COUNT = u"J'aime pas"
+POST_DONT_UNDERSTAND_COUNT = u"Pas tout compris"
+POST_MORE_INFO_PLEASE_COUNT = u"SVP + d'infos"
+SENTIMENT_ACTOR_NAME = u"Nom du votant"
+SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
+SENTIMENT_CREATION_DATE = u"Date/heure du vote"
+SHARE_COUNT = u"Nombre de share"
+MESSAGE_URL = u"URL du message"
+WATSON_SENTIMENT = u"Sentiment (analyse Watson)"
+POST_CLASSIFIER = u"Nom de la colonne"
+
+MESSAGE_INDENTATION = "Indentation du message"
+TOP_POST_TITLE = "Titre du top post"
+TOP_POST = "Top post"
+TOP_POST_WORD_COUNT = "Nombre de mots top post"
+POST_BODY_COUNT = u"Nombre de mots du post"
+NUMBER_OF_ANSWERS = u"Nombre de réponses"
+
+MESSAGE_COUNT = u"Nombre de message (débat)"
+HARVESTING_COUNT = u"Nombre d'attrapages"
+FICTION_URL = u"URL de la fiction"
+
 def phase_csv_export(request):
     """
     This is the first sheet of the multi-module export.
@@ -1533,57 +1570,49 @@ def phase_csv_export(request):
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
 
-    THEMATIC_NAME = u"Thématique parent".encode('utf-8')
-    IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1".encode('utf-8')
-    IDEA_CHILD_LEVEL_2 = u"Thématique enfant niveau 2".encode('utf-8')
-    MODULE = u"Module".encode('utf-8')
-    POSTED_MESSAGES_COUNT = u"Nombre de messages postés".encode('utf-8')
-    DELETED_MESSAGES_COUNT = u"Nombre de messages supprimés".encode('utf-8')
-    TOP_POST_COUNT = u"Nombre de Top post".encode('utf-8')
-    NON_TOP_POST_COUNT = u"Nombre de messages (non top post)".encode('utf-8')
-    LIKE = u"J'aime".encode('utf-8')
-    DONT_LIKE = u"J'aime pas".encode('utf-8')
-    DONT_UNDERSTAND = u"Pas tout compris".encode('utf-8')
-    MORE_INFO = u"SVP + dinfos".encode('utf-8')
-    THEMATIC_SHARE_COUNT = u"Nombre de share de la thématique".encode('utf-8')
-    MESSAGE_SHARE_COUNT = u"Nombre de share de message".encode('utf-8')
-    WATSON_SENTIMENT = u"Sentiment (analyse Watson)".encode('utf-8')
+    MODULE = u"Module"
+    POSTED_MESSAGES_COUNT = u"Nombre de messages postés"
+    DELETED_MESSAGES_COUNT = u"Nombre de messages supprimés"
+    TOP_POST_COUNT = u"Nombre de Top post"
+    NON_TOP_POST_COUNT = u"Nombre de messages (non top post)"
+    LIKE = u"J'aime"
+    DONT_LIKE = u"J'aime pas"
+    DONT_UNDERSTAND = u"Pas tout compris"
+    MORE_INFO = u"SVP + d'infos"
+    THEMATIC_SHARE_COUNT = u"Nombre de share de la thématique"
+    MESSAGE_SHARE_COUNT = u"Nombre de share de message"
     fieldnames = [
-        THEMATIC_NAME,
-        IDEA_CHILD_LEVEL_1,
-        IDEA_CHILD_LEVEL_2,
-        MODULE,
-        POSTED_MESSAGES_COUNT,
-        DELETED_MESSAGES_COUNT,
-        TOP_POST_COUNT, # In the case of a thread
-        NON_TOP_POST_COUNT,
-        LIKE,
-        DONT_LIKE,
-        DONT_UNDERSTAND,
-        MORE_INFO,
-        THEMATIC_SHARE_COUNT,
-        MESSAGE_SHARE_COUNT,
-        WATSON_SENTIMENT
+        THEMATIC_NAME.encode('utf-8'),  # TODO rewrite this
+        IDEA_CHILD_LEVEL_1.encode('utf-8'),  # TODO rewrite this
+        IDEA_CHILD_LEVEL_2.encode('utf-8'),  # TODO rewrite this
+        MODULE.encode('utf-8'),
+        POSTED_MESSAGES_COUNT.encode('utf-8'),
+        DELETED_MESSAGES_COUNT.encode('utf-8'),  # TODO
+        TOP_POST_COUNT.encode('utf-8'),  # TODO In the case of a thread
+        NON_TOP_POST_COUNT.encode('utf-8'),  # TODO
+        LIKE.encode('utf-8'),
+        DONT_LIKE.encode('utf-8'),
+        DONT_UNDERSTAND.encode('utf-8'),
+        MORE_INFO.encode('utf-8'),
+        THEMATIC_SHARE_COUNT.encode('utf-8'),  # TODO
+        MESSAGE_SHARE_COUNT.encode('utf-8'),  # TODO
+        WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
     ideas = get_ideas_for_export(discussion)
     rows = []
     for idea in ideas:
         row = {}
         row[THEMATIC_NAME] = get_entries_locale_original(idea.title).get('entry')
-        children = idea.get_children()
         row[IDEA_CHILD_LEVEL_1] = ""
         row[IDEA_CHILD_LEVEL_2] = ""
         row[MODULE] = idea.message_view_override
         row[POSTED_MESSAGES_COUNT] = idea.num_posts
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index+1)
+            column_name = "Mots clés {}".format(index + 1)
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
-            row[column_name] = str(key_word)
-
-        # Not yet implemented
-        # row[THEMATIC_SHARE_COUNT] =
+            row[column_name] = key_word.encode('utf-8')
 
         row[LIKE] = idea.get_total_sentiments("like")
         row[DONT_LIKE] = idea.get_total_sentiments("dont_like")
@@ -1596,10 +1625,9 @@ def phase_csv_export(request):
 def survey_csv_export(request):
     """CSV export for survey thematics."""
     from assembl.models import Locale, Idea
-    from assembl.models.auth import LanguagePreferenceCollection
     start, end, interval = get_time_series_timing(request)
-    has_lang = 'lang' in request.GET
     has_anon = asbool(request.GET.get('anon', False))
+    has_lang = 'lang' in request.GET
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -1616,29 +1644,10 @@ def survey_csv_export(request):
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
 
-    # Ensure additions to the header are reflected in the tests
-    THEMATIC_NAME = u"Thématique parent"
-    IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1"
-    IDEA_CHILD_LEVEL_2 = u"Thématique enfant niveau 2"
-    QUESTION_TITLE = u"Question"
     POST_BODY = u"Réponse"
-    WORD_COUNT = u"Nombre de mots"
-    POST_CREATOR_NAME = u"Nom de l'auteur"
-    POST_CREATOR_USERNAME = u"Nom d'utilisateur de l'auteur"
-    POST_CREATOR_EMAIL = u"Adresse mail de l'auteur"
-    POST_CREATION_DATE = u"Date de publication"
-    POST_LIKE_COUNT = u"J'aime (nombre total)"
-    POST_DISAGREE_COUNT = u"J'aime pas (nombre total)"
-    SENTIMENT_ACTOR_NAME = u"Nom du votant"
-    SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
-    SENTIMENT_CREATION_DATE = u"Date/heure du vote"
-    SHARE_COUNT = u"Nombre de share"
-    MESSAGE_URL = u"URL du message"
-    WATSON_SENTIMENT = u"Sentiment (analyse Watson)"
     fieldnames = [
+        # TODO idea breadcrumbs
         THEMATIC_NAME.encode('utf-8'),
-        IDEA_CHILD_LEVEL_1.encode('utf-8'),
-        IDEA_CHILD_LEVEL_2.encode('utf-8'),
         QUESTION_TITLE.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         WORD_COUNT.encode('utf-8'),
@@ -1650,35 +1659,34 @@ def survey_csv_export(request):
         POST_DISAGREE_COUNT.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
+        # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
-        SHARE_COUNT.encode('utf-8'),
-        MESSAGE_URL.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')
+        SHARE_COUNT.encode('utf-8'),  # TODO
+        MESSAGE_URL.encode('utf-8'),  # TODO
+        WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
 
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
     if extra_columns_info:
         # insert after email
-        fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        # TODO change the position after rewriting the first columns
+        fieldnames[7:7] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
-    survey_phase = get_phase_by_identifier(discussion, Phases.survey.value)
     thematics = get_survey_ideas(discussion)
     rows = []
     for thematic in thematics:
         row = {}
         top_key_words = thematic.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index+1)
+            column_name = "Mots clés {}".format(index + 1)
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
-            row[column_name] = str(key_word)
+            row[column_name] = key_word.encode('utf-8')
+
         row[THEMATIC_NAME] = get_entries_locale_original(thematic.title).get('entry')
-        children = thematic.get_children()
-        row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if len(children) > 0 and children[0].title else ""
-        row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if len(children) > 1 and children[1].title else ""
         for question in thematic.get_children():
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
             posts = get_published_posts(question, start, end)
@@ -1686,9 +1694,9 @@ def survey_csv_export(request):
                 if has_lang:
                     post.maybe_translate(target_locales=[language])
 
-                post_entries = get_entries_locale_original(post.body)
-                row[POST_BODY] = sanitize_text(post_entries.get('entry'))
-                row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else 0
+                body = get_entries_locale_original(post.body)
+                row[POST_BODY] = sanitize_text(body.get('entry'))
+                row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
                 if not has_anon:
                     row[POST_CREATOR_NAME] = post.creator.real_name()
                     row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
@@ -1746,33 +1754,11 @@ def multicolumn_csv_export(request):
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
 
-    # Ensure additions to the header are reflected in the tests
-    PARENT_IDEA = u"Thématique parent"
-    IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1"
-    IDEA_CHILD_LEVEL_2 = u"Thématique enfant niveau 2"
-    IDEA_NAME = u"Nom de l'idée"
-    POST_CLASSIFIER = u"Nom de la colonne"
-    POST_BODY = u"Message"
-    WORD_COUNT = u"Nombre de mots"
-    POST_CREATOR_NAME = u"Nom de l'auteur"
-    POST_CREATOR_USERNAME = u"Nom d'utilisateur de l'auteur"
-    POST_CREATOR_EMAIL = u"Adresse mail de l'auteur"
-    POST_CREATION_DATE = u"Date de publication"
-    POST_LIKE_COUNT = u"J'aime"
-    POST_DISAGREE_COUNT = u"J'aime pas"
-    POST_DONT_UNDERSTAND_COUNT = u"Pas tout compris"
-    POST_MORE_INFO_PLEASE_COUNT = u"SVP + d'infos"
-    SENTIMENT_ACTOR_NAME = u"Nom du votant"
-    SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
-    SENTIMENT_CREATION_DATE = u"Date de vote"
-    SHARE_COUNT = u"Nombre de share"
-    MESSAGE_URL = u"URL du message"
-    WATSON_SENTIMENT = u"Sentiment (analyse Watson)"
     fieldnames = [
-        PARENT_IDEA.encode('utf-8'),
-        IDEA_CHILD_LEVEL_1.encode('utf-8'),
-        IDEA_CHILD_LEVEL_2.encode('utf-8'),
-        IDEA_NAME.encode('utf-8'),
+        IDEA_PARENT.encode('utf-8'),  # TODO rewrite this
+        IDEA_CHILD_LEVEL_1.encode('utf-8'),  # TODO rewrite this
+        IDEA_CHILD_LEVEL_2.encode('utf-8'),  # TODO rewrite this
+        IDEA_NAME.encode('utf-8'),  # TODO rewrite this
         POST_CLASSIFIER.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         WORD_COUNT.encode('utf-8'),
@@ -1786,16 +1772,18 @@ def multicolumn_csv_export(request):
         POST_MORE_INFO_PLEASE_COUNT.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
+        # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
-        SHARE_COUNT.encode('utf-8'),
-        MESSAGE_URL.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8'),
+        SHARE_COUNT.encode('utf-8'),  # TODO
+        MESSAGE_URL.encode('utf-8'),  # TODO
+        WATSON_SENTIMENT.encode('utf-8'),  # TODO
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
 
     if extra_columns_info:
         # insert after email
+        # TODO change the position after rewriting the first columns
         fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
@@ -1806,11 +1794,12 @@ def multicolumn_csv_export(request):
         row = {}
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index+1)
+            column_name = "Mots clés {}".format(index + 1)
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
-            row[column_name] = str(key_word)
-        row[PARENT_IDEA] = get_idea_parents_titles(idea, user_prefs)
+            row[column_name] = key_word.encode('utf-8')
+
+        row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         posts = get_published_posts(idea, start, end)
         for post in posts:
@@ -1819,6 +1808,8 @@ def multicolumn_csv_export(request):
 
             body = get_entries_locale_original(post.body)
             row[POST_BODY] = sanitize_text(body.get('entry'))
+            row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
+            # TODO should column title instead of message_classifier
             row[POST_CLASSIFIER] = post.message_classifier if post.message_classifier else ""
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
@@ -1877,41 +1868,15 @@ def thread_csv_export(request):
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
 
-    # Ensure additions to the header are reflected in the
-    IDEA_NAME = u"Nom de la thématique"
-    IDEA_PARENT = u"Thématique parent"
-    IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1"
-    IDEA_CHILD_LEVEL_2 = u"Thématique enfant niveau 2"
-    MESSAGE_INDENTATION = "Indentation du message"
-    TOP_POST_TITLE = "Titre du top post"
-    TOP_POST = "Top post"
-    TOP_POST_WORD_COUNT = "Nombre de mots top post"
-    POST_SUBJECT = u"Sujet"
-    POST_BODY = u"Post"
-    POST_BODY_COUNT = u"Nombre de mots du post"
-    POST_CREATOR_NAME = u"Nom du contributeur"
-    POST_CREATOR_USERNAME = u"Nom d'utilisateur du contributeur"
-    POST_CREATOR_EMAIL = u"Adresse mail du contributeur"
-    POST_CREATION_DATE = u"Date/heure du post"
-    NUMBER_OF_ANSWERS = u"Nombre de réponses"
-    POST_LIKE_COUNT = u"Nombre de \"J'aime\""
-    POST_DISAGREE_COUNT = u"Nombre de \"En désaccord\""
-    POST_DONT_UNDERSTAND_COUNT = u"Pas tout compris"
-    POST_MORE_INFO_PLEASE_COUNT = u"SVP + d'infos"
-    SENTIMENT_ACTOR_NAME = u"Nom du votant"
-    SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
-    SENTIMENT_CREATION_DATE = u"Date/heure du vote"
-    MESSAGE_URL = u"URL du message"
-    WATSON_SENTIMENT = u"Sentiment (analyse Watson)"
     fieldnames = [
-        IDEA_NAME.encode('utf-8'),
-        IDEA_PARENT.encode('utf-8'),
-        IDEA_CHILD_LEVEL_1.encode('utf-8'),
-        IDEA_CHILD_LEVEL_2.encode('utf-8'),
-        MESSAGE_INDENTATION.encode('utf-8'),
-        TOP_POST_TITLE.encode('utf-8'),
-        TOP_POST.encode('utf-8'),
-        TOP_POST_WORD_COUNT.encode('utf-8'),
+        IDEA_NAME.encode('utf-8'),  # TODO rewrite this
+        IDEA_PARENT.encode('utf-8'),  # TODO rewrite this
+        IDEA_CHILD_LEVEL_1.encode('utf-8'),  # TODO rewrite this
+        IDEA_CHILD_LEVEL_2.encode('utf-8'),  # TODO rewrite this
+        MESSAGE_INDENTATION.encode('utf-8'),  # TODO
+        TOP_POST_TITLE.encode('utf-8'),  # TODO
+        TOP_POST.encode('utf-8'),  # TODO
+        TOP_POST_WORD_COUNT.encode('utf-8'),  # TODO
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         POST_BODY_COUNT.encode('utf-8'),
@@ -1919,22 +1884,25 @@ def thread_csv_export(request):
         POST_DISAGREE_COUNT.encode('utf-8'),
         POST_DONT_UNDERSTAND_COUNT.encode('utf-8'),
         POST_MORE_INFO_PLEASE_COUNT.encode('utf-8'),
-        NUMBER_OF_ANSWERS.encode('utf-8'),
+        NUMBER_OF_ANSWERS.encode('utf-8'),  # TODO
         POST_CREATOR_NAME.encode('utf-8'),
         POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
+        # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
-        MESSAGE_URL.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')
+        SHARE_COUNT.encode('utf-8'),  # TODO
+        MESSAGE_URL.encode('utf-8'),  # TODO
+        WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
 
     if extra_columns_info:
         # insert after email
+        # TODO change the position after rewriting the first columns
         fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
@@ -1945,10 +1913,11 @@ def thread_csv_export(request):
         row = {}
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index+1)
+            column_name = "Mots clés {}".format(index + 1)
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
-            row[column_name] = str(key_word)
+            row[column_name] = key_word.encode('utf-8')
+
         children = idea.get_children()
         row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
@@ -1963,6 +1932,7 @@ def thread_csv_export(request):
             body = get_entries_locale_original(post.body)
             row[POST_SUBJECT] = subject.get('entry')
             row[POST_BODY] = sanitize_text(body.get('entry'))
+            row[POST_BODY_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
                 row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
@@ -2022,33 +1992,12 @@ def bright_mirror_csv_export(request):
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
 
-    # Ensure additions to the header are reflected in the tests
-    IDEA_ID = u"Numéro de l'idée"
-    IDEA_PARENT = u"Les numéros des parent d'idée"
-    IDEA_NAME = u"Nom de l'idée"
     POST_SUBJECT = u"Titre de la fiction"
     POST_BODY = u"Fiction"
-    WORD_COUNT = u"Nombre de mots"
-    POST_CREATOR_NAME = u"Nom du contributeur"
-    POST_CREATOR_USERNAME = u"Nom d'utilisateur du contributeur"
-    POST_CREATOR_EMAIL = u"Adresse mail du contributeur"
-    POST_CREATION_DATE = u"Date/heure du post"
-    MESSAGE_COUNT = u"Nombre de message (débat)"
-    HARVESTING_COUNT = u"Nombre d'attrapages"
-    POST_LIKE_COUNT = u"\"J'aime\""
-    POST_DISAGREE_COUNT = u"Nombre de \"En désaccord\""
-    POST_DONT_UNDERSTAND_COUNT = u" Pas tout compris"
-    POST_MORE_INFO_PLEASE_COUNT = u"SVP plus d'infos"
-    SENTIMENT_ACTOR_NAME = u"Nom du votant"
-    SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
-    SENTIMENT_CREATION_DATE = u"Date/heure du vote"
-    NUMBER_OF_SHARES = u"Nombre de share"
-    FICTION_URL = u"URL de la fiction"
-    WATSON_SENTIMENT = u"Sentiment (analyse Watson)"
     fieldnames = [
-        IDEA_ID.encode('utf-8'),
-        IDEA_PARENT.encode('utf-8'),
-        IDEA_NAME.encode('utf-8'),
+        IDEA_ID.encode('utf-8'),  # TODO rewrite this
+        IDEA_PARENT.encode('utf-8'),  # TODO rewrite this
+        IDEA_NAME.encode('utf-8'),  # TODO rewrite this
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         WORD_COUNT.encode('utf-8'),
@@ -2056,24 +2005,26 @@ def bright_mirror_csv_export(request):
         POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
-        MESSAGE_COUNT.encode('utf-8'),
-        HARVESTING_COUNT.encode('utf-8'),
+        MESSAGE_COUNT.encode('utf-8'),  # TODO
+        HARVESTING_COUNT.encode('utf-8'),  # TODO
         POST_LIKE_COUNT.encode('utf-8'),
         POST_DISAGREE_COUNT.encode('utf-8'),
         POST_DONT_UNDERSTAND_COUNT.encode('utf-8'),
         POST_MORE_INFO_PLEASE_COUNT.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
+        # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
-        NUMBER_OF_SHARES.encode('utf-8'),
-        FICTION_URL.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')
+        SHARE_COUNT.encode('utf-8'),  # TODO
+        FICTION_URL.encode('utf-8'),  # TODO
+        WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
 
     if extra_columns_info:
         # insert after email
+        # TODO change the position after rewriting the first columns
         fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
@@ -2084,10 +2035,11 @@ def bright_mirror_csv_export(request):
         row = {}
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index+1)
+            column_name = "Mots clés {}".format(index + 1)
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
-            row[column_name] = str(key_word)
+            row[column_name] = key_word.encode('utf-8')
+
         row[IDEA_ID] = idea.id
         row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
@@ -2100,7 +2052,7 @@ def bright_mirror_csv_export(request):
             body = get_entries_locale_original(post.body)
             row[POST_SUBJECT] = subject.get('entry')
             row[POST_BODY] = sanitize_text(body.get('entry'))
-            row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else 0
+            row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
                 row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
@@ -2120,10 +2072,8 @@ def bright_mirror_csv_export(request):
                 extra_info = column_info_per_user[post.creator_id]
                 for num, (name, path) in enumerate(extra_columns_info):
                     row[name] = extra_info[num]
-            if not post.shares:
-                row[NUMBER_OF_SHARES] = u''
-            else:
-                row[NUMBER_OF_SHARES] = str(post.get_number_of_shares)
+
+            row[SHARE_COUNT] = str(post.get_number_of_shares())
 
             if post.sentiments:
                 for sentiment in post.sentiments:
@@ -2166,10 +2116,6 @@ def voters_csv_export(request):
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
 
-    # Ensure additions to the header are reflected in the tests
-    IDEA_ID = u"Numéro de l'idée"
-    IDEA_PARENT = u"Les numéros des parent d'idée"
-    IDEA_NAME = u"Nom de l'idée"
     fieldnames = [
 #        IDEA_ID.encode('utf-8'),
         IDEA_PARENT.encode('utf-8'),
@@ -2181,6 +2127,7 @@ def voters_csv_export(request):
 
     if extra_columns_info:
         # insert after email
+        # TODO change the position after rewriting the first columns
         fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
