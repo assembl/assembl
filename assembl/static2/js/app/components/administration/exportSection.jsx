@@ -11,20 +11,21 @@ import { datePickerPresets } from '../../constants';
 import { getFullDebatePreset } from '../form/utils';
 
 type Props = {
-  languages: Array<Object>,
   exportLink: string,
-  exportLocale: string,
-  locale: string,
   annotation: string,
   sectionTitle: string,
-  phases: Array<Preset>,
-  handleDatesChange: Function,
-  handleAnonymousChange: Function,
-  handleExportLocaleChange: Function,
-  shouldBeAnonymous: boolean,
-  shouldTranslate: boolean,
-  start: ?moment,
-  end: ?moment
+  locale?: string,
+  exportLocale?: string,
+  languages?: Array<Object>,
+  handleDatesChange?: Function,
+  handleAnonymousChange?: Function,
+  handleExportLocaleChange?: Function,
+  shouldBeAnonymous?: boolean,
+  handleShouldTranslate?: Function,
+  shouldTranslate?: boolean,
+  start?: ?moment,
+  end?: ?moment,
+  phases?: Timeline
 };
 
 export const ExportSection = ({
@@ -55,8 +56,11 @@ export const ExportSection = ({
     ) : null);
 
   const renderLanguageOptions = () => {
+    if (!handleExportLocaleChange || !languages || !handleShouldTranslate) {
+      return null;
+    }
     const activeLanguage = languages ? languages.filter(language => language.locale === exportLocale)[0] : null;
-    return languages ? (
+    return (
       <React.Fragment>
         <Translate value="administration.export.translation" />
         <Radio checked={!shouldTranslate} onChange={() => handleShouldTranslate(false)}>
@@ -83,11 +87,11 @@ export const ExportSection = ({
           )}
         </Radio>
       </React.Fragment>
-    ) : null;
+    );
   };
 
   const renderDatePicker = () => {
-    if (!phases) {
+    if (!phases || !locale || !handleDatesChange) {
       return null;
     }
     const phasesPresets = phases

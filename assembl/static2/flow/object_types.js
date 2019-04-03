@@ -230,3 +230,9 @@ type FileDocumentFile = {|
 |};
 
 type StrictFile = FileDocumentFile | FileDocument;
+
+type Language = {
+  locale: string,
+  name: string,
+  nativeName: string
+};

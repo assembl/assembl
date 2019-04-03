@@ -7,7 +7,10 @@ import PresetsList from './presetsList';
 
 type Props = {
   presets?: Array<Preset>,
-  locale: string
+  locale: string,
+  start: ?moment,
+  end: ?moment,
+  handleDatesChange: Function
 };
 
 type State = {

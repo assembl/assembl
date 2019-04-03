@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { compose, graphql } from 'react-apollo';
+import moment from 'moment';
 import { connect } from 'react-redux';
 import ExportSection from '../components/administration/exportSection';
 import { get } from '../utils/routeMap';
@@ -12,11 +13,12 @@ import DiscussionPreferences from '../graphql/DiscussionPreferences.graphql';
 type Props = {
   section: string,
   locale: string,
-  languages: Array<Object>
+  languages: Array<Language>,
+  phases: Timeline
 };
 
 type State = {
-  shoudTranslate: boolean,
+  shouldTranslate: boolean,
   exportLocale: string,
   shouldBeAnonymous: boolean,
   start: ?moment,
