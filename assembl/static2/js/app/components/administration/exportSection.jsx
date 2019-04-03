@@ -91,7 +91,7 @@ export const ExportSection = ({
   };
 
   const renderDatePicker = () => {
-    if (!phases || !locale || !handleDatesChange) {
+    if (!locale || !handleDatesChange) {
       return null;
     }
     const phasesPresets = phases
@@ -155,7 +155,7 @@ ExportSection.defaultProps = {
   shouldTranslate: false,
   start: null,
   end: null,
-  phases: []
+  phases: null
 };
 
 export default ExportSection;

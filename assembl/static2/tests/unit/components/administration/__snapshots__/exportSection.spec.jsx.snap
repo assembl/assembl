@@ -1,177 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DumbExportSection component should render an DumbExportSection component with languages options 1`] = `
-<div
-  className="admin-box admin-export-section"
->
-  <div>
-    <h3
-      className="dark-title-3"
-    >
-      Export data
-    </h3>
-    <div
-      className="box-hyphen"
-    />
-    <div
-      className="annotation margin padding-left"
-    >
-      You can export all of the data by clicking on the export button
-    </div>
-  </div>
-  <div
-    className="admin-content"
-  >
-    <div
-      className="form-group"
-    >
-      <div
-        className="export-options"
-      >
-        <div>
-          <span>
-            Translation of the data
-          </span>
-          <div
-            className="radio"
-          >
-            <label
-              title=""
-            >
-              <input
-                checked={true}
-                disabled={false}
-                onChange={[Function]}
-                type="radio"
-              />
-              <span>
-                Keep the messages in their original languages
-              </span>
-            </label>
-          </div>
-          <div
-            className="radio"
-          >
-            <label
-              title=""
-            >
-              <input
-                checked={false}
-                disabled={false}
-                onChange={[Function]}
-                type="radio"
-              />
-              <span>
-                Translate the messages in:
-              </span>
-            </label>
-          </div>
-        </div>
-        <div
-          className="export-date"
-        >
-          <span>
-            Export date
-          </span>
-          <div
-            className="date-range-picker"
-          >
-            <div
-              className="DateRangePicker DateRangePicker_1"
-            >
-              <div>
-                <div
-                  className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
-                >
-                  <div
-                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
-                  >
-                    <input
-                      aria-describedby="DateInput__screen-reader-message-startDateInput"
-                      aria-label="Start date"
-                      autoComplete="off"
-                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                      disabled={false}
-                      id="startDateInput"
-                      name="startDateInput"
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      onKeyDown={[Function]}
-                      placeholder="Start date"
-                      readOnly={false}
-                      required={false}
-                      type="text"
-                      value=""
-                    />
-                    <p
-                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-startDateInput"
-                    >
-                      Press the down arrow key to interact with the calendar and
-  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-                    </p>
-                  </div>
-                  <div
-                    aria-hidden="true"
-                    className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
-                    role="presentation"
-                  >
-                    -
-                  </div>
-                  <div
-                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
-                  >
-                    <input
-                      aria-describedby="DateInput__screen-reader-message-endDateInput"
-                      aria-label="End date"
-                      autoComplete="off"
-                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                      disabled={false}
-                      id="endDateInput"
-                      name="endDateInput"
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      onKeyDown={[Function]}
-                      placeholder="End date"
-                      readOnly={false}
-                      required={false}
-                      type="text"
-                      value=""
-                    />
-                    <p
-                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-endDateInput"
-                    >
-                      Press the down arrow key to interact with the calendar and
-  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div
-      className="center-flex"
-    >
-      <a
-        className="button-link button-dark margin-l"
-        href="foo.com"
-        onClick={[Function]}
-        style={Object {}}
-      >
-        <span>
-          Export
-        </span>
-      </a>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`DumbExportSection component should render an DumbExportSection component without languages options 1`] = `
+exports[`ExportSection component should render an ExportSection component with dates options 1`] = `
 <div
   className="admin-box admin-export-section"
 >
@@ -304,7 +133,7 @@ exports[`DumbExportSection component should render an DumbExportSection componen
 </div>
 `;
 
-exports[`DumbExportSection component should render an export section that handles different export links 1`] = `
+exports[`ExportSection component should render an ExportSection component with languages options 1`] = `
 <div
   className="admin-box admin-export-section"
 >
@@ -333,25 +162,9 @@ exports[`DumbExportSection component should render an export section that handle
         className="export-options"
       >
         <div>
-          <div
-            className="radio"
-          >
-            <label
-              title=""
-            >
-              <input
-                checked={true}
-                disabled={false}
-                name="exportLink"
-                onChange={[Function]}
-                type="radio"
-                value="foo.com"
-              />
-              <span>
-                Export general data for the vote module
-              </span>
-            </label>
-          </div>
+          <span>
+            Translation of the data
+          </span>
           <div
             className="radio"
           >
@@ -361,101 +174,167 @@ exports[`DumbExportSection component should render an export section that handle
               <input
                 checked={false}
                 disabled={false}
-                name="exportLink"
                 onChange={[Function]}
                 type="radio"
-                value="bar.org"
               />
               <span>
-                Export vote details for each user
+                Keep the messages in their original languages
+              </span>
+            </label>
+          </div>
+          <div
+            className="radio"
+          >
+            <label
+              title=""
+            >
+              <input
+                checked={true}
+                disabled={false}
+                onChange={[Function]}
+                type="radio"
+              />
+              <span>
+                Translate the messages in:
+              </span>
+              <select
+                className="export-language-dropdown form-control"
+                onChange={[Function]}
+                value=""
+              >
+                <option
+                  value="fr"
+                >
+                  French
+                </option>
+                <option
+                  value="en"
+                >
+                  English
+                </option>
+              </select>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="center-flex"
+    >
+      <a
+        className="button-link button-dark margin-l"
+        href="foo.com"
+        onClick={[Function]}
+        style={Object {}}
+      >
+        <span>
+          Export
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ExportSection component should render an ExportSection component with the anonymous option 1`] = `
+<div
+  className="admin-box admin-export-section"
+>
+  <div>
+    <h3
+      className="dark-title-3"
+    >
+      Export data
+    </h3>
+    <div
+      className="box-hyphen"
+    />
+    <div
+      className="annotation margin padding-left"
+    >
+      You can export all of the data by clicking on the export button
+    </div>
+  </div>
+  <div
+    className="admin-content"
+  >
+    <div
+      className="form-group"
+    >
+      <div
+        className="export-options"
+      >
+        <div>
+          <span>
+            Anonymity
+          </span>
+          <div
+            className="checkbox"
+          >
+            <label
+              title=""
+            >
+              <input
+                disabled={false}
+                onChange={[MockFunction]}
+                type="checkbox"
+                value={false}
+              />
+              <span>
+                Make the data anonymous
               </span>
             </label>
           </div>
         </div>
-        <div
-          className="export-date"
-        >
-          <span>
-            Export date
-          </span>
-          <div
-            className="date-range-picker"
-          >
-            <div
-              className="DateRangePicker DateRangePicker_1"
-            >
-              <div>
-                <div
-                  className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
-                >
-                  <div
-                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
-                  >
-                    <input
-                      aria-describedby="DateInput__screen-reader-message-startDateInput"
-                      aria-label="Start date"
-                      autoComplete="off"
-                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                      disabled={false}
-                      id="startDateInput"
-                      name="startDateInput"
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      onKeyDown={[Function]}
-                      placeholder="Start date"
-                      readOnly={false}
-                      required={false}
-                      type="text"
-                      value=""
-                    />
-                    <p
-                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-startDateInput"
-                    >
-                      Press the down arrow key to interact with the calendar and
-  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-                    </p>
-                  </div>
-                  <div
-                    aria-hidden="true"
-                    className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
-                    role="presentation"
-                  >
-                    -
-                  </div>
-                  <div
-                    className="DateInput DateInput_1 DateInput__small DateInput__small_2"
-                  >
-                    <input
-                      aria-describedby="DateInput__screen-reader-message-endDateInput"
-                      aria-label="End date"
-                      autoComplete="off"
-                      className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
-                      disabled={false}
-                      id="endDateInput"
-                      name="endDateInput"
-                      onChange={[Function]}
-                      onFocus={[Function]}
-                      onKeyDown={[Function]}
-                      placeholder="End date"
-                      readOnly={false}
-                      required={false}
-                      type="text"
-                      value=""
-                    />
-                    <p
-                      className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
-                      id="DateInput__screen-reader-message-endDateInput"
-                    >
-                      Press the down arrow key to interact with the calendar and
-  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
+    </div>
+    <div
+      className="center-flex"
+    >
+      <a
+        className="button-link button-dark margin-l"
+        href="foo.com"
+        onClick={[Function]}
+        style={Object {}}
+      >
+        <span>
+          Export
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ExportSection component should render an ExportSection component without any option 1`] = `
+<div
+  className="admin-box admin-export-section"
+>
+  <div>
+    <h3
+      className="dark-title-3"
+    >
+      Export data
+    </h3>
+    <div
+      className="box-hyphen"
+    />
+    <div
+      className="annotation margin padding-left"
+    >
+      You can export all of the data by clicking on the export button
+    </div>
+  </div>
+  <div
+    className="admin-content"
+  >
+    <div
+      className="form-group"
+    >
+      <div
+        className="export-options"
+      >
+        <div />
       </div>
     </div>
     <div
