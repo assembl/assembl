@@ -1573,11 +1573,6 @@ def phase_csv_export(request):
         children = idea.get_children()
         row[IDEA_CHILD_LEVEL_1] = ""
         row[IDEA_CHILD_LEVEL_2] = ""
-        # if children:
-        #     if children[0]:
-        #         row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if children[0].title else ""
-        #     if children[1]:
-        #         row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if children[1].title else ""
         row[MODULE] = idea.message_view_override
         row[POSTED_MESSAGES_COUNT] = idea.num_posts
         top_key_words = idea.top_keywords()
@@ -1669,12 +1664,6 @@ def survey_csv_export(request):
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
-    output = tempfile.NamedTemporaryFile('w+b', delete=True)
-    # include BOM for Excel to open the file in UTF-8 properly
-    output.write(u'\ufeff'.encode('utf-8'))
-    writer = csv.DictWriter(
-        output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
-    writer.writeheader()
     survey_phase = get_phase_by_identifier(discussion, Phases.survey.value)
     thematics = get_survey_ideas(discussion)
     rows = []
@@ -1811,12 +1800,6 @@ def multicolumn_csv_export(request):
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
-    output = tempfile.NamedTemporaryFile('w+b', delete=True)
-    # include BOM for Excel to open the file in UTF-8 properly
-    output.write(u'\ufeff'.encode('utf-8'))
-    writer = csv.DictWriter(
-        output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
-    writer.writeheader()
     ideas = get_multicolumns_ideas(discussion)
     rows = []
     for idea in ideas:
@@ -1893,6 +1876,7 @@ def thread_csv_export(request):
     discussion = request.context._instance
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
+
     # Ensure additions to the header are reflected in the
     IDEA_NAME = u"Nom de la thématique"
     IDEA_PARENT = u"Thématique parent"
@@ -1955,12 +1939,6 @@ def thread_csv_export(request):
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
-    output = tempfile.NamedTemporaryFile('w+b', delete=True)
-    # include BOM for Excel to open the file in UTF-8 properly
-    output.write(u'\ufeff'.encode('utf-8'))
-    writer = csv.DictWriter(
-        output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
-    writer.writeheader()
     ideas = get_thread_ideas(discussion)
     rows = []
     for idea in ideas:
@@ -2100,12 +2078,6 @@ def bright_mirror_csv_export(request):
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
-    output = tempfile.NamedTemporaryFile('w+b', delete=True)
-    # include BOM for Excel to open the file in UTF-8 properly
-    output.write(u'\ufeff'.encode('utf-8'))
-    writer = csv.DictWriter(
-        output, dialect='excel', delimiter=';', fieldnames=fieldnames, quoting=csv.QUOTE_ALL)
-    writer.writeheader()
     ideas = get_bright_mirror_ideas(discussion)
     rows = []
     for idea in ideas:
