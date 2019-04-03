@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { configure, mount } from 'enzyme';
 import 'react-dates/initialize';
 import Adapter from 'enzyme-adapter-react-16.3';
@@ -22,8 +23,8 @@ describe('getFullDebatePreset function', () => {
       id: 4,
       labelTranslationKey: 'administration.export.presets.fullDebate',
       range: {
-        startDate: '2018-12-31T23:00:00.000Z',
-        endDate: '2019-03-14T23:00:00.000Z'
+        startDate: moment('2019-01-01 13:00:00'),
+        endDate: moment('2019-03-15 13:00:00')
       },
       type: 'basic'
     });
