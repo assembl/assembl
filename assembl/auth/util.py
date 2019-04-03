@@ -529,7 +529,6 @@ def add_user(name, email, password=None, role=R_SYSADMIN, force=False, username=
                     status_in_discussion is None or
                     not status_in_discussion.first_visit))):
         from assembl.views.auth.views import send_change_password_email
-        from assembl.models import Discussion
         closer = None
         request = request or get_current_request()
         if not request:

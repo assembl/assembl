@@ -1877,10 +1877,7 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
         read_engine = None
     session_maker.configure(bind=engine, read_bind=read_engine)
     global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
-    if str(settings['sqlalchemy.url']).startswith('virtuoso:'):
-        db_schema = '.'.join((settings['db_schema'], settings['db_user']))
-    else:
-        db_schema = settings['db_schema']
+    db_schema = settings['db_schema']
     _metadata = MetaData(schema=db_schema)
     Base, TimestampedBase = declarative_bases(_metadata, class_registry)
     obsolete = MetaData(schema=db_schema)
