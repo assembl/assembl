@@ -634,12 +634,12 @@ def multi_module_csv_export(request):
     results = {sheet_name: None for sheet_name in sheet_names}
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
     from assembl.views.api2.votes import extract_voters, global_vote_results_csv
-#    fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
-#    fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(request)
-#    fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(request)
-#    fieldnames['export_module_multicolumns'], results['export_module_multicolumns'] = multicolumn_csv_export(request)
+    fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
+    fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(request)
+    fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(request)
+    fieldnames['export_module_multicolumns'], results['export_module_multicolumns'] = multicolumn_csv_export(request)
     fieldnames['vote_users_data'], results['vote_users_data'] = voters_csv_export(request)
-#    fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
+    fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
     # fieldnames['export_module_vote'], results['export_module_vote'] = global_vote_results_csv(request)
 
     return csv_response_multiple_sheets(results, fieldnames)
