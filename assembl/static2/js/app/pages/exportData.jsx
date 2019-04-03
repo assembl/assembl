@@ -25,7 +25,7 @@ type State = {
   end: ?moment
 };
 
-class ExportData extends React.Component<Props, State> {
+export class DumbExportData extends React.Component<Props, State> {
   state = {
     exportLocale: '',
     shouldTranslate: false,
@@ -123,4 +123,4 @@ export default compose(
     }
   }),
   manageErrorAndLoading({ displayLoader: true })
-)(ExportData);
+)(DumbExportData);

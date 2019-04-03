@@ -1,0 +1,245 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ExportData page should render an ExportData page with an ExportSection for multimodule data 1`] = `
+<div>
+  <div
+    className="admin-box admin-export-section"
+  >
+    <div>
+      <h3
+        className="dark-title-3"
+      >
+        Contributions of the participants
+      </h3>
+      <div
+        className="box-hyphen"
+      />
+      <div
+        className="annotation margin padding-left"
+      >
+        Contributions of the participants
+      </div>
+    </div>
+    <div
+      className="admin-content"
+    >
+      <div
+        className="form-group"
+      >
+        <div
+          className="export-options"
+        >
+          <div>
+            <span>
+              Anonymity
+            </span>
+            <div
+              className="checkbox"
+            >
+              <label
+                title=""
+              >
+                <input
+                  disabled={false}
+                  onChange={[Function]}
+                  type="checkbox"
+                  value={false}
+                />
+                <span>
+                  Make the data anonymous
+                </span>
+              </label>
+            </div>
+            <span>
+              Translation of the data
+            </span>
+            <div
+              className="radio"
+            >
+              <label
+                title=""
+              >
+                <input
+                  checked={true}
+                  disabled={false}
+                  onChange={[Function]}
+                  type="radio"
+                />
+                <span>
+                  Keep the messages in their original languages
+                </span>
+              </label>
+            </div>
+            <div
+              className="radio"
+            >
+              <label
+                title=""
+              >
+                <input
+                  checked={false}
+                  disabled={false}
+                  onChange={[Function]}
+                  type="radio"
+                />
+                <span>
+                  Translate the messages in:
+                </span>
+              </label>
+            </div>
+          </div>
+          <div
+            className="export-date"
+          >
+            <span>
+              Export date
+            </span>
+            <div
+              className="date-range-picker"
+            >
+              <div
+                className="DateRangePicker DateRangePicker_1"
+              >
+                <div>
+                  <div
+                    className="DateRangePickerInput DateRangePickerInput_1 DateRangePickerInput__withBorder DateRangePickerInput__withBorder_2"
+                  >
+                    <div
+                      className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+                    >
+                      <input
+                        aria-describedby="DateInput__screen-reader-message-startDateInput"
+                        aria-label="Start date"
+                        autoComplete="off"
+                        className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
+                        disabled={false}
+                        id="startDateInput"
+                        name="startDateInput"
+                        onChange={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        placeholder="Start date"
+                        readOnly={false}
+                        required={false}
+                        type="text"
+                        value=""
+                      />
+                      <p
+                        className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                        id="DateInput__screen-reader-message-startDateInput"
+                      >
+                        Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+                      </p>
+                    </div>
+                    <div
+                      aria-hidden="true"
+                      className="DateRangePickerInput_arrow DateRangePickerInput_arrow_1"
+                      role="presentation"
+                    >
+                      -
+                    </div>
+                    <div
+                      className="DateInput DateInput_1 DateInput__small DateInput__small_2"
+                    >
+                      <input
+                        aria-describedby="DateInput__screen-reader-message-endDateInput"
+                        aria-label="End date"
+                        autoComplete="off"
+                        className="DateInput_input DateInput_input_1 DateInput_input__small DateInput_input__small_2"
+                        disabled={false}
+                        id="endDateInput"
+                        name="endDateInput"
+                        onChange={[Function]}
+                        onFocus={[Function]}
+                        onKeyDown={[Function]}
+                        placeholder="End date"
+                        readOnly={false}
+                        required={false}
+                        type="text"
+                        value=""
+                      />
+                      <p
+                        className="DateInput_screenReaderMessage DateInput_screenReaderMessage_1"
+                        id="DateInput__screen-reader-message-endDateInput"
+                      >
+                        Press the down arrow key to interact with the calendar and
+  select a date. Press the question mark key to get the keyboard shortcuts for changing dates.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        className="center-flex"
+      >
+        <a
+          className="button-link button-dark margin-l"
+          href="/data/Discussion/\${debateId}/multi-module-export?anon=false&end=&lang=&start="
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <span>
+            Export
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`ExportData page should render an ExportData page with an ExportSection for taxonomies 1`] = `
+<div>
+  <div
+    className="admin-box admin-export-section"
+  >
+    <div>
+      <h3
+        className="dark-title-3"
+      >
+        Export taxonomy
+      </h3>
+      <div
+        className="box-hyphen"
+      />
+      <div
+        className="annotation margin padding-left"
+      >
+        You can export all of the taxonomies by clicking on the export button
+      </div>
+    </div>
+    <div
+      className="admin-content"
+    >
+      <div
+        className="form-group"
+      >
+        <div
+          className="export-options"
+        >
+          <div />
+        </div>
+      </div>
+      <div
+        className="center-flex"
+      >
+        <a
+          className="button-link button-dark margin-l"
+          href="/data/Discussion/\${debateId}/extract_csv_taxonomy"
+          onClick={[Function]}
+          style={Object {}}
+        >
+          <span>
+            Export
+          </span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;
