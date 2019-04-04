@@ -1510,7 +1510,6 @@ def get_entries_locale_original(lang_string):
     }
 
 
-IDEA_ID = u"Numéro de l'idée"
 THEMATIC_NAME = u"Thématique parent"
 IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1"
 IDEA_CHILD_LEVEL_2 = u"Thématique enfant niveau 2"
@@ -1997,7 +1996,6 @@ def bright_mirror_csv_export(request):
     POST_SUBJECT = u"Titre de la fiction"
     POST_BODY = u"Fiction"
     fieldnames = [
-        IDEA_ID.encode('utf-8'),  # TODO rewrite this
         IDEA_PARENT.encode('utf-8'),  # TODO rewrite this
         IDEA_NAME.encode('utf-8'),  # TODO rewrite this
         POST_SUBJECT.encode('utf-8'),
@@ -2042,7 +2040,6 @@ def bright_mirror_csv_export(request):
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
 
-        row[IDEA_ID] = idea.id
         row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
         row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
         posts = get_published_posts(idea, start, end)
@@ -2098,8 +2095,6 @@ def global_votes_csv_export(request):
     """CSV export for export_module_vote sheet."""
     from assembl.views.api2.votes import global_vote_results_csv
     from assembl.models import Locale, Idea
-    start, end, interval = get_time_series_timing(request)
-    has_anon = asbool(request.GET.get('anon', False))
     has_lang = 'lang' in request.GET
     if has_lang:
         language = request.GET['lang']
@@ -2118,7 +2113,6 @@ def global_votes_csv_export(request):
     Idea.prepare_counters(discussion_id, True)
 
     fieldnames = [
-#        IDEA_ID.encode('utf-8'),
         IDEA_PARENT.encode('utf-8'),
         IDEA_NAME.encode('utf-8'),
         # TODO idea breadcrumbs instead of IDEA_PARENT IDEA_NAME
@@ -2146,7 +2140,6 @@ def global_votes_csv_export(request):
         idea_name = get_entries_locale_original(idea.title).get('entry')
         for vote_row in votes:
             row = {}
-#            row[IDEA_ID] = idea.id
             row[IDEA_PARENT] = idea_parent
             row[IDEA_NAME] = idea_name
             row.update(vote_row)
@@ -2158,7 +2151,6 @@ def voters_csv_export(request):
     """CSV export for vote_users_data sheet."""
     from assembl.views.api2.votes import extract_voters
     from assembl.models import Locale, Idea
-    start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
     # TODO anonymize the export
     has_lang = 'lang' in request.GET
@@ -2179,7 +2171,6 @@ def voters_csv_export(request):
     Idea.prepare_counters(discussion_id, True)
 
     fieldnames = [
-#        IDEA_ID.encode('utf-8'),
         IDEA_PARENT.encode('utf-8'),
         IDEA_NAME.encode('utf-8'),
         # TODO idea breadcrumbs instead of IDEA_PARENT IDEA_NAME
@@ -2215,7 +2206,6 @@ def voters_csv_export(request):
         idea_name = get_entries_locale_original(idea.title).get('entry')
         for vote_row in votes:
             row = {}
-#            row[IDEA_ID] = idea.id
             row[IDEA_PARENT] = idea_parent
             row[IDEA_NAME] = idea_name
             row.update(vote_row)
