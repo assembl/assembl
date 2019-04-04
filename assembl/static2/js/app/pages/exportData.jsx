@@ -73,8 +73,8 @@ export class DumbExportData extends React.Component<Props, State> {
     const translation = shouldTranslate && locale ? locale : '';
     const anonymous = `${shouldBeAnonymous.toString()}`;
     const debateId = getDiscussionId();
-    const startDate = start ? start.format('L') : '';
-    const endDate = end ? end.format('L') : '';
+    const startDate = start ? start.toISOString() : '';
+    const endDate = end ? end.toISOString() : '';
     const exportDataLink = get(
       'exportDebateData',
       { debateId: debateId },
