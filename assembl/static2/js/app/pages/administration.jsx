@@ -66,38 +66,42 @@ class Administration extends React.Component<Props, State> {
   componentDidMount() {
     // we need to use the redux store for administration data to be able to use a
     // "global" save button that will do all the mutations "at once"
-    this.putSectionsInStore(this.props.sections);
-    this.putVoteSessionInStore(this.props.voteSession);
-    this.putVoteModulesInStore(this.props.voteSession);
-    this.putVoteProposalsInStore(this.props.voteSession);
+    const { sections, voteSession, identifier, location, landingPageModules, textFields } = this.props;
+    this.putSectionsInStore(sections);
+    this.putVoteSessionInStore(voteSession);
+    this.putVoteModulesInStore(voteSession);
+    this.putVoteProposalsInStore(voteSession);
     const isHidden =
-      this.props.identifier === 'discussion' && SECTIONS_WITHOUT_LANGUAGEMENU.includes(this.props.location.query.section);
+      (identifier === 'discussion' && SECTIONS_WITHOUT_LANGUAGEMENU.includes(location.query.section)) ||
+      identifier === 'exportDebateData';
     this.props.displayLanguageMenu(isHidden);
-    this.putLandingPageModulesInStore(this.props.landingPageModules);
-    this.putTextFieldsInStore(this.props.textFields);
+    this.putLandingPageModulesInStore(landingPageModules);
+    this.putTextFieldsInStore(textFields);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.sections !== this.props.sections) {
-      this.putSectionsInStore(nextProps.sections);
+    const { sections, voteSession, identifier, location, landingPageModules, textFields } = nextProps;
+    if (sections !== this.props.sections) {
+      this.putSectionsInStore(sections);
     }
 
-    if (nextProps.voteSession !== this.props.voteSession) {
-      this.putVoteSessionInStore(nextProps.voteSession);
-      this.putVoteModulesInStore(nextProps.voteSession);
-      this.putVoteProposalsInStore(nextProps.voteSession);
+    if (voteSession !== this.props.voteSession) {
+      this.putVoteSessionInStore(voteSession);
+      this.putVoteModulesInStore(voteSession);
+      this.putVoteProposalsInStore(voteSession);
     }
 
-    if (nextProps.landingPageModules !== this.props.landingPageModules) {
-      this.putLandingPageModulesInStore(nextProps.landingPageModules);
+    if (landingPageModules !== this.props.landingPageModules) {
+      this.putLandingPageModulesInStore(landingPageModules);
     }
 
     const isHidden =
-      nextProps.identifier === 'discussion' && SECTIONS_WITHOUT_LANGUAGEMENU.includes(nextProps.location.query.section);
+      (identifier === 'discussion' && SECTIONS_WITHOUT_LANGUAGEMENU.includes(location.query.section)) ||
+      identifier === 'exportDebateData';
     this.props.displayLanguageMenu(isHidden);
 
-    if (nextProps.textFields !== this.props.textFields) {
-      this.putTextFieldsInStore(nextProps.textFields);
+    if (textFields !== this.props.textFields) {
+      this.putTextFieldsInStore(textFields);
     }
   }
 
