@@ -215,6 +215,8 @@ def range_float(minimum, maximum, nb_ticks):
 
 
 def global_vote_results_csv(widget, request):
+    from .discussion import get_time_series_timing
+    start, end, interval = get_time_series_timing(request)
     user_prefs = LanguagePreferenceCollection.getCurrent()
     # first fetch the ideas voted on
     ideas = widget.db.query(Idea
@@ -288,11 +290,13 @@ def global_vote_results_csv(widget, request):
                     if spec is None:
                         row[fieldname] = '-'
                     else:
+                        vote_cls = spec.get_vote_class()
                         query = spec.db.query(
-                            func.sum(getattr(spec.get_vote_class(), "vote_value"))).filter_by(
+                            func.sum(vote_cls.vote_value)).filter_by(
                             vote_spec_id=spec.id,
                             tombstone_date=None,
-                            token_category_id=token_category.id)
+                            token_category_id=token_category.id
+                            ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                         # when there is no votes, query.first() equals (None,)
                         # in this case set num_token to 0
                         num_token = query.first()[0]
@@ -311,19 +315,22 @@ def global_vote_results_csv(widget, request):
                             row[fieldname] = '-'
                 elif isinstance(template_spec, NumberGaugeVoteSpecification):
                     vote_cls = spec.get_vote_class()
-                    voting_avg = spec.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
+                    voting_avg = spec.db.query(func.avg(vote_cls.vote_value)).filter_by(
                         vote_spec_id=spec.id,
                         tombstone_date=None,
-                        idea_id=spec.criterion_idea_id).first()
+                        idea_id=spec.criterion_idea_id
+                        ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end
+                        ).first()
                     # when there is no votes, query.first() equals (None,)
                     avg = voting_avg[0] or '-'
                     fieldname = get_choice_average_fieldname(title)
                     row[fieldname] = avg
 
-                    q_histogram = spec.db.query(getattr(vote_cls, 'vote_value'), func.count(getattr(vote_cls, 'voter_id'))).filter_by(
+                    q_histogram = spec.db.query(vote_cls.vote_value, func.count(vote_cls.voter_id)).filter_by(
                         vote_spec_id=spec.id,
                         tombstone_date=None,
-                        idea_id=spec.criterion_idea_id).group_by(getattr(vote_cls, 'vote_value'))
+                        idea_id=spec.criterion_idea_id).group_by(vote_cls.vote_value
+                        ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                     histogram = dict(q_histogram.all())
                     for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
                         fieldname = get_number_choice_fieldname(choice_value, template_spec)
@@ -338,10 +345,11 @@ def global_vote_results_csv(widget, request):
                     fieldname = get_choice_average_fieldname(title)
                     row[fieldname] = label_avg
 
-                    q_histogram = spec.db.query(getattr(vote_cls, 'vote_value'), func.count(getattr(vote_cls, 'voter_id'))).filter_by(
+                    q_histogram = spec.db.query(vote_cls.vote_value, func.count(vote_cls.voter_id)).filter_by(
                         vote_spec_id=spec.id,
                         tombstone_date=None,
-                        idea_id=spec.criterion_idea_id).group_by(getattr(vote_cls, 'vote_value'))
+                        idea_id=spec.criterion_idea_id).group_by(vote_cls.vote_value
+                        ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                     histogram = dict(q_histogram.all())
                     for choice in template_spec.get_choices():
                         fieldname = get_text_choice_fieldname(choice)
@@ -350,10 +358,13 @@ def global_vote_results_csv(widget, request):
             if spec is None:
                 row[TOTAL_VOTES] = '-'
             else:
+                vote_cls = spec.get_vote_class()
                 num_votes = spec.db.query(
-                    getattr(spec.get_vote_class(), "voter_id")).filter_by(
+                    vote_cls.voter_id).filter_by(
                     vote_spec_id=spec.id,
-                    tombstone_date=None).count()
+                    tombstone_date=None
+                    ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end
+                    ).count()
                 row[TOTAL_VOTES] = num_votes
         rows.append(row)
     return fieldnames, rows
@@ -381,14 +392,19 @@ def global_vote_results_csv_view(request):
 VOTER_MAIL = "Adresse mail du contributeur"
 def extract_voters(widget, request):  # widget is the vote session
     has_anon = asbool(request.GET.get('anon', False))
+    from .discussion import get_time_series_timing
+    start, end, interval = get_time_series_timing(request)
     extract_votes = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", VOTER_MAIL, "Date du vote", "Proposition"]
-    votes = widget.db.query(AbstractIdeaVote
+    query = widget.db.query(AbstractIdeaVote
         ).filter(AbstractVoteSpecification.widget_id==widget.id
         ).filter(AbstractIdeaVote.tombstone_date==None
+        ).filter(AbstractIdeaVote.vote_date >= start
+        ).filter(AbstractIdeaVote.vote_date <= end
         ).order_by(AbstractIdeaVote.vote_spec_id.desc()
-        ).all()
+        )
+    votes = query.all()
     voters_by_id = {}
     proposition_by_id = {}
     for count, vote in enumerate(votes):
