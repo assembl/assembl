@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { I18n, Translate } from 'react-redux-i18n';
 import moment from 'moment';
+import classnames from 'classnames';
 import { Link } from 'react-router';
 import { FormGroup, Radio, Checkbox, FormControl } from 'react-bootstrap';
 
@@ -20,6 +21,8 @@ type Props = {
   handleDatesChange?: ?Function,
   handleAnonymousChange?: ?Function,
   handleExportLocaleChange?: ?Function,
+  disableExportButton: Function,
+  buttonIsDisabled: boolean,
   shouldBeAnonymous?: boolean,
   handleShouldTranslate?: ?Function,
   shouldTranslate?: ?boolean,
@@ -43,7 +46,9 @@ export const ExportSection = ({
   end,
   phases,
   languages,
-  locale
+  locale,
+  disableExportButton,
+  buttonIsDisabled
 }: Props) => {
   const renderAnonymousOption = () =>
     (handleAnonymousChange ? (
@@ -115,6 +120,8 @@ export const ExportSection = ({
     ) : null;
   };
 
+  const exportButtonClassNames = classnames('button-link button-dark margin-l', { disabled: buttonIsDisabled });
+
   return (
     <div className="admin-box admin-export-section">
       <SectionTitle
@@ -132,7 +139,7 @@ export const ExportSection = ({
           </div>
         </FormGroup>
         <div className="center-flex">
-          <Link className="button-link button-dark margin-l" href={exportLink}>
+          <Link className={exportButtonClassNames} href={exportLink} onClick={disableExportButton}>
             <Translate value="administration.export.link" />
           </Link>
         </div>

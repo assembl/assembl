@@ -5,6 +5,10 @@
     }
   }
 
+  .disabled {
+    cursor: progress;
+  }
+
   .export-language-dropdown {
     margin-top: 5px;
   }

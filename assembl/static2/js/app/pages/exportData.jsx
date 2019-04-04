@@ -22,7 +22,8 @@ type State = {
   exportLocale: string,
   shouldBeAnonymous: boolean,
   start: ?moment,
-  end: ?moment
+  end: ?moment,
+  buttonIsDisabled: boolean
 };
 
 export class DumbExportData extends React.Component<Props, State> {
@@ -31,28 +32,43 @@ export class DumbExportData extends React.Component<Props, State> {
     shouldTranslate: false,
     shouldBeAnonymous: false,
     start: null,
-    end: null
+    end: null,
+    buttonIsDisabled: false
   };
 
-  handleDatesChange = ({ startDate, endDate }: DateRange) => this.setState({ start: startDate, end: endDate });
+  handleDatesChange = ({ startDate, endDate }: DateRange) => {
+    this.enableExportButton();
+    this.setState({ start: startDate, end: endDate });
+  };
 
   handleShouldTranslate = (shouldTranslate: boolean) => {
+    this.enableExportButton();
     this.setState({ shouldTranslate: shouldTranslate });
   };
 
   toggleAnonymousOption = () => {
+    this.enableExportButton();
     this.setState(prevState => ({ shouldBeAnonymous: !prevState.shouldBeAnonymous }));
   };
 
   handleExportLocaleChange = (exportLocale: string) => {
+    this.enableExportButton();
     this.setState({
       exportLocale: exportLocale
     });
   };
 
+  disableExportButton = () => {
+    this.setState({ buttonIsDisabled: true });
+  };
+
+  enableExportButton = () => {
+    this.setState({ buttonIsDisabled: false });
+  };
+
   render() {
     const { section, languages, phases } = this.props;
-    const { exportLocale, shouldBeAnonymous, shouldTranslate, start, end } = this.state;
+    const { exportLocale, shouldBeAnonymous, shouldTranslate, start, end, buttonIsDisabled } = this.state;
     const locale = exportLocale || (languages && languages[0].locale);
     const translation = shouldTranslate && locale ? locale : '';
     const anonymous = `${shouldBeAnonymous.toString()}`;
@@ -84,10 +100,18 @@ export class DumbExportData extends React.Component<Props, State> {
             start={start}
             end={end}
             languages={languages}
+            disableExportButton={this.disableExportButton}
+            buttonIsDisabled={buttonIsDisabled}
           />
         )}
         {section === '2' && (
-          <ExportSection sectionTitle="taxonomySectionTitle" annotation="taxonomyAnnotation" exportLink={exportTaxonomiesLink} />
+          <ExportSection
+            sectionTitle="taxonomySectionTitle"
+            annotation="taxonomyAnnotation"
+            exportLink={exportTaxonomiesLink}
+            disableExportButton={this.disableExportButton}
+            buttonIsDisabled={buttonIsDisabled}
+          />
         )}
       </div>
     );
