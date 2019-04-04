@@ -1479,15 +1479,6 @@ def convert_to_utf8(rowdict):
     return row
 
 
-def get_idea_parent_ids(idea):
-    # Filter the RootIdea, as it's never reported in the exports
-    return ", ".join([str(i.id) for i in idea.get_parents() if i.sqla_type != u'root_idea'])
-
-
-def get_idea_parents_titles(idea, user_prefs):
-    return ", ".join([i.title.best_lang(user_prefs).value.encode("utf-8") for i in idea.get_parents() if i.sqla_type != u'root_idea' and i.title])
-
-
 def get_entries_locale_original(lang_string):
     if lang_string is None:
         return {
@@ -1510,9 +1501,10 @@ def get_entries_locale_original(lang_string):
     }
 
 
-THEMATIC_NAME = u"Thématique parent"
-IDEA_CHILD_LEVEL_1 = u"Thématique enfant niveau 1"
-IDEA_CHILD_LEVEL_2 = u"Thématique enfant niveau 2"
+IDEA_LEVEL_1 = u"Thématique niveau 1"
+IDEA_LEVEL_2 = u"Thématique niveau 2"
+IDEA_LEVEL_3 = u"Thématique niveau 3"
+IDEA_LEVEL_4 = u"Thématique niveau 4"
 IDEA_NAME = u"Nom de la thématique"
 IDEA_PARENT = u"Thématique parent"
 QUESTION_TITLE = u"Question"
@@ -1545,6 +1537,41 @@ NUMBER_OF_ANSWERS = u"Nombre de réponses"
 MESSAGE_COUNT = u"Nombre de message (débat)"
 HARVESTING_COUNT = u"Nombre d'attrapages"
 FICTION_URL = u"URL de la fiction"
+
+
+def get_idea_parents_titles(idea, user_prefs):
+    idea_title = idea.title.best_lang(user_prefs).value.encode("utf-8") if idea.title else ""
+    ideas = [i.title.best_lang(user_prefs).value.encode("utf-8") if idea.title else ""
+             for i in idea.parents if i.sqla_type != u'root_idea' and not i.hidden]
+    if len(ideas) == 0:
+        return {
+            IDEA_LEVEL_1: idea_title,
+            IDEA_LEVEL_2: "",
+            IDEA_LEVEL_3: "",
+            IDEA_LEVEL_4: ""
+        }
+    if len(ideas) == 1:
+        return {
+            IDEA_LEVEL_1: ideas[0],
+            IDEA_LEVEL_2: idea_title,
+            IDEA_LEVEL_3: "",
+            IDEA_LEVEL_4: ""
+        }
+    if len(ideas) == 2:
+        return {
+            IDEA_LEVEL_1: ideas[0],
+            IDEA_LEVEL_2: ideas[1],
+            IDEA_LEVEL_3: idea_title,
+            IDEA_LEVEL_4: ""
+        }
+    if len(ideas) == 3:
+        return {
+            IDEA_LEVEL_1: ideas[0],
+            IDEA_LEVEL_2: ideas[1],
+            IDEA_LEVEL_3: ideas[2],
+            IDEA_LEVEL_4: idea_title
+        }
+
 
 def phase_csv_export(request):
     """
@@ -1582,9 +1609,10 @@ def phase_csv_export(request):
     THEMATIC_SHARE_COUNT = u"Nombre de share de la thématique"
     MESSAGE_SHARE_COUNT = u"Nombre de share de message"
     fieldnames = [
-        THEMATIC_NAME.encode('utf-8'),  # TODO rewrite this
-        IDEA_CHILD_LEVEL_1.encode('utf-8'),  # TODO rewrite this
-        IDEA_CHILD_LEVEL_2.encode('utf-8'),  # TODO rewrite this
+        IDEA_LEVEL_1.encode('utf-8'),
+        IDEA_LEVEL_2.encode('utf-8'),
+        IDEA_LEVEL_3.encode('utf-8'),
+        IDEA_LEVEL_4.encode('utf-8'),
         MODULE.encode('utf-8'),
         POSTED_MESSAGES_COUNT.encode('utf-8'),
         DELETED_MESSAGES_COUNT.encode('utf-8'),  # TODO
@@ -1602,9 +1630,7 @@ def phase_csv_export(request):
     rows = []
     for idea in ideas:
         row = {}
-        row[THEMATIC_NAME] = get_entries_locale_original(idea.title).get('entry')
-        row[IDEA_CHILD_LEVEL_1] = ""
-        row[IDEA_CHILD_LEVEL_2] = ""
+        row.update(get_idea_parents_titles(idea, user_prefs))
         row[MODULE] = idea.message_view_override
         row[POSTED_MESSAGES_COUNT] = idea.num_posts
         top_key_words = idea.top_keywords()
@@ -1646,8 +1672,10 @@ def survey_csv_export(request):
 
     POST_BODY = u"Réponse"
     fieldnames = [
-        # TODO idea breadcrumbs
-        THEMATIC_NAME.encode('utf-8'),
+        IDEA_LEVEL_1.encode('utf-8'),
+        IDEA_LEVEL_2.encode('utf-8'),
+        IDEA_LEVEL_3.encode('utf-8'),
+        IDEA_LEVEL_4.encode('utf-8'),
         QUESTION_TITLE.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         WORD_COUNT.encode('utf-8'),
@@ -1670,8 +1698,7 @@ def survey_csv_export(request):
                           load_social_columns_info(discussion, language))
     if extra_columns_info:
         # insert after email
-        # TODO change the position after rewriting the first columns
-        fieldnames[7:7] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        fieldnames[10:10] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
@@ -1686,7 +1713,7 @@ def survey_csv_export(request):
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
 
-        row[THEMATIC_NAME] = get_entries_locale_original(thematic.title).get('entry')
+        row.update(get_idea_parents_titles(thematic, user_prefs))
         for question in thematic.get_children():
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
             posts = get_published_posts(question, start, end)
@@ -1755,10 +1782,10 @@ def multicolumn_csv_export(request):
     Idea.prepare_counters(discussion_id, True)
 
     fieldnames = [
-        IDEA_PARENT.encode('utf-8'),  # TODO rewrite this
-        IDEA_CHILD_LEVEL_1.encode('utf-8'),  # TODO rewrite this
-        IDEA_CHILD_LEVEL_2.encode('utf-8'),  # TODO rewrite this
-        IDEA_NAME.encode('utf-8'),  # TODO rewrite this
+        IDEA_LEVEL_1.encode('utf-8'),
+        IDEA_LEVEL_2.encode('utf-8'),
+        IDEA_LEVEL_3.encode('utf-8'),
+        IDEA_LEVEL_4.encode('utf-8'),
         POST_CLASSIFIER.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         WORD_COUNT.encode('utf-8'),
@@ -1783,8 +1810,7 @@ def multicolumn_csv_export(request):
 
     if extra_columns_info:
         # insert after email
-        # TODO change the position after rewriting the first columns
-        fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        fieldnames[10:10] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
@@ -1799,8 +1825,7 @@ def multicolumn_csv_export(request):
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
 
-        row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
-        row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
+        row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
         for post in posts:
             if has_lang:
@@ -1869,10 +1894,10 @@ def thread_csv_export(request):
     Idea.prepare_counters(discussion_id, True)
 
     fieldnames = [
-        IDEA_NAME.encode('utf-8'),  # TODO rewrite this
-        IDEA_PARENT.encode('utf-8'),  # TODO rewrite this
-        IDEA_CHILD_LEVEL_1.encode('utf-8'),  # TODO rewrite this
-        IDEA_CHILD_LEVEL_2.encode('utf-8'),  # TODO rewrite this
+        IDEA_LEVEL_1.encode('utf-8'),
+        IDEA_LEVEL_2.encode('utf-8'),
+        IDEA_LEVEL_3.encode('utf-8'),
+        IDEA_LEVEL_4.encode('utf-8'),
         MESSAGE_INDENTATION.encode('utf-8'),  # TODO
         TOP_POST_TITLE.encode('utf-8'),  # TODO
         TOP_POST.encode('utf-8'),  # TODO
@@ -1902,8 +1927,7 @@ def thread_csv_export(request):
 
     if extra_columns_info:
         # insert after email
-        # TODO change the position after rewriting the first columns
-        fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        fieldnames[15:15] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
@@ -1919,10 +1943,7 @@ def thread_csv_export(request):
             row[column_name] = key_word.encode('utf-8')
 
         children = idea.get_children()
-        row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
-        row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
-        row[IDEA_CHILD_LEVEL_1] = children[0].title.best_lang(user_prefs).value if len(children) > 0 and children[0].title else ""
-        row[IDEA_CHILD_LEVEL_2] = children[1].title.best_lang(user_prefs).value if len(children) > 1 and children[1].title else ""
+        row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
         for post in posts:
             if has_lang:
@@ -1995,8 +2016,10 @@ def bright_mirror_csv_export(request):
     POST_SUBJECT = u"Titre de la fiction"
     POST_BODY = u"Fiction"
     fieldnames = [
-        IDEA_PARENT.encode('utf-8'),  # TODO rewrite this
-        IDEA_NAME.encode('utf-8'),  # TODO rewrite this
+        IDEA_LEVEL_1.encode('utf-8'),
+        IDEA_LEVEL_2.encode('utf-8'),
+        IDEA_LEVEL_3.encode('utf-8'),
+        IDEA_LEVEL_4.encode('utf-8'),
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         WORD_COUNT.encode('utf-8'),
@@ -2023,8 +2046,7 @@ def bright_mirror_csv_export(request):
 
     if extra_columns_info:
         # insert after email
-        # TODO change the position after rewriting the first columns
-        fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        fieldnames[10:10] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
@@ -2039,8 +2061,7 @@ def bright_mirror_csv_export(request):
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
 
-        row[IDEA_PARENT] = get_idea_parents_titles(idea, user_prefs)
-        row[IDEA_NAME] = get_entries_locale_original(idea.title).get('entry')
+        row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
         for post in posts:
             if has_lang:
@@ -2112,13 +2133,11 @@ def global_votes_csv_export(request):
     Idea.prepare_counters(discussion_id, True)
 
     fieldnames = [
-        IDEA_PARENT.encode('utf-8'),
-        IDEA_NAME.encode('utf-8'),
-        # TODO idea breadcrumbs instead of IDEA_PARENT IDEA_NAME
+        IDEA_LEVEL_1.encode('utf-8'),
+        IDEA_LEVEL_2.encode('utf-8'),
+        IDEA_LEVEL_3.encode('utf-8'),
+        IDEA_LEVEL_4.encode('utf-8')
     ]
-    extra_columns_info = (None if 'no_extra_columns' in request.GET else
-                          load_social_columns_info(discussion, language))
-
     ideas = get_vote_session_ideas(discussion)
     votes_exports = {}
     for idea in ideas:
@@ -2135,12 +2154,10 @@ def global_votes_csv_export(request):
         if not idea.vote_session:
             continue
         votes = votes_exports.get(idea.id)
-        idea_parent = get_idea_parents_titles(idea, user_prefs)
-        idea_name = get_entries_locale_original(idea.title).get('entry')
+        idea_levels = get_idea_parents_titles(idea, user_prefs)
         for vote_row in votes:
             row = {}
-            row[IDEA_PARENT] = idea_parent
-            row[IDEA_NAME] = idea_name
+            row.update(idea_levels)
             row.update(vote_row)
             rows.append(convert_to_utf8(row))
     return fieldnames, rows
@@ -2168,9 +2185,10 @@ def voters_csv_export(request):
     Idea.prepare_counters(discussion_id, True)
 
     fieldnames = [
-        IDEA_PARENT.encode('utf-8'),
-        IDEA_NAME.encode('utf-8'),
-        # TODO idea breadcrumbs instead of IDEA_PARENT IDEA_NAME
+        IDEA_LEVEL_1.encode('utf-8'),
+        IDEA_LEVEL_2.encode('utf-8'),
+        IDEA_LEVEL_3.encode('utf-8'),
+        IDEA_LEVEL_4.encode('utf-8')
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
@@ -2199,12 +2217,10 @@ def voters_csv_export(request):
         if not idea.vote_session:
             continue
         votes = votes_exports.get(idea.id)
-        idea_parent = get_idea_parents_titles(idea, user_prefs)
-        idea_name = get_entries_locale_original(idea.title).get('entry')
+        idea_levels = get_idea_parents_titles(idea, user_prefs)
         for vote_row in votes:
             row = {}
-            row[IDEA_PARENT] = idea_parent
-            row[IDEA_NAME] = idea_name
+            row.update(idea_levels)
             row.update(vote_row)
             rows.append(convert_to_utf8(row))
     return fieldnames, rows
