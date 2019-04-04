@@ -376,7 +376,8 @@ def global_vote_results_csv_view(request):
     return csv_response(rows, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="vote_results.csv"')
 
 
-def extract_voters(widget):  # widget is the vote session
+def extract_voters(widget, request):  # widget is the vote session
+    has_anon = asbool(request.GET.get('anon', False))
     extract_votes = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
@@ -392,9 +393,14 @@ def extract_voters(widget):  # widget is the vote session
         voter_info = voters_by_id.get(vote.voter_id, None)
         if voter_info is None:
             voter = User.get(vote.voter_id)
-            contributor = voter.real_name() or u""
-            contributor_username = voter.username_p or u""
-            contributor_mail = voter.get_preferred_email() or u""
+            if not has_anon:
+                contributor = voter.real_name() or u""
+                contributor_username = voter.username_p or u""
+                contributor_mail = voter.get_preferred_email() or u""
+            else:
+                contributor = voter.anonymous_name() or u""
+                contributor_username = voter.anonymous_username() or u""
+                contributor_mail = voter.get_preferred_email(anonymous=has_anon) or u""
             voter_info = {
                 "Nom du contributeur": contributor.encode('utf-8'),
                 "Nom d'utilisateur du contributeur": contributor_username.encode('utf-8'),
@@ -462,5 +468,5 @@ def extract_voters_view(request):
         if P_ADMIN_DISC not in permissions:
             raise HTTPUnauthorized()
 
-    fieldnames, extract_votes = extract_voters(widget)
+    fieldnames, extract_votes = extract_voters(widget, request)
     return csv_response(extract_votes, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="detailed_vote_results.csv"')

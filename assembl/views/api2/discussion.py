@@ -1554,7 +1554,6 @@ def phase_csv_export(request):
     from assembl.models.auth import LanguagePreferenceCollection
     from assembl.utils import get_ideas_for_export
     has_lang = 'lang' in request.GET
-    has_anon = asbool(request.GET.get('anon', False))
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -2151,8 +2150,6 @@ def voters_csv_export(request):
     """CSV export for vote_users_data sheet."""
     from assembl.views.api2.votes import extract_voters
     from assembl.models import Locale, Idea
-    has_anon = asbool(request.GET.get('anon', False))
-    # TODO anonymize the export
     has_lang = 'lang' in request.GET
     if has_lang:
         language = request.GET['lang']
@@ -2191,7 +2188,7 @@ def voters_csv_export(request):
     for idea in ideas:
         if not idea.vote_session:
             continue
-        votes_fieldnames, votes = extract_voters(idea.vote_session)
+        votes_fieldnames, votes = extract_voters(idea.vote_session, request)
         votes_exports[idea.id] = votes
         for fieldname in votes_fieldnames:
             if fieldname not in fieldnames:
