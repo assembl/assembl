@@ -20,7 +20,9 @@ from assembl.models import (
     NumberGaugeVoteSpecification, TokenVoteSpecification, LanguagePreferenceCollection)
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
+from assembl.utils import format_date
 from assembl.views.api2.discussion import csv_response, CSV_MIMETYPE
+
 
 # Votes are private
 @view_config(context=CollectionContext, renderer='json',
@@ -422,7 +424,7 @@ def extract_voters(widget, request):  # widget is the vote session
         if votes[count].vote_spec_id != votes[count-1].vote_spec_id and fieldnames[-1] != "  ":
             fieldnames.append("  ")
 
-        extract_info["Date/heure du vote"] = str(vote_date)
+        extract_info["Date/heure du vote"] = format_date(vote_date)
 
         if vote.type == u'token_idea_vote':
             token_category = vote.token_category.name.best_lang(user_prefs).value or u""
