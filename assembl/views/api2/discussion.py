@@ -643,6 +643,12 @@ def multi_module_csv_export(request):
     return csv_response_multiple_sheets(results, fieldnames)
 
 
+def transform_fieldname(fn):
+    if '_' in fn:
+        return ' '.join(fn.split('_')).title()
+    return fn
+
+
 def csv_response(results, format, fieldnames=None, content_disposition=None):
     output = StringIO()
     if format == CSV_MIMETYPE:
@@ -662,8 +668,7 @@ def csv_response(results, format, fieldnames=None, content_disposition=None):
         empty = None
 
     if fieldnames:
-        # TODO: i18n
-        writerow([' '.join(fn.split('_')).title() for fn in fieldnames])
+        writerow([transform_fieldname(fn) for fn in fieldnames])
         for r in results:
             writerow([r.get(f, empty) for f in fieldnames])
     else:
@@ -697,8 +702,7 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
     for worksheet in workbook.worksheets:
         writerow = worksheet.append
         if fieldnames[worksheet.title] is not None:
-            # TODO: i18n
-            writerow([' '.join(fn.split('_')).title() for fn in fieldnames[worksheet.title]])
+            writerow([transform_fieldname(fn) for fn in fieldnames[worksheet.title]])
             if results[worksheet.title] is not None:
                 for r in results[worksheet.title]:
                     writerow([r.get(f, empty) for f in fieldnames[worksheet.title]])
