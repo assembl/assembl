@@ -212,7 +212,7 @@ def range_float(minimum, maximum, nb_ticks):
         yield i
 
 
-def global_vote_results_csv(widget):
+def global_vote_results_csv(widget, request):
     user_prefs = LanguagePreferenceCollection.getCurrent()
     # first fetch the ideas voted on
     ideas = widget.db.query(Idea
@@ -232,7 +232,10 @@ def global_vote_results_csv(widget):
     template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
                       for spec in widget.specification_templates]
     template_specs.sort()
-    coltitles = ["Proposition", "Nombre de participants sur la proposition"]
+    PROPOSITION = "Proposition"
+    PARTICIPANTS_COUNT = "Nombre de participants sur la proposition"
+    TOTAL_VOTES = "Total votes"
+    fieldnames = [PROPOSITION, PARTICIPANTS_COUNT]
 
     # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
     num_participants_by_idea_id = {}
@@ -243,35 +246,45 @@ def global_vote_results_csv(widget):
     # either each token count (for token votes) OR
     # sum of vote values, and count of votes otherwise.
     # Ideas are rows (and Idea.id is column 0)
+    def get_token_category_fieldname(token_category):
+        return token_category.name.best_lang(user_prefs).value.encode('utf-8')
+
+    def get_choice_average_fieldname(title):
+        return u'{title} - moyenne'.format(title=title).encode('utf-8')
+
+    def get_number_choice_fieldname(choice_value, template_spec):
+        return u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8')
+
+    def get_text_choice_fieldname(choice):
+        return choice.label.best_lang(user_prefs).value.encode('utf-8')
+
     for title, template_spec in template_specs:
         if isinstance(template_spec, TokenVoteSpecification):
             for tokencat in template_spec.token_categories:
-                coltitles.append(tokencat.name.best_lang(user_prefs).value.encode('utf-8'))
+                fieldnames.append(get_token_category_fieldname(tokencat))
         else:
-            coltitles.append(u'{title} - moyenne'.format(title=title).encode('utf-8'))
+            fieldnames.append(get_choice_average_fieldname(title))
             if isinstance(template_spec, NumberGaugeVoteSpecification):
                 for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                    coltitles.append(u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8'))
+                    fieldnames.append(get_number_choice_fieldname(choice_value, template_spec))
             else:
                 for choice in template_spec.get_choices():
-                    coltitles.append(choice.label.best_lang(user_prefs).value.encode('utf-8'))
-        coltitles.append('Total votes')
+                    fieldnames.append(get_text_choice_fieldname(choice))
+        fieldnames.append(TOTAL_VOTES)
 
-    output = StringIO()
-    # include BOM for Excel to open the file in UTF-8 properly
-    output.write(u'\ufeff'.encode('utf-8'))
-    csvw = csv.writer(output)
     rows = []
-    csvw.writerow(coltitles)
     from assembl.graphql.vote_session import get_avg_choice
     for title, idea_id in rowtitles:
-        row = [title.encode('utf-8'), num_participants_by_idea_id[idea_id]]
-        for t, template_spec in template_specs:
+        row = {}
+        row[PROPOSITION] = title.encode('utf-8')
+        row[PARTICIPANTS_COUNT] = num_participants_by_idea_id[idea_id]
+        for title, template_spec in template_specs:
             spec = spec_by_idea_id_and_template_specid.get((idea_id, template_spec.id), None)
             if isinstance(template_spec, TokenVoteSpecification):
                 for token_category in template_spec.token_categories:
+                    fieldname = get_token_category_fieldname(token_category)
                     if spec is None:
-                        row.append('-')
+                        row[fieldname] = '-'
                     else:
                         query = spec.db.query(
                             func.sum(getattr(spec.get_vote_class(), "vote_value"))).filter_by(
@@ -281,16 +294,19 @@ def global_vote_results_csv(widget):
                         # when there is no votes, query.first() equals (None,)
                         # in this case set num_token to 0
                         num_token = query.first()[0]
-                        row.append(num_token or "-")
+                        row[fieldname] = num_token or '-'
             else:  # this is a number or text gauge
                 if spec is None:
-                    row.append('-')
+                    fieldname = get_choice_average_fieldname(title)
+                    row[fieldname] = '-'
                     if isinstance(template_spec, NumberGaugeVoteSpecification):
                         for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                            row.append('-')
+                            fieldname = get_number_choice_fieldname(choice_value, template_spec)
+                            row[fieldname] = '-'
                     else:
                         for choice in template_spec.get_choices():
-                            row.append('-')
+                            fieldname = get_text_choice_fieldname(choice)
+                            row[fieldname] = '-'
                 elif isinstance(template_spec, NumberGaugeVoteSpecification):
                     vote_cls = spec.get_vote_class()
                     voting_avg = spec.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
@@ -299,7 +315,8 @@ def global_vote_results_csv(widget):
                         idea_id=spec.criterion_idea_id).first()
                     # when there is no votes, query.first() equals (None,)
                     avg = voting_avg[0] or '-'
-                    row.append(avg)
+                    fieldname = get_choice_average_fieldname(title)
+                    row[fieldname] = avg
 
                     q_histogram = spec.db.query(getattr(vote_cls, 'vote_value'), func.count(getattr(vote_cls, 'voter_id'))).filter_by(
                         vote_spec_id=spec.id,
@@ -307,7 +324,8 @@ def global_vote_results_csv(widget):
                         idea_id=spec.criterion_idea_id).group_by(getattr(vote_cls, 'vote_value'))
                     histogram = dict(q_histogram.all())
                     for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                        row.append(histogram.get(choice_value, 0))
+                        fieldname = get_number_choice_fieldname(choice_value, template_spec)
+                        row[fieldname] = histogram.get(choice_value, 0)
                 else:
                     vote_cls = spec.get_vote_class()
                     avg_choice = get_avg_choice(spec)
@@ -315,7 +333,8 @@ def global_vote_results_csv(widget):
                         label_avg = '-'
                     else:
                         label_avg = avg_choice.label.best_lang(user_prefs).value.encode('utf-8')
-                    row.append(label_avg)
+                    fieldname = get_choice_average_fieldname(title)
+                    row[fieldname] = label_avg
 
                     q_histogram = spec.db.query(getattr(vote_cls, 'vote_value'), func.count(getattr(vote_cls, 'voter_id'))).filter_by(
                         vote_spec_id=spec.id,
@@ -323,20 +342,19 @@ def global_vote_results_csv(widget):
                         idea_id=spec.criterion_idea_id).group_by(getattr(vote_cls, 'vote_value'))
                     histogram = dict(q_histogram.all())
                     for choice in template_spec.get_choices():
-                        row.append(histogram.get(choice.value, 0))
+                        fieldname = get_text_choice_fieldname(choice)
+                        row[fieldname] = histogram.get(choice.value, 0)
 
             if spec is None:
-                row.append('-')
+                row[TOTAL_VOTES] = '-'
             else:
                 num_votes = spec.db.query(
                     getattr(spec.get_vote_class(), "voter_id")).filter_by(
                     vote_spec_id=spec.id,
                     tombstone_date=None).count()
-                row.append(num_votes)
-        csvw.writerow(row)
+                row[TOTAL_VOTES] = num_votes
         rows.append(row)
-    output.seek(0)
-    return output, coltitles, rows
+    return fieldnames, rows
 
 
 # url /data/Discussion/${debateId}/widgets/${voteSessionId}/vote_results_csv
@@ -354,8 +372,8 @@ def global_vote_results_csv_view(request):
         if P_ADMIN_DISC not in permissions:
             raise HTTPUnauthorized()
 
-    output, coltitles, rows = global_vote_results_csv(widget)
-    return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
+    fieldnames, rows = global_vote_results_csv(widget, request)
+    return csv_response(rows, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="vote_results.csv"')
 
 
 def extract_voters(widget):  # widget is the vote session

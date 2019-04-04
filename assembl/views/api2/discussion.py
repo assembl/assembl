@@ -633,15 +633,13 @@ def extract_taxonomy_csv(request):
 def multi_module_csv_export(request):
     results = {sheet_name: None for sheet_name in sheet_names}
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
-    from assembl.views.api2.votes import extract_voters, global_vote_results_csv
     fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
     fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(request)
     fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(request)
     fieldnames['export_module_multicolumns'], results['export_module_multicolumns'] = multicolumn_csv_export(request)
     fieldnames['vote_users_data'], results['vote_users_data'] = voters_csv_export(request)
     fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
-    # fieldnames['export_module_vote'], results['export_module_vote'] = global_vote_results_csv(request)
-
+    fieldnames['export_module_vote'], results['export_module_vote'] = global_votes_csv_export(request)
     return csv_response_multiple_sheets(results, fieldnames)
 
 
@@ -2089,6 +2087,66 @@ def bright_mirror_csv_export(request):
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
                 rows.append(convert_to_utf8(row))
+    return fieldnames, rows
+
+
+def global_votes_csv_export(request):
+    """CSV export for export_module_vote sheet."""
+    from assembl.views.api2.votes import global_vote_results_csv
+    from assembl.models import Locale, Idea
+    start, end, interval = get_time_series_timing(request)
+    has_anon = asbool(request.GET.get('anon', False))
+    has_lang = 'lang' in request.GET
+    if has_lang:
+        language = request.GET['lang']
+        exists = Locale.get_id_of(language, create=False)
+        if not exists:
+            language = u'fr'
+    else:
+        language = u'fr'
+
+    # This is required so that the langstring methods can operate using correct globals
+    # on the request object
+    LanguagePreferenceCollection.setCurrentFromLocale(language, req=request)
+    user_prefs = LanguagePreferenceCollection.getCurrent()
+    discussion = request.context._instance
+    discussion_id = discussion.id
+    Idea.prepare_counters(discussion_id, True)
+
+    fieldnames = [
+#        IDEA_ID.encode('utf-8'),
+        IDEA_PARENT.encode('utf-8'),
+        IDEA_NAME.encode('utf-8'),
+        # TODO idea breadcrumbs instead of IDEA_PARENT IDEA_NAME
+    ]
+    extra_columns_info = (None if 'no_extra_columns' in request.GET else
+                          load_social_columns_info(discussion, language))
+
+    ideas = get_vote_session_ideas(discussion)
+    votes_exports = {}
+    for idea in ideas:
+        if not idea.vote_session:
+            continue
+        votes_fieldnames, votes = global_vote_results_csv(idea.vote_session, request)
+        votes_exports[idea.id] = votes
+        for fieldname in votes_fieldnames:
+            if fieldname not in fieldnames:
+                fieldnames.append(fieldname)
+
+    rows = []
+    for idea in ideas:
+        if not idea.vote_session:
+            continue
+        votes = votes_exports.get(idea.id)
+        idea_parent = get_idea_parents_titles(idea, user_prefs)
+        idea_name = get_entries_locale_original(idea.title).get('entry')
+        for vote_row in votes:
+            row = {}
+#            row[IDEA_ID] = idea.id
+            row[IDEA_PARENT] = idea_parent
+            row[IDEA_NAME] = idea_name
+            row.update(vote_row)
+            rows.append(convert_to_utf8(row))
     return fieldnames, rows
 
 
