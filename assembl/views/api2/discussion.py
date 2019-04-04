@@ -1698,7 +1698,8 @@ def survey_csv_export(request):
                           load_social_columns_info(discussion, language))
     if extra_columns_info:
         # insert after email
-        fieldnames[10:10] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        i = fieldnames.index(POST_CREATOR_EMAIL.encode('utf-8')) + 1
+        fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
@@ -1810,7 +1811,8 @@ def multicolumn_csv_export(request):
 
     if extra_columns_info:
         # insert after email
-        fieldnames[10:10] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        i = fieldnames.index(POST_CREATOR_EMAIL.encode('utf-8')) + 1
+        fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
@@ -1927,7 +1929,8 @@ def thread_csv_export(request):
 
     if extra_columns_info:
         # insert after email
-        fieldnames[15:15] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        i = fieldnames.index(POST_CREATOR_EMAIL.encode('utf-8')) + 1
+        fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
@@ -2046,7 +2049,8 @@ def bright_mirror_csv_export(request):
 
     if extra_columns_info:
         # insert after email
-        fieldnames[10:10] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        i = fieldnames.index(POST_CREATOR_EMAIL.encode('utf-8')) + 1
+        fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
 
@@ -2165,7 +2169,7 @@ def global_votes_csv_export(request):
 
 def voters_csv_export(request):
     """CSV export for vote_users_data sheet."""
-    from assembl.views.api2.votes import extract_voters
+    from assembl.views.api2.votes import extract_voters, VOTER_MAIL
     from assembl.models import Locale, Idea
     has_lang = 'lang' in request.GET
     if has_lang:
@@ -2190,17 +2194,6 @@ def voters_csv_export(request):
         IDEA_LEVEL_3.encode('utf-8'),
         IDEA_LEVEL_4.encode('utf-8')
     ]
-    extra_columns_info = (None if 'no_extra_columns' in request.GET else
-                          load_social_columns_info(discussion, language))
-
-    if extra_columns_info:
-        # insert after email
-        # TODO change the position after rewriting the first columns
-        fieldnames[8:8] = [name.encode('utf-8') for (name, path) in extra_columns_info]
-        column_info_per_user = {}
-        provider_id = get_provider_id_for_discussion(discussion)
-        # TODO fill those extra columns
-
     ideas = get_vote_session_ideas(discussion)
     votes_exports = {}
     for idea in ideas:
@@ -2211,6 +2204,15 @@ def voters_csv_export(request):
         for fieldname in votes_fieldnames:
             if fieldname not in fieldnames:
                 fieldnames.append(fieldname)
+
+    extra_columns_info = (None if 'no_extra_columns' in request.GET else
+                          load_social_columns_info(discussion, language))
+    if extra_columns_info:
+        # insert after email
+        i = fieldnames.index(VOTER_MAIL) + 1
+        fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
+        column_info_per_user = {}
+        provider_id = get_provider_id_for_discussion(discussion)
 
     rows = []
     for idea in ideas:
@@ -2223,6 +2225,14 @@ def voters_csv_export(request):
             row.update(idea_levels)
             row.update(vote_row)
             rows.append(convert_to_utf8(row))
+            if extra_columns_info:
+                voter = vote_row['voter']
+                if voter.id not in column_info_per_user:
+                    column_info_per_user[voter.id] = get_social_columns_from_user(
+                        voter, extra_columns_info, provider_id)
+                extra_info = column_info_per_user[voter.id]
+                for num, (name, path) in enumerate(extra_columns_info):
+                    row[name] = extra_info[num]
     return fieldnames, rows
 
 

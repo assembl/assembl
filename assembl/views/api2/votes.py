@@ -378,11 +378,12 @@ def global_vote_results_csv_view(request):
     return csv_response(rows, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="vote_results.csv"')
 
 
+VOTER_MAIL = "Adresse mail du contributeur"
 def extract_voters(widget, request):  # widget is the vote session
     has_anon = asbool(request.GET.get('anon', False))
     extract_votes = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
-    fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
+    fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", VOTER_MAIL, "Date du vote", "Proposition"]
     votes = widget.db.query(AbstractIdeaVote
         ).filter(AbstractVoteSpecification.widget_id==widget.id
         ).filter(AbstractIdeaVote.tombstone_date==None
@@ -406,7 +407,8 @@ def extract_voters(widget, request):  # widget is the vote session
             voter_info = {
                 "Nom du contributeur": contributor.encode('utf-8'),
                 "Nom d'utilisateur du contributeur": contributor_username.encode('utf-8'),
-                "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
+                VOTER_MAIL: contributor_mail.encode('utf-8'),
+                "voter": voter # used in voters_csv_export to add sso info
             }
             voters_by_id[vote.voter_id] = voter_info
 
@@ -424,7 +426,7 @@ def extract_voters(widget, request):  # widget is the vote session
         if votes[count].vote_spec_id != votes[count-1].vote_spec_id and fieldnames[-1] != "  ":
             fieldnames.append("  ")
 
-        extract_info["Date/heure du vote"] = format_date(vote_date)
+        extract_info["Date du vote"] = format_date(vote_date)
 
         if vote.type == u'token_idea_vote':
             token_category = vote.token_category.name.best_lang(user_prefs).value or u""
