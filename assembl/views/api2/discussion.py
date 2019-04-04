@@ -1523,10 +1523,10 @@ POST_CREATOR_NAME = u"Nom de l'auteur"
 POST_CREATOR_USERNAME = u"Nom d'utilisateur de l'auteur"
 POST_CREATOR_EMAIL = u"Adresse mail de l'auteur"
 POST_CREATION_DATE = u"Date de publication"
-POST_LIKE_COUNT = u"J'aime"
-POST_DISAGREE_COUNT = u"J'aime pas"
-POST_DONT_UNDERSTAND_COUNT = u"Pas tout compris"
-POST_MORE_INFO_PLEASE_COUNT = u"SVP + d'infos"
+POST_LIKE = u"J'aime"
+POST_DISAGREE = u"J'aime pas"
+POST_DONT_UNDERSTAND = u"Pas tout compris"
+POST_MORE_INFO_PLEASE = u"SVP + d'infos"
 SENTIMENT_ACTOR_NAME = u"Nom du votant"
 SENTIMENT_ACTOR_EMAIL = u"Adresse mail du votant"
 SENTIMENT_CREATION_DATE = u"Date du vote"
@@ -1655,8 +1655,8 @@ def survey_csv_export(request):
         POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
-        POST_LIKE_COUNT.encode('utf-8'),
-        POST_DISAGREE_COUNT.encode('utf-8'),
+        POST_LIKE.encode('utf-8'),
+        POST_DISAGREE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         # TODO extra columns for sentiment actor
@@ -1705,8 +1705,6 @@ def survey_csv_export(request):
                     row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
                 row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
-                row[POST_LIKE_COUNT] = post.like_count
-                row[POST_DISAGREE_COUNT] = post.disagree_count
                 if extra_columns_info:
                     if post.creator_id not in column_info_per_user:
                         column_info_per_user[post.creator_id] = get_social_columns_from_user(
@@ -1717,6 +1715,8 @@ def survey_csv_export(request):
 
                 if post.sentiments:
                     for sentiment in post.sentiments:
+                        row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
+                        row[POST_DISAGREE] = "1" if sentiment.name == 'disagree' else "0"
                         if not has_anon:
                             row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
                         else:
@@ -1766,10 +1766,10 @@ def multicolumn_csv_export(request):
         POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
-        POST_LIKE_COUNT.encode('utf-8'),
-        POST_DISAGREE_COUNT.encode('utf-8'),
-        POST_DONT_UNDERSTAND_COUNT.encode('utf-8'),
-        POST_MORE_INFO_PLEASE_COUNT.encode('utf-8'),
+        POST_LIKE.encode('utf-8'),
+        POST_DISAGREE.encode('utf-8'),
+        POST_DONT_UNDERSTAND.encode('utf-8'),
+        POST_MORE_INFO_PLEASE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         # TODO extra columns for sentiment actor
@@ -1819,8 +1819,6 @@ def multicolumn_csv_export(request):
                 row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
-            row[POST_LIKE_COUNT] = post.like_count
-            row[POST_DISAGREE_COUNT] = post.disagree_count
             if extra_columns_info:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(
@@ -1831,6 +1829,8 @@ def multicolumn_csv_export(request):
 
             if post.sentiments:
                 for sentiment in post.sentiments:
+                    row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
+                    row[POST_DISAGREE] = "1" if sentiment.name == 'disagree' else "0"
                     if not has_anon:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
                     else:
@@ -1880,15 +1880,15 @@ def thread_csv_export(request):
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         POST_BODY_COUNT.encode('utf-8'),
-        POST_LIKE_COUNT.encode('utf-8'),
-        POST_DISAGREE_COUNT.encode('utf-8'),
-        POST_DONT_UNDERSTAND_COUNT.encode('utf-8'),
-        POST_MORE_INFO_PLEASE_COUNT.encode('utf-8'),
         NUMBER_OF_ANSWERS.encode('utf-8'),  # TODO
         POST_CREATOR_NAME.encode('utf-8'),
         POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
+        POST_LIKE.encode('utf-8'),
+        POST_DISAGREE.encode('utf-8'),
+        POST_DONT_UNDERSTAND.encode('utf-8'),
+        POST_MORE_INFO_PLEASE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         # TODO extra columns for sentiment actor
@@ -1941,10 +1941,6 @@ def thread_csv_export(request):
                 row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
-            row[POST_LIKE_COUNT] = post.like_count
-            row[POST_DISAGREE_COUNT] = post.disagree_count
-            row[POST_DONT_UNDERSTAND_COUNT] = post.dont_understand_count
-            row[POST_MORE_INFO_PLEASE_COUNT] = post.more_info_count
             if extra_columns_info:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(
@@ -1955,6 +1951,10 @@ def thread_csv_export(request):
 
             if post.sentiments:
                 for sentiment in post.sentiments:
+                    row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
+                    row[POST_DISAGREE] = "1" if sentiment.name == 'disagree' else "0"
+                    row[POST_DONT_UNDERSTAND] = "1" if sentiment.name == 'dont_understand' else "0"
+                    row[POST_MORE_INFO_PLEASE] = "1" if sentiment.name == 'more_info' else "0"
                     if not has_anon:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
                     else:
@@ -2006,10 +2006,10 @@ def bright_mirror_csv_export(request):
         POST_CREATION_DATE.encode('utf-8'),
         MESSAGE_COUNT.encode('utf-8'),  # TODO
         HARVESTING_COUNT.encode('utf-8'),  # TODO
-        POST_LIKE_COUNT.encode('utf-8'),
-        POST_DISAGREE_COUNT.encode('utf-8'),
-        POST_DONT_UNDERSTAND_COUNT.encode('utf-8'),
-        POST_MORE_INFO_PLEASE_COUNT.encode('utf-8'),
+        POST_LIKE.encode('utf-8'),
+        POST_DISAGREE.encode('utf-8'),
+        POST_DONT_UNDERSTAND.encode('utf-8'),
+        POST_MORE_INFO_PLEASE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         # TODO extra columns for sentiment actor
@@ -2059,10 +2059,6 @@ def bright_mirror_csv_export(request):
                 row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
-            row[POST_LIKE_COUNT] = post.like_count
-            row[POST_DISAGREE_COUNT] = post.disagree_count
-            row[POST_DONT_UNDERSTAND_COUNT] = post.dont_understand_count
-            row[POST_MORE_INFO_PLEASE_COUNT] = post.more_info_count
             if extra_columns_info:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(
@@ -2075,6 +2071,10 @@ def bright_mirror_csv_export(request):
 
             if post.sentiments:
                 for sentiment in post.sentiments:
+                    row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
+                    row[POST_DISAGREE] = "1" if sentiment.name == 'disagree' else "0"
+                    row[POST_DONT_UNDERSTAND] = "1" if sentiment.name == 'dont_understand' else "0"
+                    row[POST_MORE_INFO_PLEASE] = "1" if sentiment.name == 'more_info' else "0"
                     if not has_anon:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
                     else:
