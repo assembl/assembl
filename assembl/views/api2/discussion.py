@@ -60,7 +60,8 @@ from assembl.models import (Discussion, Permission)
 from assembl.utils import format_date, get_published_posts, get_ideas
 from assembl.utils import (
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
-    get_bright_mirror_ideas, get_vote_session_ideas)
+    get_bright_mirror_ideas, get_vote_session_ideas,
+    get_deleted_posts)
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
@@ -1646,6 +1647,8 @@ def phase_csv_export(request):
         row[DONT_LIKE] = idea.get_total_sentiments("dont_like")
         row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
         row[MORE_INFO] = idea.get_total_sentiments("more_info")
+        # To be implemented
+        # row[WATSON_SENTIMENT] = idea.sentiments()
         rows.append(row)
     return fieldnames, rows
 
@@ -1719,6 +1722,8 @@ def survey_csv_export(request):
         row.update(get_idea_parents_titles(thematic, user_prefs))
         for question in thematic.get_children():
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
+            # To be implemented later
+            # row[WATSON_SENTIMENT] = thematic.sentiments()
             posts = get_published_posts(question, start, end)
             for post in posts:
                 if has_lang:
@@ -1831,6 +1836,8 @@ def multicolumn_csv_export(request):
 
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
+        # WATSON sentiment to be implemented later
+        # row[WATSON_SENTIMENT] = idea.sentiments()
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
@@ -1950,6 +1957,8 @@ def thread_csv_export(request):
         children = idea.get_children()
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
+        # WATSON sentiment to be impemented later
+        # row[WATSON_SENTIMENT] = idea.sentiments()
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
@@ -2060,6 +2069,8 @@ def bright_mirror_csv_export(request):
     rows = []
     for idea in ideas:
         row = {}
+        # WATSON sentiment to be impemented later
+        # row[WATSON_SENTIMENT] = idea.sentiments()
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
             column_name = "Mots clés {}".format(index + 1)
