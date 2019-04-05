@@ -1580,6 +1580,7 @@ def phase_csv_export(request):
     from assembl.models import Locale, Idea
     from assembl.models.auth import LanguagePreferenceCollection
     from assembl.utils import get_ideas_for_export
+    start, end, interval = get_time_series_timing(request)
     has_lang = 'lang' in request.GET
     if has_lang:
         language = request.GET['lang']
@@ -1640,6 +1641,7 @@ def phase_csv_export(request):
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
 
+        row[DELETED_MESSAGES_COUNT] = get_deleted_posts(idea, start, end).count()
         row[LIKE] = idea.get_total_sentiments("like")
         row[DONT_LIKE] = idea.get_total_sentiments("dont_like")
         row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
@@ -2187,7 +2189,6 @@ def voters_csv_export(request):
     discussion = request.context._instance
     discussion_id = discussion.id
     Idea.prepare_counters(discussion_id, True)
-
     fieldnames = [
         IDEA_LEVEL_1.encode('utf-8'),
         IDEA_LEVEL_2.encode('utf-8'),
