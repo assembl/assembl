@@ -210,7 +210,7 @@ def discussion_with_moderation(discussion, test_session):
     test_session.commit()
     return discussion
 
-@pyest.fixture(scope="function")
+@pytest.fixture(scope="function")
 def discussion_with_translation(discussion, test_session):
     discussion.preferences['with_translation'] = True
     test_session.commit()

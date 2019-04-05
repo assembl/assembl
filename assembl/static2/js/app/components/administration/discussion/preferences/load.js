@@ -39,9 +39,11 @@ export function postLoadFormat(data: Data): DiscussionPreferencesFormValues {
     label: language.label,
     value: language.localeCode
   }));
+  const { withModeration, withTranslation, slug } = discussionPreferences;
   return {
     languages: languages,
-    withModeration: discussionPreferences.withModeration,
-    slug: discussionPreferences.slug
+    withModeration: withModeration,
+    withTranslation: withTranslation,
+    slug: slug
   };
 }

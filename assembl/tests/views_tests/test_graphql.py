@@ -1693,7 +1693,7 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
             u'favicon': None,
             u'logo': None,
             u'tabTitle': '',
-            u'withModeration': False
+            u'withModeration': False,
             u'withTranslation': True
         }
     }
@@ -1709,7 +1709,7 @@ def test_query_discussion_preferences_moderation(graphql_registry, graphql_reque
             u'logo': None,
             u'tabTitle': '',
             u'withModeration': True,
-            u'withTranslation': True
+            u'withTranslation': True,
         }
     }
 
