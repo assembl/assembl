@@ -369,5 +369,20 @@ def collection_add_json(request, json=None):
         return CreationResponse(first, user_id, permissions, view)
 
 
+@view_config(route_name='health_check', request_method='GET', renderer='string')
+def health_check(request):
+    """
+    Simple health check
+    TODO: Add connection to database
+    TODO: Add connection to elasticsearch
+    TODO: Add connection to memcached
+    TODO: Add connection to URLMetadata
+    TODO: Ensure SQS is empty and reachable (for celery)
+    TODO: Ensure S3 buckets used on this server are reachable
+    """
+    return "OK"
+
+
 def includeme(config):
+    config.add_route('health_check', '/health_check')
     config.include('.discussion')
