@@ -1883,7 +1883,7 @@ const Translations = {
       moderation: "Post pending for moderation",
       activateModeration: "Activate the moderation",
       translation: "Option to translate messages",
-      activateTranslation: "Activate the options for user to translate the messages",
+      activateTranslation: "Activate the option for users to translate the messages",
       ph: {
         propositionSectionTitle: "Section title",
         propositionSectionSubtitle: "Section subtitle",
