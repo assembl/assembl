@@ -55,7 +55,7 @@ def get_deleted_posts(idea, start=None, end=None):
     """
     Post = models.Post
     query = get_posts(idea, start, end)
-    query = query.filter(Post.is_tombstoned == True)  # noqa: E712
+    query = query.filter(Post.is_tombstone == True)  # noqa: E712
     if start is not None:
         query = query.filter(Post.creation_date >= start)
 
