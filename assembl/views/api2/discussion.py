@@ -2163,7 +2163,7 @@ def global_votes_csv_export(request):
             row = {}
             row.update(idea_levels)
             row.update(vote_row)
-            rows.append(convert_to_utf8(row))
+            rows.append(row)
     return fieldnames, rows
 
 
@@ -2224,7 +2224,7 @@ def voters_csv_export(request):
             row = {}
             row.update(idea_levels)
             row.update(vote_row)
-            rows.append(convert_to_utf8(row))
+            rows.append(row)
             if extra_columns_info:
                 voter = vote_row['voter']
                 if voter.id not in column_info_per_user:
