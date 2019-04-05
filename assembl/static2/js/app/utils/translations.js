@@ -863,7 +863,7 @@ const Translations = {
       moderation: "Modération à priori",
       activateModeration: "Activer la modération",
       translation: "Option de traduction pour les utilisateurs",
-      activateTranslation: "Ativer l'option pour les utilisateurs de traduire les messages",
+      activateTranslation: "Activer l'option pour les utilisateurs de traduire les messages",
       ph: {
         propositionSectionTitle: "Titre de la section",
         propositionSectionSubtitle: "Sous-titre de la section",

@@ -341,7 +341,13 @@ class DiscussionPreferences(graphene.ObjectType):
         return self.get('with_moderation')
 
     def resolve_with_translation(self, args, context, info):
-        return self.get('with_translation')
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        translation_service = discussion.preferences['translation_service']
+        if translation_service == 'assembl.nlp.translation_service.GoogleTranslationService':
+            return True
+        else:
+            return False
 
     def resolve_slug(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -633,8 +639,10 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             if with_moderation is not None:
                 discussion.preferences['with_moderation'] = with_moderation
 
-            if with_translation is not None:
-                discussion.preferences['with_translation'] = with_translation
+            if with_translation is True:
+                discussion.preferences['translation_service'] = "assembl.nlp.translation_service.GoogleTranslationService"
+            else:
+                discussion.preferences['translation_service'] = ""
 
             if slug is not None:
                 if slug != discussion.slug:

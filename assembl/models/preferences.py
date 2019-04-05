@@ -1086,16 +1086,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             "default": False,
-        },
-        {
-            "id": "with_translation",
-            "value_type": "bool",
-            "name": _("Translation option"),
-            "description": _("Is the translation of messages activated or not"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": True,
-        },
+        }
     ]
 
     # Precompute, this is not mutable.
