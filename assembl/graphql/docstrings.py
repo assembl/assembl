@@ -119,6 +119,7 @@ class DiscussionPreferences:
     favicon = Default.document % ("""The site favicon.""",)
     logo = Default.document % ("""The site logo.""",)
     with_moderation = """A Boolean flag indicating whether the moderation is activated or not."""
+    with_translation = """A Boolean flag indicating wheter the users have the possibility to translate the messages or not."""
     slug = Discussion.slug
     old_slugs = """List of previous used slugs for this discussion"""
 
@@ -164,6 +165,7 @@ class UpdateDiscussionPreferences:
     favicon = DiscussionPreferences.favicon
     logo = DiscussionPreferences.logo
     with_moderation = DiscussionPreferences.with_moderation
+    with_translation = DiscussionPreferences.with_translation
     slug = DiscussionPreferences.slug
 
 

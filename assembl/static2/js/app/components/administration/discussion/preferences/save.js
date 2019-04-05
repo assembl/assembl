@@ -9,6 +9,7 @@ import { SECTION_DISCUSSION_PREFERENCES } from '../../../../constants';
 const getVariables = async (client: ApolloClient, values: DiscussionPreferencesFormValues) => ({
   languages: convertCheckboxListValueToVariable(values.languages),
   withModeration: values.withModeration,
+  withTranslation: values.withTranslation,
   slug: values.slug
 });
 

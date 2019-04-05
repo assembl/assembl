@@ -312,6 +312,7 @@ class DiscussionPreferences(graphene.ObjectType):
     favicon = graphene.Field(Document, description=docs.DiscussionPreferences.favicon)
     logo = graphene.Field(Document, description=docs.DiscussionPreferences.logo)
     with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
+    with_translation = graphene.Boolean(description=docs.DiscussionPreferences.with_translation)
     slug = graphene.String(required=True, description=docs.DiscussionPreferences.slug)
     old_slugs = graphene.List(graphene.String, required=True, description=docs.DiscussionPreferences.old_slugs)
 
@@ -338,6 +339,15 @@ class DiscussionPreferences(graphene.ObjectType):
 
     def resolve_with_moderation(self, args, context, info):
         return self.get('with_moderation')
+
+    def resolve_with_translation(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        translation_service = discussion.preferences['translation_service']
+        if translation_service == 'assembl.nlp.translation_service.GoogleTranslationService':
+            return True
+        else:
+            return False
 
     def resolve_slug(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -574,6 +584,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         favicon = graphene.String(description=docs.UpdateDiscussionPreferences.favicon)
         logo = graphene.String(description=docs.UpdateDiscussionPreferences.logo)
         with_moderation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_moderation)
+        with_translation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_translation)
         slug = graphene.String(description=docs.UpdateDiscussionPreferences.slug)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
@@ -590,6 +601,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         favicon = args.get('favicon', None)
         logo = args.get('logo', None)
         with_moderation = args.get('with_moderation', None)
+        with_translation = args.get('with_translation', None)
         slug = args.get('slug', None)
         with cls.default_db.no_autoflush as db:
             if languages is not None:
@@ -626,6 +638,11 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 
             if with_moderation is not None:
                 discussion.preferences['with_moderation'] = with_moderation
+
+            if with_translation is True:
+                discussion.preferences['translation_service'] = "assembl.nlp.translation_service.GoogleTranslationService"
+            else:
+                discussion.preferences['translation_service'] = ""
 
             if slug is not None:
                 if slug != discussion.slug:

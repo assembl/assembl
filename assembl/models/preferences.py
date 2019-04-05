@@ -1086,7 +1086,7 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             "default": False,
-        },
+        }
     ]
 
     # Precompute, this is not mutable.

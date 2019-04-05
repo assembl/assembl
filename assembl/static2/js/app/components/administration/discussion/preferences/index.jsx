@@ -95,6 +95,17 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                     label={I18n.t('administration.activateModeration')}
                     type="checkbox"
                   />
+                  <div className="separator" />
+                  <div className="title">
+                    <Translate value="administration.translation" />
+                  </div>
+                  <Field
+                    component={CheckboxFieldAdapter}
+                    name="withTranslation"
+                    isChecked
+                    label={I18n.t('administration.activateTranslation')}
+                    type="checkbox"
+                  />
                 </div>
               </AdminForm>
             </div>
