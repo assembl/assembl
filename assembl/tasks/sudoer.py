@@ -1,4 +1,3 @@
-import os
 import sys
 from os.path import exists, join
 
@@ -10,11 +9,6 @@ from common import (
     get_venv_site_packages,
     exists as sudo_exists)
 
-# try:
-#     # invoke 0.11
-#     from invoke import ctask as task
-# except ImportError:
-#     from invoke import task
 
 core_dependencies = [
     'apt-transport-https',
