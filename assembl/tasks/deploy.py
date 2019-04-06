@@ -33,7 +33,7 @@ def ensureSection(config, section):
 
 
 def yaml_to_ini(yaml_conf, default_section='app:assembl'):
-    """Convert a .rc file to a ConfigParser (.ini-like object)
+    """Convert a .yaml file to a ConfigParser (.ini-like object)
 
     Items are assumed to be in app:assembl section,
         unless prefixed by "{section}__" .
