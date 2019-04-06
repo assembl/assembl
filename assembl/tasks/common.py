@@ -57,7 +57,7 @@ def get_aws_account_id(c):
         if r.ok:
             return r.json()['accountId']
     except:
-        pass
+        return None
 
 
 def get_secrets_from_manager(c, aws_secret_ids, cache=True):
