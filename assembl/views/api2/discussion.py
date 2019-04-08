@@ -2080,6 +2080,7 @@ def bright_mirror_csv_export(request):
 
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
+        row[MESSAGE_COUNT] = posts.count()
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
