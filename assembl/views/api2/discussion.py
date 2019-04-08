@@ -61,7 +61,7 @@ from assembl.utils import format_date, get_published_posts, get_ideas
 from assembl.utils import (
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
     get_bright_mirror_ideas, get_vote_session_ideas,
-    get_deleted_posts, get_related_extracts)
+    get_deleted_posts, get_related_extracts, get_top_posts)
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
@@ -70,6 +70,7 @@ from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
 from assembl.models import LanguagePreferenceCollection
 from assembl.models.idea_content_link import ExtractStates
 from assembl.models.timeline import Phases, get_phase_by_identifier
+from assembl.models.idea import MessageView
 
 no_thematic_associated = "no thematic associated"
 
@@ -1617,8 +1618,8 @@ def phase_csv_export(request):
         IDEA_LEVEL_4.encode('utf-8'),
         MODULE.encode('utf-8'),
         POSTED_MESSAGES_COUNT.encode('utf-8'),
-        DELETED_MESSAGES_COUNT.encode('utf-8'),  # TODO
-        TOP_POST_COUNT.encode('utf-8'),  # TODO In the case of a thread
+        DELETED_MESSAGES_COUNT.encode('utf-8'),
+        TOP_POST_COUNT.encode('utf-8'),
         NON_TOP_POST_COUNT.encode('utf-8'),  # TODO
         LIKE.encode('utf-8'),
         DONT_LIKE.encode('utf-8'),
@@ -1641,7 +1642,8 @@ def phase_csv_export(request):
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
-
+        if idea.message_view_override == MessageView.thread.value:
+            row[TOP_POST_COUNT] = get_top_posts(idea, start, end).count()
         row[DELETED_MESSAGES_COUNT] = get_deleted_posts(idea, start, end).count()
         row[LIKE] = idea.get_total_sentiments("like")
         row[DONT_LIKE] = idea.get_total_sentiments("dont_like")

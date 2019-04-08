@@ -29,6 +29,19 @@ def get_posts(idea, start=None, end=None):
     return query
 
 
+def get_top_posts(idea, start=None, end=None):
+    Post = models.Post
+    query = get_posts(idea, start, end)
+    query = query.filter(Post.parent_id == None)  # noqa: E711
+    if start is not None:
+        query = query.filter(Post.creation_date >= start)
+
+    if end is not None:
+        query = query.filter(Post.creation_date <= end)
+
+    return query
+
+
 def get_published_posts(idea, start=None, end=None):
     """Get published posts for the given idea filtered by start and end dates.
     @param: idea Idea
