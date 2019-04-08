@@ -1,18 +1,23 @@
-import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
 import React from 'react';
 import renderer from 'react-test-renderer';
-
+import 'react-dates/initialize';
 import ExportSection from '../../../../js/app/components/administration/exportSection';
 
-configure({ adapter: new Adapter() });
-
 describe('ExportSection component', () => {
-  it('should render an ExportSection component without languages options', () => {
+  it('should render an ExportSection component without any option', () => {
     const props = {
-      voteSessionId: '123',
-      debateId: '7',
       exportLink: 'foo.com'
+    };
+    const component = renderer.create(<ExportSection {...props} />);
+    const tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('should render an ExportSection component with the anonymous option', () => {
+    const handleAnonymousChangeSpy = jest.fn(() => {});
+    const props = {
+      exportLink: 'foo.com',
+      handleAnonymousChange: handleAnonymousChangeSpy
     };
     const component = renderer.create(<ExportSection {...props} />);
     const tree = component.toJSON();
@@ -22,13 +27,13 @@ describe('ExportSection component', () => {
   it('should render an ExportSection component with languages options', () => {
     const handleExportLocaleChangeSpy = jest.fn(() => {});
     const handleTranslationChangeSpy = jest.fn(() => {});
+    const handleShouldTranslateSpy = jest.fn(() => {});
     const props = {
-      voteSessionId: '123',
-      debateId: '7',
-      withLanguageOptions: true,
       exportLink: 'foo.com',
       handleExportLocaleChange: handleExportLocaleChangeSpy,
+      handleShouldTranslate: handleShouldTranslateSpy,
       handleTranslationChange: handleTranslationChangeSpy,
+      shouldTranslate: true,
       languages: [
         { locale: 'fr', name: 'French', nativeName: 'français', __typename: 'LocalePreference' },
         { locale: 'en', name: 'English', nativeName: 'English', __typename: 'LocalePreference' }
@@ -39,44 +44,15 @@ describe('ExportSection component', () => {
     expect(tree).toMatchSnapshot();
   });
 
-  it('should render an export section that handles different export links', () => {
+  it('should render an ExportSection component with dates options', () => {
+    const handleDatesChangeSpy = jest.fn(() => {});
     const props = {
-      voteSessionId: '123',
-      debateId: '7',
-      exportLink: [{ msgId: 'vote.voteResultsCsv', url: 'foo.com' }, { msgId: 'vote.extractCsvVoters', url: 'bar.org' }]
+      exportLink: 'foo.com',
+      handleDatesChange: handleDatesChangeSpy,
+      locale: 'fr'
     };
     const component = renderer.create(<ExportSection {...props} />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
-  });
-
-  it('should update exportLink in state when user clicks on on export link option', () => {
-    const props = {
-      voteSessionId: '123',
-      debateId: '7',
-      exportLink: [
-        {
-          msgId: 'vote.voteResultsCsv',
-          url: 'http://url/to/vote_results_csv'
-        },
-        {
-          msgId: 'vote.extractCsvVoters',
-          url: 'http://url/to/extract_csv_voters'
-        }
-      ]
-    };
-    const wrapper = mount(<ExportSection {...props} />);
-    const options = wrapper.find('input[name="exportLink"]');
-    expect(wrapper.state('exportLink')).toEqual('http://url/to/vote_results_csv');
-    const eventMock = {
-      target: {
-        value: 'http://url/to/extract_csv_voters'
-      }
-    };
-    options.last().simulate('change', eventMock);
-    expect(wrapper.state('exportLink')).toEqual('http://url/to/extract_csv_voters');
-    eventMock.target.value = 'http://url/to/vote_results_csv';
-    options.first().simulate('change', eventMock);
-    expect(wrapper.state('exportLink')).toEqual('http://url/to/vote_results_csv');
   });
 });

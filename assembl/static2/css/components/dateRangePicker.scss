@@ -1,0 +1,68 @@
+.date-range-picker {
+  margin-top: 10px;
+
+  .DateInput_input__small {
+    font-size: $font-size-sm;
+  }
+
+  .DateInput__small {
+    width: 156px;
+  }
+
+  .DateInput_input,
+  .DateInput_input__focused {
+    text-align: center;
+  }
+
+  .dropdown {
+    width: 100%;
+
+    span {
+      font-size: $font-size-sm;
+    }
+
+    #presets-dropdown {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: $font-size-sm;
+      border-top: 2px solid $cyan;
+    }
+
+    .dropdown-menu {
+      width: 100%;
+      border: 1px solid $cyan;
+      border-top: none;
+      border-radius: 0;
+    }
+  }
+
+  .DateRangePickerInput__withBorder {
+    border: 2px solid $cyan;
+  }
+
+  .CalendarDay__selected {
+    background: $cyan;
+    border: none;
+  }
+
+  .CalendarDay__selected_span,
+  .CalendarDay__hovered_span {
+    background: $cyan-transparent;
+    border: none;
+    color: $white;
+  }
+
+  .DateRangePicker_picker {
+    border: 2px double $cyan;
+  }
+
+  .DateInput_fang {
+    display: none;
+  }
+}
+
+.DateRangePickerInput__withBorder {
+  width: 323px;
+}

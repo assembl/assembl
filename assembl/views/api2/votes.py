@@ -20,7 +20,9 @@ from assembl.models import (
     NumberGaugeVoteSpecification, TokenVoteSpecification, LanguagePreferenceCollection)
 from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
+from assembl.utils import format_date
 from assembl.views.api2.discussion import csv_response, CSV_MIMETYPE
+
 
 # Votes are private
 @view_config(context=CollectionContext, renderer='json',
@@ -212,19 +214,9 @@ def range_float(minimum, maximum, nb_ticks):
         yield i
 
 
-@view_config(context=InstanceContext, request_method='GET',
-             ctx_instance_class=VotingWidget,
-             name="vote_results_csv", permission=P_DISC_STATS)
-def global_vote_results_csv(request):
-    ctx = request.context
-    user_id = request.authenticated_userid
-    if not user_id:
-        raise HTTPUnauthorized
-    widget = ctx._instance
-    if widget.activity_state != "ended":
-        permissions = get_permissions(user_id, ctx.get_discussion_id())
-        if P_ADMIN_DISC not in permissions:
-            raise HTTPUnauthorized()
+def global_vote_results_csv(widget, request):
+    from .discussion import get_time_series_timing
+    start, end, interval = get_time_series_timing(request)
     user_prefs = LanguagePreferenceCollection.getCurrent()
     # first fetch the ideas voted on
     ideas = widget.db.query(Idea
@@ -244,7 +236,10 @@ def global_vote_results_csv(request):
     template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
                       for spec in widget.specification_templates]
     template_specs.sort()
-    coltitles = ["Proposition", "Nombre de participants sur la proposition"]
+    PROPOSITION = "Proposition"
+    PARTICIPANTS_COUNT = "Nombre de participants sur la proposition"
+    TOTAL_VOTES = "Total votes"
+    fieldnames = [PROPOSITION, PARTICIPANTS_COUNT]
 
     # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
     num_participants_by_idea_id = {}
@@ -255,70 +250,91 @@ def global_vote_results_csv(request):
     # either each token count (for token votes) OR
     # sum of vote values, and count of votes otherwise.
     # Ideas are rows (and Idea.id is column 0)
+    def get_token_category_fieldname(token_category):
+        return token_category.name.best_lang(user_prefs).value.encode('utf-8')
+
+    def get_choice_average_fieldname(title):
+        return u'{title} - moyenne'.format(title=title).encode('utf-8')
+
+    def get_number_choice_fieldname(choice_value, template_spec):
+        return u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8')
+
+    def get_text_choice_fieldname(choice):
+        return choice.label.best_lang(user_prefs).value.encode('utf-8')
+
     for title, template_spec in template_specs:
         if isinstance(template_spec, TokenVoteSpecification):
             for tokencat in template_spec.token_categories:
-                coltitles.append(tokencat.name.best_lang(user_prefs).value.encode('utf-8'))
+                fieldnames.append(get_token_category_fieldname(tokencat))
         else:
-            coltitles.append(u'{title} - moyenne'.format(title=title).encode('utf-8'))
+            fieldnames.append(get_choice_average_fieldname(title))
             if isinstance(template_spec, NumberGaugeVoteSpecification):
                 for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                    coltitles.append(u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8'))
+                    fieldnames.append(get_number_choice_fieldname(choice_value, template_spec))
             else:
                 for choice in template_spec.get_choices():
-                    coltitles.append(choice.label.best_lang(user_prefs).value.encode('utf-8'))
-        coltitles.append('Total votes')
+                    fieldnames.append(get_text_choice_fieldname(choice))
+        fieldnames.append(TOTAL_VOTES)
 
-    output = StringIO()
-    # include BOM for Excel to open the file in UTF-8 properly
-    output.write(u'\ufeff'.encode('utf-8'))
-    csvw = csv.writer(output)
-    csvw.writerow(coltitles)
+    rows = []
     from assembl.graphql.vote_session import get_avg_choice
     for title, idea_id in rowtitles:
-        row = [title.encode('utf-8'), num_participants_by_idea_id[idea_id]]
-        for t, template_spec in template_specs:
+        row = {}
+        row[PROPOSITION] = title.encode('utf-8')
+        row[PARTICIPANTS_COUNT] = num_participants_by_idea_id[idea_id]
+        for title, template_spec in template_specs:
             spec = spec_by_idea_id_and_template_specid.get((idea_id, template_spec.id), None)
             if isinstance(template_spec, TokenVoteSpecification):
                 for token_category in template_spec.token_categories:
+                    fieldname = get_token_category_fieldname(token_category)
                     if spec is None:
-                        row.append('-')
+                        row[fieldname] = '-'
                     else:
+                        vote_cls = spec.get_vote_class()
                         query = spec.db.query(
-                            func.sum(getattr(spec.get_vote_class(), "vote_value"))).filter_by(
+                            func.sum(vote_cls.vote_value)).filter_by(
                             vote_spec_id=spec.id,
                             tombstone_date=None,
-                            token_category_id=token_category.id)
+                            token_category_id=token_category.id
+                            ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                         # when there is no votes, query.first() equals (None,)
                         # in this case set num_token to 0
                         num_token = query.first()[0]
-                        row.append(num_token or "-")
+                        row[fieldname] = num_token or '-'
             else:  # this is a number or text gauge
                 if spec is None:
-                    row.append('-')
+                    fieldname = get_choice_average_fieldname(title)
+                    row[fieldname] = '-'
                     if isinstance(template_spec, NumberGaugeVoteSpecification):
                         for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                            row.append('-')
+                            fieldname = get_number_choice_fieldname(choice_value, template_spec)
+                            row[fieldname] = '-'
                     else:
                         for choice in template_spec.get_choices():
-                            row.append('-')
+                            fieldname = get_text_choice_fieldname(choice)
+                            row[fieldname] = '-'
                 elif isinstance(template_spec, NumberGaugeVoteSpecification):
                     vote_cls = spec.get_vote_class()
-                    voting_avg = spec.db.query(func.avg(getattr(vote_cls, 'vote_value'))).filter_by(
+                    voting_avg = spec.db.query(func.avg(vote_cls.vote_value)).filter_by(
                         vote_spec_id=spec.id,
                         tombstone_date=None,
-                        idea_id=spec.criterion_idea_id).first()
+                        idea_id=spec.criterion_idea_id
+                        ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end
+                        ).first()
                     # when there is no votes, query.first() equals (None,)
                     avg = voting_avg[0] or '-'
-                    row.append(avg)
+                    fieldname = get_choice_average_fieldname(title)
+                    row[fieldname] = avg
 
-                    q_histogram = spec.db.query(getattr(vote_cls, 'vote_value'), func.count(getattr(vote_cls, 'voter_id'))).filter_by(
+                    q_histogram = spec.db.query(vote_cls.vote_value, func.count(vote_cls.voter_id)).filter_by(
                         vote_spec_id=spec.id,
                         tombstone_date=None,
-                        idea_id=spec.criterion_idea_id).group_by(getattr(vote_cls, 'vote_value'))
+                        idea_id=spec.criterion_idea_id).group_by(vote_cls.vote_value
+                        ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                     histogram = dict(q_histogram.all())
                     for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                        row.append(histogram.get(choice_value, 0))
+                        fieldname = get_number_choice_fieldname(choice_value, template_spec)
+                        row[fieldname] = histogram.get(choice_value, 0)
                 else:
                     vote_cls = spec.get_vote_class()
                     avg_choice = get_avg_choice(spec)
@@ -326,70 +342,107 @@ def global_vote_results_csv(request):
                         label_avg = '-'
                     else:
                         label_avg = avg_choice.label.best_lang(user_prefs).value.encode('utf-8')
-                    row.append(label_avg)
+                    fieldname = get_choice_average_fieldname(title)
+                    row[fieldname] = label_avg
 
-                    q_histogram = spec.db.query(getattr(vote_cls, 'vote_value'), func.count(getattr(vote_cls, 'voter_id'))).filter_by(
+                    q_histogram = spec.db.query(vote_cls.vote_value, func.count(vote_cls.voter_id)).filter_by(
                         vote_spec_id=spec.id,
                         tombstone_date=None,
-                        idea_id=spec.criterion_idea_id).group_by(getattr(vote_cls, 'vote_value'))
+                        idea_id=spec.criterion_idea_id).group_by(vote_cls.vote_value
+                        ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                     histogram = dict(q_histogram.all())
                     for choice in template_spec.get_choices():
-                        row.append(histogram.get(choice.value, 0))
+                        fieldname = get_text_choice_fieldname(choice)
+                        row[fieldname] = histogram.get(choice.value, 0)
 
             if spec is None:
-                row.append('-')
+                row[TOTAL_VOTES] = '-'
             else:
+                vote_cls = spec.get_vote_class()
                 num_votes = spec.db.query(
-                    getattr(spec.get_vote_class(), "voter_id")).filter_by(
+                    vote_cls.voter_id).filter_by(
                     vote_spec_id=spec.id,
-                    tombstone_date=None).count()
-                row.append(num_votes)
-        csvw.writerow(row)
-    output.seek(0)
-    return Response(body_file=output, content_type='text/csv', content_disposition='attachment; filename="vote_results.csv"')
+                    tombstone_date=None
+                    ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end
+                    ).count()
+                row[TOTAL_VOTES] = num_votes
+        rows.append(row)
+    return fieldnames, rows
 
 
-@view_config(context=InstanceContext, name="extract_csv_voters",
-             ctx_instance_class=VotingWidget, request_method='GET',
-             permission=P_DISC_STATS)
-def extract_voters(request):
-    extract_votes = []
+# url /data/Discussion/${debateId}/widgets/${voteSessionId}/vote_results_csv
+@view_config(context=InstanceContext, request_method='GET',
+              ctx_instance_class=VotingWidget,
+              name="vote_results_csv", permission=P_DISC_STATS)
+def global_vote_results_csv_view(request):
     ctx = request.context
     user_id = request.authenticated_userid
     if not user_id:
         raise HTTPUnauthorized
     widget = ctx._instance
-    user_id = request.authenticated_userid
     if widget.activity_state != "ended":
         permissions = get_permissions(user_id, ctx.get_discussion_id())
         if P_ADMIN_DISC not in permissions:
             raise HTTPUnauthorized()
+
+    fieldnames, rows = global_vote_results_csv(widget, request)
+    return csv_response(rows, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="vote_results.csv"')
+
+
+VOTER_MAIL = "Adresse mail du contributeur"
+def extract_voters(widget, request):  # widget is the vote session
+    has_anon = asbool(request.GET.get('anon', False))
+    from .discussion import get_time_series_timing
+    start, end, interval = get_time_series_timing(request)
+    extract_votes = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
-    fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", "Adresse mail du contributeur", "Date/heure du vote", "Proposition"]
-    votes = widget.db.query(AbstractIdeaVote
+    fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", VOTER_MAIL, "Date du vote", "Proposition"]
+    query = widget.db.query(AbstractIdeaVote
         ).filter(AbstractVoteSpecification.widget_id==widget.id
         ).filter(AbstractIdeaVote.tombstone_date==None
+        ).filter(AbstractIdeaVote.vote_date >= start
+        ).filter(AbstractIdeaVote.vote_date <= end
         ).order_by(AbstractIdeaVote.vote_spec_id.desc()
-        ).all()
+        )
+    votes = query.all()
+    voters_by_id = {}
+    proposition_by_id = {}
     for count, vote in enumerate(votes):
-        voter = vote.voter
-        contributor = voter.real_name() or u""
-        contributor_username = voter.username_p or u""
-        contributor_mail = voter.get_preferred_email() or u""
+        extract_info = {}
+        voter_info = voters_by_id.get(vote.voter_id, None)
+        if voter_info is None:
+            voter = User.get(vote.voter_id)
+            if not has_anon:
+                contributor = voter.real_name() or u""
+                contributor_username = voter.username_p or u""
+                contributor_mail = voter.get_preferred_email() or u""
+            else:
+                contributor = voter.anonymous_name() or u""
+                contributor_username = voter.anonymous_username() or u""
+                contributor_mail = voter.get_preferred_email(anonymous=has_anon) or u""
+            voter_info = {
+                "Nom du contributeur": contributor.encode('utf-8'),
+                "Nom d'utilisateur du contributeur": contributor_username.encode('utf-8'),
+                VOTER_MAIL: contributor_mail.encode('utf-8'),
+                "voter": voter # used in voters_csv_export to add sso info
+            }
+            voters_by_id[vote.voter_id] = voter_info
+
+        extract_info.update(voter_info)
         vote_date = vote.vote_date or u""
-        proposition = Idea.get(vote.idea_id).title.best_lang(user_prefs).value or u""
+        proposition = proposition_by_id.get(vote.idea_id, None)
+        if proposition is None:
+            proposition = Idea.get(vote.idea_id).title.best_lang(user_prefs).value or u""
+            proposition = proposition.encode('utf-8')
+            proposition_by_id[vote.idea_id] = proposition
+
+        extract_info["Proposition"] = proposition
         vote_value = vote.vote_value
 
         if votes[count].vote_spec_id != votes[count-1].vote_spec_id and fieldnames[-1] != "  ":
             fieldnames.append("  ")
 
-        extract_info = {
-            "Nom du contributeur": contributor.encode('utf-8'),
-            "Nom d'utilisateur du contributeur": contributor_username.encode('utf-8'),
-            "Adresse mail du contributeur": contributor_mail.encode('utf-8'),
-            "Date/heure du vote": str(vote_date),
-            "Proposition": proposition.encode('utf-8'),
-        }
+        extract_info["Date du vote"] = format_date(vote_date)
 
         if vote.type == u'token_idea_vote':
             token_category = vote.token_category.name.best_lang(user_prefs).value or u""
@@ -416,4 +469,24 @@ def extract_voters(request):
 
             extract_votes.append(extract_info)
     extract_votes.sort(key=operator.itemgetter('Nom du contributeur'))
+    return fieldnames, extract_votes
+
+
+# url /data/Discussion/${debateId}/widgets/${voteSessionId}/extract_csv_voters
+@view_config(context=InstanceContext, name="extract_csv_voters",
+             ctx_instance_class=VotingWidget, request_method='GET',
+             permission=P_DISC_STATS)
+def extract_voters_view(request):
+    ctx = request.context
+    user_id = request.authenticated_userid
+    if not user_id:
+        raise HTTPUnauthorized
+    widget = ctx._instance
+    user_id = request.authenticated_userid
+    if widget.activity_state != "ended":
+        permissions = get_permissions(user_id, ctx.get_discussion_id())
+        if P_ADMIN_DISC not in permissions:
+            raise HTTPUnauthorized()
+
+    fieldnames, extract_votes = extract_voters(widget, request)
     return csv_response(extract_votes, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="detailed_vote_results.csv"')

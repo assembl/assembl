@@ -688,7 +688,8 @@ const Translations = {
         exportTaxonomies: "Exporter les taxonomies",
         manageProfileOptions: "Options d'inscription",
         personalizeInterface: "Personnaliser l'interface",
-        configureThematic: "Configurer la thématique %{index}"
+        configureThematic: "Configurer la thématique %{index}",
+        exportDebateData: "Exporter les données"
       },
       discussionPreferences: {
         debateLogoLabel: "Logo du débat"
@@ -920,7 +921,21 @@ const Translations = {
         defaultSectionTitle: "Exporter les données",
         taxonomySectionTitle: "Exporter les taxonomies",
         translateTheMessagesIn: "Traduire l'ensemble des messages en :",
+        anonymity: "Anonymat",
+        translation: "Traduction des données",
         anonymous: "Rendre les données anonymes",
+        contributions: "Les contributions des participants",
+        exportDate: "Date de l'export",
+        startDate: "Début",
+        endDate: "Fin",
+        presets: {
+          today: "Aujourd'hui",
+          lastWeek: "Semaine dernière",
+          lastMonth: "Mois dernier",
+          phase: "Phase %{count}",
+          fullDebate: "Intégralité du débat",
+          placeHolder: "Presets"
+        },
         vote: {
           voteResultsCsv: "Exporter les données générales du module de vote",
           extractCsvVoters: "Exporter les détails de vote de chaque utilisateur"
@@ -1714,7 +1729,8 @@ const Translations = {
         exportTaxonomies: "Export taxonomies",
         manageProfileOptions: "Registration options",
         personalizeInterface: "Personalize the interface",
-        configureThematic: "Configure the theme %{index}"
+        configureThematic: "Configure the theme %{index}",
+        exportDebateData: "Export the data"
       },
       discussionPreferences: {
         debateLogoLabel: "Debate logo"
@@ -1939,7 +1955,21 @@ const Translations = {
         defaultSectionTitle: "Export data",
         taxonomySectionTitle: "Export taxonomy",
         translateTheMessagesIn: "Translate the messages in:",
+        anonymity: "Anonymity",
+        translation: "Translation of the data",
         anonymous: "Make the data anonymous",
+        contributions: "Contributions of the participants",
+        exportDate: "Export date",
+        startDate: "Start date",
+        endDate: "End date",
+        presets: {
+          today: "Today",
+          lastWeek: "Last week",
+          lastMonth: "Last month",
+          phase: "Phase %{count}",
+          fullDebate: "All of the debate",
+          placeHolder: "Presets"
+        },
         vote: {
           voteResultsCsv: "Export general data for the vote module",
           extractCsvVoters: "Export vote details for each user"

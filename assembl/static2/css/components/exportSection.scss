@@ -1,0 +1,27 @@
+.admin-export-section {
+  &.admin-box {
+    .admin-content {
+      text-align: left !important;
+    }
+  }
+
+  .disabled {
+    cursor: progress;
+  }
+
+  .export-language-dropdown {
+    margin-top: 5px;
+  }
+
+  .export-options {
+    display: flex;
+
+    .export-date {
+      margin-left: 100px;
+
+      .datepicker-with-presets {
+        margin-top: 12px;
+      }
+    }
+  }
+}

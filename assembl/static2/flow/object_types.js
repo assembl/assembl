@@ -23,6 +23,18 @@ type ChildType = TreeItem & {
   [string]: any
 };
 
+type DateRange = {
+  startDate: moment$Moment,
+  endDate: moment$Moment
+};
+
+type Preset = {
+  id: string | number,
+  range: DateRange,
+  labelTranslationKey: string,
+  type: string
+};
+
 export type Idea = {
   id: string,
   parentId: string,
@@ -218,3 +230,9 @@ type FileDocumentFile = {|
 |};
 
 type StrictFile = FileDocumentFile | FileDocument;
+
+type Language = {
+  locale: string,
+  name: string,
+  nativeName: string
+};

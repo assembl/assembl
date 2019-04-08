@@ -41,9 +41,6 @@
 @import 'components/synthesisPreview';
 @import 'components/switchButton';
 @import 'components/socialShare';
-@import 'components/surveyAdmin';
-@import 'components/threadAdmin';
-@import 'components/multiColumnAdmin';
 @import 'components/resourcesCenter';
 @import 'components/header';
 @import 'components/section';
@@ -55,11 +52,13 @@
 @import 'components/gaugeVoteForProposal';
 @import 'components/cookiesPolicy';
 @import 'components/datePicker';
+@import 'components/dateRangePicker';
 @import 'components/rc-slider';
 @import 'components/cookiesBar';
 @import 'components/cookiesSelector';
 @import 'components/circleAvatar';
 @import 'components/fictionHeader';
+@import 'components/exportSection';
 @import 'views/administration';
 @import 'views/unauthorizedAdministration';
 @import 'views/debate';

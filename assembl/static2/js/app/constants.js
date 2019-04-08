@@ -1,4 +1,5 @@
 // @flow
+import moment from 'moment';
 import ThematicsMenu from './components/administration/thematicsMenu';
 
 export const DEFAULT_FAVICON = '/static/img/icon/infinite-1.png';
@@ -179,9 +180,19 @@ export const ADMIN_MENU = {
       }
     }
   },
-  exportTaxonomies: {
-    title: 'administration.menu.exportTaxonomies',
-    sectionId: ''
+  exportDebateData: {
+    title: 'administration.menu.exportDebateData',
+    sectionId: '1',
+    subMenu: {
+      contributions: {
+        title: 'administration.export.contributions',
+        sectionId: '1'
+      },
+      taxonomies: {
+        title: 'administration.menu.exportTaxonomies',
+        sectionId: '2'
+      }
+    }
   },
   landingPage: {
     title: 'administration.landingpage',
@@ -406,4 +417,25 @@ export const availableLocales = [
   'th',
   'tr',
   'zh_Hans'
+];
+
+export const datePickerPresets = [
+  {
+    id: 'today',
+    labelTranslationKey: 'administration.export.presets.today',
+    range: { startDate: moment(), endDate: moment() },
+    type: 'basic'
+  },
+  {
+    id: 'lastWeek',
+    labelTranslationKey: 'administration.export.presets.lastWeek',
+    range: { startDate: moment().subtract(7, 'days'), endDate: moment() },
+    type: 'basic'
+  },
+  {
+    id: 'lastMonth',
+    labelTranslationKey: 'administration.export.presets.lastMonth',
+    range: { startDate: moment().subtract(1, 'month'), endDate: moment() },
+    type: 'basic'
+  }
 ];

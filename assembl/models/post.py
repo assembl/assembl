@@ -176,6 +176,17 @@ class Post(Content, TaggableEntity):
 
         return descendants
 
+    def get_top_post_in_thread(self):
+        found = False
+        post = self
+        while not found:
+            top_post_id = post.parent_id
+            top_post = self.get(top_post_id)
+            post = top_post
+            if not post.parent_id:
+                found = True
+        return post
+
     def is_read(self):
         # TODO: Make it user-specific.
         return self.views is not None
@@ -569,6 +580,9 @@ class Post(Content, TaggableEntity):
             return False
 
         return parent_ideas[0].message_view_override == MessageView.brightMirror.value
+
+    def get_number_of_shares(self):
+        return len(self.shares)
 
     def get_ideas(self):
         ideas = [
