@@ -1740,6 +1740,7 @@ def survey_csv_export(request):
                     row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
                 row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
+                row[MESSAGE_URL] = post.get_url()
                 if extra_columns_info:
                     if post.creator_id not in column_info_per_user:
                         column_info_per_user[post.creator_id] = get_social_columns_from_user(
@@ -1855,6 +1856,7 @@ def multicolumn_csv_export(request):
                 row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
+            row[MESSAGE_URL] = post.get_url()
             if extra_columns_info:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(
@@ -1974,6 +1976,7 @@ def thread_csv_export(request):
             row[TOP_POST_WORD_COUNT] = str(len(row[TOP_POST].split())) if row[TOP_POST] else "0"
             row[POST_BODY] = sanitize_text(body.get('entry'))
             row[POST_BODY_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
+            row[MESSAGE_URL] = post.get_url()
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
                 row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
@@ -2106,6 +2109,7 @@ def bright_mirror_csv_export(request):
                 row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
+            row[MESSAGE_URL] = post.get_url()
             if extra_columns_info:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(
