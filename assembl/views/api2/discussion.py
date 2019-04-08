@@ -1966,6 +1966,12 @@ def thread_csv_export(request):
             subject = get_entries_locale_original(post.subject)
             body = get_entries_locale_original(post.body)
             row[POST_SUBJECT] = subject.get('entry')
+            top_post = post.get_top_post_in_thread()
+            top_post_body = get_entries_locale_original(top_post.body)
+            top_post_title = get_entries_locale_original(top_post.get_subject())
+            row[TOP_POST] = sanitize_text(top_post_body.get('entry'))
+            row[TOP_POST_TITLE] = sanitize_text(top_post_title.get('entry'))
+            row[TOP_POST_WORD_COUNT] = str(len(row[TOP_POST].split())) if row[TOP_POST] else "0"
             row[POST_BODY] = sanitize_text(body.get('entry'))
             row[POST_BODY_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
             if not has_anon:
