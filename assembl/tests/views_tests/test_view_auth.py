@@ -9,6 +9,7 @@ from requests import Response
 import mock
 from pyramid.interfaces import ISessionFactory, IAuthorizationPolicy
 from pyramid.request import Request
+from webtest import AppError
 
 from assembl.models import SocialAuthAccount
 from assembl.auth.password import password_change_token, verify_password_change_token, Validity
@@ -275,20 +276,20 @@ def test_change_password_token(test_app, participant1_user):
     old_password = participant1_user.password
     token = password_change_token(participant1_user)
     my_json = {"token": token,
-                "password1": "lolo",
-                "password2": "lolo"}
+                "password1": "9WWcPG9*YcVk",
+                "password2": "9WWcPG9*YcVk"}
 
     # Test token
     user, validity = verify_password_change_token(token)
     assert validity == Validity.VALID
-    
+
     # Test API
     response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
     assert response.status_code == 200
     assert old_password != participant1_user.password
-    assert participant1_user.check_password("lolo") == True
+    assert participant1_user.check_password("9WWcPG9*YcVk") == True
 
-def test_change_password_token_local_user_role(test_app, participant1_user, local_user_role):
+def test_change_password_token_not_enough_strong(test_app, participant1_user):
     # Set up
     old_password = participant1_user.password
     token = password_change_token(participant1_user)
@@ -299,9 +300,27 @@ def test_change_password_token_local_user_role(test_app, participant1_user, loca
     # Test token
     user, validity = verify_password_change_token(token)
     assert validity == Validity.VALID
-    
+
+    # Test API
+    with pytest.raises(AppError) as exception:
+        response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
+        assert response.status_code == 520
+        assert old_password == participant1_user.password
+
+def test_change_password_token_local_user_role(test_app, participant1_user, local_user_role):
+    # Set up
+    old_password = participant1_user.password
+    token = password_change_token(participant1_user)
+    my_json = {"token": token,
+                "password1": "9WWcPG9*YcVk",
+                "password2": "9WWcPG9*YcVk"}
+
+    # Test token
+    user, validity = verify_password_change_token(token)
+    assert validity == Validity.VALID
+
     # Test API
     response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
     assert response.status_code == 200
     assert old_password != participant1_user.password
-    assert participant1_user.check_password("lolo") == True
+    assert participant1_user.check_password("9WWcPG9*YcVk") == True
