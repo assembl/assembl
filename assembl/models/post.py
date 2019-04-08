@@ -181,9 +181,10 @@ class Post(Content, TaggableEntity):
         post = self
         while not found:
             top_post_id = post.parent_id
-            top_post = self.get(top_post_id)
-            post = top_post
-            if not post.parent_id:
+            if top_post_id:
+                top_post = Post.get(top_post_id)
+                post = top_post
+            else:
                 found = True
         return post
 
