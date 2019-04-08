@@ -65,6 +65,11 @@ def get_deleted_posts(idea, start=None, end=None):
     return query
 
 
+def get_related_extracts(idea):
+    extracts = idea.db.query(models.Extract).filter(models.Extract.idea_id == idea.id)
+    return extracts
+
+
 def get_all_phase_root_ideas(discussion):
     root_ideas = []
     for phase in discussion.timeline_phases:

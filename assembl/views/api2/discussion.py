@@ -61,7 +61,7 @@ from assembl.utils import format_date, get_published_posts, get_ideas
 from assembl.utils import (
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
     get_bright_mirror_ideas, get_vote_session_ideas,
-    get_deleted_posts)
+    get_deleted_posts, get_related_extracts)
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
@@ -2041,8 +2041,8 @@ def bright_mirror_csv_export(request):
         POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
         POST_CREATION_DATE.encode('utf-8'),
-        MESSAGE_COUNT.encode('utf-8'),  # TODO
-        HARVESTING_COUNT.encode('utf-8'),  # TODO
+        MESSAGE_COUNT.encode('utf-8'),
+        HARVESTING_COUNT.encode('utf-8'),
         POST_LIKE.encode('utf-8'),
         POST_DISAGREE.encode('utf-8'),
         POST_DONT_UNDERSTAND.encode('utf-8'),
@@ -2081,6 +2081,8 @@ def bright_mirror_csv_export(request):
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
         row[MESSAGE_COUNT] = posts.count()
+        extracts = get_related_extracts(idea)
+        row[HARVESTING_COUNT] = extracts.count()
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
