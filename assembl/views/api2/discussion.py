@@ -1644,6 +1644,7 @@ def phase_csv_export(request):
             row[column_name] = key_word.encode('utf-8')
         if idea.message_view_override == MessageView.thread.value:
             row[TOP_POST_COUNT] = get_top_posts(idea, start, end).count()
+            row[NON_TOP_POST_COUNT] = row[POSTED_MESSAGES_COUNT] - row[TOP_POST_COUNT]
         row[DELETED_MESSAGES_COUNT] = get_deleted_posts(idea, start, end).count()
         row[LIKE] = idea.get_total_sentiments("like")
         row[DONT_LIKE] = idea.get_total_sentiments("dont_like")
