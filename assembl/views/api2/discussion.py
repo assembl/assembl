@@ -61,8 +61,7 @@ from assembl.utils import format_date, get_published_posts, get_ideas
 from assembl.utils import (
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
     get_bright_mirror_ideas, get_vote_session_ideas,
-    get_deleted_posts, get_related_extracts, get_top_posts,
-    get_idea_message_columns)
+    get_deleted_posts, get_related_extracts, get_top_posts)
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
@@ -1828,7 +1827,6 @@ def multicolumn_csv_export(request):
         provider_id = get_provider_id_for_discussion(discussion)
 
     ideas = get_multicolumns_ideas(discussion)
-    idea_message_columns = get_idea_message_columns(discussion)
     rows = []
     for idea in ideas:
         row = {}
@@ -1850,6 +1848,7 @@ def multicolumn_csv_export(request):
             body = get_entries_locale_original(post.body)
             row[POST_BODY] = sanitize_text(body.get('entry'))
             row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
+            idea_message_columns = idea.message_columns
             idea_message_column = [i for i in idea_message_columns if i.message_classifier == post.message_classifier]
             row[POST_CLASSIFIER] = idea_message_column[0].title.best_lang(user_prefs).value
             if not has_anon:
