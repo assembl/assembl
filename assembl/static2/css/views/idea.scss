@@ -115,6 +115,7 @@
     padding-bottom: $post-space;
     padding-left: $tree-indentation*2;
     border-top: 1px solid $first-color-light;
+    border-left: 1px solid $first-color-light;
 
     .box {
       border-top: none;
