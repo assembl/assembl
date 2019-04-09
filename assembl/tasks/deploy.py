@@ -6,12 +6,12 @@ import json
 from time import sleep
 from ConfigParser import RawConfigParser
 from getpass import getuser
+from invoke.tasks import call
 
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
     create_venv, fill_template, get_s3_file, get_aws_account_id, delete_foreign_tasks,
     get_venv_site_packages, is_cloud_env)
-from .build import update_pip_requirements
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
@@ -190,14 +190,13 @@ def get_aws_invoke_yaml(c, celery=False):
         with open(invoke_path, 'w') as f:
             f.write(CELERY_YAML)
         invoke_path = os.path.join(c.config.projectpath, 'cicd.yaml')
-    content = get_s3_file(
-        bucket,
-        'cicd.yaml',
-        invoke_path)
+    content = get_s3_file(bucket, 'client_data.yaml', invoke_path)
+    if not content:
+        content = get_s3_file(bucket, 'cicd.yaml', invoke_path)
     if not content:
         content = '_extends: terraform.yaml\n'
-        with open(invoke_path, 'w') as f:
-            f.write(content)
+    with open(invoke_path, 'w') as f:
+        f.write(content)
     extends_re = re.compile(r'\b_extends:\s*(\w+\.yaml)')
     match = extends_re.search(content)
     while match:
@@ -215,8 +214,8 @@ def get_aws_invoke_yaml(c, celery=False):
 
 
 @task()
-def ensure_aws_invoke_yaml(c):
-    if not exists(c, 'invoke.yaml'):
+def ensure_aws_invoke_yaml(c, override=False):
+    if not exists(c, 'invoke.yaml') or override:
         get_aws_invoke_yaml(c)
 
 
@@ -291,7 +290,7 @@ def webservers_reload(c):
         c.sudo('killall -HUP nginx')
 
 
-@task(ensure_aws_invoke_yaml)
+@task(call(ensure_aws_invoke_yaml, override=True))
 def create_local_ini(c):
     """Compose local.ini from the given .yaml file"""
     from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
@@ -326,7 +325,7 @@ def create_local_ini(c):
         base.write(f)
 
 
-@task(ensure_aws_invoke_yaml)
+@task(call(ensure_aws_invoke_yaml, override=True))
 def generate_nginx_conf(c):
     """Hard assumption that this is only used under the cloud condition"""
     if is_cloud_env(c):
@@ -359,7 +358,7 @@ def aws_server_startup_from_local(c):
     webservers_reload(c)
 
 
-@task(setup_aws_default_region, ensure_aws_invoke_yaml, download_rds_pem, post=[aws_server_startup_from_local])
+@task(setup_aws_default_region, call(ensure_aws_invoke_yaml, override=True), download_rds_pem, post=[aws_server_startup_from_local])
 def aws_instance_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
@@ -367,7 +366,7 @@ def aws_instance_startup(c):
     setup_ctx(c)
 
 
-@task(setup_aws_default_region, ensure_aws_invoke_yaml, download_rds_pem, install_wheel, post=[aws_server_startup_from_local])
+@task(setup_aws_default_region, call(ensure_aws_invoke_yaml, override=True), download_rds_pem, install_wheel, post=[aws_server_startup_from_local])
 def aws_instance_update_and_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
