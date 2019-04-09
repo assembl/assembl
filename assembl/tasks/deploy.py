@@ -260,6 +260,7 @@ def supervisor_restart(c):
         if "no such file" in result.stdout:
             c.run("supervisord")
 
+
 @task()
 def webservers_stop(c):
     """Stop all webservers."""
@@ -380,6 +381,18 @@ def aws_celery_instance_startup(c):
     get_aws_invoke_yaml(c, True)
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
         raise RuntimeError("Missing invoke.yaml file")
+    setup_ctx(c)
+
+
+@task(setup_aws_default_region, post=[aws_server_startup_from_local])
+def aws_instance_config_update_and_restart(c, nginx=False, celery=False):
+    if celery:
+        get_aws_invoke_yaml(c, True)
+    else:
+        ensure_aws_invoke_yaml(c, override=True)
+    create_local_ini(c)
+    if nginx:
+        generate_nginx_conf(c)
     setup_ctx(c)
 
 
