@@ -12,6 +12,12 @@ def format_date(datetime_to_format):
     return datetime_to_format.strftime('%d/%m/%Y')
 
 
+def get_idea_message_columns(discussion):
+    idea_msg_columns = discussion.db.query(models.IdeaMessageColumn).all()
+    idea_msg_columns = [k for k in idea_msg_columns if k.get_discussion_id() == discussion.id]
+    return idea_msg_columns
+
+
 def get_posts(idea, start=None, end=None):
     """
     Get all posts given a certain idea.
