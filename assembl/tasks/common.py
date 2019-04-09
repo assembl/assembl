@@ -179,6 +179,10 @@ def setup_ctx(c):
             c.config._project = current
             c.config.merge()
             secrets = get_secrets(c, aws_secrets_ids)
+            # client_data can override the secrets
+            ks, sks = set(current.keys()), set(secrets.keys())
+            for k in ks.intersection(sks):
+                secrets.pop(k)
             current.update(secrets)
 
     if current is not c.config._project:
