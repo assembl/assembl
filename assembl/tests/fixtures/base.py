@@ -226,6 +226,47 @@ def test_app(request, admin_user, test_app_no_perm):
     config.set_authentication_policy(dummy_policy)
     return test_app_no_perm
 
+@pytest.fixture(scope="function")
+def test_app_complex_password(request, test_app):
+    """A configured Assembl fixture with permissions
+    and an admin user logged in and strong password
+    requirements enabled"""
+    settings = get_config()
+    settings['minimum_password_complexity'] = 3
+    settings['password_required_classes'] = None
+    config = testing.setUp(settings=settings)
+    return test_app
+
+
+@pytest.fixture(scope="function")
+def test_app_spec_chars_password(request, test_app):
+    """A configured Assembl fixture with permissions
+    and an admin user logged in and strong password
+    requirements enabled"""
+    settings = get_config()
+    settings['minimum_password_complexity'] = 0
+    settings['password_required_classes'] = \
+        {"[a-z]": {"en": "lower-case letter"}, \
+         "[A-Z]": {"en": "upper-case letter"}, \
+         "\\d": {"en": "digit"}, \
+         "\\W": {"en": "special character"}}
+    config = testing.setUp(settings=settings)
+    return test_app
+
+@pytest.fixture(scope="function")
+def test_app_strong_password(request, test_app):
+    """A configured Assembl fixture with permissions
+    and an admin user logged in and strong password
+    requirements enabled"""
+    settings = get_config()
+    settings['minimum_password_complexity'] = 3
+    settings['password_required_classes'] = \
+        {"[a-z]": {"en": "lower-case letter"}, \
+         "[A-Z]": {"en": "upper-case letter"}, \
+         "\\d": {"en": "digit"}, \
+         "\\W": {"en": "special character"}}
+    config = testing.setUp(settings=settings)
+    return test_app
 
 @pytest.fixture(scope="function")
 def test_app_no_login(request, test_app_no_perm):
