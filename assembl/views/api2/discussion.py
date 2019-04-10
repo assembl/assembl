@@ -1698,8 +1698,8 @@ def survey_csv_export(request):
         # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),  # TODO
-        MESSAGE_URL.encode('utf-8'),  # TODO
-        WATSON_SENTIMENT.encode('utf-8')  # TODO
+        MESSAGE_URL.encode('utf-8'),
+        WATSON_SENTIMENT.encode('utf-8')
     ]
 
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
@@ -1814,7 +1814,7 @@ def multicolumn_csv_export(request):
         # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),  # TODO
-        MESSAGE_URL.encode('utf-8'),  # TODO
+        MESSAGE_URL.encode('utf-8'),
         WATSON_SENTIMENT.encode('utf-8'),  # TODO
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
@@ -1936,7 +1936,7 @@ def thread_csv_export(request):
         # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),  # TODO
-        MESSAGE_URL.encode('utf-8'),  # TODO
+        MESSAGE_URL.encode('utf-8'),
         WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
