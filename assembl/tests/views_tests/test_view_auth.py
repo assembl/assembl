@@ -271,56 +271,56 @@ def test_autologin_override(
         backend=google_identity_provider.name
     ) == urlparse.urlparse(reply.location).path
 
-def test_change_password_token(test_app, participant1_user):
-    # Set up
-    old_password = participant1_user.password
-    token = password_change_token(participant1_user)
-    my_json = {"token": token,
-                "password1": "9WWcPG9*YcVk",
-                "password2": "9WWcPG9*YcVk"}
-
-    # Test token
+def setup_change_password(user, password):
+    old_password = user.password
+    token = password_change_token(user)
+    password_change_payload = {"token": token,
+                                "password1": password,
+                                "password2": password}
     user, validity = verify_password_change_token(token)
     assert validity == Validity.VALID
 
+    return old_password, password_change_payload
+
+def test_change_password_token(test_app_strong_password, participant1_user):
+    # Set up
+    old_password, my_json = setup_change_password(participant1_user, "9WWcPG9*YcVk")
+
     # Test API
-    response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
+    response = test_app_strong_password.post_json('/data/AgentProfile/do_password_change', my_json)
     assert response.status_code == 200
     assert old_password != participant1_user.password
     assert participant1_user.check_password("9WWcPG9*YcVk") == True
 
-def test_change_password_token_not_enough_strong(test_app, participant1_user):
+def test_change_password_token_too_short(test_app, participant1_user):
     # Set up
-    old_password = participant1_user.password
-    token = password_change_token(participant1_user)
-    my_json = {"token": token,
-                "password1": "lolo",
-                "password2": "lolo"}
-
-    # Test token
-    user, validity = verify_password_change_token(token)
-    assert validity == Validity.VALID
+    old_password, my_json = setup_change_password(participant1_user, "9WWc")
 
     # Test API
     with pytest.raises(AppError) as exception:
         response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
-        assert response.status_code == 520
-        assert old_password == participant1_user.password
+    assert "520 Unknown Server Error" in exception.value.message
+    assert "Password shorter than 5 characters" in exception.value.message
+    assert old_password == participant1_user.password
 
-def test_change_password_token_local_user_role(test_app, participant1_user, local_user_role):
-    # Set up
-    old_password = participant1_user.password
-    token = password_change_token(participant1_user)
-    my_json = {"token": token,
-                "password1": "9WWcPG9*YcVk",
-                "password2": "9WWcPG9*YcVk"}
-
-    # Test token
-    user, validity = verify_password_change_token(token)
-    assert validity == Validity.VALID
+def test_change_password_token_not_enough_complex(test_app_complex_password, participant1_user):
+    # Set Up
+    old_password, my_json = setup_change_password(participant1_user, "password")
 
     # Test API
-    response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
-    assert response.status_code == 200
-    assert old_password != participant1_user.password
-    assert participant1_user.check_password("9WWcPG9*YcVk") == True
+    with pytest.raises(AppError) as exception:
+        response = test_app_complex_password.post_json('/data/AgentProfile/do_password_change', my_json)
+    assert "520 Unknown Server Error" in exception.value.message
+    assert "This is a top-10 common password." in exception.value.message
+    assert old_password == participant1_user.password
+
+def test_change_password_token_dont_contain_special_chars(test_app_spec_chars_password, participant1_user):
+    # Set up
+    old_password, my_json = setup_change_password(participant1_user, "9WWcPG9YcVk")
+
+    # Test API
+    with pytest.raises(AppError) as exception:
+        response = test_app_spec_chars_password.post_json('/data/AgentProfile/do_password_change', my_json)
+    assert "520 Unknown Server Error" in exception.value.message
+    assert "Your password should include at least a special character" in exception.value.message
+    assert old_password == participant1_user.password
