@@ -7,7 +7,6 @@ import hashlib
 import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
-import logging
 import re
 from abc import abstractmethod
 
