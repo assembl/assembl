@@ -23,7 +23,7 @@ def test_assembl_login(discussion, participant1_user,
     # is not stored in the object.
     res = test_app_no_login.post(url, OrderedDict([
         ('identifier', participant1_user.get_preferred_email()),
-        ('password', 'password')]))
+        ('password', "hw5A^xYT1p&i")]))
     assert (res.status_code == 302 and urlparse.urlparse(
         res.location).path == '/' + discussion.slug + '/home')
     assert test_app_no_login.app.registry.getUtility(
@@ -40,7 +40,7 @@ def test_assembl_login_mixed_case(discussion, participant1_user,
     res = test_app_no_login.post(url, OrderedDict([
         ('identifier',
          participant1_user.get_preferred_email().title()),
-        ('password', 'password')]))
+        ('password', "hw5A^xYT1p&i")]))
     assert (res.status_code == 302 and urlparse.urlparse(
         res.location).path == '/' + discussion.slug + '/home')
     assert test_app_no_login.app.registry.getUtility(
