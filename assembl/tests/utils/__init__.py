@@ -11,7 +11,8 @@ from webtest import TestRequest
 from webob.request import environ_from_url
 from pyramid.threadlocal import manager
 from contextlib import contextmanager
-
+from sqlalchemy import Column, Integer, ForeignKey
+from sqlalchemy.orm import relationship
 from assembl.lib.sqla import (
     configure_engine, get_session_maker,
     get_metadata, is_zopish, mark_changed)
@@ -26,6 +27,17 @@ class FakeLocalizer(object):
     def translate(self, message):
         return message
 
+
+class FakeContext(object):
+    _instance_id = Column(Integer, ForeignKey(
+        'discussion.id',
+        ondelete='CASCADE',
+        onupdate='CASCADE',
+        ),
+        nullable=False, index=True)
+    _instance = relationship("Discussion")
+    def __init__(self, discussion):
+        self._instance=discussion
 
 class PyramidWebTestRequest(TestRequest):
     """
@@ -64,6 +76,7 @@ class PyramidWebTestRequest(TestRequest):
     # TODO: Use the negotiator
     locale_name = 'en'
     localizer = FakeLocalizer()
+    context = None
 
 
 def committing_session_tween_factory(handler, registry):
