@@ -142,7 +142,7 @@ def test_graphql_update_user_modify_password(graphql_request, participant1_user,
     res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
-        "oldPassword": "password",
+        "oldPassword": "hw5A^xYT1p&i",
         "newPassword": "new_secret",
         "newPassword2": "new_secret"
     })
@@ -163,7 +163,7 @@ def test_graphql_update_user_modify_password_refused_because_not_owner(graphql_r
     res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
-        "oldPassword": "password",
+        "oldPassword": "secret",
         "newPassword": "new_secret",
         "newPassword2": "new_secret"
     })
@@ -176,7 +176,7 @@ def test_graphql_update_user_modify_password_wrong_password(graphql_request, par
     res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
-        "oldPassword": "passwrd",  # wrong password
+        "oldPassword": "wrong_password",  # wrong password
         "newPassword": "new_secret",
         "newPassword2": "new_secret"
     })
@@ -189,7 +189,7 @@ def test_graphql_update_user_modify_password_passwords_mismatch(graphql_request,
     res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
-        "oldPassword": "password",
+        "oldPassword": "hw5A^xYT1p&i",
         "newPassword": "new_secret",
         "newPassword2": "newsecret"  # not the same password
     })
@@ -202,9 +202,9 @@ def test_graphql_update_user_modify_password_needs_to_be_different(graphql_reque
     res = schema.execute(graphql_registry["updateUser"],
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
-        "oldPassword": "password",
-        "newPassword": "password",
-        "newPassword2": "password"
+        "oldPassword": "hw5A^xYT1p&i",
+        "newPassword": "hw5A^xYT1p&i",
+        "newPassword2": "hw5A^xYT1p&i"
     })
     assert res.errors is not None
     assert res.errors[0].message == u"004: The new password has to be different than the current password."
@@ -218,8 +218,8 @@ def test_graphql_update_user_modify_password_needs_to_be_different_from_previous
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password2",
-        "newPassword": "password",
-        "newPassword2": "password"
+        "newPassword": "hw5A^xYT1p&i",
+        "newPassword2": "hw5A^xYT1p&i"
     })
     assert res.errors is not None
     assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
@@ -234,8 +234,8 @@ def test_graphql_update_user_modify_password_needs_to_be_different_from_previous
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password3",
-        "newPassword": "password",
-        "newPassword2": "password"
+        "newPassword": "hw5A^xYT1p&i",
+        "newPassword2": "hw5A^xYT1p&i"
     })
     assert res.errors is not None
     assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
@@ -251,8 +251,8 @@ def test_graphql_update_user_modify_password_needs_to_be_different_from_previous
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password4",
-        "newPassword": "password",
-        "newPassword2": "password"
+        "newPassword": "hw5A^xYT1p&i",
+        "newPassword2": "hw5A^xYT1p&i"
     })
     assert res.errors is not None
     assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
@@ -269,8 +269,8 @@ def test_graphql_update_user_modify_password_needs_to_be_different_from_previous
                          context_value=graphql_request, variable_values={
         "id": to_global_id('AgentProfile', participant1_user.id),
         "oldPassword": "password5",
-        "newPassword": "password",
-        "newPassword2": "password"
+        "newPassword": "hw5A^xYT1p&i",
+        "newPassword2": "hw5A^xYT1p&i"
     })
     assert res.errors is not None
     assert res.errors[0].message == u"005: The new password has to be different than the last 5 passwords you set."
@@ -289,8 +289,8 @@ def test_graphql_update_user_modify_password_can_reuse_the_old_6th_password_set(
                          context_value=graphql_request, variable_values={
                              "id": to_global_id('AgentProfile', participant1_user.id),
                              "oldPassword": "password6",
-                             "newPassword": "password",
-                             "newPassword2": "password"
+                             "newPassword": "hw5A^xYT1p&i",
+                             "newPassword2": "hw5A^xYT1p&i"
                          })
     assert res.errors is None
 
