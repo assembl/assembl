@@ -1916,9 +1916,9 @@ def thread_csv_export(request):
         IDEA_LEVEL_3.encode('utf-8'),
         IDEA_LEVEL_4.encode('utf-8'),
         MESSAGE_INDENTATION.encode('utf-8'),  # TODO
-        TOP_POST_TITLE.encode('utf-8'),  # TODO
-        TOP_POST.encode('utf-8'),  # TODO
-        TOP_POST_WORD_COUNT.encode('utf-8'),  # TODO
+        TOP_POST_TITLE.encode('utf-8'),
+        TOP_POST.encode('utf-8'),
+        TOP_POST_WORD_COUNT.encode('utf-8'),
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         POST_BODY_COUNT.encode('utf-8'),
@@ -1937,7 +1937,7 @@ def thread_csv_export(request):
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),  # TODO
         MESSAGE_URL.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')  # TODO
+        WATSON_SENTIMENT.encode('utf-8')
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
@@ -2065,8 +2065,8 @@ def bright_mirror_csv_export(request):
         # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),  # TODO
-        FICTION_URL.encode('utf-8'),  # TODO
-        WATSON_SENTIMENT.encode('utf-8')  # TODO
+        FICTION_URL.encode('utf-8'),
+        WATSON_SENTIMENT.encode('utf-8')
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
@@ -2113,7 +2113,7 @@ def bright_mirror_csv_export(request):
                 row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
-            row[MESSAGE_URL] = post.get_url()
+            row[FICTION_URL] = post.get_url()
             if extra_columns_info:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(

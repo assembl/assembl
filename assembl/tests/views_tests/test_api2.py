@@ -992,7 +992,7 @@ def test_add_timeline_event(test_app, discussion):
 
 
 class AbstractExport(object):
-    # HEADER = {}
+
 
     def _get(self, app, discussion_id, widget_id=0, lang=None, view_name=None, votes_export=False):
         base_req = '/data/Discussion/%d/%s' % (discussion_id, view_name)
@@ -1108,10 +1108,10 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.TAG1] == ""
         assert last_row[self.TAG2] == ""
 
-"""
+
 class TestPhase1Export(AbstractExport):
 
-    view_name = 'phase1_csv_export'
+    view_name = 'multi-module-export'
     THEMATIC_NAME = 0
     QUESTION_ID = 1
     QUESTION_TITLE = 2
@@ -1127,7 +1127,68 @@ class TestPhase1Export(AbstractExport):
     SENTIMENT_CREATION_DATE = 14
     POST_BODY_ORIGINAL = 15
 
-    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, test_app):
+    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, test_app,
+    google_identity_provider, admin_social_account, participant1_social_account, bright_mirror, test_webrequest,
+    post_published_for_bright_mirror, post_published_for_bright_mirror_participant,
+    participant_published_post_with_parent_post_for_bright_mirror, post_draft_for_bright_mirror,
+    text_field, text_field2, fullname_text_field, select_field,
+    profile_field, profile_field_for_participant_user, criterion_1, criterion_2,
+    criterion_3, synthesis_1, jack_layton_linked_discussion, idea_message_column_positive,
+    idea_message_column_negative, idea_message_column_positive_on_subidea_1_1,
+    idea_message_column_negative_on_subidea_1_1, root_idea, idea_with_en_fr,
+    annnouncement_for_subidea_1_1, announcement_en_fr, subidea_1, subidea_2, subidea_1_1,
+    subidea_1_2, subidea_1_1_1, root_post_1, root_post_1_with_positive_message_classifier,
+    root_post_en_under_positive_column_of_idea, post_related_to_sub_idea_1, post_related_to_sub_idea_1_1_1,
+    synthesis_post_1, reply_post_1, reply_post_2, reply_post_3,
+    reply_deleted_post_4, reply_to_deleted_post_5, participant2_user, vote_session, token_vote_specification,
+    gauge_vote_specification, number_gauge_vote_specification, vote_proposal,
+    token_vote_specification_associated_to_proposal, gauge_vote_specification_associated_to_proposal,
+    number_gauge_vote_specification_associated_to_proposal, token_vote_spec_with_votes, gauge_vote_specification_with_votes,
+    number_gauge_vote_specification_with_votes):
+        from assembl.views.api2.discussion import (sheet_names, phase_csv_export, survey_csv_export,
+        thread_csv_export, multicolumn_csv_export, voters_csv_export, bright_mirror_csv_export,
+        global_votes_csv_export)
+        results = {sheet_name: None for sheet_name in sheet_names}
+        fieldnames = {sheet_name: None for sheet_name in sheet_names}
+        fieldnames['export_phase'], results['export_phase'] = phase_csv_export(test_webrequest)
+        fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(test_webrequest)
+        fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(test_webrequest)
+        fieldnames['export_module_multicolumns'], results['export_module_multicolumns'] = multicolumn_csv_export(test_webrequest)
+        fieldnames['vote_users_data'], results['vote_users_data'] = voters_csv_export(test_webrequest)
+        fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(test_webrequest)
+        fieldnames['export_module_vote'], results['export_module_vote'] = global_votes_csv_export(test_webrequest)
+        assert fieldnames['export_phase'] == ['Thématique niveau 1', 'Thématique niveau 2', 'Thématique niveau 3',
+                                            'Thématique niveau 4', 'Module', 'Nombre de messages postés',
+                                            'Nombre de messages supprimés', 'Nombre de Top post',
+                                            'Nombre de messages (non top post)', "J'aime", "J'aime pas",
+                                            'Pas tout compris', "SVP + d'infos", 'Nombre de share de la thématique',
+                                            'Nombre de share de message', 'Sentiment (analyse Watson)']
+        assert fieldnames['export_module_survey'] == ['Thématique niveau 1', 'Thématique niveau 2', 'Thématique niveau 3',
+                                            'Thématique niveau 4', 'Question', 'Réponse', 'Nombre de mots', "Nom de l'auteur",
+                                            "Nom d'utilisateur de l'auteur", "Adresse mail de l'auteur", 'Date de publication',
+                                            "J'aime", "J'aime pas", 'Nom du votant', 'Adresse mail du votant', 'Date du vote',
+                                            'Nombre de share', 'URL du message', 'Sentiment (analyse Watson)']
+        assert fieldnames['export_module_thread'] == ['Thématique niveau 1', 'Thématique niveau 2', 'Thématique niveau 3',
+                                            'Thématique niveau 4', 'Indentation du message', 'Titre du top post', 'Top post',
+                                            'Nombre de mots top post', 'Sujet', 'Message', 'Nombre de mots du post', 'Nombre de réponses',
+                                            "Nom de l'auteur", "Nom d'utilisateur de l'auteur", "Adresse mail de l'auteur", 'Date de publication',
+                                            "J'aime", "J'aime pas", 'Pas tout compris', "SVP + d'infos", 'Nom du votant', 'Adresse mail du votant',
+                                            'Date du vote', 'Nombre de share', 'URL du message', 'Sentiment (analyse Watson)']
+        assert fieldnames['export_module_multicolumns'] == ['Thématique niveau 1', 'Thématique niveau 2', 'Thématique niveau 3', 'Thématique niveau 4',
+                                            'Nom de la colonne', 'Message', 'Nombre de mots', "Nom de l'auteur", "Nom d'utilisateur de l'auteur",
+                                            "Adresse mail de l'auteur", 'Date de publication', "J'aime", "J'aime pas", 'Pas tout compris',
+                                            "SVP + d'infos", 'Nom du votant', 'Adresse mail du votant', 'Date du vote', 'Nombre de share',
+                                            'URL du message', 'Sentiment (analyse Watson)']
+        assert fieldnames['vote_users_data'] == ['Thématique niveau 1', 'Thématique niveau 2', 'Thématique niveau 3', 'Thématique niveau 4']
+        assert fieldnames['export_module_bright_mirror'] == ['Thématique niveau 1', 'Thématique niveau 2', 'Thématique niveau 3',
+                                            'Thématique niveau 4', 'Titre de la fiction', 'Fiction', 'Nombre de mots', "Nom de l'auteur",
+                                            "Nom d'utilisateur de l'auteur", "Adresse mail de l'auteur", 'Date de publication',
+                                            'Nombre de message (débat)', "Nombre d'attrapages", "J'aime", "J'aime pas", 'Pas tout compris',
+                                            "SVP + d'infos", 'Nom du votant', 'Adresse mail du votant', 'Date du vote', 'Nombre de share',
+                                            'URL de la fiction', 'Sentiment (analyse Watson)']
+
+
+"""
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[TestPhase1Export.QUESTION_ID] == b'Numéro de la question'
