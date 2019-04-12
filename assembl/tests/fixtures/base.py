@@ -89,7 +89,7 @@ def base_registry(request):
     return registry
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def test_app_no_perm(request, base_registry, db_tables):
     """A configured Assembl fixture with no permissions"""
     global_config = {
