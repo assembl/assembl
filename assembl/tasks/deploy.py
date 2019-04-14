@@ -186,14 +186,13 @@ def get_aws_invoke_yaml(c, celery=False):
     # s3://assembl-data-{account_id}/{fname}.yaml
     bucket = 'assembl-data-' + account
     invoke_path = os.path.join(c.config.projectpath, 'invoke.yaml')
-    if celery:
-        with open(invoke_path, 'w') as f:
-            f.write(CELERY_YAML)
-        invoke_path = os.path.join(c.config.projectpath, 'cicd.yaml')
     content = get_s3_file(bucket, 'client_data.yaml', invoke_path)
-    if not content:
+    if not content and not celery:
         content = get_s3_file(bucket, 'cicd.yaml', invoke_path)
-    if not content:
+    elif celery:
+        invoke_path = os.path.join(c.config.projectpath, 'cicd.yaml')
+        content = CELERY_YAML
+    else:
         content = '_extends: terraform.yaml\n'
     with open(invoke_path, 'w') as f:
         f.write(content)
