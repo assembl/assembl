@@ -68,6 +68,8 @@ before_install:
  - sudo usermod -a -G www-data $USER
  - ssh-keygen -P '' -f ~/.ssh/id_rsa && cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
  - echo -e "_extends = ./testing.rc\n_gitbranch = $TRAVIS_COMMIT\nsqlalchemy.echo = False" > travis.rc
+ # The following line is needed for the auto incrementing of assembl version
+ - git fetch --unshallow
  # The following line produces warning "uses weak digest algorithm" during its `apt-get update`
  # - fab -f assembl/fabfile.py -c travis.rc install_assembl_server_deps
  # - fab -f assembl/fabfile.py -c travis.rc install_redis
