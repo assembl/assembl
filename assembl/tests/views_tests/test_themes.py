@@ -103,17 +103,31 @@ def test_populate_theme_v2():
 
 def test_populate_theme_v2_resource_exists_no_config():
     import os
+    import shutil
     build_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
         'static2/build'
     )
-    resources_html = os.path.join(build_path, 'resources.html')
-    if not os.path.exists(resources_html):
+    resources_html_path = os.path.join(build_path, 'resources.html')
+    resources_file_created = False
+    build_folder_created = False
+    if not os.path.exists(build_path):
+        os.mkdir(build_path)
+        build_folder_created = True
+    if not os.path.exists(resources_html_path):
+        resources_file_created = True
         Uuid = uuid.uuid4().hex
         resources_html = get_resources_html(Uuid)
-        with open(resources_html, 'w') as f:
+        with open(resources_html_path, 'w') as f:
             f.seek(0)
             f.write(resources_html)
     data = populate_theme_information()
     non_build_css_path = data.get('theme_css_file', "").replace("/build", "")
+
+    # Clean up the file creations before the assert
+    if build_folder_created:
+        shutil.rmtree(build_path)
+    elif resources_file_created:
+        os.unlink(resources_html_path)
+
     assert non_build_css_path in data.get('full_theme_url')
