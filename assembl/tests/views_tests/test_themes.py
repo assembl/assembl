@@ -2,6 +2,7 @@ import pytest
 import uuid
 
 from assembl.views import find_theme, populate_theme_information, extract_resources_hash, extract_v1_resources_hash
+from assembl.tests.fixtures.base import get_resources_html
 
 
 def test_find_themes():
@@ -10,28 +11,6 @@ def test_find_themes():
     expected_relative_path = 'default'
     retval = find_theme(theme_name)
     assert retval == expected_relative_path, "find_themes returned %s but we expected %s" % (retval, expected_relative_path)
-
-
-def get_resources_html(uuid, theme_name="default"):
-    return """
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Caching</title>
-        <link href="/build/themes/default/theme_default_web.8bbb970b0346866e3dac.css" rel="stylesheet">
-        <link href="/build/themes/{uuid}/{theme_name}/theme_{theme_name}_web.8bbb970b0346866e3dac.css" rel="stylesheet">
-        <link href="/build/bundle.5f3e474ec0d2193c8af5.css" rel="stylesheet">
-        <link href="/build/searchv1.04e4e4b2fab45a2ab04e.css" rel="stylesheet">
-      </head>
-      <body>
-        <script type="text/javascript" src="/build/themes/default//theme_default_web.ed5786109ac04600f1d5.js"></script>
-        <script type="text/javascript" src="/build/themes/{uuid}/{theme_name}/theme_{theme_name}_web.ed5786109ac04600f1d5.js"></script>
-        <script type="text/javascript" src="/build/bundle.5aae461a0604ace7cd31.js"></script>
-        <script type="text/javascript" src="/build/searchv1.b8939cd89ebdedfd2901.js"></script>
-      </body>
-    </html>
-    """.format(theme_name=theme_name, uuid=uuid)
 
 
 class TestResources(object):
@@ -101,33 +80,7 @@ def test_populate_theme_v2():
     assert 'more information regarding the bundle and themes' in str(exc.value)
 
 
-def test_populate_theme_v2_resource_exists_no_config():
-    import os
-    import shutil
-    build_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        'static2/build'
-    )
-    resources_html_path = os.path.join(build_path, 'resources.html')
-    resources_file_created = False
-    build_folder_created = False
-    if not os.path.exists(build_path):
-        os.mkdir(build_path)
-        build_folder_created = True
-    if not os.path.exists(resources_html_path):
-        resources_file_created = True
-        Uuid = uuid.uuid4().hex
-        resources_html = get_resources_html(Uuid)
-        with open(resources_html_path, 'w') as f:
-            f.seek(0)
-            f.write(resources_html)
+def test_populate_theme_v2_resource_exists_no_config(static_asset_resources_html):
     data = populate_theme_information()
     non_build_css_path = data.get('theme_css_file', "").replace("/build", "")
-
-    # Clean up the file creations before the assert
-    if build_folder_created:
-        shutil.rmtree(build_path)
-    elif resources_file_created:
-        os.unlink(resources_html_path)
-
     assert non_build_css_path in data.get('full_theme_url')

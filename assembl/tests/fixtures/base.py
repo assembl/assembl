@@ -201,8 +201,62 @@ def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
     return req
 
 
+def get_resources_html(uuid, theme_name="default"):
+    return """
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Caching</title>
+        <link href="/build/themes/default/theme_default_web.8bbb970b0346866e3dac.css" rel="stylesheet">
+        <link href="/build/themes/{uuid}/{theme_name}/theme_{theme_name}_web.8bbb970b0346866e3dac.css" rel="stylesheet">
+        <link href="/build/bundle.5f3e474ec0d2193c8af5.css" rel="stylesheet">
+        <link href="/build/searchv1.04e4e4b2fab45a2ab04e.css" rel="stylesheet">
+      </head>
+      <body>
+        <script type="text/javascript" src="/build/themes/default//theme_default_web.ed5786109ac04600f1d5.js"></script>
+        <script type="text/javascript" src="/build/themes/{uuid}/{theme_name}/theme_{theme_name}_web.ed5786109ac04600f1d5.js"></script>
+        <script type="text/javascript" src="/build/bundle.5aae461a0604ace7cd31.js"></script>
+        <script type="text/javascript" src="/build/searchv1.b8939cd89ebdedfd2901.js"></script>
+      </body>
+    </html>
+    """.format(theme_name=theme_name, uuid=uuid)
+
+
 @pytest.fixture(scope="function")
-def test_app(request, admin_user, test_app_no_perm):
+def static_asset_resources_html(request):
+    import os
+    import shutil
+    import uuid
+    build_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+        'static2/build'
+    )
+    resources_html_path = os.path.join(build_path, 'resources.html')
+    resources_file_created = False
+    build_folder_created = False
+    if not os.path.exists(build_path):
+        os.mkdir(build_path)
+        build_folder_created = True
+    if not os.path.exists(resources_html_path):
+        resources_file_created = True
+        Uuid = uuid.uuid4().hex
+        resources_html = get_resources_html(Uuid)
+        with open(resources_html_path, 'w') as f:
+            f.seek(0)
+            f.write(resources_html)
+
+    def fin():
+        # Clean up the file creations before the assert
+        if build_folder_created:
+            shutil.rmtree(build_path)
+        elif resources_file_created:
+            os.unlink(resources_html_path)
+    request.addfinalizer(fin)
+
+
+@pytest.fixture(scope="function")
+def test_app(request, static_asset_resources_html, admin_user, test_app_no_perm):
     """A configured Assembl fixture with permissions
     and an admin user logged in"""
 
@@ -232,6 +286,7 @@ def test_app_no_login(request, test_app_no_perm):
     config.set_authentication_policy(dummy_policy)
 
     return test_app_no_perm
+
 
 @pytest.fixture(scope="function")
 def test_app_no_login_real_policy(request, test_app_no_perm):
