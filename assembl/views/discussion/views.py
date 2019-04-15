@@ -216,11 +216,7 @@ def react_view(request, required_permission=P_READ):
     get_route = old_context["get_route"]
     theme_name = get_theme_name(discussion)
     node_env = os.getenv('NODE_ENV', 'production')
-    # wsginame values are defined in *.rc files
-    wsginame = get('wsginame', '')
-    bugherd_url = None
-    if wsginame in ('preprod.wsgi',):
-        bugherd_url = get('bugherd_url', None)
+    bugherd_url = get('bugherd_url', None)
 
     common_context = {
         "theme_name": theme_name,
