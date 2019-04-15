@@ -1127,7 +1127,7 @@ class TestPhase1Export(AbstractExport):
     SENTIMENT_CREATION_DATE = 14
     POST_BODY_ORIGINAL = 15
 
-    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, test_app,
+    def test_new_export(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, test_app,
     google_identity_provider, admin_social_account, participant1_social_account, bright_mirror, test_webrequest,
     post_published_for_bright_mirror, post_published_for_bright_mirror_participant,
     participant_published_post_with_parent_post_for_bright_mirror, post_draft_for_bright_mirror,
@@ -1138,13 +1138,13 @@ class TestPhase1Export(AbstractExport):
     idea_message_column_negative_on_subidea_1_1, root_idea, idea_with_en_fr,
     annnouncement_for_subidea_1_1, announcement_en_fr, subidea_1, subidea_2, subidea_1_1,
     subidea_1_2, subidea_1_1_1, root_post_1, root_post_1_with_positive_message_classifier,
-    root_post_en_under_positive_column_of_idea, post_related_to_sub_idea_1, post_related_to_sub_idea_1_1_1,
-    synthesis_post_1, reply_post_1, reply_post_2, reply_post_3,
+    root_post_en_under_positive_column_of_idea, root_post_en_under_positive_column_of_subidea_1_1, post_related_to_sub_idea_1,
+    post_related_to_sub_idea_1_1_1, synthesis_post_1, reply_post_1, reply_post_2, reply_post_3,
     reply_deleted_post_4, reply_to_deleted_post_5, participant2_user, vote_session, token_vote_specification,
-    gauge_vote_specification, number_gauge_vote_specification, vote_proposal,
+    gauge_vote_specification, number_gauge_vote_specification, vote_proposal, root_post_en_under_negative_column_of_idea,
     token_vote_specification_associated_to_proposal, gauge_vote_specification_associated_to_proposal,
     number_gauge_vote_specification_associated_to_proposal, token_vote_spec_with_votes, gauge_vote_specification_with_votes,
-    number_gauge_vote_specification_with_votes):
+    number_gauge_vote_specification_with_votes, graphql_participant1_request, graphql_registry, phases):
         from assembl.views.api2.discussion import (sheet_names, phase_csv_export, survey_csv_export,
         thread_csv_export, multicolumn_csv_export, voters_csv_export, bright_mirror_csv_export,
         global_votes_csv_export)
@@ -1179,13 +1179,101 @@ class TestPhase1Export(AbstractExport):
                                             "Adresse mail de l'auteur", 'Date de publication', "J'aime", "J'aime pas", 'Pas tout compris',
                                             "SVP + d'infos", 'Nom du votant', 'Adresse mail du votant', 'Date du vote', 'Nombre de share',
                                             'URL du message', 'Sentiment (analyse Watson)']
-        assert fieldnames['vote_users_data'] == ['Thématique niveau 1', 'Thématique niveau 2', 'Thématique niveau 3', 'Thématique niveau 4']
         assert fieldnames['export_module_bright_mirror'] == ['Thématique niveau 1', 'Thématique niveau 2', 'Thématique niveau 3',
                                             'Thématique niveau 4', 'Titre de la fiction', 'Fiction', 'Nombre de mots', "Nom de l'auteur",
                                             "Nom d'utilisateur de l'auteur", "Adresse mail de l'auteur", 'Date de publication',
                                             'Nombre de message (débat)', "Nombre d'attrapages", "J'aime", "J'aime pas", 'Pas tout compris',
                                             "SVP + d'infos", 'Nom du votant', 'Adresse mail du votant', 'Date du vote', 'Nombre de share',
                                             'URL de la fiction', 'Sentiment (analyse Watson)']
+        import pdb; pdb.set_trace()
+        assert results['export_phase'][0] == {u'Nombre de messages postés': 23L, u"SVP + d'infos": 0L, u'Module': None,
+                                    u'Nombre de messages supprimés': 0L, u'Pas tout compris': 0L, u"J'aime pas": 0L,
+                                    u'Thématique niveau 2': '', u'Thématique niveau 3': '',
+                                    u'Thématique niveau 1': 'Favor economic growth', u'Thématique niveau 4': '',
+                                    u"J'aime": 0L}
+        assert results['export_phase'][1] == {u'Nombre de messages postés': 0, u"SVP + d'infos": 0L, u'Module': None,
+                                            u'Nombre de messages supprimés': 0L, u'Pas tout compris': 0L, u"J'aime pas": 0L,
+                                            u'Thématique niveau 2': 'cost', u'Thématique niveau 3': '',
+                                            u'Thématique niveau 1': 'Favor economic growth', u'Thématique niveau 4': '', u"J'aime": 0L}
+        assert results['export_module_survey'][0] == {'Date du vote': '', 'Nom du votant': '',
+                                                    'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019',
+                                                    "Adresse mail de l'auteur": 'admin@assembl.com', 'Adresse mail du votant': '',
+                                                    "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/',
+                                                    'Thématique niveau 4': '', 'Réponse': 'une proposition 14',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues',
+                                                    'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][1] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de \
+                                                        l'Intelligence Artificielle dans notre société ?", "Nom de l'auteur": 'Mr. Administrator',
+                                                        'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                        'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                        'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '',
+                                                        'Réponse': 'une proposition 13', 'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '',
+                                                        'Thématique niveau 3': ''}
+        assert results['export_module_survey'][2] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 12',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][3] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 11',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][4] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 10',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][5] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 9',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][6] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 8',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][7] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 7',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][8] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 6',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][9] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 5',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][10] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 4',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][11] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 3',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][12] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 2',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][13] == {'Date du vote': '', 'Nom du votant': '', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    "Nom de l'auteur": 'Mr. Administrator', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com',
+                                                    'Adresse mail du votant': '', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3',
+                                                    'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYTox/', 'Thématique niveau 4': '', 'Réponse': 'une proposition 1',
+                                                    'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+        assert results['export_module_survey'][14] == {"J'aime": '1', "Nom de l'auteur": 'Mr. Administrator', 'Nom du votant': 'Mr. Administrator', 'Question': "Comment qualifiez-vous l'emergence de l'Intelligence Artificielle dans notre société ?",
+                                                    'Date du vote': '12/04/2019', 'Date de publication': '12/04/2019', "Adresse mail de l'auteur": 'admin@assembl.com', 'Adresse mail du votant': 'admin@assembl.com', "Nom d'utilisateur de l'auteur": 'mr_admin_user', 'Nombre de mots': '3', "J'aime pas": '                                           0', 'Thématique niveau 4': '', 'Réponse': 'une proposition 0', 'URL du message': 'http://localhost:6546/jacklayton2/debate/survey/theme/SWRlYToz/', 'Thématique niveau 1': 'Understanding the dynamics and issues', 'Thématique niveau 2': '', 'Thématique niveau 3': ''}
+
 
 
 """
