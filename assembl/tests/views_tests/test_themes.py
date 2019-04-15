@@ -60,26 +60,6 @@ def test_populate_theme_v1():
     assert assertion
 
 
-def test_populate_theme_v2():
-    import os
-    import shutil
-    build_path = os.path.join(
-        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
-        'static2/build'
-    )
-    resources_html = os.path.join(build_path, 'resources.html')
-    resources_html_tmp = os.path.join(build_path, 'resources.html.tmp')
-    if os.path.exists(build_path) and os.path.exists(resources_html):
-        shutil.move(resources_html, resources_html_tmp)
-        with pytest.raises(Exception) as exc:
-            populate_theme_information('some-theme', 2)
-        shutil.move(resources_html_tmp, resources_html)
-    else:
-        with pytest.raises(Exception) as exc:
-            populate_theme_information('some-theme', 2)
-    assert 'more information regarding the bundle and themes' in str(exc.value)
-
-
 def test_populate_theme_v2_resource_exists_no_config(static_asset_resources_html):
     data = populate_theme_information()
     non_build_css_path = data.get('theme_css_file', "").replace("/build", "")
