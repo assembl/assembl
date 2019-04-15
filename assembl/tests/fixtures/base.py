@@ -233,25 +233,41 @@ def static_asset_resources_html(request):
         'static2/build'
     )
     resources_html_path = os.path.join(build_path, 'resources.html')
+    resources_html_tmp = os.path.join(build_path, 'resources.html.tmp')
     resources_file_created = False
     build_folder_created = False
-    if not os.path.exists(build_path):
-        os.mkdir(build_path)
-        build_folder_created = True
-    if not os.path.exists(resources_html_path):
-        resources_file_created = True
+    resource_file_moved = False
+
+    def write_resouces_to_disk():
         Uuid = uuid.uuid4().hex
         resources_html = get_resources_html(Uuid)
         with open(resources_html_path, 'w') as f:
             f.seek(0)
             f.write(resources_html)
 
+    if not os.path.exists(build_path):
+        os.mkdir(build_path)
+        build_folder_created = True
+    if not os.path.exists(resources_html_path):
+        write_resouces_to_disk()
+        resources_file_created = True
+    else:
+        # resouce html exists, change file name temporarily for the test
+        # This happens when testing on local machine where a static2 build folder has already been done
+        shutil.move(resources_html_path, resources_html_tmp)
+        write_resouces_to_disk()
+        resource_file_moved = True
+
     def fin():
-        # Clean up the file creations before the assert
+        # Clean up the file creations after assertions
         if build_folder_created:
             shutil.rmtree(build_path)
         elif resources_file_created:
             os.unlink(resources_html_path)
+        elif resource_file_moved:
+            os.unlink(resources_html_path)
+            shutil.move(resources_html_tmp, resources_html_path)
+
     request.addfinalizer(fin)
 
 

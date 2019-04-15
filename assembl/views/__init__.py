@@ -261,10 +261,13 @@ def populate_theme_information(theme_name='default', version=2):
             'theme_name': 'default'
         }
     else:
-        if asbool(config.get('use_webpack_server')):
+        if asbool(config.get('under_test')) or asbool(config.get('use_webpack_server')):
             # Local development mode, use default always (for now)
             data = {
-                'theme_js_file': '/build/themes/default/theme_default_web.js'
+                # Used in dev
+                'theme_js_file': '/build/themes/default/theme_default_web.js',
+                # Used in testing
+                'full_theme_url': 'http://localhost/static2/build/themes/default/theme_default_web.css'
             }
         else:
             # Production environment, currently handling only usecase of pulling from the s3 bucket
