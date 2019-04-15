@@ -85,7 +85,7 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
         onMouseOver={!isTouchScreenDevice && !screenTooSmall ? this.showMenu : null}
         onMouseLeave={!isTouchScreenDevice && !screenTooSmall ? this.hideMenu : null}
       >
-        {!screenTooSmall ? (
+        {!screenTooSmall && !isTouchScreenDevice ? (
           <React.Fragment>
             <div className={classNames(className, activeClassName)} data-text={dataText}>
               {children}
