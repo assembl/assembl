@@ -5,7 +5,17 @@ exports[`DebateLink component should match the DebateLink (small screen) 1`] = `
   className="debate-link"
   onMouseLeave={null}
   onMouseOver={null}
-/>
+>
+  <div
+    className="debate-class debate-class-active"
+    data-text="Debate"
+    onClick={[Function]}
+  >
+    <span>
+      Debate
+    </span>
+  </div>
+</div>
 `;
 
 exports[`DebateLink component should match the DebateLink 1`] = `
