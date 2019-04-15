@@ -16,7 +16,7 @@ _internal:
   build_docs: false
   can_test: true
 under_test: true
-theme_base : %(code_root)s/assembl/static2/build/themes/develop
+theme_base : "%(code_root)s/assembl/static2/build/themes/develop"
 pyramid.default_locale_name: en
 assembl_handle_exceptions: false
 tm.attempts: 2
