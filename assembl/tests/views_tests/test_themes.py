@@ -25,7 +25,6 @@ class TestResources(object):
             'bundle_css_hash': '5f3e474ec0d2193c8af5'
         }
         assert expected['bundle_hash'] == resources_hash['bundle_hash']
-        assert expected['theme_js_file'] == resources_hash['theme_js_file']
         assert expected['bundle_css_hash'] == resources_hash['bundle_css_hash']
 
     def test_get_v1_resources_hash(self):
