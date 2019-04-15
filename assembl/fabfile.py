@@ -29,7 +29,7 @@ from os.path import join, dirname, split, normpath, realpath
 # Other calls to os.path rarely mostly don't work remotely. Use locally only.
 import os.path
 from functools import wraps
-from tempfile import NamedTemporaryFile, TemporaryFile
+from tempfile import NamedTemporaryFile
 
 from fabric.operations import (
     local, put, get, run, sudo as fabsudo)
@@ -78,27 +78,11 @@ def get_user_password_from_config(user):
     return env.get('%s_user_password' % user, None)
 
 
-def fabpass_for(user, password=None):
-    """
-    A method that creates the dict of users/passwords necessary for fabric to be able to
-    log in to system unassisted
-    """
-    if not user:
-        raise RuntimeError("No user was presented to get a password for")
-    passwords = env.passwords or {}
-    pass_key = '%s@%s:%s' % (user, env.public_hostname, env.get('ssh_port', '22'))
-    passwords[pass_key] = password or get_user_password_from_config(user)
-    return passwords
-
-
 def sudo(*args, **kwargs):
     sudoer = env.get("sudoer", None) or env.get("user")
     # Generic ability for a defined user to have capabilities to run commands on machine without
     # being a sudo user
-    passwords = {}
-    if env.get('sudo_password', None):
-        passwords = fabpass_for(env.sudoer, env.sudo_password)
-    with settings(user=sudoer, passwords=passwords):
+    with settings(user=sudoer):
         if sudoer in ("root",):
             return run(*args, **kwargs)
         else:
@@ -311,28 +295,11 @@ def listdir(path):
     return run("ls " + path).split()
 
 
-def _generate_random_string(N=32):
-    import random
-    import string
-    return ''.join(random.SystemRandom().choice(string.letters + string.digits) for _ in range(N))
-
-
 def warn_only(string, use_sudo=False):
     with settings(warn_only=True):
         if use_sudo:
             return sudo(string)
         return run(string)
-
-
-def run_as_user(cmd, user, password=None, **kwargs):
-    passwords = {}
-    password_from_env = get_user_password_from_config(user)
-    pwd = password or password_from_env
-    if not pwd:
-        raise RuntimeError("No password has been provided to run command \"%s\"as user %s" % cmd, user)
-    passwords = fabpass_for(user, password=pwd)
-    with settings(user=user, passwords=passwords):
-        return run(cmd, **kwargs)
 
 
 @task
@@ -1459,8 +1426,6 @@ def app_setup(backup=False):
     """Setup the environment so the application can run"""
     if not env.package_install:
         venvcmd('pip install -e ./')
-    else:
-        pip_install_wheel()
     execute(setup_var_directory)
     if not exists(env.ini_file):
         execute(create_local_ini)
@@ -1608,34 +1573,23 @@ def generate_dh_group():
 
 
 @task
-def setup_nginx_file(debug=False):
+def update_nginx_file():
     """Creates nginx config file from template."""
     # Deleting any existing nginx configurations already existing
-    if not env.webmaster_user:
-        print(red("A webmaster user does not exist"))
-        return
-
     file = join(os.getcwd(), env.public_hostname)
-    try:
-        rc_info = filter_global_names(combine_rc(env['rcfile']))
-        fill_template('nginx_default.jinja2', rc_info, file)
-        run_as_user('cp -fp /etc/nginx/sites-available/%(host_name)s /etc/nginx/sites-available/%(host_name)s.bak' % {'host_name': env.public_hostname},
-                    env.webmaster_user)
-        # Have to change users with settings due to put operation
-        with settings(user=env.webmaster_user, passwords=fabpass_for(env.webmaster_user)):
-            put(file, "/etc/nginx/sites-available/%s" % (env.public_hostname))
-            status = sudo('nginx -t', warn_only=True)
-            if status.failed:
-                run('rm -f /etc/nginx/sites-available/%s' % env.public_hostname)
-                run('mv /etc/nginx/sites-available/%(host_name)s.bak /etc/nginx/sites-available/%(host_name)s' % {'host_name': env.public_hostname})
-                raise RuntimeError("The NGINX configuration was improperly set up! Please rerun setup_nginx_file with debug enabled to view the config")
-            else:
-                run("rm -f /etc/nginx/sites-enabled/%s" % (env.public_hostname))
-                run("ln -s /etc/nginx/sites-available/%(host_name)s /etc/nginx/sites-enabled/%(host_name)s" % {'host_name': env.public_hostname})
-                run("sudo /etc/init.d/nginx restart")
-    finally:
-        if debug:
-            os.unlink(file)
+    rc_info = filter_global_names(combine_rc(env['rcfile']))
+    fill_template('nginx_default.jinja2', rc_info, file)
+    # Have to change users with settings due to put operation
+    with settings(user=env.user):
+        nginx_path = "%s/var/share/assembl.nginx" % env.projectpath
+        run('cp %(file)s %(file)s.bak' % {'file': nginx_path})
+        put(file, nginx_path)
+        run("sudo /etc/init.d/nginx restart")
+
+
+@task
+def setup_nginx_file():
+    sudo('ln -s %s/var/share/assembl.nginx /etc/nginx/sites-available/assembl.nginx' % env.projectpath)
 
 
 @task
@@ -3338,169 +3292,6 @@ def secure_sshd_fail2ban():
     # Fail2ban needs verbose logging for full security
     sudo("sed -i 's/LogLevel .*/LogLevel VERBOSE/' /etc/ssh/sshd_config")
     sudo('service ssh restart')
-
-
-@task
-def migrate_important_information(path, to):
-    """
-    Move important files that are meant to survive moving to an automated deployment strategy
-    """
-    if exists(path):
-        basename = os.path.basename(path)
-        destination_path = normpath(to, basename)
-        if not exists(destination_path):
-            run('cp -r %s %s' % (path, destination_path))
-
-
-@task
-def migrate_server_for_automated_deployment():
-    important_vars = [
-        'var',
-        'random.ini',
-        'local.rc'
-    ]
-    private_config_path = normpath(os.path. join(env.projectpath, '..', 'global_configs'))
-    run('mkdir -p %s' % private_config_path)
-
-    for v in important_vars:
-        execute(migrate_important_information, path=join(env.projectpath, v), to=private_config_path)
-
-
-def pip_install_wheel(version=None):
-    base_wheel_path = env.get('assembl_wheel_dir')
-    if not version:
-        version = open("%s/VERSION" % local_code_root).read().strip()
-        if not version:
-            version = run('ls -t %s | head -n 1' % (base_wheel_path))
-    wheel_path = os.path.join(base_wheel_path, version, 'assembl-%s-py2-none-any.whl' % version)
-    use_wheel = '' if not env.wheelhouse else '--find-links=%s' % env.wheelhouse
-    venvcmd('pip install %(wheelhouse)s %(wheel)s%(dev_mode)s' % {
-            'wheelhouse': use_wheel,
-            'wheel': wheel_path,
-            'dev_mode': '[dev]' if not is_integration_env() else ''
-            })  # To allow debugging on server
-
-
-@task
-def deploy_wheel(version=None):
-    # Run by same user who will install Assembl
-    # Tested on Ubuntu only
-    execute(migrate_server_for_automated_deployment)
-    # Remove the main code_path
-    assembl_main_project_path = join(env.projectpath, 'assembl')
-    fabric_path = normpath(join(code_root(), 'fabfile.py'))
-    if exists(assembl_main_project_path):
-        run('rm -rf %s' % assembl_main_project_path)
-    if exists(env.venvpath):
-        run('rm -rf %s' % env.venvpath)
-        run('rm -rf %s' % env.venvpath + 'py3')
-
-    execute(build_virtualenv, with_setuptools=True)
-    pip_install_wheel(version)
-    venvcmd('ln -s %s %s' % (fabric_path, env.projectpath))
-    if not is_integration_env():
-        if env.is_production_env:
-            execute(install_url_metadata_wheel)
-        else:
-            execute(install_url_metadata_source)
-
-
-@task
-def create_user(name, rsa_passphrase=""):
-    if env.mac:
-        return
-
-    username = name
-    hostname = env.public_hostname
-    if warn_only('grep %s /etc/passwd' % username).failed:
-
-        print(red("A %s user does not exist on this machine. One will be created for you. "
-                  "You will be responsible for fetching the private key of this user." % username))
-        password = get_user_password_from_config(username) or _generate_random_string()
-        # Create a webmaster user, including the home folder
-        sudo('adduser %s --gecos "First Last,RoomNumber,WorkPhone,HomePhone" --disabled-password' % username)
-        with hide('running', 'stdout'), shell_env(USER_SPECIFIED_PASSWORD=password):
-            sudo('echo "%s:$USER_SPECIFIED_PASSWORD" | sudo chpasswd' % username)
-        if run('which ssh-keygen').failed:
-            print(yellow("ssh-client is not installed on this machine. Installing it now..."))
-            sudo('apt-get install -y openssh-client')
-        run_as_user('ssh-keygen -q -t rsa -N %s -f /home/%s/.ssh/id_rsa' % (rsa_passphrase, username), username, password=password)
-        run_as_user('cat /home/%(username)s/.ssh/id_rsa.pub >> /home/%(username)s/.ssh/authorized_keys' % {'username': username},
-                    username, password=password)
-        run_as_user('chmod -R 700 /home/%s/.ssh' % username, username, password=password)
-
-        print(red("Generating private information for %s user. This file contains private information and should not be shared" % username))
-        output_path = join(os.getcwd(), '%s.secret' % hostname)
-        with hide('running', 'stdout'):
-            # In the future, do NOT do this. Instead, use KMS or SecretManager, or Vault as the place to store
-            # the secret information
-            with TemporaryFile() as f:
-                # Need to temporarily allow access
-                temp_path = '/home/%s/tmp.pem' % env.user
-                sudo('cp /home/%s/.ssh/id_rsa %s' % (username, temp_path))
-                sudo('chown %s:%s %s' % (env.user, env.user, temp_path))
-                result = get(temp_path, local_path=f)
-                run('rm -f %s' % temp_path)
-                if not result.failed:
-                    f.seek(0)
-                    private_key = f.read()
-                    data = {
-                        'username': username,
-                        'password': password,
-                        'hostname': hostname,
-                        'private_key': private_key,
-                        'rsa_passphrase': ''
-                    }
-                    fill_template('system_user_information.jinja2', data, output=output_path)
-                else:
-                    print(red("Failed to fetch the resource. Please access the resource by-hand."))
-        print(green("The secrets file has been generated at %s" % output_path))
-    print(yellow("""The user %s already exists on the platform. Please request the following access information from your IT manager:\n
-                 "Account Name\nPassword\nHostname of Machine\nPrivate Key\nRSA Passphrase (if required)""" % username))
-
-
-@task
-def check_or_create_webmaster_user():
-    execute(create_user, name=env.webmaster_user)
-
-
-@task
-def set_webmaster_user_permissions():
-    """
-    Make sure that the nginx configs folder can be edited by webmaster user
-    """
-    if env.mac:
-        return
-
-    username = env.webmaster_user
-    group = 'www-data'
-    sudo('chown -R %s:%s /etc/nginx/sites-enabled /etc/nginx/sites-available' % (username, group))
-    if warn_only('grep %s /etc/sudoers' % username, use_sudo=True).failed:
-        commands = [
-            '/etc/init.d/nginx *',
-            '/usr/sbin/nginx'  # This still crashes as the nginx deamon runs as root
-        ]
-        config_line = "%s ALL=NOPASSWD: %s" % (username, ','.join(commands))
-        sudo('echo \'%s\' | sudo EDITOR=\'tee -a\' visudo' % config_line)
-
-
-@task
-def prepare_server_for_deployment():
-    """
-    A one-stop command to prepare servers for automatic deployment
-    MUST have a sudo user/pass set in the environment
-    """
-    if env.mac:
-        return
-
-    # install docker
-    # add webmaster user to docker user
-
-    # TODO: Make sure all reloads/template updating are done with this user
-    # And their "sudo" command uses the webmaster user (in fabric)
-    # This function assumes that the private key of such a user is added to the ssh-agent of the runner
-    execute(check_or_create_webmaster_user)
-    execute(set_webmaster_user_permissions)
 
 
 @task
