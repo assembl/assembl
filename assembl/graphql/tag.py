@@ -94,8 +94,7 @@ class AddTag(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
-
-        require_cls_permission(CrudPermissions.CREATE, models.Keyword, context)
+        require_cls_permission(CrudPermissions.CREATE, models.Post, context)
 
         taggable = None
         taggable_id = args.get('taggable_id', None)
