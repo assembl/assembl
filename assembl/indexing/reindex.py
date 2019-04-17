@@ -92,9 +92,9 @@ def reindex_content(content, action='update'):
     elif isinstance(content, Username):
         changes.index_content(content.user)
         for post in content.user.posts_created:
-            changes.index_content(post)
+            reindex_content(post)
         for extract in content.user.extracts_created:
-            changes.index_content(extract)
+            reindex_content(extract)
     elif isinstance(content, AgentStatusInDiscussion):
         reindex_content(content.agent_profile)
     elif type(content) == Idea:  # only index Idea, not Thematic or Question
