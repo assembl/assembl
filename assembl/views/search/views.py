@@ -48,25 +48,14 @@ def search_endpoint(context, request):
 #    print get_curl_query(query)
     result = es.search(index=index_name, body=query)
 
-    # add creator_name in each hit
-    creator_ids = set([hit['_source']['creator_id']
-                       for hit in result['hits']['hits']
-                       if hit['_source'].get('creator_id', None) is not None])
     session = get_session_maker()
-    creators = session.query(models.AgentProfile.id, models.AgentProfile.name
-        ).filter(models.AgentProfile.id.in_(creator_ids)).all()
-    creators_by_id = dict(creators)
     for hit in result['hits']['hits']:
         source = hit['_source']
-        creator_id = source.get('creator_id', None)
         # Remove inner_hits key to not leak posts from private discussion.
         # You can easily craft a query to get the participants of a public
         # discussion and do a has_child filter with inner_hits on a private discussion.
         if 'inner_hits' in hit:
             del hit['inner_hits']
-
-        if creator_id is not None:
-            source['creator_name'] = creators_by_id.get(creator_id)
 
         if hit['_type'] == 'idea':
             idea = models.Idea.get_instance(source['id'])

@@ -78,7 +78,7 @@ def reindex_content(content, action='update'):
     from assembl.models.post import PublicationStates
     from assembl.models import (
         AgentStatusInDiscussion, Post, AgentProfile, Idea,
-        IdeaContentLink, IdeaAnnouncement, SentimentOfPost, Extract)
+        IdeaContentLink, IdeaAnnouncement, SentimentOfPost, Extract, Username)
 
     if not indexing_active():
         return
@@ -89,6 +89,12 @@ def reindex_content(content, action='update'):
         changes.unindex_content(content)
     elif isinstance(content, AgentProfile):
         changes.index_content(content)
+    elif isinstance(content, Username):
+        changes.index_content(content.user)
+        for post in content.user.posts_created:
+            reindex_content(post)
+        for extract in content.user.extracts_created:
+            reindex_content(extract)
     elif isinstance(content, AgentStatusInDiscussion):
         reindex_content(content.agent_profile)
     elif type(content) == Idea:  # only index Idea, not Thematic or Question
