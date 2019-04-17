@@ -25,8 +25,10 @@ export function addProtocol(url: string): string {
   return hasProtocol ? url : `https://${url}`;
 }
 
-export function addIframeForMindManager(html: string): string {
-  const url = /(<a href="(https:\/\/share.mindmanager.com[^\s]+)".*<\/a>)/gi;
+export function addIframeForMindMapping(html: string): string {
+  const url = html.includes('mindmanager')
+    ? /(<a href="(https:\/\/share.mindmanager.com[^\s]+)".*<\/a>)/gi
+    : /(<a href="(https:\/\/embed.coggle.it\/diagram[^\s]+)".*<\/a>)/gi;
   return html.replace(url, '<div class="iframed"><iframe src="$2"></iframe></div>');
 }
 

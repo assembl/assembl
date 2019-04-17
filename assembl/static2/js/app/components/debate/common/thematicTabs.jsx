@@ -7,7 +7,7 @@ import activeHtml from 'react-active-html';
 // Component imports
 import { ANNOUNCEMENT_TAB_ITEM_ID } from '../../../constants';
 import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
-import { addIframeForMindManager } from '../../../utils/linkify';
+import { addIframeForMindMapping } from '../../../utils/linkify';
 import { postBodyReplacementComponents } from './post/postBody';
 
 // GraphQL imports
@@ -54,7 +54,7 @@ const ThematicTabs = ({ guidelinesContent, summary, semanticAnalysisForThematicD
       {summary ? (
         <div className="announcement">
           <div className="announcement-media announcement-text-only">
-            {activeHtml(summary && (isMobile ? summary : addIframeForMindManager(summary)), postBodyReplacementComponents())}
+            {activeHtml(summary && (isMobile ? summary : addIframeForMindMapping(summary)), postBodyReplacementComponents())}
           </div>
         </div>
       ) : null}
