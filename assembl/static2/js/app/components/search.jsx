@@ -313,7 +313,7 @@ const PostHit = ({ bemBlocks, collapseSearch, locale, result }) => {
         <PublishedInfo
           date={source.creation_date}
           userId={source.creator_id}
-          userName={source.creator_name}
+          userName={source.creator_display_name}
           relatedIdeasTitles={[ideaTitle]}
           ideaUrl={ideaUrl}
           onLinkClick={collapseSearch}
@@ -348,7 +348,7 @@ const DumbExtractHit = ({ bemBlocks, collapseSearch, isHarvesting, locale, toggl
         <PublishedInfo
           date={source.creation_date}
           userId={source.creator_id}
-          userName={source.creator_name}
+          userName={source.creator_display_name}
           publishedOnMsgId="search.harvested_on"
           relatedIdeasTitles={[ideaTitle]}
           ideaUrl={ideaUrl}
@@ -388,7 +388,9 @@ const SynthesisHit = ({ bemBlocks, collapseSearch, locale, result }) => {
           <div style={{ backgroundColor: '#f4f4f4', marginTop: '1em' }} dangerouslySetInnerHTML={{ __html: conclusion }} />
         </React.Fragment>
       )}
-      renderFooter={() => <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_name} />}
+      renderFooter={() => (
+        <PublishedInfo date={source.creation_date} userId={source.creator_id} userName={source.creator_display_name} />
+      )}
     />
   );
 };

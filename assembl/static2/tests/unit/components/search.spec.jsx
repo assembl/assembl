@@ -58,7 +58,7 @@ describe('Hits components', () => {
           _source: {
             creation_date: '2018-08-08',
             creator_id: 'foo',
-            creator_name: 'Paxton Pouros',
+            creator_display_name: 'Paxton Pouros',
             subject_en: 'We need to quantify the optical HTTP panel!',
             body_en: 'We need to connect the multi-byte SQL interface!',
             idea_id: ['fakeIdeaId', 'otherFakeIdeaId'],
@@ -144,7 +144,7 @@ describe('Hits components', () => {
           _source: {
             creation_date: '2018-08-08',
             creator_id: 'foo',
-            creator_name: 'Annabelle Olson',
+            creator_display_name: 'Annabelle Olson',
             ideas_en: 'First idea Second idea',
             subject_en: 'Maybe it will transmit the optical application!!',
             introduction_en: 'I\'ll bypass the online PCI card, that should matrix the USB firewall!',
@@ -211,7 +211,7 @@ describe('Hits components', () => {
           _source: {
             creation_date: '2018-08-08',
             creator_id: 'foo',
-            creator_name: 'Jewell Pouros',
+            creator_display_name: 'Jewell Pouros',
             subject_en: 'We need to quantify the optical HTTP panel!',
             body: 'We need to connect the multi-byte SQL interface!',
             idea_id: 'fakeIdeaId',
