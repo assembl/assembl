@@ -26,10 +26,12 @@ export function addProtocol(url: string): string {
 }
 
 export function addIframeForMindMapping(html: string): string {
-  const url = html.includes('mindmanager')
-    ? /(<a href="(https:\/\/share.mindmanager.com[^\s]+)".*<\/a>)/gi
-    : /(<a href="(https:\/\/embed.coggle.it\/diagram[^\s]+)".*<\/a>)/gi;
-  return html.replace(url, '<div class="iframed"><iframe src="$2"></iframe></div>');
+  // add new url to this array if you want to embed another mindmap iframe
+  const urlArray = ['share.mindmanager.com', 'embed.coggle.it'];
+  const filteredUrlArray = urlArray.filter(websiteUrl => html.includes(websiteUrl));
+  const url = filteredUrlArray.length ? filteredUrlArray[0] : '';
+  const regex = new RegExp(`(<a href="(https://${url}[^\\s]+)".*</a>)`, 'gi');
+  return html.replace(regex, '<div class="iframed"><iframe src="$2"></iframe></div>');
 }
 
 export const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
