@@ -36,6 +36,7 @@
 .hide-cookies-bar {
   opacity: 0;
   z-index: -1;
+  position: relative;
 }
 
 @media screen and (max-width: 820px) {
