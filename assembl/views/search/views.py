@@ -53,9 +53,9 @@ def search_endpoint(context, request):
                        for hit in result['hits']['hits']
                        if hit['_source'].get('creator_id', None) is not None])
     session = get_session_maker()
-    creators = session.query(models.AgentProfile.id, models.AgentProfile.name
+    creators = session.query(models.AgentProfile
         ).filter(models.AgentProfile.id.in_(creator_ids)).all()
-    creators_by_id = dict(creators)
+    creators_by_id = {creator.id: creator.display_name() for creator in creators}
     for hit in result['hits']['hits']:
         source = hit['_source']
         creator_id = source.get('creator_id', None)

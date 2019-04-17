@@ -128,10 +128,7 @@ def get_data(content):
             data[attr] = getattr(content, attr, None)
             # AgentProfile doesn't have creation_date, User does.
 
-        if content.username:
-            data['name'] = content.username.username
-        else:
-            data['name'] = content.name
+        data['name'] = content.display_name()
         # get all discussions that the user is in via AgentStatusInDiscussion
         data['discussion_id'] = set([s.discussion_id
                                  for s in content.agent_status_in_discussion])
