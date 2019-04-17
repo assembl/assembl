@@ -10,6 +10,7 @@ from sqlalchemy import (
     func)
 
 from . import DiscussionBoundBase, Base, DeclarativeAbstractMeta
+from assembl.auth import CrudPermissions, P_ADMIN_DISC, P_READ
 
 
 class TaggableEntity(Base):
@@ -70,6 +71,7 @@ class Keyword(DiscussionBoundBase):
         'polymorphic_identity': 'keyword',
         'with_polymorphic': '*'
     }
+    crud_permissions = CrudPermissions(P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
 
     def __repr__(self):
         return "<Tag %s (%d)>" % (self.value, self.id or -1)

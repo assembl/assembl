@@ -7,7 +7,7 @@ import assembl.graphql.docstrings as docs
 from assembl.auth import CrudPermissions
 from assembl import models
 
-from .permissions_helpers import require_instance_permission
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType, SQLAlchemyInterface
 from .utils import abort_transaction_on_exception
 
@@ -95,6 +95,7 @@ class AddTag(graphene.Mutation):
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
 
+        require_cls_permission(CrudPermissions.CREATE, models.Post, context)
         taggable = None
         taggable_id = args.get('taggable_id', None)
         if taggable_id:
@@ -102,7 +103,7 @@ class AddTag(graphene.Mutation):
             taggable_id = int(taggable_node[1])
             taggable = models.TaggableEntity.get_taggable_from_id(
                 taggable_node[0], taggable_id)
-        require_instance_permission(CrudPermissions.CREATE, taggable, context)
+
         value = args.get('value').lower()
         db = taggable.db
         tag = models.Keyword.get_tag(value, discussion_id, db)
