@@ -861,7 +861,7 @@ const Translations = {
         "6": "Personnaliser l'interface"
       },
       languageChoice: "Sélection des langues du débat",
-      moderation: "Modération à priori",
+      moderation: "Modération a priori",
       activateModeration: "Activer la modération",
       translation: "Option de traduction pour les utilisateurs",
       activateTranslation: "Activer l'option pour les utilisateurs de traduire les messages",
