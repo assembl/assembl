@@ -11,6 +11,8 @@ from assembl.auth.util import get_permissions
 from assembl.auth.util import find_discussion_from_slug
 from assembl.graphql.schema import Schema
 from assembl.lib.logging import getLogger
+from assembl.models import AgentProfile
+from assembl.indexing.reindex import reindex_content
 
 
 class LoggingMiddleware(object):
@@ -102,6 +104,9 @@ def graphql_api(request):
     # We monkey patch get_graphql_params for logging instead.
     solver = graphql_wsgi_wrapper(Schema)  # , middleware=[LoggingMiddleware()])
     response = solver(request)
+    if request.json_body['query'].startswith(u'mutation updateProfileFields'):
+        user_profile = AgentProfile.query.filter(AgentProfile.id == user_id).first()
+        reindex_content(user_profile)
     if has_cors:
         response.headerlist.extend(cors_headers)
     return response
