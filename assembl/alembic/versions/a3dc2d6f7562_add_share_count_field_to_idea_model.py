@@ -21,8 +21,10 @@ from assembl.lib import config
 def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column('idea', sa.Column('share_count', sa.Integer))
+        op.add_column('post', sa.Column('share_count', sa.Integer))
 
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
         op.drop_column('idea', 'share_count')
+        op.drop_column('post', 'share_count')
