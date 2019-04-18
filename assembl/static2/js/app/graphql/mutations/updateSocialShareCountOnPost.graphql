@@ -1,0 +1,8 @@
+mutation updateSocialShareCountOnPost($postId: ID!, $socialSharesOnPost: [SocialShareTypes]!) {
+  updateSocialShareCountOnPost(postId: $postId, socialSharesOnPost: $socialSharesOnPost) {
+    post {
+      id
+      socialSharesOnPost
+    }
+  }
+}
