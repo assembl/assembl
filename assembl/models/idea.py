@@ -176,7 +176,7 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         cascade="all, delete-orphan")
     hidden = Column(Boolean, server_default='0')
     last_modified = Column(Timestamp)
-    share_count = Column(Integer)
+    share_count = Column(Integer, default=0)
     # TODO: Make this autoupdate on change. see
     # http://stackoverflow.com/questions/1035980/update-timestamp-when-row-is-updated-in-postgresql
 
