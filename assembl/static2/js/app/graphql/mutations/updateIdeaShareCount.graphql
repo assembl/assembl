@@ -1,7 +1,0 @@
-mutation updateIdeaShareCount($actions: SocialShareTypes!, $ideaId: ideaId!) {
-  updateIdeaShareCount(actions: $actions, ideaId: $ideaId) {
-    user {
-      shares
-    }
-  }
-}
