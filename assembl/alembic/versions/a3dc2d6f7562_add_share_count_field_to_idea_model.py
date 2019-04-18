@@ -22,12 +22,6 @@ def upgrade(pyramid_env):
     with context.begin_transaction():
         op.add_column('idea', sa.Column('share_count', sa.Integer))
 
-    # Do stuff with the app's models here.
-    from assembl import models as m
-    db = m.get_session_maker()()
-    with transaction.manager:
-        pass
-
 
 def downgrade(pyramid_env):
     with context.begin_transaction():
