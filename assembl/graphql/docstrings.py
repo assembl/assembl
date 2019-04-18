@@ -642,6 +642,12 @@ class UpdatePost:
     publication_state = PostInterface.publication_state
 
 
+class UpdateSocialShareCountOnPost:
+    __doc__ = "A mutataion called when user shares post on social media."
+    post_id = Default.node_id % ("Post") + " The identifier of the Post to be updated."
+    social_shares_on_post = """A list of social share actions on the post."""
+
+
 class DeletePost:
     __doc__ = "A mutation to delete a Post."
     post_id = Default.node_id % "Post" + " This is the Post identifier that is to be deleted."
