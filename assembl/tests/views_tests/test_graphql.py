@@ -8,6 +8,8 @@ from graphql_relay.connection.arrayconnection import offset_to_cursor
 from assembl import models
 from assembl.graphql.schema import Schema as schema
 from assembl.graphql.utils import create_root_thematic
+from assembl import models
+from graphql_relay.node.node import from_global_id, to_global_id
 
 
 def test_graphene_id():
@@ -1467,6 +1469,19 @@ mutation myMutation {
             {u'order': 2.0, u'title': u'AI revolution'}
         ]
     }
+
+def test_update_social_share_count_on_post(test_session, graphql_registry, graphql_request, participant1_user, idea_in_thread_phase, top_post_in_thread_phase):
+    res = schema.execute(graphql_registry['updateSocialShareCountOnPost'],
+                            context_value=graphql_request, variable_values={
+                            "postId": top_post_in_thread_phase,
+                            "socialSharesOnPost": ['FACEBOOK']
+                            })
+    assert res.errors == None
+    # tested_post = test_session.query(models.Post).filter(models.Post.id==top_post_in_thread_phase).first()
+    tested_post = test_session.query(models.Post).get(int(from_global_id(top_post_in_thread_phase)[1]))
+    assert tested_post.share_count == 1
+    facebook_social_share = test_session.query(models.SharePostWithFacebook).first()
+    assert facebook_social_share.post_id == int(from_global_id(top_post_in_thread_phase)[1])
 
 
 def test_mutation_update_post(graphql_request, top_post_in_thread_phase):
