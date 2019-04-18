@@ -209,6 +209,30 @@ class ActionOnPost(Action):
         Discussion, viewonly=True, secondary=Content.__table__, uselist=False)
 
 
+class SharePostWithFacebook(ActionOnPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:SharePostWithFacebook'
+    }
+
+
+class SharePostWithTwitter(ActionOnPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:SharePostWithTwitter'
+    }
+
+
+class SharePostWithLinkedin(ActionOnPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:SharePostWithLinkedin'
+    }
+
+
+class SharePostWithMail(ActionOnPost):
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:SharePostWithMail'
+    }
+
+
 class UniqueActionOnPost(ActionOnPost):
     "An action that should be unique of its subclass for a post, user pair"
 

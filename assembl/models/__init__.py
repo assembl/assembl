@@ -219,7 +219,11 @@ from .action import (  # noqa: E402, F401
     ShareIdeaWithFacebook,
     ShareIdeaWithTwitter,
     ShareIdeaWithLinkedin,
-    ShareIdeaWithMail
+    ShareIdeaWithMail,
+    SharePostWithFacebook,
+    SharePostWithTwitter,
+    SharePostWithLinkedin,
+    SharePostWithMail
 )
 from .idea_content_link import (  # noqa: E402, F401
     Extract,
