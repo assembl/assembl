@@ -158,6 +158,8 @@ class Post(Content, TaggableEntity):
     creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created",
                            doc=docs.PostInterface.creator)
 
+    share_count = Column(Integer, default=0)
+
     tags_associations_cls = PostsTagsAssociation
 
     __mapper_args__ = {
@@ -187,6 +189,12 @@ class Post(Content, TaggableEntity):
             else:
                 found = True
         return post
+
+    def get_share_count(self):
+        return self.share_count
+
+    def increment_share_count(self):
+        self.share_count += 1
 
     def is_read(self):
         # TODO: Make it user-specific.
