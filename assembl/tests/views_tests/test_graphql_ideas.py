@@ -1769,6 +1769,49 @@ def test_mutation_update_ideas_delete(test_session, graphql_request, graphql_reg
     test_session.rollback()
 
 
+def test_update_social_share_count(test_session, phases, graphql_registry, graphql_request, discussion, participant1_user, subidea_2):
+    test_session.commit()
+    res = create_idea(graphql_request, graphql_registry, phases)
+    assert res.errors is None
+    created_idea_global_id = res.data['updateIdeas']['query']['thematics'][0]['id']
+    created_idea = test_session.query(models.Idea).get(int(from_global_id(created_idea_global_id)[1]))
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'id': created_idea_global_id,
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'socialShares': ['FACEBOOK']}]})
+    assert res.errors == None
+    assert created_idea.share_count == 1
+    facebook_social_share = test_session.query(models.ShareIdeaWithFacebook).first()
+    assert facebook_social_share.idea_id == created_idea.id
+
+    res = schema.execute(
+        graphql_registry['updateIdeas'],
+        context_value=graphql_request,
+        variable_values={
+            'discussionPhaseId': phases['multiColumns'].id,
+            'ideas': [{
+                'id': created_idea_global_id,
+                'titleEntries': [
+                    {'value': u"Comprendre les dynamiques et les enjeux", 'localeCode': u"fr"},
+                    {'value': u"Understanding the dynamics and issues", 'localeCode': u"en"}
+                ],
+                'socialShares': ['TWITTER']}]})
+    assert res.errors == None
+    assert created_idea.share_count == 2
+    facebook_social_share = test_session.query(models.ShareIdeaWithFacebook).first()
+    twitter_social_share = test_session.query(models.ShareIdeaWithTwitter).first()
+    assert twitter_social_share.idea_id == created_idea.id
+    test_session.rollback()
+
+
 def test_mutation_update_ideas_child_survey(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
     import os
