@@ -482,6 +482,7 @@ class IdeaInput:
     image = Default.document % ("An Image to be shown in the Thematic. ")
     order = Default.float_entry % (" Order of the thematic.")
     message_columns = """A list of IdeaMessageColumnInput to be associated to the idea."""
+    social_shares = """A list of social share actions on the idea"""
 
 
 class UpdateIdeas:
