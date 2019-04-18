@@ -228,21 +228,6 @@ class UniqueActionOnPost(ActionOnPost):
             actor=User.uri_generic(self.actor_id))
 
 
-class SharePost(UniqueActionOnPost):
-    """
-    Created in order to count the number of shares on a post.
-    """
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:ShareStatusChange_P'
-    }
-    post_from_share = relationship(
-        'Content',
-        backref=backref('shares'),
-    )
-
-    verb = 'shared'
-
-
 class ViewPost(UniqueActionOnPost):
     """
     A view action on a post.
@@ -512,3 +497,27 @@ class ShareIdea(ActionOnIdea):
             actor=User.uri_generic(self.actor_id))
 
     verb = 'shared'
+
+
+class ShareIdeaWithFacebook(ShareIdea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:ShareStatusChange_I_WithFacebook'
+    }
+
+
+class ShareIdeaWithTwitter(ShareIdea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:ShareStatusChange_I_WithTwitter'
+    }
+
+
+class ShareIdeaWithLinkedin(ShareIdea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:ShareStatusChange_I_WithLinkedin'
+    }
+
+
+class ShareIdeaWithMail(ShareIdea):
+    __mapper_args__ = {
+        'polymorphic_identity': 'version:ShareStatusChange_I_WithMail'
+    }
