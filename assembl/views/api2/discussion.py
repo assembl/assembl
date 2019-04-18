@@ -1634,6 +1634,7 @@ def phase_csv_export(request):
     for idea in ideas:
         row = {}
         row.update(get_idea_parents_titles(idea, user_prefs))
+        row[THEMATIC_SHARE_COUNT] = idea.get_share_count()
         row[MODULE] = idea.message_view_override
         row[POSTED_MESSAGES_COUNT] = idea.num_posts
         top_key_words = idea.top_keywords()
@@ -1697,7 +1698,7 @@ def survey_csv_export(request):
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
-        SHARE_COUNT.encode('utf-8'),  # TODO
+        SHARE_COUNT.encode('utf-8'),
         MESSAGE_URL.encode('utf-8'),
         WATSON_SENTIMENT.encode('utf-8')
     ]
@@ -1721,7 +1722,7 @@ def survey_csv_export(request):
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
-
+        row[SHARE_COUNT] = thematic.get_share_count()
         row.update(get_idea_parents_titles(thematic, user_prefs))
         for question in thematic.get_children():
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
@@ -1840,6 +1841,7 @@ def multicolumn_csv_export(request):
 
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
+        row[THEMATIC_SHARE_COUNT] = idea.get_share_count()
         # WATSON sentiment to be implemented later
         # row[WATSON_SENTIMENT] = idea.sentiments()
         for post in posts:
@@ -1963,6 +1965,7 @@ def thread_csv_export(request):
         children = idea.get_children()
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
+        row[THEMATIC_SHARE_COUNT] = idea.get_share_count()
         # WATSON sentiment to be impemented later
         # row[WATSON_SENTIMENT] = idea.sentiments()
         for post in posts:
@@ -2096,6 +2099,7 @@ def bright_mirror_csv_export(request):
         row[MESSAGE_COUNT] = posts.count()
         extracts = get_related_extracts(idea)
         row[HARVESTING_COUNT] = extracts.count()
+        row[THEMATIC_SHARE_COUNT] = idea.get_share_count()
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
