@@ -11376,8 +11376,8 @@ react-style-proptype@^3.0.0:
     prop-types "^15.5.4"
 
 "react-tag-input@https://github.com/assembl/react-tags.git#assembl":
-  version "0.0.0-semantically-released"
-  resolved "https://github.com/assembl/react-tags.git#1407edcbe45b80c916ea72d4fa101188992a0d7c"
+  version "0.0.1-semantically-released"
+  resolved "https://github.com/assembl/react-tags.git#1e5679033f1485f28924c00a8659e0cb74003ae4"
   dependencies:
     classnames "2.2.6"
     core-js "2.6.5"
