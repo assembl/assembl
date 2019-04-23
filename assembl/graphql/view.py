@@ -37,7 +37,8 @@ class ReadOnlyMiddleware(object):
     def resolve(self, next, source, gargs, context, info, *args, **kwargs):
         session = get_session_maker()()
         ro = session.readonly
-        if info.operation.operation == 'query':
+        if info.operation.operation == 'query' and info.operation.name.value != u'Post':
+            # Post query has a side-effect with maybe_translate so it requires a db write.
             session.set_readonly()
         try:
             return next(source, gargs, context, info, *args, **kwargs)
