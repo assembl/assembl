@@ -292,7 +292,7 @@ def test_change_password_token(test_app_strong_password, participant1_user):
     assert old_password != participant1_user.password
     assert participant1_user.check_password("9WWcPG9*YcVk") == True
 
-def test_change_password_token_too_short(test_app, participant1_user):
+def test_change_password_token_too_short(test_app, participant1_user, user_language_preference_en_cookie):
     # Set up
     old_password, my_json = setup_change_password(participant1_user, "9WWc")
 
@@ -303,7 +303,7 @@ def test_change_password_token_too_short(test_app, participant1_user):
     assert "Password shorter than 5 characters" in exception.value.message
     assert old_password == participant1_user.password
 
-def test_change_password_token_not_enough_complex(test_app_complex_password, participant1_user):
+def test_change_password_token_not_enough_complex(test_app_complex_password, participant1_user, user_language_preference_en_cookie):
     # Set Up
     old_password, my_json = setup_change_password(participant1_user, "password")
 
@@ -314,7 +314,7 @@ def test_change_password_token_not_enough_complex(test_app_complex_password, par
     assert "This is a top-10 common password." in exception.value.message
     assert old_password == participant1_user.password
 
-def test_change_password_token_dont_contain_special_chars(test_app_spec_chars_password, participant1_user):
+def test_change_password_token_dont_contain_special_chars(test_app_spec_chars_password, participant1_user, user_language_preference_en_cookie):
     # Set up
     old_password, my_json = setup_change_password(participant1_user, "9WWcPG9YcVk")
 
