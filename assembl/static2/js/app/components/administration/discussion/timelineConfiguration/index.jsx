@@ -121,6 +121,7 @@ class TimelineFields extends React.Component<Props> {
                             />
                             <Translate value="administration.timelineAdmin.instruction3" className="admin-paragraph" />
                             <Field
+                              required
                               name={`${name}.start`}
                               component={DatePickerFieldAdapter}
                               picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
@@ -132,6 +133,7 @@ class TimelineFields extends React.Component<Props> {
                               hasConflictingDates={conflictingDates}
                             />
                             <Field
+                              required
                               name={`${name}.end`}
                               component={DatePickerFieldAdapter}
                               picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}

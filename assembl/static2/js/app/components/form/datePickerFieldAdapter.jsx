@@ -24,6 +24,7 @@ type Props = {
   placeHolder: string,
   showTime: boolean,
   hasConflictingDates: boolean,
+  required: boolean,
   input: {
     name: string,
     onChange: ({ time: moment$Moment }) => void,
@@ -50,6 +51,7 @@ const DatePickerFieldAdapter = ({
   dateFormat,
   ...rest
 }: Props) => {
+  const decoratedPlaceholder = required ? `${placeHolder} *` : placeHolder;
   const onLocalizedChange = (e: moment$Moment): void => {
     if (e !== value.time) {
       if (form) {
@@ -69,7 +71,7 @@ const DatePickerFieldAdapter = ({
           {picker &&
             picker.pickerType && <div className={`date-picker-type ${picker.pickerClasses || ''}`}>{picker.pickerType}</div>}
           <DatePicker
-            placeholderText={placeHolder}
+            placeholderText={decoratedPlaceholder}
             selected={value.time}
             id={`date-picker-${name}`}
             onChange={onLocalizedChange}
