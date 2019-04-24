@@ -57,17 +57,18 @@ from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions, discussions_with_access
 from assembl.graphql.langstring import resolve_langstring
 from assembl.models import (Discussion, Permission)
-from assembl.utils import format_date, get_published_posts, get_ideas
 from assembl.utils import (
+    format_date,
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
     get_bright_mirror_ideas, get_vote_session_ideas,
-    get_deleted_posts, get_related_extracts, get_top_posts)
+    get_deleted_posts, get_related_extracts,
+    get_published_posts, get_published_top_posts)
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
-from assembl.models import LanguagePreferenceCollection
+from assembl.models import LanguagePreferenceCollection, Locale
 from assembl.models.idea_content_link import ExtractStates
 from assembl.models.timeline import Phases, get_phase_by_identifier
 from assembl.models.idea import MessageView
@@ -1495,11 +1496,15 @@ def get_entries_locale_original(lang_string):
     if len(entries) > 1:
         best = entries[0]
         original = entries[-1]
-    locale = best.locale.code
+    locale = best.locale
+    if locale is None:
+        # zxx locale: best.locale_id=3 but best.locale is None
+        locale = Locale.get(best.locale_id)
+    locale_code = locale.code
     return {
         "entry": best.value,
         "original": original.value,
-        "locale": locale
+        "locale": locale_code
     }
 
 
@@ -1620,12 +1625,12 @@ def phase_csv_export(request):
         POSTED_MESSAGES_COUNT.encode('utf-8'),
         DELETED_MESSAGES_COUNT.encode('utf-8'),
         TOP_POST_COUNT.encode('utf-8'),
-        NON_TOP_POST_COUNT.encode('utf-8'),  # TODO
+        NON_TOP_POST_COUNT.encode('utf-8'),
         LIKE.encode('utf-8'),
         DONT_LIKE.encode('utf-8'),
         DONT_UNDERSTAND.encode('utf-8'),
         MORE_INFO.encode('utf-8'),
-        THEMATIC_SHARE_COUNT.encode('utf-8'),  # TODO
+        THEMATIC_SHARE_COUNT.encode('utf-8'),
         MESSAGE_SHARE_COUNT.encode('utf-8'),  # TODO
         WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
@@ -1634,26 +1639,26 @@ def phase_csv_export(request):
     for idea in ideas:
         row = {}
         row.update(get_idea_parents_titles(idea, user_prefs))
-        row[THEMATIC_SHARE_COUNT] = idea.get_share_count()
+        row[THEMATIC_SHARE_COUNT] = idea.share_count
         row[MODULE] = idea.message_view_override
-        row[POSTED_MESSAGES_COUNT] = idea.num_posts
+        row[POSTED_MESSAGES_COUNT] = get_published_posts(idea, start, end).count()
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
             column_name = "Mots clés {}".format(index + 1)
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
-        if idea.message_view_override == MessageView.thread.value:
-            row[TOP_POST_COUNT] = get_top_posts(idea, start, end).count()
-            row[NON_TOP_POST_COUNT] = row[POSTED_MESSAGES_COUNT] - row[TOP_POST_COUNT]
         row[DELETED_MESSAGES_COUNT] = get_deleted_posts(idea, start, end).count()
+        if idea.message_view_override == MessageView.thread.value:
+            row[TOP_POST_COUNT] = get_published_top_posts(idea, start, end).count()
+            row[NON_TOP_POST_COUNT] = row[POSTED_MESSAGES_COUNT] - row[TOP_POST_COUNT]
         row[LIKE] = idea.get_total_sentiments("like")
         row[DONT_LIKE] = idea.get_total_sentiments("dont_like")
         row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
         row[MORE_INFO] = idea.get_total_sentiments("more_info")
         # To be implemented
         # row[WATSON_SENTIMENT] = idea.sentiments()
-        rows.append(row)
+        rows.append(convert_to_utf8(row))
     return fieldnames, rows
 
 
@@ -1700,7 +1705,7 @@ def survey_csv_export(request):
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),
         MESSAGE_URL.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')
+        WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
 
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
@@ -1722,7 +1727,6 @@ def survey_csv_export(request):
             if column_name not in fieldnames:
                 fieldnames.append(column_name.encode('utf-8'))
             row[column_name] = key_word.encode('utf-8')
-        row[SHARE_COUNT] = thematic.get_share_count()
         row.update(get_idea_parents_titles(thematic, user_prefs))
         for question in thematic.get_children():
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
@@ -1753,6 +1757,7 @@ def survey_csv_export(request):
                     for num, (name, path) in enumerate(extra_columns_info):
                         row[name] = extra_info[num]
 
+                row[SHARE_COUNT] = post.share_count
                 if post.sentiments:
                     for sentiment in post.sentiments:
                         row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
@@ -1814,7 +1819,7 @@ def multicolumn_csv_export(request):
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
-        SHARE_COUNT.encode('utf-8'),  # TODO
+        SHARE_COUNT.encode('utf-8'),
         MESSAGE_URL.encode('utf-8'),
         WATSON_SENTIMENT.encode('utf-8'),  # TODO
     ]
@@ -1841,7 +1846,6 @@ def multicolumn_csv_export(request):
 
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
-        row[THEMATIC_SHARE_COUNT] = idea.get_share_count()
         # WATSON sentiment to be implemented later
         # row[WATSON_SENTIMENT] = idea.sentiments()
         for post in posts:
@@ -1853,7 +1857,7 @@ def multicolumn_csv_export(request):
             row[WORD_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
             idea_message_columns = idea.message_columns
             idea_message_column = [i for i in idea_message_columns if i.message_classifier == post.message_classifier]
-            row[POST_CLASSIFIER] = idea_message_column[0].title.best_lang(user_prefs).value
+            row[POST_CLASSIFIER] = idea_message_column[0].title.best_lang(user_prefs).value if idea_message_column else post.message_classifier
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
                 row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
@@ -1871,6 +1875,7 @@ def multicolumn_csv_export(request):
                 for num, (name, path) in enumerate(extra_columns_info):
                     row[name] = extra_info[num]
 
+            row[SHARE_COUNT] = post.share_count
             if post.sentiments:
                 for sentiment in post.sentiments:
                     row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
@@ -1937,9 +1942,9 @@ def thread_csv_export(request):
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
-        SHARE_COUNT.encode('utf-8'),  # TODO
+        SHARE_COUNT.encode('utf-8'),
         MESSAGE_URL.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')
+        WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
@@ -1965,7 +1970,6 @@ def thread_csv_export(request):
         children = idea.get_children()
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
-        row[THEMATIC_SHARE_COUNT] = idea.get_share_count()
         # WATSON sentiment to be impemented later
         # row[WATSON_SENTIMENT] = idea.sentiments()
         for post in posts:
@@ -1976,7 +1980,7 @@ def thread_csv_export(request):
             body = get_entries_locale_original(post.body)
             row[POST_SUBJECT] = subject.get('entry')
             top_post = post.get_top_post_in_thread()
-            top_post_body = get_entries_locale_original(top_post.body)
+            top_post_body = get_entries_locale_original(top_post.get_body())  # use get_body() instead of body, top post may be deleted
             top_post_title = get_entries_locale_original(top_post.get_subject())
             row[TOP_POST] = sanitize_text(top_post_body.get('entry'))
             row[TOP_POST_TITLE] = sanitize_text(top_post_title.get('entry'))
@@ -2000,6 +2004,7 @@ def thread_csv_export(request):
                 for num, (name, path) in enumerate(extra_columns_info):
                     row[name] = extra_info[num]
 
+            row[SHARE_COUNT] = post.share_count
             if post.sentiments:
                 for sentiment in post.sentiments:
                     row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
@@ -2067,9 +2072,9 @@ def bright_mirror_csv_export(request):
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
         # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
-        SHARE_COUNT.encode('utf-8'),  # TODO
+        SHARE_COUNT.encode('utf-8'),
         FICTION_URL.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')
+        WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
@@ -2099,7 +2104,6 @@ def bright_mirror_csv_export(request):
         row[MESSAGE_COUNT] = posts.count()
         extracts = get_related_extracts(idea)
         row[HARVESTING_COUNT] = extracts.count()
-        row[THEMATIC_SHARE_COUNT] = idea.get_share_count()
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
@@ -2126,8 +2130,7 @@ def bright_mirror_csv_export(request):
                 for num, (name, path) in enumerate(extra_columns_info):
                     row[name] = extra_info[num]
 
-            row[SHARE_COUNT] = str(post.get_number_of_shares())
-
+            row[SHARE_COUNT] = post.share_count
             if post.sentiments:
                 for sentiment in post.sentiments:
                     row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"

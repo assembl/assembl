@@ -643,7 +643,7 @@ class UpdatePost:
 
 
 class UpdateSocialShareCountOnPost:
-    __doc__ = "A mutataion called when user shares post on social media."
+    __doc__ = "A mutation called when a user shares a post on social media."
     post_id = Default.node_id % ("Post") + " The identifier of the Post to be updated."
     social_shares_on_post = """A list of social share actions on the post."""
 

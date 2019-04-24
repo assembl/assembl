@@ -176,18 +176,14 @@ class Idea(HistoryMixin, DiscussionBoundBase):
         cascade="all, delete-orphan")
     hidden = Column(Boolean, server_default='0')
     last_modified = Column(Timestamp)
-    share_count = Column(Integer, default=0)
     # TODO: Make this autoupdate on change. see
     # http://stackoverflow.com/questions/1035980/update-timestamp-when-row-is-updated-in-postgresql
-
-    # temporary placeholders
-    @property
-    def get_share_count(self):
-        return self.share_count
+    share_count = Column(Integer, nullable=False, default=0, server_default='0')
 
     def increment_share_count(self):
         self.share_count += 1
 
+    # temporary placeholders
     @property
     def definition(self):
         if self.description_id:

@@ -158,7 +158,7 @@ class Post(Content, TaggableEntity):
     creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created",
                            doc=docs.PostInterface.creator)
 
-    share_count = Column(Integer, default=0)
+    share_count = Column(Integer, nullable=False, default=0, server_default='0')
 
     tags_associations_cls = PostsTagsAssociation
 
@@ -189,9 +189,6 @@ class Post(Content, TaggableEntity):
             else:
                 found = True
         return post
-
-    def get_share_count(self):
-        return self.share_count
 
     def increment_share_count(self):
         self.share_count += 1
@@ -589,9 +586,6 @@ class Post(Content, TaggableEntity):
             return False
 
         return parent_ideas[0].message_view_override == MessageView.brightMirror.value
-
-    def get_number_of_shares(self):
-        return len(self.shares)
 
     def get_ideas(self):
         ideas = [
