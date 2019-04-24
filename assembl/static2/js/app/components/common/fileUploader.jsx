@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { Button, OverlayTrigger, Tooltip } from 'react-bootstrap';
-import { deleteFileTooltip, fileNameTooltip } from '../common/tooltips';
+import { deleteFileTooltip } from '../common/tooltips';
 
 type FileUploaderProps = {
   deleteFileTooltip: React.Element<Tooltip>,
@@ -102,12 +102,10 @@ class FileUploader extends React.Component<FileUploaderProps, FileUploaderState>
   getFilePreview = (isImage: ?boolean, title: string, src: String | string | ArrayBuffer) => (
     <div className="preview">
       {isImage && <img src={src} alt="preview" />}
-      <OverlayTrigger placement="top" overlay={fileNameTooltip(title)}>
-        <div className="preview-title">
-          <span className="assembl-icon-text-attachment" />
-          {title}
-        </div>
-      </OverlayTrigger>
+      <div className="preview-title">
+        <span className="assembl-icon-text-attachment" />
+        {title}
+      </div>
       <OverlayTrigger placement="top" overlay={this.props.deleteFileTooltip}>
         <Button onClick={this.props.onDeleteClick} className="admin-icons">
           <span className="assembl-icon-delete grey" />
