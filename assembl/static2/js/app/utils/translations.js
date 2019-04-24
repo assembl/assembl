@@ -972,7 +972,7 @@ const Translations = {
           titleLabel: "Titre du débat",
           subtitleLabel: "Sous-titre du débat",
           buttonLabel: "Nom du bouton de renvoi vers le débat",
-          headerImage: "Choisir l'image de font du bandeau",
+          headerImage: "Choisir l'image de fond du bandeau",
           logoImage: "Choisir le logo du débat",
           headerDescription:
             "L'image doit avoir une hauteur de 450px de haut et une largeur de 1280px. Le poids ne doit pas dépasser 1Mo.",
