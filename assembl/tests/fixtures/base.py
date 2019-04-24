@@ -106,11 +106,9 @@ def test_app_no_perm(request, base_registry, db_tables):
 
 
 @pytest.fixture(scope="function")
-def test_webrequest(request, test_app_no_perm, discussion):
+def test_webrequest(request, test_app_no_perm):
     """A Pyramid request fixture with no user authorized"""
     req = PyramidWebTestRequest.blank('/', method="GET")
-    from assembl.tests.utils import FakeContext
-    req.context = FakeContext(discussion=discussion)
 
     def fin():
         print "finalizer test_webrequest"

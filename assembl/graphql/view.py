@@ -90,6 +90,7 @@ def graphql_api(request):
     check_read_permission = True
     if request.content_type == 'application/json' and u'query' in request.json_body and (
         request.json_body['query'].startswith(u'query TextFields(') or
+            request.json_body['query'].startswith(u'query UpdateShareCount(') or
             request.json_body['query'].startswith(u'query TabsCondition(') or
             request.json_body['query'].startswith(u'query LegalContents(')):
         check_read_permission = False

@@ -1,0 +1,12 @@
+mutation updateShareCount($nodeId: ID!) {
+  updateShareCount(nodeId: $nodeId) {
+    node {
+      ... on Idea {
+        id
+      }
+      ... on Post {
+        id
+      }
+    }
+  }
+}

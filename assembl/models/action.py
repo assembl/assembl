@@ -209,30 +209,6 @@ class ActionOnPost(Action):
         Discussion, viewonly=True, secondary=Content.__table__, uselist=False)
 
 
-class SharePostWithFacebook(ActionOnPost):
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:SharePostWithFacebook'
-    }
-
-
-class SharePostWithTwitter(ActionOnPost):
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:SharePostWithTwitter'
-    }
-
-
-class SharePostWithLinkedin(ActionOnPost):
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:SharePostWithLinkedin'
-    }
-
-
-class SharePostWithMail(ActionOnPost):
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:SharePostWithMail'
-    }
-
-
 class UniqueActionOnPost(ActionOnPost):
     "An action that should be unique of its subclass for a post, user pair"
 
@@ -504,44 +480,3 @@ class ViewIdea(ActionOnIdea):
             actor=User.uri_generic(self.actor_id))
 
     verb = 'viewed'
-
-
-class ShareIdea(ActionOnIdea):
-    """
-    A share action on an idea.
-    """
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:ShareStatusChange_I'
-    }
-
-    def tombstone(self):
-        from .generic import Content
-        return DiscussionBoundTombstone(
-            self, idea=Content.uri_generic(self.idea_id),
-            actor=User.uri_generic(self.actor_id))
-
-    verb = 'shared'
-
-
-class ShareIdeaWithFacebook(ShareIdea):
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:ShareStatusChange_I_WithFacebook'
-    }
-
-
-class ShareIdeaWithTwitter(ShareIdea):
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:ShareStatusChange_I_WithTwitter'
-    }
-
-
-class ShareIdeaWithLinkedin(ShareIdea):
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:ShareStatusChange_I_WithLinkedin'
-    }
-
-
-class ShareIdeaWithMail(ShareIdea):
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:ShareStatusChange_I_WithMail'
-    }

@@ -4,7 +4,6 @@
 fragment ideaData on IdeaInterface {
   parentId
   messageViewOverride
-  socialShares
   order
   numPosts
   titleEntries {

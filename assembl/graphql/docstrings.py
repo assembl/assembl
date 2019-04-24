@@ -482,7 +482,6 @@ class IdeaInput:
     image = Default.document % ("An Image to be shown in the Thematic. ")
     order = Default.float_entry % (" Order of the thematic.")
     message_columns = """A list of IdeaMessageColumnInput to be associated to the idea."""
-    social_shares = """A list of social share actions on the idea"""
 
 
 class UpdateIdeas:
@@ -642,10 +641,9 @@ class UpdatePost:
     publication_state = PostInterface.publication_state
 
 
-class UpdateSocialShareCountOnPost:
-    __doc__ = "A mutation called when a user shares a post on social media."
-    post_id = Default.node_id % ("Post") + " The identifier of the Post to be updated."
-    social_shares_on_post = """A list of social share actions on the post."""
+class UpdateShareCount:
+    __doc__ = "A mutation called when a user shares a post/idea."
+    node_id = Default.node_id % ("Post/Idea") + " The identifier of the Post/Idea to be updated."
 
 
 class DeletePost:

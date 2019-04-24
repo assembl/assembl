@@ -33,9 +33,6 @@ from .utils import DateTime, abort_transaction_on_exception
 from .synthesis import Synthesis
 from .extract import Extract, ExtractStates, ExtractNatures
 from .tag import Tag
-from assembl.models.social_share_types import SocialShareTypes as PySocialShareTypes
-from assembl.models.action import SharePostWithFacebook, SharePostWithTwitter, SharePostWithLinkedin, SharePostWithMail
-from assembl.graphql.idea import SocialShareTypes
 
 _ = TranslationStringFactory('assembl')
 
@@ -106,7 +103,6 @@ class PostInterface(SQLAlchemyInterface):
     keywords = graphene.List(TagResult, description=docs.PostInterface.keywords)
     nlp_sentiment = graphene.Float(description=docs.PostInterface.nlp_sentiment)
     tags = graphene.List(Tag, description=docs.PostInterface.tags)
-    social_shares_on_post = graphene.List(SocialShareTypes, description=docs.UpdateSocialShareCountOnPost.social_shares_on_post)
 
     def resolve_db_id(self, args, context, info):
         return self.id
@@ -470,49 +466,26 @@ class CreatePost(graphene.Mutation):
         return CreatePost(post=new_post)
 
 
-class UpdateSocialShareCountOnPost(graphene.Mutation):
-    __doc__ = docs.UpdateSocialShareCountOnPost.__doc__
+class UpdateShareCount(graphene.Mutation):
+    __doc__ = docs.UpdateShareCount.__doc__
 
     class Input:
-        post_id = graphene.ID(required=True, description=docs.UpdateSocialShareCountOnPost.post_id)
-        social_shares_on_post = graphene.List(SocialShareTypes, description=docs.UpdateSocialShareCountOnPost.social_shares_on_post)
+        node_id = graphene.ID(required=True, description=docs.UpdateShareCount.node_id)
 
-    post = graphene.Field(lambda: Post)
+    node = graphene.Field(lambda: Node)
 
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        user_id = context.authenticated_userid or Everyone
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-        post_id = args.get('post_id')
-        post_id = int(Node.from_global_id(post_id)[1])
-        post = models.Post.get(post_id)
-
-        permissions = get_permissions(user_id, discussion_id)
-        allowed = post.user_can(user_id, CrudPermissions.UPDATE, permissions)
-        if not allowed:
-            raise HTTPUnauthorized()
-        if (post.publication_state == models.PublicationStates.PUBLISHED and
-                P_MODERATE not in permissions and
-                discussion.preferences['with_moderation']):
-            raise HTTPUnauthorized()
-        social_shares = args.get("social_shares_on_post")
-        if social_shares:
-            for s in social_shares:
-                action_type_enum = PySocialShareTypes(s)
-                if action_type_enum == PySocialShareTypes.FACEBOOK:
-                    action = SharePostWithFacebook(post_id=post_id, actor_id=user_id)
-                elif action_type_enum == PySocialShareTypes.TWITTER:
-                    action = SharePostWithTwitter(post_id=post_id, actor_id=user_id)
-                elif action_type_enum == PySocialShareTypes.LINKEDIN:
-                    action = SharePostWithLinkedin(post_id=post_id, actor_id=user_id)
-                elif action_type_enum == PySocialShareTypes.MAIL:
-                    action = SharePostWithMail(post_id=post_id, actor_id=user_id)
-                post.db.add(action)
-                post.increment_share_count()
-
-        return UpdateSocialShareCountOnPost(post=post)
+        post_id = args.get('node_id')
+        node_type, node_id = Node.from_global_id(post_id)
+        node_id = int(node_id)
+        if node_type == 'Post':
+            node = models.Post.get(node_id)
+        else:
+            node = models.Idea.get(node_id)
+        node.increment_share_count()
+        return UpdateShareCount(node=node)
 
 
 class UpdatePost(graphene.Mutation):

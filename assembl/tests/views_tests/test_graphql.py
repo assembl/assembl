@@ -1470,18 +1470,43 @@ mutation myMutation {
         ]
     }
 
-def test_update_social_share_count_on_post(test_session, graphql_registry, graphql_request, participant1_user, idea_in_thread_phase, top_post_in_thread_phase):
-    res = schema.execute(graphql_registry['updateSocialShareCountOnPost'],
-                            context_value=graphql_request, variable_values={
-                            "postId": top_post_in_thread_phase,
-                            "socialSharesOnPost": ['FACEBOOK']
-                            })
-    assert res.errors == None
-    # tested_post = test_session.query(models.Post).filter(models.Post.id==top_post_in_thread_phase).first()
-    tested_post = test_session.query(models.Post).get(int(from_global_id(top_post_in_thread_phase)[1]))
-    assert tested_post.share_count == 1
-    facebook_social_share = test_session.query(models.SharePostWithFacebook).first()
-    assert facebook_social_share.post_id == int(from_global_id(top_post_in_thread_phase)[1])
+def test_update_share_count_on_post(test_session, graphql_registry, graphql_request, participant1_user, idea_in_thread_phase, top_post_in_thread_phase):
+    res = schema.execute(
+        graphql_registry['updateShareCount'],
+        context_value=graphql_request,
+        variable_values={
+            "nodeId": top_post_in_thread_phase})
+    assert res.errors is None
+    assert res.data['updateShareCount']['node']['id'] == top_post_in_thread_phase
+    post = test_session.query(models.Post).get(int(from_global_id(top_post_in_thread_phase)[1]))
+    assert post.share_count == 1
+    res = schema.execute(
+        graphql_registry['updateShareCount'],
+        context_value=graphql_request,
+        variable_values={
+            "nodeId": top_post_in_thread_phase})
+    assert res.errors is None
+    assert post.share_count == 2
+
+
+def test_update_share_count_on_idea(test_session, graphql_registry, graphql_request, participant1_user, idea_in_thread_phase):
+    res = schema.execute(
+        graphql_registry['updateShareCount'],
+        context_value=graphql_request,
+        variable_values={
+            "nodeId": idea_in_thread_phase})
+    assert res.errors is None
+    assert res.data['updateShareCount']['node']['id'] == idea_in_thread_phase
+    idea = test_session.query(models.Idea).get(int(from_global_id(idea_in_thread_phase)[1]))
+    assert idea.share_count == 1
+    res = schema.execute(
+        graphql_registry['updateShareCount'],
+        context_value=graphql_request,
+        variable_values={
+            "nodeId": idea_in_thread_phase})
+    assert res.errors is None
+    assert res.data['updateShareCount']['node']['id'] == idea_in_thread_phase
+    assert idea.share_count == 2
 
 
 def test_mutation_update_post(graphql_request, top_post_in_thread_phase):

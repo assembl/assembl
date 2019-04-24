@@ -18,8 +18,6 @@ from assembl.auth.util import user_has_permission
 from assembl.models.action import SentimentOfPost
 from assembl.models import Phases
 from assembl.models.idea import MessageView
-from assembl.models.action import (ShareIdeaWithMail, ShareIdeaWithFacebook,
-                                   ShareIdeaWithTwitter, ShareIdeaWithLinkedin)
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .attachment import Attachment
 from .document import Document
@@ -34,12 +32,6 @@ from .utils import (
     create_root_thematic, create_attachment,
     update_attachment, create_idea_announcement, get_attachments_with_purpose)
 import assembl.graphql.docstrings as docs
-from assembl.models.social_share_types import SocialShareTypes as PySocialShareTypes
-from graphene.pyutils.enum import Enum as PyEnum
-
-social_share_type_enum = PyEnum(
-    'SocialShareTypes', [(k, k) for k in PySocialShareTypes.values()])
-SocialShareTypes = graphene.Enum.from_enum(social_share_type_enum)
 
 
 EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
@@ -90,7 +82,6 @@ class IdeaInterface(graphene.Interface):
     questions = graphene.List(lambda: Question, description=docs.Idea.questions)
     announcement = graphene.Field(lambda: IdeaAnnouncement, description=docs.Idea.announcement)
     message_columns = graphene.List(lambda: IdeaMessageColumn, description=docs.Idea.message_columns)
-    social_shares = graphene.List(SocialShareTypes, description=docs.IdeaInput.social_shares)
 
     def resolve_title(self, args, context, info):
         return resolve_langstring(self.title, args.get('lang'))
@@ -849,7 +840,7 @@ def update_idea(args, phase, context):
     message_view_override = args.get('message_view_override')
     is_survey_thematic = message_view_override == MessageView.survey.value
     is_multicolumns = message_view_override == MessageView.messageColumns.value
-    social_shares = args.get('social_shares')
+
     require_instance_permission(CrudPermissions.UPDATE, thematic, context)
 
     with cls.default_db.no_autoflush as db:
@@ -858,20 +849,6 @@ def update_idea(args, phase, context):
             tombstone_posts_related_to_idea(thematic)
         # introducing history at every step, including thematics + questions  # noqa: E501
         thematic.copy(tombstone=True)
-        if social_shares:
-            for s in social_shares:
-                action_type_enum = PySocialShareTypes(s)
-                if action_type_enum == PySocialShareTypes.FACEBOOK:
-                    action = ShareIdeaWithFacebook(idea_id=id_, actor_id=user_id)
-                elif action_type_enum == PySocialShareTypes.TWITTER:
-                    action = ShareIdeaWithTwitter(idea_id=id_, actor_id=user_id)
-                elif action_type_enum == PySocialShareTypes.LINKEDIN:
-                    action = ShareIdeaWithLinkedin(idea_id=id_, actor_id=user_id)
-                elif action_type_enum == PySocialShareTypes.MAIL:
-                    action = ShareIdeaWithMail(idea_id=id_, actor_id=user_id)
-                db.add(action)
-                thematic.increment_share_count()
-
         title_entries = args.get('title_entries')
         if title_entries is not None and len(title_entries) == 0:
             raise Exception(
@@ -1188,7 +1165,6 @@ class IdeaInput(graphene.InputObjectType):
     order = graphene.Float(description=docs.Default.float_entry)
     message_view_override = graphene.String(description=docs.IdeaInterface.message_view_override)
     parent_id = graphene.ID(description=docs.Idea.parent_id)  # used only for create
-    social_shares = graphene.Argument(graphene.List(SocialShareTypes), description=docs.IdeaInput.social_shares)
 
 
 class UpdateIdeas(graphene.Mutation):

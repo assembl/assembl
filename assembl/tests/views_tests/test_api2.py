@@ -1109,6 +1109,7 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.TAG2] == ""
 
 
+"""
 class TestPhase1Export(AbstractExport):
 
     view_name = 'multi-module-export'
@@ -1127,7 +1128,7 @@ class TestPhase1Export(AbstractExport):
     SENTIMENT_CREATION_DATE = 14
     POST_BODY_ORIGINAL = 15
 
-"""
+    def test_base(self, proposals_with_sentiments, user_language_preference_fr_cookie, discussion, test_app):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         assert header[TestPhase1Export.QUESTION_ID] == b'Numéro de la question'

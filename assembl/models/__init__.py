@@ -216,14 +216,6 @@ from .action import (  # noqa: E402, F401
     UniqueActionOnPost,
     ViewIdea,
     ViewPost,
-    ShareIdeaWithFacebook,
-    ShareIdeaWithTwitter,
-    ShareIdeaWithLinkedin,
-    ShareIdeaWithMail,
-    SharePostWithFacebook,
-    SharePostWithTwitter,
-    SharePostWithLinkedin,
-    SharePostWithMail
 )
 from .idea_content_link import (  # noqa: E402, F401
     Extract,
