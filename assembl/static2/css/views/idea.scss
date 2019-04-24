@@ -140,6 +140,8 @@
   }
 
   .tree-list {
+    will-change: auto !important;
+
     &:focus {
       outline: none;
     }
