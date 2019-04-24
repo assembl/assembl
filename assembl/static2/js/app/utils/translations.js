@@ -736,7 +736,7 @@ const Translations = {
         "3": "Exporter les données"
       },
       imageRequirements:
-        "L'image doit avoir une hauteur de 300 px et une largeur de 1280 px. Le poids ne doit pas dépasser 300 ko.",
+        "L'image doit avoir une hauteur de 1280px et une largeur de 480px. Le poids ne doit pas dépasser 300 ko.",
       voteWithTokens: "Vote par jetons",
       voteWithGauges: "Vote par jauge(s)",
       gauge: "Jauge %{number}",
