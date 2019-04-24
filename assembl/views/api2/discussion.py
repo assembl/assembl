@@ -1705,7 +1705,6 @@ def survey_csv_export(request):
         POST_DISAGREE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
-        # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),
         MESSAGE_URL.encode('utf-8'),
@@ -1720,6 +1719,8 @@ def survey_csv_export(request):
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
+        i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
+        fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
     thematics = get_survey_ideas(discussion)
     rows = []
@@ -1772,6 +1773,13 @@ def survey_csv_export(request):
                             row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                         row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                         row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
+                        if extra_columns_info:
+                            if sentiment.actor_id not in column_info_per_user:
+                                column_info_per_user[sentiment.actor_id] = get_social_columns_from_user(
+                                    sentiment.actor, extra_columns_info, provider_id)
+                            extra_info = column_info_per_user[sentiment.actor_id]
+                            for num, (name, path) in enumerate(extra_columns_info):
+                                row['sentiment ' + name.encode('utf-8')] = extra_info[num]
                         rows.append(convert_to_utf8(row))
                 else:
                     row[SENTIMENT_ACTOR_NAME] = u''
@@ -1821,7 +1829,6 @@ def multicolumn_csv_export(request):
         POST_MORE_INFO_PLEASE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
-        # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),
         MESSAGE_URL.encode('utf-8'),
@@ -1836,6 +1843,8 @@ def multicolumn_csv_export(request):
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
+        i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
+        fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
     ideas = get_multicolumns_ideas(discussion)
     rows = []
@@ -1890,6 +1899,13 @@ def multicolumn_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
+                    if extra_columns_info:
+                        if sentiment.actor_id not in column_info_per_user:
+                            column_info_per_user[sentiment.actor_id] = get_social_columns_from_user(
+                                sentiment.actor, extra_columns_info, provider_id)
+                        extra_info = column_info_per_user[sentiment.actor_id]
+                        for num, (name, path) in enumerate(extra_columns_info):
+                            row['sentiment ' + name.encode('utf-8')] = extra_info[num]
                     rows.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
@@ -1944,7 +1960,6 @@ def thread_csv_export(request):
         POST_MORE_INFO_PLEASE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
-        # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),
         MESSAGE_URL.encode('utf-8'),
@@ -1959,6 +1974,8 @@ def thread_csv_export(request):
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
+        i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
+        fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
     ideas = get_thread_ideas(discussion)
     rows = []
@@ -2021,6 +2038,13 @@ def thread_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
+                    if extra_columns_info:
+                        if sentiment.actor_id not in column_info_per_user:
+                            column_info_per_user[sentiment.actor_id] = get_social_columns_from_user(
+                                sentiment.actor, extra_columns_info, provider_id)
+                        extra_info = column_info_per_user[sentiment.actor_id]
+                        for num, (name, path) in enumerate(extra_columns_info):
+                            row['sentiment ' + name.encode('utf-8')] = extra_info[num]
                     rows.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
@@ -2074,7 +2098,6 @@ def bright_mirror_csv_export(request):
         POST_MORE_INFO_PLEASE.encode('utf-8'),
         SENTIMENT_ACTOR_NAME.encode('utf-8'),
         SENTIMENT_ACTOR_EMAIL.encode('utf-8'),
-        # TODO extra columns for sentiment actor
         SENTIMENT_CREATION_DATE.encode('utf-8'),
         SHARE_COUNT.encode('utf-8'),
         FICTION_URL.encode('utf-8'),
@@ -2089,6 +2112,8 @@ def bright_mirror_csv_export(request):
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
         column_info_per_user = {}
         provider_id = get_provider_id_for_discussion(discussion)
+        i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
+        fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
     ideas = get_bright_mirror_ideas(discussion)
     rows = []
@@ -2147,6 +2172,13 @@ def bright_mirror_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
+                    if extra_columns_info:
+                        if sentiment.actor_id not in column_info_per_user:
+                            column_info_per_user[sentiment.actor_id] = get_social_columns_from_user(
+                                sentiment.actor, extra_columns_info, provider_id)
+                        extra_info = column_info_per_user[sentiment.actor_id]
+                        for num, (name, path) in enumerate(extra_columns_info):
+                            row['sentiment ' + name.encode('utf-8')] = extra_info[num]
                     rows.append(convert_to_utf8(row))
             else:
                 row[SENTIMENT_ACTOR_NAME] = u''
