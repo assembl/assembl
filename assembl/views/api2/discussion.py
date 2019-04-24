@@ -56,7 +56,7 @@ from assembl.auth import (
 from assembl.auth.password import verify_data_token, data_token, Validity
 from assembl.auth.util import get_permissions, discussions_with_access
 from assembl.graphql.langstring import resolve_langstring
-from assembl.models import (Discussion, Permission)
+from assembl.models import Discussion, Permission, Post
 from assembl.utils import (
     format_date,
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
@@ -1631,7 +1631,7 @@ def phase_csv_export(request):
         DONT_UNDERSTAND.encode('utf-8'),
         MORE_INFO.encode('utf-8'),
         THEMATIC_SHARE_COUNT.encode('utf-8'),
-        MESSAGE_SHARE_COUNT.encode('utf-8'),  # TODO
+        MESSAGE_SHARE_COUNT.encode('utf-8'),
         WATSON_SENTIMENT.encode('utf-8')  # TODO
     ]
     ideas = get_ideas_for_export(discussion)
@@ -1641,7 +1641,11 @@ def phase_csv_export(request):
         row.update(get_idea_parents_titles(idea, user_prefs))
         row[THEMATIC_SHARE_COUNT] = idea.share_count
         row[MODULE] = idea.message_view_override
-        row[POSTED_MESSAGES_COUNT] = get_published_posts(idea, start, end).count()
+        published_posts_query = get_published_posts(idea, start, end)
+        row[POSTED_MESSAGES_COUNT] = published_posts_query.count()
+        message_share_count_query = published_posts_query.with_entities(
+            func.sum(Post.share_count)).order_by(None)
+        row[MESSAGE_SHARE_COUNT] = message_share_count_query.first()[0] or 0
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
             column_name = "Mots clés {}".format(index + 1)
