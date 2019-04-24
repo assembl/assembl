@@ -845,7 +845,7 @@ def get_visitors(request):
 
     select_field_options = db.query(m.SelectFieldOption).all()
     select_field_options_dict = {sfd.id: sfd.label.best_lang(user_prefs).value for sfd in select_field_options}
-    if extra_columns_info:
+    if extra_columns_info and not has_anon:
         # insert after email
         fieldnames.extend([name.encode('utf-8') for (name, path) in extra_columns_info])
         column_info_per_user = {}
@@ -876,7 +876,7 @@ def get_visitors(request):
                 else:
                     data.update({(profile_field[0].title.best_lang(user_prefs).value).encode("utf-8"): (profile_field[1].value_data["value"]).encode("utf-8")})
 
-        if extra_columns_info:
+        if extra_columns_info and not has_anon:
             extra_info = get_social_columns_from_user(
                 st.agent_profile, extra_columns_info, provider_id)
             for num, (name, path) in enumerate(extra_columns_info):
@@ -1713,7 +1713,7 @@ def survey_csv_export(request):
 
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
-    if extra_columns_info:
+    if extra_columns_info and not has_anon:
         # insert after email
         i = fieldnames.index(POST_CREATOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
@@ -1754,7 +1754,7 @@ def survey_csv_export(request):
                 row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
                 row[POST_CREATION_DATE] = format_date(post.creation_date)
                 row[MESSAGE_URL] = post.get_url()
-                if extra_columns_info:
+                if extra_columns_info and not has_anon:
                     if post.creator_id not in column_info_per_user:
                         column_info_per_user[post.creator_id] = get_social_columns_from_user(
                             post.creator, extra_columns_info, provider_id)
@@ -1773,7 +1773,7 @@ def survey_csv_export(request):
                             row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                         row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                         row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                        if extra_columns_info:
+                        if extra_columns_info and not has_anon:
                             if sentiment.actor_id not in column_info_per_user:
                                 column_info_per_user[sentiment.actor_id] = get_social_columns_from_user(
                                     sentiment.actor, extra_columns_info, provider_id)
@@ -1837,7 +1837,7 @@ def multicolumn_csv_export(request):
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
 
-    if extra_columns_info:
+    if extra_columns_info and not has_anon:
         # insert after email
         i = fieldnames.index(POST_CREATOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
@@ -1880,7 +1880,7 @@ def multicolumn_csv_export(request):
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
             row[MESSAGE_URL] = post.get_url()
-            if extra_columns_info:
+            if extra_columns_info and not has_anon:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(
                         post.creator, extra_columns_info, provider_id)
@@ -1899,7 +1899,7 @@ def multicolumn_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                    if extra_columns_info:
+                    if extra_columns_info and not has_anon:
                         if sentiment.actor_id not in column_info_per_user:
                             column_info_per_user[sentiment.actor_id] = get_social_columns_from_user(
                                 sentiment.actor, extra_columns_info, provider_id)
@@ -1968,7 +1968,7 @@ def thread_csv_export(request):
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
 
-    if extra_columns_info:
+    if extra_columns_info and not has_anon:
         # insert after email
         i = fieldnames.index(POST_CREATOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
@@ -2017,7 +2017,7 @@ def thread_csv_export(request):
                 row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
-            if extra_columns_info:
+            if extra_columns_info and not has_anon:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(
                         post.creator, extra_columns_info, provider_id)
@@ -2038,7 +2038,7 @@ def thread_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                    if extra_columns_info:
+                    if extra_columns_info and not has_anon:
                         if sentiment.actor_id not in column_info_per_user:
                             column_info_per_user[sentiment.actor_id] = get_social_columns_from_user(
                                 sentiment.actor, extra_columns_info, provider_id)
@@ -2106,7 +2106,7 @@ def bright_mirror_csv_export(request):
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
 
-    if extra_columns_info:
+    if extra_columns_info and not has_anon:
         # insert after email
         i = fieldnames.index(POST_CREATOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
@@ -2151,7 +2151,7 @@ def bright_mirror_csv_export(request):
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
             row[FICTION_URL] = post.get_url()
-            if extra_columns_info:
+            if extra_columns_info and not has_anon:
                 if post.creator_id not in column_info_per_user:
                     column_info_per_user[post.creator_id] = get_social_columns_from_user(
                         post.creator, extra_columns_info, provider_id)
@@ -2172,7 +2172,7 @@ def bright_mirror_csv_export(request):
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.anonymous_name()
                     row[SENTIMENT_ACTOR_EMAIL] = sentiment.actor.get_preferred_email(anonymous=has_anon)
                     row[SENTIMENT_CREATION_DATE] = format_date(sentiment.creation_date)
-                    if extra_columns_info:
+                    if extra_columns_info and not has_anon:
                         if sentiment.actor_id not in column_info_per_user:
                             column_info_per_user[sentiment.actor_id] = get_social_columns_from_user(
                                 sentiment.actor, extra_columns_info, provider_id)
@@ -2244,6 +2244,7 @@ def voters_csv_export(request):
     """CSV export for vote_users_data sheet."""
     from assembl.views.api2.votes import extract_voters, VOTER_MAIL
     from assembl.models import Locale, Idea
+    has_anon = asbool(request.GET.get('anon', False))
     has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
@@ -2279,7 +2280,7 @@ def voters_csv_export(request):
 
     extra_columns_info = (None if 'no_extra_columns' in request.GET else
                           load_social_columns_info(discussion, language))
-    if extra_columns_info:
+    if extra_columns_info and not has_anon:
         # insert after email
         i = fieldnames.index(VOTER_MAIL) + 1
         fieldnames[i:i] = [name.encode('utf-8') for (name, path) in extra_columns_info]
@@ -2297,7 +2298,7 @@ def voters_csv_export(request):
             row.update(idea_levels)
             row.update(vote_row)
             rows.append(convert_to_utf8(row))
-            if extra_columns_info:
+            if extra_columns_info and not has_anon:
                 voter = vote_row['voter']
                 if voter.id not in column_info_per_user:
                     column_info_per_user[voter.id] = get_social_columns_from_user(
