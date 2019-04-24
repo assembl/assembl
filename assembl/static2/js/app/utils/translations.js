@@ -975,12 +975,13 @@ const Translations = {
           headerImage: "Choisir l'image de fond du bandeau",
           logoImage: "Choisir le logo du débat",
           headerDescription:
-            "L'image doit avoir une hauteur de 450px de haut et une largeur de 1280px. Le poids ne doit pas dépasser 1Mo.",
+            "L'image doit avoir une hauteur de 480px et une largeur de 1480px. Le poids ne doit pas dépasser 300 ko.",
           logoDescription:
             "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent.",
           startDate: "Du",
           endDate: "Au",
           timePlaceholder: "Optionnel : Entrez les dates du débat",
+          dateLabel: "Choisissez les dates de la discussion qui apparaissent dans le bandeau.",
           dateDescription:
             "Pour configurer les dates du debat. Si vous n'avez pas sélectionné de dates, les dates sont déduites des timelines.",
           startDateError: "La date de début ne peut pas être postérieure à la date de fin",
@@ -2007,12 +2008,13 @@ const Translations = {
           buttonLabel: "Name of the referral button to the debate",
           headerImage: "Choose the header image",
           logoImage: "Choose the header logo",
-          headerDescription: "The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.",
+          headerDescription: "The image must have a height of 480px and a width of 1480px. The weight must not exceed 300ko.",
           logoDescription:
             "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.",
           startDate: "From",
           endDate: "To",
           timePlaceholder: "Optional: Enter the dates of the debate",
+          dateLabel: "Enter the dates of the the debate that appear in the header.",
           dateDescription:
             "Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.",
           startDateError: "The start date cannot be after the end date",
