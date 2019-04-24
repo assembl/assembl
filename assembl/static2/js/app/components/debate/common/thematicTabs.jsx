@@ -6,6 +6,7 @@ import classnames from 'classnames';
 import activeHtml from 'react-active-html';
 // Component imports
 import { ANNOUNCEMENT_TAB_ITEM_ID } from '../../../constants';
+import { isEmptyEditorState } from '../../../utils/globalFunctions';
 import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
 import { addIframeForMindMapping } from '../../../utils/linkify';
 import { postBodyReplacementComponents } from './post/postBody';
@@ -35,6 +36,7 @@ const ThematicTabs = ({ guidelinesContent, summary, semanticAnalysisForThematicD
   const summaryTabTitle = I18n.t(summaryTitleKey);
   const semanticAnalysisTabLongTitle = I18n.t(semanticAnalysisLongTitleKey);
   const semanticAnalysisTabShortTitle = I18n.t(semanticAnalysisShortTitleKey);
+
   // Since 'semantic analysis' is a long composed word, we only display 'analysis' on small devices
   const semanticAnalysisTabTitle = (
     <React.Fragment>
@@ -78,7 +80,7 @@ const ThematicTabs = ({ guidelinesContent, summary, semanticAnalysisForThematicD
       className={classnames('announcement-menu', classNameTabs)}
     >
       {guidelinesTabAndContent}
-      {summary ? summaryTabAndContent : null}
+      {isEmptyEditorState(summary) ? null : summaryTabAndContent}
       {topKeywordsLength > 0 ? semanticAnalysisTabAndContent : null}
     </Tabs>
   );
