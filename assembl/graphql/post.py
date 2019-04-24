@@ -130,6 +130,7 @@ class PostInterface(SQLAlchemyInterface):
             return post.creator
 
     @staticmethod
+    @abort_transaction_on_exception
     def _maybe_translate(post, locale, request):
         if request.authenticated_userid == Everyone:
             # anonymous cannot trigger translations
@@ -147,6 +148,8 @@ class PostInterface(SQLAlchemyInterface):
             target_locale = target_locale.code
             if not ls.closest_entry(target_locale):
                 post.maybe_translate(lpc)
+        # flush so abort_transaction_on_exception decorator can catch the error
+        post.db.flush()
 
     def resolve_subject_entries(self, args, context, info):
         # Use self.subject and not self.get_subject() because we still
