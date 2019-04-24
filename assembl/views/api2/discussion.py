@@ -1588,7 +1588,7 @@ def phase_csv_export(request):
     from assembl.models.auth import LanguagePreferenceCollection
     from assembl.utils import get_ideas_for_export
     start, end, interval = get_time_series_timing(request)
-    has_lang = 'lang' in request.GET
+    has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -1671,7 +1671,7 @@ def survey_csv_export(request):
     from assembl.models import Locale, Idea
     start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
-    has_lang = 'lang' in request.GET
+    has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -1786,7 +1786,7 @@ def multicolumn_csv_export(request):
     from assembl.models import Locale, Idea
     start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
-    has_lang = 'lang' in request.GET
+    has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -1904,7 +1904,7 @@ def thread_csv_export(request):
     from assembl.models import Locale, Idea
     start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
-    has_lang = 'lang' in request.GET
+    has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -2035,7 +2035,7 @@ def bright_mirror_csv_export(request):
     from assembl.models import Locale, Idea
     start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
-    has_lang = 'lang' in request.GET
+    has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -2160,7 +2160,7 @@ def global_votes_csv_export(request):
     """CSV export for export_module_vote sheet."""
     from assembl.views.api2.votes import global_vote_results_csv
     from assembl.models import Locale, Idea
-    has_lang = 'lang' in request.GET
+    has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
@@ -2212,7 +2212,7 @@ def voters_csv_export(request):
     """CSV export for vote_users_data sheet."""
     from assembl.views.api2.votes import extract_voters, VOTER_MAIL
     from assembl.models import Locale, Idea
-    has_lang = 'lang' in request.GET
+    has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
         exists = Locale.get_id_of(language, create=False)
