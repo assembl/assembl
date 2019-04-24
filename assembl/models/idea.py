@@ -269,6 +269,10 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             ).filter((IdeaLink.target_id == self.id) & (Idea.tombstone_date == None)  # noqa: E711
             ).all()
 
+    def get_questions(self):
+        from .thematic import Question
+        return [child for child in self.get_children() if isinstance(child, Question)]
+
     def safe_title(self, user_prefs, localizer=None):
         if self.title:
             entry = self.title.best_lang(user_prefs)

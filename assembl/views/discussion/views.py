@@ -406,30 +406,7 @@ def purl_post(request):
     phase = discussion.current_discussion_phase()
     if (discussion.preferences['landing_page'] and (
             phase is None or not phase.interface_v1)):
-        if post.__class__ == PropositionPost:
-            idea = post.get_closest_thematic()
-        else:
-            # Assumption V2: The post is only under one idea
-            # TODO: Fix assumption when posts in multiple ideas
-            # are supported in V2.
-            idcs = post.idea_links_of_content
-            if not idcs:
-                idea = None
-            else:
-                idc = post.idea_links_of_content[0]
-                idea = idc.idea
-        if not idea:
-            return HTTPSeeOther(location=request.route_url(
-                'new_home', discussion_slug=discussion.slug))
-        return HTTPSeeOther(
-            location=urljoin(
-                discussion.get_base_url(),
-                furl.get_frontend_url(
-                    'post',
-                    phase=phase.identifier,
-                    themeId=idea.graphene_id(),
-                    element=post.graphene_id()))
-        )
+        return HTTPSeeOther(location=post.get_url())
 
     # V1 purl
     return HTTPOk(

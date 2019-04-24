@@ -666,24 +666,6 @@ class AssemblPost(Post):
         'polymorphic_identity': 'assembl_post',
     }
 
-    def get_closest_thematic(self):
-        from ..models import Idea
-        idea_ids = Idea.get_idea_ids_showing_post(self.id)
-        thematics = self.db.query(Idea
-            ).filter(Idea.sqla_type != 'question'
-            ).filter(Idea.id.in_(idea_ids)).all()
-        if not thematics:
-            log.error("This post is not under any thematic:" + repr(self))
-            return None
-        # use only leaf thematics
-        thematics = set(thematics)
-        for th in list(thematics):
-            for parent in th.parents:
-                thematics.discard(parent)
-        if len(thematics) > 1:
-            log.error("This post is under many thematics:" + repr(self))
-        return thematics.pop()
-
     def get_body_mime_type(self):
         return self.body_mime_type
 
