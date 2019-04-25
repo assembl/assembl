@@ -2216,10 +2216,7 @@ def bright_mirror_csv_export(request):
             row[column_name] = key_word.encode('utf-8')
 
         row.update(get_idea_parents_titles(idea, user_prefs))
-        posts = get_published_posts(idea, start, end)
-        row[MESSAGE_COUNT] = posts.count()
-        extracts = get_related_extracts(idea)
-        row[HARVESTING_COUNT] = extracts.count()
+        posts = get_published_top_posts(idea, start, end)  # we only care about fictions
         for post in posts:
             if has_lang:
                 post.maybe_translate(target_locales=[language])
@@ -2237,6 +2234,9 @@ def bright_mirror_csv_export(request):
                 row[POST_CREATOR_USERNAME] = post.creator.anonymous_username() or ""
             row[POST_CREATOR_EMAIL] = post.creator.get_preferred_email(anonymous=has_anon)
             row[POST_CREATION_DATE] = format_date(post.creation_date)
+            extracts = get_related_extracts(post)
+            row[HARVESTING_COUNT] = extracts.count()
+            row[MESSAGE_COUNT] = post.get_descendants().order_by(None).count()
             row[FICTION_URL] = post.get_url()
             if extra_columns_info and not has_anon:
                 if post.creator_id not in column_info_per_user:

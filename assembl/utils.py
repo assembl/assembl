@@ -66,8 +66,9 @@ def get_deleted_posts(idea, start=None, end=None):
     return query
 
 
-def get_related_extracts(idea):
-    extracts = idea.db.query(models.Extract).filter(models.Extract.idea_id == idea.id)
+def get_related_extracts(content):
+    extracts = content.db.query(models.Extract
+        ).filter(models.Extract.content_id == content.id)
     return extracts
 
 
