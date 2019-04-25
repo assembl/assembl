@@ -477,14 +477,15 @@ class UpdateShareCount(graphene.Mutation):
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
-        post_id = args.get('node_id')
-        node_type, node_id = Node.from_global_id(post_id)
+        node_type, node_id = Node.from_global_id(args.get('node_id'))
         node_id = int(node_id)
+        node = None
         if node_type == 'Post':
             node = models.Post.get(node_id)
-        else:
+        elif node_type == 'Idea':
             node = models.Idea.get(node_id)
-        node.increment_share_count()
+        if node:
+            node.increment_share_count()
         return UpdateShareCount(node=node)
 
 
