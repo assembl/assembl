@@ -541,6 +541,7 @@ def extract_taxonomy_csv(request):
     len_tags = max([len(extract.tags) for extract in extracts])
     tags_names = ["Tag{}".format(index + 1) for index in range(len_tags)]
     fieldnames.extend(tags_names)
+    user_info_by_id = {}
     for extract in extracts:
         if extract.idea_id:
             thematic = db.query(m.Idea).get(extract.idea_id)
@@ -557,7 +558,7 @@ def extract_taxonomy_csv(request):
             extract_locale = extract.locale.code
         else:
             extract_locale = "no extract locale"
-        content = db.query(m.Post).filter(m.Post.id == extract.content_id).first()
+        content = db.query(m.Post).get(extract.content_id)
         if content:
             if content.body:
                 original_message = content.body.first_original().value
@@ -589,21 +590,33 @@ def extract_taxonomy_csv(request):
             qualify_by_action = extract.extract_action.name
         else:
             qualify_by_action = " "
-        owner_of_the_message = db.query(m.User).filter(m.User.id == content.creator_id).first()
         published_on = unicode(content.creation_date.replace(microsecond=0))
-        harvester = db.query(m.User).filter(m.User.id == extract.owner_id).first()
         harvested_on = unicode(extract.creation_date.replace(microsecond=0))
         nugget = "Yes" if extract.important else "No"
         state = getattr(extract, 'extract_state', ExtractStates.PUBLISHED.value)
         tags = [t.value for t in extract.tags]
-        message_full_name = owner_of_the_message.real_name().encode('utf-8') if \
-            owner_of_the_message.real_name() else ""
-        message_username = owner_of_the_message.username_p.encode('utf-8') if \
-            owner_of_the_message.username_p else ""
-        harvester_full_name = harvester.real_name().encode('utf-8') if \
-            harvester.real_name() else ""
-        harvester_username = harvester.username_p.encode('utf-8') if \
-            harvester.username_p else ""
+
+        user_info = user_info_by_id.get(content.creator_id, None)
+        if user_info is None:
+            owner_of_the_message = db.query(m.User).get(content.creator_id)
+            user_info = {}
+            user_info['fullname'] = (owner_of_the_message.real_name() or u"").encode('utf-8')
+            user_info['username'] = (owner_of_the_message.username_p or u"").encode('utf-8')
+            user_info_by_id[content.creator_id] = user_info
+
+        message_full_name = user_info['fullname']
+        message_username = user_info['username']
+
+        user_info = user_info_by_id.get(extract.owner_id, None)
+        if user_info is None:
+            harvester = db.query(m.User).get(extract.owner_id)
+            user_info = {}
+            user_info['fullname'] = (harvester.real_name() or u"").encode('utf-8')
+            user_info['username'] = (harvester.username_p or u"").encode('utf-8')
+            user_info_by_id[extract.owner_id] = user_info
+
+        harvester_full_name = user_info['fullname']
+        harvester_username = user_info['username']
 
         extract_info = {
             "Thematic": thematic.encode('utf-8'),
@@ -625,7 +638,7 @@ def extract_taxonomy_csv(request):
         }
         len_tags = len(tags)
         extract_info.update(
-            {tag_name: tags[index].encode('utf-8') if len_tags > index else u"" for index, tag_name in enumerate(tags_names)})
+            {tag_name: tags[index].encode('utf-8') if len_tags > index else "" for index, tag_name in enumerate(tags_names)})
         extract_list.append(extract_info)
 
     return csv_response(extract_list, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="extract_taxonomies.csv"')
