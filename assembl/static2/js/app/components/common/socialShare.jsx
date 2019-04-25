@@ -3,11 +3,13 @@ import * as React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import { I18n } from 'react-redux-i18n';
+import { type ApolloClient, compose, withApollo } from 'react-apollo';
 import classNames from 'classnames';
 
 import MailIcon from '../common/icons/mailIcon/mailIcon';
 import LinkIcon from '../common/icons/linkIcon/linkIcon';
 import ThickIcon from '../common/icons/tickIcon/tickIcon';
+import updateShareCount from '../../graphql/mutations/updateShareCount.graphql';
 
 const {
   FacebookShareButton,
@@ -21,7 +23,8 @@ const {
 type Props = {
   url: string,
   onClose: () => void,
-  social: boolean
+  social: boolean,
+  client?: ApolloClient
 };
 
 type State = {
@@ -62,10 +65,22 @@ const EmailButton = ({ url }: EmailButtonProps) => {
   );
 };
 
-export default class SocialShare extends React.Component<Props, State> {
+export class DumbSocialShare extends React.Component<Props, State> {
   state = {
     copied: false
   };
+
+  componentDidMount() {
+    // for idea, get the string after the last /, for post, get the string after the #
+    const parts = this.props.url.split(/[/#]/);
+    const nodeId = parts[parts.length - 1];
+    if (this.props.client) {
+      this.props.client.mutate({
+        mutation: updateShareCount,
+        variables: { nodeId: nodeId }
+      });
+    }
+  }
 
   render() {
     const { url, onClose, social } = this.props;
@@ -110,3 +125,5 @@ export default class SocialShare extends React.Component<Props, State> {
     );
   }
 }
+
+export default compose(withApollo)(DumbSocialShare);
