@@ -2066,13 +2066,17 @@ def thread_csv_export(request):
 
         children = idea.get_children()
         row.update(get_idea_parents_titles(idea, user_prefs))
-        # we need to use get_posts and not get_published_posts to create the tree
-        posts = get_posts(idea, start, end).all()
+        # We need to use get_posts without date filtering
+        # instead of get_published_posts to create the tree.
+        posts = get_posts(idea, None, None).all()
         # WATSON sentiment to be impemented later
         # row[WATSON_SENTIMENT] = idea.sentiments()
         create_tree(posts)  # this calculate p._indentation and p._children for each post
         for post in posts:
             if post.publication_state != PublicationStates.PUBLISHED:
+                continue
+
+            if post.creation_date < start or post.creation_date > end:
                 continue
 
             if has_lang:
