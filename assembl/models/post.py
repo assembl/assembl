@@ -179,15 +179,9 @@ class Post(Content, TaggableEntity):
         return descendants
 
     def get_top_post_in_thread(self):
-        found = False
         post = self
-        while not found:
-            top_post_id = post.parent_id
-            if top_post_id:
-                top_post = Post.get(top_post_id)
-                post = top_post
-            else:
-                found = True
+        while post.parent_id is not None:
+            post = Post.get(post.parent_id)
         return post
 
     def increment_share_count(self):
