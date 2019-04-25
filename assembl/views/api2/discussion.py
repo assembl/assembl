@@ -61,15 +61,16 @@ from assembl.utils import (
     format_date,
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
     get_bright_mirror_ideas, get_vote_session_ideas,
-    get_deleted_posts, get_related_extracts,
+    get_deleted_posts, get_related_extracts, get_posts,
     get_published_posts, get_published_top_posts)
 from assembl.models.social_data_extraction import (
     get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
-from assembl.models import LanguagePreferenceCollection, Locale
+from assembl.models import LanguagePreferenceCollection, Locale, PublicationStates
 from assembl.models.idea_content_link import ExtractStates
+from assembl.models.post import deleted_publication_states
 from assembl.models.timeline import Phases, get_phase_by_identifier
 from assembl.models.idea import MessageView
 
@@ -1915,6 +1916,81 @@ def multicolumn_csv_export(request):
     return fieldnames, rows
 
 
+def get_latest_date(post):
+    """From a post, get the latest creation_date of live descendants and self.
+    """
+    max_date = post.creation_date
+    if len(post._children) == 0:
+        if post.publication_state in deleted_publication_states:
+            return None
+        return max_date
+
+    for p in post._children:
+        date = get_latest_date(p)
+        if date and date > max_date:
+            max_date = date
+
+    return max_date
+
+
+# This is the equivalent of transformPosts in pages/idea.jsx to create the tree
+def create_tree(posts):
+    """Augment each post with _children and _indentation attributes.
+    """
+    posts_by_parent = {}
+    posts_by_id = {p.id: p for p in posts}
+    for p in posts:
+        posts_by_parent.setdefault(p.parent_id, []).append(p)
+
+    def get_post_indentation(post, ident=None):
+        """Return post indentation with the form 1.2.1
+        (first reply of the second post of the first top post)
+        """
+        if ident is None:
+            ident = []
+
+        if post.parent_id is None:
+            try:
+                pos = post._position
+            except AttributeError:
+                pos = 'x'
+            ident[0:0] = [pos]
+            return '.'.join([str(e) for e in ident])
+
+        parent_post = posts_by_id[post.parent_id]
+        parent_post_children = parent_post._children
+        ident[0:0] = [parent_post_children.index(post) + 1]
+        return get_post_indentation(parent_post, ident)
+
+    def get_children(post_id):
+        new_posts = []
+        for p in posts_by_parent.get(post_id, ()):
+            p._children = get_children(p.id)
+            new_posts.append(p)
+        new_posts.sort(key=lambda p: p.creation_date, reverse=True)
+        return new_posts
+
+    top_posts = []
+    for p in posts_by_parent.get(None, ()):
+        p._children = get_children(p.id)
+        top_posts.append(p)
+
+    top_posts = [p for p in top_posts
+        if not (p.publication_state in deleted_publication_states and len(p._children) == 0)]
+
+    top_posts.sort(key=lambda p: get_latest_date(p), reverse=True)
+    for idx, p in enumerate(top_posts):
+        p._position = idx + 1
+
+    for p in posts:
+        if p.publication_state == PublicationStates.PUBLISHED:
+            p._indentation = get_post_indentation(p)
+        else:
+            p._indentation = 'x'
+
+    return top_posts
+
+
 def thread_csv_export(request):
     """CSV export for phase thread sheet"""
     from assembl.models import Locale, Idea
@@ -1942,14 +2018,14 @@ def thread_csv_export(request):
         IDEA_LEVEL_2.encode('utf-8'),
         IDEA_LEVEL_3.encode('utf-8'),
         IDEA_LEVEL_4.encode('utf-8'),
-        MESSAGE_INDENTATION.encode('utf-8'),  # TODO
+        MESSAGE_INDENTATION.encode('utf-8'),
         TOP_POST_TITLE.encode('utf-8'),
         TOP_POST.encode('utf-8'),
         TOP_POST_WORD_COUNT.encode('utf-8'),
         POST_SUBJECT.encode('utf-8'),
         POST_BODY.encode('utf-8'),
         POST_BODY_COUNT.encode('utf-8'),
-        NUMBER_OF_ANSWERS.encode('utf-8'),  # TODO
+        NUMBER_OF_ANSWERS.encode('utf-8'),
         POST_CREATOR_NAME.encode('utf-8'),
         POST_CREATOR_USERNAME.encode('utf-8'),
         POST_CREATOR_EMAIL.encode('utf-8'),
@@ -1990,10 +2066,15 @@ def thread_csv_export(request):
 
         children = idea.get_children()
         row.update(get_idea_parents_titles(idea, user_prefs))
-        posts = get_published_posts(idea, start, end)
+        # we need to use get_posts and not get_published_posts to create the tree
+        posts = get_posts(idea, start, end).all()
         # WATSON sentiment to be impemented later
         # row[WATSON_SENTIMENT] = idea.sentiments()
+        create_tree(posts)  # this calculate p._indentation and p._children for each post
         for post in posts:
+            if post.publication_state != PublicationStates.PUBLISHED:
+                continue
+
             if has_lang:
                 post.maybe_translate(target_locales=[language])
 
@@ -2008,6 +2089,8 @@ def thread_csv_export(request):
             row[TOP_POST_WORD_COUNT] = str(len(row[TOP_POST].split())) if row[TOP_POST] else "0"
             row[POST_BODY] = sanitize_text(body.get('entry'))
             row[POST_BODY_COUNT] = str(len(row[POST_BODY].split())) if row[POST_BODY] else "0"
+            row[NUMBER_OF_ANSWERS] = len(post._children)
+            row[MESSAGE_INDENTATION] = post._indentation
             row[MESSAGE_URL] = post.get_url()
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
