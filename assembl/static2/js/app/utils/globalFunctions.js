@@ -382,6 +382,3 @@ export const formatedTagList = (tags: Tags): Array<TagProps> =>
       return result;
     }, [])
     : []);
-
-// Check if a richtext editor state is empty or not
-export const isEmptyEditorState = (editorState: ?string) => editorState === '<p></p>' || editorState === null;

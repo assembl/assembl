@@ -105,6 +105,9 @@ export function editorStateIsEmpty(editorState: EditorState): boolean {
   return false;
 }
 
+// Check if a richtext body is empty or not
+export const richTextBodyIsEmpty = (body: ?string) => body === '<p></p>' || body === null;
+
 export type UploadNewAttachmentsPromiseResult = {
   contentState: ContentState,
   documentIds: Array<string>
