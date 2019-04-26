@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 
-import ManageModules from '../components/administration/landingPage/manageModules';
+// import ManageModules from '../components/administration/landingPage/manageModules';
 import CustomizeHeader from '../components/administration/landingPage/header/index';
 import Navbar from '../components/administration/navbar';
 import { displayAlert } from '../utils/utilityManager';
@@ -22,12 +22,12 @@ type Props = {
   route: Route,
   router: Router,
   section: string,
-  editLocale: string,
-  phasesHaveChanged: boolean,
-  updateDiscussionPhase: Function,
-  discussionPhases: Array<Object>,
-  refetchTimeline: Function,
-  timelineModuleId: string
+  editLocale: string
+  // phasesHaveChanged: boolean,
+  // updateDiscussionPhase: Function,
+  // discussionPhases: Array<Object>,
+  // refetchTimeline: Function,
+  // timelineModuleId: string
 };
 
 type State = {
@@ -100,8 +100,8 @@ class LandingPageAdmin extends React.Component<Props, State> {
       <div className="landing-page-admin">
         {showSaveButton(section) && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
         {section === '1' && <CustomizeHeader editLocale={editLocale} />}
-        {section === '2' && <ManageModules {...this.props} />}
-        {section && <Navbar currentStep={section} steps={['1', '2']} phaseIdentifier="landingPage" />}
+        {/* {section === '2' && <ManageModules {...this.props} />} */}
+        {section && <Navbar currentStep={section} steps={['1']} phaseIdentifier="landingPage" />}
       </div>
     );
   }
