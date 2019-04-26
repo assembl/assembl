@@ -259,55 +259,58 @@ class FrontendUrls(object):
         if current_phase_use_v1_interface(self.discussion.timeline_events):
             return self.get_discussion_url() + self.get_relative_post_url(post)
         else:
-            route = None
-            phase = post.get_created_phase()
-            # The created post must be created within an associated phase
-            assert phase
-            if post.__class__.__name__ == 'SynthesisPost':
-                synthesis_id = post.graphene_id()
-                route = self.get_frontend_url('synthesis',
-                                              slug=self.discussion.slug,
-                                              synthesisId=synthesis_id)
-                return urljoin(
-                    self.discussion.get_base_url(),
-                    route)
-            first_idea = None
-            ideas = post.get_ideas()
-            if not ideas:
-                # orphan post, redirect to home
+            try:
+                route = None
+                phase = post.get_created_phase()
+                # The created post must be created within an associated phase
+                assert phase
+                if post.__class__.__name__ == 'SynthesisPost':
+                    synthesis_id = post.graphene_id()
+                    route = self.get_frontend_url('synthesis',
+                                                  slug=self.discussion.slug,
+                                                  synthesisId=synthesis_id)
+                    return urljoin(
+                        self.discussion.get_base_url(),
+                        route)
+                first_idea = None
+                ideas = post.get_ideas()
+                if not ideas:
+                    # orphan post, redirect to home
+                    return self.get_discussion_url()
+
+                first_idea = ideas[0]
+                if first_idea.__class__.__name__ == 'Question':
+                    try:
+                        questions = first_idea.parents[0].get_questions() if first_idea.parents else []
+                        questionIndex = questions.index(first_idea) + 1
+                    except ValueError:
+                        questionIndex = 1
+                    route = self.get_frontend_url('questionPost', **{
+                        'phase': phase.identifier,
+                        'phaseId': phase.graphene_id(),
+                        'questionId': first_idea.graphene_id(),
+                        'questionIndex': questionIndex,
+                        'element': post.graphene_id()
+                    })
+                elif first_idea.message_view_override == MessageView.brightMirror.value:
+                    route = self.get_frontend_url('brightMirrorFiction', **{
+                        'phase': phase.identifier,
+                        'phaseId': phase.graphene_id(),
+                        'themeId': first_idea.graphene_id(),
+                        'fictionId': post.graphene_id()
+                    })
+
+                if not route:
+                    route = self.get_frontend_url('post', **{
+                        'phase': phase.identifier,
+                        'phaseId': phase.graphene_id(),
+                        'themeId': first_idea.graphene_id(),
+                        'element': post.graphene_id()
+                    })
+
+                return urljoin(self.discussion.get_base_url(), route)
+            except:
                 return self.get_discussion_url()
-
-            first_idea = ideas[0]
-            if first_idea.__class__.__name__ == 'Question':
-                try:
-                    questions = first_idea.parents[0].get_questions() if first_idea.parents else []
-                    questionIndex = questions.index(first_idea) + 1
-                except ValueError:
-                    questionIndex = 1
-                route = self.get_frontend_url('questionPost', **{
-                    'phase': phase.identifier,
-                    'phaseId': phase.graphene_id(),
-                    'questionId': first_idea.graphene_id(),
-                    'questionIndex': questionIndex,
-                    'element': post.graphene_id()
-                })
-            elif first_idea.message_view_override == MessageView.brightMirror.value:
-                route = self.get_frontend_url('brightMirrorFiction', **{
-                    'phase': phase.identifier,
-                    'phaseId': phase.graphene_id(),
-                    'themeId': first_idea.graphene_id(),
-                    'fictionId': post.graphene_id()
-                })
-
-            if not route:
-                route = self.get_frontend_url('post', **{
-                    'phase': phase.identifier,
-                    'phaseId': phase.graphene_id(),
-                    'themeId': first_idea.graphene_id(),
-                    'element': post.graphene_id()
-                })
-
-            return urljoin(self.discussion.get_base_url(), route)
 
     def get_relative_idea_url(self, idea):
         return '/idea/' + urllib.quote(idea.original_uri, '')
