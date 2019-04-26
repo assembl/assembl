@@ -24,7 +24,7 @@ from sqlalchemy import (
     desc,
     Float,
 )
-from sqlalchemy.orm import with_polymorphic, subqueryload
+from sqlalchemy.orm import with_polymorphic, joinedload, joinedload_all
 from sqlalchemy.orm.util import aliased
 from sqlalchemy.sql.expression import literal
 from cornice import Service
@@ -530,7 +530,13 @@ def extract_taxonomy_csv(request):
     import assembl.models as m
     discussion = request.context._instance
     db = discussion.db
-    extracts = db.query(m.Extract).filter(m.Extract.discussion_id == discussion.id)
+    extracts = db.query(m.Extract
+        ).filter(m.Extract.discussion_id == discussion.id
+        ).options(
+            joinedload(m.Extract.tags_associations),
+            joinedload_all('content.body.entries'),
+        ).all()
+
     extract_list = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Thematic", "Message", "Content harvested",  "Content locale",
