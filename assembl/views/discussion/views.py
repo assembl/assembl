@@ -212,9 +212,7 @@ def react_view(request, required_permission=P_READ):
             destination = path.replace(slug, discussion.slug)
             return HTTPMovedPermanently(destination)
 
-        return react_base_view(request, required_permission)
-
-    raise HTTPNotFound("No discussion found for slug=%s" % (slug,))
+    return react_base_view(request, required_permission)
 
 
 def react_base_view(request, required_permission=P_READ):
