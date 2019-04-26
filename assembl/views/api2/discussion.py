@@ -1497,7 +1497,8 @@ def get_participant_time_series_analytics(request):
 def convert_to_utf8(rowdict):
     row = {}
     for key, value in rowdict.items():
-        row[key.encode('utf-8')] = value.encode('utf-8') if isinstance(value, unicode) else value
+        k = key.encode('utf-8') if isinstance(key, unicode) else key
+        row[k] = value.encode('utf-8') if isinstance(value, unicode) else value
 
     return row
 
