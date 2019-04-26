@@ -255,6 +255,7 @@ class FrontendUrls(object):
         return '/posts/' + urllib.quote(post.uri(), '')
 
     def get_post_url(self, post):
+        from assembl.models.idea import MessageView
         if current_phase_use_v1_interface(self.discussion.timeline_events):
             return self.get_discussion_url() + self.get_relative_post_url(post)
         else:
@@ -272,20 +273,30 @@ class FrontendUrls(object):
                     route)
             first_idea = None
             ideas = post.get_ideas()
-            if ideas:
-                first_idea = ideas[0]
-            else:
+            if not ideas:
                 # orphan post, redirect to home
                 return self.get_discussion_url()
 
-            if first_idea is not None and first_idea.__class__.__name__ ==\
-                    'Question':
-                thematic = post.get_closest_thematic()
-                route = self.get_frontend_url('post', **{
+            first_idea = ideas[0]
+            if first_idea.__class__.__name__ == 'Question':
+                try:
+                    questions = first_idea.parents[0].get_questions() if first_idea.parents else []
+                    questionIndex = questions.index(first_idea) + 1
+                except ValueError:
+                    questionIndex = 1
+                route = self.get_frontend_url('questionPost', **{
                     'phase': phase.identifier,
                     'phaseId': phase.graphene_id(),
-                    'themeId': thematic.graphene_id(),
-                    'element': ''
+                    'questionId': first_idea.graphene_id(),
+                    'questionIndex': questionIndex,
+                    'element': post.graphene_id()
+                })
+            elif first_idea.message_view_override == MessageView.brightMirror.value:
+                route = self.get_frontend_url('brightMirrorFiction', **{
+                    'phase': phase.identifier,
+                    'phaseId': phase.graphene_id(),
+                    'themeId': first_idea.graphene_id(),
+                    'fictionId': post.graphene_id()
                 })
 
             if not route:

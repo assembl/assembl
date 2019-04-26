@@ -466,6 +466,29 @@ class CreatePost(graphene.Mutation):
         return CreatePost(post=new_post)
 
 
+class UpdateShareCount(graphene.Mutation):
+    __doc__ = docs.UpdateShareCount.__doc__
+
+    class Input:
+        node_id = graphene.ID(required=True, description=docs.UpdateShareCount.node_id)
+
+    node = graphene.Field(lambda: Node)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        node_type, node_id = Node.from_global_id(args.get('node_id'))
+        node_id = int(node_id)
+        node = None
+        if node_type == 'Post':
+            node = models.Post.get(node_id)
+        elif node_type == 'Idea':
+            node = models.Idea.get(node_id)
+        if node:
+            node.increment_share_count()
+        return UpdateShareCount(node=node)
+
+
 class UpdatePost(graphene.Mutation):
     __doc__ = docs.UpdatePost.__doc__
 

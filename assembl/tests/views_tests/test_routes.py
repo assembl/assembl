@@ -494,6 +494,23 @@ def test_url_to_post_v2_proposal(discussion, proposals_en_fr,
         u'thread'
     assert current_phase_use_v1_interface(discussion.timeline_events) is False
     frontend_urls = FrontendUrls(discussion)
-    expected = 'jacklayton2/debate/{}/theme/'.format(phase.identifier)
+    expected = 'jacklayton2/debate/{}/question/{}/1/#{}'.format(
+        phase.identifier,
+        proposal.get_ideas()[0].graphene_id(),
+        proposals_en_fr[0].graphene_id())
     actual = frontend_urls.get_post_url(proposals_en_fr[0])
+    assert expected in actual
+
+
+# this test fails with InvalidRequestError: Instance '<EmailAccount at 0x7fb21ceb4990>' is not persisted
+def xtest_url_to_fiction(discussion, post_published_for_bright_mirror):
+    fiction = post_published_for_bright_mirror
+    from assembl.lib.frontend_urls import FrontendUrls
+    frontend_urls = FrontendUrls(discussion)
+    phase = fiction.get_created_phase()
+    expected = 'jacklayton2/debate/{}/theme/{}/fictions/{}'.format(
+        phase.identifier,
+        fiction.get_ideas()[0].graphene_id(),
+        fiction.graphene_id())
+    actual = frontend_urls.get_post_url(fiction)
     assert expected in actual

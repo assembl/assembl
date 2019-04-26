@@ -228,21 +228,6 @@ class UniqueActionOnPost(ActionOnPost):
             actor=User.uri_generic(self.actor_id))
 
 
-class SharePost(UniqueActionOnPost):
-    """
-    Created in order to count the number of shares on a post.
-    """
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:ShareStatusChange_P'
-    }
-    post_from_share = relationship(
-        'Content',
-        backref=backref('shares'),
-    )
-
-    verb = 'shared'
-
-
 class ViewPost(UniqueActionOnPost):
     """
     A view action on a post.
@@ -495,20 +480,3 @@ class ViewIdea(ActionOnIdea):
             actor=User.uri_generic(self.actor_id))
 
     verb = 'viewed'
-
-
-class ShareIdea(ActionOnIdea):
-    """
-    A share action on an idea.
-    """
-    __mapper_args__ = {
-        'polymorphic_identity': 'version:ShareStatusChange_I'
-    }
-
-    def tombstone(self):
-        from .generic import Content
-        return DiscussionBoundTombstone(
-            self, idea=Content.uri_generic(self.idea_id),
-            actor=User.uri_generic(self.actor_id))
-
-    verb = 'shared'

@@ -31,7 +31,7 @@ from assembl.graphql.locale import Locale
 from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
                                   ValidatePost, DeletePostAttachment, UndeletePost,
                                   UpdatePost, AddPostExtract, PostConnection,
-                                  AddPostsExtract)
+                                  AddPostsExtract, UpdateShareCount)
 from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
 from assembl.graphql.tag import Tag, AddTag, RemoveTag, UpdateTag
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
@@ -475,6 +475,7 @@ class Mutations(graphene.ObjectType):
     update_ideas = UpdateIdeas.Field(description=docs.UpdateIdeas.__doc__)
     create_post = CreatePost.Field(description=docs.CreatePost.__doc__)
     update_post = UpdatePost.Field(description=docs.UpdatePost.__doc__)
+    update_share_count = UpdateShareCount.Field(description=docs.UpdateShareCount.__doc__)
     delete_post = DeletePost.Field(description=docs.DeletePost.__doc__)
     validate_post = ValidatePost.Field(description=docs.ValidatePost.__doc__)
     undelete_post = UndeletePost.Field(description=docs.UndeletePost.__doc__)

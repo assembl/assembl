@@ -178,6 +178,10 @@ class Idea(HistoryMixin, DiscussionBoundBase):
     last_modified = Column(Timestamp)
     # TODO: Make this autoupdate on change. see
     # http://stackoverflow.com/questions/1035980/update-timestamp-when-row-is-updated-in-postgresql
+    share_count = Column(Integer, nullable=False, default=0, server_default='0')
+
+    def increment_share_count(self):
+        self.share_count += 1
 
     # temporary placeholders
     @property
@@ -264,6 +268,10 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             ).join(IdeaLink, (IdeaLink.source_id == Idea.id) & (IdeaLink.tombstone_date == None)  # noqa: E711
             ).filter((IdeaLink.target_id == self.id) & (Idea.tombstone_date == None)  # noqa: E711
             ).all()
+
+    def get_questions(self):
+        from .thematic import Question
+        return [child for child in self.get_children() if isinstance(child, Question)]
 
     def safe_title(self, user_prefs, localizer=None):
         if self.title:

@@ -4,6 +4,7 @@ from sqlalchemy.orm import contains_eager, joinedload, subqueryload
 
 from assembl import models
 from assembl.models.idea import MessageView
+from assembl.models.post import deleted_publication_states
 from assembl.models.timeline import Phases
 from assembl.graphql.utils import get_root_thematic_for_phase
 
@@ -12,20 +13,34 @@ def format_date(datetime_to_format):
     return datetime_to_format.strftime('%d/%m/%Y')
 
 
-def get_posts(idea, start=None, end=None):
+def get_posts(idea, start=None, end=None, include_deleted=None):
     """
-    Get all posts given a certain idea.
+    Get all posts given a given idea filtered by start and end dates.
     @param: idea Idea
     @param: start datetime
     @param: end datetime
     """
     Post = models.Post
-    related = idea.get_related_posts_query(True, include_moderating=False)
+    related = idea.get_related_posts_query(True, include_moderating=False, include_deleted=include_deleted)
     query = Post.query.join(
         related, Post.id == related.c.post_id
         ).order_by(desc(Post.creation_date), Post.id
         ).options(subqueryload(Post.creator),
                   subqueryload(Post.creator, models.AgentProfile.accounts))
+    if start is not None:
+        query = query.filter(Post.creation_date >= start)
+
+    if end is not None:
+        query = query.filter(Post.creation_date <= end)
+
+    return query
+
+
+def get_published_top_posts(idea, start=None, end=None):
+    Post = models.Post
+    query = get_posts(idea, start, end, include_deleted=False)
+    query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED)
+    query = query.filter(Post.parent_id == None)  # noqa: E711
     return query
 
 
@@ -35,34 +50,26 @@ def get_published_posts(idea, start=None, end=None):
     @param: start datetime
     @param: end datetime
     """
-    Post = models.Post
-    query = get_posts(idea, start, end)
-    query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED)
-    if start is not None:
-        query = query.filter(Post.creation_date >= start)
-
-    if end is not None:
-        query = query.filter(Post.creation_date <= end)
-
+    query = get_posts(idea, start, end, include_deleted=False)
+    query = query.filter(models.Post.publication_state == models.PublicationStates.PUBLISHED)
     return query
 
 
 def get_deleted_posts(idea, start=None, end=None):
-    """
+    """Get deleted posts for the given idea filtered by start and end dates.
     @param: idea Idea
     @param: start datetime
     @param: end datetime
     """
-    Post = models.Post
-    query = get_posts(idea, start, end)
-    query = query.filter(Post.is_tombstone == True)  # noqa: E712
-    if start is not None:
-        query = query.filter(Post.creation_date >= start)
-
-    if end is not None:
-        query = query.filter(Post.creation_date <= end)
-
+    query = get_posts(idea, start, end, include_deleted=True)
+    query = query.filter(models.Post.publication_state.in_(deleted_publication_states))
     return query
+
+
+def get_related_extracts(content):
+    extracts = content.db.query(models.Extract
+        ).filter(models.Extract.content_id == content.id)
+    return extracts
 
 
 def get_all_phase_root_ideas(discussion):

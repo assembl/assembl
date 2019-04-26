@@ -18,7 +18,6 @@ from assembl.auth.util import user_has_permission
 from assembl.models.action import SentimentOfPost
 from assembl.models import Phases
 from assembl.models.idea import MessageView
-
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .attachment import Attachment
 from .document import Document
@@ -175,7 +174,7 @@ class IdeaInterface(graphene.Interface):
         return [child for child in self.get_children() if not child.hidden and not isinstance(child, (models.Question, models.VoteProposal))]
 
     def resolve_questions(self, args, context, info):
-        return [child for child in self.get_children() if isinstance(child, models.Question)]
+        return self.get_questions()
 
     def resolve_announcement(self, args, context, info):
         return self.get_applicable_announcement()

@@ -992,7 +992,7 @@ def test_add_timeline_event(test_app, discussion):
 
 
 class AbstractExport(object):
-    # HEADER = {}
+
 
     def _get(self, app, discussion_id, widget_id=0, lang=None, view_name=None, votes_export=False):
         base_req = '/data/Discussion/%d/%s' % (discussion_id, view_name)
@@ -1108,10 +1108,11 @@ class TestTaxonomyExport(AbstractExport):
         assert last_row[self.TAG1] == ""
         assert last_row[self.TAG2] == ""
 
+
 """
 class TestPhase1Export(AbstractExport):
 
-    view_name = 'phase1_csv_export'
+    view_name = 'multi-module-export'
     THEMATIC_NAME = 0
     QUESTION_ID = 1
     QUESTION_TITLE = 2
@@ -1222,8 +1223,8 @@ class TestPhase2Export(AbstractExport):
         assert header[self.POST_CLASSIFIER] == b"Classification de Post"
 
     # TODO: Add more unit tests for the phase 2 export API.
-# These tests are temporarily commented due to changes related to the vote session. 
-# Vote Sessions are now related to ideas not discussions. 
+# These tests are temporarily commented due to changes related to the vote session.
+# Vote Sessions are now related to ideas not discussions.
 
 
 class TestExtractCsvVoters(AbstractExport):

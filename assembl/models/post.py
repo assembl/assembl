@@ -158,6 +158,8 @@ class Post(Content, TaggableEntity):
     creator = relationship(AgentProfile, foreign_keys=[creator_id], backref="posts_created",
                            doc=docs.PostInterface.creator)
 
+    share_count = Column(Integer, nullable=False, default=0, server_default='0')
+
     tags_associations_cls = PostsTagsAssociation
 
     __mapper_args__ = {
@@ -177,15 +179,13 @@ class Post(Content, TaggableEntity):
         return descendants
 
     def get_top_post_in_thread(self):
-        found = False
         post = self
-        while not found:
-            top_post_id = post.parent_id
-            top_post = self.get(top_post_id)
-            post = top_post
-            if not post.parent_id:
-                found = True
+        while post.parent_id is not None:
+            post = Post.get(post.parent_id)
         return post
+
+    def increment_share_count(self):
+        self.share_count += 1
 
     def is_read(self):
         # TODO: Make it user-specific.
@@ -581,9 +581,6 @@ class Post(Content, TaggableEntity):
 
         return parent_ideas[0].message_view_override == MessageView.brightMirror.value
 
-    def get_number_of_shares(self):
-        return len(self.shares)
-
     def get_ideas(self):
         ideas = [
             link.idea for link in self.indirect_idea_content_links_without_cache()
@@ -662,24 +659,6 @@ class AssemblPost(Post):
     __mapper_args__ = {
         'polymorphic_identity': 'assembl_post',
     }
-
-    def get_closest_thematic(self):
-        from ..models import Idea
-        idea_ids = Idea.get_idea_ids_showing_post(self.id)
-        thematics = self.db.query(Idea
-            ).filter(Idea.sqla_type != 'question'
-            ).filter(Idea.id.in_(idea_ids)).all()
-        if not thematics:
-            log.error("This post is not under any thematic:" + repr(self))
-            return None
-        # use only leaf thematics
-        thematics = set(thematics)
-        for th in list(thematics):
-            for parent in th.parents:
-                thematics.discard(parent)
-        if len(thematics) > 1:
-            log.error("This post is under many thematics:" + repr(self))
-        return thematics.pop()
 
     def get_body_mime_type(self):
         return self.body_mime_type

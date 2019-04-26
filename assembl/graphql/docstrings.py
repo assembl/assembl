@@ -641,6 +641,11 @@ class UpdatePost:
     publication_state = PostInterface.publication_state
 
 
+class UpdateShareCount:
+    __doc__ = "A mutation called when a user shares a post/idea."
+    node_id = Default.node_id % ("Post/Idea") + " The identifier of the Post/Idea to be updated."
+
+
 class DeletePost:
     __doc__ = "A mutation to delete a Post."
     post_id = Default.node_id % "Post" + " This is the Post identifier that is to be deleted."
