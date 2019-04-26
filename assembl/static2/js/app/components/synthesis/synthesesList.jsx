@@ -12,7 +12,7 @@ import { get } from '../../utils/routeMap';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 
 export type Props = {
-  syntheses: Array<SynthesisPreviw>
+  syntheses: Array<SynthesisPreview>
 };
 
 const masonryOptions = {
