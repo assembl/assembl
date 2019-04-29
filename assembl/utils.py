@@ -115,13 +115,14 @@ def get_vote_session_ideas(discussion):
 def get_ideas_for_export(discussion, module_type=None):
     model = models.Idea
     query = model.query
+    descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
+    query = query.filter(model.id.in_(descendants_query))
     query = query.outerjoin(
             models.Idea.source_links
         ).filter(
             ~model.sqla_type.in_(('question', 'vote_proposal', 'root_idea')),
             model.hidden == False,  # noqa: E712
             model.tombstone_date == None,  # noqa: E711
-            model.discussion_id == discussion.id,
         ).options(
             contains_eager(models.Idea.source_links),
             joinedload(models.Idea.title).joinedload("entries"),
