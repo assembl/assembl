@@ -1678,7 +1678,7 @@ def phase_csv_export(request):
             row[TOP_POST_COUNT] = get_published_top_posts(idea, start, end).count()
             row[NON_TOP_POST_COUNT] = row[POSTED_MESSAGES_COUNT] - row[TOP_POST_COUNT]
         row[LIKE] = idea.get_total_sentiments("like")
-        row[DONT_LIKE] = idea.get_total_sentiments("dont_like")
+        row[DONT_LIKE] = idea.get_total_sentiments("disagree")
         row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
         row[MORE_INFO] = idea.get_total_sentiments("more_info")
         # To be implemented
