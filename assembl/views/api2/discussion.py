@@ -1785,9 +1785,9 @@ def survey_csv_export(request):
 
                 row[SHARE_COUNT] = post.share_count
                 if post.sentiments:
+                    row[POST_LIKE] = len([p for p in post.sentiments if p.name == 'like'])
+                    row[POST_DISAGREE] = len([p for p in post.sentiments if p.name == 'disagree'])
                     for sentiment in post.sentiments:
-                        row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
-                        row[POST_DISAGREE] = "1" if sentiment.name == 'disagree' else "0"
                         if not has_anon:
                             row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
                         else:
@@ -1803,6 +1803,8 @@ def survey_csv_export(request):
                                 row['sentiment ' + name.encode('utf-8')] = extra_info[num]
                         rows.append(convert_to_utf8(row))
                 else:
+                    row[POST_LIKE] = 0
+                    row[POST_DISAGREE] = 0
                     row[SENTIMENT_ACTOR_NAME] = u''
                     row[SENTIMENT_ACTOR_EMAIL] = u''
                     row[SENTIMENT_CREATION_DATE] = u''
@@ -1911,9 +1913,11 @@ def multicolumn_csv_export(request):
 
             row[SHARE_COUNT] = post.share_count
             if post.sentiments:
+                row[POST_LIKE] = len([p for p in post.sentiments if p.name == 'like'])
+                row[POST_DISAGREE] = len([p for p in post.sentiments if p.name == 'disagree'])
+                row[POST_DONT_UNDERSTAND] = len([p for p in post.sentiments if p.name == 'dont_understand'])
+                row[POST_MORE_INFO_PLEASE] = len([p for p in post.sentiments if p.name == 'more_info'])
                 for sentiment in post.sentiments:
-                    row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
-                    row[POST_DISAGREE] = "1" if sentiment.name == 'disagree' else "0"
                     if not has_anon:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
                     else:
@@ -1929,6 +1933,10 @@ def multicolumn_csv_export(request):
                             row['sentiment ' + name.encode('utf-8')] = extra_info[num]
                     rows.append(convert_to_utf8(row))
             else:
+                row[POST_LIKE] = 0
+                row[POST_DISAGREE] = 0
+                row[POST_DONT_UNDERSTAND] = 0
+                row[POST_MORE_INFO_PLEASE] = 0
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
@@ -2134,11 +2142,11 @@ def thread_csv_export(request):
 
             row[SHARE_COUNT] = post.share_count
             if post.sentiments:
+                row[POST_LIKE] = len([p for p in post.sentiments if p.name == 'like'])
+                row[POST_DISAGREE] = len([p for p in post.sentiments if p.name == 'disagree'])
+                row[POST_DONT_UNDERSTAND] = len([p for p in post.sentiments if p.name == 'dont_understand'])
+                row[POST_MORE_INFO_PLEASE] = len([p for p in post.sentiments if p.name == 'more_info'])
                 for sentiment in post.sentiments:
-                    row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
-                    row[POST_DISAGREE] = "1" if sentiment.name == 'disagree' else "0"
-                    row[POST_DONT_UNDERSTAND] = "1" if sentiment.name == 'dont_understand' else "0"
-                    row[POST_MORE_INFO_PLEASE] = "1" if sentiment.name == 'more_info' else "0"
                     if not has_anon:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
                     else:
@@ -2154,6 +2162,10 @@ def thread_csv_export(request):
                             row['sentiment ' + name.encode('utf-8')] = extra_info[num]
                     rows.append(convert_to_utf8(row))
             else:
+                row[POST_LIKE] = 0
+                row[POST_DISAGREE] = 0
+                row[POST_DONT_UNDERSTAND] = 0
+                row[POST_MORE_INFO_PLEASE] = 0
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
@@ -2268,11 +2280,11 @@ def bright_mirror_csv_export(request):
 
             row[SHARE_COUNT] = post.share_count
             if post.sentiments:
+                row[POST_LIKE] = len([p for p in post.sentiments if p.name == 'like'])
+                row[POST_DISAGREE] = len([p for p in post.sentiments if p.name == 'disagree'])
+                row[POST_DONT_UNDERSTAND] = len([p for p in post.sentiments if p.name == 'dont_understand'])
+                row[POST_MORE_INFO_PLEASE] = len([p for p in post.sentiments if p.name == 'more_info'])
                 for sentiment in post.sentiments:
-                    row[POST_LIKE] = "1" if sentiment.name == 'like' else "0"
-                    row[POST_DISAGREE] = "1" if sentiment.name == 'disagree' else "0"
-                    row[POST_DONT_UNDERSTAND] = "1" if sentiment.name == 'dont_understand' else "0"
-                    row[POST_MORE_INFO_PLEASE] = "1" if sentiment.name == 'more_info' else "0"
                     if not has_anon:
                         row[SENTIMENT_ACTOR_NAME] = sentiment.actor.real_name()
                     else:
@@ -2288,6 +2300,10 @@ def bright_mirror_csv_export(request):
                             row['sentiment ' + name.encode('utf-8')] = extra_info[num]
                     rows.append(convert_to_utf8(row))
             else:
+                row[POST_LIKE] = 0
+                row[POST_DISAGREE] = 0
+                row[POST_DONT_UNDERSTAND] = 0
+                row[POST_MORE_INFO_PLEASE] = 0
                 row[SENTIMENT_ACTOR_NAME] = u''
                 row[SENTIMENT_ACTOR_EMAIL] = u''
                 row[SENTIMENT_CREATION_DATE] = u''
