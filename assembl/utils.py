@@ -61,7 +61,8 @@ def get_deleted_posts(idea, start=None, end=None):
     @param: start datetime
     @param: end datetime
     """
-    query = get_posts(idea, start, end, include_deleted=True)
+    # Don't use include_deleted=False here. A post can be deleted (publication_state) but not tombstoned
+    query = get_posts(idea, start, end, include_deleted=None)
     query = query.filter(models.Post.publication_state.in_(deleted_publication_states))
     return query
 
