@@ -114,25 +114,18 @@ def get_vote_session_ideas(discussion):
 
 
 def get_ideas_for_export(discussion, module_type=None):
-    model = models.Idea
-    query = model.query
-    descendants_query = discussion.root_idea.get_descendants_query(inclusive=False)
-    query = query.filter(model.id.in_(descendants_query))
-    query = query.outerjoin(
-            models.Idea.source_links
-        ).filter(
-            ~model.sqla_type.in_(('question', 'vote_proposal', 'root_idea')),
-            model.hidden == False,  # noqa: E712
-            model.tombstone_date == None,  # noqa: E711
-        ).options(
-            contains_eager(models.Idea.source_links),
-            joinedload(models.Idea.title).joinedload("entries"),
-            joinedload(models.Idea.description).joinedload("entries"),
-        ).order_by(models.IdeaLink.order, models.Idea.creation_date)
-    if module_type is not None:
-        query = query.filter(model.message_view_override == module_type)
+    ideas = []
+    for phase in discussion.timeline_events:
+        root_thematic = get_root_thematic_for_phase(phase)
+        if root_thematic is not None:
+            ideas_query = get_ideas(phase)
+            if module_type is None:
+                ideas.extend(ideas_query.all())
+            else:
+                ideas.extend(ideas_query.filter(
+                    models.Idea.message_view_override == module_type).all())
 
-    return query.all()
+    return ideas
 
 
 def get_ideas(phase, options=None):
