@@ -1894,6 +1894,8 @@ def multicolumn_csv_export(request):
             idea_message_columns = idea.message_columns
             idea_message_column = [i for i in idea_message_columns if i.message_classifier == post.message_classifier]
             row[POST_CLASSIFIER] = idea_message_column[0].title.best_lang(user_prefs).value if idea_message_column else post.message_classifier
+            # fallback to post.message_classifier if title entry was empty
+            row[POST_CLASSIFIER] = row[POST_CLASSIFIER] or post.message_classifier
             if not has_anon:
                 row[POST_CREATOR_NAME] = post.creator.real_name()
                 row[POST_CREATOR_USERNAME] = post.creator.username_p or ""
