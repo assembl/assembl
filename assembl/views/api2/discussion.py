@@ -1569,8 +1569,13 @@ FICTION_URL = u"URL de la fiction"
 
 def get_idea_parents_titles(idea, user_prefs):
     idea_title = idea.title.best_lang(user_prefs).value.encode("utf-8") if idea.title else ""
-    ideas = [i.title.best_lang(user_prefs).value.encode("utf-8") if idea.title else ""
-             for i in idea.parents if i.sqla_type != u'root_idea' and not i.hidden]
+    ideas = []
+    i = idea
+    while i.parents and i.parents[0].sqla_type != u'root_idea' and not i.parents[0].hidden:
+        i = i.parents[0]
+        title = i.title.best_lang(user_prefs).value.encode("utf-8") if i.title else ""
+        ideas.append(title)
+
     if len(ideas) == 0:
         return {
             IDEA_LEVEL_1: idea_title,
@@ -1587,16 +1592,16 @@ def get_idea_parents_titles(idea, user_prefs):
         }
     if len(ideas) == 2:
         return {
-            IDEA_LEVEL_1: ideas[0],
-            IDEA_LEVEL_2: ideas[1],
+            IDEA_LEVEL_1: ideas[1],
+            IDEA_LEVEL_2: ideas[0],
             IDEA_LEVEL_3: idea_title,
             IDEA_LEVEL_4: ""
         }
     if len(ideas) == 3:
         return {
-            IDEA_LEVEL_1: ideas[0],
+            IDEA_LEVEL_1: ideas[2],
             IDEA_LEVEL_2: ideas[1],
-            IDEA_LEVEL_3: ideas[2],
+            IDEA_LEVEL_3: ideas[0],
             IDEA_LEVEL_4: idea_title
         }
 
