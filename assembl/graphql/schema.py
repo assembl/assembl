@@ -39,7 +39,7 @@ from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
-from assembl.graphql.synthesis import Synthesis, CreateSynthesis
+from assembl.graphql.synthesis import Synthesis, CreateSynthesis, UpdateSynthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
 from .configurable_fields import (
     ConfigurableFieldUnion, CreateTextField, UpdateTextField,
@@ -490,6 +490,7 @@ class Mutations(graphene.ObjectType):
     update_resource = UpdateResource.Field(description=docs.UpdateResource.__doc__)
     update_resources_center = UpdateResourcesCenter.Field(description=docs.UpdateResourcesCenter.__doc__)
     create_synthesis = CreateSynthesis.Field(description=docs.CreateSynthesis.__doc__)
+    update_synthesis = UpdateSynthesis.Field(description=docs.UpdateSynthesis.__doc__)
     create_section = CreateSection.Field(description=docs.CreateSection.__doc__)
     delete_section = DeleteSection.Field(description=docs.DeleteSection.__doc__)
     update_section = UpdateSection.Field(description=docs.UpdateSection.__doc__)

@@ -1,0 +1,15 @@
+#import "../fragments/SynthesisPost.graphql"
+
+mutation updateSynthesis(
+  $id: ID!
+  $image: String
+  $lang: String!
+  $bodyEntries: [LangStringEntryInput]!
+  $subjectEntries: [LangStringEntryInput]!
+) {
+  updateSynthesis(id: $id, image: $image, bodyEntries: $bodyEntries, subjectEntries: $subjectEntries) {
+    synthesisPost {
+      ...SynthesisPost
+    }
+  }
+}

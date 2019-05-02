@@ -225,6 +225,17 @@ class CreateSynthesis:
     image = """The uploaded image file"""
 
 
+class UpdateSynthesis:
+    __doc__ = """A mutation that enables a Synthesis to be updated."""
+    id = Default.node_id % "Synthesis" + " This is the identifier of the Synthesis to update."
+    synthesis_type = Synthesis.synthesis_type
+    body_entries = Synthesis.body_entries
+    subject_entries = Synthesis.subject_entries
+    introduction_entries = Synthesis.introduction_entries
+    conclusion_entries = Synthesis.conclusion_entries
+    image = CreateSynthesis.image
+
+
 class TextFragmentIdentifier:
     __doc__ = """A text fragment metadata that describes the positioning of the fragment both in the DOM and its position in the string of text."""
     xpath_start = """The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned."""

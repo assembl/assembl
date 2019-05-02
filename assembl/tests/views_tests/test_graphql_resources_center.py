@@ -134,19 +134,9 @@ def test_update_resource(graphql_registry, graphql_request, resource_with_image_
     resource = resource_with_image_and_doc
     resource_id = to_global_id('Resource', resource.id)
 
-    import os
-    from io import BytesIO
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-
-        def __init__(self, filename, type):
-            self.filename = filename
-            self.type = type
-
-    graphql_request.POST['variables.img'] = FieldStorage(
+    graphql_request.POST['variables.img'] = FakeUploadedFile(
         u'path/to/new-img.png', 'image/png')
-    graphql_request.POST['variables.doc'] = FieldStorage(
+    graphql_request.POST['variables.doc'] = FakeUploadedFile(
         u'path/to/new-doc.pdf', 'application/pdf')
 
     res = schema.execute(
@@ -237,17 +227,7 @@ def test_query_discussion_resources_center_fields(
 
 
 def test_update_resources_center(graphql_request, discussion):
-    import os
-    from io import BytesIO
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-
-        def __init__(self, filename, type):
-            self.filename = filename
-            self.type = type
-
-    graphql_request.POST['variables.headerImage'] = FieldStorage(
+    graphql_request.POST['variables.headerImage'] = FakeUploadedFile(
         u'path/to/new-img.png', 'image/png')
 
     res = schema.execute(u"""

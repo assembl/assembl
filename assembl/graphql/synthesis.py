@@ -6,17 +6,15 @@ from graphene.pyutils.enum import Enum as PyEnum
 from assembl import models
 import assembl.graphql.docstrings as docs
 from assembl.auth import CrudPermissions
-from assembl.graphql.langstring import LangStringEntryInput, langstring_from_input_entries
-from assembl.graphql.permissions_helpers import require_cls_permission
-from assembl.graphql.utils import abort_transaction_on_exception, create_attachment, get_attachment_with_purpose
-from assembl.models import LangString, FullTextSynthesis
-from assembl.models.idea_graph_view import FULLTEXT_SYNTHESIS_TYPE, STRUCTURED_SYNTHESIS_TYPE
+from assembl.graphql.langstring import LangStringEntryInput, langstring_from_input_entries, \
+    update_langstring_from_input_entries
+from assembl.graphql.permissions_helpers import require_cls_permission, require_instance_permission
+from assembl.graphql import utils
 from .document import Document
 from .idea import IdeaUnion
 from .langstring import (
     LangStringEntry, resolve_langstring, resolve_langstring_entries)
 from .types import SecureObjectType
-from .utils import DateTime
 
 
 synthesis_type_enum = PyEnum('SynthesisTypes', (
@@ -44,7 +42,7 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
     conclusion_entries = graphene.List(LangStringEntry, description=docs.Synthesis.conclusion_entries)
     ideas = graphene.List(lambda: IdeaUnion, description=docs.Synthesis.ideas)
     img = graphene.Field(Document, description=docs.Synthesis.img)
-    creation_date = DateTime(description=docs.Synthesis.creation_date)
+    creation_date = utils.DateTime(description=docs.Synthesis.creation_date)
     post = graphene.Field("assembl.graphql.post.Post", description=docs.Synthesis.post)
     synthesis_type = graphene.Field(
         type=SynthesisTypes,
@@ -81,7 +79,10 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
 
     def resolve_img(self, args, context, info):
         ATTACHMENT_PURPOSE_IMAGE = models.AttachmentPurpose.IMAGE.value
-        image_file = get_attachment_with_purpose(self.published_in_post.attachments, ATTACHMENT_PURPOSE_IMAGE)
+        image_file = utils.get_attachment_with_purpose(
+            self.published_in_post.attachments,
+            ATTACHMENT_PURPOSE_IMAGE,
+        )
         if image_file:
             return image_file.document
         else:
@@ -94,10 +95,10 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
         return self.published_in_post
 
     def resolve_synthesis_type(self, args, context, info):
-        if isinstance(self, FullTextSynthesis):
-            return FULLTEXT_SYNTHESIS_TYPE
+        if isinstance(self, models.FullTextSynthesis):
+            return models.idea_graph_view.FULLTEXT_SYNTHESIS_TYPE
         else:
-            return STRUCTURED_SYNTHESIS_TYPE
+            return models.idea_graph_view.STRUCTURED_SYNTHESIS_TYPE
 
 
 class CreateSynthesis(graphene.Mutation):
@@ -119,7 +120,7 @@ class CreateSynthesis(graphene.Mutation):
     synthesis_post = graphene.Field('assembl.graphql.post.Post')
 
     @staticmethod
-    @abort_transaction_on_exception
+    @utils.abort_transaction_on_exception
     def mutate(root, args, context, info):
         if args.get('synthesis_type') == models.idea_graph_view.FULLTEXT_SYNTHESIS_TYPE:
             cls = models.FullTextSynthesis
@@ -135,27 +136,12 @@ class CreateSynthesis(graphene.Mutation):
         with cls.default_db.no_autoflush as db:
             kwargs = {}
             user_id = context.authenticated_userid
-            body_langstring = langstring_from_input_entries(
-                args.get('body_entries')
-            )
-            if body_langstring is not None:
-                kwargs['body'] = body_langstring
 
-            subject_langstring = langstring_from_input_entries(
-                args.get('subject_entries')
-            )
-            if subject_langstring is not None:
-                kwargs['subject'] = subject_langstring
-
-            introduction_langstring = langstring_from_input_entries(
-                args.get('introduction_entries')
-            )
-            kwargs['introduction'] = introduction_langstring or LangString.EMPTY()
-
-            conclusion_langstring = langstring_from_input_entries(
-                args.get('conclusion_entries')
-            )
-            kwargs['conclusion'] = conclusion_langstring or LangString.EMPTY()
+            for langstring_field in ('body', 'subject', 'introduction', 'conclusion'):
+                langstring = langstring_from_input_entries(
+                    args.get(langstring_field + '_entries')
+                )
+                kwargs[langstring_field] = langstring or models.LangString.EMPTY()
 
             post_saobj = post_cls(
                 discussion=discussion,
@@ -168,7 +154,7 @@ class CreateSynthesis(graphene.Mutation):
 
             image = args.get('image')
             if image is not None:
-                new_attachment = create_attachment(
+                new_attachment = utils.create_attachment(
                     discussion,
                     models.PostAttachment,
                     models.AttachmentPurpose.IMAGE.value,
@@ -181,3 +167,53 @@ class CreateSynthesis(graphene.Mutation):
             db.flush()
 
         return CreateSynthesis(synthesis_post=post_saobj)
+
+
+class UpdateSynthesis(graphene.Mutation):
+    __doc__ = docs.UpdateSynthesis.__doc__
+
+    class Input:
+        # Careful, having required=True on a graphene.List only means
+        # it can't be None, having an empty [] is perfectly valid.
+        id = graphene.ID(required=True)
+        body_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateSynthesis.body_entries)
+        subject_entries = graphene.List(LangStringEntryInput, required=True,
+                                        description=docs.CreateSynthesis.subject_entries)
+        image = graphene.String(description=docs.CreateSynthesis.image)
+
+    synthesis_post = graphene.Field('assembl.graphql.post.Post')
+
+    @staticmethod
+    @utils.abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        post_cls = models.SynthesisPost
+
+        synthesis_post_id = utils.get_primary_id(args.get('id'))
+        synthesis_post = post_cls.get(synthesis_post_id)
+
+        discussion = models.Discussion.get(context.matchdict['discussion_id'])
+
+        require_instance_permission(CrudPermissions.UPDATE, synthesis_post, context)
+
+        with post_cls.default_db.no_autoflush as db:
+            for langstring_field in ('body', 'subject', 'introduction', 'conclusion'):
+                field_entries = args.get(langstring_field + '_entries')
+                update_langstring_from_input_entries(
+                    synthesis_post.publishes_synthesis, langstring_field, field_entries)
+
+            # add uploaded image as an attachment to the resource
+            image = args.get('image')
+            if image is not None:
+                utils.update_attachment(
+                    discussion,
+                    models.PostAttachment,
+                    image,
+                    synthesis_post.attachments,
+                    models.AttachmentPurpose.IMAGE.value,
+                    db,
+                    context
+                )
+
+            db.flush()
+
+        return UpdateSynthesis(synthesis_post=synthesis_post)
