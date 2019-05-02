@@ -10,7 +10,7 @@ from invoke.tasks import call
 
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
-    create_venv, fill_template, get_s3_file, get_aws_account_id, delete_foreign_tasks,
+    create_venv, fill_template, get_s3_file, s3_file_exists, get_aws_account_id, delete_foreign_tasks,
     get_venv_site_packages, is_cloud_env)
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
@@ -168,7 +168,7 @@ def setup_aws_default_region(c):
     c.run('aws configure set region ' + region)
 
 
-CELERY_YAML = """_extends: cicd.yaml
+CELERY_YAML = """_extends: terraform.yaml
 supervisor:
   autostart_celery: true
   autostart_celery_notify_beat: true
@@ -184,29 +184,40 @@ def get_aws_invoke_yaml(c, celery=False):
     # This introduces a convention: yaml files
     # for a given amazon account will be stored in
     # s3://assembl-data-{account_id}/{fname}.yaml
-    bucket = 'assembl-data-' + account
+
+    def write_config_to_disk(path, content):
+        with open(path, 'w') as f:
+            f.write(content)
+
     invoke_path = os.path.join(c.config.projectpath, 'invoke.yaml')
-    content = get_s3_file(bucket, 'client_data.yaml', invoke_path)
-    if not content and not celery:
-        content = get_s3_file(bucket, 'cicd.yaml', invoke_path)
-    elif celery:
-        invoke_path = os.path.join(c.config.projectpath, 'cicd.yaml')
-        content = CELERY_YAML
+    bucket = 'assembl-data-' + account
+    account_data_name = 'account_data.yaml'
+    cicd_name = 'cicd.yaml'
+    cicd_path = os.path.join(c.config.projectpath, cicd_name)
+
+    content = None
+    if s3_file_exists(bucket, account_data_name):
+        content = "_extends: %s" % account_data_name
     else:
-        content = '_extends: terraform.yaml\n'
-    with open(invoke_path, 'w') as f:
-        f.write(content)
+        content = "_extends: %s" % cicd_name
+    # Create a top-level invoke.yaml file
+    write_config_to_disk(invoke_path, content)
+
     extends_re = re.compile(r'\b_extends:\s*(\w+\.yaml)')
     match = extends_re.search(content)
     while match:
         key = match.group(1)
+        if celery and key == cicd_name:
+            # In the condition of Celery instance
+            write_config_to_disk(cicd_path, CELERY_YAML)
+            match = extends_re.search(CELERY_YAML)
+            continue
         # assuming local bucket; what if from shared region?
         # maybe look for client_id in bucket name, assume shared otherwise???
         ex_content = get_s3_file(bucket, key)
         if not ex_content:
             break
-        with open(os.path.join(c.config.projectpath, key), 'w') as f:
-            f.write(ex_content)
+        write_config_to_disk(os.path.join(c.config.projectpath, key), ex_content)
         match = extends_re.search(ex_content)
     if not content:
         raise RuntimeError("invoke.yaml was not defined in S3" % account)
