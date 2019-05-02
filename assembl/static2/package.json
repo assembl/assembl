@@ -195,7 +195,7 @@
       "jsx"
     ],
     "transformIgnorePatterns": [
-      "/node_modules/(?!(assembl-editor-utils|assembl-test-editor-utils|draft-js-attachment-plugin|draft-js-link-plugin|draft-js-modal-plugin|hypothesis)/)"
+      "/node_modules/(?!(assembl-editor-utils|assembl-test-editor-utils|draft-js-attachment-plugin|draft-js-link-plugin|draft-js-modal-plugin|draft-js-side-toolbar-plugin|hypothesis)/)"
     ],
     "transform": {
       "\\.(gql|graphql)$": "jest-transform-graphql",

@@ -20,6 +20,7 @@ import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import Helper from '../../common/helper';
 import BackButton from '../../debate/common/backButton';
 import { redirectToPreviousPage } from '../../form/utils';
+import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 
 type Props = {
   client: ApolloClient,
@@ -66,6 +67,17 @@ const CreateSynthesisForm = ({ client, editLocale, lang }: Props) => (
                     <Field name="picture" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
                     <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" " />
                     {/* TODO: add image to the helper */}
+                  </div>
+                  <div className="flex">
+                    <Field
+                      editLocale={editLocale}
+                      name="body"
+                      component={MultilingualRichTextFieldAdapter}
+                      label={I18n.t('debate.syntheses.body')}
+                      withAttachmentButton
+                      withSideToolbar
+                      rows={1000}
+                    />
                   </div>
                 </Section>
               </div>

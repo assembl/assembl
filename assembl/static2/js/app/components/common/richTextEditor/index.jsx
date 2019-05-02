@@ -4,7 +4,11 @@ import { EditorState, RichUtils } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
-
+import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
+import {
+  HeadlineTwoButton,
+  HeadlineThreeButton,
+} from 'draft-js-buttons';
 // from our workspaces
 /* eslint-disable import/no-extraneous-dependencies */
 import createAttachmentPlugin from 'draft-js-attachment-plugin';
@@ -14,6 +18,8 @@ import createModalPlugin from 'draft-js-modal-plugin';
 
 import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
 import { addProtocol } from '../../../utils/linkify';
+import AttachmentButton from 'draft-js-attachment-plugin/src/components/AttachmentButton';
+import LinkButton from 'draft-js-link-plugin/src/components/LinkButton';
 
 type DraftPlugin = any;
 
@@ -24,7 +30,8 @@ type Props = {
   placeholder?: string,
   textareaRef?: Function,
   toolbarPosition: string,
-  withAttachmentButton: boolean
+  withAttachmentButton: boolean,
+  withSideToolbar?: boolean,
 };
 
 type State = {
@@ -41,7 +48,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
   static defaultProps = {
     handleInputFocus: undefined,
     toolbarPosition: 'top',
-    withAttachmentButton: false
+    withAttachmentButton: false,
+    withSideToolbar: false
   };
 
   constructor(props: Props): void {
@@ -60,41 +68,54 @@ export default class RichTextEditor extends React.Component<Props, State> {
     const { LinkButton } = linkPlugin;
 
     const components = {};
+    components.Modal = Modal;
     const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
     const plugins = [linkPlugin];
+
     if (props.withAttachmentButton) {
       const attachmentPlugin = createAttachmentPlugin({
         ...modalConfig
       });
-      const { AttachmentButton, Attachments } = attachmentPlugin;
+      const {AttachmentButton, Attachments} = attachmentPlugin;
       toolbarStructure.push(AttachmentButton);
       plugins.push(attachmentPlugin);
       components.Attachments = Attachments;
     }
+    if (!!props.withSideToolbar) {
+      const sideToolbarPlugin = createSideToolbarPlugin({
+        structure: toolbarStructure
+      });
+      plugins.push(sideToolbarPlugin);
 
-    const staticToolbarPlugin = createToolbarPlugin({
-      structure: toolbarStructure,
-      // we need this for toolbar plugin to add css classes to buttons and toolbar
-      theme: {
-        buttonStyles: {
-          active: 'active',
-          button: 'btn btn-default',
-          buttonWrapper: 'btn-group'
-        },
-        toolbarStyles: {
-          toolbar: classNames('editor-toolbar', props.toolbarPosition)
+      const {SideToolbar} = sideToolbarPlugin;
+      this.components = {
+        SideToolbar: SideToolbar,
+        ...components
+      };
+    } else {
+      const staticToolbarPlugin = createToolbarPlugin({
+        structure: toolbarStructure,
+        // we need this for toolbar plugin to add css classes to buttons and toolbar
+        theme: {
+          buttonStyles: {
+            active: 'active',
+            button: 'btn btn-default',
+            buttonWrapper: 'btn-group'
+          },
+          toolbarStyles: {
+            toolbar: classNames('editor-toolbar', props.toolbarPosition)
+          }
         }
-      }
-    });
-    plugins.push(staticToolbarPlugin);
+      });
+      plugins.push(staticToolbarPlugin);
 
+      const { Toolbar } = staticToolbarPlugin;
+      this.components = {
+        Toolbar: Toolbar,
+        ...components
+      };
+    }
     this.plugins = plugins;
-    const { Toolbar } = staticToolbarPlugin;
-    this.components = {
-      Modal: Modal,
-      Toolbar: Toolbar,
-      ...components
-    };
 
     this.state = {
       editorHasFocus: false
@@ -152,7 +173,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
   render() {
     const { editorState, onChange, placeholder, textareaRef } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const { Attachments, Modal, Toolbar } = this.components;
+    const {Attachments, Modal, SideToolbar, Toolbar} = this.components;
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
@@ -180,8 +201,19 @@ export default class RichTextEditor extends React.Component<Props, State> {
           we have to move toolbar in css for now since there is a bug in draft-js-plugin
           It should be fixed in draft-js-plugin v3
          */}
-        <Toolbar />
-        {Attachments ? <Attachments /> : null}
+        {!!Toolbar ? <Toolbar/> : ''}
+        {!!SideToolbar ? <SideToolbar
+          children={(externalProps) => (
+          <div>
+            <HeadlineTwoButton {...externalProps} />
+            <HeadlineThreeButton {...externalProps} />
+            <BoldButton {...externalProps} />
+            <ItalicButton {...externalProps} />
+            <UnorderedListButton {...externalProps} />
+            <AttachmentButton  {...externalProps} />
+            {/*<LinkButton {...externalProps} />*/}
+          </div>)}/> : ''}
+        {Attachments ? <Attachments/> : null}
       </div>
     );
   }

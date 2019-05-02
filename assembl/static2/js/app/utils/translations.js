@@ -395,6 +395,7 @@ const Translations = {
         picture: "Image de l'encarté de la synthèse",
         urlHelper: "Insérez l'URL de votre story sur storychief",
         pictureHelper: "Cette image illustrera votre synthèse dans la page des synthèses",
+        body: "Le texte de la synthèse",
         deleteSucessMessage: "La synthèse a bien été supprimée",
         deleteSynthesisTooltip: "Supprimer la synthèse",
         editSynthesisTooltip: "Editer la synthèse"
@@ -1457,6 +1458,7 @@ const Translations = {
         picture: "Picture of the synthesis' frame",
         urlHelper: "Insert the url of your story on storychief",
         pictureHelper: "This is the picture that will be shown to illustrate your synthesis in the syntheses page",
+        body: "The synthesis body",
         deleteSuccessMessage: "The synthesis has been successfully deleted",
         deleteSynthesisTooltip: "Delete the synthesis",
         editSynthesisTooltip: "Edit the synthesis"

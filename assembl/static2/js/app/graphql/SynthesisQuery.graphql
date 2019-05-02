@@ -1,59 +1,7 @@
-#import "./fragments/IdeaMessageColumn.graphql"
+#import "./fragments/SynthesisPost.graphql"
 
 query SynthesisQuery($id: ID!, $lang: String) {
   synthesisPost: node(id: $id) {
-    id
-    ... on Post {
-      publishesSynthesis {
-        ... on Synthesis {
-          id
-          subject(lang: $lang)
-          introduction(lang: $lang)
-          conclusion(lang: $lang)
-          creationDate
-          img {
-            externalUrl
-          }
-          ideas {
-            ... on Idea {
-              id
-              ancestors
-              title(lang: $lang)
-              synthesisTitle(lang: $lang)
-              live {
-                ... on Idea {
-                  id
-                  order
-                  numPosts
-                  numContributors
-                  messageColumns {
-                    ...IdeaMessageColumn
-                  }
-                  messageViewOverride
-                  img {
-                    externalUrl
-                  }
-                  posts {
-                    edges {
-                      node {
-                        ... on Post {
-                          sentimentCounts {
-                            like
-                            disagree
-                            dontUnderstand
-                            moreInfo
-                          }
-                          publicationState
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
+    ...SynthesisPost
   }
 }

@@ -3,13 +3,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router';
-import { Localize, Translate } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 
 import { get } from '../utils/routeMap';
 import { browserHistory } from '../router';
-import { CLASS_NAME_GENERATOR } from '../utils/cardList';
 import Section from '../components/common/section';
-import Card from '../components/common/card';
 import SynthesesList from '../components/synthesis/synthesesList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 
@@ -75,7 +73,8 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
   }
 
   render() {
-    const { syntheses, slug, hasSyntheses } = this.props;
+    let { syntheses, slug, hasSyntheses } = this.props;
+    hasSyntheses = true;
     const createSynthesisRoute = get('createSynthesis', { slug: slug });
     return (
       <Section title="debate.syntheses.summary" translate>
