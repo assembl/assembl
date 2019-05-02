@@ -287,6 +287,17 @@ def get_s3_file(bucket, key, destination=None, region=None):
         return None
 
 
+def s3_file_exists(bucket, key):
+    import boto3
+    import botocore
+    s3 = boto3.resource('s3')
+    try:
+        s3.Object(bucket, key).load()
+        return True
+    except botocore.exceptions.ClientError:
+        return False
+
+
 @task()
 def create_venv(c, path=None):
     # note that here, we do not depend on setup_ctx
@@ -316,6 +327,7 @@ def add_github_bot_ssh_keys(c, private_key):
             print("The provided key was not found!")
     else:
         c.run('echo "$GITHUB_BOT_SSH_KEY" | tr -d \'\r\' | ssh-add - > /dev/null')
+
 
 
 def delete_foreign_tasks(locals):
