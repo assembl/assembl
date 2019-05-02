@@ -2,11 +2,8 @@ _extends: base_env.yaml
 ini_files: production.ini no_sentry.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
 DEFAULT:
   db_user: assembl_user
-  # temporary
-  sentry_host:
+  sentry_host: sentry-aws.bluenove.com
 hosts: localhost
-_internal:
-  webmaster_user:
 theme_base: "https://s3-eu-west-1.amazonaws.com/bluenove-client-themes/default/"
 attachment_service: s3
 celery_tasks.broker: sqs://
@@ -49,11 +46,10 @@ uwsgi:
   stats: :3002
   stats-http: 1
 
-# temporary
 public_port: 80
 accept_secure_connection: false
 require_secure_connection: false
-piwik_host:
+piwik_host: stats.bluenove.com
 csp_header: |-
   default-src 'self' www.bugherd.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com *.bugherd.com *.cloudfront.net; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com www.bugherd.com *.coggle.it mindjet.com *.mindmanager.com; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com www.bugherd.com *.pusher.com bugherd-attachments.s3.amazonaws.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com www.bugherd.com *.cloudfront.net s3-eu-west-1.amazonaws.com; font-src 'self' data: fonts.gstatic.com www.bugherd.com s3-eu-west-1.amazonaws.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net img.youtube.com www.bugherd.com
 wheelhouse: s3://bluenove-assembl-wheelhouse
