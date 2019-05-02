@@ -1,0 +1,20 @@
+#import "../fragments/SynthesisPost.graphql"
+
+mutation createSynthesis(
+  $image: String
+  $lang: String
+  $bodyEntries: [LangStringEntryInput]!
+  $subjectEntries: [LangStringEntryInput]!
+  $synthesisType: SynthesisTypes!
+) {
+  createSynthesis(
+    image: $image
+    bodyEntries: $bodyEntries
+    subjectEntries: $subjectEntries
+    synthesisType: $synthesisType
+  ) {
+    synthesisPost {
+      ...SynthesisPost
+    }
+  }
+}
