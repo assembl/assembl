@@ -1,3 +1,4 @@
+{% block http_server %}
 {% if require_secure_connection %}
 server {
     listen   80;
@@ -8,14 +9,18 @@ server {
     return 301 https://$host$request_uri;
 }
 {% endif %}
+{% endblock %}
 
+{% block url_metadata_server %}
 {% if url_metadata_host %}
 upstream urlmetadata {
     server {{url_metadata_host}}:5000;
 }
 {% endif %}
+{% endblock %}
 
 server {
+  {% block ssl_configuration %}
   {% if accept_secure_connection %}
     listen 443 ssl http2;
     {% if nginx_ipv6 %}
@@ -42,7 +47,6 @@ server {
     {% if ssl_dhparam %}
     ssl_dhparam {{ ssl_dhparam }};
     {% endif %}
-
   {% endif %}
   {% if not require_secure_connection %}
     listen    80;
@@ -50,10 +54,13 @@ server {
     listen   [::]:80;
     {% endif %}
   {% endif %}
+  {% endblock %}
 
+  {% block headers %}
     add_header x-xss-protection "1; mode=block" always;
     add_header x-frame-options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
+  {% endblock %}
 
     server_tokens off;
     {% if csp_header %}
@@ -85,6 +92,7 @@ server {
     }
     {% endif %}
 
+    {% block url_metadata_configuration %}
     {% if url_metadata_host %}
     location /urlmetadata/ {
         proxy_http_version 1.1;
@@ -100,7 +108,9 @@ server {
         proxy_pass http://urlmetadata;
     }
     {% endif %}
+    {% endblock %}
 
+    {% block location_static %}
     location /static {
         #Do NOT put something like "expires modified +1h;" here, it WILL cause problems when deploying a new version.
         #Nor will it help your performance after the first hour...
@@ -113,6 +123,7 @@ server {
         {% endif %}
     }
 
+    {% block location_private_uploads %}
     location ~ ^/private_uploads/(.*) {
       internal;
       {% if attachment_service=='hashfs' %}
@@ -130,8 +141,10 @@ server {
         add_header Content-Disposition $upstream_http_content_disposition;
         proxy_max_temp_file_size 0;
       {% endif %}
+      {% endblock %}
     }
 
+    {% block location_base %}
     location / {
         include uwsgi_params;
         uwsgi_read_timeout 5m;
@@ -141,11 +154,13 @@ server {
         uwsgi_pass unix://{{ projectpath }}/var/run/uwsgi.sock;
         {% endif %}
     }
+    {% endblock %}
 
-  # So files uploaded to the database are not artificailly limited by nginx
+  # So files uploaded to the database are not artificially limited by nginx
   client_max_body_size 500M;
 
   # Save some bandwidth
+  {% block gzip_options %}
   gzip on;
   gzip_http_version 1.1;
   gzip_vary on;
@@ -153,4 +168,5 @@ server {
   gzip_proxied any;
   #text/html is implicit
   gzip_types text/plain text/css application/json application/ld+json application/x-javascript text/xml application/xml application/xml+rss text/javascript application/javascript text/x-js image/svg+xml font/truetype font/opentype application/vnd.ms-fontobject;
+  {% endblock %}
 }
