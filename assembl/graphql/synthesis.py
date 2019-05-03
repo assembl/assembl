@@ -217,3 +217,25 @@ class UpdateSynthesis(graphene.Mutation):
             db.flush()
 
         return UpdateSynthesis(synthesis_post=synthesis_post)
+
+
+class DeleteSynthesis(graphene.Mutation):
+    __doc__ = docs.DeleteSynthesis.__doc__
+
+    class Input:
+        id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    @utils.abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        synthesis_post_id = utils.get_primary_id(args.get('id'))
+        synthesis_post = models.SynthesisPost.get(synthesis_post_id)
+
+        require_instance_permission(CrudPermissions.DELETE, synthesis_post, context)
+
+        synthesis_post.db.delete(synthesis_post)
+        synthesis_post.db.flush()
+
+        return DeleteSynthesis(success=True)

@@ -236,6 +236,11 @@ class UpdateSynthesis:
     image = CreateSynthesis.image
 
 
+class DeleteSynthesis:
+    __doc__ = """A mutation that enables the deletion of a Synthesis."""
+    id = Default.node_id % "Synthesis post" + " This is the synthesis post identifier to be deleted."
+
+
 class TextFragmentIdentifier:
     __doc__ = """A text fragment metadata that describes the positioning of the fragment both in the DOM and its position in the string of text."""
     xpath_start = """The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned."""

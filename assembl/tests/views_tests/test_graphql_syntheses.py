@@ -165,3 +165,16 @@ def test_graphql_update_synthesis(graphql_registry, graphql_request, fulltext_sy
     new_synthesis = new_synthesis_post.publishes_synthesis
     assert new_synthesis.body.closest_entry('en').value == 'Text in english v2'
     assert new_synthesis.body.closest_entry('fr').value == 'Texte en français v2'
+
+
+def test_graphql_delete_synthesis(graphql_registry, graphql_request, fulltext_synthesis_post):
+    fulltext_synthesis_post_id = to_global_id('Post', fulltext_synthesis_post.id)
+    res = schema.execute(
+        graphql_registry['deleteSynthesis'],
+        variable_values={
+            "id": fulltext_synthesis_post_id
+        },
+        context_value=graphql_request)
+    assert res.errors is None
+    assert res.data['deleteSynthesis']['success'] is True
+    assert SynthesisPost.get(fulltext_synthesis_post.id) is None

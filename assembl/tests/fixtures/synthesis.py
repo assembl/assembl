@@ -3,10 +3,11 @@ import pytest
 
 
 @pytest.fixture(scope="function")
-def fulltext_synthesis_post(request, discussion, test_session):
+def fulltext_synthesis_post(request, discussion, moderator_user, test_session):
     from assembl import models
     synthesis_post = models.SynthesisPost(
         discussion=discussion,
+        creator=moderator_user,
         publishes_synthesis=models.FullTextSynthesis(
             discussion=discussion,
             subject=models.LangString.create(u"a synthesis", "en"),
