@@ -37,22 +37,22 @@ const AddLinkForm = ({ initialValues, onSubmit }: Props) => (
     render={({ handleSubmit }) => (
       <BootstrapForm componentClass="div" horizontal>
         <FormGroup controlId="url">
-          <Col componentClass={ControlLabel} sm={2}>
+          <Col componentClass={ControlLabel} sm={3}>
             <div className="richtext-label">
               <Translate value="common.editor.linkPlugin.url" />
             </div>
           </Col>
-          <Col sm={10}>
+          <Col sm={9}>
             <Field name="url" component={FormControlAdapter} />
           </Col>
         </FormGroup>
         <FormGroup controlId="text">
-          <Col componentClass={ControlLabel} sm={2}>
+          <Col componentClass={ControlLabel} sm={3}>
             <div className="richtext-label">
               <Translate value="common.editor.linkPlugin.text" />
             </div>
           </Col>
-          <Col sm={10}>
+          <Col sm={9}>
             <Field name="text" component={FormControlAdapter} />
           </Col>
         </FormGroup>

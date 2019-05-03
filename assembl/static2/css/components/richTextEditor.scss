@@ -101,13 +101,19 @@
   }
 
   .insertion-box {
+    .richtext-label {
+      white-space: nowrap;
+    }
+
     background-color: $white;
     min-height: 200px;
     position: fixed;
     top: 25%;
     left: 50%;
     transform: translate(-50%);
-    width: 700px;
+    width: 50%;
+    min-width: 320px;
+    max-width: 550px;
     z-index: 1040;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;

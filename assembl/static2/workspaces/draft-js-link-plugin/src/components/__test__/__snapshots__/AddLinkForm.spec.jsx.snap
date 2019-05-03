@@ -8,7 +8,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
     className="form-group"
   >
     <label
-      className="col-sm-2 control-label"
+      className="col-sm-3 control-label"
       htmlFor="url"
     >
       <div
@@ -20,7 +20,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
       </div>
     </label>
     <div
-      className="col-sm-10"
+      className="col-sm-9"
     >
       <input
         className="form-control"
@@ -55,7 +55,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
     className="form-group"
   >
     <label
-      className="col-sm-2 control-label"
+      className="col-sm-3 control-label"
       htmlFor="text"
     >
       <div
@@ -67,7 +67,7 @@ exports[`AddLinkForm component should render a form to add a link 1`] = `
       </div>
     </label>
     <div
-      className="col-sm-10"
+      className="col-sm-9"
     >
       <input
         className="form-control"
