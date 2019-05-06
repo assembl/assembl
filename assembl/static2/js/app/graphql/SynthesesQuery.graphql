@@ -9,6 +9,7 @@ query SynthesesQuery($lang: String!) {
       }
       post {
         id
+        publicationState
       }
     }
   }

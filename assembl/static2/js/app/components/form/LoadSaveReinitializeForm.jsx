@@ -14,30 +14,28 @@ import { Form } from 'react-final-form';
 import type { MutationsPromises, SaveStatus } from './types.flow';
 import { displayConfirmationModal } from '../../utils/administration/displayConfirmationModal';
 
-type TOriginalValues = {| [string]: any |};
+export type TValues = { [string]: any };
 
-export type TInitialValues = { [string]: any };
-
-type Props = {
-  load: (fetchPolicy: FetchPolicy) => Promise<TOriginalValues>,
+type Props<T> = {
+  load: (fetchPolicy: FetchPolicy) => Promise<T>,
   loading: React.Node,
-  postLoadFormat: ?(TOriginalValues) => TInitialValues,
-  createMutationsPromises: (TInitialValues, TInitialValues) => MutationsPromises,
+  postLoadFormat: ?(T) => T,
+  createMutationsPromises: (T, T) => MutationsPromises,
   save: MutationsPromises => Promise<SaveStatus>,
-  afterSave?: TInitialValues => void,
+  afterSave?: T => void,
   mutators?: { [string]: Mutator },
   warningMessageKey?: string,
   withWarningModal?: boolean,
   warningValues?: Array<string>
 };
 
-type State = {
-  initialValues: ?TInitialValues,
+type State<T> = {
+  initialValues: ?T,
   isLoading: boolean,
-  originalValues: ?TOriginalValues
+  originalValues: ?T
 };
 
-export default class LoadSaveReinitializeForm extends React.Component<Props, State> {
+export default class LoadSaveReinitializeForm extends React.Component<Props<TValues>, State<TValues>> {
   state = {
     isLoading: false,
     originalValues: undefined,
@@ -59,7 +57,7 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     });
   };
 
-  runMutations = async (values: TInitialValues) => {
+  runMutations = async (values: TValues) => {
     const { createMutationsPromises, save, afterSave } = this.props;
     if (this.state.initialValues) {
       const mutationPromises = createMutationsPromises(values, this.state.initialValues);
@@ -72,7 +70,7 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     }
   };
 
-  save = (values: TInitialValues) => {
+  save = (values: TValues) => {
     const { withWarningModal, warningValues, warningMessageKey } = this.props;
     const { initialValues } = this.state;
     // We check if any of the values that need to be warned about have been changed

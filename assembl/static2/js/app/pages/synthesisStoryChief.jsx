@@ -2,9 +2,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Section from '../components/common/section';
+import { Col, Grid, Row } from 'react-bootstrap';
+import Header from './synthesis';
 
 type Props = {
-  title: string,
+  subject: string,
   url: string
 };
 
@@ -12,30 +14,23 @@ class Synthesis extends React.Component<Props> {
   handleLoad = () => {};
 
   render() {
-    const { title, url } = this.props;
+    const { subject, body } = this.props;
     return (
-      <Section title={title}>
-        <div className="synthesis">
-          <iframe
-            ref={(iframe) => {
-              if (iframe) {
-                this.iframe = iframe;
-              }
-            }}
-            src={url}
-            title="storychief-iframe"
-            frameBorder="0"
-            className="synthesis-iframe"
-          />
-        </div>
-      </Section>
+      <Header title={subject} imgUrl="" type="synthesis"/>
+            <Section title="" className="synthesis-block">
+              <Row>
+                <Col mdOffset={3} md={8} smOffset={1} sm={10}>
+                  <div dangerouslySetInnerHTML={{ __html: body }}/>
+                </Col>
+              </Row>
+            </Section>
     );
   }
 }
 
 const mockProps = () => ({
   title: 'Un bon titre de synthèse',
-  url: 'https://bluenovev3.storychief.io/culture-manager-phase-2'
+  body: '<p>OMG</p>'
 });
 
 export default connect(mockProps)(Synthesis);

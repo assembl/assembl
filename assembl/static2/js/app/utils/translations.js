@@ -306,7 +306,7 @@ const Translations = {
       title: "synthèse",
       seeConversation: "Voir la conversation",
       noSynthesisYet: "Il n'y a pas encore de synthèse disponible.",
-      tableOfContents: "Sommaire"
+      tableOfContents: "Sommaire",
     },
     common: {
       attachments: {
@@ -398,7 +398,8 @@ const Translations = {
         body: "Le texte de la synthèse",
         deleteSucessMessage: "La synthèse a bien été supprimée",
         deleteSynthesisTooltip: "Supprimer la synthèse",
-        editSynthesisTooltip: "Editer la synthèse"
+        editSynthesisTooltip: "Editer la synthèse",
+        successSave: "La synthèse a été sauvegardée",
       },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
@@ -1461,7 +1462,8 @@ const Translations = {
         body: "The synthesis body",
         deleteSuccessMessage: "The synthesis has been successfully deleted",
         deleteSynthesisTooltip: "Delete the synthesis",
-        editSynthesisTooltip: "Edit the synthesis"
+        editSynthesisTooltip: "Edit the synthesis",
+        successSave: "Synthesis successfully saved",
       },
       validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {

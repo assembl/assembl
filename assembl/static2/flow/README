@@ -1,12 +1,5 @@
-The graphql_types.flow.js was generated with the following commands:
+The graphql_types.flow.js was generated with the following command to run from the project root:
 
-    assembl-graphql-schema-json local.ini
-    cd assembl/static2
-    yarn add apollo-codegen@0.19.1
-    ./node_modules/.bin/apollo-codegen generate js/app/graphql/*.graphql js/app/graphql/fragments/*.graphql js/app/graphql/mutations/*.graphql --schema /tmp/schema.json --target flow --output flow/graphql_types.flow.js
-    ./node_modules/.bin/prettier-eslint --write flow/graphql_types.flow.js
-    git checkout package.json yarn.lock
-    rm -rf node_modules/
-    yarn
+    assembl/static2/scripts/generate-graphql-types.sh
 
 Note that dependencies of apollo-codegen conflict with our current package versions, hence the ungainly yarn maneuver.

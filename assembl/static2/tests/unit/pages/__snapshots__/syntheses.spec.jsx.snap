@@ -185,7 +185,7 @@ exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
       className="content-section margin-l"
     >
       <div
-        className="center create-synthesis"
+        className="center create-synthesis-button"
       >
         <a
           className="button-submit button-dark"

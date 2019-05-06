@@ -8,11 +8,10 @@ import { I18n } from 'react-redux-i18n';
 import SynthesisPreview from './synthesisPreview';
 import { displayAlert } from '../../utils/utilityManager';
 import { connectedUserIsAdmin } from '../../utils/permissions';
-import { get } from '../../utils/routeMap';
-import { getDiscussionSlug } from '../../utils/globalFunctions';
+import type { SynthesisItem } from './types.flow';
 
 export type Props = {
-  syntheses: Array<SynthesisPreview>
+  syntheses: Array<SynthesisItem>
 };
 
 const masonryOptions = {
@@ -25,11 +24,11 @@ const deleteSynthesisHandler = () => {
   displayAlert('success', I18n.t('debate.syntheses.deleteSuccessMessage'));
 };
 
-const publicationStateCreationDateComparator = (a, b) => {
+const publicationStateCreationDateComparator = (a: SynthesisItem, b: SynthesisItem) => {
   const aDate: string = a.creationDate;
   const bDate: string = b.creationDate;
-  const aState = a.publicationState;
-  const bState = b.publicationState;
+  const aState = a.post.publicationState;
+  const bState = b.post.publicationState;
 
   if (aState === bState) {
     if (aDate > bDate) return -1;
@@ -40,24 +39,22 @@ const publicationStateCreationDateComparator = (a, b) => {
 };
 
 const SynthesesList = ({ syntheses }: Props) => {
-  const childElements = syntheses.sort(publicationStateCreationDateComparator).reduce((result, synthesis) => {
-    const userCanEdit = connectedUserIsAdmin() || false;
-    const userCanDelete = connectedUserIsAdmin() || false;
-    const slug = getDiscussionSlug();
-
-    result.push(
-      <Animated key={synthesis.id} preset="scalein">
+  const childElements = syntheses
+    .slice()  // copy before sort
+    .sort(publicationStateCreationDateComparator)
+    .map((synthesis) => {
+      const userCanEdit = connectedUserIsAdmin() || false;
+      const userCanDelete = connectedUserIsAdmin() || false;
+      return <Animated key={synthesis.id} preset="scalein">
         <SynthesisPreview
-          {...synthesis}
-          link={get('newSynthesis', { slug: slug })}
+          synthesis={synthesis}
           deleteSynthesisHandler={deleteSynthesisHandler}
           userCanDelete={userCanDelete}
           userCanEdit={userCanEdit}
         />
       </Animated>
-    );
-    return result;
-  }, []);
+        ;
+    });
 
   return (
     <section className="fictions-section">

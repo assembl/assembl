@@ -17,6 +17,39 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       componentClass="div"
       fluid={true}
     >
+      <Section
+        className="synthesis-block"
+        containerAdditionalClassNames={Array []}
+        displayIndex={false}
+        index={1}
+        indexGenerator={[Function]}
+        innerRef={[Function]}
+        parents={Array []}
+        title=""
+        translate={false}
+      >
+        <Row
+          bsClass="row"
+          componentClass="div"
+        >
+          <Col
+            bsClass="col"
+            componentClass="div"
+            md={8}
+            mdOffset={3}
+            sm={10}
+            smOffset={1}
+          >
+            <div
+              dangerouslySetInnerHTML={
+                Object {
+                  "__html": "<p>yolo</p>",
+                }
+              }
+            />
+          </Col>
+        </Row>
+      </Section>
       <Row
         bsClass="row"
         className="background-grey synthesis-tree"
@@ -59,6 +92,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
               ]
             }
             show={false}
+            synthesisPostId="yop"
           />
         </Col>
         <Col

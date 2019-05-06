@@ -1,7 +1,0 @@
-#import "./fragments/SynthesisPost.graphql"
-
-query SynthesisQuery($id: ID!, $lang: String) {
-  synthesisPost: node(id: $id) {
-    ...SynthesisPost
-  }
-}

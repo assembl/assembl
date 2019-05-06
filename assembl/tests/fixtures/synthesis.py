@@ -39,6 +39,9 @@ def fulltext_synthesis_post_with_image(request, discussion, moderator_user, simp
             body=models.LangString.create(u"Lorem ipsum dolor sit amet", "en"),
         )
     )
+
+    synthesis_post.publishes_synthesis.subject.add_value("une synthèse avec image", "fr")
+    synthesis_post.publishes_synthesis.body.add_value("Laurème ipsoume dolaure sitamette", "fr")
     synthesis_image = models.PostAttachment(
         discussion=discussion,
         document=simple_file,

@@ -1,0 +1,21 @@
+#import "./LangString.graphql"
+# Synthesis query for administration form
+
+fragment MultilingualSynthesisPost on Post {
+  id
+  publishesSynthesis {
+    ... on Synthesis {
+      id
+      synthesisType
+      subjectEntries {
+        ...langStringEntry
+      }
+      bodyEntries {
+        ...langStringEntry
+      }
+      img {
+        externalUrl
+      }
+    }
+  }
+}

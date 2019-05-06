@@ -1,0 +1,7 @@
+#import "./fragments/MultilingualSynthesisPost.graphql"
+
+query MultilingualSynthesisQuery($id: ID!) {
+  synthesisPost: node(id: $id) {
+    ...MultilingualSynthesisPost
+  }
+}

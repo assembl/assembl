@@ -4,7 +4,7 @@ import { type ApolloClient, withApollo } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 
-import LoadSaveReinitializeForm, { type TInitialValues } from '../../../form/LoadSaveReinitializeForm';
+import LoadSaveReinitializeForm, { type TValues } from '../../../form/LoadSaveReinitializeForm';
 import SaveButton from '../../saveButton';
 import SectionTitle from '../../sectionTitle';
 import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
@@ -31,7 +31,7 @@ const PersonalizeInterface = ({ client }: Props) => (
         postLoadFormat={postLoadFormat}
         createMutationsPromises={createMutationsPromises(client)}
         save={save}
-        afterSave={(values: TInitialValues) => {
+        afterSave={(values: TValues) => {
           // Update the title and the favicon of the page
           const head = document.head;
           if (head) {

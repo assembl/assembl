@@ -1,4 +1,4 @@
-#import "../fragments/SynthesisPost.graphql"
+#import "../fragments/MultilingualSynthesisPost.graphql"
 
 mutation updateSynthesis(
   $id: ID!

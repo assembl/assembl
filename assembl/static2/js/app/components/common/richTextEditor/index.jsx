@@ -5,21 +5,16 @@ import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
 import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
-import {
-  HeadlineTwoButton,
-  HeadlineThreeButton,
-} from 'draft-js-buttons';
+import { HeadlineThreeButton, HeadlineTwoButton, } from 'draft-js-buttons';
 // from our workspaces
 /* eslint-disable import/no-extraneous-dependencies */
 import createAttachmentPlugin from 'draft-js-attachment-plugin';
 import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
-/* eslint-enable import/no-extraneous-dependencies */
-
 import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
 import { addProtocol } from '../../../utils/linkify';
 import AttachmentButton from 'draft-js-attachment-plugin/src/components/AttachmentButton';
-import LinkButton from 'draft-js-link-plugin/src/components/LinkButton';
+/* eslint-enable import/no-extraneous-dependencies */
 
 type DraftPlugin = any;
 
@@ -43,7 +38,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
   plugins: Array<DraftPlugin>;
 
-  components: { [string]: React.ComponentType<*> };
+  components: { [ string ]: React.ComponentType<*> };
 
   static defaultProps = {
     handleInputFocus: undefined,
@@ -69,14 +64,14 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
     const components = {};
     components.Modal = Modal;
-    const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
-    const plugins = [linkPlugin];
+    const toolbarStructure = [ BoldButton, ItalicButton, UnorderedListButton, LinkButton ];
+    const plugins = [ linkPlugin ];
 
     if (props.withAttachmentButton) {
       const attachmentPlugin = createAttachmentPlugin({
         ...modalConfig
       });
-      const {AttachmentButton, Attachments} = attachmentPlugin;
+      const { AttachmentButton, Attachments } = attachmentPlugin;
       toolbarStructure.push(AttachmentButton);
       plugins.push(attachmentPlugin);
       components.Attachments = Attachments;
@@ -87,7 +82,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
       });
       plugins.push(sideToolbarPlugin);
 
-      const {SideToolbar} = sideToolbarPlugin;
+      const { SideToolbar } = sideToolbarPlugin;
       this.components = {
         SideToolbar: SideToolbar,
         ...components
@@ -173,7 +168,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
   render() {
     const { editorState, onChange, placeholder, textareaRef } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const {Attachments, Modal, SideToolbar, Toolbar} = this.components;
+    const { Attachments, Modal, SideToolbar, Toolbar } = this.components;
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
@@ -182,9 +177,9 @@ export default class RichTextEditor extends React.Component<Props, State> {
           ) : (
             <div className="editor-label form-label">&nbsp;</div>
           )}
-          <div className="clear" />
+          <div className="clear"/>
         </div>
-        <Modal />
+        <Modal/>
         <div onClick={this.focusEditor}>
           <Editor
             editorState={editorState}
@@ -204,15 +199,15 @@ export default class RichTextEditor extends React.Component<Props, State> {
         {!!Toolbar ? <Toolbar/> : ''}
         {!!SideToolbar ? <SideToolbar
           children={(externalProps) => (
-          <div>
-            <HeadlineTwoButton {...externalProps} />
-            <HeadlineThreeButton {...externalProps} />
-            <BoldButton {...externalProps} />
-            <ItalicButton {...externalProps} />
-            <UnorderedListButton {...externalProps} />
-            <AttachmentButton  {...externalProps} />
-            {/*<LinkButton {...externalProps} />*/}
-          </div>)}/> : ''}
+            <div>
+              <HeadlineTwoButton {...externalProps} />
+              <HeadlineThreeButton {...externalProps} />
+              <BoldButton {...externalProps} />
+              <ItalicButton {...externalProps} />
+              <UnorderedListButton {...externalProps} />
+              <AttachmentButton  {...externalProps} />
+              {/*<LinkButton {...externalProps} />*/}
+            </div>)}/> : ''}
         {Attachments ? <Attachments/> : null}
       </div>
     );

@@ -6,75 +6,30 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 
 import { get } from '../utils/routeMap';
-import { browserHistory } from '../router';
 import Section from '../components/common/section';
 import SynthesesList from '../components/synthesis/synthesesList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
-
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
+import type {SynthesisPost} from '../types.flow';
 
 type SynthesesProps = {
-  syntheses: Array<Object>,
+  syntheses: Array<SynthesisPost>,
   slug: string,
   hasSyntheses: boolean
 };
 
-const fakeSyntheses = [
-  {
-    id: '1234',
-    subject: 'Une jolie synthèse',
-    creationDate: '02-03-2019',
-    link: 'http://www.google.com',
-    lang: 'fr',
-    userCanEdit: true,
-    userCanDelete: true,
-    img: 'https://images.pexels.com/photos/1097456/pexels-photo-1097456.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
-  },
-  {
-    id: '4524',
-    subject: 'Une seconde synthèse',
-    creationDate: '01-02-2019',
-    link: 'http://www.google.com',
-    lang: 'fr',
-    userCanEdit: true,
-    userCanDelete: true,
-    img:
-      'https://d2v9y0dukr6mq2.cloudfront.net/video/thumbnail/BKpZoQ4viqlda90c/abstract-dark-blue-background-with-moving-colored-particles_bjfoo46np__F0000.png'
-  },
-  {
-    id: '4624',
-    subject: 'Une troisième synthèse',
-    creationDate: '01-02-2019',
-    link: 'http://www.google.com',
-    lang: 'fr',
-    userCanEdit: true,
-    userCanDelete: true,
-    img: 'https://images.pexels.com/photos/1090977/pexels-photo-1090977.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'
-  },
-  {
-    id: '4522',
-    subject: 'Une quatrième synthèse tant qu\'on y est',
-    creationDate: '01-02-2019',
-    link: 'http://www.google.com',
-    lang: 'fr',
-    userCanEdit: true,
-    userCanDelete: true,
-    img: 'https://images.pexels.com/photos/1895162/pexels-photo-1895162.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260'
-  }
-];
-
 export class DumbSyntheses extends React.Component<SynthesesProps> {
-  componentDidMount() {
-    const { syntheses, slug } = this.props;
-    if (syntheses && syntheses.length === 1) {
-      const firstSynthesis = syntheses[0];
-      browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.post.id, slug: slug })}`);
-    }
-  }
+  // componentDidMount() {
+  //   // redirect to synthesis if there is only one
+  //   const { syntheses, slug } = this.props;
+  //   if (syntheses && syntheses.length === 1) {
+  //     const firstSynthesis = syntheses[0];
+  //     browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.post.id, slug: slug })}`);
+  //   }
+  // }
 
   render() {
-    let { syntheses, slug, hasSyntheses } = this.props;
-    hasSyntheses = true;
+    const { syntheses, slug, hasSyntheses } = this.props;
     const createSynthesisRoute = get('createSynthesis', { slug: slug });
     return (
       <Section title="debate.syntheses.summary" translate>
@@ -88,7 +43,7 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
             <Translate value="synthesis.noSynthesisYet" />
           </h2>
         ) : (
-          <SynthesesList syntheses={fakeSyntheses} />
+          <SynthesesList syntheses={syntheses} />
         )}
       </Section>
     );

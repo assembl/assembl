@@ -497,14 +497,18 @@ LangString.setup_ownership_load_event(
 class FullTextSynthesis(Synthesis):
 
     body_id = Column(
-        Integer(), ForeignKey(LangString.id))
+        Integer(),
+        ForeignKey(LangString.id),
+        nullable=True,
+    )
 
     body = relationship(
         LangString,
         lazy="subquery", single_parent=True,
         primaryjoin=body_id == LangString.id,
         backref=backref("synthesis_from_body", lazy="dynamic"),
-        cascade="all, delete-orphan")
+        cascade="all, delete-orphan",
+    )
 
     __mapper_args__ = {
         'polymorphic_identity': 'fulltext_synthesis',

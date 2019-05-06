@@ -6,3 +6,4 @@ js/app/components/styleguide/*
 package.json
 webpack.config.js
 webpack.dev.config.js
+workspaces/draft-js-side-toolbar-plugin

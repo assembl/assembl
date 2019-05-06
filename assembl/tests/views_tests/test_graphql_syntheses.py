@@ -17,39 +17,33 @@ def test_graphql_get_syntheses(graphql_request,
 
 
 def test_graphql_get_synthesis(graphql_request,
+                               graphql_registry,
                                user_language_preference_en_cookie,
                                synthesis_in_syntheses):
     synthesis_id = synthesis_in_syntheses.data['syntheses'][0]['id']
     res = schema.execute(
-        u"""query SynthesisQuery($id: ID!, $lang: String) {
-            synthesis: node(id: $id) {
-              ... on Synthesis {
-                id
-                subject(lang: $lang)
-                ideas {
-                  ... on Idea {
-                    id
-                    live {
-                      ... on Idea {
-                        id
-                        img { externalUrl }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        """,
+        graphql_registry['SynthesisQuery'],
         context_value=graphql_request,
-        variable_values={
-             "id": synthesis_id,
-            "lang": "en"
-        })
+        variable_values={"id": synthesis_id, "lang": "en"},
+    )
     assert len(res.data) == 1
     synthesis = res.data['synthesis']
     assert synthesis['subject'] == 'subject EN'
     assert len(synthesis['ideas']) == 2
+
+
+def test_graphql_get_multilingual_synthesis(graphql_request, graphql_registry, fulltext_synthesis_post_with_image):
+    synthesis_post_id = to_global_id('Post', fulltext_synthesis_post_with_image.id)
+    res = schema.execute(
+        graphql_registry['MultilingualSynthesisQuery'],
+        context_value=graphql_request,
+        variable_values={"id": synthesis_post_id},
+    )
+    assert res.errors is None
+    assert len(res.data) == 1
+    synthesis = res.data['synthesisPost']['publishesSynthesis']
+    assert len(synthesis['subjectEntries']) == 2
+    assert synthesis['subjectEntries'][0]['value'] == u'a synthesis with image'
 
 
 def test_graphql_has_syntheses(graphql_request,
@@ -155,16 +149,16 @@ def test_graphql_update_synthesis(graphql_registry, graphql_request, fulltext_sy
     assert res.data['updateSynthesis'] is not None
     assert res.data['updateSynthesis']['synthesisPost']['publishesSynthesis'] is not None
     synthesis = res.data['updateSynthesis']['synthesisPost']['publishesSynthesis']
-    assert synthesis[u'subject'] == u'Ma synthèse v2'
-    assert synthesis[u'body'] == u'Texte en français v2'
+    assert synthesis[u'subject'] == u"Ma synthèse v2"
+    assert synthesis[u'body'] == u"Texte en français v2"
 
     assert '/documents/' in synthesis['img']['externalUrl']
 
     new_synthesis_post = SynthesisPost.get(synthesis_post.id)
     assert new_synthesis_post.attachments[0].document.title == 'new-img.png'
     new_synthesis = new_synthesis_post.publishes_synthesis
-    assert new_synthesis.body.closest_entry('en').value == 'Text in english v2'
-    assert new_synthesis.body.closest_entry('fr').value == 'Texte en français v2'
+    assert new_synthesis.body.closest_entry('en').value == u"Text in english v2"
+    assert new_synthesis.body.closest_entry('fr').value == u"Texte en français v2"
 
 
 def test_graphql_delete_synthesis(graphql_registry, graphql_request, fulltext_synthesis_post):

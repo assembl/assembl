@@ -1,31 +1,31 @@
 // @flow
 import * as React from 'react';
-import { Link } from 'react-router';
-import { Translate, Localize } from 'react-redux-i18n';
+import {Link} from 'react-router';
+import {Translate, Localize} from 'react-redux-i18n';
 import ResponsiveOverlayTrigger from '../common/responsiveOverlayTrigger';
 import EditPostButton from '../debate/common/editPostButton';
 import DeletePostIcon from '../common/icons/deletePostIcon/deletePostIcon';
-import { deleteSynthesisTooltip, editSynthesisTooltip } from '../common/tooltips';
+import {deleteSynthesisTooltip, editSynthesisTooltip} from '../common/tooltips';
+import type {SynthesisItem} from './types.flow';
+import {getDiscussionSlug} from '../../utils/globalFunctions';
+import {get as getLink} from '../../utils/routeMap';
 // import classnames from 'classnames';
 // import DeletePostButton from '../debate/common/deletePostButton';
 
 export type Props = {
-  subject: ?string,
-  creationDate: string,
-  link: string,
+  synthesis: SynthesisItem,
   userCanEdit: boolean,
   userCanDelete: boolean,
-  img: ?string
 };
 
-const SynthesisPreview = ({ img, subject, creationDate, link }: Props) => {
+const SynthesisPreview = ({synthesis}: Props) => {
   const handleEdit = () => {
     // redirect to the storychief edition interface
   };
   const editButton = (
     <li>
       <ResponsiveOverlayTrigger placement="left" tooltip={editSynthesisTooltip}>
-        <EditPostButton handleClick={handleEdit} linkClassName="edit" />
+        <EditPostButton handleClick={handleEdit} linkClassName="edit"/>
       </ResponsiveOverlayTrigger>
     </li>
   );
@@ -35,12 +35,15 @@ const SynthesisPreview = ({ img, subject, creationDate, link }: Props) => {
   const deleteButton = (
     <li>
       <ResponsiveOverlayTrigger placement="left" tooltip={deleteSynthesisTooltip}>
-        <DeletePostIcon />
+        <DeletePostIcon/>
       </ResponsiveOverlayTrigger>
     </li>
   );
 
-  const previewStyle = img ? { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${img})` } : null;
+  const slug = getDiscussionSlug();
+  const link = getLink('synthesis', {synthesisId: synthesis.post.id, slug: slug});
+
+  const previewStyle = synthesis.img ? {backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${synthesis.img.externalUrl})`} : null;
   return (
     <div className="fiction-preview" style={previewStyle}>
       <div className="content-box">
@@ -50,11 +53,11 @@ const SynthesisPreview = ({ img, subject, creationDate, link }: Props) => {
         </ul>
         <Link className="link" to={link}>
           <div className="inner-box">
-            <h3>{subject}</h3>
+            <h3>{synthesis.subject}</h3>
             <p className="info">
               <span className="published-date">
-                <Translate value="debate.syntheses.publishedOn" />
-                <Localize value={creationDate} dateFormat="date.format" />
+                <Translate value="debate.syntheses.publishedOn"/>
+                <Localize value={synthesis.creationDate} dateFormat="date.format"/>
               </span>
             </p>
           </div>
