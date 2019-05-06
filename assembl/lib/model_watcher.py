@@ -190,4 +190,4 @@ def configure_model_watcher(registry, task_name):
         '.model_watcher.BaseModelEventWatcher').split()
     for class_name in class_names:
         cls = resolver.resolve(class_name)
-        registry.registerUtility(cls(), IModelEventWatcher, name=cls.__name__)
+        registry.registerUtility(cls(), IModelEventWatcher, name=class_name)
