@@ -18,6 +18,7 @@ from ..lib import config
 from ..lib import logging
 from ..lib.sentry import capture_exception
 
+
 API_ENDPOINTS = {}
 api_version = config.get("watson_api_version", "2018-09-21")
 log = logging.getLogger()
@@ -191,8 +192,8 @@ def prepare_computation(id):
 def process_post_watson(id, celery=False):
     """Use this entry point to analyze a post from pshell"""
     if celery:
-        from assembl.lib.sqla import get_session_maker
-        if get_session_maker().session_factory.kw['extension']:
+        from assembl.lib.sqla import is_zopish
+        if is_zopish():
             do_it = prepare_computation(id)
         else:
             with transaction.manager:

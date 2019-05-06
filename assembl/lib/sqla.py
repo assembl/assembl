@@ -158,6 +158,7 @@ class TableLockCreationThread(Thread):
         super(TableLockCreationThread, self).__init__()
         self.object_generator = object_generator
         self.lock_table_name = lock_table_name
+        self.lock_id = hash(lock_table_name)
         self.num_attempts = num_attempts
         self.success = None
         self.created = False
@@ -185,10 +186,9 @@ class TableLockCreationThread(Thread):
                         db.commit()
                     tm = CommittingTm(db)
                 with tm:
-                    try:
-                        db.execute("LOCK TABLE %s IN EXCLUSIVE MODE NOWAIT" % (
-                            self.lock_table_name,))
-                    except OperationalError as e:
+                    got_lock = (db.execute("SELECT pg_try_advisory_xact_lock(%d)" % (
+                            self.lock_id,)).first(), )
+                    if not got_lock:
                         log.info("Could not get the table lock in attempt %d"
                                  % (num,))
                         sleep(random() / 10.0)
@@ -199,9 +199,12 @@ class TableLockCreationThread(Thread):
                     for ob in to_be_created:
                         self.created = True
                         db.add(ob)
-                # implicit commit of subtransaction
-                # We _should_ get the transient error reraised if we keep failing.
+                # implicit commit of subtransaction clears the lock
                 self.success = True
+                break
+            else:
+                log.error("Never obtained lock")
+                self.success = False
         except ObjectNotUniqueError as e:
             # Should not happen anymore. Log if so.
             self.success = False
