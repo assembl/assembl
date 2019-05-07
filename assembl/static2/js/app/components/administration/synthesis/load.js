@@ -7,20 +7,20 @@ import type { MultilingualSynthesisPost, SynthesisFormValues } from './types.flo
 export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy, id: ?string): Promise<{ synthesisPost: MultilingualSynthesisPost | null }> => {
   if (!id)
     return Promise.resolve({ synthesisPost: null });
-
-  const { data } = await client.query({
-    query: MultilingualSynthesisQuery,
-    variables: {},
-    fetchPolicy: fetchPolicy
-  });
-  return data;
+  else {
+    const { data } = await client.query({
+      query: MultilingualSynthesisQuery,
+      variables: { id: id },
+      fetchPolicy: fetchPolicy
+    });
+    return data;
+  }
 };
 
 export const postLoadFormat = ({ synthesisPost }: { synthesisPost: MultilingualSynthesisPost | null }): SynthesisFormValues => {
   if (!synthesisPost) {
     return { subject: {}, body: {}, image: null }
   }
-
   const synthesis = synthesisPost.publishesSynthesis;
   return {
     subject: !!synthesis.subjectEntries ? convertEntriesToI18nValue(synthesis.subjectEntries) : {},

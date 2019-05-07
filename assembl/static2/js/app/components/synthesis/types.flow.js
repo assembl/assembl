@@ -1,4 +1,4 @@
-import type {FileValue} from '../form/types.flow';
+import type { FileValue } from '../form/types.flow';
 
 export type Synthesis = {
   id: string,
@@ -6,7 +6,7 @@ export type Synthesis = {
   subject: string,
   body: string,
   img: FileValue
-}
+};
 
 /* item of synthesis list */
 export type SynthesisItem = {
@@ -15,12 +15,12 @@ export type SynthesisItem = {
   creationDate: string,
   post: {
     id: string,
-    publicationState: string,
+    publicationState: string
   },
-  img: FileValue,
-}
+  img: FileValue
+};
 
 export type SynthesisPost = {
   id: string,
-  publishesSynthesis: Synthesis,
-}
+  publishesSynthesis: Synthesis
+};

@@ -1,6 +1,7 @@
 // @flow
 import type { ApolloClient } from 'react-apollo';
 import createSynthesis from '../../../graphql/mutations/createSynthesis.graphql';
+import updateSynthesis from '../../../graphql/mutations/updateSynthesis.graphql';
 import type { SynthesisFormValues } from './types.flow';
 
 import { convertRichTextToVariables, convertToEntries, createSave, getFileVariable } from '../../form/utils';
@@ -19,17 +20,31 @@ const getVariables = async (client: ApolloClient, values: SynthesisFormValues, i
   };
 };
 
-export const createMutationsPromises = (client: ApolloClient) =>
+export const createMutationsPromises = (client: ApolloClient, synthesisPostId?: string) =>
   (values: SynthesisFormValues, initialValues: SynthesisFormValues) => [
-    () =>
-      getVariables(client, values, initialValues).then(variables =>
-        client.mutate({
-          mutation: createSynthesis,
-          variables: {
-            ...variables
-          }
-        })
-      )
+    (): Promise<any> => {
+      const variables = getVariables(client, values, initialValues);
+      if (!synthesisPostId) {
+        return variables.then(variables =>
+          client.mutate({
+            mutation: createSynthesis,
+            variables: {
+              ...variables
+            }
+          })
+        )
+      } else {
+        return variables.then(variables =>
+          client.mutate({
+            mutation: updateSynthesis,
+            variables: {
+              id: synthesisPostId,
+              ...variables
+            }
+          })
+        )
+      }
+    }
   ];
 
 export const save = createSave('debate.syntheses.successSave');

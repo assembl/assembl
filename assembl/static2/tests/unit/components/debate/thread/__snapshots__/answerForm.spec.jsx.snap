@@ -234,6 +234,7 @@ exports[`AnswerForm component should render a answer form 1`] = `
                         </button>
                       </div>
                     </div>
+                    
                     <div
                       class="attachments"
                     />
@@ -375,6 +376,7 @@ exports[`AnswerForm component should render a answer form 1`] = `
                         </button>
                       </div>
                     </div>
+                    
                     <div
                       class="attachments"
                     />
@@ -395,6 +397,7 @@ exports[`AnswerForm component should render a answer form 1`] = `
           }
           toolbarPosition="top"
           withAttachmentButton={true}
+          withSideToolbar={false}
         />
         <div
           className="button-container"

@@ -133,7 +133,10 @@ export default [
         <Route path={routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
         <Route path={routeForRouter('syntheses')} component={Syntheses} />
         <Route path={routeForRouter('createSynthesis')} components={CreateSynthesisForm} />
-        <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
+        <Route path={routeForRouter('editSynthesis', false, { synthesisId: ':synthesisId' })}
+               components={CreateSynthesisForm} />
+        <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })}
+               component={Synthesis} />
         <Route path={routeForRouter('newSynthesis')} component={NewSynthesis} />
         <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
         <Route path={routeForRouter('semanticAnalysis')} component={SemanticAnalysisForDiscussion} />

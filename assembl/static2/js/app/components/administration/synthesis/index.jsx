@@ -22,12 +22,18 @@ import { redirectToPreviousPage } from '../../form/utils';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import { displayLanguageMenu } from '../../../actions/adminActions';
 import LanguageMenu from '../languageMenu';
+import { browserHistory } from '../../../router';
+import { get as getLink } from '../../../utils/routeMap';
 
 type Props = {
   client: ApolloClient,
   editLocale: string,
   lang: string,
   displayLanguageMenu: Function,
+  routeParams: {
+    slug: string,
+    synthesisId: string;
+  }
 };
 
 const loading = <Loader/>;
@@ -39,14 +45,19 @@ class CreateSynthesisForm extends React.Component<Props> {
   }
 
   render() {
-    const { client, editLocale } = this.props;
+    const { client, editLocale, routeParams } = this.props;
+    const synthesisPostId = routeParams.synthesisId;
+    const redirectToList = () => {
+      browserHistory.push(getLink('syntheses', { slug: routeParams.slug }))
+    };
     return (
       <LoadSaveReinitializeForm
-        load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy)}
+        load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, synthesisPostId)}
         loading={loading}
-        createMutationsPromises={createMutationsPromises(client)}
+        createMutationsPromises={createMutationsPromises(client, synthesisPostId)}
         postLoadFormat={postLoadFormat}
         save={save}
+        afterSave={redirectToList}
         validate={() => {
         }}
         mutators={{ ...arrayMutators }}
@@ -58,7 +69,9 @@ class CreateSynthesisForm extends React.Component<Props> {
                   <LanguageMenu/>
                   <div className="admin-box">
                     <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn"/>
-                    <Section title="debate.syntheses.createNewSynthesis" translate>
+                    <Section
+                      title={!synthesisPostId ? 'debate.syntheses.createNewSynthesis' : 'debate.syntheses.editSynthesis'}
+                      translate>
                       <Field
                         editLocale={editLocale}
                         name="subject"

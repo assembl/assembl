@@ -40,20 +40,21 @@ const publicationStateCreationDateComparator = (a: SynthesisItem, b: SynthesisIt
 
 const SynthesesList = ({ syntheses }: Props) => {
   const childElements = syntheses
-    .slice()  // copy before sort
+    .slice() // copy before sort
     .sort(publicationStateCreationDateComparator)
     .map((synthesis) => {
       const userCanEdit = connectedUserIsAdmin() || false;
       const userCanDelete = connectedUserIsAdmin() || false;
-      return <Animated key={synthesis.id} preset="scalein">
-        <SynthesisPreview
-          synthesis={synthesis}
-          deleteSynthesisHandler={deleteSynthesisHandler}
-          userCanDelete={userCanDelete}
-          userCanEdit={userCanEdit}
-        />
-      </Animated>
-        ;
+      return (
+        <Animated key={synthesis.id} preset="scalein">
+          <SynthesisPreview
+            synthesis={synthesis}
+            deleteSynthesisHandler={deleteSynthesisHandler}
+            userCanDelete={userCanDelete}
+            userCanEdit={userCanEdit}
+          />
+        </Animated>
+      );
     });
 
   return (

@@ -15,7 +15,7 @@ import type { Synthesis } from '../components/synthesis/types.flow';
 
 type SynthesisProps = {
   synthesis: Synthesis,
-  routeParams: RouterParams,
+  routeParams: {slug: string, synthesisId: string},
   synthesisPostId: string
 };
 
@@ -60,6 +60,7 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
   updateSideMenuNode = (node: HTMLElement) => {
     this.setState({ sideMenuNode: node });
   };
+
   //
   // updateSideMenuVisibility = debounce(() => {
   //   const { bodyBlock, sideMenuNode } = this.state;
@@ -115,14 +116,12 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
     return (
       <div className="synthesis-page">
         <div className="background-light">
-          <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} type="synthesis"/>
+          <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} type="synthesis" />
           <Grid fluid>
-            <Section
-              title={''} className="synthesis-block"
-              innerRef={this.updateBodyBlock}>
+            <Section title={''} className="synthesis-block" innerRef={this.updateBodyBlock}>
               <Row>
                 <Col mdOffset={3} md={8} smOffset={1} sm={10}>
-                  <div dangerouslySetInnerHTML={{ __html: body }}/>
+                  <div dangerouslySetInnerHTML={{ __html: body }} />
                 </Col>
               </Row>
             </Section>
@@ -134,7 +133,8 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
                   top: `${sideMenuTopPercentage} %`,
                   overflow: sideMenuOverflow,
                   height: setSideMenuHeight
-                }}>
+                }}
+              >
                 <SideMenu
                   rootIdeas={roots}
                   descendants={descendants}

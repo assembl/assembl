@@ -389,10 +389,11 @@ const Translations = {
       syntheses: {
         summary: "Sommaire des synthèses",
         createNewSynthesis: "Rédiger une nouvelle synthèse",
+        editSynthesis: "Modifier la synthèse",
         publishedOn: "Publiée le ",
         title: "Titre de la synthèse",
         url: "URL de la synthèse",
-        picture: "Image de l'encarté de la synthèse",
+        picture: "Image de l'encart de la synthèse",
         urlHelper: "Insérez l'URL de votre story sur storychief",
         pictureHelper: "Cette image illustrera votre synthèse dans la page des synthèses",
         body: "Le texte de la synthèse",
@@ -1453,6 +1454,7 @@ const Translations = {
       syntheses: {
         summary: "Syntheses summary",
         createNewSynthesis: "Create a new synthesis",
+        editSynthesis: "Edit the synthesis",
         publishedOn: "Published on ",
         title: "Title of the synthesis",
         url: "URL of the synthesis",

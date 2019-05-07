@@ -1,31 +1,34 @@
 // @flow
 import * as React from 'react';
-import {Link} from 'react-router';
-import {Translate, Localize} from 'react-redux-i18n';
+import { Link } from 'react-router';
+import { Translate, Localize } from 'react-redux-i18n';
 import ResponsiveOverlayTrigger from '../common/responsiveOverlayTrigger';
 import EditPostButton from '../debate/common/editPostButton';
 import DeletePostIcon from '../common/icons/deletePostIcon/deletePostIcon';
-import {deleteSynthesisTooltip, editSynthesisTooltip} from '../common/tooltips';
-import type {SynthesisItem} from './types.flow';
-import {getDiscussionSlug} from '../../utils/globalFunctions';
-import {get as getLink} from '../../utils/routeMap';
+import { deleteSynthesisTooltip, editSynthesisTooltip } from '../common/tooltips';
+import type { SynthesisItem } from './types.flow';
+import { getDiscussionSlug } from '../../utils/globalFunctions';
+import { get as getLink } from '../../utils/routeMap';
+import { browserHistory } from '../../router';
 // import classnames from 'classnames';
 // import DeletePostButton from '../debate/common/deletePostButton';
 
 export type Props = {
   synthesis: SynthesisItem,
   userCanEdit: boolean,
-  userCanDelete: boolean,
+  userCanDelete: boolean
 };
 
-const SynthesisPreview = ({synthesis}: Props) => {
-  const handleEdit = () => {
+const SynthesisPreview = ({ synthesis }: Props) => {
+  const handleEdit = (synthesis: SynthesisItem) => {
+    const slug = getDiscussionSlug();
+    browserHistory.push(getLink('editSynthesis', { slug: slug, synthesisId: synthesis.post.id }));
     // redirect to the storychief edition interface
   };
   const editButton = (
     <li>
       <ResponsiveOverlayTrigger placement="left" tooltip={editSynthesisTooltip}>
-        <EditPostButton handleClick={handleEdit} linkClassName="edit"/>
+        <EditPostButton handleClick={() => handleEdit(synthesis)} linkClassName="edit"/>
       </ResponsiveOverlayTrigger>
     </li>
   );
@@ -41,9 +44,11 @@ const SynthesisPreview = ({synthesis}: Props) => {
   );
 
   const slug = getDiscussionSlug();
-  const link = getLink('synthesis', {synthesisId: synthesis.post.id, slug: slug});
+  const link = getLink('synthesis', { synthesisId: synthesis.post.id, slug: slug });
 
-  const previewStyle = synthesis.img ? {backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${synthesis.img.externalUrl})`} : null;
+  const previewStyle = synthesis.img
+    ? { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${synthesis.img.externalUrl})` }
+    : null;
   return (
     <div className="fiction-preview" style={previewStyle}>
       <div className="content-box">
