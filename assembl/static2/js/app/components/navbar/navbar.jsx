@@ -77,6 +77,7 @@ const SectionLink = ({ section, options }) => {
     .join('/')
     .includes(sectionName);
   const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
+
   return sectionType === 'DEBATE' ? (
     <DebateLink identifier={options.phase} className={linkClassNames} dataText={title} screenTooSmall={options.screenTooSmall}>
       {title}
@@ -143,6 +144,7 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
     const filteredSections = sections.filter(sectionFilter(sectionData)).sort((a, b) => a.order - b.order);
     const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
     const mapOptions = {
+      screenTooSmall: screenTooSmall,
       slug: slug,
       phase: currentPhaseIdentifier,
       phaseId: currentPhaseId,

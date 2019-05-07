@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 
 import TimelineCpt from './timeline';
 import TimelineSegmentMenu from './timelineSegmentMenu';
-import { isMobile } from '../../../utils/globalFunctions';
+import { browserHistory } from '../../../router';
+import { get } from '../../../utils/routeMap';
+import { isMobile, getDiscussionSlug } from '../../../utils/globalFunctions';
+import { getCurrentPhaseData } from '../../../utils/timeline';
 
 type DebateLinkProps = {
   timeline: Timeline,
@@ -66,6 +69,13 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
     const activeSegmentPhase = timeline ? timeline[activeSegment] : undefined;
     // The first touch show the menu and the second activate the link
     const isTouchScreenDevice = isMobile.any();
+
+    const displayPhase = () => {
+      const slug = { slug: getDiscussionSlug() };
+      const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
+      browserHistory.push(get('debate', { ...slug, phase: currentPhaseIdentifier }));
+    };
+
     return (
       <div
         ref={(debateNode) => {
@@ -75,7 +85,7 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
         onMouseOver={!isTouchScreenDevice && !screenTooSmall ? this.showMenu : null}
         onMouseLeave={!isTouchScreenDevice && !screenTooSmall ? this.hideMenu : null}
       >
-        {!screenTooSmall ? (
+        {!screenTooSmall && !isTouchScreenDevice ? (
           <React.Fragment>
             <div className={classNames(className, activeClassName)} data-text={dataText}>
               {children}
@@ -105,7 +115,11 @@ export class DumbDebateLink extends React.Component<DebateLinkProps, DebateLinkS
               )}
             </div>
           </React.Fragment>
-        ) : null}
+        ) : (
+          <div onClick={displayPhase} className={classNames(className, activeClassName)} data-text={dataText}>
+            {children}
+          </div>
+        )}
       </div>
     );
   }
