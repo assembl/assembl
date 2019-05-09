@@ -1,4 +1,5 @@
 #import "./LangString.graphql"
+#import "./ADocument.graphql"
 # Synthesis query for administration form
 
 fragment MultilingualSynthesisPost on Post {
@@ -14,7 +15,7 @@ fragment MultilingualSynthesisPost on Post {
         ...langStringEntry
       }
       img {
-        externalUrl
+        ...ADocument
       }
     }
   }
