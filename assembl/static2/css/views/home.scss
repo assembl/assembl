@@ -427,114 +427,110 @@ $illustration-box-margin-right: 2px;
         padding: 75px 40px 150px;
       }
     }
+  }
 
-    .phases-section {
-      .phases-container {
-        .illustration-box {
-          margin-right: $illustration-box-margin-right;
-          width: calc(50% - #{$illustration-box-margin-right});
+  @media screen and (max-width: $screen-sm-min) {
+    .home {
+      .padding-sm {
+        padding: 40px 0;
+      }
+
+      .partners-section {
+        .partner-logo {
+          margin: 20px;
         }
-      }
-    }
-  }
-}
 
-@media screen and (max-width: $screen-sm-min) {
-  .home {
-    .padding-sm {
-      padding: 40px 0;
-    }
-
-    .partners-section {
-      .partner-logo {
-        margin: 20px;
-      }
-
-      img {
-        height: 60%;
-        width: 60%;
-      }
-    }
-  }
-}
-
-@media screen and (min-width: $screen-md-min) {
-  .home {
-    .header-section {
-      .header-content {
-        max-width: 100%;
-      }
-    }
-  }
-}
-
-@media screen and (min-width: $screen-lg-min) {
-  .home {
-    .phases-section {
-      .phases-container {
-        padding-bottom: 0;
-
-        .illustration-box {
-          height: 500px;
-          width: calc(25% - #{$illustration-box-margin-right});
-        }
-      }
-    }
-  }
-}
-
-@media screen and (max-width: $screen-xxs-max) {
-  .home {
-    .header-section {
-      .header-content {
-        padding: 10px 5px 170px;
-      }
-    }
-
-    .objectives-section-1 {
-      .objectives-img.size-single-img {
-        width: 100%;
-      }
-    }
-
-    .twitter-section {
-      .tweet-section {
-        padding: 10px 20px $margin-section-tiny 20px;
-      }
-
-      .title-section {
-        padding: $margin-section-tiny 0 0;
-
-        h1 {
-          padding: 0 0 0 20px;
+        img {
+          height: 60%;
+          width: 60%;
         }
       }
     }
   }
 
-  .objectives-section-1 {
-    .objectives {
-      &:nth-child(3) {
-        display: none;
+  @media screen and (min-width: $screen-md-min) {
+    .home {
+      .header-section {
+        .header-content {
+          max-width: 100%;
+        }
       }
     }
   }
-}
 
-@media screen and (min-width: $screen-xxs-max) {
-  .home {
-    .objectives-section-1 {
-      .container-objectives-img {
-        flex-direction: row;
-        overflow: hidden;
+  @media screen and (min-width: $screen-lg-min) {
+    .home {
+      .phases-section {
+        .phases-container {
+          padding-bottom: 0;
 
-        .objectives-img {
-          &.margin-right {
-            margin-right: 20px;
+          @for $i from 1 through 8 {
+            div:first-child:nth-last-child(#{$i}),
+            div:first-child:nth-last-child(#{$i}) ~ div {
+              height: 500px;
+              width: 100% / $i;
+              flex: 0 0 100% / $i;
+              min-width: 25%;
+            }
           }
+        }
+      }
+    }
+  }
 
-          &.size-two-img {
-            width: 100%;
+  @media screen and (max-width: $screen-xxs-max) {
+    .home {
+      .header-section {
+        .header-content {
+          padding: 10px 5px 170px;
+        }
+      }
+
+      .objectives-section-1 {
+        .objectives-img.size-single-img {
+          width: 100%;
+        }
+      }
+
+      .twitter-section {
+        .tweet-section {
+          padding: 10px 20px $margin-section-tiny 20px;
+        }
+
+        .title-section {
+          padding: $margin-section-tiny 0 0;
+
+          h1 {
+            padding: 0 0 0 20px;
+          }
+        }
+      }
+    }
+
+    .objectives-section-1 {
+      .objectives {
+        &:nth-child(3) {
+          display: none;
+        }
+      }
+    }
+  }
+
+  @media screen and (min-width: $screen-xxs-max) {
+    .home {
+      .objectives-section-1 {
+        .container-objectives-img {
+          flex-direction: row;
+          overflow: hidden;
+
+          .objectives-img {
+            &.margin-right {
+              margin-right: 20px;
+            }
+
+            &.size-two-img {
+              width: 100%;
+            }
           }
         }
       }

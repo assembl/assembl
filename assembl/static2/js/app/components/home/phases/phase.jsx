@@ -18,7 +18,7 @@ const BOX_TOP_MARGIN = {
   },
   tablet: {
     maxTopMargin: 20,
-    marginStep: 10,
+    marginStep: 0,
     phasesPerLine: 2
   },
   desktop: {
