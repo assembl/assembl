@@ -11,7 +11,8 @@ import { connectedUserIsAdmin } from '../../utils/permissions';
 import type { SynthesisItem } from './types.flow';
 
 export type Props = {
-  syntheses: Array<SynthesisItem>
+  syntheses: Array<SynthesisItem>,
+  refetchQueries?: Array<any>
 };
 
 const masonryOptions = {
@@ -38,7 +39,7 @@ const publicationStateCreationDateComparator = (a: SynthesisItem, b: SynthesisIt
   return aState < bState ? -1 : 1;
 };
 
-const SynthesesList = ({ syntheses }: Props) => {
+const SynthesesList = ({ syntheses, refetchQueries }: Props) => {
   const childElements = syntheses
     .slice() // copy before sort
     .sort(publicationStateCreationDateComparator)
@@ -48,6 +49,7 @@ const SynthesesList = ({ syntheses }: Props) => {
       return (
         <Animated key={synthesis.id} preset="scalein">
           <SynthesisPreview
+            refetchQueries={refetchQueries}
             synthesis={synthesis}
             deleteSynthesisHandler={deleteSynthesisHandler}
             userCanDelete={userCanDelete}

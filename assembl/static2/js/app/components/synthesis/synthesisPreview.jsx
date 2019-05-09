@@ -1,25 +1,25 @@
 // @flow
 import * as React from 'react';
 import { Link } from 'react-router';
-import { Translate, Localize } from 'react-redux-i18n';
+import { I18n, Localize, Translate } from 'react-redux-i18n';
 import ResponsiveOverlayTrigger from '../common/responsiveOverlayTrigger';
 import EditPostButton from '../debate/common/editPostButton';
-import DeletePostIcon from '../common/icons/deletePostIcon/deletePostIcon';
 import { deleteSynthesisTooltip, editSynthesisTooltip } from '../common/tooltips';
 import type { SynthesisItem } from './types.flow';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { get as getLink } from '../../utils/routeMap';
 import { browserHistory } from '../../router';
-// import classnames from 'classnames';
-// import DeletePostButton from '../debate/common/deletePostButton';
+import DeleteSynthesisButton from '../administration/synthesis/deleteSynthesisButton';
+import { displayAlert } from '../../utils/utilityManager';
 
 export type Props = {
   synthesis: SynthesisItem,
   userCanEdit: boolean,
-  userCanDelete: boolean
+  userCanDelete: boolean,
+  refetchQueries?: Array<any>
 };
 
-const SynthesisPreview = ({ synthesis }: Props) => {
+const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
   const handleEdit = (synthesis: SynthesisItem) => {
     const slug = getDiscussionSlug();
     browserHistory.push(getLink('editSynthesis', { slug: slug, synthesisId: synthesis.post.id }));
@@ -32,13 +32,20 @@ const SynthesisPreview = ({ synthesis }: Props) => {
       </ResponsiveOverlayTrigger>
     </li>
   );
-  const handleDelete = () => {
-    // do stuff
+
+  // Define callback functions
+  const deleteCallback = () => {
+    displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
   };
+
   const deleteButton = (
     <li>
       <ResponsiveOverlayTrigger placement="left" tooltip={deleteSynthesisTooltip}>
-        <DeletePostIcon/>
+        <DeleteSynthesisButton
+          synthesisPostId={synthesis.post.id}
+          modalBodyMessage="debate.brightMirror.deleteFictionModalBody"
+          refetchQueries={refetchQueries}
+          onDeleteCallback={deleteCallback}/>
       </ResponsiveOverlayTrigger>
     </li>
   );

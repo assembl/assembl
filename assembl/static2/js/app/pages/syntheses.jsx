@@ -10,12 +10,13 @@ import Section from '../components/common/section';
 import SynthesesList from '../components/synthesis/synthesesList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
-import type {SynthesisPost} from '../types.flow';
+import type { SynthesisPost } from '../types.flow';
 
 type SynthesesProps = {
   syntheses: Array<SynthesisPost>,
   slug: string,
-  hasSyntheses: boolean
+  hasSyntheses: boolean,
+  lang: string,
 };
 
 export class DumbSyntheses extends React.Component<SynthesesProps> {
@@ -29,21 +30,29 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
   // }
 
   render() {
-    const { syntheses, slug, hasSyntheses } = this.props;
+    const { syntheses, slug, hasSyntheses, lang } = this.props;
     const createSynthesisRoute = get('createSynthesis', { slug: slug });
+    const updateSynthesesQuery = {
+      query: SynthesesQuery,
+      variables: {
+        lang: lang
+      }
+    };
+    const refetchQueries = [updateSynthesesQuery];
+
     return (
       <Section title="debate.syntheses.summary" translate>
         <div className="center create-synthesis-button">
           <Link to={createSynthesisRoute} className="button-submit button-dark">
-            <Translate value="debate.syntheses.createNewSynthesis" />
+            <Translate value="debate.syntheses.createNewSynthesis"/>
           </Link>
         </div>
         {!hasSyntheses ? (
           <h2 className="dark-title-2 margin-left-xxl">
-            <Translate value="synthesis.noSynthesisYet" />
+            <Translate value="synthesis.noSynthesisYet"/>
           </h2>
         ) : (
-          <SynthesesList syntheses={syntheses} />
+          <SynthesesList syntheses={syntheses} refetchQueries={refetchQueries}/>
         )}
       </Section>
     );
