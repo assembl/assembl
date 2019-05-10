@@ -5,6 +5,7 @@ import { Translate } from 'react-redux-i18n';
 import { FieldArray, type FieldArrayRenderProps } from 'react-final-form-arrays';
 import classNames from 'classnames';
 import range from 'lodash/range';
+import isEmpty from 'lodash/isEmpty';
 
 import { displayModal, closeModal } from '../../utils/utilityManager';
 import { upTooltip, downTooltip } from '../common/tooltips';
@@ -38,7 +39,8 @@ type Props = {
   confirmDeletionMessages: {
     confirmDeletionTitle: (props: ConfirmationMessageType) => React.Node,
     confirmDeletionBody: (props: ConfirmationMessageType) => React.Node
-  }
+  },
+  errors?: Object
 };
 
 type State = {
@@ -176,7 +178,8 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
       onRemove,
       onUp,
       onDown,
-      usePanels
+      usePanels,
+      errors
     } = this.props;
     /* Hack to fix issue with richtext field:
     when clicking on delete action, the value of richtext field becomes '' and so
@@ -220,13 +223,20 @@ export class Fields extends React.PureComponent<FieldsProps, State> {
             : removeField;
           return (
             <div
-              className={classNames('form-container', { 'panel panel-default': usePanels })}
+              className={classNames('form-container', {
+                'panel panel-default': usePanels,
+                'panel-error': this.state.activePanel !== idx && errors && !isEmpty(errors[idx])
+              })}
               id={usePanels ? `panel${idx}` : undefined}
               key={fieldname}
             >
               {titleMsgId ? (
                 <div
-                  className={classNames({ title: !usePanels, 'panel-heading pointer': usePanels, left: true })}
+                  className={classNames({
+                    title: !usePanels,
+                    'panel-heading pointer': usePanels,
+                    left: true
+                  })}
                   onClick={usePanels ? () => this.setActivePanel(idx) : undefined}
                 >
                   {renderTitleMsg({ titleMsgId: titleMsgId, idx: idx, fieldValue: fieldValue })}

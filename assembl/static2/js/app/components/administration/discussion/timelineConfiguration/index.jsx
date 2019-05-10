@@ -68,7 +68,7 @@ class TimelineFields extends React.Component<Props> {
               ...arrayMutators,
               setFieldTouched: setFieldTouched
             }}
-            render={({ values, handleSubmit, submitting, initialValues, form }) => {
+            render={({ values, handleSubmit, submitting, initialValues, form, errors }) => {
               const pristine = isEqualWith(initialValues, values, compareEditorState);
               return (
                 <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
@@ -77,6 +77,7 @@ class TimelineFields extends React.Component<Props> {
                   </p>
                   <div className="panel-group">
                     <FieldArrayWithActions
+                      errors={errors.phases}
                       usePanels
                       confirmDeletion
                       name="phases"

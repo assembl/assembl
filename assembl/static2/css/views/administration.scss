@@ -102,6 +102,10 @@
     border-color: $error !important;
   }
 
+  .panel-error {
+    border-color: $error;
+  }
+
   .block-picker {
     input {
       height: 34px !important;
