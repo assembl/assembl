@@ -153,4 +153,3 @@ def test_graphql_vote_results_gauges_zero_votes(graphql_participant1_request, vo
     assert res.data['voteSession']['proposals'][0]['voteResults']['numParticipants'] == 0
     assert res.data['voteSession']['proposals'][0]['modules'][0]['averageLabel'] is None
     assert res.data['voteSession']['proposals'][0]['modules'][0]['averageResult'] is None
-    assert res.data['voteSession']['proposals'][0]['modules'][0]['averageResult'] is None
