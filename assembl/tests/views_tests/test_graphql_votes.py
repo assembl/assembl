@@ -3,7 +3,8 @@ from graphql_relay.node.node import to_global_id
 from assembl.graphql.schema import Schema as schema
 
 
-def test_graphql_add_token_vote(graphql_participant1_request, vote_session, vote_proposal, token_vote_specification_associated_to_proposal, graphql_registry):
+def test_graphql_add_token_vote(test_session, graphql_participant1_request, vote_session, vote_proposal, token_vote_specification_associated_to_proposal, graphql_registry):
+    from assembl.models import TokenIdeaVote
     proposal_id = to_global_id("Idea", vote_proposal.id)
     token_category_id = to_global_id("TokenCategorySpecification", token_vote_specification_associated_to_proposal.token_categories[0].id)
     vote_spec_id = to_global_id("TokenVoteSpecification", token_vote_specification_associated_to_proposal.id)
@@ -22,7 +23,10 @@ def test_graphql_add_token_vote(graphql_participant1_request, vote_session, vote
     assert res.data['addTokenVote']['voteSpecification']['myVotes'][0]['voteValue'] == 3
     assert res.data['addTokenVote']['voteSpecification']['myVotes'][0]['proposalId'] == proposal_id
     assert res.data['addTokenVote']['voteSpecification']['myVotes'][0]['tokenCategoryId'] == token_category_id
-
+    tvs = test_session.query(TokenIdeaVote).all()
+    for tv in tvs:
+        test_session.delete(tv)
+    test_session.commit()
 
 def test_graphql_delete_token_vote(graphql_participant1_request, vote_session, vote_proposal, token_vote_specification_associated_to_proposal, graphql_registry):
     proposal_id = to_global_id("Idea", vote_proposal.id)
@@ -140,7 +144,8 @@ def test_graphql_vote_results_number_gauge_average(graphql_participant1_request,
     assert res.data['voteSession']['proposals'][0]['modules'][0]['averageResult'] == 40.0
 
 
-def test_graphql_vote_results_gauges_zero_votes(graphql_participant1_request, vote_session, vote_proposal, gauge_vote_specification_associated_to_proposal, number_gauge_vote_specification_associated_to_proposal, graphql_registry):
+def test_graphql_vote_results_gauges_zero_votes(test_session, graphql_participant1_request, vote_session, vote_proposal, gauge_vote_specification_associated_to_proposal, number_gauge_vote_specification_associated_to_proposal, graphql_registry):
+    from assembl.models import TokenIdeaVote
     res = schema.execute(
         graphql_registry['VoteSession'],
         context_value=graphql_participant1_request,
@@ -150,6 +155,9 @@ def test_graphql_vote_results_gauges_zero_votes(graphql_participant1_request, vo
         }
     )
     assert res.errors is None
-    assert res.data['voteSession']['proposals'][0]['voteResults']['numParticipants'] == 0
-    assert res.data['voteSession']['proposals'][0]['modules'][0]['averageLabel'] is None
-    assert res.data['voteSession']['proposals'][0]['modules'][0]['averageResult'] is None
+    proposal = res.data['voteSession']['proposals'][0]
+    assert proposal['voteResults']['numParticipants'] == 0
+    for module in proposal['modules']:
+        if module['voteType'] == 'gauge_vote_specification':
+            assert module['averageLabel'] is None
+            assert module['averageResult'] is None
