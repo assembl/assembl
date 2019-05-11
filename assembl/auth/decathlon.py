@@ -32,10 +32,10 @@ class DecathlonOAuth(BaseOAuth2):
             'email': response.get('mail'),
             'first_name': response.get('givenName'),
             'last_name': response.get('familyName'),
-            'username': response.get('displayName')
+            'username': response.get('displayName'),
+            'fullname': ' '.join((response.get('givenName'), response.get('familyName')))
         }
-
-        return details.update({'fullname': ' '.join((details.get('first_name'), details.get('last_name')))})
+        return details
 
     def user_data(self, token, *args, **kwargs):
         """Loads user data from service"""
