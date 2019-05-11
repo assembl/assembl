@@ -8,23 +8,15 @@ from assembl.lib.config import get
 class DecathlonOAuth(BaseOAuth2):
     """
     Decathlon OAuth authentication backend.
-    TODO: Get Docs Address
     """
     name = 'decathlon'
-    # put these in a configuration file
     client_id = get('SOCIAL_AUTH_DECATHLON_CLIENT_ID')
     BASE_AS_URL = get('SOCIAL_AUTH_DECATHLON_BASE_AS_URI')
     AUTHORIZATION_URL = urljoin(BASE_AS_URL, '/as/authorization.oauth2')
 
     RESPONSE_TYPE = 'token'
     SCOPE_SEPARATOR = ' '
-    EXTRA_DATA = []  # Any extra data that's wanted?
-
-    def get_user_id(self, details, response):
-        """Return user unique id provided by service"""
-        print "[Decathlon][get_user_id][details] %s" % details
-        print "[Decathlon][get_user_id][response] %s" % response
-        return response['account'].get('id')
+    ID_KEY = 'uid'
 
     def get_user_details(self, response):
         """Return user details from Decathlon account"""
