@@ -3,6 +3,9 @@ from social_core.utils import handle_http_errors
 from urlparse import urljoin
 
 from assembl.lib.config import get
+from assembl.lib.logging import getLogger
+
+log = getLogger('assembl')
 
 
 class DecathlonOAuth(BaseOAuth2):
@@ -10,13 +13,17 @@ class DecathlonOAuth(BaseOAuth2):
     Decathlon OAuth authentication backend.
     """
     name = 'decathlon'
-    client_id = get('SOCIAL_AUTH_DECATHLON_CLIENT_ID')
     BASE_AS_URL = get('SOCIAL_AUTH_DECATHLON_BASE_AS_URI')
     AUTHORIZATION_URL = urljoin(BASE_AS_URL, '/as/authorization.oauth2')
 
     RESPONSE_TYPE = 'token'
     SCOPE_SEPARATOR = ' '
     ID_KEY = 'uid'
+    REDIRECT_STATE = False
+    STATE_PARAMETER = False
+
+    def get_scope_argument(self):
+        return {'scope': 'profile openid'}
 
     def get_user_details(self, response):
         """Return user details from Decathlon account"""
@@ -42,12 +49,11 @@ class DecathlonOAuth(BaseOAuth2):
     @handle_http_errors
     def auth_complete(self, *args, **kwargs):
         """Completes login process, must return user instance"""
-        print "[Decathlon][auth_complete][data] %s" % self.data
-        print "[Decathlon][auth_complete][args] %s" % args
-        print "[Decathlon][auth_complete][kwargs] %s" % kwargs
+        log.info("[Decathlon][auth_complete][args] %s" % ' '.join(args))
+        log.info("[Decathlon][auth_complete][kwargs] %s" % kwargs)
+        log.info("[Decathlon][auth_complete][data] %s" % self.data)
+        log.info("[Decathlon][auth_complete][request_path] %s" % self.strategy.request_url())
         self.process_error(self.data)
         # Implicit flow doesn't make API call
-        token = self.data['access_token'] or ''
-        # TODO: Add the redirection_uri
-        kwargs.update({'redirect_uri': ''})
+        token = self.data.get('access_token', '')
         return self.do_auth(token, *args, **kwargs)
