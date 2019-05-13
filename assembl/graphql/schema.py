@@ -230,13 +230,13 @@ class Query(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return discussion.get_all_syntheses_query(
-            include_unpublished=False).order_by(
+            include_unpublished=False, user_id=context.authenticated_userid).order_by(
                 models.Synthesis.creation_date)
 
     def resolve_has_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        query = discussion.get_all_syntheses_query(include_unpublished=False)
+        query = discussion.get_all_syntheses_query(include_unpublished=False, user_id=context.authenticated_userid)
         count = query.filter(
             models.Synthesis.is_next_synthesis != True).count()  # noqa: E712
         return True if count else False

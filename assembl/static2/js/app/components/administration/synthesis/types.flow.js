@@ -1,5 +1,6 @@
 // @flow
 import type { FileValue, I18nRichTextValue, I18nValue } from '../../form/types.flow';
+import { PublicationStates } from '../../../constants';
 
 export type SynthesisFormValues = {
   subject: I18nValue,
@@ -10,6 +11,7 @@ export type SynthesisFormValues = {
 export type MultilingualSynthesisPost = {
   // The ID of the object.
   id: string,
+  publicationState: string,
   // Graphene Field modeling a relationship to a published synthesisPost.
   publishesSynthesis: {|
     // The ID of the object.

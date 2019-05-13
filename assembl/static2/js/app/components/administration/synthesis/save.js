@@ -5,6 +5,7 @@ import updateSynthesis from '../../../graphql/mutations/updateSynthesis.graphql'
 import type { SynthesisFormValues } from './types.flow';
 
 import { convertRichTextToVariables, convertToEntries, createSave, getFileVariable } from '../../form/utils';
+import SynthesesQuery from '../../../graphql/SynthesesQuery.graphql';
 
 const getVariables = async (client: ApolloClient, values: SynthesisFormValues, initialValues: SynthesisFormValues) => {
   const bodyVars = await convertRichTextToVariables(values.body, client);

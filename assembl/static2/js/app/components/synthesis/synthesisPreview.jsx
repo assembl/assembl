@@ -11,6 +11,7 @@ import { get as getLink } from '../../utils/routeMap';
 import { browserHistory } from '../../router';
 import DeleteSynthesisButton from '../administration/synthesis/deleteSynthesisButton';
 import { displayAlert } from '../../utils/utilityManager';
+import { PublicationStates } from '../../constants';
 
 export type Props = {
   synthesis: SynthesisItem,
@@ -25,6 +26,7 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
     browserHistory.push(getLink('editSynthesis', { slug: slug, synthesisId: synthesis.post.id }));
     // redirect to the storychief edition interface
   };
+  const isDraft = synthesis.post.publicationState === PublicationStates.DRAFT;
   const editButton = (
     <li>
       <ResponsiveOverlayTrigger placement="left" tooltip={editSynthesisTooltip}>
@@ -35,7 +37,7 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
 
   // Define callback functions
   const deleteCallback = () => {
-    displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
+    displayAlert('success', I18n.t('debate.syntheses.deleteSuccessMessage'));
   };
 
   const deleteButton = (
@@ -43,7 +45,7 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
       <ResponsiveOverlayTrigger placement="left" tooltip={deleteSynthesisTooltip}>
         <DeleteSynthesisButton
           synthesisPostId={synthesis.post.id}
-          modalBodyMessage="debate.brightMirror.deleteFictionModalBody"
+          modalBodyMessage="debate.syntheses.confirmDeletionBody"
           refetchQueries={refetchQueries}
           onDeleteCallback={deleteCallback}/>
       </ResponsiveOverlayTrigger>
@@ -64,6 +66,7 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
           {deleteButton}
         </ul>
         <Link className="link" to={link}>
+          {isDraft ? <div className="draft-label">{I18n.t('debate.syntheses.draftLabel')}</div> : null}
           <div className="inner-box">
             <h3>{synthesis.subject}</h3>
             <p className="info">

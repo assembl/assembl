@@ -10,6 +10,7 @@ from assembl.graphql.langstring import LangStringEntryInput, langstring_from_inp
     update_langstring_from_input_entries
 from assembl.graphql.permissions_helpers import require_cls_permission, require_instance_permission
 from assembl.graphql import utils
+from assembl.models import PublicationStates
 from .document import Document
 from .idea import IdeaUnion
 from .langstring import (
@@ -146,6 +147,7 @@ class CreateSynthesis(graphene.Mutation):
             post_saobj = post_cls(
                 discussion=discussion,
                 creator_id=user_id,
+                publication_state=PublicationStates.DRAFT.name,
                 publishes_synthesis=cls(
                     discussion=discussion,
                     **kwargs

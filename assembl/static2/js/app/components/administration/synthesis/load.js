@@ -26,5 +26,6 @@ export const postLoadFormat = ({ synthesisPost }: { synthesisPost: MultilingualS
     subject: !!synthesis.subjectEntries ? convertEntriesToI18nValue(synthesis.subjectEntries) : {},
     body: !!synthesis.bodyEntries ? convertEntriesToI18nRichText(synthesis.bodyEntries) : {},
     image: synthesis.img || null,
+    publicationState: synthesisPost.publicationState,
   };
 };
