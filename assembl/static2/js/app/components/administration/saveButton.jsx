@@ -8,7 +8,9 @@ import classNames from 'classnames';
 import { type MutationsPromises } from '../form/types.flow';
 
 type Props = {
+  buttonId: string,
   disabled?: boolean,
+  label: string,
   saveAction: () => void,
   specificClasses?: ?string
 };
@@ -103,13 +105,13 @@ export const getMutationsPromises = (params: Params) => {
   return promises;
 };
 
-export const DumbSaveButton = ({ disabled, saveAction, specificClasses }: Props) => {
+export const DumbSaveButton = ({ buttonId, disabled, saveAction, specificClasses, label }: Props) => {
   const isHoverClass = !disabled ? 'button-dark' : '';
   const buttonClasses = specificClasses || classNames('save-button button-submit right', isHoverClass);
 
   return (
     <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
-      <Translate value="administration.saveThemes" />
+      <Translate value={label}/>
     </Button>
   );
 };
@@ -121,16 +123,18 @@ DumbSaveButton.defaultProps = {
 
 class SaveButtonInPortal extends React.PureComponent<Props> {
   static defaultProps = {
-    specificClasses: null
+    specificClasses: null,
+    buttonId: 'save-button',
+    label: 'administration.saveThemes',
   };
 
   componentDidMount() {
-    const saveButton = document.getElementById('save-button');
+    const saveButton = document.getElementById(this.props.buttonId);
     if (saveButton) saveButton.appendChild(this.el);
   }
 
   componentWillUnmount() {
-    const saveButton = document.getElementById('save-button');
+    const saveButton = document.getElementById(this.props.buttonId);
     if (saveButton) saveButton.removeChild(this.el);
   }
 
