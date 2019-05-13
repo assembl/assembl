@@ -85,7 +85,7 @@ msgstr "${val} n’est pas une chaîne: ${err}"
 
 #: assembl/models/auth.py:634
 msgid "Straight rows of keys are easy to guess."
-msgstr "Les séquence de touches du clavier sont faciles à deviner."
+msgstr "Les séquences de touches du clavier sont faciles à deviner."
 
 #: assembl/models/auth.py:635
 msgid "Short keyboard patterns are easy to guess."
@@ -102,7 +102,7 @@ msgstr "Des caractères répétés comme \"abcabcabc\" sont à peine plus diffic
 
 #: assembl/models/auth.py:638
 msgid "Sequences like abc or 6543 are easy to guess."
-msgstr "Des séquences comme abc ou 6543  sont faciles à deviner."
+msgstr "Des séquences comme abc ou 6543 sont faciles à deviner."
 
 #: assembl/models/auth.py:639
 msgid "Recent years are easy to guess."
@@ -545,7 +545,7 @@ msgstr "Permettre à la liste blanche de s'appliquer à l'abonnement via assembl
 
 #: assembl/models/preferences.py:884
 msgid "Discussion administrators"
-msgstr "Adminstrateurs de la discussion"
+msgstr "Administrateurs de la discussion"
 
 #: assembl/models/preferences.py:887
 msgid ""
@@ -2653,7 +2653,7 @@ msgstr "C'est votre première visite à la discussion '%s'."
 
 #: assembl/templates/join0.jinja2:9
 msgid "By entering, you agree to receive the following notifications:"
-msgstr "En rejoignant la discussion, vous acceptez de recevoir les notifications suivantes:"
+msgstr "En rejoignant la discussion, vous acceptez de recevoir les notifications suivantes :"
 
 #: assembl/templates/join0.jinja2:17
 msgid "join"
