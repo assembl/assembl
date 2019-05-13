@@ -19,7 +19,7 @@ from .langstring import (
 from assembl.models.timeline import Phases
 from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType
-from .utils import DateTime, abort_transaction_on_exception, update_attachment
+from .utils import DateTime, abort_transaction_on_exception, create_attachment, update_attachment
 
 
 class DiscussionPhase(SecureObjectType, SQLAlchemyObjectType):
@@ -64,8 +64,10 @@ class CreateDiscussionPhase(graphene.Mutation):
         lang = graphene.String(required=True, description=docs.CreateDiscussionPhase.lang)
         identifier = graphene.String(description=docs.CreateDiscussionPhase.identifier)
         title_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateDiscussionPhase.title_entries)
+        description_entries = graphene.List(LangStringEntryInput, required=False, description=docs.UpdateDiscussionPhase.description_entries)
         start = DateTime(required=True, description=docs.CreateDiscussionPhase.start)
         end = DateTime(required=True, description=docs.CreateDiscussionPhase.end)
+        image = graphene.String(description=docs.UpdateDiscussionPhase.image)
         order = graphene.Float(required=True, description=docs.CreateDiscussionPhase.order)
 
     discussion_phase = graphene.Field(lambda: DiscussionPhase)
@@ -90,14 +92,30 @@ class CreateDiscussionPhase(graphene.Mutation):
                     'DiscussionPhase titleEntries needs at least one entry')
 
             title_langstring = langstring_from_input_entries(title_entries)
+            description_entries = args.get('description_entries')
+            description_langstring = langstring_from_input_entries(description_entries)
+
             saobj = cls(
                 discussion_id=discussion_id,
                 identifier=identifier,
                 is_thematics_table=is_thematics_table,
                 title=title_langstring,
+                description=description_langstring,
                 start=args.get('start'),
                 end=args.get('end'),
                 order=args.get('order'))
+
+            image = args.get('image')
+            if image is not None:
+                new_attachment = create_attachment(
+                    discussion,
+                    models.TimelineEventAttachment,
+                    models.AttachmentPurpose.IMAGE.value,
+                    context,
+                    new_value=image
+                )
+                new_attachment.timeline_event = saobj
+                db.add(new_attachment)
 
             discussion.timeline_events.append(saobj)
             db.flush()
