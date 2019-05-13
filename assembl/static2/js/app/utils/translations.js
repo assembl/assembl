@@ -60,7 +60,7 @@ const Translations = {
         label: "Tags",
         cancel: "Annuler",
         validate: "Valider",
-        edit: "Cliquez pour editer le tag \"%{tag}\"",
+        edit: "Cliquez pour éditer le tag \"%{tag}\"",
         deleteConfirmation: {
           confirmDeletionTitle: "Supprimer le tag \"%{tag}\"",
           confirmDeletionBody: "Êtes-vous certain de vouloir supprimer ce tag ?"
@@ -388,13 +388,13 @@ const Translations = {
       validateSuccess: "La contribution a bien été validée. Elle est désormais visible par l'ensemble des participants.",
       syntheses: {
         body: "Le texte de la synthèse",
-        confirmDeletionBody: "Êtes-vous bien certains de vouloir supprimer cette synthèse ?",
+        confirmDeletionBody: "Êtes-vous bien certain de vouloir supprimer cette synthèse ?",
         createNewSynthesis: "Rédiger une nouvelle synthèse",
         deleteSuccessMessage: "La synthèse a bien été supprimée",
         deleteSynthesisTooltip: "Supprimer la synthèse",
         draftLabel: "Brouillon",
         editSynthesis: "Modifier la synthèse",
-        editSynthesisTooltip: "Editer la synthèse",
+        editSynthesisTooltip: "Éditer la synthèse",
         picture: "Image de l'encart de la synthèse",
         pictureHelper: "Cette image illustrera votre synthèse dans la page des synthèses",
         publishedOn: "Publiée le ",
