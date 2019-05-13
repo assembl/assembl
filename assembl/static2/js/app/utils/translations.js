@@ -388,7 +388,7 @@ const Translations = {
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
         themesTitle: "Choisissez une thématique !",
-        txtAreaPh: "Ecrivez votre proposition",
+        txtAreaPh: "Ecrivez votre proposition (minimum 11 caractères)",
         question_x_on_total: "Question %{current} sur %{total}",
         proposalsTitle: "Êtes-vous d'accord avec les propositions exprimées ?",
         moderateProposalsTitle: "Modérer les propositions exprimées par les participants.",
@@ -1431,7 +1431,7 @@ const Translations = {
       survey: {
         loadRecentPosts: "Load recent proposals",
         themesTitle: "Choose a theme!",
-        txtAreaPh: "Write your point of view",
+        txtAreaPh: "Write your point of view (minimum of 11 characters)",
         question_x_on_total: "Question %{current} on %{total}",
         proposalsTitle: "Do you agree with these points of view?",
         moderateProposalsTitle: "Moderate these points of view",

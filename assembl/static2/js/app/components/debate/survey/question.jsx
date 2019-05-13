@@ -130,7 +130,7 @@ export class Question extends React.Component<Props, State> {
               <RichTextEditor
                 editorState={this.state.postBody}
                 onChange={this.updateBody}
-                placeHolder={I18n.t('debate.survey.txtAreaPh')}
+                placeholder={I18n.t('debate.survey.txtAreaPh')}
                 handleInputFocus={this.redirectToLogin}
               />
               <Button
