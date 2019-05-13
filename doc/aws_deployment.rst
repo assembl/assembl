@@ -32,8 +32,12 @@ The build machine is similar to an assembl box, with the difference of having th
 	rm -rf wheelhouse
 	source venv/bin/activate
 
+	# Get the latest theme
+	cd assembl/static2/css/themes/vendor/assembl2-client-themes
+	git pull	
+	cd ../..
+
 	# Build the static assets (JS/CSS + Themes)
-	cd assembl/static2
 	npm run build
 	cd ../..
 
