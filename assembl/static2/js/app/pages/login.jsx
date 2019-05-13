@@ -41,7 +41,6 @@ class Login extends React.Component<Props> {
     return (
       <Grid fluid className="login-grid">
         <Col xs={12} sm={hasSocialMedias ? 9 : 6} lg={hasSocialMedias ? 7 : 4} className="login-container col-centered">
-          <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
           <div className="box-title margin-l">{I18n.t('login.login')}</div>
           <div className="box">
             {hasSocialMedias && (
@@ -62,6 +61,7 @@ class Login extends React.Component<Props> {
               <AssemblLogin next={next} slug={slug} />
             </Col>
             <div className="clear">&nbsp;</div>
+            <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
           </div>
         </Col>
       </Grid>
