@@ -76,7 +76,7 @@ class Toolbar extends React.Component {
       }
 
       const position = {
-        top: node.offsetTop + editorRoot.offsetTop,
+        top: node.offsetTop,
         transform: 'scale(1)',
         transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
       };
