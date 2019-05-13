@@ -4,6 +4,7 @@
 
 fragment MultilingualSynthesisPost on Post {
   id
+  publicationState
   publishesSynthesis {
     ... on Synthesis {
       id
