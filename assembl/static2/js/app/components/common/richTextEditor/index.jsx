@@ -4,17 +4,17 @@ import { EditorState, RichUtils } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
-import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
-import { HeadlineThreeButton, HeadlineTwoButton, } from 'draft-js-buttons';
+import { HeadlineThreeButton, HeadlineTwoButton } from 'draft-js-buttons';
 // from our workspaces
 /* eslint-disable import/no-extraneous-dependencies */
+import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import createAttachmentPlugin from 'draft-js-attachment-plugin';
 import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
-import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
-import { addProtocol } from '../../../utils/linkify';
 import AttachmentButton from 'draft-js-attachment-plugin/src/components/AttachmentButton';
 /* eslint-enable import/no-extraneous-dependencies */
+import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
+import { addProtocol } from '../../../utils/linkify';
 
 type DraftPlugin = any;
 
