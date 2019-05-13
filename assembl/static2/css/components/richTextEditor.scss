@@ -107,6 +107,11 @@
 
     background-color: $white;
     min-height: 200px;
+
+    .richtext-large & {
+      min-height: 1500px;
+    }
+
     position: fixed;
     top: 25%;
     left: 50%;
@@ -297,6 +302,11 @@
 
   .public-DraftEditor-content {
     height: 200px;
+
+    .richtext-large & {
+      height: 1500px;
+    }
+
     overflow: auto;
   }
 }

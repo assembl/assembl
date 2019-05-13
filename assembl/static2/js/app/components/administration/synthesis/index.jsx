@@ -87,7 +87,7 @@ class CreateSynthesisForm extends React.Component<Props> {
                         <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" "/>
                         {/* TODO: add image to the helper */}
                       </div>
-                      <div className="flex">
+                      <div className="flex richtext-large">
                         <Field
                           editLocale={editLocale}
                           name="body"
