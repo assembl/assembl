@@ -171,6 +171,9 @@ class SignupForm extends React.Component<Props, State> {
                         onChange={this.handleInput}
                         required={field.required}
                       />
+                      {field.identifier === 'PASSWORD2' ? (
+                        <p className="annotation no-margin">{I18n.t('login.passwordRequirement')}</p>
+                      ) : null}
                     </FormGroup>
                   );
                 }

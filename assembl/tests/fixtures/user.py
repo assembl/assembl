@@ -14,7 +14,7 @@ def participant1_user(request, test_session, discussion):
     """A User fixture with R_PARTICIPANT global role and with R_PARTICIPANT local role in discussion `discussion`"""
 
     from assembl.models import User, UserRole, Role, EmailAccount
-    u = User(name=u"A. Barking Loon", type="user", password="password",
+    u = User(name=u"A. Barking Loon", type="user", password="hw5A^xYT1p&i",
              verified=True, last_assembl_login=datetime.utcnow())
 
     email = EmailAccount(email="abloon@gmail.com", profile=u, verified=True)

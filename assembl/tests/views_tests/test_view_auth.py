@@ -9,6 +9,7 @@ from requests import Response
 import mock
 from pyramid.interfaces import ISessionFactory, IAuthorizationPolicy
 from pyramid.request import Request
+from webtest import AppError
 
 from assembl.models import SocialAuthAccount
 from assembl.auth.password import password_change_token, verify_password_change_token, Validity
@@ -22,7 +23,7 @@ def test_assembl_login(discussion, participant1_user,
     # is not stored in the object.
     res = test_app_no_login.post(url, OrderedDict([
         ('identifier', participant1_user.get_preferred_email()),
-        ('password', 'password')]))
+        ('password', "hw5A^xYT1p&i")]))
     assert (res.status_code == 302 and urlparse.urlparse(
         res.location).path == '/' + discussion.slug + '/home')
     assert test_app_no_login.app.registry.getUtility(
@@ -39,7 +40,7 @@ def test_assembl_login_mixed_case(discussion, participant1_user,
     res = test_app_no_login.post(url, OrderedDict([
         ('identifier',
          participant1_user.get_preferred_email().title()),
-        ('password', 'password')]))
+        ('password', "hw5A^xYT1p&i")]))
     assert (res.status_code == 302 and urlparse.urlparse(
         res.location).path == '/' + discussion.slug + '/home')
     assert test_app_no_login.app.registry.getUtility(
@@ -270,38 +271,56 @@ def test_autologin_override(
         backend=google_identity_provider.name
     ) == urlparse.urlparse(reply.location).path
 
-def test_change_password_token(test_app, participant1_user):
-    # Set up
-    old_password = participant1_user.password
-    token = password_change_token(participant1_user)
-    my_json = {"token": token,
-                "password1": "lolo",
-                "password2": "lolo"}
-
-    # Test token
+def setup_change_password(user, password):
+    old_password = user.password
+    token = password_change_token(user)
+    password_change_payload = {"token": token,
+                                "password1": password,
+                                "password2": password}
     user, validity = verify_password_change_token(token)
     assert validity == Validity.VALID
-    
-    # Test API
-    response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
-    assert response.status_code == 200
-    assert old_password != participant1_user.password
-    assert participant1_user.check_password("lolo") == True
 
-def test_change_password_token_local_user_role(test_app, participant1_user, local_user_role):
+    return old_password, password_change_payload
+
+def test_change_password_token(test_app_strong_password, participant1_user):
     # Set up
-    old_password = participant1_user.password
-    token = password_change_token(participant1_user)
-    my_json = {"token": token,
-                "password1": "lolo",
-                "password2": "lolo"}
+    old_password, my_json = setup_change_password(participant1_user, "9WWcPG9*YcVk")
 
-    # Test token
-    user, validity = verify_password_change_token(token)
-    assert validity == Validity.VALID
-    
     # Test API
-    response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
+    response = test_app_strong_password.post_json('/data/AgentProfile/do_password_change', my_json)
     assert response.status_code == 200
     assert old_password != participant1_user.password
-    assert participant1_user.check_password("lolo") == True
+    assert participant1_user.check_password("9WWcPG9*YcVk") == True
+
+def test_change_password_token_too_short(test_app, participant1_user, user_language_preference_en_cookie):
+    # Set up
+    old_password, my_json = setup_change_password(participant1_user, "9WWc")
+
+    # Test API
+    with pytest.raises(AppError) as exception:
+        response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
+    assert "520 Unknown Server Error" in exception.value.message
+    assert "Password shorter than 5 characters" in exception.value.message
+    assert old_password == participant1_user.password
+
+def test_change_password_token_not_enough_complex(test_app_complex_password, participant1_user, user_language_preference_en_cookie):
+    # Set Up
+    old_password, my_json = setup_change_password(participant1_user, "password")
+
+    # Test API
+    with pytest.raises(AppError) as exception:
+        response = test_app_complex_password.post_json('/data/AgentProfile/do_password_change', my_json)
+    assert "520 Unknown Server Error" in exception.value.message
+    assert "This is a top-10 common password." in exception.value.message
+    assert old_password == participant1_user.password
+
+def test_change_password_token_dont_contain_special_chars(test_app_spec_chars_password, participant1_user, user_language_preference_en_cookie):
+    # Set up
+    old_password, my_json = setup_change_password(participant1_user, "9WWcPG9YcVk")
+
+    # Test API
+    with pytest.raises(AppError) as exception:
+        response = test_app_spec_chars_password.post_json('/data/AgentProfile/do_password_change', my_json)
+    assert "520 Unknown Server Error" in exception.value.message
+    assert "Your password should include at least a special character" in exception.value.message
+    assert old_password == participant1_user.password

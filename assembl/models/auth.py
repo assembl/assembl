@@ -7,6 +7,7 @@ import hashlib
 import simplejson as json
 from collections import defaultdict
 from enum import IntEnum
+import re
 from abc import abstractmethod
 
 from sqlalchemy.ext.hybrid import hybrid_property
@@ -29,6 +30,7 @@ from sqlalchemy import (
 )
 from pyramid.httpexceptions import HTTPBadRequest, HTTPUnauthorized
 from sqlalchemy import orm
+from pyramid.i18n import TranslationStringFactory
 from sqlalchemy.orm import (
     relationship, backref, deferred)
 from sqlalchemy.orm.attributes import NO_VALUE
@@ -37,6 +39,7 @@ from sqlalchemy.sql.functions import count
 from ..lib import config, logging
 from ..lib.locale import to_posix_string
 from ..lib.model_watcher import get_model_watcher
+from ..lib.exceptions import LocalizableError, LocalizableMultipleErrors, LocalizableErrorWithMapping
 from ..lib.sqla import CrudOperation, PrivateObjectMixin
 from ..lib.sqla_types import (
     URLString, EmailString, EmailUnicode, CaseInsensitiveWord, CoerceUnicode)
@@ -59,7 +62,9 @@ from ..auth import (
 from .langstrings import Locale
 from assembl.models.cookie_types import CookieTypes, AcceptedCookies, RejectedCookies
 
-log = logging.getLogger()
+
+log = logging.getLogger('assembl')
+_ = TranslationStringFactory('assembl')
 
 
 # None-tolerant min, max
@@ -630,6 +635,39 @@ class IdentityProvider(Base):
                 db_provider.trust_emails = (provider in trusted_providers)
 
 
+# copied from zxcvbn/src/feedback.coffee
+# because extracting from another library is needlessly complicated
+zxcvbn_messages = [
+    _('Straight rows of keys are easy to guess.'),
+    _('Short keyboard patterns are easy to guess.'),
+    _('Repeats like "aaa" are easy to guess.'),
+    _('Repeats like "abcabcabc" are only slightly harder to guess than "abc".'),
+    _("Sequences like abc or 6543 are easy to guess."),
+    _("Recent years are easy to guess."),
+    _("Dates are often easy to guess."),
+    _('This is a top-10 common password.'),
+    _('This is a top-100 common password.'),
+    _('This is a very common password.'),
+    _('This is similar to a commonly used password.'),
+    _('A word by itself is easy to guess.'),
+    _('Names and surnames by themselves are easy to guess.'),
+    _('Common names and surnames are easy to guess.'),
+    _("Use a few words, avoid common phrases."),
+    _("No need for symbols, digits, or uppercase letters."),
+    _('Add another word or two. Uncommon words are better.'),
+    _('Use a longer keyboard pattern with more turns.'),
+    _('Avoid repeated words and characters.'),
+    _('Avoid sequences.'),
+    _('Avoid recent years.'),
+    _('Avoid years that are associated with you.'),
+    _('Avoid dates and years that are associated with you.'),
+    _("Capitalization doesn't help very much."),
+    _("All-uppercase is almost as easy to guess as all-lowercase."),
+    _("Reversed words aren't much harder to guess."),
+    _("Predictable substitutions like '@' instead of 'a' don't help very much."),
+]
+
+
 class AgentStatusInDiscussion(DiscussionBoundBase):
     """Information about a user's activity in a discussion
 
@@ -801,11 +839,10 @@ class User(AgentProfile):
     last_rejected_user_guideline_date = Column(DateTime)
 
     def __init__(self, **kwargs):
-        if kwargs.get('password', None) is not None:
-            from ..auth.password import hash_password
-            kwargs['password'] = hash_password(kwargs['password'])
-
+        password = kwargs.pop('password', None)
         super(User, self).__init__(**kwargs)
+        if password is not None:
+            self.password_p = password
 
     @classmethod
     def populate_db(cls, db=None):
@@ -934,16 +971,53 @@ class User(AgentProfile):
     def password_p(self):
         return ""
 
+    def validate_password(self, password):
+        from ..auth.password import verify_password
+        # check length
+        minimum_password_length = int(config.get("minimum_password_length", 5))
+        if len(password) < minimum_password_length:
+            raise LocalizableErrorWithMapping(
+                _("Password shorter than ${minlen} characters"),
+                mapping={"minlen": minimum_password_length})
+        # look for presence of required elements (see regexp)
+        password_required_classes = config.get("password_required_classes", None)
+        if password_required_classes:
+            if not isinstance(password_required_classes, dict):
+                # Should be done upstream to optimize
+                password_required_classes = json.loads(password_required_classes)
+            for charclass, langstring in password_required_classes.items():
+                if re.search(charclass, password) is None:
+                    raise LocalizableErrorWithMapping(
+                        _("Your password should include at least a ${class}"),
+                        langstrings={"class": langstring})
+        # Check zxcvbn complexity
+        minimum_password_complexity = int(config.get("minimum_password_complexity", 0))
+        if minimum_password_complexity:
+            from zxcvbn import zxcvbn
+            results = zxcvbn(password, user_inputs=(self.name or '').split(' '))
+            if results['score'] < minimum_password_complexity:
+                raise LocalizableMultipleErrors(
+                    [results['feedback']['warning']] + results['feedback']['suggestions'])
+        # refuse if reusing an old password
+        for p in self.old_passwords:
+            if verify_password(password, p.password):
+                raise LocalizableError(_("Please do not repeat an older password."))
+
     @password_p.setter
     def password_p(self, password):
-        from ..auth.password import hash_password
+        from ..auth.password import hash_password, verify_password
         if password:
-            # keep the current password to avoid the user to reuse it later
-            self.old_passwords.append(
-                OldPassword(password=self.password))
-            # keep only the last 5 passwords (4 in self.old_passwords
-            # and the current password)
-            for p in self.old_passwords[0:-4]:
+            if self.password and verify_password(password, self.password):
+                # unchanged password, allow at this level
+                return
+            self.validate_password(password)
+            if self.password:
+                # keep the current password to avoid the user to reuse it later
+                self.old_passwords.append(
+                    OldPassword(password=self.password))
+            # keep only the last N+1 passwords (including current)
+            keep_past_passwords = int(config.get("keep_past_passwords", 4))
+            for p in list(self.old_passwords[0:-keep_past_passwords]):
                 self.old_passwords.remove(p)
 
             # set the new password

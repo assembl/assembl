@@ -53,6 +53,126 @@ msgstr "${val}不能序列化：${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val}不是一个字符串：${err}"
 
+#: assembl/models/auth.py:634
+msgid "Straight rows of keys are easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:635
+msgid "Short keyboard patterns are easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:636
+msgid "Repeats like \"aaa\" are easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:637
+msgid "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"."
+msgstr ""
+
+#: assembl/models/auth.py:638
+msgid "Sequences like abc or 6543 are easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:639
+msgid "Recent years are easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:640
+msgid "Dates are often easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:641
+msgid "This is a top-10 common password."
+msgstr ""
+
+#: assembl/models/auth.py:642
+msgid "This is a top-100 common password."
+msgstr ""
+
+#: assembl/models/auth.py:643
+msgid "This is a very common password."
+msgstr ""
+
+#: assembl/models/auth.py:644
+msgid "This is similar to a commonly used password."
+msgstr ""
+
+#: assembl/models/auth.py:645
+msgid "A word by itself is easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:646
+msgid "Names and surnames by themselves are easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:647
+msgid "Common names and surnames are easy to guess."
+msgstr ""
+
+#: assembl/models/auth.py:648
+msgid "Use a few words, avoid common phrases."
+msgstr ""
+
+#: assembl/models/auth.py:649
+msgid "No need for symbols, digits, or uppercase letters."
+msgstr ""
+
+#: assembl/models/auth.py:650
+msgid "Add another word or two. Uncommon words are better."
+msgstr ""
+
+#: assembl/models/auth.py:651
+msgid "Use a longer keyboard pattern with more turns."
+msgstr ""
+
+#: assembl/models/auth.py:652
+msgid "Avoid repeated words and characters."
+msgstr ""
+
+#: assembl/models/auth.py:653
+msgid "Avoid sequences."
+msgstr ""
+
+#: assembl/models/auth.py:654
+msgid "Avoid recent years."
+msgstr ""
+
+#: assembl/models/auth.py:655
+msgid "Avoid years that are associated with you."
+msgstr ""
+
+#: assembl/models/auth.py:656
+msgid "Avoid dates and years that are associated with you."
+msgstr ""
+
+#: assembl/models/auth.py:657
+msgid "Capitalization doesn't help very much."
+msgstr ""
+
+#: assembl/models/auth.py:658
+msgid "All-uppercase is almost as easy to guess as all-lowercase."
+msgstr ""
+
+#: assembl/models/auth.py:659
+msgid "Reversed words aren't much harder to guess."
+msgstr ""
+
+#: assembl/models/auth.py:660
+msgid "Predictable substitutions like '@' instead of 'a' don't help very much."
+msgstr ""
+
+#: assembl/models/auth.py:952
+msgid "Password shorter than ${minlen} characters"
+msgstr ""
+
+#: assembl/models/auth.py:963
+msgid "Your password should include at least a ${class}"
+msgstr ""
+
+#: assembl/models/auth.py:976
+msgid "Please do not repeat an older password."
+msgstr ""
+
 #: assembl/models/edgesense_drupal.py:173
 msgid "Unknown User ${uid}"
 msgstr "未知用户${uid}"
@@ -838,6 +958,7 @@ msgid ""
 msgstr "欢迎参加这个讨论。我们创建了一系列的提示来帮助您上手使用Assembl。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
+#: assembl/templates/join0.jinja2:6
 msgid "Join the discussion"
 msgstr "加入讨论"
 
@@ -2326,6 +2447,20 @@ msgstr "通过"
 #: assembl/templates/idea_in_synthesis.jinja2:16
 msgid "See the conversation around this idea"
 msgstr "查看围绕这个想法的对话"
+
+#: assembl/templates/join0.jinja2:7
+#, fuzzy, python-format
+msgid "This is you first visit to the discussion '%s'."
+msgstr "您必须先加入这个讨论"
+
+#: assembl/templates/join0.jinja2:9
+msgid "By entering, you agree to receive the following notifications:"
+msgstr ""
+
+#: assembl/templates/join0.jinja2:17
+#, fuzzy
+msgid "join"
+msgstr "登录"
 
 #: assembl/templates/login.jinja2:30
 #, python-format

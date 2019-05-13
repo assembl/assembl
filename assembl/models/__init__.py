@@ -381,3 +381,7 @@ from .landing_page import LandingPageModuleType, LandingPageModule  # noqa: E402
 def includeme(config):
     config.include('.langstrings')
     config.include('.preferences')
+    settings = config.get_settings()
+    if settings.get('password_required_classes', None):
+        from simplejson import loads
+        settings['password_required_classes'] = loads(settings['password_required_classes'])

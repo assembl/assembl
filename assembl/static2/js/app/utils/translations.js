@@ -229,6 +229,8 @@ const Translations = {
       username: "Email ou nom d'utilisateur",
       fullName: "Nom complet",
       password2: "Répéter le mot de passe",
+      passwordRequirement:
+        "Votre mot de passe doit contenir au moins une lettre minuscule, une lettre majuscule, un nombre et un caractère spécial.",
       createAccount: "Créer un compte",
       send: "Envoyer",
       sendPwdConfirm: "Changement de mot de passe demandé",
@@ -1272,6 +1274,8 @@ const Translations = {
       username: "Email or user name",
       fullName: "Full name",
       password2: "Repeat password",
+      passwordRequirement:
+        "Your password must contain at least a lowercase and a uppercase character, a number and a special character.",
       createAccount: "Create an account",
       send: "Send",
       sendPwdConfirm: "Password change requested",
