@@ -81,7 +81,7 @@ export function DumbQuestion(props: Props) {
               </div>
               <div className="center">
                 <h3 className="collapsed-title">
-                  {numPosts > 1 ? <span>{`${params.questionIndex}/ ${title}`}</span> : <span>{`${title}`}</span>}
+                  <span>{`${params.questionIndex}/ ${title}`}</span>
                 </h3>
                 <Posts
                   isModerating={isModerating}
