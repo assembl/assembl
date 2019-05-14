@@ -143,7 +143,9 @@ function getIdeas(client, themes, initialThemes) {
 
 export const createMutationsPromises = (client: ApolloClient, discussionPhaseId: ?string) => (
   values: ThemesAdminValues,
-  initialValues: ThemesAdminValues
+  // $FlowFixMe specifying the type here trigger "Recursion limit exceeded" */
+  initialValues
+  // initialValues: ThemesAdminValues
 ): Array<() => Promise<mixed>> => {
   const allMutations = [];
   let createUpdateMutation;
