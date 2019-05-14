@@ -38,6 +38,7 @@ class DecathlonOAuth(BaseOAuth2):
 
     def get_user_details(self, response):
         """Return user details from Decathlon account"""
+        log.info("[SOCIAL_AUTH_DECATHLON] Social auth successful with the following response: %s" % response)
         details = {
             'email': response.get('mail'),
             'first_name': response.get('givenName'),
