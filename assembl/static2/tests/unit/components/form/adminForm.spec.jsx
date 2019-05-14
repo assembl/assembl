@@ -1,9 +1,9 @@
 import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 
-import { DumbAdminForm } from '../../../../js/app/components/form/adminForm';
+import AdminForm from '../../../../js/app/components/form/adminForm';
 
-describe('DumbAdminForm component', () => {
+describe('AdminForm component', () => {
   const handleSubmitSpy = jest.fn();
 
   it('should render an admin form', () => {
@@ -19,7 +19,7 @@ describe('DumbAdminForm component', () => {
     };
 
     const shallowRenderer = new ShallowRenderer();
-    shallowRenderer.render(<DumbAdminForm {...props}>nothing</DumbAdminForm>);
+    shallowRenderer.render(<AdminForm {...props}>nothing</AdminForm>);
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
   });

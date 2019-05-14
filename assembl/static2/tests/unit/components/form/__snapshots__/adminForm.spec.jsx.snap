@@ -1,13 +1,15 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`DumbAdminForm component should render an admin form 1`] = `
-<form
-  onSubmit={[MockFunction]}
+exports[`AdminForm component should render an admin form 1`] = `
+<withRouter(DumbForm)
+  handleSubmit={[MockFunction]}
+  pristine={false}
+  submitting={false}
 >
   <SaveButtonInPortal
     saveAction={[MockFunction]}
     specificClasses={null}
   />
   nothing
-</form>
+</withRouter(DumbForm)>
 `;
