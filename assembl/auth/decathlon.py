@@ -10,6 +10,11 @@ log = getLogger('assembl')
 class DecathlonOAuth(BaseOAuth2):
     """
     Decathlon OAuth authentication backend. Authorization Code flow.
+    In order to activate, must add the following keys to the settings:
+
+    SOCIAL_AUTH_DECATHLON_BASE_AS_URI:  The base URI of the IDP, provided by Decathlon
+    SOCIAL_AUTH_DECATHLON_KEY:          The client id provided by Decathlon
+    SOCIAL_AUTH_DECATHLON_SECRET:       The client secret provided by Decathlon
     """
     name = 'decathlon'
     BASE_AS_URL = get('SOCIAL_AUTH_DECATHLON_BASE_AS_URI')
