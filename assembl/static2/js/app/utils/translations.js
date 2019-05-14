@@ -736,7 +736,7 @@ const Translations = {
         "3": "Exporter les données"
       },
       imageRequirements:
-        "L'image doit avoir une hauteur de 1280px et une largeur de 480px. Le poids ne doit pas dépasser 300 ko.",
+        "L'image doit avoir une hauteur de 480px et une largeur de 1280px. Le poids ne doit pas dépasser 300 ko.",
       voteWithTokens: "Vote par jetons",
       voteWithGauges: "Vote par jauge(s)",
       gauge: "Jauge %{number}",
@@ -1777,7 +1777,7 @@ const Translations = {
         "2": "Configure the voting proposals",
         "3": "Export data"
       },
-      imageRequirements: "The image must have a height of 300 px and a width of 1280 px. Its size has to be under 300 kB.",
+      imageRequirements: "The image must have a height of 480px and a width of 1480 px. Its size has to be under 300 kB.",
       voteWithTokens: "Tokens vote",
       voteWithGauges: "Gauge(s) vote",
       gauge: "Gauge %{number}",

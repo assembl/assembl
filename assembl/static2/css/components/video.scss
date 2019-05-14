@@ -1,8 +1,3 @@
-.video-wrapper {
-  width: 900px;
-  margin: auto;
-}
-
 .video-container {
   height: 0;
   margin: 20px 0 0;
@@ -14,10 +9,11 @@
   iframe,
   object,
   embed {
-    height: 100%;
-    left: 0;
     position: absolute;
     top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    border: 0;
   }
 }

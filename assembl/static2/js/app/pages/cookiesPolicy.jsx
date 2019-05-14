@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 
 import TextWithHeaderPage from '../components/common/textWithHeaderPage';
+import { richTextBodyIsEmpty } from '../utils/draftjs';
 import CookiesSelectorContainer from '../components/cookies/cookiesSelectorContainer';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import LegalContents from '../graphql/LegalContents.graphql';
@@ -26,7 +27,7 @@ const CookiesPolicy = ({ text, headerTitle, debateData }) => (
       renderPageBody={() => (
         <Fragment>
           <CookiesSelectorContainer key="cookies-selector" />
-          <h2 className="dark-title-2">{text !== '<p></p>' ? <Translate value="cookiesPolicy.sectionTitle" /> : null}</h2>
+          <h2 className="dark-title-2">{!richTextBodyIsEmpty(text) ? <Translate value="cookiesPolicy.sectionTitle" /> : null}</h2>
           <div
             className="ellipsis-content justify"
             dangerouslySetInnerHTML={{

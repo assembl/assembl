@@ -6,6 +6,7 @@ import { I18n } from 'react-redux-i18n';
 import PostColumn from './postColumn';
 import { orderPostsByMessageClassifier } from './utils';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
+import { richTextBodyIsEmpty } from '../../../utils/draftjs';
 import TabbedColumns from './tabbedColumns';
 import MultiColumns from './multiColumns';
 import { MIN_WIDTH_COLUMN, APP_CONTAINER_MAX_WIDTH } from '../../../constants';
@@ -63,7 +64,7 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
               // keep the || here, if body is empty string, we want noSynthesisYet message
               hyphenStyle: { borderTopColor: col.color }
             };
-            if (synthesisProps.synthesisBody === '<p></p>') {
+            if (richTextBodyIsEmpty(synthesisProps.synthesisBody)) {
               synthesisProps.synthesisBody = I18n.t('multiColumns.synthesis.noSynthesisYet');
             }
             return (

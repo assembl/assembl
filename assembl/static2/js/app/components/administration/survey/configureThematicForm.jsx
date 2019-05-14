@@ -132,7 +132,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           label={I18n.t('administration.tableOfThematics.bannerImagePickerLabel')}
         />
         <div className="label-indication">
-          <Translate value="administration.imageRequirements" />
+          <Translate value="administration.landingPage.header.headerDescription" />
         </div>
         <div className="title">{I18n.t('administration.tableOfThematics.moduleTypeLabel')}</div>
         <Field
