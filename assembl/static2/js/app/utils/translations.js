@@ -735,8 +735,6 @@ const Translations = {
         "2": "Configurer les propositions de vote",
         "3": "Exporter les données"
       },
-      imageRequirements:
-        "L'image doit avoir une hauteur de 480px et une largeur de 1280px. Le poids ne doit pas dépasser 300 ko.",
       voteWithTokens: "Vote par jetons",
       voteWithGauges: "Vote par jauge(s)",
       gauge: "Jauge %{number}",
