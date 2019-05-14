@@ -26,7 +26,7 @@ type Props = {
   textareaRef?: Function,
   toolbarPosition: string,
   withAttachmentButton: boolean,
-  withSideToolbar?: boolean,
+  withSideToolbar?: boolean
 };
 
 type State = {
@@ -38,7 +38,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
   plugins: Array<DraftPlugin>;
 
-  components: { [ string ]: React.ComponentType<*> };
+  components: { [string]: React.ComponentType<*> };
 
   static defaultProps = {
     handleInputFocus: undefined,
@@ -64,8 +64,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
     const components = {};
     components.Modal = Modal;
-    const toolbarStructure = [ BoldButton, ItalicButton, UnorderedListButton, LinkButton ];
-    const plugins = [ linkPlugin ];
+    const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
+    const plugins = [linkPlugin];
 
     if (props.withAttachmentButton) {
       const attachmentPlugin = createAttachmentPlugin({
@@ -76,7 +76,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
       plugins.push(attachmentPlugin);
       components.Attachments = Attachments;
     }
-    if (!!props.withSideToolbar) {
+    if (props.withSideToolbar) {
       const sideToolbarPlugin = createSideToolbarPlugin({
         structure: toolbarStructure
       });
@@ -177,9 +177,9 @@ export default class RichTextEditor extends React.Component<Props, State> {
           ) : (
             <div className="editor-label form-label">&nbsp;</div>
           )}
-          <div className="clear"/>
+          <div className="clear" />
         </div>
-        <Modal/>
+        <Modal />
         <div onClick={this.focusEditor}>
           <Editor
             editorState={editorState}
@@ -196,19 +196,25 @@ export default class RichTextEditor extends React.Component<Props, State> {
           we have to move toolbar in css for now since there is a bug in draft-js-plugin
           It should be fixed in draft-js-plugin v3
          */}
-        {!!Toolbar ? <Toolbar/> : ''}
-        {!!SideToolbar ? <SideToolbar
-          children={(externalProps) => (
-            <div>
-              <HeadlineTwoButton {...externalProps} />
-              <HeadlineThreeButton {...externalProps} />
-              <BoldButton {...externalProps} />
-              <ItalicButton {...externalProps} />
-              <UnorderedListButton {...externalProps} />
-              <AttachmentButton  {...externalProps} />
-              {/*<LinkButton {...externalProps} />*/}
-            </div>)}/> : ''}
-        {Attachments ? <Attachments/> : null}
+        {Toolbar ? <Toolbar /> : ''}
+        {SideToolbar ? (
+          <SideToolbar
+            children={externalProps => (
+              <div>
+                <HeadlineTwoButton {...externalProps} />
+                <HeadlineThreeButton {...externalProps} />
+                <BoldButton {...externalProps} />
+                <ItalicButton {...externalProps} />
+                <UnorderedListButton {...externalProps} />
+                <AttachmentButton {...externalProps} />
+                {/* <LinkButton {...externalProps} /> */}
+              </div>
+            )}
+          />
+        ) : (
+          ''
+        )}
+        {Attachments ? <Attachments /> : null}
       </div>
     );
   }

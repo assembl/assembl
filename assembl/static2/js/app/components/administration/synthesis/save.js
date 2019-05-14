@@ -15,45 +15,48 @@ const getVariables = async (client: ApolloClient, values: SynthesisFormValues, i
   const image = getFileVariable(values.image, initialValues.image);
   return {
     synthesisType: 'fulltext_synthesis',
-    subjectEntries,
-    bodyEntries,
-    image,
+    subjectEntries: subjectEntries,
+    bodyEntries: bodyEntries,
+    image: image
   };
 };
 
-export const createMutationsPromises = (client: ApolloClient, synthesisPostId?: string) =>
-  (values: SynthesisFormValues, initialValues: SynthesisFormValues) => [
-    (): Promise<any> => {
-      const variables = getVariables(client, values, initialValues);
-      const refetchQueries = [{
+export const createMutationsPromises = (client: ApolloClient, lang: string, synthesisPostId?: string) => (
+  values: SynthesisFormValues,
+  initialValues: SynthesisFormValues
+) => [
+  (): Promise<any> => {
+    const variables = getVariables(client, values, initialValues);
+    const refetchQueries = [
+      {
         query: SynthesesQuery,
         variables: {
           lang: lang
         }
-      }];
-      if (!synthesisPostId) {
-        return variables.then(variables =>
-          client.mutate({
-            mutation: createSynthesis,
-            variables: {
-              ...variables
-            },
-            refetchQueries: refetchQueries,
-          })
-        )
-      } else {
-        return variables.then(variables =>
-          client.mutate({
-            mutation: updateSynthesis,
-            variables: {
-              id: synthesisPostId,
-              ...variables
-            },
-            refetchQueries: refetchQueries,
-          })
-        )
       }
+    ];
+    if (!synthesisPostId) {
+      return variables.then(variables =>
+        client.mutate({
+          mutation: createSynthesis,
+          variables: {
+            ...variables
+          },
+          refetchQueries: refetchQueries
+        })
+      );
     }
-  ];
+    return variables.then(variables =>
+      client.mutate({
+        mutation: updateSynthesis,
+        variables: {
+          id: synthesisPostId,
+          ...variables
+        },
+        refetchQueries: refetchQueries
+      })
+    );
+  }
+];
 
 export const save = createSave('debate.syntheses.successSave');

@@ -15,7 +15,7 @@ import type { Synthesis } from '../components/synthesis/types.flow';
 
 type SynthesisProps = {
   synthesis: Synthesis,
-  routeParams: {slug: string, synthesisId: string},
+  routeParams: { slug: string, synthesisId: string },
   synthesisPostId: string
 };
 

@@ -16,7 +16,7 @@ type SynthesesProps = {
   syntheses: Array<SynthesisPost>,
   slug: string,
   hasSyntheses: boolean,
-  lang: string,
+  lang: string
 };
 
 export class DumbSyntheses extends React.Component<SynthesesProps> {
@@ -44,15 +44,15 @@ export class DumbSyntheses extends React.Component<SynthesesProps> {
       <Section title="debate.syntheses.summary" translate>
         <div className="center create-synthesis-button">
           <Link to={createSynthesisRoute} className="button-submit button-dark">
-            <Translate value="debate.syntheses.createNewSynthesis"/>
+            <Translate value="debate.syntheses.createNewSynthesis" />
           </Link>
         </div>
         {!hasSyntheses ? (
           <h2 className="dark-title-2 margin-left-xxl">
-            <Translate value="synthesis.noSynthesisYet"/>
+            <Translate value="synthesis.noSynthesisYet" />
           </h2>
         ) : (
-          <SynthesesList syntheses={syntheses} refetchQueries={refetchQueries}/>
+          <SynthesesList syntheses={syntheses} refetchQueries={refetchQueries} />
         )}
       </Section>
     );

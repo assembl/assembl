@@ -26,7 +26,7 @@ describe('Synthesis component', () => {
           }
         ]
       },
-      synthesisPostId: "yop"
+      synthesisPostId: 'yop'
     };
     const renderer = new ShallowRenderer();
     renderer.render(<DumbSynthesis {...props} />);

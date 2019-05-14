@@ -21,7 +21,7 @@ type Props = {
   label: string,
   toolbarPosition: string,
   withAttachmentButton: boolean,
-  withSideToolbar: boolean,
+  withSideToolbar: boolean
 } & FieldRenderProps;
 
 const RichTextFieldAdapter = ({

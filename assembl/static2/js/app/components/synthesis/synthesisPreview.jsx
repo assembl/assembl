@@ -30,7 +30,7 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
   const editButton = (
     <li>
       <ResponsiveOverlayTrigger placement="left" tooltip={editSynthesisTooltip}>
-        <EditPostButton handleClick={() => handleEdit(synthesis)} linkClassName="edit"/>
+        <EditPostButton handleClick={() => handleEdit(synthesis)} linkClassName="edit" />
       </ResponsiveOverlayTrigger>
     </li>
   );
@@ -47,7 +47,8 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
           synthesisPostId={synthesis.post.id}
           modalBodyMessage="debate.syntheses.confirmDeletionBody"
           refetchQueries={refetchQueries}
-          onDeleteCallback={deleteCallback}/>
+          onDeleteCallback={deleteCallback}
+        />
       </ResponsiveOverlayTrigger>
     </li>
   );
@@ -71,8 +72,8 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
             <h3>{synthesis.subject}</h3>
             <p className="info">
               <span className="published-date">
-                <Translate value="debate.syntheses.publishedOn"/>
-                <Localize value={synthesis.creationDate} dateFormat="date.format"/>
+                <Translate value="debate.syntheses.publishedOn" />
+                <Localize value={synthesis.creationDate} dateFormat="date.format" />
               </span>
             </p>
           </div>

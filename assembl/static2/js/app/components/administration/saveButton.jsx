@@ -111,7 +111,7 @@ export const DumbSaveButton = ({ buttonId, disabled, saveAction, specificClasses
 
   return (
     <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
-      <Translate value={label}/>
+      <Translate value={label} />
     </Button>
   );
 };
@@ -125,7 +125,7 @@ class SaveButtonInPortal extends React.PureComponent<Props> {
   static defaultProps = {
     specificClasses: null,
     buttonId: 'save-button',
-    label: 'administration.saveThemes',
+    label: 'administration.saveThemes'
   };
 
   componentDidMount() {

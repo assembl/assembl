@@ -32,14 +32,13 @@ type Props = {
   displayLanguageMenu: Function,
   routeParams: {
     slug: string,
-    synthesisId: string;
+    synthesisId: string
   }
 };
 
-const loading = <Loader/>;
+const loading = <Loader />;
 
 class CreateSynthesisForm extends React.Component<Props> {
-
   componentDidMount() {
     this.props.displayLanguageMenu(false);
   }
@@ -48,7 +47,7 @@ class CreateSynthesisForm extends React.Component<Props> {
     const { client, editLocale, routeParams } = this.props;
     const synthesisPostId = routeParams.synthesisId;
     const redirectToList = () => {
-      browserHistory.push(getLink('syntheses', { slug: routeParams.slug }))
+      browserHistory.push(getLink('syntheses', { slug: routeParams.slug }));
     };
     return (
       <LoadSaveReinitializeForm
@@ -58,20 +57,20 @@ class CreateSynthesisForm extends React.Component<Props> {
         postLoadFormat={postLoadFormat}
         save={save}
         afterSave={redirectToList}
-        validate={() => {
-        }}
+        validate={() => {}}
         mutators={{ ...arrayMutators }}
         render={({ handleSubmit, pristine, submitting }) => (
           <div className="administration max-container create-synthesis-form">
             <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
               <Row>
                 <Col xs={12} md={10}>
-                  <LanguageMenu/>
+                  <LanguageMenu />
                   <div className="admin-box">
-                    <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn"/>
+                    <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
                     <Section
                       title={!synthesisPostId ? 'debate.syntheses.createNewSynthesis' : 'debate.syntheses.editSynthesis'}
-                      translate>
+                      translate
+                    >
                       <Field
                         editLocale={editLocale}
                         name="subject"
@@ -80,11 +79,8 @@ class CreateSynthesisForm extends React.Component<Props> {
                         required
                       />
                       <div className="flex">
-                        <Field name="image"
-                               component={FileUploaderFieldAdapter}
-                               label={I18n.t('debate.syntheses.picture')}
-                        />
-                        <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" "/>
+                        <Field name="image" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
+                        <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" " />
                         {/* TODO: add image to the helper */}
                       </div>
                       <div className="flex richtext-large">
@@ -95,7 +91,7 @@ class CreateSynthesisForm extends React.Component<Props> {
                           label={I18n.t('debate.syntheses.body')}
                           withAttachmentButton
                           withSideToolbar
-                          rows={1000}
+                          // toolbarPosition="top"
                         />
                       </div>
                     </Section>
@@ -106,8 +102,9 @@ class CreateSynthesisForm extends React.Component<Props> {
             <div id="save-button">&nbsp;</div>
           </div>
         )}
-      />)
-  };
+      />
+    );
+  }
 }
 
 const mapStateToProps = ({ admin, i18n }) => ({
@@ -116,7 +113,7 @@ const mapStateToProps = ({ admin, i18n }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden)),
+  displayLanguageMenu: isHidden => dispatch(displayLanguageMenu(isHidden))
 });
 
 export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(CreateSynthesisForm);

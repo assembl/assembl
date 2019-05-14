@@ -24,7 +24,7 @@ export type Props = {
   /** Modal custom message */
   modalBodyMessage?: string,
   /** callback function handled by the parent component */
-  onDeleteCallback?: Function,
+  onDeleteCallback?: Function
 };
 
 type GraphQLProps = {

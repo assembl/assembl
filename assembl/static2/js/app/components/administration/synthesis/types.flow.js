@@ -5,7 +5,7 @@ import { PublicationStates } from '../../../constants';
 export type SynthesisFormValues = {
   subject: I18nValue,
   body: I18nRichTextValue,
-  image: FileValue,
+  image: FileValue
 };
 
 export type MultilingualSynthesisPost = {
@@ -25,4 +25,4 @@ export type MultilingualSynthesisPost = {
     // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
     img: FileValue
   |}
-}
+};

@@ -89,6 +89,10 @@ export default class LoadSaveReinitializeForm<TO: { [string]: any }, TI: { [stri
   render() {
     const { load, loading, postLoadFormat, createMutationsPromises, save, ...rest } = this.props;
     const { isLoading, initialValues } = this.state;
-    return isLoading || !initialValues ? loading : <Form {...rest} initialValues={initialValues} onSubmit={this.save} />;
+    return isLoading || !initialValues ? (
+      loading
+    ) : (
+      <Form {...rest} initialValues={initialValues} onSubmit={values => this.save(values)} />
+    );
   }
 }

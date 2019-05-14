@@ -306,7 +306,7 @@ const Translations = {
       title: "synthèse",
       seeConversation: "Voir la conversation",
       noSynthesisYet: "Il n'y a pas encore de synthèse disponible.",
-      tableOfContents: "Sommaire",
+      tableOfContents: "Sommaire"
     },
     common: {
       attachments: {
@@ -402,7 +402,7 @@ const Translations = {
         url: "URL de la synthèse",
         urlHelper: "Insérez l'URL de votre story sur storychief",
         successSave: "La synthèse a été sauvegardée",
-        summary: "Sommaire des synthèses",
+        summary: "Sommaire des synthèses"
       },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
@@ -1468,7 +1468,7 @@ const Translations = {
         summary: "Syntheses summary",
         title: "Title of the synthesis",
         url: "URL of the synthesis",
-        urlHelper: "Insert the url of your story on storychief",
+        urlHelper: "Insert the url of your story on storychief"
       },
       validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {
