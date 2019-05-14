@@ -41,7 +41,7 @@ type EditPostFormProps = {
   fillBodyLabelMsgId?: string,
   childrenUpdate?: boolean,
   draftable?: boolean,
-  draftSuccessMsgId?: string,
+  draftSuccessMsgId?: ?string,
   isDebateModerated: boolean,
   multiColumns?: boolean
 };

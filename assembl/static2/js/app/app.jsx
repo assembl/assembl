@@ -41,7 +41,7 @@ const defaultContextValue: ContextValue = {
   messageViewOverride: MESSAGE_VIEW.noModule
 };
 
-export const DebateContext = React.createContext(defaultContextValue);
+export const DebateContext: React$Context<ContextValue> = React.createContext(defaultContextValue);
 
 type Debate = {
   debateData: DebateData,

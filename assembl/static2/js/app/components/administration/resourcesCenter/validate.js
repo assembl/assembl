@@ -14,7 +14,7 @@ function validateResource(resource): Errors {
   return errors;
 }
 
-export default function validate(values: ResourcesValues) {
+export default function validate(values: ResourcesValues): { pageTitle: ?string, resources: Array<Errors> } {
   return {
     pageTitle: i18nValueIsEmpty(values.pageTitle) ? I18n.t('error.required') : undefined,
     resources: values.resources.map(validateResource)
