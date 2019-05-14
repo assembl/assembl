@@ -36,9 +36,9 @@ class TabbedContent extends React.Component<Props, State> {
 
   renderOverlay = (tab: Tab) => (tab.title ? this.props.renderTooltip(tab.title) : hiddenTooltip);
 
-  renderTabs() {
+  renderTabs(): Array<React.Element<Col>> {
     const { tabTitleMsgId, tabs } = this.props;
-    return tabs.map((tab, idx): React.Element<Col> => (
+    return tabs.map((tab, idx) => (
       <Col xs={12} md={Math.round(12 / tabs.length)} key={tab.id}>
         <OverlayTrigger placement="top" overlay={this.renderOverlay(tab)}>
           <a

@@ -32,7 +32,7 @@ type Props = {
   onDateChange: ?(moment$Moment) => void,
   form: FormApi,
   children?: React.Node,
-  dateFormat?: 'string'
+  dateFormat?: string
 } & FieldRenderProps;
 
 const DatePickerFieldAdapter = ({

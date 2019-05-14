@@ -11,7 +11,7 @@ export type Props = {
 };
 
 const SuggestionContainer = ({ suggestionList, suggestionContainerClassnamePrefix, suggestionContainerTitle }: Props) =>
-  suggestionContainerClassnamePrefix && (
+  (suggestionContainerClassnamePrefix ? (
     <div className={`${suggestionContainerClassnamePrefix}-container`}>
       <div className="title">{suggestionContainerTitle}</div>
       <div className={`${suggestionContainerClassnamePrefix}-list`}>
@@ -20,7 +20,7 @@ const SuggestionContainer = ({ suggestionList, suggestionContainerClassnamePrefi
         ))}
       </div>
     </div>
-  );
+  ) : null);
 
 SuggestionContainer.defaultProps = {
   suggestionContainerClassnamePrefix: 'suggestion'
