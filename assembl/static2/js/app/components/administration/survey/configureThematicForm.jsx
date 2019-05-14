@@ -131,8 +131,8 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
           component={FileUploaderFieldAdapter}
           label={I18n.t('administration.tableOfThematics.bannerImagePickerLabel')}
         />
-        <div className="file-uploader-warning">
-          <Translate value="administration.imageRequirements" />
+        <div className="label-indication">
+          <Translate value="administration.landingPage.header.headerDescription" />
         </div>
         <div className="title">{I18n.t('administration.tableOfThematics.moduleTypeLabel')}</div>
         <Field
@@ -173,6 +173,21 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
               withAttachmentButton
               component={MultilingualRichTextFieldAdapter}
             />
+            <div className="margin-l" />
+            <Helper
+              label={I18n.t('administration.summary')}
+              helperUrl="/static2/img/helpers/helper_BM_1.png"
+              helperText={I18n.t('administration.tableOfThematics.summaryHeader')}
+              classname="title"
+            />
+            <Field
+              key={`${announcementSummaryName}-${editLocale}`}
+              editLocale={editLocale}
+              name={announcementSummaryName}
+              label={`${I18n.t('administration.tableOfThematics.summaryLabel')} ${upperCaseLocale}`}
+              withAttachmentButton
+              component={MultilingualRichTextFieldAdapter}
+            />
           </React.Fragment>
         ) : null}
         {theme ? this.addVoteModuleLink(theme) : null}
@@ -182,23 +197,6 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
         {theme && theme.messageViewOverride && theme.messageViewOverride.value === MESSAGE_VIEW.messageColumns ? (
           <MultiColumnsFields editLocale={editLocale} fieldPrefix={name} nbColumnsInForm={nbColumnsInForm} />
         ) : null}
-        <React.Fragment>
-          <div className="margin-l" />
-          <Helper
-            label={I18n.t('administration.summary')}
-            helperUrl="/static2/img/helpers/helper_BM_1.png"
-            helperText={I18n.t('administration.tableOfThematics.summaryHeader')}
-            classname="title"
-          />
-          <Field
-            key={`${announcementSummaryName}-${editLocale}`}
-            editLocale={editLocale}
-            name={announcementSummaryName}
-            label={`${I18n.t('administration.tableOfThematics.summaryLabel')} ${upperCaseLocale}`}
-            withAttachmentButton
-            component={MultilingualRichTextFieldAdapter}
-          />
-        </React.Fragment>
       </div>
     );
   }

@@ -262,6 +262,7 @@ class Post extends React.Component<Props> {
     let userCanDeleteThisMessage = false;
     const userIsModerator = connectedUserIsModerator();
     const isPendingForModerator = isPending && userIsModerator;
+    const deleteModalMessage = isPendingForModerator ? 'debate.confirmRefusalBody' : null;
 
     if (post.creator) {
       const { displayName, isDeleted } = post.creator;
@@ -273,6 +274,7 @@ class Post extends React.Component<Props> {
     }
     const deleteButton = (
       <DeletePostButton
+        modalBodyMessage={deleteModalMessage}
         isPendingForModerator={isPendingForModerator}
         postId={post.id}
         refetchQueries={refetchQueries}

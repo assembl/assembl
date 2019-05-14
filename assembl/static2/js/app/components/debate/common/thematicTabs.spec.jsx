@@ -16,6 +16,7 @@ describe('<InstructionsText /> - with shallow', () => {
 
   beforeEach(() => {
     props = {
+      summary: null,
       isMobile: false,
       semanticAnalysisForThematicData: {
         id: '1234',

@@ -5,16 +5,20 @@ mutation createDiscussionPhase(
   $lang: String!
   $identifier: String
   $titleEntries: [LangStringEntryInput]!
+  $descriptionEntries: [LangStringEntryInput]
   $start: DateTime!
   $end: DateTime!
+  $image: String
   $order: Float!
 ) {
   createDiscussionPhase(
     lang: $lang
     identifier: $identifier
     titleEntries: $titleEntries
+    descriptionEntries: $descriptionEntries
     start: $start
     end: $end
+    image: $image
     order: $order
   ) {
     discussionPhase {

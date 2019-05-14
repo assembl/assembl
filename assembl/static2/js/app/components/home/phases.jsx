@@ -38,13 +38,7 @@ const Phases = ({ timeline }: Props) => (
         <div className="content-section visible-lg">
           <Row className="no-margin">
             {timeline.map((phase, index) => (
-              <Col
-                xs={12 / timeline.length}
-                sm={12 / timeline.length}
-                md={12 / timeline.length}
-                className={'no-padding bar'}
-                key={index}
-              >
+              <Col xs={2} className={'no-padding bar'} key={index}>
                 <Timeline index={index} />
               </Col>
             ))}
@@ -54,7 +48,6 @@ const Phases = ({ timeline }: Props) => (
     </Grid>
   </section>
 );
-
 const mapStateToProps = state => ({
   timeline: state.timeline
 });

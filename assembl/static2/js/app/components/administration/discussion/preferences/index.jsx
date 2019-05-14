@@ -64,7 +64,7 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
               <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting} disableSave={slugIsInvalid}>
                 <div className="form-container">
                   <div className="title">
-                    <Translate value="administration.nameOfTheDebate" />
+                    <Translate value="administration.informationOfTheDebate" />
                   </div>
                   <Field
                     validate={this.checkSlugValidity}

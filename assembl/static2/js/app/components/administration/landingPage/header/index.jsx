@@ -144,16 +144,15 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
                       component={FileUploaderFieldAdapter}
                       label={I18n.t('administration.landingPage.header.headerImage')}
                     />
+                    <p className="label-indication">{I18n.t('administration.landingPage.header.headerDescription')}</p>
                     <div className="flex">
                       <Field
                         name="headerLogoImage"
                         component={FileUploaderFieldAdapter}
-                        label={I18n.t('administration.landingPage.header.logoDescription')}
+                        label={I18n.t('administration.landingPage.header.logoHelper')}
                       />
-                      {/* Passing an empty class to the popOver cancels the default styling */}
-                      <Helper helperText={I18n.t('administration.landingPage.header.logoHelper')} popOverClass=" " />
                     </div>
-                    <div className="section-description">{I18n.t('administration.landingPage.header.dateDescription')}</div>
+                    <p className="section-description">{I18n.t('administration.landingPage.header.dateLabel')}</p>
                     <Field
                       name="headerStartDate"
                       component={DatePickerFieldAdapter}
@@ -178,6 +177,7 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
                       form={form}
                       dateFormat="LL"
                     />
+                    <p className="label-indication">{I18n.t('administration.landingPage.header.dateDescription')}</p>
                   </div>
                 </AdminForm>
               </div>

@@ -4,6 +4,7 @@ import { Grid, Col } from 'react-bootstrap';
 import classnames from 'classnames';
 import type { AnnouncementContent } from '../debate/common/announcement';
 import { renderRichtext } from '../../utils/linkify';
+import { richTextBodyIsEmpty } from '../../utils/draftjs';
 
 type DescriptionProps = {
   content: string
@@ -11,7 +12,7 @@ type DescriptionProps = {
 
 type Props = AnnouncementContent;
 
-const isValidDescription = (description: ?string): boolean => (description ? description !== '<p></p>' : false);
+const isValidDescription = (description: ?string): boolean => (description ? !richTextBodyIsEmpty(description) : false);
 
 const Quote = ({ content }: DescriptionProps) => (
   <div className="media-description">

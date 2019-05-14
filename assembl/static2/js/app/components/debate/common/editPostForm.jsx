@@ -35,6 +35,7 @@ type EditPostFormProps = {
   uploadDocument: Function,
   updatePost: Function,
   onSuccess: Function,
+  textareaRef: Function,
   postSuccessMsgId?: string,
   editTitleLabelMsgId?: string,
   bodyDescriptionMsgId?: string,
@@ -170,7 +171,8 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
       bodyDescriptionMsgId,
       draftable,
       isDebateModerated,
-      multiColumns
+      multiColumns,
+      textareaRef
     } = this.props;
     const userIsModerator = connectedUserIsModerator();
     const publicationState =
@@ -207,6 +209,7 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
                 editorState={body}
                 placeholder={I18n.t(bodyDescriptionMsgId)}
                 onChange={this.updateBody}
+                textareaRef={textareaRef}
                 withAttachmentButton
               />
 

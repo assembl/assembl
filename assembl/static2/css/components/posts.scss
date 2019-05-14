@@ -82,7 +82,12 @@
     }
 
     .actions {
+      display: inline-flex;
       margin: 15px;
+    }
+
+    .assembl-icon-check-box-declined:before {
+      font-size: 20px;
     }
   }
 

@@ -6,14 +6,14 @@ type Props = {
 };
 
 const YoutubeVideo = ({ id }: Props) => (
-  <div className="video-container">
+  <div className="embed-responsive embed-responsive-16by9">
     <iframe
       title="YouTube video"
       id="ytplayer"
       type="text/html"
       width="640"
       height="360"
-      src={`https://www.youtube.com/embed/${id}?autoplay=1`}
+      src={`https://www.youtube.com/embed/${id}?autoplay=0`}
       frameBorder="0"
     />
   </div>

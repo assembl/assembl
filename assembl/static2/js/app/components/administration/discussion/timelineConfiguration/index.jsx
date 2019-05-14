@@ -68,7 +68,7 @@ class TimelineFields extends React.Component<Props> {
               ...arrayMutators,
               setFieldTouched: setFieldTouched
             }}
-            render={({ values, handleSubmit, submitting, initialValues, form }) => {
+            render={({ values, handleSubmit, submitting, initialValues, form, errors }) => {
               const pristine = isEqualWith(initialValues, values, compareEditorState);
               return (
                 <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
@@ -77,6 +77,7 @@ class TimelineFields extends React.Component<Props> {
                   </p>
                   <div className="panel-group">
                     <FieldArrayWithActions
+                      errors={errors.phases}
                       usePanels
                       confirmDeletion
                       name="phases"
@@ -121,6 +122,7 @@ class TimelineFields extends React.Component<Props> {
                             />
                             <Translate value="administration.timelineAdmin.instruction3" className="admin-paragraph" />
                             <Field
+                              required
                               name={`${name}.start`}
                               component={DatePickerFieldAdapter}
                               picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
@@ -132,6 +134,7 @@ class TimelineFields extends React.Component<Props> {
                               hasConflictingDates={conflictingDates}
                             />
                             <Field
+                              required
                               name={`${name}.end`}
                               component={DatePickerFieldAdapter}
                               picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}

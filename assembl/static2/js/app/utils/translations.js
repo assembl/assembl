@@ -390,7 +390,7 @@ const Translations = {
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
         themesTitle: "Choisissez une thématique !",
-        txtAreaPh: "Ecrivez votre proposition",
+        txtAreaPh: "Ecrivez votre proposition (minimum 11 caractères)",
         question_x_on_total: "Question %{current} sur %{total}",
         proposalsTitle: "Êtes-vous d'accord avec les propositions exprimées ?",
         moderateProposalsTitle: "Modérer les propositions exprimées par les participants.",
@@ -676,7 +676,7 @@ const Translations = {
       down: "Descendre",
       nextStep: "Étape suivante",
       previousStep: "Étape précédente",
-      nameOfTheDebate: "Nom de la discussion",
+      informationOfTheDebate: "Informations de la discussion",
       discussionSlug: "Slug de la discussion",
       slugWarning:
         "Cette modification entraine un changement de l'adresse de la consultation. Intégrez ce changement dans vos prochaines communications. Pour assurer la continuité du service, la précédente adresse sera toujours opérationnelle.",
@@ -694,7 +694,7 @@ const Translations = {
         exportDebateData: "Exporter les données"
       },
       discussionPreferences: {
-        debateLogoLabel: "Logo du débat"
+        debateLogoLabel: "Logo de la discussion"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -737,8 +737,6 @@ const Translations = {
         "2": "Configurer les propositions de vote",
         "3": "Exporter les données"
       },
-      imageRequirements:
-        "L'image doit avoir une hauteur de 300 px et une largeur de 1280 px. Le poids ne doit pas dépasser 300 ko.",
       voteWithTokens: "Vote par jetons",
       voteWithGauges: "Vote par jauge(s)",
       gauge: "Jauge %{number}",
@@ -974,15 +972,16 @@ const Translations = {
           titleLabel: "Titre du débat",
           subtitleLabel: "Sous-titre du débat",
           buttonLabel: "Nom du bouton de renvoi vers le débat",
-          headerImage: "Choisir l'image de font du bandeau",
+          headerImage: "Choisir l'image de fond du bandeau",
           logoImage: "Choisir le logo du débat",
           headerDescription:
-            "L'image doit avoir une hauteur de 450px de haut et une largeur de 1280px. Le poids ne doit pas dépasser 1Mo.",
+            "L'image doit avoir une hauteur de 480px et une largeur de 1480px. Le poids ne doit pas dépasser 300 ko.",
           logoDescription:
             "Le logo doit avoir une hauteur maximale de 78px et une largeur maximale de 200px. Le poids ne doit pas dépasser 1Mo. Le fond doit être transparent.",
           startDate: "Du",
           endDate: "Au",
           timePlaceholder: "Optionnel : Entrez les dates du débat",
+          dateLabel: "Choisissez les dates de la discussion qui apparaissent dans le bandeau.",
           dateDescription:
             "Pour configurer les dates du debat. Si vous n'avez pas sélectionné de dates, les dates sont déduites des timelines.",
           startDateError: "La date de début ne peut pas être postérieure à la date de fin",
@@ -1434,7 +1433,7 @@ const Translations = {
       survey: {
         loadRecentPosts: "Load recent proposals",
         themesTitle: "Choose a theme!",
-        txtAreaPh: "Write your point of view",
+        txtAreaPh: "Write your point of view (minimum of 11 characters)",
         question_x_on_total: "Question %{current} on %{total}",
         proposalsTitle: "Do you agree with these points of view?",
         moderateProposalsTitle: "Moderate these points of view",
@@ -1719,7 +1718,7 @@ const Translations = {
       down: "Down",
       nextStep: "Next step",
       previousStep: "Previous step",
-      nameOfTheDebate: "Name of the debate",
+      informationOfTheDebate: "Information of the debate",
       discussionSlug: "Slug of the debate",
       slugWarning:
         "This modification causes a change in the address of the debate. Please take this change into account in further communications. To insure the continuity of the service, the previous address will still be operating.",
@@ -1737,7 +1736,7 @@ const Translations = {
         exportDebateData: "Export the data"
       },
       discussionPreferences: {
-        debateLogoLabel: "Debate logo"
+        debateLogoLabel: "Discussion logo"
       },
       timelineAdmin: {
         phase: "Phase %{count}",
@@ -1780,7 +1779,6 @@ const Translations = {
         "2": "Configure the voting proposals",
         "3": "Export data"
       },
-      imageRequirements: "The image must have a height of 300 px and a width of 1280 px. Its size has to be under 300 kB.",
       voteWithTokens: "Tokens vote",
       voteWithGauges: "Gauge(s) vote",
       gauge: "Gauge %{number}",
@@ -2011,12 +2009,13 @@ const Translations = {
           buttonLabel: "Name of the referral button to the debate",
           headerImage: "Choose the header image",
           logoImage: "Choose the header logo",
-          headerDescription: "The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.",
+          headerDescription: "The image must have a height of 480px and a width of 1480px. The weight must not exceed 300ko.",
           logoDescription:
             "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.",
           startDate: "From",
           endDate: "To",
           timePlaceholder: "Optional: Enter the dates of the debate",
+          dateLabel: "Enter the dates of the the debate that appear in the header.",
           dateDescription:
             "Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.",
           startDateError: "The start date cannot be after the end date",

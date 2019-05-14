@@ -102,6 +102,10 @@
     border-color: $error !important;
   }
 
+  .panel-error {
+    border-color: $error;
+  }
+
   .block-picker {
     input {
       height: 34px !important;
@@ -145,7 +149,7 @@
     margin-top: 30px;
   }
 
-  .file-uploader-warning {
+  .label-indication {
     font-family: $font-family7;
     font-size: $font-size-xxs;
     margin-bottom: 2em;

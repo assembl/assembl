@@ -11,6 +11,7 @@ import PostQuery from '../../../../graphql/PostQuery.graphql';
 import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 import { DeletedPublicationStates, PublicationStates } from '../../../../constants';
 import hashLinkScroll from '../../../../utils/hashLinkScroll';
+import { getDomElementOffset } from '../../../../utils/globalFunctions';
 import NuggetsManager from '../../../common/nuggetsManager';
 import { DebateContext } from '../../../../app';
 
@@ -65,6 +66,8 @@ type State = {
 type bodyAndSubject = { body: string, subject: string, originalBody: string, originalSubject: string };
 
 export class DumbPost extends React.PureComponent<Props, State> {
+  editPostarea: ?HTMLTextAreaElement;
+
   static defaultProps = {
     isHarvesting: false,
     multiColumns: false
@@ -139,6 +142,12 @@ export class DumbPost extends React.PureComponent<Props, State> {
 
   handleEditClick = () => {
     this.setState({ mode: 'edit' }, this.props.measureTreeHeight);
+    setTimeout(() => {
+      const editPostareaRef = this.editPostarea;
+      if (!editPostareaRef) return;
+      const txtareaOffset = getDomElementOffset(editPostareaRef).top;
+      window.scrollTo({ top: txtareaOffset - editPostareaRef.clientHeight, left: 0, behavior: 'smooth' });
+    }, 200);
   };
 
   goBackToViewMode = () => {
@@ -172,6 +181,10 @@ export class DumbPost extends React.PureComponent<Props, State> {
       </span>
     );
 
+    const editPostareaRef = (el: ?HTMLTextAreaElement) => {
+      this.editPostarea = el;
+    };
+
     if (publicationState in DeletedPublicationStates) {
       return (
         <DeletedPost
@@ -203,6 +216,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
               modifiedOriginalSubject={modifiedOriginalSubject}
               originalLocale={originalLocale}
               multiColumns={multiColumns}
+              textareaRef={editPostareaRef}
             />
           </div>
         ) : (
