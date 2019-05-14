@@ -149,6 +149,7 @@ def setup_ctx(c):
     target = c.config.get('_extends', None)
     if not target and exists(c, 'invoke.yaml'):
         target = 'invoke.yaml'
+    temp_config = {}
     while target:
         if os.path.isabs(target):
             if exists(c, target):
@@ -165,7 +166,9 @@ def setup_ctx(c):
         if not data:
             break
         target = data.get('_extends', None)
-        current = rec_update(data, current)
+        temp_config = rec_update(data, temp_config)
+    import pdb; pdb.set_trace()
+    current = rec_update(current, temp_config)
 
     account_id = current.get('aws_client', None)
     if not account_id:
