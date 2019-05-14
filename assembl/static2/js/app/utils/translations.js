@@ -1775,7 +1775,6 @@ const Translations = {
         "2": "Configure the voting proposals",
         "3": "Export data"
       },
-      imageRequirements: "The image must have a height of 480px and a width of 1480 px. Its size has to be under 300 kB.",
       voteWithTokens: "Tokens vote",
       voteWithGauges: "Gauge(s) vote",
       gauge: "Gauge %{number}",
