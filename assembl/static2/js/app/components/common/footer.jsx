@@ -5,7 +5,7 @@ import { Translate } from 'react-redux-i18n';
 import { Grid } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { graphql, compose } from 'react-apollo';
-import connectedUserIsAdmin from '../../utils/permissions';
+import { connectedUserIsAdmin } from '../../utils/permissions';
 import { get } from '../../utils/routeMap';
 import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
 import TabsConditionQuery from '../../graphql/TabsConditionQuery.graphql';
