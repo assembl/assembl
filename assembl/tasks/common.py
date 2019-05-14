@@ -15,7 +15,6 @@ local_code_root = dirname(dirname(realpath(_local_file)))
 
 
 def task(*args, **kwargs):
-    import pdb; pdb.set_trace()
     pre = list(kwargs.pop('pre', args))
     pre.append(base_task(setup_ctx))
     return base_task(pre=pre, **kwargs)
@@ -135,6 +134,7 @@ def is_cloud_env(c):
 
 def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
+    import pdb; pdb.set_trace()
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
     if is_cloud_env(c):
         code_root = os.path.join(os.getcwd(), get_venv_site_packages(c))
