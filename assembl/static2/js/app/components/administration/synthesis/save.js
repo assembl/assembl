@@ -15,6 +15,7 @@ const getVariables = async (client: ApolloClient, values: SynthesisFormValues, i
   const image = getFileVariable(values.image, initialValues.image);
   return {
     synthesisType: 'fulltext_synthesis',
+    publicationState: values.publicationState,
     subjectEntries: subjectEntries,
     bodyEntries: bodyEntries,
     image: image

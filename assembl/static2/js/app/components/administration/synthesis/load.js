@@ -2,6 +2,7 @@
 import type { ApolloClient } from 'react-apollo';
 import MultilingualSynthesisQuery from '../../../graphql/MultilingualSynthesisQuery.graphql';
 import { convertEntriesToI18nRichText, convertEntriesToI18nValue } from '../../form/utils';
+import { PublicationStates } from '../../../constants';
 import type { MultilingualSynthesisPost, SynthesisFormValues } from './types.flow';
 
 export const load = async (
@@ -21,7 +22,7 @@ export const load = async (
 
 export const postLoadFormat = ({ synthesisPost }: { synthesisPost: MultilingualSynthesisPost | null }): SynthesisFormValues => {
   if (!synthesisPost) {
-    return { subject: {}, body: {}, image: null };
+    return { subject: {}, body: {}, image: null, publicationState: PublicationStates.DRAFT };
   }
   const synthesis = synthesisPost.publishesSynthesis;
   return {

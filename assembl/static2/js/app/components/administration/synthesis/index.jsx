@@ -10,10 +10,11 @@ import { I18n } from 'react-redux-i18n';
 import Section from '../../common/section';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import Loader from '../../common/loader';
-import AdminForm from '../../../components/form/adminForm';
 
 import { createMutationsPromises, save } from './save';
 import { load, postLoadFormat } from './load';
+import FormWithRouter from '../../form/formWithRouter';
+import SubmitButton from '../../form/submitButton';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import FileUploaderFieldAdapter from '../../form/fileUploaderFieldAdapter';
 import Helper from '../../common/helper';
@@ -24,6 +25,7 @@ import { displayLanguageMenu } from '../../../actions/adminActions';
 import LanguageMenu from '../languageMenu';
 import { browserHistory } from '../../../router';
 import { get as getLink } from '../../../utils/routeMap';
+import { PublicationStates } from '../../../constants';
 
 type Props = {
   client: ApolloClient,
@@ -44,7 +46,7 @@ class CreateSynthesisForm extends React.Component<Props> {
   }
 
   render() {
-    const { client, editLocale, routeParams } = this.props;
+    const { client, editLocale, routeParams, lang } = this.props;
     const synthesisPostId = routeParams.synthesisId;
     const redirectToList = () => {
       browserHistory.push(getLink('syntheses', { slug: routeParams.slug }));
@@ -53,15 +55,15 @@ class CreateSynthesisForm extends React.Component<Props> {
       <LoadSaveReinitializeForm
         load={(fetchPolicy: FetchPolicy) => load(client, fetchPolicy, synthesisPostId)}
         loading={loading}
-        createMutationsPromises={createMutationsPromises(client, synthesisPostId)}
+        createMutationsPromises={createMutationsPromises(client, lang, synthesisPostId)}
         postLoadFormat={postLoadFormat}
         save={save}
         afterSave={redirectToList}
         validate={() => {}}
         mutators={{ ...arrayMutators }}
-        render={({ handleSubmit, pristine, submitting }) => (
+        render={({ form, handleSubmit, pristine, submitting }) => (
           <div className="administration max-container create-synthesis-form">
-            <AdminForm handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+            <FormWithRouter handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
               <Row>
                 <Col xs={12} md={10}>
                   <LanguageMenu />
@@ -98,8 +100,25 @@ class CreateSynthesisForm extends React.Component<Props> {
                   </div>
                 </Col>
               </Row>
-            </AdminForm>
-            <div id="save-button">&nbsp;</div>
+              <Row>
+                <SubmitButton
+                  name="save"
+                  label="administration.saveThemes"
+                  disabled={pristine || submitting}
+                  onClick={() => {
+                    form.change('publicationState', PublicationStates.DRAFT);
+                  }}
+                />
+                <SubmitButton
+                  name="post"
+                  label="debate.post"
+                  disabled={pristine || submitting}
+                  onClick={() => {
+                    form.change('publicationState', PublicationStates.PUBLISHED);
+                  }}
+                />
+              </Row>
+            </FormWithRouter>
           </div>
         )}
       />

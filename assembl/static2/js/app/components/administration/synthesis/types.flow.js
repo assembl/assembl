@@ -1,11 +1,11 @@
 // @flow
 import type { FileValue, I18nRichTextValue, I18nValue } from '../../form/types.flow';
-import { PublicationStates } from '../../../constants';
 
 export type SynthesisFormValues = {
   subject: I18nValue,
   body: I18nRichTextValue,
-  image: FileValue
+  image: FileValue,
+  publicationState: string
 };
 
 export type MultilingualSynthesisPost = {
@@ -22,7 +22,8 @@ export type MultilingualSynthesisPost = {
     subjectEntries: LangstringEntries,
     // A list of possible languages of the entity as LangStringEntry objects. The body in various languages.
     bodyEntries: LangstringEntries,
-    // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
+    // This is a header image document object that will be visible on the Synthesis view's header.
+    // A file metadata object, described by the Document object.
     img: FileValue
   |}
 };
