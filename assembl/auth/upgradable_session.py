@@ -13,7 +13,7 @@ class UpgradableSession(Session):
         self.elevated_expires = elevated_expires
         self.basic_expires = cookie_expires
         self.elevated = False
-        timeout = int(request.registry.settings['session_timeout'])
+        timeout = request.registry.settings['session_timeout']
         super(UpgradableSession, self).__init__(
             request, cookie_expires=cookie_expires, timeout=timeout, **kwargs)
         self.elevated = self.get_is_elevated()
