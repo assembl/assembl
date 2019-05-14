@@ -1,5 +1,4 @@
 from social_core.backends.oauth import BaseOAuth2
-from base64 import urlsafe_b64encode
 from urlparse import urljoin
 
 from assembl.lib.config import get
@@ -17,27 +16,20 @@ class DecathlonOAuth(BaseOAuth2):
     AUTHORIZATION_URL = urljoin(BASE_AS_URL, '/as/authorization.oauth2')
     ACCESS_TOKEN_URL = urljoin(BASE_AS_URL, '/as/token.oauth2')
     REFRESH_TOKEN_URL = urljoin(BASE_AS_URL, '/token')
-
     ACCESS_TOKEN_METHOD = 'POST'
-    SCOPE_SEPARATOR = ' '
     ID_KEY = 'uid'
     REDIRECT_STATE = False
     STATE_PARAMETER = False
 
     def auth_headers(self):
-        headers = {}
-        headers.update({'cache-control': 'no-cache'})
-        # Manually override authorization
-        client_id, client_secret = self.get_key_and_secret()
-        credentials = "%s:%s" % (client_id, client_secret)
-        headers.update({'Authorization': 'Basic %s' % urlsafe_b64encode(credentials)})
+        headers = {'cache-control': 'no-cache'}
         return headers
 
     def get_scope_argument(self):
         return {'scope': 'openid profile email'}
 
     def auth_complete_credentials(self):
-        return None
+        return self.get_key_and_secret()
 
     def get_user_details(self, response):
         """Return user details from Decathlon account"""
