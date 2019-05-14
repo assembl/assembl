@@ -26,7 +26,7 @@ export const createMutationsPromises = (client: ApolloClient, lang: string, synt
   initialValues: SynthesisFormValues
 ) => [
   (): Promise<any> => {
-    const variables = getVariables(client, values, initialValues);
+    const vars = getVariables(client, values, initialValues);
     const refetchQueries = [
       {
         query: SynthesesQuery,
@@ -36,7 +36,7 @@ export const createMutationsPromises = (client: ApolloClient, lang: string, synt
       }
     ];
     if (!synthesisPostId) {
-      return variables.then(variables =>
+      return vars.then(variables =>
         client.mutate({
           mutation: createSynthesis,
           variables: {
@@ -46,7 +46,7 @@ export const createMutationsPromises = (client: ApolloClient, lang: string, synt
         })
       );
     }
-    return variables.then(variables =>
+    return vars.then(variables =>
       client.mutate({
         mutation: updateSynthesis,
         variables: {
