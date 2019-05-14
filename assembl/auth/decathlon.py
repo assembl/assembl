@@ -1,4 +1,5 @@
 from social_core.backends.oauth import BaseOAuth2
+from base64 import urlsafe_b64encode
 from urlparse import urljoin
 
 from assembl.lib.config import get
@@ -17,28 +18,29 @@ class DecathlonOAuth(BaseOAuth2):
     ACCESS_TOKEN_URL = urljoin(BASE_AS_URL, '/as/token.oauth2')
     REFRESH_TOKEN_URL = urljoin(BASE_AS_URL, '/token')
 
-    RESPONSE_TYPE = 'code'
     ACCESS_TOKEN_METHOD = 'POST'
     SCOPE_SEPARATOR = ' '
     ID_KEY = 'uid'
     REDIRECT_STATE = False
     STATE_PARAMETER = False
 
-    def get_scope_argument(self):
-        return {'scope': 'profile openid'}
-
     def auth_headers(self):
-        headers = super(DecathlonOAuth, self).auth_headers()
+        headers = {}
         headers.update({'cache-control': 'no-cache'})
-        log.info("[Decathlon][auth_headers][headers] %s" % headers)
+        # Manually override authorization
+        client_id, client_secret = self.get_key_and_secret()
+        credentials = "%s:%s" % (client_id, client_secret)
+        headers.update({'Authorization': 'Basic %s' % urlsafe_b64encode(credentials)})
         return headers
 
+    def get_scope_argument(self):
+        return {'scope': 'openid profile email'}
+
     def auth_complete_credentials(self):
-        return self.get_key_and_secret()
+        return None
 
     def get_user_details(self, response):
         """Return user details from Decathlon account"""
-        log.info("[Decathlon][get_user_details][response] %s" % response)
         details = {
             'email': response.get('mail'),
             'first_name': response.get('givenName'),
@@ -47,6 +49,12 @@ class DecathlonOAuth(BaseOAuth2):
             'fullname': ' '.join((response.get('givenName'), response.get('familyName')))
         }
         return details
+
+    def auth_complete_params(self, state=None):
+        params = super(DecathlonOAuth, self).auth_complete_params(state)
+        if 'client_secret' in params:
+            params.pop('client_secret')
+        return params
 
     def user_data(self, token, *args, **kwargs):
         """Loads user data from service"""
