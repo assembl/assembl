@@ -15,6 +15,7 @@ local_code_root = dirname(dirname(realpath(_local_file)))
 
 
 def task(*args, **kwargs):
+    import pdb; pdb.set_trace()
     pre = list(kwargs.pop('pre', args))
     pre.append(base_task(setup_ctx))
     return base_task(pre=pre, **kwargs)
@@ -165,7 +166,6 @@ def setup_ctx(c):
                 target, config_prefix, project_prefix))
         if not data:
             break
-        import pdb; pdb.set_trace()
         target = data.get('_extends', None)
         temp_config = rec_update(data, temp_config)
 
