@@ -342,11 +342,7 @@ def get_default_context(request, **kwargs):
     web_analytics_piwik_script = config.get(
         'web_analytics_piwik_script') or False
     discussion = get_current_discussion()
-    if discussion:
-        furl = FrontendUrls(discussion)
-        application_url = furl.get_discussion_url(request)
-    else:
-        application_url = get_global_base_url()
+    application_url = get_global_base_url()
     if (web_analytics_piwik_script and discussion and discussion.web_analytics_piwik_id_site):
         web_analytics_piwik_script = web_analytics_piwik_script % (
             discussion.web_analytics_piwik_id_site,
