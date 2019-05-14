@@ -14,8 +14,6 @@ import { Form } from 'react-final-form';
 import type { MutationsPromises, SaveStatus } from './types.flow';
 import { displayConfirmationModal } from '../../utils/administration/displayConfirmationModal';
 
-export type TValues = { [string]: any };
-
 type Props<TOriginalValues, TFormValues> = {
   load: (fetchPolicy: FetchPolicy) => Promise<TOriginalValues>,
   loading: React.Node,
@@ -54,7 +52,7 @@ export default class LoadSaveReinitializeForm<TO: { [string]: any }, TI: { [stri
     const { load, postLoadFormat } = this.props;
     this.setState({ isLoading: true });
     const originalValues: TO = await load(fetchPolicy);
-    const initialValues: TI = postLoadFormat ? postLoadFormat((originalValues: any)) : (originalValues: any);
+    const initialValues: TI = postLoadFormat ? postLoadFormat(originalValues) : (originalValues: any);
     this.setState({
       isLoading: false,
       initialValues: initialValues
@@ -74,25 +72,23 @@ export default class LoadSaveReinitializeForm<TO: { [string]: any }, TI: { [stri
     }
   };
 
-  save = (values: Object) => {
+  save = (values: TI) => {
     const { withWarningModal, warningValues, warningMessageKey } = this.props;
     const { initialValues } = this.state;
     // We check if any of the values that need to be warned about have been changed
     const warningValuesHaveChanged =
-      warningValues && initialValues && warningValues.some(value => values.get(value) !== initialValues.get(value));
+      warningValues && initialValues && warningValues.some(value => values[value] !== initialValues[value]);
     if (withWarningModal && warningValuesHaveChanged && warningMessageKey) {
-      return displayConfirmationModal(() => this.runMutations((values: any)), warningMessageKey);
+      // $FlowFixMe
+      return displayConfirmationModal(() => this.runMutations(values), warningMessageKey);
     }
-    return this.runMutations((values: any)); // flow bug ?
+    // $FlowFixMe
+    return this.runMutations(values);
   };
 
   render() {
     const { load, loading, postLoadFormat, createMutationsPromises, save, ...rest } = this.props;
     const { isLoading, initialValues } = this.state;
-    return isLoading || !initialValues ? (
-      loading
-    ) : (
-      <Form {...rest} initialValues={initialValues} onSubmit={values => this.save(values)} />
-    );
+    return isLoading || !initialValues ? loading : <Form {...rest} initialValues={initialValues} onSubmit={this.save} />;
   }
 }
