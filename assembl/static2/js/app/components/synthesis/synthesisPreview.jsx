@@ -15,17 +15,18 @@ import { PublicationStates } from '../../constants';
 
 export type Props = {
   synthesis: SynthesisItem,
-  userCanEdit: boolean,
-  userCanDelete: boolean,
-  refetchQueries?: Array<any>
+  // userCanEdit: boolean,
+  // userCanDelete: boolean,
+  refetchQueries: Array<any>
+};
+
+const handleEdit = (synthesis: SynthesisItem) => {
+  const slug = getDiscussionSlug();
+  browserHistory.push(getLink('editSynthesis', { slug: slug, synthesisId: synthesis.post.id }));
+  // redirect to the storychief edition interface
 };
 
 const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
-  const handleEdit = (synthesis: SynthesisItem) => {
-    const slug = getDiscussionSlug();
-    browserHistory.push(getLink('editSynthesis', { slug: slug, synthesisId: synthesis.post.id }));
-    // redirect to the storychief edition interface
-  };
   const isDraft = synthesis.post.publicationState === PublicationStates.DRAFT;
   const editButton = (
     <li>

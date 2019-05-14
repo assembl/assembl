@@ -12,7 +12,7 @@ import type { SynthesisItem } from './types.flow';
 
 export type Props = {
   syntheses: Array<SynthesisItem>,
-  refetchQueries?: Array<any>
+  refetchQueries: Array<any>
 };
 
 const masonryOptions = {

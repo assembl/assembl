@@ -234,7 +234,6 @@ exports[`AnswerForm component should render a answer form 1`] = `
                         </button>
                       </div>
                     </div>
-                    
                     <div
                       class="attachments"
                     />
@@ -376,7 +375,6 @@ exports[`AnswerForm component should render a answer form 1`] = `
                         </button>
                       </div>
                     </div>
-                    
                     <div
                       class="attachments"
                     />

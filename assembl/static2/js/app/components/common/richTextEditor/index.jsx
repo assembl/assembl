@@ -11,7 +11,6 @@ import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import createAttachmentPlugin from 'draft-js-attachment-plugin';
 import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
-import AttachmentButton from 'draft-js-attachment-plugin/src/components/AttachmentButton';
 /* eslint-enable import/no-extraneous-dependencies */
 import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
 import { addProtocol } from '../../../utils/linkify';
@@ -75,6 +74,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
       toolbarStructure.push(AttachmentButton);
       plugins.push(attachmentPlugin);
       components.Attachments = Attachments;
+      components.AttachmentButton = AttachmentButton;
     }
     if (props.withSideToolbar) {
       const sideToolbarPlugin = createSideToolbarPlugin({
@@ -168,7 +168,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
   render() {
     const { editorState, onChange, placeholder, textareaRef } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const { Attachments, Modal, SideToolbar, Toolbar } = this.components;
+    const { Attachments, AttachmentButton, Modal, SideToolbar, Toolbar } = this.components;
     return (
       <div className={divClassName} ref={textareaRef}>
         <div className="editor-header">
@@ -196,10 +196,10 @@ export default class RichTextEditor extends React.Component<Props, State> {
           we have to move toolbar in css for now since there is a bug in draft-js-plugin
           It should be fixed in draft-js-plugin v3
          */}
-        {Toolbar ? <Toolbar /> : ''}
+        {Toolbar ? <Toolbar /> : null}
         {SideToolbar ? (
-          <SideToolbar
-            children={externalProps => (
+          <SideToolbar>
+            {externalProps => (
               <div>
                 <HeadlineTwoButton {...externalProps} />
                 <HeadlineThreeButton {...externalProps} />
@@ -210,10 +210,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
                 {/* <LinkButton {...externalProps} /> */}
               </div>
             )}
-          />
-        ) : (
-          ''
-        )}
+          </SideToolbar>
+        ) : null}
         {Attachments ? <Attachments /> : null}
       </div>
     );

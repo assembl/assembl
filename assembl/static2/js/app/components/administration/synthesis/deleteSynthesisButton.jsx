@@ -5,7 +5,7 @@ import { type DocumentNode, graphql, type TVariables } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 
 import { closeModal, displayModal } from '../../../utils/utilityManager';
-import deleteSynthesis from '../../../graphql/mutations/deleteSynthesis.graphql';
+import deleteSynthesisMutation from '../../../graphql/mutations/deleteSynthesis.graphql';
 
 import DeletePostIcon from '../../common/icons/deletePostIcon/deletePostIcon';
 
@@ -84,4 +84,4 @@ DeleteSynthesisButton.defaultProps = {
   onDeleteCallback: null
 };
 
-export default graphql(deleteSynthesis, { name: 'deleteSynthesis' })(DeleteSynthesisButton);
+export default graphql(deleteSynthesisMutation, { name: 'deleteSynthesis' })(DeleteSynthesisButton);

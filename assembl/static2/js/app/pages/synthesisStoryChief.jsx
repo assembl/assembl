@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
-import Section from '../components/common/section';
 import { Col, Grid, Row } from 'react-bootstrap';
+import Section from '../components/common/section';
 import Header from './synthesis';
 
 type Props = {
