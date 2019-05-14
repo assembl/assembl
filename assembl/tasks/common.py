@@ -165,9 +165,10 @@ def setup_ctx(c):
                 target, config_prefix, project_prefix))
         if not data:
             break
+        import pdb; pdb.set_trace()
         target = data.get('_extends', None)
         temp_config = rec_update(data, temp_config)
-    import pdb; pdb.set_trace()
+
     current = rec_update(current, temp_config)
 
     account_id = current.get('aws_client', None)
