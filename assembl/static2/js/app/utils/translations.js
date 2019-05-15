@@ -2066,7 +2066,7 @@ const Translations = {
       },
       semanticAnalysis: {
         title: "Semantic Analysis",
-        description: "Semantic analysis feature is only available for the following module: thread, survey and Bright Mirror",
+        description: "Semantic analysis feature is only available for the following modules: thread, survey and Bright Mirror",
         activate: "Activate the semantic analysis"
       }
     },
