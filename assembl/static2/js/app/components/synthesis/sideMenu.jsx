@@ -4,8 +4,7 @@ import { Translate } from 'react-redux-i18n';
 import { getChildren } from '../../utils/tree';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import SideMenuTree from './sideMenuTree';
-
-import type { SynthesisIdea } from './IdeaSynthesis';
+import type { SynthesisIdea } from './types.flow';
 
 type SideMenuProps = {
   rootIdeas: Array<SynthesisIdea>,

@@ -8,27 +8,7 @@ import StatisticsDoughnut from '../debate/common/statisticsDoughnut';
 import PostsAndContributorsCount from '../common/postsAndContributorsCount';
 import { getColumnInfos, getSentimentsCount, createDoughnutElements } from '../debate/common/announcement';
 import { MESSAGE_VIEW } from '../../constants';
-
-export type SynthesisIdea = {
-  id: string,
-  ancestors: Array<string>,
-  title: string,
-  synthesisTitle: string,
-  live: {
-    id: string,
-    order: number,
-    img: {
-      externalUrl: string
-    },
-    numContributors: number,
-    numPosts: number,
-    messageColumns: Array<IdeaMessageColumnFragment>,
-    messageViewOverride: string,
-    posts: {
-      edges: Array<Object>
-    }
-  }
-};
+import type { SynthesisIdea } from './types.flow';
 
 const SynthesisBody = ({ level, hasSiblings, value, stats }) => (
   <div className="synthesis-body" style={{ columnCount: !hasSiblings && level > 2 ? 2 : 'auto' }}>

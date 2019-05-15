@@ -1,12 +1,33 @@
 // @flow
-import type { FileValue } from '../form/types.flow';
+
+export type SynthesisIdea = {
+  id: string,
+  ancestors: Array<string>,
+  title: string,
+  synthesisTitle: string,
+  live: {
+    id: string,
+    order: number,
+    img: FileDocument,
+    numContributors: number,
+    numPosts: number,
+    messageColumns: Array<IdeaMessageColumnFragment>,
+    messageViewOverride: string,
+    posts: {
+      edges: Array<Object>
+    }
+  }
+};
 
 export type Synthesis = {
   id: string,
   synthesisType: SynthesisTypes,
   subject: string,
-  body: string,
-  img: FileValue
+  introduction: ?string,
+  conclusion: ?string,
+  ideas: Array<SynthesisIdea>,
+  body: ?string,
+  img: FileDocument
 };
 
 /* item of synthesis list */
@@ -18,7 +39,7 @@ export type SynthesisItem = {
     id: string,
     publicationState: string
   },
-  img: FileValue
+  img: FileDocument
 };
 
 export type SynthesisPost = {

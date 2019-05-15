@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import { getPartialTree, getChildren } from '../../utils/tree';
 import { get } from '../../utils/routeMap';
 import { SECTION_INDEX_GENERATOR, getIndexesForIdeas } from '../../utils/section';
-import type { SynthesisIdea } from './IdeaSynthesis';
+import type { SynthesisIdea } from './types.flow';
 
 type SideMenuTreeState = {
   activeKey: ?string,

@@ -57,9 +57,10 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
   const slug = getDiscussionSlug();
   const link = getLink('synthesis', { synthesisId: synthesis.post.id, slug: slug });
 
-  const previewStyle = synthesis.img
-    ? { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${synthesis.img.externalUrl})` }
-    : null;
+  const previewStyle =
+    synthesis.img && synthesis.img.externalUrl
+      ? { backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(${synthesis.img.externalUrl})` }
+      : null;
   return (
     <div className="fiction-preview" style={previewStyle}>
       <div className="content-box">
