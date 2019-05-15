@@ -32,11 +32,18 @@ def running_locally(c):
     return c.__class__.__module__.startswith('invoke.')
 
 
-def rec_update(d1, d2):
+def rec_update(d1, d2, excluded_keys=None):
+    if excluded_keys is None:
+        excluded_keys = []
     if not isinstance(d1, dict):
         return d2
     result = dict(d1, **d2)
     result.update({k: rec_update(v, d2.get(k, v)) for (k, v) in d1.iteritems() if isinstance(v, dict)})
+    for key in excluded_keys:
+        if key in d1:
+            result[key] = d1[key]
+        else:
+            del result[key]
     return result
 
 
@@ -146,7 +153,9 @@ def setup_ctx(c):
     current['projectpath'] = project_prefix
     current['_internal'] = c.config.get('_internal') or {}
     current['_internal']['mac'] = sys.platform == 'darwin'
-    target = 'invoke.yaml' if exists(c, 'invoke.yaml') else None
+    target = c.config.get('_extends', None)
+    if not target and exists(c, 'invoke.yaml'):
+        target = 'invoke.yaml'
     temp_config = {}
     while target:
         if os.path.isabs(target):
@@ -164,9 +173,9 @@ def setup_ctx(c):
         if not data:
             break
         target = data.get('_extends', None)
-        temp_config = rec_update(data, temp_config)
+        temp_config = rec_update(data, temp_config, excluded_keys=['_extends'])
 
-    current = rec_update(current, temp_config)
+    current = rec_update(current, temp_config, excluded_keys=['_extends'])
 
     account_id = current.get('aws_client', None)
     if not account_id:
