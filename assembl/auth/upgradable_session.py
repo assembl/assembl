@@ -13,8 +13,17 @@ class UpgradableSession(Session):
         self.elevated_expires = elevated_expires
         self.basic_expires = cookie_expires
         self.elevated = False
+        # The else statement is for the travis tests
+        # Tests were failing because when running the test
+        # test_homepage_returns_200 the request did not have
+        # the registry attribute. The request attribute passed
+        # in that test was a dict (it has not attribute registry)
+        if hasattr(request, 'registry'):
+            timeout = request.registry.settings['session_timeout']
+        else:
+            timeout = 60
         super(UpgradableSession, self).__init__(
-            request, cookie_expires=cookie_expires, **kwargs)
+            request, cookie_expires=cookie_expires, timeout=timeout, **kwargs)
         self.elevated = self.get_is_elevated()
         self._set_cookie_expires(None)
 
