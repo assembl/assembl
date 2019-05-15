@@ -101,22 +101,24 @@ class CreateSynthesisForm extends React.Component<Props> {
                 </Col>
               </Row>
               <Row>
-                <SubmitButton
-                  name="save"
-                  label="administration.saveThemes"
-                  disabled={pristine || submitting}
-                  onClick={() => {
-                    form.change('publicationState', PublicationStates.DRAFT);
-                  }}
-                />
-                <SubmitButton
-                  name="post"
-                  label="debate.post"
-                  disabled={pristine || submitting}
-                  onClick={() => {
-                    form.change('publicationState', PublicationStates.PUBLISHED);
-                  }}
-                />
+                <div className="button-container">
+                  <SubmitButton
+                    name="save"
+                    label="administration.saveThemes"
+                    disabled={pristine || submitting}
+                    onClick={() => {
+                      form.change('publicationState', PublicationStates.DRAFT);
+                    }}
+                  />
+                  <SubmitButton
+                    name="post"
+                    label="debate.post"
+                    disabled={pristine || submitting}
+                    onClick={() => {
+                      form.change('publicationState', PublicationStates.PUBLISHED);
+                    }}
+                  />
+                </div>
               </Row>
             </FormWithRouter>
           </div>
