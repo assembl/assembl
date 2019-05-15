@@ -596,17 +596,6 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             # "backend_validator_function": func_name...?,
             "default": False  # for development
         },
-
-        # Various Watson values
-        {
-            "id": "with_semantic_analysis",
-            "name": _("Activate semantic analysis"),
-            "value_type": "bool",
-            "description": _("Use Watson for semantic analysis"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": False  # for development
-        },
         {
             "id": "authorization_server_backend",
             "value_type": "scalar",
