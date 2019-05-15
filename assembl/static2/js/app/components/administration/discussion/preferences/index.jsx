@@ -111,13 +111,16 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                   />
                   <div className="separator" />
                   <div className="title">
-                    <Translate value="administration.translation" />
+                    <Translate value="administration.translationService.title" />
+                  </div>
+                  <div className="label-indication">
+                    <Translate value="administration.translationService.description" />
                   </div>
                   <Field
                     component={CheckboxFieldAdapter}
                     name="withTranslation"
                     isChecked
-                    label={I18n.t('administration.activateTranslation')}
+                    label={I18n.t('administration.translationService.label')}
                     type="checkbox"
                   />
                 </div>
