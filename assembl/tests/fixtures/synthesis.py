@@ -6,6 +6,7 @@ import pytest
 def fulltext_synthesis_post(request, discussion, moderator_user, test_session):
     from assembl import models
     synthesis_post = models.SynthesisPost(
+        publication_state=models.PublicationStates.DRAFT,
         discussion=discussion,
         creator=moderator_user,
         publishes_synthesis=models.FullTextSynthesis(
@@ -31,6 +32,7 @@ def fulltext_synthesis_post(request, discussion, moderator_user, test_session):
 def fulltext_synthesis_post_with_image(request, discussion, moderator_user, simple_file, test_session):
     from assembl import models
     synthesis_post = models.SynthesisPost(
+        publication_state=models.PublicationStates.DRAFT,
         discussion=discussion,
         creator=moderator_user,
         publishes_synthesis=models.FullTextSynthesis(
@@ -39,9 +41,10 @@ def fulltext_synthesis_post_with_image(request, discussion, moderator_user, simp
             body=models.LangString.create(u"Lorem ipsum dolor sit amet", "en"),
         )
     )
-
     synthesis_post.publishes_synthesis.subject.add_value("une synthèse avec image", "fr")
     synthesis_post.publishes_synthesis.body.add_value("Laurème ipsoume dolaure sitamette", "fr")
+    test_session.flush()
+
     synthesis_image = models.PostAttachment(
         discussion=discussion,
         document=simple_file,

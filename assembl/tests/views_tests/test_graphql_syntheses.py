@@ -8,26 +8,31 @@ from assembl.tests.utils import FakeUploadedFile
 
 
 def test_graphql_get_syntheses(graphql_request,
+                               graphql_registry,
                                user_language_preference_en_cookie,
-                               synthesis_in_syntheses):
-    assert len(synthesis_in_syntheses.data['syntheses']) == 1
-    synthesis = synthesis_in_syntheses.data['syntheses'][0]
+                               synthesis_post_1):
+    res = schema.execute(
+        graphql_registry['SynthesesQuery'],
+        context_value=graphql_request,
+        variable_values={"lang": "en"},
+    )
+    assert res.errors is None
+    assert len(res.data['syntheses']) == 1
+    synthesis = res.data['syntheses'][0]
     assert synthesis['subject'] == 'subject EN'
-    assert len(synthesis['ideas']) == 2
 
 
 def test_graphql_get_synthesis(graphql_request,
                                graphql_registry,
                                user_language_preference_en_cookie,
-                               synthesis_in_syntheses):
-    synthesis_id = synthesis_in_syntheses.data['syntheses'][0]['id']
+                               synthesis_post_1):
+    synthesis_post_id = to_global_id('Post', synthesis_post_1.id)
     res = schema.execute(
         graphql_registry['SynthesisQuery'],
         context_value=graphql_request,
-        variable_values={"id": synthesis_id, "lang": "en"},
+        variable_values={"id": synthesis_post_id, "lang": "en"},
     )
-    assert len(res.data) == 1
-    synthesis = res.data['synthesis']
+    synthesis = res.data['synthesisPost']['publishesSynthesis']
     assert synthesis['subject'] == 'subject EN'
     assert len(synthesis['ideas']) == 2
 
@@ -40,7 +45,6 @@ def test_graphql_get_multilingual_synthesis(graphql_request, graphql_registry, f
         variable_values={"id": synthesis_post_id},
     )
     assert res.errors is None
-    assert len(res.data) == 1
     synthesis = res.data['synthesisPost']['publishesSynthesis']
     assert len(synthesis['subjectEntries']) == 2
     assert synthesis['subjectEntries'][0]['value'] == u'a synthesis with image'
@@ -62,22 +66,22 @@ def test_graphql_has_syntheses(graphql_request,
 def test_graphql_create_synthesis(graphql_request, graphql_registry):
     subject_entries = [
         {
-            "value": u"Première synthèse",
-            "localeCode": u"fr"
-        },
-        {
             "value": u"First synthesis",
             "localeCode": u"en"
+        },
+        {
+            "value": u"Première synthèse",
+            "localeCode": u"fr"
         }
     ]
     body_entries = [
         {
-            "value": u"Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
-            "localeCode": u"fr"
-        },
-        {
             "value": u"Foobar",
             "localeCode": u"en"
+        },
+        {
+            "value": u"Lorem ipsum dolor sit amet, consectetur adipisicing elit.",
+            "localeCode": u"fr"
         }
     ]
 
@@ -93,15 +97,18 @@ def test_graphql_create_synthesis(graphql_request, graphql_registry):
             "lang": u"fr",
             "subjectEntries": subject_entries,
             "bodyEntries": body_entries,
+            "publicationState": u"DRAFT"
         }
     )
     assert res.errors is None
     result = res.data
     assert result is not None
     assert result['createSynthesis'] is not None
+    assert res.data['createSynthesis']['synthesisPost']['publicationState'] == u"DRAFT"
     synthesis = result['createSynthesis']['synthesisPost']['publishesSynthesis']
-    assert synthesis['subject'] == u'Première synthèse'
-    assert synthesis['body'] == u'Lorem ipsum dolor sit amet, consectetur adipisicing elit.'
+    assert synthesis['subjectEntries'] == subject_entries
+    assert sorted(synthesis['subjectEntries'], key=lambda e: e['localeCode']) == subject_entries
+    assert sorted(synthesis['bodyEntries'], key=lambda e: e['localeCode']) == body_entries
     assert synthesis['synthesisType'] == FULLTEXT_SYNTHESIS_TYPE
 
     assert '/documents/' in synthesis['img']['externalUrl']
@@ -110,10 +117,28 @@ def test_graphql_create_synthesis(graphql_request, graphql_registry):
 def test_graphql_update_synthesis(graphql_registry, graphql_request, fulltext_synthesis_post_with_image):
     synthesis_post = fulltext_synthesis_post_with_image
     synthesis_post_graphql_id = to_global_id('Post', synthesis_post.id)
-
     graphql_request.POST['variables.image'] = FakeUploadedFile(
         u'path/to/new-img.png', 'image/png')
-
+    subject_entries = [
+        {
+            "value": u"My synthesis v2",
+            "localeCode": u"en"
+        },
+        {
+            "value": u"Ma synthèse v2",
+            "localeCode": u"fr"
+        }
+    ]
+    body_entries = [
+        {
+            "value": u"Text in english v2",
+            "localeCode": u"en"
+        },
+        {
+            "value": u"Texte en français v2",
+            "localeCode": u"fr"
+        }
+    ]
     res = schema.execute(
         graphql_registry['updateSynthesis'],
         context_value=graphql_request,
@@ -122,35 +147,19 @@ def test_graphql_update_synthesis(graphql_registry, graphql_request, fulltext_sy
             "image": u"variables.image",
             "embedCode": u"nothing",
             "lang": u"fr",
-            "subjectEntries": [
-                {
-                    "value": u"My synthesis v2",
-                    "localeCode": u"en"
-                },
-                {
-                    "value": u"Ma synthèse v2",
-                    "localeCode": u"fr"
-                }
-            ],
-            "bodyEntries": [
-                {
-                    "value": u"Text in english v2",
-                    "localeCode": u"en"
-                },
-                {
-                    "value": u"Texte en français v2",
-                    "localeCode": u"fr"
-                }
-            ],
+            "subjectEntries": subject_entries,
+            "bodyEntries": body_entries,
+            "publicationState": u"PUBLISHED"
         }
     )
     assert res.errors is None
     assert res.data is not None
     assert res.data['updateSynthesis'] is not None
+    assert res.data['updateSynthesis']['synthesisPost']['publicationState'] == u"PUBLISHED"
     assert res.data['updateSynthesis']['synthesisPost']['publishesSynthesis'] is not None
     synthesis = res.data['updateSynthesis']['synthesisPost']['publishesSynthesis']
-    assert synthesis[u'subject'] == u"Ma synthèse v2"
-    assert synthesis[u'body'] == u"Texte en français v2"
+    assert sorted(synthesis['subjectEntries'], key=lambda e: e['localeCode']) == subject_entries
+    assert sorted(synthesis['bodyEntries'], key=lambda e: e['localeCode']) == body_entries
 
     assert '/documents/' in synthesis['img']['externalUrl']
 

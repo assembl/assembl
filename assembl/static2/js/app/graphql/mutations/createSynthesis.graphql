@@ -5,8 +5,15 @@ mutation createSynthesis(
   $bodyEntries: [LangStringEntryInput]!
   $subjectEntries: [LangStringEntryInput]!
   $synthesisType: SynthesisTypes!
+  $publicationState: PublicationStates!
 ) {
-  createSynthesis(image: $image, bodyEntries: $bodyEntries, subjectEntries: $subjectEntries, synthesisType: $synthesisType) {
+  createSynthesis(
+    image: $image
+    bodyEntries: $bodyEntries
+    subjectEntries: $subjectEntries
+    synthesisType: $synthesisType
+    publicationState: $publicationState
+  ) {
     synthesisPost {
       ...MultilingualSynthesisPost
     }

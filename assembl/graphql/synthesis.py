@@ -10,7 +10,6 @@ from assembl.graphql.langstring import LangStringEntryInput, langstring_from_inp
     update_langstring_from_input_entries
 from assembl.graphql.permissions_helpers import require_cls_permission, require_instance_permission
 from assembl.graphql import utils
-from assembl.models import PublicationStates
 from .document import Document
 from .idea import IdeaUnion
 from .langstring import (
@@ -106,8 +105,6 @@ class CreateSynthesis(graphene.Mutation):
     __doc__ = docs.CreateSynthesis.__doc__
 
     class Input:
-        # Careful, having required=True on a graphene.List only means
-        # it can't be None, having an empty [] is perfectly valid.
         synthesis_type = graphene.Argument(
             type=SynthesisTypes,
             required=True,
@@ -117,6 +114,7 @@ class CreateSynthesis(graphene.Mutation):
         subject_entries = graphene.List(LangStringEntryInput, required=True,
                                         description=docs.CreateSynthesis.subject_entries)
         image = graphene.String(description=docs.CreateSynthesis.image)
+        publication_state = utils.PublicationStates(required=True, description=docs.CreateSynthesis.publication_state)
 
     synthesis_post = graphene.Field('assembl.graphql.post.Post')
 
@@ -144,15 +142,17 @@ class CreateSynthesis(graphene.Mutation):
                 )
                 kwargs[langstring_field] = langstring or models.LangString.EMPTY()
 
+            publication_state = models.PublicationStates.from_string(args['publication_state'])
             post_saobj = post_cls(
                 discussion=discussion,
                 creator_id=user_id,
-                publication_state=PublicationStates.DRAFT.name,
+                publication_state=publication_state,
                 publishes_synthesis=cls(
                     discussion=discussion,
                     **kwargs
                 ))
             db.add(post_saobj)
+            db.flush()  # needed before creating the attachment
 
             image = args.get('image')
             if image is not None:
@@ -175,13 +175,12 @@ class UpdateSynthesis(graphene.Mutation):
     __doc__ = docs.UpdateSynthesis.__doc__
 
     class Input:
-        # Careful, having required=True on a graphene.List only means
-        # it can't be None, having an empty [] is perfectly valid.
         id = graphene.ID(required=True)
         body_entries = graphene.List(LangStringEntryInput, required=True, description=docs.CreateSynthesis.body_entries)
         subject_entries = graphene.List(LangStringEntryInput, required=True,
                                         description=docs.CreateSynthesis.subject_entries)
         image = graphene.String(description=docs.CreateSynthesis.image)
+        publication_state = utils.PublicationStates(required=True, description=docs.UpdateSynthesis.publication_state)
 
     synthesis_post = graphene.Field('assembl.graphql.post.Post')
 
@@ -203,6 +202,8 @@ class UpdateSynthesis(graphene.Mutation):
                 update_langstring_from_input_entries(
                     synthesis_post.publishes_synthesis, langstring_field, field_entries)
 
+            publication_state = models.PublicationStates.from_string(args['publication_state'])
+            synthesis_post.publication_state = publication_state
             # add uploaded image as an attachment to the resource
             image = args.get('image')
             if image is not None:

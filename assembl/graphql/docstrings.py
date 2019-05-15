@@ -215,27 +215,6 @@ class Synthesis:
     post = """Synthesis post to be created."""
 
 
-class CreateSynthesis:
-    __doc__ = """A mutation that enables a Synthesis to be created."""
-    synthesis_type = Synthesis.synthesis_type
-    body_entries = Synthesis.body_entries
-    subject_entries = Synthesis.subject_entries
-    introduction_entries = Synthesis.introduction_entries
-    conclusion_entries = Synthesis.conclusion_entries
-    image = """The uploaded image file"""
-
-
-class UpdateSynthesis:
-    __doc__ = """A mutation that enables a Synthesis to be updated."""
-    id = Default.node_id % "Synthesis" + " This is the identifier of the Synthesis to update."
-    synthesis_type = Synthesis.synthesis_type
-    body_entries = Synthesis.body_entries
-    subject_entries = Synthesis.subject_entries
-    introduction_entries = Synthesis.introduction_entries
-    conclusion_entries = Synthesis.conclusion_entries
-    image = CreateSynthesis.image
-
-
 class DeleteSynthesis:
     __doc__ = """A mutation that enables the deletion of a Synthesis."""
     id = Default.node_id % "Synthesis post" + " This is the synthesis post identifier to be deleted."
@@ -671,6 +650,29 @@ class UpdatePost:
     subject = "The subject of Post, updated in the original langauge of the Post."
     body = Default.string_entry % ("Post body") + " This is just a string input, and will update the original language body of the Post."
     attachments = "A list of Attachments to be appended to the Post."
+    publication_state = PostInterface.publication_state
+
+
+class CreateSynthesis:
+    __doc__ = """A mutation that enables a Synthesis to be created."""
+    synthesis_type = Synthesis.synthesis_type
+    body_entries = Synthesis.body_entries
+    subject_entries = Synthesis.subject_entries
+    introduction_entries = Synthesis.introduction_entries
+    conclusion_entries = Synthesis.conclusion_entries
+    image = """The uploaded image file"""
+    publication_state = PostInterface.publication_state
+
+
+class UpdateSynthesis:
+    __doc__ = """A mutation that enables a Synthesis to be updated."""
+    id = Default.node_id % "Synthesis" + " This is the identifier of the Synthesis to update."
+    synthesis_type = Synthesis.synthesis_type
+    body_entries = Synthesis.body_entries
+    subject_entries = Synthesis.subject_entries
+    introduction_entries = Synthesis.introduction_entries
+    conclusion_entries = Synthesis.conclusion_entries
+    image = CreateSynthesis.image
     publication_state = PostInterface.publication_state
 
 

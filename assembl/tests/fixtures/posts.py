@@ -268,7 +268,7 @@ def root_post_en_under_negative_column_of_idea(
 @pytest.fixture(scope="function")
 def synthesis_post_1(request, participant1_user, discussion, test_session,
                      synthesis_1):
-    """A Syntehsis Post fixture"""
+    """A Synthesis Post fixture"""
 
     from assembl.models import SynthesisPost, LangString
     p = SynthesisPost(
