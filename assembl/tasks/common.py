@@ -153,9 +153,7 @@ def setup_ctx(c):
     current['projectpath'] = project_prefix
     current['_internal'] = c.config.get('_internal') or {}
     current['_internal']['mac'] = sys.platform == 'darwin'
-    target = c.config.get('_extends', None)
-    if not target and exists(c, 'invoke.yaml'):
-        target = 'invoke.yaml'
+    target = 'invoke.yaml'
     temp_config = {}
     if 'DEBUG_START' in os.environ:
         import pdb; pdb.set_trace()
