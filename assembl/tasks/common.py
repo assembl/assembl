@@ -158,6 +158,9 @@ def setup_ctx(c):
         target = 'invoke.yaml'
     temp_config = {}
     while target:
+        if 'DEBUG_LOOP' in os.environ:
+            if os.environ['DEBUG'] == target:
+                import pdb; pdb.set_trace()
         if os.path.isabs(target):
             if exists(c, target):
                 data = c.config._load_yaml(config_prefix + target)
@@ -175,6 +178,8 @@ def setup_ctx(c):
         target = data.get('_extends', None)
         temp_config = rec_update(data, temp_config, excluded_keys=['_extends'])
 
+    if 'DEBUG_END' in os.environ:
+        import pdb; pdb.set_trace()
     current = rec_update(current, temp_config, excluded_keys=['_extends'])
 
     account_id = current.get('aws_client', None)
