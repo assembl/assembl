@@ -2,6 +2,7 @@ mutation updateDiscussionPreference(
   $languages: [String]
   $withModeration: Boolean
   $withTranslation: Boolean
+  $withSemanticAnalysis: Boolean
   $tabTitle: String
   $favicon: String
   $slug: String
@@ -11,6 +12,7 @@ mutation updateDiscussionPreference(
     languages: $languages
     withModeration: $withModeration
     withTranslation: $withTranslation
+    withSemanticAnalysis: $withSemanticAnalysis
     tabTitle: $tabTitle
     favicon: $favicon
     slug: $slug

@@ -599,52 +599,14 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
 
         # Various Watson values
         {
-            "id": "watson_keywords",
-            "name": _("Get keywords from Watson"),
+            "id": "with_semantic_analysis",
+            "name": _("Activate semantic analysis"),
             "value_type": "bool",
-            "description": _("Use Watson to identify keywords"),
+            "description": _("Use Watson for semantic analysis"),
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             "default": False  # for development
         },
-        {
-            "id": "watson_concepts",
-            "name": _("Get concepts from Watson"),
-            "value_type": "bool",
-            "description": _("Use Watson to identify concepts"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": False  # for development
-        },
-        {
-            "id": "watson_categories",
-            "name": _("Get categories from Watson"),
-            "value_type": "bool",
-            "description": _("Use Watson to identify categories"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": False  # for development
-        },
-        {
-            "id": "watson_sentiment",
-            "name": _("Get sentiments from Watson"),
-            "value_type": "bool",
-            "description": _("Use Watson to identify sentiments"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": False  # for development
-        },
-        {
-            "id": "watson_emotion",
-            "name": _("Get emotions from Watson"),
-            "value_type": "bool",
-            "description": _("Use Watson to identify emotions"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": False  # for development
-        },
-
-
         {
             "id": "authorization_server_backend",
             "value_type": "scalar",

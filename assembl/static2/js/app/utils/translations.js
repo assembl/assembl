@@ -864,6 +864,7 @@ const Translations = {
       moderation: "Modération a priori",
       activateModeration: "Activer la modération",
       translation: "Option de traduction pour les utilisateurs",
+      translationService: "Service de traduction",
       activateTranslation: "Activer l'option pour les utilisateurs de traduire les messages",
       ph: {
         propositionSectionTitle: "Titre de la section",
@@ -1023,6 +1024,11 @@ const Translations = {
         logoInstruction:
           "L'image du logo doit avoir une hauteur d'au plus 110px, et une largeur d'au plus 215px. Le fond doit être transparent.",
         icoRequired: "Le favicon doit être un fichier .ico uniquement"
+      },
+      semanticAnalysis: {
+        title: "Analyse sémantique",
+        description: "L'analyse sémantique est disponible seulement pour les modules thread, questions et Bright Mirror",
+        activate: "Activer l'analyse sémantique"
       }
     },
     unauthorizedAdministration: {
@@ -1901,6 +1907,7 @@ const Translations = {
       moderation: "Post pending for moderation",
       activateModeration: "Activate the moderation",
       translation: "Option to translate messages",
+      translationService: "Translation service",
       activateTranslation: "Activate the option for users to translate the messages",
       ph: {
         propositionSectionTitle: "Section title",
@@ -2056,6 +2063,11 @@ const Translations = {
         logoInstruction:
           "Logo should have a maximum height of 110px and a maximum width of 215px. The background must be transparent.",
         icoRequired: "The favicon must be an .ico file only"
+      },
+      semanticAnalysis: {
+        title: "Semantic Analysis",
+        description: "Semantic analysis feature is only available for the following module: thread, survey and Bright Mirror",
+        activate: "Activate the semantic analysis"
       }
     },
     unauthorizedAdministration: {
