@@ -63,9 +63,15 @@ class Synthesis(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring_entries(self, 'introduction')
 
     def resolve_body(self, args, context, info):
+        if not isinstance(self, models.FullTextSynthesis):
+            return None
+
         return resolve_langstring(self.body, args.get('lang'))
 
     def resolve_body_entries(self, args, context, info):
+        if not isinstance(self, models.FullTextSynthesis):
+            return []
+
         return resolve_langstring_entries(self, 'body')
 
     def resolve_conclusion(self, args, context, info):
