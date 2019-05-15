@@ -1747,7 +1747,9 @@ def test_query_discussion_preferences_moderation(graphql_registry, graphql_reque
             u'favicon': None,
             u'logo': None,
             u'tabTitle': '',
-            u'withModeration': True
+            u'withModeration': True,
+            u'withSemanticAnalysis': False,
+            u'withTranslation': False
         }
     }
 
@@ -1761,7 +1763,9 @@ def test_query_discussion_preferences_semantic_analysis(graphql_registry, graphq
             u'favicon': None,
             u'logo': None,
             u'tabTitle': '',
-            u'withSemanticAnalysis': True
+            u'withModeration': False,
+            u'withSemanticAnalysis': True,
+            u'withTranslation': False
         }
     }
 
@@ -1775,6 +1779,8 @@ def test_query_discussion_preferences_translation(graphql_registry, graphql_requ
             u'favicon': None,
             u'logo': None,
             u'tabTitle': '',
+            u'withModeration': False,
+            u'withSemanticAnalysis': False,
             u'withTranslation': True
         }
     }
@@ -1944,6 +1950,68 @@ mutation myMutationModeration($withModeration: Boolean!, $languages: [String]!) 
         u'updateDiscussionPreferences': {
             u'preferences': {
                 u'withModeration': True,
+                u'languages': [
+                    {u'locale': u'de'},
+                    {u'locale': u'ja'}
+                ]
+
+            }
+        }}
+
+
+def test_mutation_update_semantic_analysis_preference(graphql_request):
+    res = schema.execute(u"""
+mutation myMutationModeration($withSemanticAnalysis: Boolean!, $languages: [String]!) {
+    updateDiscussionPreferences(withSemanticAnalysis: $withSemanticAnalysis, languages:$languages) {
+        preferences {
+            withSemanticAnalysis
+            languages{
+                locale
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+                        variable_values={
+                            "languages": ['de', 'ja'],
+                            "withSemanticAnalysis": True
+                        })
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateDiscussionPreferences': {
+            u'preferences': {
+                u'withSemanticAnalysis': True,
+                u'languages': [
+                    {u'locale': u'de'},
+                    {u'locale': u'ja'}
+                ]
+
+            }
+        }}
+
+
+def test_mutation_update_translation_preference(graphql_request):
+    res = schema.execute(u"""
+mutation myMutationModeration($withTranslation: Boolean!, $languages: [String]!) {
+    updateDiscussionPreferences(withTranslation: $withTranslation, languages:$languages) {
+        preferences {
+            withTranslation
+            languages{
+                locale
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+                        variable_values={
+                            "languages": ['de', 'ja'],
+                            "withTranslation": True
+                        })
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateDiscussionPreferences': {
+            u'preferences': {
+                u'withTranslation': True,
                 u'languages': [
                     {u'locale': u'de'},
                     {u'locale': u'ja'}

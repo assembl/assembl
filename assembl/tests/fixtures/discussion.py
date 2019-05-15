@@ -218,6 +218,6 @@ def discussion_with_semantic_analysis(discussion, test_session):
 
 @pytest.fixture(scope="function")
 def discussion_with_translation(discussion, test_session):
-    discussion.preferences['with_translation'] = True
+    discussion.preferences['translation_service'] = 'assembl.nlp.translation_service.GoogleTranslationService'
     test_session.commit()
     return discussion

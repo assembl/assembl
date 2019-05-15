@@ -423,15 +423,6 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "allow_user_override": None,
             "default": False,
         },
-        {
-            "id": "with_translation",
-            "name": _("Activate translation service"),
-            "value_type": "bool",
-            "description": _("Use Google Translate translation service"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": False  # for development
-        },
         # full class name of translation service to use, if any
         # e.g. assembl.nlp.translate.GoogleTranslationService
         {
@@ -440,14 +431,6 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "value_type": "scalar",
             "scalar_values": {
                 "": _("No translation"),
-                "assembl.nlp.translation_service.DummyTranslationServiceTwoSteps":
-                    _("Dummy translation service (two steps)"),
-                "assembl.nlp.translation_service.DummyTranslationServiceOneStep":
-                    _("Dummy translation service (one step)"),
-                "assembl.nlp.translation_service.DummyTranslationServiceTwoStepsWithErrors":
-                    _("Dummy translation service (two steps) with errors"),
-                "assembl.nlp.translation_service.DummyTranslationServiceOneStepWithErrors":
-                    _("Dummy translation service (one step) with errors"),
                 "assembl.nlp.translation_service.GoogleTranslationService":
                     _("Google Translate")},
             "description": _(
