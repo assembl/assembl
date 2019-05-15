@@ -32,7 +32,7 @@ fragment SynthesisPost on Post {
               }
               messageViewOverride
               img {
-                ...ADocument
+                externalUrl
               }
               posts {
                 edges {
