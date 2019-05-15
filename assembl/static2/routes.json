@@ -59,6 +59,5 @@
   "integrationBrightMirrorIndex": "integration/bright-mirror/index",
   "integrationBrightMirrorFiction": "integration/bright-mirror/bright-mirror-fiction",
   "integrationSemanticAnalysis": "integration/semantic-analysis/semantic-analysis",
-  "integrationTagOnPost": "integration/tag-on-post/tag-on-post",
-  "newSynthesis": "${slug}/newSynthesis"
+  "integrationTagOnPost": "integration/tag-on-post/tag-on-post"
 }
