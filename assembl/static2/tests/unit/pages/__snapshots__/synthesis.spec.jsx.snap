@@ -17,35 +17,23 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       componentClass="div"
       fluid={true}
     >
-      <Section
-        className="synthesis-block"
-        containerAdditionalClassNames={Array []}
-        displayIndex={false}
-        index={1}
-        indexGenerator={[Function]}
-        innerRef={[Function]}
-        parents={Array []}
-        title=""
-        translate={false}
+      <Row
+        bsClass="row"
+        componentClass="div"
       >
-        <Row
-          bsClass="row"
+        <Col
+          bsClass="col"
           componentClass="div"
+          md={8}
+          mdOffset={3}
+          sm={10}
+          smOffset={1}
         >
-          <Col
-            bsClass="col"
-            componentClass="div"
-            md={8}
-            mdOffset={3}
-            sm={10}
-            smOffset={1}
-          >
-            <p>
-              yolo
-            </p>
-          </Col>
-        </Row>
-      </Section>
+          <p>
+            yolo
+          </p>
+        </Col>
+      </Row>
       <Row
         bsClass="row"
         className="background-grey synthesis-tree"

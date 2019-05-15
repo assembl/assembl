@@ -25,7 +25,6 @@ type SynthesisProps = {
 type SynthesisState = {
   introBlock: ?HTMLElement,
   conclusionBlock: ?HTMLElement,
-  bodyBlock: ?HTMLElement,
   sideMenuNode: ?HTMLElement,
   sideMenuIsHidden: boolean,
   ideaOnScroll?: string,
@@ -42,7 +41,6 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
     this.state = {
       introBlock: null,
       conclusionBlock: null,
-      bodyBlock: null,
       sideMenuNode: null,
       sideMenuIsHidden: true,
       sideMenuHeight: 0,
@@ -65,10 +63,6 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
 
   updateConclusionBlock = (node: HTMLElement) => {
     this.setState({ conclusionBlock: node });
-  };
-
-  updateBodyBlock = (node: HTMLElement) => {
-    this.setState({ bodyBlock: node });
   };
 
   updateSideMenuNode = (node: HTMLElement) => {
@@ -141,13 +135,11 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
               </Section>
             )}
             {body && (
-              <Section title="" className="synthesis-block" innerRef={this.updateBodyBlock}>
-                <Row>
-                  <Col mdOffset={3} md={8} smOffset={1} sm={10}>
-                    {renderSynthesisBody(body)}
-                  </Col>
-                </Row>
-              </Section>
+              <Row>
+                <Col mdOffset={3} md={8} smOffset={1} sm={10}>
+                  {renderSynthesisBody(body)}
+                </Col>
+              </Row>
             )}
             <Row className="background-grey synthesis-tree">
               <Col
