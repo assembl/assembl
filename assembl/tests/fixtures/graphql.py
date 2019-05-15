@@ -21,6 +21,22 @@ def graphql_request_with_moderation(request, test_adminuser_webrequest, discussi
     return req
 
 @pytest.fixture(scope="function")
+def graphql_request_with_semantic_analysis(request, test_adminuser_webrequest, discussion_with_semantic_analysis):
+    """ A graphql request fixture with an ADMIN user authenticated """
+    req = test_adminuser_webrequest
+    req.matchdict = {"discussion_id": discussion_with_semantic_analysis.id}
+    req.method = 'POST'
+    return req
+
+@pytest.fixture(scope="function")
+def graphql_request_with_translation(request, test_adminuser_webrequest, discussion_with_translation):
+    """ A graphql request fixture with an ADMIN user authenticated """
+    req = test_adminuser_webrequest
+    req.matchdict = {"discussion_id": discussion_with_translation.id}
+    req.method = 'POST'
+    return req
+
+@pytest.fixture(scope="function")
 def graphql_unauthenticated_request(request, test_webrequest, discussion):
     req = test_webrequest
     req.matchdict = {"discussion_id": discussion.id}

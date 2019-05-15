@@ -1752,6 +1752,34 @@ def test_query_discussion_preferences_moderation(graphql_registry, graphql_reque
     }
 
 
+def test_query_discussion_preferences_semantic_analysis(graphql_registry, graphql_request_with_semantic_analysis):
+    result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request_with_semantic_analysis)
+    assert result.errors is None
+    res_data = json.loads(json.dumps(result.data))
+    assert res_data == {
+        u'discussionPreferences': {
+            u'favicon': None,
+            u'logo': None,
+            u'tabTitle': '',
+            u'withSemanticAnalysis': True
+        }
+    }
+
+
+def test_query_discussion_preferences_translation(graphql_registry, graphql_request_with_translation):
+    result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request_with_translation)
+    assert result.errors is None
+    res_data = json.loads(json.dumps(result.data))
+    assert res_data == {
+        u'discussionPreferences': {
+            u'favicon': None,
+            u'logo': None,
+            u'tabTitle': '',
+            u'withTranslation': True
+        }
+    }
+
+
 @pytest.mark.xfail
 def test_query_default_discussion_preferences(graphql_request,
                                               discussion_with_lang_prefs):

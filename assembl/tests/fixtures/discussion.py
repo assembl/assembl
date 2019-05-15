@@ -211,6 +211,12 @@ def discussion_with_moderation(discussion, test_session):
     return discussion
 
 @pytest.fixture(scope="function")
+def discussion_with_semantic_analysis(discussion, test_session):
+    discussion.preferences['with_semantic_analysis'] = True
+    test_session.commit()
+    return discussion
+
+@pytest.fixture(scope="function")
 def discussion_with_translation(discussion, test_session):
     discussion.preferences['with_translation'] = True
     test_session.commit()

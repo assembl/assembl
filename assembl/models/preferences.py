@@ -423,6 +423,15 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "allow_user_override": None,
             "default": False,
         },
+        {
+            "id": "with_translation",
+            "name": _("Activate translation service"),
+            "value_type": "bool",
+            "description": _("Use Google Translate translation service"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
+            "default": False  # for development
+        },
         # full class name of translation service to use, if any
         # e.g. assembl.nlp.translate.GoogleTranslationService
         {
@@ -594,6 +603,16 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "modification_permission": P_ADMIN_DISC,
             # "frontend_validator_function": func_name...?,
             # "backend_validator_function": func_name...?,
+            "default": False  # for development
+        },
+        # Various Watson values
+        {
+            "id": "with_semantic_analysis",
+            "name": _("Activate semantic analysis"),
+            "value_type": "bool",
+            "description": _("Use Watson for semantic analysis"),
+            "allow_user_override": None,
+            "modification_permission": P_ADMIN_DISC,
             "default": False  # for development
         },
         {
