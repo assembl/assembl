@@ -26,9 +26,16 @@ export function addProtocol(url: string): string {
 }
 
 export function addIframeForMindMapping(html: string): string {
-  // We'll break up the html per paragraph and filter, and re-append
   const url = /(<a href="(https:\/\/(share.mindmanager.com|embed.coggle.it)[^\s]+)".*?<\/a>)/gi;
   return html.replace(url, '<div class="iframed"><iframe src="$2"></iframe></div>');
 }
+
+export function addIframeForStoryChief(html: string): string {
+  const url = /(<a href="(https:\/\/(bluenovev3.storychief.io)[^\s]+)".*?<\/a>)/gi;
+  return html.replace(url, '<div class="iframed"><iframe src="$2" width="100%" height="1500px"></iframe></div>');
+}
+
+export const renderSynthesisBody = (text: string) =>
+  activeHtml(text && addIframeForStoryChief(transformLinksInHtml(text)), postBodyReplacementComponents());
 
 export const renderRichtext = (text: string) => activeHtml(text && transformLinksInHtml(text), postBodyReplacementComponents());
