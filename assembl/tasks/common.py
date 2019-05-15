@@ -157,9 +157,11 @@ def setup_ctx(c):
     if not target and exists(c, 'invoke.yaml'):
         target = 'invoke.yaml'
     temp_config = {}
+    if 'DEBUG_START' in os.environ:
+        import pdb; pdb.set_trace()
     while target:
         if 'DEBUG_LOOP' in os.environ:
-            if os.environ['DEBUG'] == target:
+            if os.environ['DEBUG_LOOP'] == target:
                 import pdb; pdb.set_trace()
         if os.path.isabs(target):
             if exists(c, target):
