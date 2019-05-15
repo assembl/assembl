@@ -153,7 +153,7 @@ def setup_ctx(c):
     current['projectpath'] = project_prefix
     current['_internal'] = c.config.get('_internal') or {}
     current['_internal']['mac'] = sys.platform == 'darwin'
-    target = 'invoke.yaml'
+    target = 'invoke.yaml' if exists(c, 'invoke.yaml') else None
     temp_config = {}
     while target:
         if os.path.isabs(target):
