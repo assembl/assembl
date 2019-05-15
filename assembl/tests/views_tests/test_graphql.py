@@ -1733,7 +1733,9 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
             u'favicon': None,
             u'logo': None,
             u'tabTitle': '',
-            u'withModeration': False
+            u'withModeration': False,
+            u'withSemanticAnalysis': False,
+            u'withTranslation': False
         }
     }
 
