@@ -392,17 +392,16 @@ const Translations = {
         createNewSynthesis: "Rédiger une nouvelle synthèse",
         deleteSuccessMessage: "La synthèse a bien été supprimée",
         deleteSynthesisTooltip: "Supprimer la synthèse",
-        draftLabel: "Brouillon",
         editSynthesis: "Modifier la synthèse",
         editSynthesisTooltip: "Éditer la synthèse",
         picture: "Image de l'encart de la synthèse",
         pictureHelper: "Cette image illustrera votre synthèse dans la page des synthèses",
         publishedOn: "Publiée le ",
+        successSave: "La synthèse a été sauvegardée",
+        summary: "Sommaire des synthèses",
         title: "Titre de la synthèse",
         url: "URL de la synthèse",
-        urlHelper: "Insérez l'URL de votre story sur storychief",
-        successSave: "La synthèse a été sauvegardée",
-        summary: "Sommaire des synthèses"
+        urlHelper: "Insérez l'URL de votre story sur storychief"
       },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
@@ -1455,8 +1454,8 @@ const Translations = {
       back: "Back",
       syntheses: {
         body: "The synthesis body",
-        createNewSynthesis: "Create a new synthesis",
         confirmDeletionBody: "Are you sure you want to delete this synthesis?",
+        createNewSynthesis: "Create a new synthesis",
         deleteSuccessMessage: "The synthesis has been successfully deleted",
         deleteSynthesisTooltip: "Delete the synthesis",
         editSynthesis: "Edit the synthesis",

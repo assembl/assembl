@@ -69,7 +69,7 @@ const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {
           {deleteButton}
         </ul>
         <Link className="link" to={link}>
-          {isDraft ? <div className="draft-label">{I18n.t('debate.syntheses.draftLabel')}</div> : null}
+          {isDraft ? <div className="draft-label">{I18n.t('debate.brightMirror.draftLabel')}</div> : null}
           <div className="inner-box">
             <h3>{synthesis.subject}</h3>
             <p className="info">
