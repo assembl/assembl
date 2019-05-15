@@ -120,7 +120,7 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                     component={CheckboxFieldAdapter}
                     name="withTranslation"
                     isChecked
-                    label={I18n.t('administration.translationService.label')}
+                    label={I18n.t('administration.translationService.activate')}
                     type="checkbox"
                   />
                 </div>
