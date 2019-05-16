@@ -97,20 +97,6 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                   />
                   <div className="separator" />
                   <div className="title">
-                    <Translate value="administration.semanticAnalysis.title" />
-                  </div>
-                  <div className="label-indication">
-                    <Translate value="administration.semanticAnalysis.description" />
-                  </div>
-                  <Field
-                    component={CheckboxFieldAdapter}
-                    name="withSemanticAnalysis"
-                    isChecked
-                    label={I18n.t('administration.semanticAnalysis.activate')}
-                    type="checkbox"
-                  />
-                  <div className="separator" />
-                  <div className="title">
                     <Translate value="administration.translationService.title" />
                   </div>
                   <div className="label-indication">
@@ -121,6 +107,20 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                     name="withTranslation"
                     isChecked
                     label={I18n.t('administration.translationService.activate')}
+                    type="checkbox"
+                  />
+                  <div className="separator" />
+                  <div className="title">
+                    <Translate value="administration.semanticAnalysis.title" />
+                  </div>
+                  <div className="label-indication">
+                    <Translate value="administration.semanticAnalysis.description" />
+                  </div>
+                  <Field
+                    component={CheckboxFieldAdapter}
+                    name="withSemanticAnalysis"
+                    isChecked
+                    label={I18n.t('administration.semanticAnalysis.activate')}
                     type="checkbox"
                   />
                 </div>
