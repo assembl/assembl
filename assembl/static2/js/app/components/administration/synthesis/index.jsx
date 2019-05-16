@@ -68,7 +68,7 @@ class CreateSynthesisForm extends React.Component<Props> {
               <FormWithRouter handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
                 <Row>
                   <Col xs={12} md={10}>
-                    <LanguageMenu />
+                    <LanguageMenu position="right" />
                     <div className="admin-box">
                       <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
                       <Section

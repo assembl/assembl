@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { OverlayTrigger } from 'react-bootstrap';
+import classNames from 'classnames';
 
 import { languageTooltip } from '../common/tooltips';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
@@ -29,7 +30,8 @@ type Props = {
   editLocale: string,
   discussionPreferencesLanguages: Array<{ locale: string, name: string }>,
   isHidden: boolean,
-  changeLocale: string => void
+  changeLocale: string => void,
+  position: string
 };
 
 const Flag = ({ locale }: { locale: string }) => {
@@ -71,11 +73,12 @@ const Flag = ({ locale }: { locale: string }) => {
   }
 };
 
-const LanguageMenu = ({ changeLocale, editLocale, discussionPreferencesLanguages, isHidden }: Props) => {
+const LanguageMenu = ({ changeLocale, discussionPreferencesLanguages, editLocale, isHidden, position }: Props) => {
+  const positionClass = `language-menu-${!position ? 'left' : position}`;
   if (!isHidden) {
     return (
       <div className="relative">
-        <div className="language-menu">
+        <div className={classNames(['language-menu', positionClass])}>
           <OverlayTrigger placement="top" overlay={languageTooltip}>
             <div>
               {discussionPreferencesLanguages.map((language, index) => (
