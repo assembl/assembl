@@ -61,68 +61,71 @@ class CreateSynthesisForm extends React.Component<Props> {
         afterSave={redirectToList}
         validate={() => {}}
         mutators={{ ...arrayMutators }}
-        render={({ form, handleSubmit, pristine, submitting }) => (
-          <div className="administration max-container create-synthesis-form">
-            <FormWithRouter handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
-              <Row>
-                <Col xs={12} md={10}>
-                  <LanguageMenu />
-                  <div className="admin-box">
-                    <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
-                    <Section
-                      title={!synthesisPostId ? 'debate.syntheses.createNewSynthesis' : 'debate.syntheses.editSynthesis'}
-                      translate
-                    >
-                      <Field
-                        editLocale={editLocale}
-                        name="subject"
-                        component={MultilingualTextFieldAdapter}
-                        label={I18n.t('debate.syntheses.title')}
-                        required
-                      />
-                      <div className="flex">
-                        <Field name="image" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
-                        <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" " />
-                        {/* TODO: add image to the helper */}
-                      </div>
-                      <div className="flex richtext-large">
+        render={({ form, handleSubmit, initialValues, pristine, submitting }) => {
+          const isDraft = initialValues.publicationState === PublicationStates.DRAFT;
+          return (
+            <div className="administration max-container create-synthesis-form">
+              <FormWithRouter handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
+                <Row>
+                  <Col xs={12} md={10}>
+                    <LanguageMenu />
+                    <div className="admin-box">
+                      <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
+                      <Section
+                        title={!synthesisPostId ? 'debate.syntheses.createNewSynthesis' : 'debate.syntheses.editSynthesis'}
+                        translate
+                      >
                         <Field
                           editLocale={editLocale}
-                          name="body"
-                          component={MultilingualRichTextFieldAdapter}
-                          label={I18n.t('debate.syntheses.body')}
-                          withAttachmentButton
-                          withSideToolbar
-                          // toolbarPosition="top"
+                          name="subject"
+                          component={MultilingualTextFieldAdapter}
+                          label={I18n.t('debate.syntheses.title')}
+                          required
                         />
-                      </div>
-                    </Section>
+                        <div className="flex">
+                          <Field name="image" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
+                          <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" " />
+                          {/* TODO: add image to the helper */}
+                        </div>
+                        <div className="flex richtext-large">
+                          <Field
+                            editLocale={editLocale}
+                            name="body"
+                            component={MultilingualRichTextFieldAdapter}
+                            label={I18n.t('debate.syntheses.body')}
+                            withAttachmentButton
+                            withSideToolbar
+                            // toolbarPosition="top"
+                          />
+                        </div>
+                      </Section>
+                    </div>
+                  </Col>
+                </Row>
+                <Row>
+                  <div className="button-container">
+                    <SubmitButton
+                      name="save"
+                      label={isDraft ? 'debate.syntheses.saveDraft' : 'debate.syntheses.saveAndBackDraft'}
+                      disabled={(pristine && isDraft) || submitting}
+                      onClick={() => {
+                        form.change('publicationState', PublicationStates.DRAFT);
+                      }}
+                    />
+                    <SubmitButton
+                      name="post"
+                      label={isDraft ? 'debate.syntheses.saveAndPost' : 'debate.syntheses.save'}
+                      disabled={(pristine && !isDraft) || submitting}
+                      onClick={() => {
+                        form.change('publicationState', PublicationStates.PUBLISHED);
+                      }}
+                    />
                   </div>
-                </Col>
-              </Row>
-              <Row>
-                <div className="button-container">
-                  <SubmitButton
-                    name="save"
-                    label="administration.saveThemes"
-                    disabled={pristine || submitting}
-                    onClick={() => {
-                      form.change('publicationState', PublicationStates.DRAFT);
-                    }}
-                  />
-                  <SubmitButton
-                    name="post"
-                    label="debate.post"
-                    disabled={pristine || submitting}
-                    onClick={() => {
-                      form.change('publicationState', PublicationStates.PUBLISHED);
-                    }}
-                  />
-                </div>
-              </Row>
-            </FormWithRouter>
-          </div>
-        )}
+                </Row>
+              </FormWithRouter>
+            </div>
+          );
+        }}
       />
     );
   }

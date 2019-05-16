@@ -72,7 +72,7 @@ export default class LoadSaveReinitializeForm<TO: { [string]: any }, TI: { [stri
     }
   };
 
-  save = (values: TI) => {
+  save = (values: any) => {
     const { withWarningModal, warningValues, warningMessageKey } = this.props;
     const { initialValues } = this.state;
     // We check if any of the values that need to be warned about have been changed
