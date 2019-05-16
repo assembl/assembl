@@ -269,6 +269,17 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             ).filter((IdeaLink.target_id == self.id) & (Idea.tombstone_date == None)  # noqa: E711
             ).all()
 
+    def get_root_idea(self):
+        """
+        Return the root idea of the idea.
+        If the idea is tombstone, there is no more ancestors hence no root idea.
+        If the idea is itself a root idea, return itself.
+        """
+        if isinstance(self, RootIdea):
+            return self
+        if not self.is_tombstone:
+            return self.get_all_ancestors()[0]
+
     def get_questions(self):
         from .thematic import Question
         return [child for child in self.get_children() if isinstance(child, Question)]
