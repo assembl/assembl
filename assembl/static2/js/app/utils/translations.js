@@ -863,8 +863,6 @@ const Translations = {
       languageChoice: "Sélection des langues du débat",
       moderation: "Modération a priori",
       activateModeration: "Activer la modération",
-      translation: "Option de traduction pour les utilisateurs",
-      activateTranslation: "Activer l'option pour les utilisateurs de traduire les messages",
       ph: {
         propositionSectionTitle: "Titre de la section",
         propositionSectionSubtitle: "Sous-titre de la section",
@@ -1023,6 +1021,16 @@ const Translations = {
         logoInstruction:
           "L'image du logo doit avoir une hauteur d'au plus 110px, et une largeur d'au plus 215px. Le fond doit être transparent.",
         icoRequired: "Le favicon doit être un fichier .ico uniquement"
+      },
+      semanticAnalysis: {
+        title: "Analyse sémantique",
+        description: "L'analyse sémantique est disponible seulement pour les modules thread, questions et Bright Mirror",
+        activate: "Activer l'analyse sémantique"
+      },
+      translationService: {
+        title: "Service de traduction",
+        description: "Le service de traduction doit être activé lorsque l'analyse sémantique a été activée",
+        activate: "Activer l'option pour permettre à l'utilisateur de traduire les messages"
       }
     },
     unauthorizedAdministration: {
@@ -1900,8 +1908,6 @@ const Translations = {
       languageChoice: "Select desired languages below",
       moderation: "Post pending for moderation",
       activateModeration: "Activate the moderation",
-      translation: "Option to translate messages",
-      activateTranslation: "Activate the option for users to translate the messages",
       ph: {
         propositionSectionTitle: "Section title",
         propositionSectionSubtitle: "Section subtitle",
@@ -2056,6 +2062,16 @@ const Translations = {
         logoInstruction:
           "Logo should have a maximum height of 110px and a maximum width of 215px. The background must be transparent.",
         icoRequired: "The favicon must be an .ico file only"
+      },
+      semanticAnalysis: {
+        title: "Semantic Analysis",
+        description: "Semantic analysis feature is only available for the following modules: thread, survey and Bright Mirror",
+        activate: "Activate the semantic analysis"
+      },
+      translationService: {
+        title: "Translation service",
+        description: "Translation service should be activated when the semantic analysis is activated",
+        activate: "Activate this option to allow users to translate messages"
       }
     },
     unauthorizedAdministration: {

@@ -313,6 +313,7 @@ class DiscussionPreferences(graphene.ObjectType):
     logo = graphene.Field(Document, description=docs.DiscussionPreferences.logo)
     with_moderation = graphene.Boolean(description=docs.DiscussionPreferences.with_moderation)
     with_translation = graphene.Boolean(description=docs.DiscussionPreferences.with_translation)
+    with_semantic_analysis = graphene.Boolean(description=docs.DiscussionPreferences.with_semantic_analysis)
     slug = graphene.String(required=True, description=docs.DiscussionPreferences.slug)
     old_slugs = graphene.List(graphene.String, required=True, description=docs.DiscussionPreferences.old_slugs)
 
@@ -348,6 +349,9 @@ class DiscussionPreferences(graphene.ObjectType):
             return True
         else:
             return False
+
+    def resolve_with_semantic_analysis(self, args, context, info):
+        return self.get('with_semantic_analysis')
 
     def resolve_slug(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -585,6 +589,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         logo = graphene.String(description=docs.UpdateDiscussionPreferences.logo)
         with_moderation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_moderation)
         with_translation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_translation)
+        with_semantic_analysis = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_semantic_analysis)
         slug = graphene.String(description=docs.UpdateDiscussionPreferences.slug)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
@@ -602,6 +607,7 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         logo = args.get('logo', None)
         with_moderation = args.get('with_moderation', None)
         with_translation = args.get('with_translation', None)
+        with_semantic_analysis = args.get('with_semantic_analysis', None)
         slug = args.get('slug', None)
         with cls.default_db.no_autoflush as db:
             if languages is not None:
@@ -638,6 +644,9 @@ class UpdateDiscussionPreferences(graphene.Mutation):
 
             if with_moderation is not None:
                 discussion.preferences['with_moderation'] = with_moderation
+
+            if with_semantic_analysis is not None:
+                discussion.preferences['with_semantic_analysis'] = with_semantic_analysis
 
             if with_translation is True:
                 discussion.preferences['translation_service'] = "assembl.nlp.translation_service.GoogleTranslationService"

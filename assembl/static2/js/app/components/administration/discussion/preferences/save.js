@@ -10,6 +10,7 @@ const getVariables = async (client: ApolloClient, values: DiscussionPreferencesF
   languages: convertCheckboxListValueToVariable(values.languages),
   withModeration: values.withModeration,
   withTranslation: values.withTranslation,
+  withSemanticAnalysis: values.withSemanticAnalysis,
   slug: values.slug
 });
 

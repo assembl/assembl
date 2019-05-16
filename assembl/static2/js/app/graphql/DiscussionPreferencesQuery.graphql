@@ -12,5 +12,7 @@ query DiscussionPreferencesQuery {
       mimeType
     }
     withModeration
+    withTranslation
+    withSemanticAnalysis
   }
 }

@@ -170,15 +170,12 @@ def prepare_computation(id):
     """Prepare computation parameters according to discussion preferences"""
     from assembl.models import Content
     post = Content.get(id)
-    active = any([post.discussion.preferences['watson_' + x]
-                  for x in watson_languages.keys()])
+    active = post.discussion.preferences['with_semantic_analysis']
     if active and post.body:
         api_version = config.get("watson_api_version", "2018-03-16")
         features = {}
         post_loc = post.body.first_original().locale.root_locale
         for feature_name, langs in watson_languages.items():
-            if not post.discussion.preferences['watson_' + feature_name]:
-                continue
             if post_loc not in langs:
                 continue
             features[feature_name] = watson_feature_classes[feature_name]()
