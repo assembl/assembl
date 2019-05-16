@@ -404,8 +404,7 @@ const Translations = {
         successSave: "La synthèse a été sauvegardée",
         summary: "Sommaire des synthèses",
         title: "Titre de la synthèse",
-        url: "URL de la synthèse",
-        urlHelper: "Insérez l'URL de votre story sur storychief"
+        url: "URL de la synthèse"
       },
       survey: {
         loadRecentPosts: "Afficher les propositions récentes",
@@ -1474,8 +1473,7 @@ const Translations = {
         successSave: "Synthesis successfully saved",
         summary: "Syntheses summary",
         title: "Title of the synthesis",
-        url: "URL of the synthesis",
-        urlHelper: "Insert the url of your story on storychief"
+        url: "URL of the synthesis"
       },
       validateSuccess: "The contribution has been validated. It is now visible by all participants.",
       survey: {

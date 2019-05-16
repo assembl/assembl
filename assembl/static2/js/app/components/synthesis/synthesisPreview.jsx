@@ -23,7 +23,6 @@ export type Props = {
 const handleEdit = (synthesis: SynthesisItem) => {
   const slug = getDiscussionSlug();
   browserHistory.push(getLink('editSynthesis', { slug: slug, synthesisId: synthesis.post.id }));
-  // redirect to the storychief edition interface
 };
 
 const SynthesisPreview = ({ synthesis, refetchQueries }: Props) => {

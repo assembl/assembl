@@ -5,7 +5,7 @@ import { compose, graphql } from 'react-apollo';
 import { Col, Grid, Row } from 'react-bootstrap';
 import debounce from 'lodash/debounce';
 
-import { renderSynthesisBody } from '../utils/linkify';
+import { renderRichtext } from '../utils/linkify';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
@@ -137,7 +137,7 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
             {body && (
               <Row>
                 <Col mdOffset={3} md={8} smOffset={1} sm={10}>
-                  {renderSynthesisBody(body)}
+                  {renderRichtext(body)}
                 </Col>
               </Row>
             )}
