@@ -1674,9 +1674,9 @@ def phase_csv_export(request):
         row[MESSAGE_SHARE_COUNT] = message_share_count_query.first()[0] or 0
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index + 1)
+            column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
-                fieldnames.append(column_name.encode('utf-8'))
+                fieldnames.append(column_name)
             row[column_name] = key_word.encode('utf-8')
         row[DELETED_MESSAGES_COUNT] = get_deleted_posts(idea, start, end).count()
         if idea.message_view_override == MessageView.thread.value:
@@ -1757,9 +1757,9 @@ def survey_csv_export(request):
         row = {}
         top_key_words = thematic.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index + 1)
+            column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
-                fieldnames.append(column_name.encode('utf-8'))
+                fieldnames.append(column_name)
             row[column_name] = key_word.encode('utf-8')
         row.update(get_idea_parents_titles(thematic, user_prefs))
         for question in thematic.get_children():
@@ -1883,9 +1883,9 @@ def multicolumn_csv_export(request):
         row = {}
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index + 1)
+            column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
-                fieldnames.append(column_name.encode('utf-8'))
+                fieldnames.append(column_name)
             row[column_name] = key_word.encode('utf-8')
 
         row.update(get_idea_parents_titles(idea, user_prefs))
@@ -2095,9 +2095,9 @@ def thread_csv_export(request):
         row = {}
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index + 1)
+            column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
-                fieldnames.append(column_name.encode('utf-8'))
+                fieldnames.append(column_name)
             row[column_name] = key_word.encode('utf-8')
 
         children = idea.get_children()
@@ -2250,9 +2250,9 @@ def bright_mirror_csv_export(request):
         # row[WATSON_SENTIMENT] = idea.sentiments()
         top_key_words = idea.top_keywords()
         for index, key_word in enumerate(top_key_words):
-            column_name = "Mots clés {}".format(index + 1)
+            column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
-                fieldnames.append(column_name.encode('utf-8'))
+                fieldnames.append(column_name)
             row[column_name] = key_word.encode('utf-8')
 
         row.update(get_idea_parents_titles(idea, user_prefs))
