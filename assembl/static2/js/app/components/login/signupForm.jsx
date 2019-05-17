@@ -153,6 +153,14 @@ class SignupForm extends React.Component<Props, State> {
       userGuidelines: 'userGuidelines'
     };
 
+    const passwordRequirements = [
+      'lengthPassword',
+      'specialCharacterPassword',
+      'upperCasePassword',
+      'lowerCasePassword',
+      'specialCharacterPassword'
+    ];
+
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
@@ -171,7 +179,14 @@ class SignupForm extends React.Component<Props, State> {
                         required={field.required}
                       />
                       {field.identifier === 'PASSWORD2' ? (
-                        <p className="annotation no-margin">{I18n.t('login.passwordRequirement')}</p>
+                        <reactFragment>
+                          <p className="annotation no-margin">{I18n.t('login.passwordRequirementIntro')}</p>
+                          <ul>
+                            {passwordRequirements.map(passwordRequirement => (
+                              <li className="annotation no-margin">{I18n.t(`login.${passwordRequirement}`)}</li>
+                            ))}
+                          </ul>
+                        </reactFragment>
                       ) : null}
                     </FormGroup>
                   );
