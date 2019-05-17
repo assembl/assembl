@@ -368,9 +368,7 @@ def reset_password(request):
                     localizer.translate(_("This email does not exist")),
                     code=HTTPNotFound.code)
             else:
-                raise JSONError(
-                    localizer.translate(_(generic_error_message)),
-                    code=HTTPNotFound.code)
+                send_change_password_email(request, user, email, discussion=discussion)
                 logger.error("This email does not exist.")
         if account:
             email = account.email
@@ -378,21 +376,22 @@ def reset_password(request):
         error = localizer.translate(_("Please give an identifier"))
         raise JSONError(error)
     if not email:
-        email = user.get_preferred_email()
+        if user:
+            email = user.get_preferred_email()
+        else:
+            email = None
         if not email:
             if not discussion.preferences['generic_errors']:
                 error = localizer.translate(_("This user has no email"))
             else:
-                error = localizer.translate(_(generic_error_message))
                 logger.error("This user has no email.")
-            raise JSONError(error, code=HTTPPreconditionFailed.code)
+                send_change_password_email(request, user, email, discussion=discussion)
     if not isinstance(user, User):
         if not discussion.preferences['generic_errors']:
             error = localizer.translate(_("This is not a user"))
         else:
-            error = localizer.translate(_(generic_error_message))
             logger.error("This is not a user.")
-        raise JSONError(error, code=HTTPPreconditionFailed.code)
+            send_change_password_email(request, user, email, discussion=discussion)
     send_change_password_email(request, user, email, discussion=discussion)
     return HTTPOk()
 
