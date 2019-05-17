@@ -9,7 +9,7 @@ import { EditorState } from 'draft-js';
 import { getConnectedUserId, getPostPublicationState } from '../../../utils/globalFunctions';
 import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
 import { connectedUserIsModerator } from '../../../utils/permissions';
-import { SMALL_SCREEN_WIDTH, MINIMUM_BODY_LENGTH } from '../../../constants';
+import { MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
 import RichTextEditor from '../../common/richTextEditor';
 import { convertEditorStateToHTML } from '../../../utils/draftjs';
@@ -26,8 +26,6 @@ type Props = {
   index: number,
   refetchTheme: Function,
   mutate: Function,
-  screenHeight: number,
-  screenWidth: number,
   questionsLength: number
 };
 
@@ -106,20 +104,10 @@ export class Question extends React.Component<Props, State> {
   };
 
   render() {
-    const { index, isPhaseCompleted, title, screenWidth, screenHeight, questionsLength } = this.props;
+    const { index, isPhaseCompleted, title, questionsLength } = this.props;
     const questionTitle = questionsLength > 1 ? `${index}/ ${title}` : title;
-    let height = screenHeight;
-    const timelineElm = document && document.getElementById('timeline');
-    // This is necessary to bypass an issue with Flow
-    if (timelineElm) {
-      height = screenHeight - timelineElm.clientHeight;
-    }
     return (
-      <section
-        className={isPhaseCompleted ? 'hidden' : 'questions-section'}
-        id={`q${index}`}
-        style={screenWidth >= SMALL_SCREEN_WIDTH ? { height: height - 200 } : { height: 'auto' }}
-      >
+      <section className={isPhaseCompleted ? 'hidden' : 'questions-section'} id={`q${index}`}>
         <Grid fluid className="background-grey">
           <div className="max-container">
             <div className="question-title">
