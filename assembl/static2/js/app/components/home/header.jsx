@@ -78,12 +78,18 @@ Header.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  timeline: state.timeline
+  timeline: state.timeline,
+  i18n: state.i18n
 });
 
 export default compose(
   connect(mapStateToProps),
   graphql(DiscussionQuery, {
+    options: ({ i18n }) => ({
+      variables: {
+        lang: i18n.locale
+      }
+    }),
     props: ({ data }) => {
       if (data.error || data.loading) {
         return {
