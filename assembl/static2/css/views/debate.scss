@@ -349,15 +349,14 @@
       }
 
       .arrow {
+        align-items: center;
         background-color: $white;
         border-radius: 36px;
         cursor: pointer;
-        display: inline-block;
-        line-height: 30px;
+        display: flex;
+        justify-content: center;
         height: 36px;
         margin: 15px 0 0 30px;
-        padding: 3px 0 0 5px;
-        text-align: left;
         width: 36px;
       }
     }
