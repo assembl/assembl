@@ -25,7 +25,6 @@ class BlockTypeSelect extends React.Component<Props> {
   };
 
   componentDidMount(): void {
-    console.log(this.props);
     const { dropDown } = this.props;
     if (!dropDown) {
       this.setState({

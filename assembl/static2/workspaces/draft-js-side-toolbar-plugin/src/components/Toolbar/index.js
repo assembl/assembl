@@ -41,6 +41,7 @@ class Toolbar extends React.Component<SideToolbarProps> {
   }
 
   componentDidMount() {
+    document.addEventListener('scroll', this.trackScrolling);
     this.props.store.subscribeToItem('editorState', this.onEditorStateChange);
   }
 
@@ -60,46 +61,59 @@ class Toolbar extends React.Component<SideToolbarProps> {
       return;
     }
 
-    const { store, dropDown } = this.props;
-
     const currentContent = editorState.getCurrentContent();
     const currentBlock = currentContent.getBlockForKey(selection.getStartKey());
     // TODO verify that always a key-0-0 exists
     const offsetKey = DraftOffsetKey.encode(currentBlock.getKey(), 0, 0);
     // Note: need to wait on tick to make sure the DOM node has been create by Draft.js
     setTimeout(() => {
-      const textLineNode = document.querySelectorAll(`[data-offset-key="${offsetKey}"]`)[0];
-      const toolbarNode = this.toolbarRef.current;
+      const focusedLineNode = document.querySelectorAll(`[data-offset-key="${offsetKey}"]`)[0];
       // The editor root should be two levels above the node from
       // `getEditorRef`. In case this changes in the future, we
       // attempt to find the node dynamically by traversing upwards.
-      const editorRef = store.getItem('getEditorRef')();
-      if (!editorRef) return;
-
-      // this keeps backwards-compatibility with react 15
-      let editorRoot = editorRef.refs && editorRef.refs.editor
-        ? editorRef.refs.editor : editorRef.editor;
-      while (editorRoot.className.indexOf('DraftEditor-root') === -1) {
-        editorRoot = editorRoot.parentNode;
-      }
-      const position = {
-        top: textLineNode.offsetTop - (dropDown ? 0 : toolbarNode.scrollHeight / 2),
-        transform: 'scale(1)',
-        transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
-      };
-      // TODO: remove the hard code(width for the hover element)
-      if (this.props.position === 'right') {
-        // eslint-disable-next-line no-mixed-operators
-        position.left = editorRoot.offsetLeft + editorRoot.offsetWidth + 80 - 36;
-      } else {
-        position.left = editorRoot.offsetLeft - 80;
-      }
-
-
-      this.setState({
-        position,
-      });
+      this.setPosition(this.topPositionFromFocusedLine(focusedLineNode));
     }, 0);
+  };
+
+  setPosition(topPosition: number) {
+    const position = {
+      top: topPosition,
+      transform: 'scale(1)',
+      transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
+    };
+    // TODO: remove the hard code(width for the hover element)
+    const { store } = this.props;
+    const editorRef = store.getItem('getEditorRef')();
+    if (!editorRef) return;
+    let editorRoot = editorRef.refs && editorRef.refs.editor
+      ? editorRef.refs.editor : editorRef.editor;
+    while (editorRoot.className.indexOf('DraftEditor-root') === -1) {
+      editorRoot = editorRoot.parentNode;
+    }
+    if (this.props.position === 'right') {
+      // eslint-disable-next-line no-mixed-operators
+      position.left = editorRoot.offsetLeft + editorRoot.offsetWidth + 80 - 36;
+    } else {
+      position.left = editorRoot.offsetLeft - 80;
+    }
+
+    this.setState({
+      position,
+    });
+  }
+
+  topPositionFromFocusedLine(focusedLineNode) {
+    const toolbarNode = this.toolbarRef.current;
+    return focusedLineNode.offsetTop - (this.props.dropDown ? 0 : toolbarNode.scrollHeight / 2);
+  }
+
+  trackScrolling = () => {
+    const toolbarNode = this.toolbarRef.current;
+    const clientRectTop = toolbarNode.getBoundingClientRect().top;
+    if (clientRectTop < 60) {
+      console.log('toolbar top reached');
+      this.setPosition(60);
+    }
   };
 
   render() {

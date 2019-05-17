@@ -133,6 +133,7 @@ class CreateSynthesisForm extends React.Component<Props> {
   }
 }
 
+
 const mapStateToProps = ({ admin, i18n }) => ({
   editLocale: admin.editLocale,
   lang: i18n.locale
