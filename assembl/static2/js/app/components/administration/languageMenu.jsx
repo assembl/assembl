@@ -31,7 +31,7 @@ type Props = {
   discussionPreferencesLanguages: Array<{ locale: string, name: string }>,
   isHidden: boolean,
   changeLocale: string => void,
-  position: string
+  position: 'left' | 'right'
 };
 
 const Flag = ({ locale }: { locale: string }) => {
