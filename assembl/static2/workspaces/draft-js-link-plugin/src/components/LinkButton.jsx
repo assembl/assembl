@@ -2,7 +2,6 @@
 import classNames from 'classnames';
 import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
-
 // from workspaces
 // eslint-disable-next-line import/no-extraneous-dependencies
 import EditorUtils, { constants } from 'assembl-editor-utils';
@@ -18,7 +17,9 @@ type Props = {
   store: DraftJSPluginStore,
   theme: Theme,
   onRemoveLinkAtSelection: () => void,
-  formatLink?: string => string
+  formatLink?: string => string,
+  setEditorState?: Function,
+  getEditorState?: Function
 };
 
 export default class LinkButton extends React.Component<Props> {
@@ -28,19 +29,19 @@ export default class LinkButton extends React.Component<Props> {
 
   addLink = (values: FormValues) => {
     const { closeModal, store, formatLink } = this.props;
-    if (store) {
-      const { getEditorState, setEditorState } = store;
-      if (getEditorState && setEditorState) {
+    const editorState = this.getEditorState();
+    if (editorState) {
+      const setEditorState = (store && store.setEditorState) || this.props.setEditorState;
+      if (setEditorState) {
         if (values.url) {
           const text = values.text ? values.text : values.url;
-          const title = text;
           const data = {
             target: values.openInNewTab ? '_blank' : null,
             text: text,
-            title: title,
+            title: text,
             url: formatLink ? formatLink(values.url) : values.url
           };
-          setEditorState(EditorUtils.createLinkAtSelection(getEditorState(), data));
+          setEditorState(EditorUtils.createLinkAtSelection(editorState, data));
         }
       }
     }
@@ -55,26 +56,23 @@ export default class LinkButton extends React.Component<Props> {
     this.props.setModalContent(body, title);
   };
 
-  getSelectedText = () => {
-    const { store } = this.props;
-    if (!store.getEditorState) {
-      return '';
+  getSelectedText = (): string => {
+    const editorState = this.getEditorState();
+    if (editorState) {
+      const selectionState = editorState.getSelection();
+      const anchorKey = selectionState.getAnchorKey();
+      const currentContent = editorState.getCurrentContent();
+      const currentContentBlock = currentContent.getBlockForKey(anchorKey);
+      const [start, end] = [selectionState.getStartOffset(), selectionState.getEndOffset()];
+      return currentContentBlock.getText().slice(start, end);
     }
-
-    const editorState = store.getEditorState();
-    const selectionState = editorState.getSelection();
-    const anchorKey = selectionState.getAnchorKey();
-    const currentContent = editorState.getCurrentContent();
-    const currentContentBlock = currentContent.getBlockForKey(anchorKey);
-    const start = selectionState.getStartOffset();
-    const end = selectionState.getEndOffset();
-    const selectedText = currentContentBlock.getText().slice(start, end);
-    return selectedText;
+    return '';
   };
 
   render() {
-    const { onRemoveLinkAtSelection, store, theme } = this.props;
-    const hasLinkSelected = (store.getEditorState && EditorUtils.hasEntity(store.getEditorState(), ENTITY_TYPES.link)) || false;
+    const { onRemoveLinkAtSelection, theme } = this.props;
+    const editorState = this.getEditorState();
+    const hasLinkSelected = (editorState && EditorUtils.hasEntity(editorState, ENTITY_TYPES.link)) || false;
     const buttonClassName = classNames(theme.button, { active: hasLinkSelected });
     const handleClick = hasLinkSelected ? onRemoveLinkAtSelection : this.openModal;
     return (
@@ -84,5 +82,15 @@ export default class LinkButton extends React.Component<Props> {
         </button>
       </div>
     );
+  }
+
+  getEditorState(): EditorState | null {
+    const { getEditorState, store } = this.props;
+    if (getEditorState) {
+      return getEditorState();
+    } else if (store.getEditorState) {
+      return store.getEditorState();
+    }
+    return null;
   }
 }
