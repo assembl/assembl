@@ -5,10 +5,19 @@ import buttonStyles from './buttonStyles.css';
 import blockTypeSelectStyles from './blockTypeSelectStyles.css';
 import toolbarStyles from './toolbarStyles.css';
 
+export type SideToolbarProps = {
+  dropDown: boolean;
+  store: any,
+  theme: any,
+  position: 'left' | 'right',
+}
+
 export default (config = {}) => {
   const defaultPostion = 'left';
 
   const defaultTheme = { buttonStyles, blockTypeSelectStyles, toolbarStyles };
+
+  const defaultDropDown = true;
 
   const store = createStore({
     isVisible: false,
@@ -17,12 +26,14 @@ export default (config = {}) => {
   const {
     position = defaultPostion,
     theme = defaultTheme,
+    dropDown = defaultDropDown
   } = config;
 
-  const toolbarProps = {
+  const toolbarProps: SideToolbarProps = {
     store,
     theme,
     position,
+    dropDown,
   };
 
   return {

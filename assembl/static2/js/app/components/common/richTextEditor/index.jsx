@@ -79,7 +79,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
     }
     if (props.withSideToolbar) {
       const sideToolbarPlugin = createSideToolbarPlugin({
-        structure: toolbarStructure
+        structure: toolbarStructure,
+        dropDown: false
       });
       plugins.push(sideToolbarPlugin);
 

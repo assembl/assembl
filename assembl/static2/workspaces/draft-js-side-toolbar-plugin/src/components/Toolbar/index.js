@@ -3,16 +3,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import DraftOffsetKey from 'draft-js/lib/DraftOffsetKey';
 import {
-  HeadlineOneButton,
-  HeadlineTwoButton,
   BlockquoteButton,
   CodeBlockButton,
-  UnorderedListButton,
+  HeadlineOneButton,
+  HeadlineTwoButton,
   OrderedListButton,
+  UnorderedListButton,
 } from 'draft-js-buttons';
 import BlockTypeSelect from '../BlockTypeSelect';
+import type { SideToolbarProps } from '../../index';
 
-class Toolbar extends React.Component {
+class Toolbar extends React.Component<SideToolbarProps> {
 
   static defaultProps = {
     children: (externalProps) => (
@@ -32,6 +33,11 @@ class Toolbar extends React.Component {
     position: {
       transform: 'scale(0)',
     }
+  }
+
+  constructor(props) {
+    super(props);
+    this.toolbarRef = React.createRef();
   }
 
   componentDidMount() {
@@ -54,18 +60,20 @@ class Toolbar extends React.Component {
       return;
     }
 
+    const { store, dropDown } = this.props;
+
     const currentContent = editorState.getCurrentContent();
     const currentBlock = currentContent.getBlockForKey(selection.getStartKey());
     // TODO verify that always a key-0-0 exists
     const offsetKey = DraftOffsetKey.encode(currentBlock.getKey(), 0, 0);
     // Note: need to wait on tick to make sure the DOM node has been create by Draft.js
     setTimeout(() => {
-      const node = document.querySelectorAll(`[data-offset-key="${offsetKey}"]`)[0];
-
+      const textLineNode = document.querySelectorAll(`[data-offset-key="${offsetKey}"]`)[0];
+      const toolbarNode = this.toolbarRef.current;
       // The editor root should be two levels above the node from
       // `getEditorRef`. In case this changes in the future, we
       // attempt to find the node dynamically by traversing upwards.
-      const editorRef = this.props.store.getItem('getEditorRef')();
+      const editorRef = store.getItem('getEditorRef')();
       if (!editorRef) return;
 
       // this keeps backwards-compatibility with react 15
@@ -74,9 +82,8 @@ class Toolbar extends React.Component {
       while (editorRoot.className.indexOf('DraftEditor-root') === -1) {
         editorRoot = editorRoot.parentNode;
       }
-
       const position = {
-        top: node.offsetTop,
+        top: textLineNode.offsetTop - (dropDown ? 0 : toolbarNode.scrollHeight / 2),
         transform: 'scale(1)',
         transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
       };
@@ -93,20 +100,21 @@ class Toolbar extends React.Component {
         position,
       });
     }, 0);
-  }
+  };
 
   render() {
-    const { theme, store } = this.props;
+    const { theme, store, dropDown } = this.props;
 
     return (
-      <div
-        className={theme.toolbarStyles.wrapper}
-        style={this.state.position}
+      <div ref={this.toolbarRef}
+           className={theme.toolbarStyles.wrapper}
+           style={this.state.position}
       >
         <BlockTypeSelect
           getEditorState={store.getItem('getEditorState')}
           setEditorState={store.getItem('setEditorState')}
           theme={theme}
+          dropDown={dropDown}
         >
           {this.props.children}
         </BlockTypeSelect>

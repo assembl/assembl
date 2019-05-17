@@ -2,56 +2,82 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-class BlockTypeSelect extends React.Component {
+type Props = {
+  getEditorState: Function,
+  setEditorState: Function,
+  theme: any,
+  dropDown: boolean
+}
+
+const style = {
+  transform: {
+    show: 'translate(-50%) scale(1)',
+    hide: 'translate(-50%) scale(0)',
+  }
+};
+
+class BlockTypeSelect extends React.Component<Props> {
 
   state = {
     style: {
-      transform: 'translate(-50%) scale(0)',
+      transform: style.transform.hide,
+    }
+  };
+
+  componentDidMount(): void {
+    console.log(this.props);
+    const { dropDown } = this.props;
+    if (!dropDown) {
+      this.setState({
+        style: {
+          transform: style.transform.show
+        }
+      })
     }
   }
 
   onMouseEnter = () => {
-    this.setState({
-      style: {
-        transform: 'translate(-50%) scale(1)',
-        transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
-      },
-    });
-  }
+    const { dropDown } = this.props;
+    if (dropDown) {
+      this.setState({
+        style: {
+          transform: style.transform.show,
+          transition: 'transform 0.15s cubic-bezier(.3,1.2,.2,1)',
+        },
+      });
+    }
+  };
 
   onMouseLeave = () => {
-    this.setState({
-      style: {
-        transform: 'translate(-50%) scale(0)',
-      },
-    });
-  }
+    const { dropDown } = this.props;
+    if (dropDown) {
+      this.setState({
+        style: {
+          transform: style.transform.hide,
+        },
+      });
+    }
+
+  };
 
   onMouseDown = (clickEvent) => {
     clickEvent.preventDefault();
     clickEvent.stopPropagation();
-  }
+  };
 
   render() {
-    const { theme, getEditorState, setEditorState } = this.props;
+    const { theme, getEditorState, setEditorState, dropDown } = this.props;
+    const dropDownButton = this.renderDropDown();
+    const classNames = theme.blockTypeSelectStyles.popup + (dropDown ? ' ' + theme.blockTypeSelectStyles.popupDropDown : '');
     return (
       <div
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
         onMouseDown={this.onMouseDown}
       >
-        <div className={theme.blockTypeSelectStyles.blockType}>
-          <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0h24v24H0z" fill="none" />
-            <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
-          </svg>
-        </div>
-        {/*
-          The spacer is needed so the popup doesn't go away when moving from the
-          blockType div to the popup.
-        */}
-        <div className={theme.blockTypeSelectStyles.spacer} />
-        <div className={theme.blockTypeSelectStyles.popup} style={this.state.style}>
+        {dropDownButton}
+        <div className={classNames}
+             style={this.state.style}>
           {this.props.children({
             getEditorState,
             setEditorState,
@@ -59,9 +85,38 @@ class BlockTypeSelect extends React.Component {
           })}
         </div>
       </div>
-    );
+    )
   }
+
+  renderDropDown() {
+    const { theme, dropDown } = this.props;
+    if (dropDown) {
+      /* The spacer is needed so the popup doesn't go away when moving from the
+         blockType div to the popup.
+      */
+      return (
+        <>
+          <div className={theme.blockTypeSelectStyles.blockType}>
+            <svg height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z" />
+            </svg>
+          </div>
+          {/*
+            The spacer is needed so the popup doesn't go away when moving from the
+            blockType div to the popup.
+          */}
+          <div className={theme.blockTypeSelectStyles.spacer} />
+        </>
+      )
+    } else {
+      return ''
+    }
+  }
+
 }
+
 
 BlockTypeSelect.propTypes = {
   children: PropTypes.func
