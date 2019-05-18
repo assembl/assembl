@@ -120,8 +120,8 @@ class DBPediaConcept(LocalizedUriConcept):
         if locale.code == 'en':
             return self
         elif not self.english_concept:
-            log.debug("Looking for an equivalent to concept %d (%s)" % (
-                self.id, self.concept_label))
+            log.debug("Looking for an equivalent to concept (%s)" % (
+                self.concept_label))
             sparql = u"SELECT ?s WHERE {?s <%s> <%s>}" % (sameAs, self.concept_uri)
             result = requests.get('http://dbpedia.org/sparql', params={
                 'query': sparql,
