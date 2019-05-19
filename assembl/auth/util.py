@@ -9,6 +9,7 @@ from pyramid.httpexceptions import HTTPNotFound
 from pyisemail import is_email
 from pyramid.authentication import SessionAuthenticationPolicy
 from pyramid.threadlocal import get_current_request
+import transaction
 
 from assembl.lib.locale import _
 from ..lib.sqla import get_session_maker
@@ -17,7 +18,28 @@ from .password import verify_data_token, Validity
 from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission, AgentProfile,
-    EmailAccount)
+    EmailAccount, IdentityProvider)
+from ..models.social_auth import SocialAuthAccount
+
+
+def update_forced_social_auth_display_name(self, backend_cls, db=None):
+    """
+    Utility function to update the forced display name of a social auth account across server.
+    Userfull for scenarios where the display_name structure has been updated and the change must be
+    propagated across the database.
+    """
+    db = db or IdentityProvider.default_db
+    idp = IdentityProvider.get_by_type(backend_cls.name, create=False)
+    with transaction.manager:
+        social_auth_accounts = idp.agent_accounts
+        for account in social_auth_accounts:
+            if isinstance(account, SocialAuthAccount):
+                data = account.extra_data
+                display_name = backend_cls.get_display_name(data)
+                if display_name:
+                    data['forced_display_name'] = display_name
+                account.extra_data = data
+                db.flush()
 
 
 def get_user(request):
