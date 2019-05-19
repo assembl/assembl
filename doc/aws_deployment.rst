@@ -28,8 +28,12 @@ The build machine is similar to an assembl box, with the difference of having th
 .. code-block:: sh
 	sudo su - assembl_user
 	cd assembl
+	# If you rebased invoke recently
+	git fetch; git reset --hard origin/invoke
+	# If it was just regular series of commits
 	git pull  # Default is invoke
 	rm -rf wheelhouse
+	rm -rf build
 	source venv/bin/activate
 
 	# Get the latest theme
@@ -38,7 +42,9 @@ The build machine is similar to an assembl box, with the difference of having th
 	cd ../../../..
 
 	# Build the static assets (JS/CSS + Themes)
-	npm run build
+	cd assembl/static2/
+	rm -rf build
+	npm run build  # Alternatively: yarn build
 	cd ../..
 
 	# Build the static translations (used by backend only)
@@ -51,6 +57,9 @@ The build machine is similar to an assembl box, with the difference of having th
 	# Push built themes and wheel (and dependencies) to S3
 	inv build.push-wheelhouse
 	inv build.push-built-themes-to-remote-bucket
+
+
+If the fonts were updated since the last deployment, please upload the latest fonts to the SharedService `s3://bluenove-assembl-fonts` bucket. Note: Ensure that when you're uploading, the font files ACL rule is `public-read`. Default uploading from the console is private.
 
 
 S3 Contents
