@@ -153,6 +153,9 @@ class AgentProfile(Base):
 
     def display_name(self):
         # TODO: Prefer types?
+        display_name = self.get_override_display_name()
+        if display_name:
+            return display_name
         if self.name:
             return self.name
         for acc in self.identity_accounts:
@@ -162,6 +165,17 @@ class AgentProfile(Base):
             name = acc.display_name()
             if name:
                 return name
+
+    def get_override_display_name(self):
+        """
+        Override a display name by the pattern dictated by a Social Auth backend
+        """
+        display_name = None
+        for account in self.identity_accounts:
+            name = account.get_forced_display_name()
+            if name:
+                display_name = name
+        return display_name
 
     def merge(self, other_profile):
         """Merge another profile on this profile, because they are the same entity.
@@ -1119,17 +1133,6 @@ class User(AgentProfile):
         if self.name:
             return self.name
         return super(User, self).display_name()
-
-    def get_override_display_name(self):
-        idp_accounts = self.identity_accounts
-        display_name = None
-        if not idp_accounts:
-            return display_name
-        for account in idp_accounts:
-            name = account.get_forced_display_name()
-            if name:
-                display_name = name
-        return display_name
 
     @property
     def permissions_for_current_discussion(self):

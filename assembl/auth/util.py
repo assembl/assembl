@@ -12,7 +12,7 @@ from pyramid.threadlocal import get_current_request
 import transaction
 
 from assembl.lib.locale import _
-from ..lib.sqla import get_session_maker
+from ..lib.sqla import get_session_maker, mark_changed
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
 from .password import verify_data_token, Validity
 from ..models.auth import (
@@ -22,13 +22,13 @@ from ..models.auth import (
 from ..models.social_auth import SocialAuthAccount
 
 
-def update_forced_social_auth_display_name(self, backend_cls, db=None):
+def update_forced_social_auth_display_name(backend_cls, session=None):
     """
     Utility function to update the forced display name of a social auth account across server.
     Userfull for scenarios where the display_name structure has been updated and the change must be
     propagated across the database.
     """
-    db = db or IdentityProvider.default_db
+    session = session or get_session_maker()()
     idp = IdentityProvider.get_by_type(backend_cls.name, create=False)
     with transaction.manager:
         social_auth_accounts = idp.agent_accounts
@@ -39,7 +39,8 @@ def update_forced_social_auth_display_name(self, backend_cls, db=None):
                 if display_name:
                     data['forced_display_name'] = display_name
                 account.extra_data = data
-                db.flush()
+                session.flush()
+        mark_changed(session)
 
 
 def get_user(request):

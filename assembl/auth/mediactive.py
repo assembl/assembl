@@ -73,7 +73,6 @@ class Mediactive(BaseAuth):
             return "%s.%s" % (first_name, last_name)
         except Exception:
             log.error("[Mediactive Backend] Failed to populate extra data for social user with data %s" % data)
-        finally:
             return None
 
     def display_name(self, response):
