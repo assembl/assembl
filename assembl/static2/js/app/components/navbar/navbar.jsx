@@ -30,7 +30,7 @@ const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) =>
   case 'RESOURCES_CENTER':
     return hasResourcesCenter;
   case 'SYNTHESES':
-    return hasSyntheses;
+    return hasSyntheses || connectedUserIsAdmin();
   case 'ADMINISTRATION':
     return connectedUserIsAdmin();
   case 'HOMEPAGE':
