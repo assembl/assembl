@@ -38,7 +38,7 @@ const Phases = ({ timeline }: Props) => (
         <div className="content-section visible-lg">
           <Row className="no-margin">
             {timeline.map((phase, index) => (
-              <Col xs={2} className={'no-padding bar'} key={index}>
+              <Col xs={timeline.length < 5 ? 12 / timeline.length : 2} className={'no-padding bar'} key={index}>
                 <Timeline index={index} />
               </Col>
             ))}

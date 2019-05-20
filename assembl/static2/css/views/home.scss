@@ -214,6 +214,7 @@ $illustration-box-margin-right: 2px;
         background-size: cover;
         height: 300px;
         margin-bottom: 2px;
+        margin-right: 1px;
         width: 100%;
 
         .content-box {
@@ -469,8 +470,8 @@ $illustration-box-margin-right: 2px;
             div:first-child:nth-last-child(#{$i}) ~ div {
               height: 500px;
               width: 100% / $i;
-              flex: 0 0 100% / $i;
-              min-width: 25%;
+              flex: 0 0 100% / $i - 0.1;
+              min-width: 24%;
             }
           }
         }
