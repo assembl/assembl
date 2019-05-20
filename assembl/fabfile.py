@@ -2640,7 +2640,7 @@ def create_first_admin_user():
 
 @task
 def install_java():
-    """Install Oracle Java 8. Require sudo."""
+    """Install openjdk-11-jdk. Require sudo."""
     if getenv("IN_DOCKER"):
         return
 
@@ -2651,10 +2651,8 @@ def install_java():
     else:
         release_info = run("lsb_release -i")
         if "Ubuntu" in release_info:
-            sudo("add-apt-repository -y ppa:webupd8team/java")
             sudo("apt update")
-            sudo("apt install -y oracle-java8-installer")
-            sudo("apt install oracle-java8-set-default")
+            sudo("apt install -y openjdk-11-jdk")
         else:  # assuming debian
             if not exists('/usr/bin/java'):
                 print(red("Java 8 must be installed in order to progress. This is needed for elasticsearch."))
