@@ -5,7 +5,7 @@ import { postBodyReplacementComponents } from '../components/debate/common/post/
 
 function addIframeForStoryChief(html: string): string {
   const url = /(<a href="(https:\/\/(bluenovev3.storychief.io)[^\s]+)".*?<\/a>)/gi;
-  return html.replace(url, '<div class="iframed"><iframe src="$2" width="100%" height="1500px"></iframe></div>');
+  return html.replace(url, '<iframe class="synthesis-iframe" src="$2"></iframe>');
 }
 
 export function transformLinksInHtml(html: string): string {
