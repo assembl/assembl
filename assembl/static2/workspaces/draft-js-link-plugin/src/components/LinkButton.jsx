@@ -69,6 +69,16 @@ export default class LinkButton extends React.Component<Props> {
     return '';
   };
 
+  getEditorState(): EditorState | null {
+    const { getEditorState, store } = this.props;
+    if (getEditorState) {
+      return getEditorState();
+    } else if (store.getEditorState) {
+      return store.getEditorState();
+    }
+    return null;
+  }
+
   render() {
     const { onRemoveLinkAtSelection, theme } = this.props;
     const editorState = this.getEditorState();
@@ -82,15 +92,5 @@ export default class LinkButton extends React.Component<Props> {
         </button>
       </div>
     );
-  }
-
-  getEditorState(): EditorState | null {
-    const { getEditorState, store } = this.props;
-    if (getEditorState) {
-      return getEditorState();
-    } else if (store.getEditorState) {
-      return store.getEditorState();
-    }
-    return null;
   }
 }

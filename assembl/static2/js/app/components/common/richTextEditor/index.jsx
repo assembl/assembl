@@ -33,18 +33,18 @@ type State = {
 };
 
 export default class RichTextEditor extends React.Component<Props, State> {
+  editor: ?Editor;
+
+  plugins: Array<DraftPlugin>;
+
+  components: { [string]: React.ComponentType<*> };
+
   static defaultProps = {
     handleInputFocus: undefined,
     toolbarPosition: 'top',
     withAttachmentButton: false,
     withSideToolbar: false
   };
-
-  editor: ?Editor;
-
-  plugins: Array<DraftPlugin>;
-
-  components: { [string]: React.ComponentType<*> };
 
   constructor(props: Props): void {
     super(props);
@@ -167,6 +167,28 @@ export default class RichTextEditor extends React.Component<Props, State> {
     return 'not-handled';
   };
 
+  renderSideToolbar() {
+    const { AttachmentButton, SideToolbar, LinkButton } = this.components;
+    return (
+      <SideToolbar config={{ dropDown: false }}>
+        {(externalProps) => {
+          const attachmentButton = this.props.withAttachmentButton ? <AttachmentButton {...externalProps} /> : '';
+          return (
+            <div>
+              <HeadlineTwoButton {...externalProps} />
+              <HeadlineThreeButton {...externalProps} />
+              <BoldButton {...externalProps} />
+              <ItalicButton {...externalProps} />
+              <UnorderedListButton {...externalProps} />
+              {attachmentButton}
+              <LinkButton {...externalProps} />
+            </div>
+          );
+        }}
+      </SideToolbar>
+    );
+  }
+
   render() {
     const { editorState, onChange, placeholder, textareaRef, withSideToolbar } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
@@ -203,28 +225,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
         {withSideToolbar ? this.renderSideToolbar() : null}
         {Attachments ? <Attachments /> : null}
       </div>
-    );
-  }
-
-  renderSideToolbar() {
-    const { AttachmentButton, SideToolbar, LinkButton } = this.components;
-    return (
-      <SideToolbar config={{ dropDown: false }}>
-        {(externalProps) => {
-          const attachmentButton = this.props.withAttachmentButton ? <AttachmentButton {...externalProps} /> : '';
-          return (
-            <div>
-              <HeadlineTwoButton {...externalProps} />
-              <HeadlineThreeButton {...externalProps} />
-              <BoldButton {...externalProps} />
-              <ItalicButton {...externalProps} />
-              <UnorderedListButton {...externalProps} />
-              {attachmentButton}
-              <LinkButton {...externalProps} />
-            </div>
-          );
-        }}
-      </SideToolbar>
     );
   }
 }
