@@ -15,11 +15,14 @@ import { getChildren, getPartialTree } from '../utils/tree';
 import SideMenu from '../components/synthesis/sideMenu';
 import { getDomElementOffset } from '../utils/globalFunctions';
 import type { Synthesis } from '../components/synthesis/types.flow';
+import { deleteButton, editButton } from '../components/synthesis/actions';
+import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 
 type SynthesisProps = {
   synthesis: Synthesis,
   routeParams: { slug: string, synthesisId: string },
-  synthesisPostId: string
+  synthesisPostId: string,
+  lang: string
 };
 
 type SynthesisState = {
@@ -120,6 +123,15 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
     });
     const { roots, descendants } = getPartialTree(sortedIdeas);
     const hasSiblings = roots.length > 1;
+
+    const updateSynthesesQuery = {
+      query: SynthesesQuery,
+      variables: {
+        lang: this.props.lang
+      }
+    };
+    const refetchQueries = [updateSynthesesQuery];
+
     return (
       <div className="synthesis-page">
         <div className="background-light">
@@ -190,6 +202,12 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
                 </Row>
               </Section>
             )}
+            <Row>
+              <ul className="actions">
+                {editButton(synthesisPostId)}
+                {deleteButton(synthesisPostId, refetchQueries)}
+              </ul>
+            </Row>
           </Grid>
         </div>
       </div>

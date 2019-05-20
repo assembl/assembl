@@ -7,7 +7,6 @@ import { I18n } from 'react-redux-i18n';
 
 import SynthesisPreview from './synthesisPreview';
 import { displayAlert } from '../../utils/utilityManager';
-import { connectedUserIsAdmin } from '../../utils/permissions';
 import type { SynthesisItem } from './types.flow';
 
 export type Props = {
@@ -43,21 +42,11 @@ const SynthesesList = ({ syntheses, refetchQueries }: Props) => {
   const childElements = syntheses
     .slice() // copy before sort
     .sort(publicationStateCreationDateComparator)
-    .map((synthesis) => {
-      const userCanEdit = connectedUserIsAdmin() || false;
-      const userCanDelete = connectedUserIsAdmin() || false;
-      return (
-        <Animated key={synthesis.id} preset="scalein">
-          <SynthesisPreview
-            refetchQueries={refetchQueries}
-            synthesis={synthesis}
-            deleteSynthesisHandler={deleteSynthesisHandler}
-            userCanDelete={userCanDelete}
-            userCanEdit={userCanEdit}
-          />
-        </Animated>
-      );
-    });
+    .map(synthesis => (
+      <Animated key={synthesis.id} preset="scalein">
+        <SynthesisPreview refetchQueries={refetchQueries} synthesis={synthesis} deleteSynthesisHandler={deleteSynthesisHandler} />
+      </Animated>
+    ));
 
   return (
     <section className="fictions-section">

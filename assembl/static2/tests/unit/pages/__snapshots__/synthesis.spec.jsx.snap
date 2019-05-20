@@ -113,6 +113,17 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
           />
         </Col>
       </Row>
+      <Row
+        bsClass="row"
+        componentClass="div"
+      >
+        <ul
+          className="actions"
+        >
+          
+          <React.Fragment />
+        </ul>
+      </Row>
     </Grid>
   </div>
 </div>
