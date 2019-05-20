@@ -119,10 +119,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       >
         <ul
           className="actions"
-        >
-          
-          <React.Fragment />
-        </ul>
+        />
       </Row>
     </Grid>
   </div>

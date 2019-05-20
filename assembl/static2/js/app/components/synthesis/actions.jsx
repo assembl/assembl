@@ -27,7 +27,7 @@ const handleEdit = (synthesisPostId: string) => {
 
 export function editButton(synthesisPostId: string) {
   if (!userCanEdit()) {
-    return '';
+    return null;
   }
   return (
     <li>
@@ -45,7 +45,7 @@ const deleteCallback = () => {
 
 export function deleteButton(synthesisPostId: string, refetchQueries: Array<any> = []) {
   if (!userCanDelete()) {
-    return <></>;
+    return null;
   }
   return (
     <li>
