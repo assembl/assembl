@@ -68,7 +68,6 @@ class CreateSynthesisForm extends React.Component<Props> {
               <FormWithRouter handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
                 <Row>
                   <Col xs={12} md={10}>
-                    <LanguageMenu position="right" />
                     <div className="admin-box">
                       <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
                       <Section
@@ -99,29 +98,28 @@ class CreateSynthesisForm extends React.Component<Props> {
                           />
                         </div>
                       </Section>
+                      <div className="button-container">
+                        <SubmitButton
+                          name="save"
+                          label={isDraft ? 'debate.syntheses.saveDraft' : 'debate.syntheses.saveAndBackDraft'}
+                          disabled={(pristine && isDraft) || submitting}
+                          onClick={() => {
+                            form.change('publicationState', PublicationStates.DRAFT);
+                          }}
+                        />
+                        <SubmitButton
+                          name="post"
+                          label={isDraft ? 'debate.syntheses.saveAndPost' : 'debate.syntheses.save'}
+                          disabled={(pristine && !isDraft) || submitting}
+                          onClick={() => {
+                            form.change('publicationState', PublicationStates.PUBLISHED);
+                          }}
+                        />
+                      </div>
                     </div>
                   </Col>
-                </Row>
-                <Row>
-                  <Col xs={12} md={10}>
-                    <div className="button-container">
-                      <SubmitButton
-                        name="save"
-                        label={isDraft ? 'debate.syntheses.saveDraft' : 'debate.syntheses.saveAndBackDraft'}
-                        disabled={(pristine && isDraft) || submitting}
-                        onClick={() => {
-                          form.change('publicationState', PublicationStates.DRAFT);
-                        }}
-                      />
-                      <SubmitButton
-                        name="post"
-                        label={isDraft ? 'debate.syntheses.saveAndPost' : 'debate.syntheses.save'}
-                        disabled={(pristine && !isDraft) || submitting}
-                        onClick={() => {
-                          form.change('publicationState', PublicationStates.PUBLISHED);
-                        }}
-                      />
-                    </div>
+                  <Col md={1}>
+                    <LanguageMenu />
                   </Col>
                 </Row>
               </FormWithRouter>
