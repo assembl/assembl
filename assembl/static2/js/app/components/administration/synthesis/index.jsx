@@ -88,6 +88,7 @@ class CreateSynthesisForm extends React.Component<Props> {
                         </div>
                         <div className="richtext-large">
                           <Field
+                            key={`body-${editLocale}`}
                             editLocale={editLocale}
                             name="body"
                             component={MultilingualRichTextFieldAdapter}
