@@ -123,7 +123,7 @@ def do_watson_computation(id):
                         dbconcept.identify_languages(desired_locales, post.db)
                         post.db.add(PostLocalizedConceptAnalysis(
                             post=post, source=computation,
-                            value=dbconcept, score=keyword['relevance']))
+                            value=dbconcept, score=concept['relevance']))
                     sentiments = {}
                     if result.get('emotion', None):
                         emotion = result['emotion']['document']['emotion']
