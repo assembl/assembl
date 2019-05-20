@@ -3,8 +3,15 @@ import linkifyHtml from 'linkifyjs/html';
 import activeHtml from 'react-active-html';
 import { postBodyReplacementComponents } from '../components/debate/common/post/postBody';
 
+function addIframeForStoryChief(html: string): string {
+  const url = /(<a href="(https:\/\/(bluenovev3.storychief.io)[^\s]+)".*?<\/a>)/gi;
+  return html.replace(url, '<div class="iframed"><iframe src="$2" width="100%" height="1500px"></iframe></div>');
+}
+
 export function transformLinksInHtml(html: string): string {
-  return linkifyHtml(html);
+  let content = linkifyHtml(html);
+  content = addIframeForStoryChief(content);
+  return content;
 }
 
 export function addProtocol(url: string): string {
