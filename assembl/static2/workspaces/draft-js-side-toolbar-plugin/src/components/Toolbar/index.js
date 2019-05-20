@@ -1,6 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
+// import debounce from 'lodash/debounce';
 import DraftOffsetKey from 'draft-js/lib/DraftOffsetKey';
 import {
   BlockquoteButton,
@@ -41,11 +42,12 @@ class Toolbar extends React.Component<SideToolbarProps> {
   }
 
   componentDidMount() {
-    document.addEventListener('scroll', this.trackScrolling);
+    // document.addEventListener('scroll', this.trackScrolling);
     this.props.store.subscribeToItem('editorState', this.onEditorStateChange);
   }
 
   componentWillUnmount() {
+    // document.removeEventListener('scroll', this.trackScrolling);
     this.props.store.unsubscribeFromItem('editorState', this.onEditorStateChange);
   }
 
@@ -96,6 +98,8 @@ class Toolbar extends React.Component<SideToolbarProps> {
     } else {
       position.left = editorRoot.offsetLeft - 80;
     }
+    const editorScrollTop = editorRoot.querySelector(".public-DraftEditor-content").scrollTop;
+    position.top = position.top - editorScrollTop;
 
     this.setState({
       position,
@@ -103,18 +107,19 @@ class Toolbar extends React.Component<SideToolbarProps> {
   }
 
   topPositionFromFocusedLine(focusedLineNode) {
-    const toolbarNode = this.toolbarRef.current;
-    return focusedLineNode.offsetTop - (this.props.dropDown ? 0 : toolbarNode.scrollHeight / 2);
+    return focusedLineNode.offsetTop;
   }
 
-  trackScrolling = () => {
-    const toolbarNode = this.toolbarRef.current;
-    const clientRectTop = toolbarNode.getBoundingClientRect().top;
-    if (clientRectTop < 60) {
-      console.log('toolbar top reached');
-      this.setPosition(60);
-    }
-  };
+  // trackScrolling = debounce(() => {
+  //   const toolbarNode = this.toolbarRef.current;
+  //   if (toolbarNode) {
+  //     const clientRectTop = toolbarNode.getBoundingClientRect().top;
+  //     if (clientRectTop < 60) {
+  //       console.log('toolbar top reached');
+  //       this.setPosition(60);
+  //     }
+  //   }
+  // }, 100);
 
   render() {
     const { theme, store, dropDown } = this.props;
