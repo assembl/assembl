@@ -13,8 +13,9 @@
     }
   }
 
-  .form-group {
-    text-align: center;
+  .password-form-group {
+    display: flex;
+    align-items: center;
   }
 
   input:required {
@@ -68,9 +69,7 @@
   .terms-submit {
     margin: 15px 0;
   }
-}
 
-@media screen and (max-width: 600px) {
   .terms-form {
     height: 500px;
   }

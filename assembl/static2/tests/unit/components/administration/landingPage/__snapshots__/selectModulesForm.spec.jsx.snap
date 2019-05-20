@@ -15,13 +15,11 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       onChange={[Function]}
       title=""
     >
-      <Helper
-        additionalTextClasses=""
+      <Connect(Helper)
         classname="margin-left-20"
         helperText="Top page header. It contains the consultation's title and subtitle and a button to access to the consultation."
         helperUrl="/static2/img/helpers/landing_page_admin/header.png"
         label="Header"
-        popOverClass=""
       />
     </Checkbox>
     <Checkbox
@@ -32,13 +30,11 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       onChange={[Function]}
       title=""
     >
-      <Helper
-        additionalTextClasses=""
+      <Connect(Helper)
         classname="margin-left-20"
         helperText=" "
         helperUrl="/static2/img/helpers/landing_page_admin/introduction.png"
         label="Introduction"
-        popOverClass=""
       />
     </Checkbox>
     <Checkbox
@@ -49,13 +45,11 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       onChange={[Function]}
       title=""
     >
-      <Helper
-        additionalTextClasses=""
+      <Connect(Helper)
         classname="margin-left-20"
         helperText=" "
         helperUrl="/static2/img/helpers/landing_page_admin/video.png"
         label="Video"
-        popOverClass=""
       />
     </Checkbox>
     <Checkbox
@@ -66,13 +60,11 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       onChange={[Function]}
       title=""
     >
-      <Helper
-        additionalTextClasses=""
+      <Connect(Helper)
         classname="margin-left-20"
         helperText=" "
         helperUrl="/static2/img/helpers/landing_page_admin/footer.png"
         label="Footer"
-        popOverClass=""
       />
     </Checkbox>
   </FormGroup>

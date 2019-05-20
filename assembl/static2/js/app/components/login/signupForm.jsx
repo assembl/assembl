@@ -23,6 +23,7 @@ import LegalContentsQuery from '../../graphql/LegalContents.graphql';
 import LegalForm from './legalForm';
 import SignupCheckbox from './signupCheckbox';
 import BackButton from '../../../app/components/debate/common/backButton';
+import Helper from '../common/helper';
 
 type Props = {
   hasTermsAndConditions: boolean,
@@ -146,7 +147,6 @@ class SignupForm extends React.Component<Props, State> {
       userGuidelinesText
     } = this.props;
     const { privacyPolicyIsChecked, termsAndConditionsIsChecked, userGuidelinesIsChecked } = this.state;
-
     const legalContentsType = {
       termsAndConditions: 'termsAndConditions',
       privacyPolicy: 'privacyPolicy',
@@ -155,7 +155,7 @@ class SignupForm extends React.Component<Props, State> {
 
     const passwordRequirements = [
       'lengthPassword',
-      'specialCharacterPassword',
+      'figurePassword',
       'upperCasePassword',
       'lowerCasePassword',
       'specialCharacterPassword'
@@ -170,7 +170,7 @@ class SignupForm extends React.Component<Props, State> {
               textFields.map((field) => {
                 if (field.__typename === 'TextField' && !field.hidden) {
                   return (
-                    <FormGroup key={field.id}>
+                    <FormGroup className={`${field.identifier.toLowerCase()}-form-group`} key={field.id}>
                       <FormControl
                         type={field.fieldType.toLowerCase()}
                         name={field.identifier === 'CUSTOM' ? field.id : field.identifier.toLowerCase()}
@@ -178,15 +178,29 @@ class SignupForm extends React.Component<Props, State> {
                         onChange={this.handleInput}
                         required={field.required}
                       />
-                      {field.identifier === 'PASSWORD2' ? (
-                        <reactFragment>
-                          <p className="annotation no-margin">{I18n.t('login.passwordRequirementIntro')}</p>
-                          <ul>
-                            {passwordRequirements.map(passwordRequirement => (
-                              <li className="annotation no-margin">{I18n.t(`login.${passwordRequirement}`)}</li>
-                            ))}
-                          </ul>
-                        </reactFragment>
+                      {field.identifier === 'PASSWORD' ? (
+                        <Helper
+                          classname="title"
+                          helperText={
+                            <reactFragment>
+                              <p className="annotation no-margin">{I18n.t('login.passwordRequirementIntro')}</p>
+                              <ul>
+                                {passwordRequirements.map(passwordRequirement => (
+                                  <li className="annotation no-margin">{I18n.t(`login.${passwordRequirement}`)}</li>
+                                ))}
+                              </ul>
+                            </reactFragment>
+                          }
+                        >
+                          )
+                          <FormControl
+                            type={field.fieldType.toLowerCase()}
+                            name={field.identifier === 'CUSTOM' ? field.id : field.identifier.toLowerCase()}
+                            placeholder={field.required ? `${field.title}*` : field.title}
+                            onChange={this.handleInput}
+                            required={field.required}
+                          />
+                        </Helper>
                       ) : null}
                     </FormGroup>
                   );

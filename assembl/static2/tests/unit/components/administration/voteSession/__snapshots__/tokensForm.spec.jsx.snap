@@ -23,13 +23,9 @@ exports[`tokensForm component should render a form to configure a token vote wit
     <div
       className="inline"
     >
-      <Helper
-        additionalTextClasses=""
-        classname=""
+      <Connect(Helper)
         helperText="Select the number of different token types for this vote"
         helperUrl="/static2/img/helpers/helper2.jpg"
-        label=""
-        popOverClass=""
       />
     </div>
     <div>
@@ -144,13 +140,10 @@ exports[`tokensForm component should render a form to configure a token vote wit
       >
         Exclusive
       </label>
-      <Helper
+      <Connect(Helper)
         additionalTextClasses="helper-text-only"
         classname="inline"
         helperText="You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal."
-        helperUrl=""
-        label=""
-        popOverClass=""
       />
       <SplitButton
         className="admin-dropdown"
@@ -235,13 +228,9 @@ exports[`tokensForm component should render a form to configure a token vote wit
     <div
       className="inline"
     >
-      <Helper
-        additionalTextClasses=""
-        classname=""
+      <Connect(Helper)
         helperText="Select the number of different token types for this vote"
         helperUrl="/static2/img/helpers/helper2.jpg"
-        label=""
-        popOverClass=""
       />
     </div>
     <div>
