@@ -87,7 +87,7 @@ class CreateSynthesisForm extends React.Component<Props> {
                           <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" " />
                           {/* TODO: add image to the helper */}
                         </div>
-                        <div className="flex richtext-large">
+                        <div className="richtext-large">
                           <Field
                             editLocale={editLocale}
                             name="body"
@@ -132,7 +132,6 @@ class CreateSynthesisForm extends React.Component<Props> {
     );
   }
 }
-
 
 const mapStateToProps = ({ admin, i18n }) => ({
   editLocale: admin.editLocale,
