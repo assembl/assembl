@@ -10,7 +10,7 @@ import bind from 'lodash/bind';
 import { getCurrentPhaseData } from '../../utils/timeline';
 import { get } from '../../utils/routeMap';
 import { withScreenWidth } from '../common/screenDimensions';
-import { connectedUserIsAdmin } from '../../utils/permissions';
+import Permissions, { connectedUserIsAdmin, connectedUserCan } from '../../utils/permissions';
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 import DiscussionPreferencesQuery from '../../graphql/DiscussionPreferencesQuery.graphql';
@@ -30,7 +30,7 @@ const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) =>
   case 'RESOURCES_CENTER':
     return hasResourcesCenter;
   case 'SYNTHESES':
-    return hasSyntheses || connectedUserIsAdmin();
+    return hasSyntheses || connectedUserCan(Permissions.EDIT_SYNTHESIS); // the OR is to be able to create a first synthesis!
   case 'ADMINISTRATION':
     return connectedUserIsAdmin();
   case 'HOMEPAGE':

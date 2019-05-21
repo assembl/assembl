@@ -5,7 +5,7 @@ import { I18n } from 'react-redux-i18n';
 import { browserHistory } from '../../router';
 import { displayAlert } from '../../utils/utilityManager';
 import DeleteSynthesisButton from '../administration/synthesis/deleteSynthesisButton';
-import { connectedUserIsAdmin } from '../../utils/permissions';
+import Permissions, { connectedUserCan } from '../../utils/permissions';
 import { get as getLink } from '../../utils/routeMap';
 import ResponsiveOverlayTrigger from '../common/responsiveOverlayTrigger';
 import { deleteSynthesisTooltip, editSynthesisTooltip } from '../common/tooltips';
@@ -13,12 +13,12 @@ import EditPostButton from '../debate/common/editPostButton';
 import { getDiscussionSlug } from '../../utils/globalFunctions';
 import { DELETE_CALLBACK } from '../../constants';
 
-function userCanEdit() {
-  return connectedUserIsAdmin() || false;
+function userCanEdit(): boolean {
+  return connectedUserCan(Permissions.EDIT_SYNTHESIS);
 }
 
-function userCanDelete() {
-  return connectedUserIsAdmin() || false;
+function userCanDelete(): boolean {
+  return connectedUserCan(Permissions.EDIT_SYNTHESIS);
 }
 
 const handleEdit = (synthesisPostId: string) => {
