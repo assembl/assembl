@@ -180,8 +180,8 @@ export default class RichTextEditor extends React.Component<Props, State> {
               <BoldButton {...externalProps} />
               <ItalicButton {...externalProps} />
               <UnorderedListButton {...externalProps} />
-              {attachmentButton}
               <LinkButton {...externalProps} />
+              {attachmentButton}
             </div>
           );
         }}
