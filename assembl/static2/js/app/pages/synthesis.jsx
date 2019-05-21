@@ -136,6 +136,12 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
       <div className="synthesis-page">
         <div className="background-light">
           <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} type="synthesis" />
+          <div className="action-buttons">
+            <ul className="actions">
+              {editButton(synthesisPostId)}
+              {deleteButton(synthesisPostId, refetchQueries)}
+            </ul>
+          </div>
           <Grid fluid>
             {introduction && (
               <Section title="introduction" translate className="synthesis-block" innerRef={this.updateIntroBlock}>
@@ -202,12 +208,6 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
                 </Row>
               </Section>
             )}
-            <Row>
-              <ul className="actions">
-                {editButton(synthesisPostId)}
-                {deleteButton(synthesisPostId, refetchQueries)}
-              </ul>
-            </Row>
           </Grid>
         </div>
       </div>

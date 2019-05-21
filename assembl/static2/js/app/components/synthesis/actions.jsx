@@ -55,6 +55,7 @@ export function deleteButton(synthesisPostId: string, refetchQueries: Array<any>
           modalBodyMessage="debate.syntheses.confirmDeletionBody"
           refetchQueries={refetchQueries}
           onDeleteCallback={deleteCallback}
+          linkClassName="delete"
         />
       </ResponsiveOverlayTrigger>
     </li>

@@ -12,6 +12,13 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       title="Foo"
       type="synthesis"
     />
+    <div
+      className="action-buttons"
+    >
+      <ul
+        className="actions"
+      />
+    </div>
     <Grid
       bsClass="container"
       componentClass="div"
@@ -112,14 +119,6 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
             subIdeas={Array []}
           />
         </Col>
-      </Row>
-      <Row
-        bsClass="row"
-        componentClass="div"
-      >
-        <ul
-          className="actions"
-        />
       </Row>
     </Grid>
   </div>
