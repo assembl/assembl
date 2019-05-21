@@ -37,7 +37,7 @@ import { getConnectedUserId, compareByTextPosition, formatedSuggestedTagList, fo
 import Permissions, { connectedUserCan, connectedUserIsAdmin } from '../utils/permissions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 // Constant imports
-import { FICTION_DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND } from '../constants';
+import { DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND } from '../constants';
 // Type imports
 import type { ContentLocaleMapping } from '../actions/actionTypes';
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
@@ -280,7 +280,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
       // Set a callback state in order to display a delete fiction confirmation message
       browserHistory.push({
         pathname: fictionListURL,
-        state: { callback: FICTION_DELETE_CALLBACK }
+        state: { callback: DELETE_CALLBACK }
       });
     };
     const modifyFictionCallback = (subject, body, state) => {

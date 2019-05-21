@@ -3,31 +3,37 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
 import { Link } from 'react-router';
-import { Translate } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 
 import { get } from '../utils/routeMap';
 import Section from '../components/common/section';
 import SynthesesList from '../components/synthesis/synthesesList';
 import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
+import { DELETE_CALLBACK } from '../constants';
+import { displayAlert } from '../utils/utilityManager';
 import type { SynthesisPost } from '../types.flow';
 
 type SynthesesProps = {
   syntheses: Array<SynthesisPost>,
   slug: string,
   hasSyntheses: boolean,
-  lang: string
+  lang: string,
+  location: { state: { callback: string } }
 };
 
 export class DumbSyntheses extends React.Component<SynthesesProps> {
-  // componentDidMount() {
-  //   // redirect to synthesis if there is only one
-  //   const { syntheses, slug } = this.props;
-  //   if (syntheses && syntheses.length === 1) {
-  //     const firstSynthesis = syntheses[0];
-  //     browserHistory.push(`${get('synthesis', { synthesisId: firstSynthesis.post.id, slug: slug })}`);
-  //   }
-  // }
+  componentDidMount() {
+    this.displayDeleteMessage();
+  }
+
+  displayDeleteMessage() {
+    // Location state is set in brightMirrorFiction.jsx > deleteFictionCallback
+    const locationState = this.props.location.state;
+    if (locationState && locationState.callback === DELETE_CALLBACK) {
+      displayAlert('success', I18n.t('debate.syntheses.deleteSuccessMessage'));
+    }
+  }
 
   render() {
     const { syntheses, slug, hasSyntheses, lang } = this.props;

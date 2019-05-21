@@ -25,7 +25,7 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
-import { DeletedPublicationStates, FICTION_DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
+import { DeletedPublicationStates, DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
@@ -258,7 +258,7 @@ class Idea extends React.Component<Props> {
   displayBrightMirrorDeleteFictionMessage() {
     // Location state is set in brightMirrorFiction.jsx > deleteFictionCallback
     const locationState = this.props.location.state;
-    if (locationState && locationState.callback === FICTION_DELETE_CALLBACK) {
+    if (locationState && locationState.callback === DELETE_CALLBACK) {
       displayAlert('success', I18n.t('debate.brightMirror.deleteFictionSuccessMsg'));
     }
   }

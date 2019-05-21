@@ -131,7 +131,7 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
       }
     };
     const refetchQueries = [updateSynthesesQuery];
-
+    const redirectToSyntheses = true;
     return (
       <div className="synthesis-page">
         <div className="background-light">
@@ -139,7 +139,7 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
           <div className="action-buttons">
             <ul className="actions">
               {editButton(synthesisPostId)}
-              {deleteButton(synthesisPostId, refetchQueries)}
+              {deleteButton(synthesisPostId, refetchQueries, redirectToSyntheses)}
             </ul>
           </div>
           <Grid fluid>

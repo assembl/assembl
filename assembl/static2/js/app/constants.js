@@ -23,9 +23,11 @@ export const LG_SCREEN_WIDTH = 1200;
 // Semantic analysis
 export const KEYWORD_SCORE_THRESHOLD = 0.5;
 
+// Synthesis and Bright mirror
+export const DELETE_CALLBACK = 'DELETE_CALLBACK';
+
 // Bright mirror
 export const EMPTY_STRING = '';
-export const FICTION_DELETE_CALLBACK = 'FICTION_DELETE_CALLBACK';
 export const USER_ID_NOT_FOUND = -9999;
 export const PICTURES_LENGTH = 40; // Number of pictures available on S3
 export const PICTURE_BASE_URL = 'https://s3-eu-west-1.amazonaws.com';
