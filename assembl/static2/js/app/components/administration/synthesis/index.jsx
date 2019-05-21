@@ -68,7 +68,7 @@ class CreateSynthesisForm extends React.Component<Props> {
               <FormWithRouter handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
                 <Row>
                   <Col xs={12} md={10}>
-                    <div className="admin-box">
+                    <div className="admin-box admin-content">
                       <BackButton handleClick={redirectToPreviousPage} linkClassName="back-btn" />
                       <Section
                         title={!synthesisPostId ? 'debate.syntheses.createNewSynthesis' : 'debate.syntheses.editSynthesis'}
