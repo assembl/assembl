@@ -46,6 +46,7 @@ from assembl.lib.utils import normalize_email_name, get_global_base_url
 from .. import (
     get_default_context, JSONError, get_provider_data,
     HTTPTemporaryRedirect, create_get_route, sanitize_next_view)
+from pyramid.httpexceptions import HTTPOk
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger()
@@ -1119,6 +1120,20 @@ on your {assembl} account.</p>
         mailer.send(message)
 
 
+def maybe_send_email(request, profile, email=None,
+        subject=None, text_body=None, html_body=None,
+        discussion=None, sender_name=None, welcome=False,
+        immediate=False):
+        if profile:
+            send_change_password_email(request, profile, email,
+            subject, text_body=text_body, html_body=html_body, discussion=discussion,
+            sender_name=sender_name, welcome=welcome, immediate=immediate)
+            log.info('An email has been sent to the profile %s' %  email)
+        else:
+            log.error("This profile does not exist")
+        return HTTPOk()
+
+
 def send_change_password_email(
         request, profile, email=None, subject=None,
         text_body=None, html_body=None, discussion=None,
@@ -1126,54 +1141,53 @@ def send_change_password_email(
     mailer = get_mailer(request)
     localizer = request.localizer
     route_maker = create_get_route(request, discussion)
-    if profile:
-        data = dict(
-            assembl="Assembl", name=profile.name,
-            confirm_url=get_global_base_url() + route_maker(
-                'welcome' if welcome else 'do_password_change',
-                token=password_change_token(profile)))
-        sender_email = config.get('assembl.admin_email')
-        if discussion:
-            data.update(dict(
-                discussion_topic=discussion.topic,
-                discussion_url=discussion.get_url()))
-            sender_name = sender_name or discussion.topic
-        if sender_name:
-            sender_name = normalize_email_name(sender_name)
-            sender = '"%s" <%s>' % (sender_name, sender_email)
-            sender_name = Header(sender_name, 'utf-8').encode()
-            if len(sender) > 255:
-                sender = sender_email
-        else:
+    data = dict(
+        assembl="Assembl", name=profile.name,
+        confirm_url=get_global_base_url() + route_maker(
+            'welcome' if welcome else 'do_password_change',
+            token=password_change_token(profile)))
+    sender_email = config.get('assembl.admin_email')
+    if discussion:
+        data.update(dict(
+            discussion_topic=discussion.topic,
+            discussion_url=discussion.get_url()))
+        sender_name = sender_name or discussion.topic
+    if sender_name:
+        sender_name = normalize_email_name(sender_name)
+        sender = '"%s" <%s>' % (sender_name, sender_email)
+        sender_name = Header(sender_name, 'utf-8').encode()
+        if len(sender) > 255:
             sender = sender_email
-        subject = (subject or localizer.translate(
-            _("Request for password change"))).format(**data)
-        #subject = Header(subject, 'utf-8').encode()  # Fails in some cases???
-        if text_body is None or html_body is not None:
-            # if text_body and no html_body, html_body remains None.
-            html_body = html_body or localizer.translate(_(u"""<p>Hello, {name}!</p>
-    <p>We have received a request to change the password on your {assembl} account.
-    Please <a href="{confirm_url}">click here to confirm your password change</a>.</p>
-    <p>If you did not ask to reset your password please disregard this email.</p>
-    <p>Best regards,<br />The {assembl} Team</p>
-    """))
-        text_body = text_body or localizer.translate(_(u"""Hello, {name}!
-    We have received a request to change the password on your {assembl} account.
-    To confirm your password change please click on the link below.
-    <{confirm_url}>
+    else:
+        sender = sender_email
+    subject = (subject or localizer.translate(
+        _("Request for password change"))).format(**data)
+    #subject = Header(subject, 'utf-8').encode()  # Fails in some cases???
+    if text_body is None or html_body is not None:
+        # if text_body and no html_body, html_body remains None.
+        html_body = html_body or localizer.translate(_(u"""<p>Hello, {name}!</p>
+<p>We have received a request to change the password on your {assembl} account.
+Please <a href="{confirm_url}">click here to confirm your password change</a>.</p>
+<p>If you did not ask to reset your password please disregard this email.</p>
+<p>Best regards,<br />The {assembl} Team</p>
+"""))
+    text_body = text_body or localizer.translate(_(u"""Hello, {name}!
+We have received a request to change the password on your {assembl} account.
+To confirm your password change please click on the link below.
+<{confirm_url}>
 
-    If you did not ask to reset your password please disregard this email.
+If you did not ask to reset your password please disregard this email.
 
-    Best regards,
-    The {assembl} Team
-    """))
-        message = Message(
-            subject=subject,
-            sender=sender,
-            recipients=["%s <%s>" % (
-                profile.name, email or profile.get_preferred_email())],
-            body=text_body.format(**data), html=html_body.format(**data))
-        if immediate:
-            mailer.send_immediately(message)
-        else:
-            mailer.send(message)
+Best regards,
+The {assembl} Team
+"""))
+    message = Message(
+        subject=subject,
+        sender=sender,
+        recipients=["%s <%s>" % (
+            profile.name, email or profile.get_preferred_email())],
+        body=text_body.format(**data), html=html_body.format(**data))
+    if immediate:
+        mailer.send_immediately(message)
+    else:
+        mailer.send(message)

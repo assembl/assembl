@@ -39,7 +39,7 @@ from . import (
 from assembl.lib.sqla import ObjectNotUniqueError
 from ..auth.views import (
     send_change_password_email, from_identifier, send_confirmation_email,
-    maybe_auto_subscribe)
+    maybe_auto_subscribe, maybe_send_email)
 from assembl.lib import logging
 
 
@@ -363,13 +363,7 @@ def reset_password(request):
     elif identifier:
         user, account = from_identifier(identifier)
         if not user:
-            if not discussion.preferences['generic_errors']:
-                raise JSONError(
-                    localizer.translate(_("This email does not exist")),
-                    code=HTTPNotFound.code)
-            else:
-                send_change_password_email(request, user, email, discussion=discussion)
-                logger.error("This email does not exist.")
+            maybe_send_email(request, user, email, discussion=discussion)
         if account:
             email = account.email
     else:
@@ -381,18 +375,12 @@ def reset_password(request):
         else:
             email = None
         if not email:
-            if not discussion.preferences['generic_errors']:
-                error = localizer.translate(_("This user has no email"))
-            else:
-                logger.error("This user has no email.")
-                send_change_password_email(request, user, email, discussion=discussion)
+            logger.error("This user has no email.")
+            maybe_send_email(request, user, email, discussion=discussion)
     if not isinstance(user, User):
-        if not discussion.preferences['generic_errors']:
-            error = localizer.translate(_("This is not a user"))
-        else:
-            logger.error("This is not a user.")
-            send_change_password_email(request, user, email, discussion=discussion)
-    send_change_password_email(request, user, email, discussion=discussion)
+        logger.error("This is not a user.")
+        maybe_send_email(request, user, email, discussion=discussion)
+    maybe_send_email(request, user, email, discussion=discussion)
     return HTTPOk()
 
 
