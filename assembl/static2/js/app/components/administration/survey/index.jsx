@@ -7,6 +7,7 @@ import arrayMutators from 'final-form-arrays';
 
 import AdminForm from '../../form/adminForm';
 import { compareEditorState } from '../../form/utils';
+import swap from '../../form/swap';
 import LoadSaveReinitializeForm from '../../form/LoadSaveReinitializeForm';
 import Step1 from './step1';
 import ConfigureThematicForm from './configureThematicForm';
@@ -40,7 +41,8 @@ const DumbSurveyAdminForm = ({ client, phaseIdentifier, section, thematicId, dis
       save={save}
       validate={validate}
       mutators={{
-        ...arrayMutators
+        ...arrayMutators,
+        swap: swap
       }}
       render={({ handleSubmit, submitting, values, initialValues }) => {
         // the form is splitted to multiple subforms: We must calculate the global pristine.
