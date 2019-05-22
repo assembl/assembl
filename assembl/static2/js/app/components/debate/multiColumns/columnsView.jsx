@@ -36,7 +36,7 @@ class ColumnsView extends React.Component<$FlowFixMeProps> {
       timeline
     } = this.props;
     if (!Array.isArray(messageColumns)) return null;
-    const showSynthesis = messageColumns.some(column => !!get(column, 'columnSynthesis.body'));
+    const showSynthesis = messageColumns.some(column => !richTextBodyIsEmpty(get(column, 'columnSynthesis.body')));
     const columnsArray = orderPostsByMessageClassifier(messageColumns, posts);
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     let ColumnsComponent;
