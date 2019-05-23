@@ -39,7 +39,7 @@ from . import (
 from assembl.lib.sqla import ObjectNotUniqueError
 from ..auth.views import (
     send_change_password_email, from_identifier, send_confirmation_email,
-    maybe_auto_subscribe, maybe_send_email)
+    maybe_auto_subscribe, maybe_contextual_route)
 from assembl.lib import logging
 
 
@@ -346,15 +346,10 @@ def reset_password(request):
     if user_id:
         user = AgentProfile.get(int(user_id))
         if not user:
-            if not discussion.preferences['generic_errors']:
-                raise JSONError(
-                    localizer.translate(_("The user does not exist")),
-                    code=HTTPNotFound.code)
-            else:
-                raise JSONError(
-                    localizer.translate(generic_error_message),
-                    code=HTTPNotFound.code)
-                logger.error("[Password reset] The user with the identifier %s does not exist" % (identifier))
+            logger.error("[Password reset] The user with the identifier %s does not exist" % (identifier))
+            return HTTPOk(location=maybe_contextual_route(
+                request, 'password_change_sent', profile_id=user_id,
+                _query=dict(email=identifier if '@' in identifier else '')))
         if identifier:
             for account in user.accounts:
                 if identifier == account.email:
@@ -363,7 +358,10 @@ def reset_password(request):
     elif identifier:
         user, account = from_identifier(identifier)
         if not user:
-            maybe_send_email(request, user, email, discussion=discussion)
+            logger.error("[Password reset] The user with the identifier %s does not exist" % (identifier))
+            return HTTPOk(location=maybe_contextual_route(
+                request, 'password_change_sent', profile_id=user_id,
+                _query=dict(email=identifier if '@' in identifier else '')))
         if account:
             email = account.email
     else:
@@ -375,12 +373,16 @@ def reset_password(request):
         else:
             email = None
         if not email:
-            logger.error("This user has no email.")
-            maybe_send_email(request, user, email, discussion=discussion)
+            logger.error("[Password reset] The user with the identifier %s does not exist" % (user.id))
+            return HTTPOk(location=maybe_contextual_route(
+                request, 'password_change_sent', profile_id=user_id,
+                _query=dict(email=identifier if '@' in identifier else '')))
     if not isinstance(user, User):
         logger.error("This is not a user.")
-        maybe_send_email(request, user, email, discussion=discussion)
-    maybe_send_email(request, user, email, discussion=discussion)
+        return HTTPOk(location=maybe_contextual_route(
+            request, 'password_change_sent', profile_id=user_id,
+            _query=dict(email=identifier if '@' in identifier else '')))
+    send_change_password_email(request, user, email, discussion=discussion)
     return HTTPOk()
 
 

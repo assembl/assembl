@@ -1120,20 +1120,6 @@ on your {assembl} account.</p>
         mailer.send(message)
 
 
-def maybe_send_email(request, profile, email=None,
-        subject=None, text_body=None, html_body=None,
-        discussion=None, sender_name=None, welcome=False,
-        immediate=False):
-        if profile:
-            send_change_password_email(request, profile, email,
-            subject, text_body=text_body, html_body=html_body, discussion=discussion,
-            sender_name=sender_name, welcome=welcome, immediate=immediate)
-            log.info('An email has been sent to the profile %s' %  email)
-        else:
-            log.error("This profile does not exist")
-        return HTTPOk()
-
-
 def send_change_password_email(
         request, profile, email=None, subject=None,
         text_body=None, html_body=None, discussion=None,
