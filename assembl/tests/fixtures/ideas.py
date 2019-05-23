@@ -7,6 +7,10 @@ def root_idea(request, discussion, test_session):
     """A root Idea fixture"""
     return discussion.root_idea
 
+@pytest.fixture(scope="function")
+def thread_phase_root_idea(root_idea, phases):
+    from assembl.graphql.utils import create_root_thematic
+    return create_root_thematic(phases['thread'])
 
 @pytest.fixture(scope="function")
 def idea_with_en_fr(request, discussion, en_locale,
@@ -176,6 +180,24 @@ def subidea_1(request, discussion, root_idea, test_session):
         test_session.flush()
     request.addfinalizer(fin)
     return i
+
+@pytest.fixture(scope="function")
+def subidea_thread_phase_1(request, subidea_1, thread_phase_root_idea, root_idea, test_session):
+    from assembl.models import IdeaLink
+    l_r_1 = IdeaLink(source=thread_phase_root_idea, target=subidea_1)
+    for idea_link in subidea_1.source_links:
+        if idea_link.source == root_idea:
+            test_session.delete(idea_link)
+            break
+    test_session.add(l_r_1)
+    test_session.flush()
+    def fin():
+        print "finalizer subidea_thread_phase_1"
+        test_session.delete(l_r_1)
+        test_session.add(IdeaLink(source=root_idea, target=subidea_1))
+        test_session.flush()
+    request.addfinalizer(fin)
+    return subidea_1
 
 
 @pytest.fixture(scope="function")
