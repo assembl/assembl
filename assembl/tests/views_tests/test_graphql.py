@@ -675,6 +675,7 @@ mutation updateThematic($thematicId: ID!, $file: String!) {
                 u'img': None
             }}}
 
+@freeze_time("2018-2-1")
 def test_mutation_create_post(graphql_request, thematic_and_question):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
@@ -708,7 +709,65 @@ mutation myFirstMutation {
                 u'publicationState': u'PUBLISHED'
             }}}
 
+@freeze_time("2019-2-1")
+def test_mutation_create_post_phase_is_over(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        subject:"Proposition 1",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on Post {
+                subject,
+                body,
+                bodyEntries { localeCode value },
+                creator { name },
+                bodyMimeType
+                publicationState
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    assert res.errors[0].message == 'It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again.'
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': None
+        }
 
+
+@freeze_time("2015-2-1")
+def test_mutation_create_post_phase_is_not_started(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        subject:"Proposition 1",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on Post {
+                subject,
+                body,
+                bodyEntries { localeCode value },
+                creator { name },
+                bodyMimeType
+                publicationState
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    assert res.errors[0].message == 'It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again.'
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': None
+        }
+
+
+@freeze_time("2018-2-1")
 def test_mutation_create_post_without_subject(graphql_request, thematic_and_question):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
