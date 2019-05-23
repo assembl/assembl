@@ -30,6 +30,18 @@ def idea_message_column_positive(request, test_adminuser_webrequest, subidea_1, 
 
 
 @pytest.fixture(scope="function")
+def idea_message_column_positive_on_thread_phase(request, idea_message_column_positive, subidea_1, subidea_thread_phase_1, test_session):
+    idea_message_column_positive.idea = subidea_thread_phase_1
+    test_session.flush()
+
+    def fin():
+        idea_message_column_positive.idea = subidea_1
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return idea_message_column_positive
+
+@pytest.fixture(scope="function")
 def idea_message_column_negative(request, test_adminuser_webrequest, subidea_1,
                                  idea_message_column_positive, test_session):
     from assembl.models import IdeaMessageColumn, LangString
