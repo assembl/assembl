@@ -34,6 +34,7 @@ from assembl.tests.fixtures.configurable_fields import *  # noqa: F401
 from assembl.tests.fixtures.bright_mirror import *  # noqa: F401
 from assembl.tests.fixtures.tag import *  # noqa: F401
 from assembl.tests.fixtures.synthesis import *  # noqa: F401
+from assembl.tests.fixtures.phases import *  # noqa: F401
 
 
 engine = None
