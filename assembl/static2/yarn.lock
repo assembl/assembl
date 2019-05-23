@@ -4607,9 +4607,9 @@ d3-time-format@2:
     d3-time "1"
 
 d3-time@1:
-  version "1.0.10"
-  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.10.tgz#8259dd71288d72eeacfd8de281c4bf5c7393053c"
-  integrity sha512-hF+NTLCaJHF/JqHN5hE8HVGAXPStEq6/omumPE/SxyHVrR7/qQxusFDo0t0c/44+sCGHthC7yNGFZIEgju0P8g==
+  version "1.0.11"
+  resolved "https://registry.yarnpkg.com/d3-time/-/d3-time-1.0.11.tgz#1d831a3e25cd189eb256c17770a666368762bbce"
+  integrity sha512-Z3wpvhPLW4vEScGeIMUckDW7+3hWKOQfAWg/U7PlWBnQmeKQ00gCUsTtWSYulrKNA7ta8hJ+xXc6MHrMuITwEw==
 
 d3-timer@1:
   version "1.0.9"
@@ -11375,9 +11375,9 @@ react-style-proptype@^3.0.0:
   dependencies:
     prop-types "^15.5.4"
 
-"react-tag-input@https://github.com/assembl/react-tags.git#assembl":
+"react-tag-input@https://github.com/assembl/react-tags.git#c3cb50d":
   version "0.0.1-semantically-released"
-  resolved "https://github.com/assembl/react-tags.git#1e5679033f1485f28924c00a8659e0cb74003ae4"
+  resolved "https://github.com/assembl/react-tags.git#c3cb50d210c66582ac38311e8ddac72d5093a68d"
   dependencies:
     classnames "2.2.6"
     core-js "2.6.5"
@@ -11484,9 +11484,9 @@ react-with-styles@^3.2.0:
     prop-types "^15.6.1"
     react-with-direction "^1.3.0"
 
-"react-wordcloud@https://github.com/assembl/react-wordcloud":
+"react-wordcloud@https://github.com/assembl/react-wordcloud.git#9c26980":
   version "0.1.0"
-  resolved "https://github.com/assembl/react-wordcloud#778db5a6a2ab86a1a2550f1aa37c966da8cb1b36"
+  resolved "https://github.com/assembl/react-wordcloud.git#9c269802d3737fdd91e3c377022854acc860efd6"
   dependencies:
     d3-array "^1.2.1"
     d3-cloud "^1.2.4"
