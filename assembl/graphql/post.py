@@ -325,6 +325,11 @@ class CreatePost(graphene.Mutation):
         idea_id = int(Node.from_global_id(idea_id)[1])
         in_reply_to_idea = models.Idea.get(idea_id)
 
+        phase = in_reply_to_idea.get_associated_phase()
+        if not (phase.start < datetime.now() < phase.end):
+            error = _('It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again.')
+            raise HTTPUnauthorized(context.localizer.translate(error))
+
         if isinstance(in_reply_to_idea, models.Question):
             cls = models.PropositionPost
         else:
