@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 import pytest
+from freezegun import freeze_time
 
 from graphql_relay.node.node import from_global_id
 
@@ -57,7 +58,7 @@ def graphql_participant1_request(request, test_participant1_webrequest, discussi
     return req
 
 
-
+@freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
 def idea_in_thread_phase(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
@@ -93,6 +94,7 @@ mutation myFirstMutation {
     return idea_id
 
 
+@freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
 def another_idea_in_thread_phase(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
@@ -128,6 +130,7 @@ mutation myFirstMutation {
     return idea_id
 
 
+@freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
 def top_post_in_thread_phase(request, test_session, graphql_request, idea_in_thread_phase):
     from assembl.graphql.schema import Schema as schema
@@ -157,7 +160,7 @@ mutation myFirstMutation {
     request.addfinalizer(fin)
     return post_id
 
-
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def thematic_and_question(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
@@ -340,6 +343,7 @@ mutation createThematicWithImage($file: String!) {
     return thematic_id
 
 
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def proposition_id(request, test_session, graphql_request, thematic_and_question):
     from assembl.models import PropositionPost
@@ -456,6 +460,7 @@ mutation myFirstMutation {
     return post_id
 
 
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def proposals15published(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
@@ -471,6 +476,7 @@ def proposals15published(request, test_session, graphql_request, admin_user, the
     return proposals
 
 
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def proposals(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
@@ -482,7 +488,6 @@ def proposals(request, test_session, graphql_request, admin_user, thematic_and_q
             publication_state = PublicationStates.SUBMITTED_AWAITING_MODERATION.value
         else:
             publication_state = PublicationStates.PUBLISHED.value
-
         proposal_id = create_proposal_x(
             request, test_session, graphql_request, first_question_id, idx, publication_state)
         proposals.append(proposal_id)
@@ -490,6 +495,7 @@ def proposals(request, test_session, graphql_request, admin_user, thematic_and_q
     return proposals
 
 
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def proposals_no_pending(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
