@@ -37,7 +37,7 @@ def test_idea_copy_and_commit(subidea_1_1, test_session):
 def test_get_root_idea(subidea_1_1, test_session):
     root_idea = subidea_1_1.get_root_idea()
     assert isinstance(root_idea, RootIdea)
-    assert root_idea.id == 1
+    assert root_idea in subidea_1_1.get_all_ancestors()
 
 def test_get_root_idea_from_multiple_subideas(subidea_1_1, subidea_1_2, subidea_1_1_1, test_session):
     root_idea_1_1 = subidea_1_1.get_root_idea()
