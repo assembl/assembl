@@ -35,7 +35,7 @@ The build machine is similar to an assembl box, with the difference of having th
 	# Get the latest theme
 	cd assembl/static2/css/themes/vendor/assembl2-client-themes
 	git pull	
-	cd ../..
+	cd ../../../..
 
 	# Build the static assets (JS/CSS + Themes)
 	npm run build
