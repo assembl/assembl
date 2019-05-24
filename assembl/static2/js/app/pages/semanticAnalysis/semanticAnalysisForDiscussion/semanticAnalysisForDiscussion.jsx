@@ -4,6 +4,7 @@ import { Grid } from 'react-bootstrap';
 // Helper imports
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
+import { I18n } from 'react-redux-i18n';
 // Type imports
 import type { OperationComponent } from 'react-apollo';
 import type { State } from '../../../reducers/rootReducer';
@@ -34,7 +35,7 @@ export class SemanticAnalysisForDiscussion extends Component<Props> {
       <div className="semantic-analysis-container">
         <div className="banner">
           <Grid className="margin-lr">
-            <h1>Analyse sémantique</h1>
+            <h1>{I18n.t('administration.semanticAnalysis.title')}</h1>
           </Grid>
         </div>
         <Grid id="semantic-analysis-discussion" className="semantic-analysis">
