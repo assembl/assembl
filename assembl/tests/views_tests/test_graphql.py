@@ -434,7 +434,7 @@ def test_get_thematic_via_node_query(graphql_request, graphql_registry, thematic
     assert result['questions'][0]['hasPendingPosts'] is False
     assert result['questions'][0]['posts']['edges'] == []
 
-
+@freeze_time("2018-2-1")
 def test_get_thematic_with_question_with_pending_posts(graphql_request, graphql_registry, thematic_and_question, proposals):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -797,11 +797,13 @@ mutation myFirstMutation {
             }}}
 
 
+@freeze_time("2018-3-1")
 def test_mutation_create_post_on_column(graphql_request,
                                         test_session,
-                                        idea_message_column_positive):
-    idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
-    classifier = idea_message_column_positive.message_classifier
+                                        idea_message_column_positive_on_thread_phase):
+    idea_id = to_global_id('Idea', idea_message_column_positive_on_thread_phase.idea_id)
+    idea_message_column_positive_on_thread_phase.idea.get_associated_phase()
+    classifier = idea_message_column_positive_on_thread_phase.message_classifier
     res = schema.execute(u"""
 mutation myFirstMutation {
     createPost(
@@ -828,7 +830,7 @@ mutation myFirstMutation {
     # Must remove the ICL before test completes in order to avoid db constraint
     # on idea fixture removal
     icl = test_session.query(models.IdeaRelatedPostLink).\
-        filter_by(idea_id=idea_message_column_positive.idea_id).first()
+        filter_by(idea_id=idea_message_column_positive_on_thread_phase.idea_id).first()
     test_session.delete(icl)
     test_session.flush()
 
@@ -1197,7 +1199,7 @@ query {
     assert res.data['node']['numContributors'] == 1
     assert res.data['node']['totalSentiments'] == 0
 
-
+@freeze_time("2018-3-1")
 def test_mutation_create_top_post(graphql_request, idea_in_thread_phase):
     idea_id = idea_in_thread_phase
     res = schema.execute(u"""
@@ -1231,6 +1233,7 @@ mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: I
             }}}
 
 
+@freeze_time("2018-3-1")
 def test_mutation_create_reply_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     idea_id = idea_in_thread_phase
     in_reply_to_post_id = top_post_in_thread_phase
@@ -1265,6 +1268,7 @@ mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: I
             }}}
 
 
+@freeze_time("2018-3-1")
 def test_mutation_create_reply_post_no_subject(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     idea_id = idea_in_thread_phase
     in_reply_to_post_id = top_post_in_thread_phase
@@ -1319,6 +1323,7 @@ query QuestionPosts($id: ID!, $first: Int, $last: Int, $after: String, $before: 
 }
 """
 
+@freeze_time("2018-2-1")
 def test_get_proposals(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -1333,21 +1338,22 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals15publis
                     u'hasPreviousPage': False,
                     u'hasNextPage': True
                 },
-                u'edges': [{u'node': {u'body': u'une proposition 14'}},
-                           {u'node': {u'body': u'une proposition 13'}},
-                           {u'node': {u'body': u'une proposition 12'}},
-                           {u'node': {u'body': u'une proposition 11'}},
-                           {u'node': {u'body': u'une proposition 10'}},
-                           {u'node': {u'body': u'une proposition 9'}},
-                           {u'node': {u'body': u'une proposition 8'}},
-                           {u'node': {u'body': u'une proposition 7'}},
+                u'edges': [{u'node': {u'body': u'une proposition 0'}},
+                           {u'node': {u'body': u'une proposition 1'}},
+                           {u'node': {u'body': u'une proposition 2'}},
+                           {u'node': {u'body': u'une proposition 3'}},
+                           {u'node': {u'body': u'une proposition 4'}},
+                           {u'node': {u'body': u'une proposition 5'}},
                            {u'node': {u'body': u'une proposition 6'}},
-                           {u'node': {u'body': u'une proposition 5'}}]
+                           {u'node': {u'body': u'une proposition 7'}},
+                           {u'node': {u'body': u'une proposition 8'}},
+                           {u'node': {u'body': u'une proposition 9'}}]
             }
         }
     }
 
 
+@freeze_time("2018-2-1")
 def test_get_proposals_after(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -1362,16 +1368,17 @@ def test_get_proposals_after(graphql_request, thematic_and_question, proposals15
                     u'hasPreviousPage': False,  # when we specify `after`, this is always False
                     u'hasNextPage': False
                 },
-                u'edges': [{u'node': {u'body': u'une proposition 4'}},
-                           {u'node': {u'body': u'une proposition 3'}},
-                           {u'node': {u'body': u'une proposition 2'}},
-                           {u'node': {u'body': u'une proposition 1'}},
-                           {u'node': {u'body': u'une proposition 0'}}]
+                u'edges': [{u'node': {u'body': u'une proposition 10'}},
+                           {u'node': {u'body': u'une proposition 11'}},
+                           {u'node': {u'body': u'une proposition 12'}},
+                           {u'node': {u'body': u'une proposition 13'}},
+                           {u'node': {u'body': u'une proposition 14'}}]
             }
         }
     }
 
 
+@freeze_time("2018-2-1")
 def test_get_proposals_before(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -1387,16 +1394,17 @@ def test_get_proposals_before(graphql_request, thematic_and_question, proposals1
                     u'hasPreviousPage': True,
                     u'hasNextPage': False  # when we specify `before`, this is always False
                 },
-                u'edges': [{u'node': {u'body': u'une proposition 8'}},
+                u'edges': [{u'node': {u'body': u'une proposition 6'}},
                            {u'node': {u'body': u'une proposition 7'}},
-                           {u'node': {u'body': u'une proposition 6'}},
-                           {u'node': {u'body': u'une proposition 5'}},
-                           {u'node': {u'body': u'une proposition 4'}}]
+                           {u'node': {u'body': u'une proposition 8'}},
+                           {u'node': {u'body': u'une proposition 9'}},
+                           {u'node': {u'body': u'une proposition 10'}}]
             }
         }
     }
 
 
+@freeze_time("2018-2-1")
 def test_get_proposals_from_node(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -1409,13 +1417,18 @@ def test_get_proposals_from_node(graphql_request, thematic_and_question, proposa
             u'posts': {
                 u'pageInfo': {
                     u'hasPreviousPage': False,
-                    u'hasNextPage': False
+                    u'hasNextPage': True
                 },
                 u'edges': [{u'node': {u'body': u'une proposition 4'}},
-                           {u'node': {u'body': u'une proposition 3'}},
-                           {u'node': {u'body': u'une proposition 2'}},
-                           {u'node': {u'body': u'une proposition 1'}},
-                           {u'node': {u'body': u'une proposition 0'}}]
+                           {u'node': {u'body': u'une proposition 5'}},
+                           {u'node': {u'body': u'une proposition 6'}},
+                           {u'node': {u'body': u'une proposition 7'}},
+                           {u'node': {u'body': u'une proposition 8'}},
+                           {u'node': {u'body': u'une proposition 9'}},
+                           {u'node': {u'body': u'une proposition 10'}},
+                           {u'node': {u'body': u'une proposition 11'}},
+                           {u'node': {u'body': u'une proposition 12'}},
+                           {u'node': {u'body': u'une proposition 13'}}]
             }
         }
     }

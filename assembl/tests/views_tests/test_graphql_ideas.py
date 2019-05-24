@@ -5,6 +5,7 @@ from graphql_relay.node.node import from_global_id, to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
+from freezegun import freeze_time
 
 
 def test_graphql_get_all_ideas(phases, graphql_request,
@@ -1156,6 +1157,7 @@ def test_mutation_update_ideas_multicol_create_two_columns(test_session, graphql
     test_session.rollback()
 
 
+@freeze_time("2018-7-1")
 def test_mutation_update_ideas_change_module_type(test_session, graphql_request, graphql_registry, phases):
     test_session.commit()
     res = create_idea_thread(graphql_request, graphql_registry, phases)

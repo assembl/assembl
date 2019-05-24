@@ -4,8 +4,10 @@ import json
 from graphql_relay.node.node import from_global_id
 
 from assembl.graphql.schema import Schema as schema
+from freezegun import freeze_time
 
 
+@freeze_time("2018-3-1")
 def test_mutation_add_extract_comment(admin_user, graphql_request, idea_in_thread_phase, top_post_in_thread_phase, extract_post_1_to_subidea_1_1):
     from graphene.relay import Node
     raw_id = int(Node.from_global_id(top_post_in_thread_phase)[1])
@@ -37,6 +39,7 @@ def test_mutation_add_extract_comment(admin_user, graphql_request, idea_in_threa
     assert res.data['createPost']['post']['parentExtractId'] == extract_id
 
 
+@freeze_time("2018-3-1")
 def test_mutation_add_extract_comment_reply(admin_user, graphql_request, idea_in_thread_phase, top_post_in_thread_phase, extract_post_1_to_subidea_1_1, extract_comment):
     from graphene.relay import Node
     raw_id = int(Node.from_global_id(top_post_in_thread_phase)[1])
