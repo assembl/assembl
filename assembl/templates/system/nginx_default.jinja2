@@ -18,9 +18,6 @@ upstream urlmetadata {
 server {
   {% if accept_secure_connection %}
     listen 443 ssl http2;
-    {% if hsts_header %}
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-    {% endif%}
     {% if nginx_ipv6 %}
     listen   [::]:443 ssl http2;
     {% endif %}
@@ -57,7 +54,9 @@ server {
     add_header x-xss-protection "1; mode=block" always;
     add_header x-frame-options "SAMEORIGIN" always;
     add_header X-Content-Type-Options "nosniff" always;
-
+    {% if hsts_header %}
+    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
+    {% endif%}
     server_tokens off;
     {% if csp_header %}
     add_header Content-Security-Policy "{{ csp_header }}";
