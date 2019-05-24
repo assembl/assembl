@@ -345,7 +345,8 @@ def react_base_view(request, required_permission=P_READ):
         "get_landing_page_image": old_context['get_landing_page_image'],
         "private_social_sharing": old_context['private_social_sharing'],
         "get_topic": old_context['get_topic'],
-        "discussion_title": old_context['discussion_title']
+        "discussion_title": old_context['discussion_title'],
+        "application_url": old_context['application_url']
     })
     return context
 

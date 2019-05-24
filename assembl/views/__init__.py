@@ -324,7 +324,6 @@ def get_default_context(request, **kwargs):
         else config.get('changes_websocket_port')
     secure_socket = socket_proxied and (
         asbool(config.get("require_secure_connection")) or (asbool(config.get("accept_secure_connection")) and request.url.startswith('https:')))
-    application_url = get_global_base_url()
     socket_url = get_global_base_url(
         secure_socket, websocket_port) + config.get('changes_prefix')
 
@@ -343,6 +342,7 @@ def get_default_context(request, **kwargs):
     web_analytics_piwik_script = config.get(
         'web_analytics_piwik_script') or False
     discussion = get_current_discussion()
+    application_url = get_global_base_url()
     if (web_analytics_piwik_script and discussion and discussion.web_analytics_piwik_id_site):
         web_analytics_piwik_script = web_analytics_piwik_script % (
             discussion.web_analytics_piwik_id_site,
@@ -611,10 +611,13 @@ def discussion_title():
 def get_landing_page_image():
     """Returns landing page image of the discussion"""
     from ..auth.util import get_current_discussion
+    from assembl.models import AttachmentPurpose
     discussion = get_current_discussion()
     if discussion:
-        dict = discussion.preferences['extra_json']
-        return dict.get("headerBackgroundUrl", "no image available")
+        LANDING_PAGE_HEADER_IMAGE = AttachmentPurpose.LANDING_PAGE_HEADER_IMAGE.value
+        for attachment in discussion.attachments:
+            if attachment.attachmentPurpose == LANDING_PAGE_HEADER_IMAGE:
+                return attachment.document.external_url
 
 
 def process_locale(
