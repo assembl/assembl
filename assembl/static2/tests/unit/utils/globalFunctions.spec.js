@@ -165,7 +165,11 @@ describe('formatedSuggestedTagList function', () => {
         }
       ];
       const actual = formatedSuggestedTagList(suggestedTags);
-      const expected = ['Actual teachings of the great explorer of the truth'];
+      const expected = [
+        'Complete account of the system',
+        'Great pleasure',
+        'Actual teachings of the great explorer of the truth'
+      ];
       expect(actual).toEqual(expected);
     });
   });
@@ -190,7 +194,7 @@ describe('formatedSuggestedTagList function', () => {
         }
       ];
       const actual = formatedSuggestedTagList(suggestedTags);
-      const expected = [];
+      const expected = ['Complete account of the system'];
       expect(actual).toEqual(expected);
     });
   });
