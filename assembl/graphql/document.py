@@ -2,6 +2,9 @@ import ntpath
 
 import graphene
 from graphene.relay import Node
+import ntpath
+from pyramid.i18n import TranslationStringFactory
+from pyramid.httpexceptions import HTTPUnauthorized
 
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
@@ -12,6 +15,8 @@ from assembl.auth import CrudPermissions
 from .permissions_helpers import require_cls_permission
 from .types import SecureObjectType
 from .utils import abort_transaction_on_exception
+
+_ = TranslationStringFactory('assembl')
 
 
 class Document(SecureObjectType, SQLAlchemyObjectType):
@@ -56,9 +61,14 @@ class UploadDocument(graphene.Mutation):
 
         uploaded_file = args.get('file')
         if uploaded_file is not None:
+
             # Because the server is on GNU/Linux, os.path.basename will only work
             # with path using "/". Using ntpath works for both Linux and Windows path
             filename = ntpath.basename(context.POST[uploaded_file].filename)
+            extension = filename.split('.')[~0]
+            if extension not in context.registry.settings['allowed_extensions']:
+                error = _('It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again.')
+                raise HTTPUnauthorized(context.localizer.translate(error))
             mime_type = context.POST[uploaded_file].type
             document = models.File(
                 discussion=discussion,
