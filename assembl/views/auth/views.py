@@ -46,6 +46,7 @@ from assembl.lib.utils import normalize_email_name, get_global_base_url
 from .. import (
     get_default_context, JSONError, get_provider_data,
     HTTPTemporaryRedirect, create_get_route, sanitize_next_view)
+from pyramid.httpexceptions import HTTPOk
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger()
