@@ -260,3 +260,31 @@ def includeme(config):
     if not skip_migration and not is_migration_script():
         ensure_db_version(
             config.registry.settings['config_uri'], get_session_maker())
+
+
+def add_semantic_analysis_to_all_discussions(db):
+    """Add the section to all discussions that hasn't been initialized with it"""
+    import transaction
+    from assembl import models as m
+    from assembl.models.section import SectionTypesEnum
+
+    with transaction.manager:
+        discussions = db.query(m.Discussion).all()
+        for discussion in discussions:
+            sections = db.query(m.Section).filter(m.Section.discussion_id == discussion.id).all()
+
+            if SectionTypesEnum.SEMANTIC_ANALYSIS.value not in [section.section_type for section in sections]:
+                langstring = m.LangString.create(u'Semantic analysis', 'en')
+                langstring.add_value(u'Analyse sémantique', 'fr')
+                langstring.add_value(u"意味解析", 'ja')
+                langstring.add_value(u"Семантический анализ", 'ru')
+                langstring.add_value(u"语义分析", 'zh_CN')
+                semantic_analysis_section = m.Section(
+                    discussion=discussion,
+                    title=langstring,
+                    section_type=SectionTypesEnum.SEMANTIC_ANALYSIS.value,
+                    order=4.0
+                )
+                db.add(semantic_analysis_section)
+                db.flush()
+    
