@@ -87,3 +87,12 @@ class Mediactive(BaseAuth):
         if name:
             data['forced_display_name'] = name
         return data
+
+
+class EDFMediactive(Mediactive):
+    name = 'edf-mediactive'
+
+    @classmethod
+    def get_display_name(cls, data):
+        # No custom display name for EDF
+        return None
