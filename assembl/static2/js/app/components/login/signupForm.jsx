@@ -182,14 +182,14 @@ class SignupForm extends React.Component<Props, State> {
                         <Helper
                           classname="title"
                           helperText={
-                            <reactFragment>
+                            <React.Fragment>
                               <p className="annotation no-margin">{I18n.t('login.passwordRequirementIntro')}</p>
                               <ul>
                                 {passwordRequirements.map(passwordRequirement => (
                                   <li className="annotation no-margin">{I18n.t(`login.${passwordRequirement}`)}</li>
                                 ))}
                               </ul>
-                            </reactFragment>
+                            </React.Fragment>
                           }
                         >
                           )
