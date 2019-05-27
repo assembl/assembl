@@ -1677,7 +1677,7 @@ def phase_csv_export(request):
             column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
                 fieldnames.append(column_name)
-            row[column_name] = key_word.encode('utf-8')
+            row[column_name] = key_word.value.encode('utf-8')
         row[DELETED_MESSAGES_COUNT] = get_deleted_posts(idea, start, end).count()
         if idea.message_view_override == MessageView.thread.value:
             row[TOP_POST_COUNT] = get_published_top_posts(idea, start, end).count()
@@ -1760,7 +1760,7 @@ def survey_csv_export(request):
             column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
                 fieldnames.append(column_name)
-            row[column_name] = key_word.encode('utf-8')
+            row[column_name] = key_word.value.encode('utf-8')
         row.update(get_idea_parents_titles(thematic, user_prefs))
         for question in thematic.get_children():
             row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
@@ -1886,7 +1886,7 @@ def multicolumn_csv_export(request):
             column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
                 fieldnames.append(column_name)
-            row[column_name] = key_word.encode('utf-8')
+            row[column_name] = key_word.value.encode('utf-8')
 
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_posts(idea, start, end)
@@ -2098,7 +2098,7 @@ def thread_csv_export(request):
             column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
                 fieldnames.append(column_name)
-            row[column_name] = key_word.encode('utf-8')
+            row[column_name] = key_word.value.encode('utf-8')
 
         children = idea.get_children()
         row.update(get_idea_parents_titles(idea, user_prefs))
@@ -2253,7 +2253,7 @@ def bright_mirror_csv_export(request):
             column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
             if column_name not in fieldnames:
                 fieldnames.append(column_name)
-            row[column_name] = key_word.encode('utf-8')
+            row[column_name] = key_word.value.encode('utf-8')
 
         row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_top_posts(idea, start, end)  # we only care about fictions
