@@ -36,6 +36,7 @@ import get from 'lodash/get';
 import truncate from 'lodash/truncate';
 
 import DateRangeFilter from './search/DateRangeFilter';
+import MenuFilterCustomAll from './search/MenuFilterCustomAll';
 import HitsWithScrollTop from './search/HitsWithScrollTop';
 import FilteredSortingSelector from './search/SortingSelector';
 import ProfileLine from './common/profileLine';
@@ -698,12 +699,16 @@ export class SearchComponent extends React.Component {
                 }}
               />
               {/* <SelectedFilters /> */}
-              <MenuFilter
+              <MenuFilterCustomAll
                 listComponent={CheckboxItemList}
                 field="_type"
                 id="type"
                 title={I18n.t('search.Categories')}
-                exclude={!v1Interface && isExpert ? '' : 'extract'}
+                include={
+                  !v1Interface && isExpert
+                    ? ['post', 'user', 'idea', 'extract', 'synthesis']
+                    : ['post', 'user', 'idea', 'synthesis']
+                }
               />
               <Panel title={I18n.t('search.Messages')} className={messagesSelected ? null : 'hidden'}>
                 <MenuFilter
