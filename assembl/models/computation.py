@@ -64,7 +64,11 @@ class ComputationOnPost(Computation, DiscussionBoundBase):
     }
 
     def get_discussion_id(self):
-        self.post.discussion_id
+        from .generic import Content
+        post = self.post
+        if post is None:
+            post = Content.get(self.post_id)
+        return post.discussion_id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -90,7 +94,11 @@ class ComputationOnIdea(Computation, DiscussionBoundBase):
     idea = relationship("Idea", backref="computations")
 
     def get_discussion_id(self):
-        self.idea.discussion_id
+        from .idea import Idea
+        idea = self.idea
+        if idea is None:
+            idea = Idea.get(self.idea_id)
+        return idea.discussion_id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
