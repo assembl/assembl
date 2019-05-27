@@ -43,7 +43,8 @@ describe('Html component', () => {
     extracts: extracts,
     rawHtml:
       'You can\'t <span id="message-body-local:Content/1010">index <a href="url">the port</a> without programming</div>' +
-      ' the <div id="message-body-local:Content/2020">wireless HTTP program</div>! <iframe src="iframe-src"></iframe>',
+      ' the <div id="message-body-local:Content/2020">wireless HTTP program</div>! <iframe src="iframe-src"></iframe>' +
+      'Look at our website <a href="https://github.com/">https://github.com/</a>',
     divRef: () => {},
     dbId: '3059',
     contentLocale: 'en'

@@ -64,13 +64,10 @@ exports[`Html component should render a html body with extracts 1`] = `
       </ExtractInPost>
        
       <React.Fragment>
-        <URLMetadataLoader
-          afterLoad={[MockFunction]}
-          url="url"
-        />
         <a
           className="linkified"
           href="url"
+          target="_blank"
         >
           <ExtractInPost
             extractedByMachine={false}
@@ -107,6 +104,19 @@ exports[`Html component should render a html body with extracts 1`] = `
     }
     url="iframe-src"
   />
+  <React.Fragment>
+    <URLMetadataLoader
+      afterLoad={[MockFunction]}
+      url="https://github.com/"
+    />
+    <a
+      className="linkified"
+      href="https://github.com/"
+      target="_blank"
+    >
+      https://github.com/
+    </a>
+  </React.Fragment>
 </div>
 `;
 
@@ -122,13 +132,10 @@ exports[`Html component should render a html body without extracts 1`] = `
       index
        
       <React.Fragment>
-        <URLMetadataLoader
-          afterLoad={[MockFunction]}
-          url="url"
-        />
         <a
           className="linkified"
           href="url"
+          target="_blank"
         >
           the port
         </a>
@@ -151,6 +158,19 @@ exports[`Html component should render a html body without extracts 1`] = `
     }
     url="iframe-src"
   />
+  <React.Fragment>
+    <URLMetadataLoader
+      afterLoad={[MockFunction]}
+      url="https://github.com/"
+    />
+    <a
+      className="linkified"
+      href="https://github.com/"
+      target="_blank"
+    >
+      https://github.com/
+    </a>
+  </React.Fragment>
 </div>
 `;
 

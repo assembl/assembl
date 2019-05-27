@@ -87,17 +87,17 @@ export const postBodyReplacementComponents = (afterLoad?: Function, isHarvesting
     const { href, key, target, title, children } = attributes;
     const embeddedUrl = isSpecialURL(href);
     const origin = (
-      <a key={`url-link-${key}`} href={href} className="linkified" target={target} title={title}>
+      <a key={`url-link-${key}`} href={href} className="linkified" target={target || '_blank'} title={title}>
         {children}
       </a>
     );
+    const urlMetadataPreview =
+      typeof children[0] === 'string' && children[0].startsWith('http') ? (
+        <URLMetadataLoader key={`url-preview-${href}`} url={href} afterLoad={afterLoad} />
+      ) : null;
     return (
       <React.Fragment>
-        {embeddedUrl ? (
-          <Embed key={`url-embed-${href}`} url={href} />
-        ) : (
-          <URLMetadataLoader key={`url-preview-${href}`} url={href} afterLoad={afterLoad} />
-        )}
+        {embeddedUrl ? <Embed key={`url-embed-${href}`} url={href} /> : urlMetadataPreview}
         {origin}
       </React.Fragment>
     );
