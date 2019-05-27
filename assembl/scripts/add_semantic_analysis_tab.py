@@ -12,7 +12,7 @@ from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.indexing.changes import configure_indexing
 
-from assembl.lib.migration import add_semantic_analysis_to_all_discussions
+from assembl.lib.migration import add_semantic_analysis_tab_to_all_discussions
 
 
 if __name__ == '__main__':
@@ -20,8 +20,6 @@ if __name__ == '__main__':
     settings = get_appsettings(config_fname, 'assembl')
     set_config(settings)
     logging.config.fileConfig(config_fname)
-    configure_zmq(settings['changes_socket'], False)
     configure_engine(settings, True)
-    configure_indexing()
     session = get_session_maker()()
-    add_semantic_analysis_to_all_discussions(session)
+    add_semantic_analysis_tab_to_all_discussions(session)

@@ -262,7 +262,7 @@ def includeme(config):
             config.registry.settings['config_uri'], get_session_maker())
 
 
-def add_semantic_analysis_to_all_discussions(db):
+def add_semantic_analysis_tab_to_all_discussions(db):
     """Add the section to all discussions that hasn't been initialized with it"""
     import transaction
     from assembl import models as m
