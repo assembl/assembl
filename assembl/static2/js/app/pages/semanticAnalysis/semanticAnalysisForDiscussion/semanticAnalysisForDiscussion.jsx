@@ -14,6 +14,8 @@ import SemanticAnalysisForDiscussionQuery from '../../../graphql/SemanticAnalysi
 import manageErrorAndLoading, { TYPE } from '../../../components/common/manageErrorAndLoading';
 import { SemanticAnalysis, type Props as SemanticAnalysisProps } from '../semanticAnalysis';
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
+// Constant imports
+import { SEMANTIC_ANALYSIS_PICTURE_BANNER_URL } from '../../../constants';
 
 export type Props = SemanticAnalysisForDiscussionQuery;
 
@@ -31,9 +33,11 @@ export class SemanticAnalysisForDiscussion extends Component<Props> {
     const content =
       topKeywordsCount > 0 ? <SemanticAnalysis {...semanticAnalysisProps} /> : <Loader type={LOADER_TYPE.NO_DATA} />;
 
+    const bannerBackground = { backgroundImage: `url(${SEMANTIC_ANALYSIS_PICTURE_BANNER_URL})` };
+
     return (
       <div className="semantic-analysis-container">
-        <div className="banner">
+        <div className="banner" style={bannerBackground}>
           <Grid className="margin-lr">
             <h1>{I18n.t('administration.semanticAnalysis.title')}</h1>
           </Grid>
