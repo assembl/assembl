@@ -2,7 +2,6 @@
 .semantic-analysis-container {
   .banner {
     align-items: center;
-    background-image: url(https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/banner-semantic.png);
     background-position-x: -50px;
     background-size: cover;
     display: flex;
@@ -15,7 +14,7 @@
     }
 
     h1 {
-      color: $grey;
+      color: $white;
       font-family: $font-family4;
       font-size: 20px;
       letter-spacing: 1.1px;

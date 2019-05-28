@@ -5,7 +5,7 @@ exports[`Storyshots FictionPreview default 1`] = `
   className="fiction-preview"
   style={
     Object {
-      "backgroundImage": "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://s3-eu-west-1.amazonaws.com/brightmirror/preview-xx.jpg)",
+      "backgroundImage": "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/bm/preview-xx.jpg)",
     }
   }
 >
@@ -151,7 +151,7 @@ exports[`Storyshots FictionPreview playground 1`] = `
   className="fiction-preview"
   style={
     Object {
-      "backgroundImage": "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://s3-eu-west-1.amazonaws.com/brightmirror/preview-xx.jpg)",
+      "backgroundImage": "linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), url(https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/bm/preview-xx.jpg)",
     }
   }
 >

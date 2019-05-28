@@ -23,7 +23,7 @@ configure({ adapter: new Adapter() });
 jest.mock('../../../../../js/app/utils/globalFunctions', () => ({
   isMobile: { any: jest.fn(() => false) },
   getIconPath: jest.fn(() => 'icons/path/avatar'),
-  getPictureUrl: jest.fn(() => 'https://s3-eu-west-1.amazonaws.com/brightmirror/preview-xx.jpg')
+  getPictureUrl: jest.fn(() => 'https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/bm/preview-xx.jpg')
 }));
 
 describe('<FictionPreview /> - with shallow', () => {
