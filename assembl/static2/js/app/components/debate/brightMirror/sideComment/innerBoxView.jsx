@@ -55,7 +55,7 @@ class InnerBoxView extends React.Component<Props, State> {
             changeCurrentExtract(-1);
           }}
         >
-          <span className="assembl-icon-down-open grey" />
+          <span className="assembl-icon-angle-left grey" />
         </div>
       ) : (
         <div className="previous-extract empty" />
@@ -69,7 +69,7 @@ class InnerBoxView extends React.Component<Props, State> {
             changeCurrentExtract(1);
           }}
         >
-          <span className="assembl-icon-down-open grey" />
+          <span className="assembl-icon-angle-right grey" />
         </div>
       ) : (
         <div className="next-extract empty" />

@@ -654,7 +654,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                           this.changeCurrentExtract(-1);
                         }}
                       >
-                        <span className="assembl-icon-down-open grey" />
+                        <span className="assembl-icon-angle-left grey" />
                       </div>
                     )}
                   </div>
@@ -667,7 +667,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
                             this.changeCurrentExtract(1);
                           }}
                         >
-                          <span className="assembl-icon-down-open grey" />
+                          <span className="assembl-icon-angle-right grey" />
                         </div>
                       )}
                   </div>

@@ -59,7 +59,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
         onClick={[Function]}
       >
         <span
-          className="assembl-icon-down-open grey"
+          className="assembl-icon-angle-left grey"
         />
       </div>
       <div
@@ -72,7 +72,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
         onClick={[Function]}
       >
         <span
-          className="assembl-icon-down-open grey"
+          className="assembl-icon-angle-right grey"
         />
       </div>
     </div>

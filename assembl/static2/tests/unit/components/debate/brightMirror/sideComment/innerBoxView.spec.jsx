@@ -73,7 +73,8 @@ describe('<InnerBoxView /> - multiple with shallow', () => {
   });
 
   it('should render navigation arrows', () => {
-    expect(wrapper.find('div [className="assembl-icon-down-open grey"]')).toHaveLength(2);
+    expect(wrapper.find('div [className="assembl-icon-angle-left grey"]')).toHaveLength(1);
+    expect(wrapper.find('div [className="assembl-icon-angle-right grey"]')).toHaveLength(1);
   });
 
   it('should render menu button', () => {

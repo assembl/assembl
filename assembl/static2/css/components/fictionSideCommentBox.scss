@@ -81,15 +81,24 @@
         align-items: center;
         align-self: stretch;
         flex-basis: 10px;
-        font-size: 8px;
+        font-size: 30px;
         margin-top: 0;
-        padding: 17px 5px 0 5px;
+        padding: 0 5px 0 5px;
         transition: all 0.2s linear;
+
+        .assembl-icon-angle-left:before {
+          margin: 0 2px 0 2px;
+        }
+
+        .assembl-icon-angle-right:before {
+          margin: 0 0 0 4px;
+        }
 
         &:hover {
           background-color: rgba($color: $grey, $alpha: 1);
 
-          .assembl-icon-down-open {
+          .assembl-icon-angle-left,
+          .assembl-icon-angle-right, {
             color: white;
           }
         }
@@ -171,7 +180,7 @@
 
         .previous-extract,
         .next-extract {
-          padding: 17px 8px 0 8px;
+          padding: 0 8px 0 8px;
 
           &.empty {
             padding-left: 8px;

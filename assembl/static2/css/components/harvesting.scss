@@ -476,30 +476,18 @@
       .previous-extract {
         cursor: pointer;
         margin-top: 20px;
-        font-size: 10px;
+        font-size: 30px;
         flex-basis: 30px;
         flex-shrink: 0;
-
-        .assembl-icon-down-open {
-          &:before {
-            transform: rotate(-90deg) scaleX(2.5) scaleY(-1);
-          }
-        }
       }
 
       .next-extract {
         cursor: pointer;
         margin-top: 20px;
-        font-size: 10px;
+        font-size: 30px;
         flex-basis: 30px;
         flex-shrink: 0;
         padding-left: 15px;
-
-        .assembl-icon-down-open {
-          &:before {
-            transform: rotate(-90deg) scaleX(2.5);
-          }
-        }
       }
     }
   }
