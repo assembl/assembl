@@ -38,6 +38,8 @@ from .. import (
     get_locale_from_request, get_theme_info, get_resources_hash, sanitize_next_view)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
+from pyramid.threadlocal import get_current_request
+from assembl.auth.util import get_permissions
 
 
 FIXTURE = os.path.join(os.path.dirname(__file__),
@@ -215,6 +217,20 @@ def react_view(request, required_permission=P_READ):
     return react_base_view(request, required_permission)
 
 
+def get_assembl_version(discussion):
+    request = get_current_request()
+    user_id = request.authenticated_userid or Everyone
+    if discussion:
+        permissions = get_permissions(
+            user_id, discussion.id)
+        if P_ADMIN_DISC in permissions:
+            return pkg_resources.get_distribution("assembl").version
+        else:
+            return ""
+    else:
+        return ""
+
+
 def react_base_view(request, required_permission=P_READ):
     """
     The view rendered by any react-based URL requested
@@ -241,7 +257,7 @@ def react_base_view(request, required_permission=P_READ):
         "theme_relative_path": theme_relative_path,
         "REACT_URL": old_context['REACT_URL'],
         "NODE_ENV": node_env,
-        "assembl_version": pkg_resources.get_distribution("assembl").version,
+        "assembl_version": get_assembl_version(discussion),
         "elasticsearch_lang_indexes": old_context['elasticsearch_lang_indexes'],
         "web_analytics": old_context['web_analytics'],
         "under_test": old_context['under_test'],
