@@ -30,6 +30,7 @@ import FictionCommentList from '../components/debate/brightMirror/fictionComment
 import TagOnPost from '../components/tagOnPost/tagOnPost';
 import { withScreenWidth } from '../components/common/screenDimensions';
 // Utils imports
+import { getOriginalBodyAndSubject } from '../components/debate/common/post';
 import { transformPosts, getDebateTotalMessages } from './idea';
 import { displayAlert } from '../utils/utilityManager';
 import { getConnectedUserId, compareByTextPosition, formatedSuggestedTagList, formatedTagList } from '../utils/globalFunctions';
@@ -137,15 +138,17 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     const { loading } = nextProps.brightMirrorFictionData;
     if (loading) return null;
 
-    const { body, publicationState, subject } = nextProps.brightMirrorFictionData.fiction;
+    const { bodyEntries, publicationState, subjectEntries } = nextProps.brightMirrorFictionData.fiction;
 
     const { existingTags, putTagsInStore } = nextProps;
     // Store tag suggestions in store
     putTagsInStore(existingTags);
 
+    // $FlowFixMe incompatible type LangstringEntries
+    const { originalBody, originalSubject } = getOriginalBodyAndSubject(false, subjectEntries, bodyEntries);
     return {
-      title: subject || EMPTY_STRING,
-      content: body || EMPTY_STRING,
+      title: originalSubject,
+      content: originalBody,
       loading: nextProps.brightMirrorFictionData.loading || nextProps.ideaWithCommentsData.loading,
       publicationState: publicationState || PublicationStates.PUBLISHED
     };

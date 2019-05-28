@@ -173,6 +173,8 @@ export type AllIdeasQueryQuery = {|
     //
     // Contribution is counted as either as a sentiment set, a post created.
     numContributors: ?number,
+    // The total number of votes (participations) for the vote session related to the idea.
+    numVotes: ?number,
     // The total number of children ideas (called "subideas") on the Idea or Thematic.
     numChildren: ?number,
     // Header image associated with the idea. A file metadata object, described by the Document object.
@@ -192,23 +194,6 @@ export type AllIdeasQueryQuery = {|
     // The ID of the object.
     id: string
   }
-|};
-
-export type AllLanguagePreferencesQueryVariables = {|
-  inLocale: string
-|};
-
-export type AllLanguagePreferencesQuery = {|
-  // The default discussion preferences. These are server wide settings, independent of the debate.
-  defaultPreferences: ?{|
-    // A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate.
-    languages: ?Array<?{|
-      // The ISO 639-1 language string of the locale. Ex. '"fr"'.
-      locale: ?string,
-      // The name of the locale, in the language of the locale given. Ex. French, if the given locale is '"en"'.
-      name: ?string
-    |}>
-  |}
 |};
 
 export type BrightMirrorFictionQueryVariables = {|
@@ -235,10 +220,20 @@ export type BrightMirrorFictionQuery = {|
         // The internal database ID of the post.
         // This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts.
         dbId: ?number,
-        // A Subject of the post in a given language.
-        subject: ?string,
-        // A Body of the post (the main content of the post). in a given language.
-        body: ?string,
+        // A list of possible languages of the entity as LangStringEntry objects. The subject of the post in various languages.
+        subjectEntries: ?Array<?{|
+          // The unicode encoded string representation of the content.
+          value: ?string,
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string
+        |}>,
+        // A list of possible languages of the entity as LangStringEntry objects. The body of the post in various languages.
+        bodyEntries: ?Array<?{|
+          // The unicode encoded string representation of the content.
+          value: ?string,
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string
+        |}>,
         // The date that the object was created, in UTC timezone, in ISO 8601 format.
         creationDate: ?any,
         // A graphene Field containing the state of the publication of a certain post. The options are:
@@ -550,7 +545,13 @@ export type DiscussionPreferencesQuery = {|
       nativeName: ?string
     |}>,
     // A Boolean flag indicating whether the moderation is activated or not.
-    withModeration: ?boolean
+    withModeration: ?boolean,
+    // A Boolean flag indicating wheter the users have the possibility to translate the messages or not.
+    withTranslation: ?boolean,
+    // A Boolean flag indicating wheter the semantic analysis is activated or not.
+    withSemanticAnalysis: ?boolean,
+    // A string used to form the URL of the discussion.
+    slug: string
   |}
 |};
 
@@ -570,7 +571,7 @@ export type DiscussionPreferencesQueryQuery = {|
       // The MIME-Type of the file uploaded.
       mimeType: ?string
     |},
-    // The logo from the navbar. A file metadata object, described by the Document object.
+    // The site logo.A file metadata object, described by the Document object.
     logo: ?{|
       // The filename title.
       title: ?string,
@@ -580,7 +581,11 @@ export type DiscussionPreferencesQueryQuery = {|
       mimeType: ?string
     |},
     // A Boolean flag indicating whether the moderation is activated or not.
-    withModeration: ?boolean
+    withModeration: ?boolean,
+    // A Boolean flag indicating wheter the users have the possibility to translate the messages or not.
+    withTranslation: ?boolean,
+    // A Boolean flag indicating wheter the semantic analysis is activated or not.
+    withSemanticAnalysis: ?boolean
   |}
 |};
 
@@ -2257,7 +2262,8 @@ export type TabsConditionQuery = {|
 |};
 
 export type TagsQueryVariables = {|
-  filter?: ?string
+  filter?: ?string,
+  limit?: ?number
 |};
 
 export type TagsQuery = {|
@@ -2684,6 +2690,8 @@ export type VoteSessionQuery = {|
   voteSession: ?{|
     // The ID of the object.
     id: string,
+    // The count of participants on the vote session.
+    numParticipants: number,
     // A flag allowing users to view the current votes.
     seeCurrentVotes: boolean,
     // A list of possible languages of the entity as LangStringEntry objects. The Proposal section's title in various languages.
@@ -2721,32 +2729,8 @@ export type VoteSessionQuery = {|
       order: ?number,
       // The VoteResult object showing the status and result of a VoteSession on Idea.
       voteResults: {|
-        // The count of participants on the vote session.
-        numParticipants: number,
-        // The list of users who participated on the vote session. The length of the list matches the number of participants.
-        participants: Array<?{|
-          // The ID of the object.
-          id: string,
-          // The unique database identifier of the User.
-          userId: number,
-          // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
-          displayName: ?string,
-          // A boolean flag that shows if the User is deleted.
-          // If True, the User information is cleansed from the system, and the User can no longer log in.
-          isDeleted: ?boolean,
-          // A boolean flag describing if the User is a machine user or human user.
-          isMachine: ?boolean,
-          // The preferences of the User.
-          preferences: ?{|
-            // The harvesting Translation preference.
-            harvestingTranslation: ?{|
-              // The source locale of the translation.
-              localeFrom: string,
-              // The target locale of the translation.
-              localeInto: string
-            |}
-          |}
-        |}>
+        // The count of participants on the vote proposal.
+        numParticipants: number
       |},
       // The VoteSpecificationUnion placed on the Idea. This is the metadata describing the configuration of a VoteSession.
       modules: Array<?(
@@ -3324,10 +3308,12 @@ export type addTagMutationVariables = {|
 export type addTagMutation = {|
   // A mutation to add a Tag to a Post.
   addTag: ?{|
-    tags: ?Array<?{|
+    tag: ?{|
+      // The ID of the object.
+      id: string,
       // The value of the tag. This is not language dependent, but rather just unicode text.
       value: string
-    |}>
+    |}
   |}
 |};
 
@@ -3372,8 +3358,10 @@ export type createDiscussionPhaseMutationVariables = {|
   lang: string,
   identifier?: ?string,
   titleEntries: Array<?LangStringEntryInput>,
+  descriptionEntries?: ?Array<?LangStringEntryInput>,
   start: any,
   end: any,
+  image?: ?string,
   order: number
 |};
 
@@ -4372,10 +4360,7 @@ export type removeTagMutationVariables = {|
 export type removeTagMutation = {|
   // A mutation to create a Tag association to a Post.
   removeTag: ?{|
-    tags: ?Array<?{|
-      // The value of the tag. This is not language dependent, but rather just unicode text.
-      value: string
-    |}>
+    success: ?boolean
   |}
 |};
 
@@ -4512,8 +4497,12 @@ export type updateDiscussionPhaseMutation = {|
 export type updateDiscussionPreferenceMutationVariables = {|
   languages?: ?Array<?string>,
   withModeration?: ?boolean,
+  withTranslation?: ?boolean,
+  withSemanticAnalysis?: ?boolean,
   tabTitle?: ?string,
-  favicon?: ?string
+  favicon?: ?string,
+  slug?: ?string,
+  logo?: ?string
 |};
 
 export type updateDiscussionPreferenceMutation = {|
@@ -4526,7 +4515,9 @@ export type updateDiscussionPreferenceMutation = {|
         locale: ?string
       |}>,
       // A Boolean flag indicating whether the moderation is activated or not.
-      withModeration: ?boolean
+      withModeration: ?boolean,
+      // A string used to form the URL of the discussion.
+      slug: string
     |}
   |}
 |};
@@ -5704,6 +5695,53 @@ export type updateSectionMutation = {|
   |}
 |};
 
+export type updateShareCountMutationVariables = {|
+  nodeId: string
+|};
+
+export type updateShareCountMutation = {|
+  // A mutation called when a user shares a post/idea.
+  updateShareCount: ?{|
+    node: ?(
+      | {
+          // The ID of the object.
+          id: string
+        }
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {
+          // The ID of the object.
+          id: string
+        }
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {}
+      | {})
+  |}
+|};
+
 export type updateTagMutationVariables = {|
   id: string,
   value: string,
@@ -6328,10 +6366,20 @@ export type BrightMirrorFictionFragment = {|
   // The internal database ID of the post.
   // This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts.
   dbId: ?number,
-  // A Subject of the post in a given language.
-  subject: ?string,
-  // A Body of the post (the main content of the post). in a given language.
-  body: ?string,
+  // A list of possible languages of the entity as LangStringEntry objects. The subject of the post in various languages.
+  subjectEntries: ?Array<?{|
+    // The unicode encoded string representation of the content.
+    value: ?string,
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string
+  |}>,
+  // A list of possible languages of the entity as LangStringEntry objects. The body of the post in various languages.
+  bodyEntries: ?Array<?{|
+    // The unicode encoded string representation of the content.
+    value: ?string,
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string
+  |}>,
   // The date that the object was created, in UTC timezone, in ISO 8601 format.
   creationDate: ?any,
   // A graphene Field containing the state of the publication of a certain post. The options are:

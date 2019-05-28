@@ -50,8 +50,8 @@ const brightMirrorFictionDataTemplate = {
   fiction: {
     id: '1',
     dbId: 1,
-    subject: 'Hic quia eveniet cupiditate placeat laboriosam.',
-    body: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.',
+    subjectEntries: [{ value: 'Hic quia eveniet cupiditate placeat laboriosam.', localeCode: 'fr' }],
+    bodyEntries: [{ value: 'Odit mollitia natus ea iusto voluptatibus omnis pariatur tempore ipsum.', localeCode: 'fr' }],
     creationDate: new Date(),
     publicationState: PublicationStates.PUBLISHED,
     modified: false,

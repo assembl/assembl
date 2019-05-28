@@ -65,6 +65,41 @@ type State = {
 
 type bodyAndSubject = { body: string, subject: string, originalBody: string, originalSubject: string };
 
+export const getOriginalBodyAndSubject = (
+  translate: boolean,
+  subjectEntries: LangstringEntries,
+  bodyEntries: LangstringEntries
+): bodyAndSubject => {
+  let body;
+  let subject;
+  let originalBody;
+  let originalSubject;
+  if (bodyEntries.length > 1) {
+    // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
+    // second entry is the original, example localeCode "en"
+    body = translate ? bodyEntries[0].value : bodyEntries[1].value;
+    originalBody = bodyEntries[1].value;
+  } else {
+    // translation is not enabled or the message is already in the desired locale
+    body = bodyEntries[0].value;
+    originalBody = bodyEntries[0].value;
+  }
+  if (subjectEntries.length > 1) {
+    subject = translate ? subjectEntries[0].value : subjectEntries[1].value;
+    originalSubject = subjectEntries[1].value;
+  } else {
+    subject = subjectEntries[0].value;
+    originalSubject = subjectEntries[0].value;
+  }
+
+  return {
+    body: body,
+    subject: subject,
+    originalBody: originalBody,
+    originalSubject: originalSubject
+  };
+};
+
 export class DumbPost extends React.PureComponent<Props, State> {
   editPostarea: ?HTMLTextAreaElement;
 
@@ -109,35 +144,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
 
   getBodyAndSubject = (translate: boolean): bodyAndSubject => {
     const { subjectEntries, bodyEntries } = this.props.data.post;
-
-    let body;
-    let subject;
-    let originalBody;
-    let originalSubject;
-    if (bodyEntries.length > 1) {
-      // first entry is the translated version, example localeCode "fr-x-mtfrom-en"
-      // second entry is the original, example localeCode "en"
-      body = translate ? bodyEntries[0].value : bodyEntries[1].value;
-      originalBody = bodyEntries[1].value;
-    } else {
-      // translation is not enabled or the message is already in the desired locale
-      body = bodyEntries[0].value;
-      originalBody = bodyEntries[0].value;
-    }
-    if (subjectEntries.length > 1) {
-      subject = translate ? subjectEntries[0].value : subjectEntries[1].value;
-      originalSubject = subjectEntries[1].value;
-    } else {
-      subject = subjectEntries[0].value;
-      originalSubject = subjectEntries[0].value;
-    }
-
-    return {
-      body: body,
-      subject: subject,
-      originalBody: originalBody,
-      originalSubject: originalSubject
-    };
+    return getOriginalBodyAndSubject(translate, subjectEntries, bodyEntries);
   };
 
   handleEditClick = () => {

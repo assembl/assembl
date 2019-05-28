@@ -11,6 +11,7 @@ import { getDiscussionSlug, getConnectedUserId } from '../../../utils/globalFunc
 import FictionPreview from './fictionPreview';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
+import { getOriginalBodyAndSubject } from '../common/post';
 // Constant imports
 import { EMPTY_STRING, PICTURES_LENGTH } from '../../../constants';
 // Type imports
@@ -78,15 +79,17 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
       fictionId: post.id
     };
 
+    const { originalBody, originalSubject } = getOriginalBodyAndSubject(false, post.subjectEntries, post.bodyEntries);
+
     result.push(
       <Animated key={post.id} preset="scalein">
         <FictionPreview
           id={post.id}
           link={`${get('brightMirrorFiction', fictionMetaInfo)}`}
-          title={post.subject}
+          title={originalSubject}
           creationDate={I18n.l(post.creationDate, { dateFormat: 'date.format2' })}
           authorName={authorName}
-          originalBody={post.body || EMPTY_STRING}
+          originalBody={originalBody}
           refetchIdea={refetchIdea}
           userCanEdit={userCanEdit}
           userCanDelete={userCanDelete}

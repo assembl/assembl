@@ -10,7 +10,12 @@ export const customFictionsList: FictionsListProps = {
     {
       id: '0',
       dbId: 0,
-      subject: 'Red is dead',
+      subjectEntries: [
+        {
+          value: 'Red is dead',
+          localeCode: 'en'
+        }
+      ],
       creationDate: '2018-04-26T09:19:01.492406+00:00',
       publicationState: PublicationStates.PUBLISHED,
       creator: {
@@ -18,12 +23,22 @@ export const customFictionsList: FictionsListProps = {
         displayName: 'Odile DeRaie',
         isDeleted: false
       },
-      body: 'Oh non c\'est affreux'
+      bodyEntries: [
+        {
+          value: 'Oh non c\'est affreux',
+          localeCode: 'fr'
+        }
+      ]
     },
     {
       id: '1',
       dbId: 1,
-      subject: 'Red is dead 2',
+      subjectEntries: [
+        {
+          value: 'Red is dead 2',
+          localeCode: 'en'
+        }
+      ],
       creationDate: '2018-03-26T09:19:01.492406+00:00',
       publicationState: PublicationStates.PUBLISHED,
       creator: {
@@ -31,12 +46,22 @@ export const customFictionsList: FictionsListProps = {
         displayName: 'Odile DeRaie',
         isDeleted: false
       },
-      body: 'Oh non c\'est affreux'
+      bodyEntries: [
+        {
+          value: 'Oh non c\'est affreux',
+          localeCode: 'fr'
+        }
+      ]
     },
     {
       id: '2',
       dbId: 2,
-      subject: 'Red is dead 3',
+      subjectEntries: [
+        {
+          value: 'Red is dead 3',
+          localeCode: 'en'
+        }
+      ],
       creationDate: '2018-02-26T09:19:01.492406+00:00',
       publicationState: PublicationStates.PUBLISHED,
       creator: {
@@ -44,12 +69,22 @@ export const customFictionsList: FictionsListProps = {
         displayName: 'Odile DeRaie',
         isDeleted: false
       },
-      body: 'Oh non c\'est affreux'
+      bodyEntries: [
+        {
+          value: 'Oh non c\'est affreux',
+          localeCode: 'fr'
+        }
+      ]
     },
     {
       id: '3',
       dbId: 3,
-      subject: 'Red is dead 4',
+      subjectEntries: [
+        {
+          value: 'Red is dead 4',
+          localeCode: 'en'
+        }
+      ],
       creationDate: '2018-10-26T09:19:01.492406+00:00',
       publicationState: PublicationStates.DRAFT,
       creator: {
@@ -57,7 +92,12 @@ export const customFictionsList: FictionsListProps = {
         displayName: 'Odile DeRaie',
         isDeleted: false
       },
-      body: 'Oh non c\'est affreux'
+      bodyEntries: [
+        {
+          value: 'Oh non c\'est affreux',
+          localeCode: 'fr'
+        }
+      ]
     }
   ],
   identifier: 'brightMirror',

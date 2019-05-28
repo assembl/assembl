@@ -4,8 +4,14 @@
 fragment BrightMirrorFiction on Post {
   id
   dbId
-  subject(lang: $contentLocale)
-  body(lang: $contentLocale)
+  subjectEntries(lang: $contentLocale) {
+    value
+    localeCode
+  }
+  bodyEntries(lang: $contentLocale) {
+    value
+    localeCode
+  }
   creationDate
   publicationState
   modified

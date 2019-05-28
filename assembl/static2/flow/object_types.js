@@ -61,8 +61,8 @@ type Post = { ...PostFragment } & {
 type FictionPostPreview = {
   id: string,
   dbId: number,
-  subject: ?string,
-  body: ?string,
+  subjectEntries: LangstringEntries,
+  bodyEntries: LangstringEntries,
   creationDate: string,
   creator: ?{|
     userId: string,
