@@ -141,44 +141,50 @@ export class DumbTopPostForm extends React.Component<Props, State> {
 
       // first, we upload each attachment
       const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
-      uploadDocumentsPromise.then((result) => {
-        const variables = {
-          contentLocale: contentLocale,
-          ideaId: ideaId,
-          subject:
-            subject || (messageViewOverride === MESSAGE_VIEW.brightMirror ? I18n.t('debate.brightMirror.draftEmptyTitle') : null),
-          messageClassifier: messageClassifier || null,
-          // use the updated content state with new entities
-          body: convertContentStateToHTML(result.contentState),
-          attachments: result.documentIds,
-          publicationState: publicationState
-        };
+      uploadDocumentsPromise
+        .then((result) => {
+          const variables = {
+            contentLocale: contentLocale,
+            ideaId: ideaId,
+            subject:
+              subject ||
+              (messageViewOverride === MESSAGE_VIEW.brightMirror ? I18n.t('debate.brightMirror.draftEmptyTitle') : null),
+            messageClassifier: messageClassifier || null,
+            // use the updated content state with new entities
+            body: convertContentStateToHTML(result.contentState),
+            attachments: result.documentIds,
+            publicationState: publicationState
+          };
 
-        createPost({ variables: variables })
-          .then(() => {
-            refetchIdea();
-            let successMessage;
-            switch (publicationState) {
-            case PublicationStates.DRAFT:
-              successMessage = draftSuccessMsgId;
-              break;
-            case PublicationStates.SUBMITTED_AWAITING_MODERATION:
-              successMessage = 'debate.thread.postToBeValidated';
-              break;
-            default:
-              successMessage = postSuccessMsgId;
-            }
-            if (successMessage) {
-              displayAlert('success', I18n.t(successMessage), false, 10000);
-            }
-            this.resetForm();
-            this.setState(submittingState(false));
-          })
-          .catch((error) => {
-            displayAlert('danger', `${error}`);
-            this.setState(submittingState(false));
-          });
-      });
+          createPost({ variables: variables })
+            .then(() => {
+              refetchIdea();
+              let successMessage;
+              switch (publicationState) {
+              case PublicationStates.DRAFT:
+                successMessage = draftSuccessMsgId;
+                break;
+              case PublicationStates.SUBMITTED_AWAITING_MODERATION:
+                successMessage = 'debate.thread.postToBeValidated';
+                break;
+              default:
+                successMessage = postSuccessMsgId;
+              }
+              if (successMessage) {
+                displayAlert('success', I18n.t(successMessage), false, 10000);
+              }
+              this.resetForm();
+              this.setState(submittingState(false));
+            })
+            .catch((error) => {
+              displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+              this.setState(submittingState(false));
+            });
+        })
+        .catch((error) => {
+          displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+          this.setState(submittingState(false));
+        });
     } else {
       const warningMessage = this.getWarningMessageToDisplay(publicationState, subject, bodyIsEmpty, ideaOnColumn);
       if (warningMessage) displayAlert('warning', I18n.t(warningMessage));

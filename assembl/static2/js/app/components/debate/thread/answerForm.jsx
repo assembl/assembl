@@ -88,48 +88,53 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
     if (!bodyIsEmpty) {
       // first we upload the new documents
       const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
-      uploadDocumentsPromise.then((result) => {
-        if (!result.contentState) {
-          return;
-        }
-        const userIsModerator = connectedUserIsModerator();
-        const publicationState = getPostPublicationState(isDebateModerated, userIsModerator);
-        const variables = {
-          contentLocale: contentLocale,
-          ideaId: ideaId,
-          parentId: parentId,
-          body: convertContentStateToHTML(result.contentState),
-          attachments: result.documentIds,
-          publicationState: publicationState
-        };
-        displayAlert('success', I18n.t('loading.wait'), false, 10000);
-        createPost({ variables: variables })
-          .then((res) => {
-            const postId = res.data.createPost.post.id;
-            this.setState({ submitting: false, body: EditorState.createEmpty() }, () => {
-              hideAnswerForm();
-              // Execute refetchIdea after the setState otherwise we can get a
-              // warning setState called on unmounted component.
-              refetchIdea().then(() => {
-                // The thread may have moved because it became the latest active,
-                // we need to scroll to the created post.
-                // setTimeout is needed to be sure the element exist in the DOM
-                setTimeout(() => {
-                  const createdPostElement = document.getElementById(postId);
-                  if (createdPostElement) {
-                    scrollToPost(createdPostElement, false);
-                  }
+      uploadDocumentsPromise
+        .then((result) => {
+          if (!result.contentState) {
+            return;
+          }
+          const userIsModerator = connectedUserIsModerator();
+          const publicationState = getPostPublicationState(isDebateModerated, userIsModerator);
+          const variables = {
+            contentLocale: contentLocale,
+            ideaId: ideaId,
+            parentId: parentId,
+            body: convertContentStateToHTML(result.contentState),
+            attachments: result.documentIds,
+            publicationState: publicationState
+          };
+          displayAlert('success', I18n.t('loading.wait'), false, 10000);
+          createPost({ variables: variables })
+            .then((res) => {
+              const postId = res.data.createPost.post.id;
+              this.setState({ submitting: false, body: EditorState.createEmpty() }, () => {
+                hideAnswerForm();
+                // Execute refetchIdea after the setState otherwise we can get a
+                // warning setState called on unmounted component.
+                refetchIdea().then(() => {
+                  // The thread may have moved because it became the latest active,
+                  // we need to scroll to the created post.
+                  // setTimeout is needed to be sure the element exist in the DOM
+                  setTimeout(() => {
+                    const createdPostElement = document.getElementById(postId);
+                    if (createdPostElement) {
+                      scrollToPost(createdPostElement, false);
+                    }
+                  });
                 });
               });
+              const successMessage = isDebateModerated && !userIsModerator ? 'postToBeValidated' : 'postSuccess';
+              displayAlert('success', I18n.t(`debate.thread.${successMessage}`), false, 10000);
+            })
+            .catch((error) => {
+              displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+              this.setState({ submitting: false });
             });
-            const successMessage = isDebateModerated && !userIsModerator ? 'postToBeValidated' : 'postSuccess';
-            displayAlert('success', I18n.t(`debate.thread.${successMessage}`), false, 10000);
-          })
-          .catch((error) => {
-            displayAlert('danger', `${error}`);
-            this.setState({ submitting: false });
-          });
-      });
+        })
+        .catch((error) => {
+          displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+          this.setState({ submitting: false });
+        });
     } else {
       displayAlert('warning', I18n.t('debate.thread.fillBody'));
       this.setState({ submitting: false });

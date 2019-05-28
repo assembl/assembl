@@ -110,52 +110,56 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
     if ((!subjectIsEmpty || multiColumns) && !bodyIsEmpty) {
       // first we upload the new documents
       const uploadDocumentsPromise = uploadNewAttachments(body, uploadDocument);
-      uploadDocumentsPromise.then((result: UploadNewAttachmentsPromiseResult) => {
-        if (!result.contentState) {
-          return;
-        }
+      uploadDocumentsPromise
+        .then((result: UploadNewAttachmentsPromiseResult) => {
+          if (!result.contentState) {
+            return;
+          }
 
-        const variables = {
-          contentLocale: this.props.originalLocale,
-          postId: this.props.id,
-          subject: subject || '',
-          body: convertContentStateToHTML(result.contentState),
-          attachments: result.documentIds,
-          publicationState: publicationState
-        };
-        displayAlert('success', I18n.t('loading.wait'));
-        const oldSubject = this.props.subject;
-        updatePost({ variables: variables })
-          .then(() => {
-            let successMessage;
-            switch (publicationState) {
-            case PublicationStates.DRAFT:
-              successMessage = draftSuccessMsgId;
-              break;
-            case PublicationStates.SUBMITTED_AWAITING_MODERATION:
-              successMessage = 'debate.thread.postToBeValidated';
-              break;
-            default:
-              successMessage = postSuccessMsgId;
-            }
-            displayAlert('success', I18n.t(successMessage));
-            this.props.goBackToViewMode();
-            this.props.onSuccess(variables.subject, variables.body, variables.publicationState);
-            if (childrenUpdate && oldSubject !== subject) {
-              // If we edited the subject, we need to reload all descendants posts,
-              // we do this by refetch all Post queries.
-              // Descendants are actually a subset of Post queries, so we overfetch here.
-              // This is fine, editing a subject should be a rare action.
-              const queryManager = this.props.client.queryManager;
-              queryManager.queryIdsByName.Post.forEach((queryId) => {
-                queryManager.observableQueries[queryId].observableQuery.refetch();
-              });
-            }
-          })
-          .catch((error) => {
-            displayAlert('danger', `${error}`);
-          });
-      });
+          const variables = {
+            contentLocale: this.props.originalLocale,
+            postId: this.props.id,
+            subject: subject || '',
+            body: convertContentStateToHTML(result.contentState),
+            attachments: result.documentIds,
+            publicationState: publicationState
+          };
+          displayAlert('success', I18n.t('loading.wait'));
+          const oldSubject = this.props.subject;
+          updatePost({ variables: variables })
+            .then(() => {
+              let successMessage;
+              switch (publicationState) {
+              case PublicationStates.DRAFT:
+                successMessage = draftSuccessMsgId;
+                break;
+              case PublicationStates.SUBMITTED_AWAITING_MODERATION:
+                successMessage = 'debate.thread.postToBeValidated';
+                break;
+              default:
+                successMessage = postSuccessMsgId;
+              }
+              displayAlert('success', I18n.t(successMessage));
+              this.props.goBackToViewMode();
+              this.props.onSuccess(variables.subject, variables.body, variables.publicationState);
+              if (childrenUpdate && oldSubject !== subject) {
+                // If we edited the subject, we need to reload all descendants posts,
+                // we do this by refetch all Post queries.
+                // Descendants are actually a subset of Post queries, so we overfetch here.
+                // This is fine, editing a subject should be a rare action.
+                const queryManager = this.props.client.queryManager;
+                queryManager.queryIdsByName.Post.forEach((queryId) => {
+                  queryManager.observableQueries[queryId].observableQuery.refetch();
+                });
+              }
+            })
+            .catch((error) => {
+              displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+            });
+        })
+        .catch((error) => {
+          displayAlert('danger', error.message.replace('GraphQL error: ', ''));
+        });
     } else if (subjectIsEmpty && !multiColumns) {
       displayAlert('warning', I18n.t('debate.thread.fillSubject'));
     } else if (bodyIsEmpty) {
