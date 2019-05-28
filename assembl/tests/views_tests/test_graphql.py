@@ -1699,6 +1699,37 @@ mutation uploadDocument($file: String!) {
     assert res.data['uploadDocument']['document']['externalUrl'].endswith(
         '/data')
 
+def test_mutation_upload_document_extension_forbidden(graphql_request, idea_in_thread_phase):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = u'path/to/image.php'
+        type = 'text/plain'
+
+    graphql_request.POST['variables.file'] = FieldStorage()
+    res = schema.execute(u"""
+mutation uploadDocument($file: String!) {
+    uploadDocument(
+        file: $file,
+    ) {
+        document {
+            ... on Document {
+                id
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+                         variable_values={
+                             "file": "variables.file"
+                         })
+    assert res.errors
+    assert res.errors[0].message == "It looks like you do not have the right to do this action."\
+    " If you think it is an error, please reconnect to the platform and try again."
 
 def test_mutation_upload_document_windows_path(graphql_request, idea_in_thread_phase):
     import os
