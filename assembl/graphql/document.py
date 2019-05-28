@@ -11,6 +11,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import CrudPermissions
+from assembl.lib.config import get_config
 
 from .permissions_helpers import require_cls_permission
 from .types import SecureObjectType
@@ -66,7 +67,7 @@ class UploadDocument(graphene.Mutation):
             # with path using "/". Using ntpath works for both Linux and Windows path
             filename = ntpath.basename(context.POST[uploaded_file].filename)
             extension = filename.split('.')[~0]
-            if extension not in context.registry.settings['allowed_extensions']:
+            if extension not in get_config()['allowed_extensions']:
                 error = _('It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again.')
                 raise HTTPUnauthorized(context.localizer.translate(error))
             mime_type = context.POST[uploaded_file].type
