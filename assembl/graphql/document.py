@@ -1,5 +1,3 @@
-import ntpath
-
 import graphene
 from graphene.relay import Node
 import ntpath
@@ -68,7 +66,7 @@ class UploadDocument(graphene.Mutation):
             filename = ntpath.basename(context.POST[uploaded_file].filename)
             extension = filename.split('.')[~0]
             if extension not in get_config()['allowed_extensions']:
-                error = _('It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again.')
+                error = _('Sorry, this file type is not allowed.')
                 raise HTTPUnauthorized(context.localizer.translate(error))
             mime_type = context.POST[uploaded_file].type
             document = models.File(
