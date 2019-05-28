@@ -21,7 +21,7 @@ ink_css
           <tr>
             <td>
               <img style="margin: 0 10px 10px 0; max-width: 40px; max-height: 40px;" src="{{ frontendUrls.get_agentprofile_avatar_url(notification.event_source_object().creator, 40) }}">
-              <em>{{ notification.event_source_object().creator.name }}</em>
+              <em>{{ notification.event_source_object().creator.display_name() }}</em>
               <hr style="clear: both">
               {%- block post_body %}
                 {{ notification.event_source_object().get_original_body_as_html() }}
