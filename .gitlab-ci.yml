@@ -13,11 +13,14 @@ cache:
     - assembl/static2/node_modules/
     - /usr/local/share/.cache/yarn/v2
 
+# test > test_frontend: OK for byw-invoke (temporary comment to run test faster)
+
 test_frontend:
   stage: test
   except:
     - master
     - tmp_master_for_ci_cd
+    - byw-invoke
   image: node:10
   before_script:
     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
