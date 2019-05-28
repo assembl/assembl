@@ -29,7 +29,7 @@ export const FICTION_DELETE_CALLBACK = 'FICTION_DELETE_CALLBACK';
 export const USER_ID_NOT_FOUND = -9999;
 export const PICTURES_LENGTH = 40; // Number of pictures available on S3
 export const PICTURE_BASE_URL = 'https://s3-eu-west-1.amazonaws.com';
-export const BM_PICTURE_BASE_URL = `${PICTURE_BASE_URL}/brightmirror/preview-`;
+export const BM_PICTURE_BASE_URL = `${PICTURE_BASE_URL}/bluenove-assembl-images/bm/preview-`;
 export const SEMANTIC_ANALYSIS_PICTURE_BANNER_URL = `${PICTURE_BASE_URL}/bluenove-assembl-images/banner-semantic.png`;
 export const PICTURE_EXTENSION = '.jpg';
 

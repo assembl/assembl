@@ -81,6 +81,9 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
 
     const { originalBody, originalSubject } = getOriginalBodyAndSubject(false, post.subjectEntries, post.bodyEntries);
 
+    // Generate the fiction preview ID
+    const pictureId = (post.dbId * (post.dbId - 1)) % PICTURES_LENGTH;
+
     result.push(
       <Animated key={post.id} preset="scalein">
         <FictionPreview
@@ -97,7 +100,7 @@ const FictionsList = ({ posts, identifier, refetchIdea, lang, themeId }: Props) 
           publicationState={post.publicationState}
           deleteFictionHandler={deleteFictionHandler}
           fictionMetaInfo={fictionMetaInfo}
-          pictureId={post.dbId % PICTURES_LENGTH}
+          pictureId={pictureId}
         />
       </Animated>
     );
