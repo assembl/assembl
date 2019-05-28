@@ -90,6 +90,7 @@ build_wheel:
   only:
     - develop
     - invoke
+    - byw-invoke
   variables:
     LC_ALL: C.UTF-8
     LANG: en.UTF-8
