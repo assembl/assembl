@@ -225,10 +225,7 @@ def get_assembl_version(discussion):
             user_id, discussion.id)
         if P_ADMIN_DISC in permissions:
             return pkg_resources.get_distribution("assembl").version
-        else:
-            return ""
-    else:
-        return ""
+    return ""
 
 
 def react_base_view(request, required_permission=P_READ):
