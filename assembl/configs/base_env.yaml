@@ -184,6 +184,13 @@ theme_base: ""
 # To be completed if needed
 allowed_extensions:
   - pdf
-  - png
-  - jpg
+  - doc
+  - docx
+  - ppt
+  - pptx
+  - xls
+  - xlsx
   - jpeg
+  - png
+  - gif
+  - jpg

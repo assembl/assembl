@@ -168,4 +168,4 @@ maxretry = 10
 # To isolate themes, each have been put in a bucket. Declare where the bucket is for access
 # ie. https://<bucket-url>, or on local machine: /opts/assembl_themes/<bucket>/
 theme_base =
-allowed_extensions = pdf png jpg jpeg
+allowed_extensions = pdf doc docx ppt pptx xls xlsx jpeg png gif jpg
