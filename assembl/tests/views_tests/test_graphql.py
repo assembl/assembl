@@ -1728,8 +1728,7 @@ mutation uploadDocument($file: String!) {
                              "file": "variables.file"
                          })
     assert res.errors
-    assert res.errors[0].message == "It looks like you do not have the right to do this action."\
-    " If you think it is an error, please reconnect to the platform and try again."
+    assert res.errors[0].message == "Sorry, this file type is not allowed."
 
 def test_mutation_upload_document_windows_path(graphql_request, idea_in_thread_phase):
     import os
