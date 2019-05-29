@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-02-04 16:22+0100\n"
+"POT-Creation-Date: 2019-05-29 11:04+0200\n"
 "PO-Revision-Date: 2018-05-18 16:18+0200\n"
 "Last-Translator: \n"
 "Language: ro\n"
@@ -18,23 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: assembl/auth/util.py:140
+#: assembl/auth/util.py:151
 msgid "Your session has expired, you need to login again"
 msgstr "Sesiunea dvs. a expirat, trebuie să vă autentificați din nou"
 
-#: assembl/auth/util.py:519
+#: assembl/auth/util.py:530
 msgid "The CSV file must have two columns"
 msgstr "Fișierul CSV trebuie să aibă două coloane"
 
-#: assembl/auth/util.py:526
+#: assembl/auth/util.py:537
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr "Not an email: <%s> at line %d"
 
-#: assembl/auth/util.py:529
+#: assembl/auth/util.py:540
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr "Nume prea scurt: <%s> la linia %d"
+
+#: assembl/graphql/configurable_fields.py:331 assembl/views/api2/auth.py:504
+msgid "We already have a user with this username."
+msgstr "Avem deja un utilizator cu acest nume de utilizator."
+
+#: assembl/graphql/configurable_fields.py:334 assembl/views/api2/auth.py:515
+msgid "The username must be less than 20 characters."
+msgstr "Utilizați un nume de minim 3 caractere"
+
+#: assembl/graphql/discussion.py:615
+msgid "Must pass at least one language to be saved"
+msgstr ""
+
+#: assembl/graphql/discussion.py:661
+msgid "This slug is an old slug of another debate, you can't use it."
+msgstr ""
+
+#: assembl/graphql/discussion.py:667
+msgid "This slug is already used by another debate, you can't use it."
+msgstr ""
 
 #: assembl/graphql/permissions_helpers.py:9
 msgid ""
@@ -42,7 +62,11 @@ msgid ""
 "it is an error, please reconnect to the platform and try again."
 msgstr ""
 
-#: assembl/graphql/post.py:362
+#: assembl/graphql/post.py:332
+msgid "Sorry, you can no longer submit a post as the phase is now closed."
+msgstr ""
+
+#: assembl/graphql/post.py:372
 msgid "Proposal"
 msgstr ""
 
@@ -54,123 +78,123 @@ msgstr "${val} Nu poate fi serializat: ${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val} nu este un șir: ${err}"
 
-#: assembl/models/auth.py:634
+#: assembl/models/auth.py:641
 msgid "Straight rows of keys are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:635
+#: assembl/models/auth.py:642
 msgid "Short keyboard patterns are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:636
+#: assembl/models/auth.py:643
 msgid "Repeats like \"aaa\" are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:637
+#: assembl/models/auth.py:644
 msgid "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"."
 msgstr ""
 
-#: assembl/models/auth.py:638
+#: assembl/models/auth.py:645
 msgid "Sequences like abc or 6543 are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:639
+#: assembl/models/auth.py:646
 msgid "Recent years are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:640
+#: assembl/models/auth.py:647
 msgid "Dates are often easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:641
+#: assembl/models/auth.py:648
 msgid "This is a top-10 common password."
 msgstr ""
 
-#: assembl/models/auth.py:642
+#: assembl/models/auth.py:649
 msgid "This is a top-100 common password."
 msgstr ""
 
-#: assembl/models/auth.py:643
+#: assembl/models/auth.py:650
 msgid "This is a very common password."
 msgstr ""
 
-#: assembl/models/auth.py:644
+#: assembl/models/auth.py:651
 msgid "This is similar to a commonly used password."
 msgstr ""
 
-#: assembl/models/auth.py:645
+#: assembl/models/auth.py:652
 msgid "A word by itself is easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:646
+#: assembl/models/auth.py:653
 msgid "Names and surnames by themselves are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:647
+#: assembl/models/auth.py:654
 msgid "Common names and surnames are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:648
+#: assembl/models/auth.py:655
 msgid "Use a few words, avoid common phrases."
 msgstr ""
 
-#: assembl/models/auth.py:649
+#: assembl/models/auth.py:656
 msgid "No need for symbols, digits, or uppercase letters."
 msgstr ""
 
-#: assembl/models/auth.py:650
+#: assembl/models/auth.py:657
 msgid "Add another word or two. Uncommon words are better."
 msgstr ""
 
-#: assembl/models/auth.py:651
+#: assembl/models/auth.py:658
 msgid "Use a longer keyboard pattern with more turns."
 msgstr ""
 
-#: assembl/models/auth.py:652
+#: assembl/models/auth.py:659
 msgid "Avoid repeated words and characters."
 msgstr ""
 
-#: assembl/models/auth.py:653
+#: assembl/models/auth.py:660
 msgid "Avoid sequences."
 msgstr ""
 
-#: assembl/models/auth.py:654
+#: assembl/models/auth.py:661
 msgid "Avoid recent years."
 msgstr ""
 
-#: assembl/models/auth.py:655
+#: assembl/models/auth.py:662
 msgid "Avoid years that are associated with you."
 msgstr ""
 
-#: assembl/models/auth.py:656
+#: assembl/models/auth.py:663
 msgid "Avoid dates and years that are associated with you."
 msgstr ""
 
-#: assembl/models/auth.py:657
+#: assembl/models/auth.py:664
 msgid "Capitalization doesn't help very much."
 msgstr ""
 
-#: assembl/models/auth.py:658
+#: assembl/models/auth.py:665
 msgid "All-uppercase is almost as easy to guess as all-lowercase."
 msgstr ""
 
-#: assembl/models/auth.py:659
+#: assembl/models/auth.py:666
 msgid "Reversed words aren't much harder to guess."
 msgstr ""
 
-#: assembl/models/auth.py:660
+#: assembl/models/auth.py:667
 msgid "Predictable substitutions like '@' instead of 'a' don't help very much."
 msgstr ""
 
-#: assembl/models/auth.py:952
+#: assembl/models/auth.py:980
 msgid "Password shorter than ${minlen} characters"
 msgstr ""
 
-#: assembl/models/auth.py:963
+#: assembl/models/auth.py:991
 msgid "Your password should include at least a ${class}"
 msgstr ""
 
-#: assembl/models/auth.py:976
+#: assembl/models/auth.py:1004
 msgid "Please do not repeat an older password."
 msgstr ""
 
@@ -178,7 +202,7 @@ msgstr ""
 msgid "Unknown User ${uid}"
 msgstr "Utilizator necunoscut ${uid}"
 
-#: assembl/models/idea.py:274 assembl/static/js/app/views/ideaPanel.js:211
+#: assembl/models/idea.py:293 assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr "Idee"
 
@@ -198,23 +222,23 @@ msgstr "Cineva răspunde direct unuia dintre mesajele dvs."
 msgid "SYNTHESIS: "
 msgstr "SINTEZĂ:"
 
-#: assembl/models/preferences.py:115 assembl/models/preferences.py:651
+#: assembl/models/preferences.py:116 assembl/models/preferences.py:605
 msgid "No special authentication"
 msgstr "Nicio autentificare specială"
 
-#: assembl/models/preferences.py:409
+#: assembl/models/preferences.py:410
 msgid "Languages used"
 msgstr "Limbi utilizate"
 
-#: assembl/models/preferences.py:410
+#: assembl/models/preferences.py:411
 msgid "All languages expected in the discussion"
 msgstr "Toate limbile așteptate în discuție "
 
-#: assembl/models/preferences.py:420
+#: assembl/models/preferences.py:421
 msgid "Use landing page"
 msgstr "Utilizați pagina de aterizare"
 
-#: assembl/models/preferences.py:421
+#: assembl/models/preferences.py:422
 msgid ""
 "Are users directed to the landing page and phases at login, or diretly to"
 " the debate"
@@ -222,185 +246,139 @@ msgstr ""
 "Sunt utilizatorii direcționați spre pagina de aterizare și faze la "
 "conectare sau direct la dezbatere"
 
-#: assembl/models/preferences.py:429 assembl/models/preferences.py:443
+#: assembl/models/preferences.py:430 assembl/models/preferences.py:436
 msgid "Translation service"
 msgstr "Serviciu de traducere"
 
-#: assembl/models/preferences.py:432
+#: assembl/models/preferences.py:433
 msgid "No translation"
 msgstr "Fără traducere"
 
-#: assembl/models/preferences.py:434
-msgid "Dummy translation service (two steps)"
-msgstr "Dummy translation service (two steps)"
-
-#: assembl/models/preferences.py:436
-msgid "Dummy translation service (one step)"
-msgstr "Dummy translation service (one step)"
-
-#: assembl/models/preferences.py:438
-msgid "Dummy translation service (two steps) with errors"
-msgstr "Dummy translation service (two steps) with errors"
-
-#: assembl/models/preferences.py:440
-msgid "Dummy translation service (one step) with errors"
-msgstr "Dummy translation service (one step) with errors"
-
-#: assembl/models/preferences.py:442
+#: assembl/models/preferences.py:435
 msgid "Google Translate"
 msgstr "Traducere Google"
 
-#: assembl/models/preferences.py:455
+#: assembl/models/preferences.py:448
 msgid "Panel order in simple view"
 msgstr "Ordine panou în vizualizare simplă"
 
-#: assembl/models/preferences.py:458
+#: assembl/models/preferences.py:451
 msgid "Navigation, Idea, Messages"
 msgstr "Navigare, Idee, Mesaje"
 
-#: assembl/models/preferences.py:459
+#: assembl/models/preferences.py:452
 msgid "Navigation, Messages, Idea"
 msgstr "Navigare, Mesaje, Idee"
 
-#: assembl/models/preferences.py:460
+#: assembl/models/preferences.py:453
 msgid "Order of panels"
 msgstr "Ordinea panourilor"
 
-#: assembl/models/preferences.py:472
+#: assembl/models/preferences.py:465
 msgid "Extra JSON parameters"
 msgstr "Parametri suplimentare JSON"
 
-#: assembl/models/preferences.py:474
+#: assembl/models/preferences.py:467
 msgid "Parameters for quick frontend settings"
 msgstr "Parametri pentru setări rapide Frontend "
 
-#: assembl/models/preferences.py:483
+#: assembl/models/preferences.py:476
 msgid "Terms of use URL"
 msgstr "URL Termeni de utilizare"
 
-#: assembl/models/preferences.py:485
+#: assembl/models/preferences.py:478
 msgid "URL of a document presenting terms of use for the discussion"
 msgstr "URL al unui document ce prezintă termenii de utilizare pentru discuție"
 
-#: assembl/models/preferences.py:494
+#: assembl/models/preferences.py:487
 msgid "Video URL"
 msgstr "URL videoclip"
 
-#: assembl/models/preferences.py:496
+#: assembl/models/preferences.py:489
 msgid "URL of a video presenting the discussion"
 msgstr "URL al unui videoclip ce prezintă discuția"
 
-#: assembl/models/preferences.py:505
+#: assembl/models/preferences.py:498
 msgid "Tab title"
 msgstr "Titluri mesaj"
 
-#: assembl/models/preferences.py:507
+#: assembl/models/preferences.py:500
 msgid "Title which appears on the tab, by default assembl"
 msgstr ""
 
-#: assembl/models/preferences.py:515
+#: assembl/models/preferences.py:508
 msgid "Mandatory legal contents validation"
 msgstr ""
 
-#: assembl/models/preferences.py:517
+#: assembl/models/preferences.py:510
 msgid "Activate or not mandatory validation of legal contents after SSO login."
 msgstr ""
 
-#: assembl/models/preferences.py:526
+#: assembl/models/preferences.py:519
 msgid "Video description"
 msgstr "Descriere videoclip"
 
-#: assembl/models/preferences.py:528
+#: assembl/models/preferences.py:521
 msgid "Description of the video presenting the discussion"
 msgstr "Descrierea unui videoclip ce prezintă discuția"
 
-#: assembl/models/preferences.py:537
+#: assembl/models/preferences.py:530
 msgid "Social sharing"
 msgstr "Partajare site-uri de socializare"
 
-#: assembl/models/preferences.py:540
+#: assembl/models/preferences.py:533
 msgid "Show the share button on posts and ideas"
 msgstr "Arată butonul de partajare la postări și idei"
 
-#: assembl/models/preferences.py:551
+#: assembl/models/preferences.py:544
 msgid "Private social sharing"
 msgstr "Partajare privată pe site-uri de socializare"
 
-#: assembl/models/preferences.py:553
+#: assembl/models/preferences.py:546
 msgid "Publicizing or privatizing social sharing"
 msgstr ""
 "Difuzare sau configurare ca privat a partajării pe site-urile de "
 "socializare"
 
-#: assembl/models/preferences.py:562
+#: assembl/models/preferences.py:555
 msgid "Generic Errors"
 msgstr ""
 
-#: assembl/models/preferences.py:564
+#: assembl/models/preferences.py:557
 msgid "Display a generic error message."
 msgstr ""
 
-#: assembl/models/preferences.py:573
+#: assembl/models/preferences.py:566
 msgid "Extra data for CSV reports"
 msgstr "Date suplimentare pentru rapoartele CSV"
 
-#: assembl/models/preferences.py:576
+#: assembl/models/preferences.py:569
 msgid "data taken from social_auth's extra_data to add to CSV reports"
 msgstr "data taken from social_auth's extra_data to add to CSV reports"
 
-#: assembl/models/preferences.py:588
+#: assembl/models/preferences.py:581
 msgid "Require anti-virus check"
 msgstr "Necesită verificare antivirus"
 
-#: assembl/models/preferences.py:591
+#: assembl/models/preferences.py:584
 msgid "Run an anti-virus on file attachments"
 msgstr "Rulează un antivirus pe documentele atașate la fișier"
 
-#: assembl/models/preferences.py:602
-msgid "Get keywords from Watson"
+#: assembl/models/preferences.py:594
+#, fuzzy
+#| msgid "activate web annotation"
+msgid "Activate semantic analysis"
+msgstr "activați adnotarea web"
+
+#: assembl/models/preferences.py:596
+msgid "Use Watson for semantic analysis"
 msgstr ""
 
-#: assembl/models/preferences.py:604
-msgid "Use Watson to identify keywords"
-msgstr ""
-
-#: assembl/models/preferences.py:611
-msgid "Get concepts from Watson"
-msgstr ""
-
-#: assembl/models/preferences.py:613
-msgid "Use Watson to identify concepts"
-msgstr ""
-
-#: assembl/models/preferences.py:620
-msgid "Get categories from Watson"
-msgstr ""
-
-#: assembl/models/preferences.py:622
-msgid "Use Watson to identify categories"
-msgstr ""
-
-#: assembl/models/preferences.py:629
-msgid "Get sentiments from Watson"
-msgstr ""
-
-#: assembl/models/preferences.py:631
-msgid "Use Watson to identify sentiments"
-msgstr ""
-
-#: assembl/models/preferences.py:638
-msgid "Get emotions from Watson"
-msgstr ""
-
-#: assembl/models/preferences.py:640
-msgid "Use Watson to identify emotions"
-msgstr ""
-
-#: assembl/models/preferences.py:653
+#: assembl/models/preferences.py:607
 msgid "Authentication service type"
 msgstr "Tip serviciu de autentificare"
 
-#: assembl/models/preferences.py:655
+#: assembl/models/preferences.py:609
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -412,21 +390,21 @@ msgstr ""
 "server și înscrierea automată la discuție va solicita un cont de la acest"
 " backend."
 
-#: assembl/models/preferences.py:670
+#: assembl/models/preferences.py:624
 msgid "Allow access to moderated text"
 msgstr "Permite accesul la textul moderat"
 
-#: assembl/models/preferences.py:673
+#: assembl/models/preferences.py:627
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr ""
 "Sunt postările moderate doar ascunse sau sunt setate implicit ca "
 "inaccesibile?"
 
-#: assembl/models/preferences.py:686
+#: assembl/models/preferences.py:640
 msgid "Idea panel opens automatically"
 msgstr "Panoul de idei se deschide automat"
 
-#: assembl/models/preferences.py:689
+#: assembl/models/preferences.py:643
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
@@ -434,31 +412,31 @@ msgstr ""
 "Panoul de idei se deschide automat atunci când se dă clic pe o idee? (și "
 "se deschide atunci când se dă clic pe o sesiune specială)"
 
-#: assembl/models/preferences.py:701
+#: assembl/models/preferences.py:655
 msgid "Ids of columns in column view"
 msgstr "Coloana de ID-uri în vizualizarea coloanei"
 
-#: assembl/models/preferences.py:703
+#: assembl/models/preferences.py:657
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr ""
 "Care sunt identificatorii (ordonați) ai coloanelor în vizualizările cu "
 "mai multe coloane?"
 
-#: assembl/models/preferences.py:716
+#: assembl/models/preferences.py:670
 msgid "Default colors of columns in column view"
 msgstr "Culori implicite ale coloanelor în vizualizarea coloanei"
 
-#: assembl/models/preferences.py:718
+#: assembl/models/preferences.py:672
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr ""
 "Care sunt culorile temei (implicite) ale coloanelor în vizualizările cu "
 "mai multe coloane?"
 
-#: assembl/models/preferences.py:730
+#: assembl/models/preferences.py:684
 msgid "Names of columns in column view"
 msgstr "Numele coloanelor în vizualizarea coloanei"
 
-#: assembl/models/preferences.py:732
+#: assembl/models/preferences.py:686
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
@@ -466,19 +444,19 @@ msgstr ""
 "Care sunt numele (implicite) ale coloanelor în vizualizările cu mai multe"
 " coloane, în fiecare limbă de discuție?"
 
-#: assembl/models/preferences.py:745
+#: assembl/models/preferences.py:699
 msgid "Default permissions"
 msgstr "Permisiuni implicite"
 
-#: assembl/models/preferences.py:748
+#: assembl/models/preferences.py:702
 msgid "The basic permissions for a new discussion"
 msgstr "Permisiunile de bază pentru o nouă discuție"
 
-#: assembl/models/preferences.py:830
+#: assembl/models/preferences.py:788
 msgid "Require Email Domain"
 msgstr "Necesită domeniu de e-mail"
 
-#: assembl/models/preferences.py:833
+#: assembl/models/preferences.py:791
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -490,61 +468,61 @@ msgstr ""
 " self-register to this discussion. Anyone can self-register if this is "
 "empty."
 
-#: assembl/models/preferences.py:849
+#: assembl/models/preferences.py:807
 msgid "Whitelist on authentication service"
 msgstr "Tip serviciu de autentificare"
 
-#: assembl/models/preferences.py:852
+#: assembl/models/preferences.py:810
 msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
-#: assembl/models/preferences.py:864
+#: assembl/models/preferences.py:822
 msgid "Whitelist on standard registration"
 msgstr ""
 
-#: assembl/models/preferences.py:867
+#: assembl/models/preferences.py:825
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:879
+#: assembl/models/preferences.py:837
 msgid "Discussion administrators"
 msgstr "Statisticile discuției"
 
-#: assembl/models/preferences.py:882
+#: assembl/models/preferences.py:840
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
 
-#: assembl/models/preferences.py:895
+#: assembl/models/preferences.py:853
 msgid "Show CI Dashboard"
 msgstr "Afișați Tablou de bord CI"
 
-#: assembl/models/preferences.py:898
+#: assembl/models/preferences.py:856
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "Afișați Tablou de bord CI în fereastra grupului de panouri"
 
-#: assembl/models/preferences.py:910
+#: assembl/models/preferences.py:868
 msgid "URL of CI Dashboard"
 msgstr "URL Tablou de bord CI"
 
-#: assembl/models/preferences.py:912
+#: assembl/models/preferences.py:870
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "Configurarea vizualizărilor afișate în Tabloul de bord CI"
 
-#: assembl/models/preferences.py:930
+#: assembl/models/preferences.py:888
 msgid "Catalyst Visualizations"
 msgstr "Vizualizări Catalyst"
 
-#: assembl/models/preferences.py:933
+#: assembl/models/preferences.py:891
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "O descriere JSON a vizualizărilor disponibile Catalyst"
 
-#: assembl/models/preferences.py:945
+#: assembl/models/preferences.py:903
 msgid "Navigation sections"
 msgstr "Secțiuni navigare"
 
-#: assembl/models/preferences.py:948
+#: assembl/models/preferences.py:906
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
@@ -552,19 +530,19 @@ msgstr ""
 "O specificație JSON a vizualizărilor Catalyst  se va afișa în secțiunea "
 "navigare"
 
-#: assembl/models/preferences.py:961
+#: assembl/models/preferences.py:919
 msgid "Catalyst translations"
 msgstr "Traduceri Catalyst"
 
-#: assembl/models/preferences.py:964
+#: assembl/models/preferences.py:922
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "Traduceri aplicabile vizualizărilor Catalyst în format Jed (JSON)"
 
-#: assembl/models/preferences.py:981
+#: assembl/models/preferences.py:939
 msgid "Default Table of Ideas Collapsed state"
 msgstr "Stare restrânsă implicită Tabel de idei"
 
-#: assembl/models/preferences.py:984
+#: assembl/models/preferences.py:942
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
@@ -572,63 +550,62 @@ msgstr ""
 "Starea restrânsă/extinsă implicită a fiecărei idei din tabelul de idei. "
 "Un utilizator o poate suprascrie deschizând/închizând o idee"
 
-#: assembl/models/preferences.py:999
+#: assembl/models/preferences.py:957
 msgid "Preference data"
 msgstr "Date preferințe"
 
-#: assembl/models/preferences.py:1002
+#: assembl/models/preferences.py:960
 msgid "The preference configuration; override only with care"
 msgstr "Configurație preferințe: suprascrieți cu atenție"
 
-#: assembl/models/preferences.py:1014
+#: assembl/models/preferences.py:972
 msgid "Cookies banner"
 msgstr "Banner cookie-uri"
 
-#: assembl/models/preferences.py:1017
+#: assembl/models/preferences.py:975
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "Afișați bannerul care permite dezactivarea cookie-urilor Piwik"
 
-#: assembl/models/preferences.py:1029
+#: assembl/models/preferences.py:987
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:1032
+#: assembl/models/preferences.py:990
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:1042
+#: assembl/models/preferences.py:1000
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:1045
+#: assembl/models/preferences.py:1003
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:1055 assembl/models/preferences.py:1058
+#: assembl/models/preferences.py:1013 assembl/models/preferences.py:1016
 msgid "Harvesting translation"
 msgstr "Traduceri Catalyst"
 
-#: assembl/models/preferences.py:1066
+#: assembl/models/preferences.py:1024
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr ""
 
-#: assembl/models/preferences.py:1069
+#: assembl/models/preferences.py:1027
 msgid ""
 "A list of valid domain names or IP addresses that are allowed to make "
 "CORS api calls to the GraphQL API"
 msgstr ""
 
-#: assembl/models/preferences.py:1079
+#: assembl/models/preferences.py:1037
 #, fuzzy
-#| msgid "Published without moderation"
 msgid "Use moderation"
 msgstr "Publicat fără moderare"
 
-#: assembl/models/preferences.py:1080
+#: assembl/models/preferences.py:1038
 msgid "Is the moderation activated or not"
 msgstr ""
 
@@ -999,7 +976,6 @@ msgstr ""
 "a vă ajuta să începeți utilizarea Assembl."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
-#: assembl/templates/join0.jinja2:6
 msgid "Join the discussion"
 msgstr "Alăturați-vă discuției"
 
@@ -2615,22 +2591,6 @@ msgstr "De către"
 #: assembl/templates/idea_in_synthesis.jinja2:16
 msgid "See the conversation around this idea"
 msgstr "Vizualizați conversația din jurul acestei idei"
-
-#: assembl/templates/join0.jinja2:7
-#, fuzzy, python-format
-#| msgid "you must first join this discussion"
-msgid "This is you first visit to the discussion '%s'."
-msgstr "mai întâi trebuie să vă alăturați discuției"
-
-#: assembl/templates/join0.jinja2:9
-msgid "By entering, you agree to receive the following notifications:"
-msgstr ""
-
-#: assembl/templates/join0.jinja2:17
-#, fuzzy
-#| msgid "Log in"
-msgid "join"
-msgstr "Autentificați-vă"
 
 #: assembl/templates/login.jinja2:30
 #, python-format
@@ -4962,21 +4922,21 @@ msgstr "Dezabonare"
 msgid "unsubscribed"
 msgstr "dezabonat"
 
-#: assembl/views/__init__.py:755
+#: assembl/views/__init__.py:773
 msgid "error"
 msgstr ""
 
-#: assembl/views/__init__.py:756
+#: assembl/views/__init__.py:774
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
 "accessible."
 msgstr ""
 
-#: assembl/views/__init__.py:757
+#: assembl/views/__init__.py:775
 msgid "We apologize for the inconvenience"
 msgstr ""
 
-#: assembl/views/__init__.py:758
+#: assembl/views/__init__.py:776
 msgid "Homepage"
 msgstr ""
 
@@ -5005,76 +4965,68 @@ msgstr "Pentru a vizualiza postările citite, trebuie să vă autentificați"
 msgid "Your message is empty"
 msgstr "Mesajul dvs. este gol"
 
-#: assembl/views/api2/auth.py:46
+#: assembl/views/api2/auth.py:47
 msgid "The provided input combination is not valid."
 msgstr ""
 
-#: assembl/views/api2/auth.py:350
+#: assembl/views/api2/auth.py:351
 msgid "The user does not exist"
 msgstr "Utilizatorul nu există"
 
-#: assembl/views/api2/auth.py:367
+#: assembl/views/api2/auth.py:368
 msgid "This email does not exist"
 msgstr "Acest e-mail nu există"
 
-#: assembl/views/api2/auth.py:377
+#: assembl/views/api2/auth.py:378
 msgid "Please give an identifier"
 msgstr "Indicați un identificator"
 
-#: assembl/views/api2/auth.py:383
+#: assembl/views/api2/auth.py:384
 msgid "This user has no email"
 msgstr "Acest utilizator nu are e-mail"
 
-#: assembl/views/api2/auth.py:390
+#: assembl/views/api2/auth.py:391
 msgid "This is not a user"
 msgstr "Acesta nu este un utilizator"
 
-#: assembl/views/api2/auth.py:414
+#: assembl/views/api2/auth.py:415
 msgid "The passwords that were entered are mismatched!"
 msgstr "Parolele introduse nu corespund!"
 
-#: assembl/views/api2/auth.py:428 assembl/views/auth/views.py:968
+#: assembl/views/api2/auth.py:429 assembl/views/auth/views.py:968
 #: assembl/views/auth/views.py:1036
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "Link nevalid. Doriți să vă trimitem altul?"
 
-#: assembl/views/api2/auth.py:431 assembl/views/auth/views.py:971
+#: assembl/views/api2/auth.py:432 assembl/views/auth/views.py:971
 #: assembl/views/auth/views.py:1039
 msgid "This link has been used. Do you want us to send another?"
 msgstr "Linkul a fost utilizat deja. Doriți să vă trimitem altul?"
 
-#: assembl/views/api2/auth.py:461 assembl/views/auth/views.py:392
+#: assembl/views/api2/auth.py:465 assembl/views/auth/views.py:392
 msgid "Please use a name of at least 3 characters"
 msgstr "Utilizați un nume de minim 3 caractere"
 
-#: assembl/views/api2/auth.py:470 assembl/views/auth/views.py:325
+#: assembl/views/api2/auth.py:474 assembl/views/auth/views.py:325
 #: assembl/views/auth/views.py:399
 msgid "This is not a valid email"
 msgstr "E-mailul nu este valid"
 
-#: assembl/views/api2/auth.py:479 assembl/views/auth/views.py:406
+#: assembl/views/api2/auth.py:483 assembl/views/auth/views.py:406
 msgid "We already have a user with this email."
 msgstr "Avem deja un utilizator cu acest e-mail."
 
-#: assembl/views/api2/auth.py:491
+#: assembl/views/api2/auth.py:495
 msgid "No email."
 msgstr "Niciun e-mail."
 
-#: assembl/views/api2/auth.py:498
-msgid "We already have a user with this username."
-msgstr "Avem deja un utilizator cu acest nume de utilizator."
-
-#: assembl/views/api2/auth.py:509
-msgid "The username must be less than 20 characters."
-msgstr "Utilizați un nume de minim 3 caractere"
-
-#: assembl/views/api2/auth.py:523
+#: assembl/views/api2/auth.py:529
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
 msgstr ""
 
-#: assembl/views/api2/auth.py:524
+#: assembl/views/api2/auth.py:530
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "one of ${emails} for support."
@@ -5345,3 +5297,57 @@ msgstr "Nicio discuție găsită pentru slug=%s"
 
 #~ msgid ""
 #~ msgstr ""
+
+#~ msgid "Dummy translation service (two steps)"
+#~ msgstr "Dummy translation service (two steps)"
+
+#~ msgid "Dummy translation service (one step)"
+#~ msgstr "Dummy translation service (one step)"
+
+#~ msgid "Dummy translation service (two steps) with errors"
+#~ msgstr "Dummy translation service (two steps) with errors"
+
+#~ msgid "Dummy translation service (one step) with errors"
+#~ msgstr "Dummy translation service (one step) with errors"
+
+#~ msgid "Get keywords from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify keywords"
+#~ msgstr ""
+
+#~ msgid "Get concepts from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify concepts"
+#~ msgstr ""
+
+#~ msgid "Get categories from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify categories"
+#~ msgstr ""
+
+#~ msgid "Get sentiments from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify sentiments"
+#~ msgstr ""
+
+#~ msgid "Get emotions from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify emotions"
+#~ msgstr ""
+
+# | msgid "you must first join this discussion"
+#~ msgid "This is you first visit to the discussion '%s'."
+#~ msgstr "mai întâi trebuie să vă alăturați discuției"
+
+#~ msgid "By entering, you agree to receive the following notifications:"
+#~ msgstr ""
+
+# | msgid "Log in"
+#~ msgid "join"
+#~ msgstr "Autentificați-vă"
+

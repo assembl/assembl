@@ -732,7 +732,7 @@ mutation myFirstMutation {
     }
 }
 """ % first_question_id, context_value=graphql_request)
-    assert res.errors[0].message == 'It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again.'
+    assert res.errors[0].message == 'Sorry, you can no longer submit a post as the phase is now closed.'
     assert json.loads(json.dumps(res.data)) == {
         u'createPost': None
         }
@@ -761,7 +761,7 @@ mutation myFirstMutation {
     }
 }
 """ % first_question_id, context_value=graphql_request)
-    assert res.errors[0].message == 'It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again.'
+    assert res.errors[0].message == 'Sorry, you can no longer submit a post as the phase is now closed.'
     assert json.loads(json.dumps(res.data)) == {
         u'createPost': None
         }
