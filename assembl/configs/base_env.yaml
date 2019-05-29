@@ -178,3 +178,16 @@ maxretry: 10
 # Can be either a URL or a local filesystem path
 # IF URL, there should be no query strings
 theme_base: ""
+
+allowed_extensions:
+  - pdf
+  - doc
+  - docx
+  - ppt
+  - pptx
+  - xls
+  - xlsx
+  - jpeg
+  - png
+  - gif
+  - jpg
