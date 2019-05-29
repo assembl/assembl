@@ -122,8 +122,9 @@ class IdeaInterface(graphene.Interface):
             return self.num_posts
 
     def resolve_img(self, args, context, info):
-        if self.attachments:
-            return self.attachments[0].document
+        attachments = get_attachments_with_purpose(self.attachments, EMBED_ATTACHMENT)
+        if attachments:
+            return attachments[0].document
 
     def resolve_order(self, args, context, info):
         return self.get_order_from_first_parent()
