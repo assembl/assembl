@@ -311,7 +311,8 @@ def create_venv(c, path=None):
 def configure_github_user(c):
     c.run('git config --global user.email "%s"' % c.config._internal.github.user)
     c.run('git config --global user.name "%s"' % c.config._internal.github.email)
-    c.run('git remote add origin %s' % c.config._internal.github.repo)
+    # c.run('git remote rm origin')
+    # c.run('git remote add origin %s' % c.config._internal.github.repo)
 
 
 @task()
