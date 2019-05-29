@@ -24,6 +24,7 @@ import LegalForm from './legalForm';
 import SignupCheckbox from './signupCheckbox';
 import BackButton from '../../../app/components/debate/common/backButton';
 import Helper from '../common/helper';
+import { defaultPasswordRequirements } from '../../constants';
 
 type Props = {
   hasTermsAndConditions: boolean,
@@ -153,14 +154,6 @@ class SignupForm extends React.Component<Props, State> {
       userGuidelines: 'userGuidelines'
     };
 
-    const passwordRequirements = [
-      'lengthPassword',
-      'figurePassword',
-      'upperCasePassword',
-      'lowerCasePassword',
-      'specialCharacterPassword'
-    ];
-
     return (
       <div className="login-view">
         <div className="box-title">{I18n.t('login.createAccount')}</div>
@@ -185,7 +178,7 @@ class SignupForm extends React.Component<Props, State> {
                             <React.Fragment>
                               <p className="annotation no-margin">{I18n.t('login.passwordRequirementIntro')}</p>
                               <ul>
-                                {passwordRequirements.map(passwordRequirement => (
+                                {defaultPasswordRequirements.map(passwordRequirement => (
                                   <li className="annotation no-margin">{I18n.t(`login.${passwordRequirement}`)}</li>
                                 ))}
                               </ul>

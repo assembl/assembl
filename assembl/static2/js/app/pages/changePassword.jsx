@@ -3,11 +3,13 @@
 import React from 'react';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
+import Helper from '../components/common/helper';
+import inputHandler from '../utils/inputHandler';
 import { getAuthorizationToken, getDiscussionSlug } from '../utils/globalFunctions';
 import { postChangePassword } from '../services/authenticationService';
-import inputHandler from '../utils/inputHandler';
 import { get } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
+import { defaultPasswordRequirements } from '../constants';
 
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -75,13 +77,26 @@ class ChangePassword extends React.Component {
                   <Translate value="login.oldPasswordWarning" />
                 </span>
               </div>
-              <FormGroup className="margin-m">
+              <FormGroup className="margin-m align-flex">
                 <FormControl
                   type="password"
                   name="password1"
                   required
                   placeholder={I18n.t('login.newPassword')}
                   onChange={this.handleChangePassword}
+                />
+                <Helper
+                  classname="title"
+                  helperText={
+                    <React.Fragment>
+                      <p className="annotation no-margin">{I18n.t('login.passwordRequirementIntro')}</p>
+                      <ul>
+                        {defaultPasswordRequirements.map(passwordRequirement => (
+                          <li className="annotation no-margin">{I18n.t(`login.${passwordRequirement}`)}</li>
+                        ))}
+                      </ul>
+                    </React.Fragment>
+                  }
                 />
               </FormGroup>
               <FormGroup className="margin-m">

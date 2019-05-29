@@ -108,6 +108,14 @@ export const MESSAGE_VIEW = {
   brightMirror: 'brightMirror'
 };
 
+export const defaultPasswordRequirements = [
+  'lengthPassword',
+  'figurePassword',
+  'upperCasePassword',
+  'lowerCasePassword',
+  'specialCharacterPassword'
+];
+
 export const COOKIE_TYPES = [
   'ACCEPT_TRACKING_ON_DISCUSSION',
   'ACCEPT_SESSION_ON_DISCUSSION',
