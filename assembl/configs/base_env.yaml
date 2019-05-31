@@ -182,7 +182,7 @@ theme_base: ""
 # The extensions that are allowed for uploaded files
 # on thread module
 # To be completed if needed
-allowed_extensions:
+attachment_allowed_extensions:
   - pdf
   - doc
   - docx

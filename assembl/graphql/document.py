@@ -65,7 +65,7 @@ class UploadDocument(graphene.Mutation):
             # with path using "/". Using ntpath works for both Linux and Windows path
             filename = ntpath.basename(context.POST[uploaded_file].filename)
             extension = filename.split('.')[~0]
-            if extension not in get_config()['allowed_extensions']:
+            if extension not in get_config()['attachment_allowed_extensions']:
                 error = _('Sorry, this file type is not allowed.')
                 raise HTTPUnauthorized(context.localizer.translate(error))
             mime_type = context.POST[uploaded_file].type
