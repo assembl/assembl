@@ -169,11 +169,6 @@ maxretry = 10
 # ie. https://<bucket-url>, or on local machine: /opts/assembl_themes/<bucket>/
 theme_base =
 
-# The extensions that are allowed for uploaded files
-# on thread module
-# To be completed if needed
-attachment_allowed_extensions = pdf doc docx ppt pptx xls xlsx jpeg png gif jpg
-
 # The mime types that are allowed for uploaded files
 # on thread module
 # To be completed if needed

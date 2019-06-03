@@ -179,22 +179,6 @@ maxretry: 10
 # IF URL, there should be no query strings
 theme_base: ""
 
-# The extensions that are allowed for uploaded files
-# on thread module
-# To be completed if needed
-attachment_allowed_extensions:
-  - pdf
-  - doc
-  - docx
-  - ppt
-  - pptx
-  - xls
-  - xlsx
-  - jpeg
-  - png
-  - gif
-  - jpg
-
   # The mime types that are allowed for uploaded files
   # on thread module
   # To be completed if needed
