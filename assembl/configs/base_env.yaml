@@ -183,4 +183,6 @@ theme_base: ""
   # on thread module
   # To be completed if needed
   attachment_allowed_mime_types:
-    - image/png
+    - image/*
+    - video/*
+    - application/pdf
