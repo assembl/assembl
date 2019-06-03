@@ -1732,11 +1732,7 @@ mutation uploadDocument($file: String!) {
     assert res.data['uploadDocument']['document']['externalUrl'].endswith(
         '/data')
 
-
-
-
-
-def test_mutation_upload_document_extension_forbidden(graphql_request, idea_in_thread_phase):
+def test_mutation_upload_document_extension_forbidden_generic(graphql_request, idea_in_thread_phase):
     import os
     from io import BytesIO
 
@@ -1766,6 +1762,43 @@ mutation uploadDocument($file: String!) {
                          })
     assert res.errors
     assert res.errors[0].message == "Sorry, this file type is not allowed."
+
+
+
+def test_mutation_upload_document_extension_forbidden_specific(graphql_request, idea_in_thread_phase):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO('MZ\x90\x00\x03\x00\x00\x00\x04\x00\x00\x00\xff\xff\x00\x00\xb8\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x00\x0e\x1f\xba\x0e\x00\xb4\t\xcd!\xb8\x01L\xcd!This program cannot be run in DOS mode.\r\r\n$\x00\x00\x00\x00\x00\x00\x00PE\x00\x00L\x01\x0f\x00Y\x14\xf5\\\x00\x0c\x05\x00\xdb\x04\x00\x00\xe0\x00\x07\x01\x0b\x01\x02\x1e\x00\x18\x00\x00\x00*\x00\x00\x00\x04\x00\x00\xe0\x14\x00\x00\x00\x10\x00\x00\x000\x00\x00\x00\x00@\x00\x00\x10\x00\x00\x00\x02\x00\x00\x04\x00\x00\x00\x01\x00\x00\x00')
+        filename = u'path/to/test.exe'
+        type = 'application/exe'
+
+    graphql_request.POST['variables.file'] = FieldStorage()
+    res = schema.execute(u"""
+mutation uploadDocument($file: String!) {
+    uploadDocument(
+        file: $file,
+    ) {
+        document {
+            ... on Document {
+                id
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+                         variable_values={
+                             "file": "variables.file"
+                         })
+    assert res.errors
+    assert res.errors[0].message == "Sorry, this file type is not allowed."
+
+
+
+
 
 def test_mutation_upload_document_windows_path(graphql_request, idea_in_thread_phase):
     import os
