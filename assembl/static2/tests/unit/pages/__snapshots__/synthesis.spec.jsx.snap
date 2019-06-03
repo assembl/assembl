@@ -16,7 +16,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       className="action-buttons"
     >
       <ul
-        className="actions"
+        className="actions flex"
       />
     </div>
     <Grid

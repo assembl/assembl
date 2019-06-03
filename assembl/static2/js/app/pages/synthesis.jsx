@@ -137,7 +137,7 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
         <div className="background-light">
           <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} type="synthesis" />
           <div className="action-buttons">
-            <ul className="actions">
+            <ul className="actions flex">
               {editButton(synthesisPostId)}
               {deleteButton(synthesisPostId, refetchQueries, redirectToSyntheses)}
             </ul>
