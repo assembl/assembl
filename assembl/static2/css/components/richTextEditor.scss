@@ -232,6 +232,13 @@
     letter-spacing: 1.7px;
   }
 
+  .editor-toolbar-sticky {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+  }
+
   .editor-toolbar {
     float: right;
 
