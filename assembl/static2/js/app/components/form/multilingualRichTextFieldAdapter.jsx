@@ -42,7 +42,7 @@ const RichTextFieldAdapter = ({
         {...rest}
         editorState={valueInLocale}
         placeholder={label}
-        toolbarPosition={toolbarPosition || 'bottom'}
+        toolbarPosition={toolbarPosition}
         onChange={es => onChange({ ...value, [editLocale]: es })}
         withAttachmentButton={withAttachmentButton}
         withSideToolbar={withSideToolbar}
@@ -54,6 +54,7 @@ const RichTextFieldAdapter = ({
 };
 
 RichTextFieldAdapter.defaultProps = {
+  toolbarPosition: 'bottom',
   withAttachmentButton: false
 };
 
