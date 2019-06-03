@@ -1065,12 +1065,6 @@ class TestTaxonomyExport(AbstractExport):
         assert header[self.TAG2] == "Tag2"
 
         first_row = result[1]
-        if first_row[self.CONTENT_HARVESTED] == "body":
-            row_1 = result[1]
-            row_2 = result[2]
-        else:
-            row_2 = result[1]
-            row_1 = result[2]
         # Depending on tests execution order, the thematic can change
         # because reply_post_1 appears in 3 different ideas and the csv export take the first idea.
         # assert first_row[self.THEMATIC] == "Lower taxes"
@@ -1091,25 +1085,26 @@ class TestTaxonomyExport(AbstractExport):
         assert first_row[self.TAG1] == "bar"
         assert first_row[self.TAG2] == "foo"
 
+        last_row = result[-1]
         # Depending on tests execution order, the thematic can change
         # because reply_post_1 appears in 3 different ideas and the csv export take the first idea.
-        assert row_2[self.THEMATIC] == "Lower taxes"
-        assert row_2[self.MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
-        assert row_2[self.CONTENT_HARVESTED] == "variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces."
-        assert row_2[self.CONTENT_LOCALE] == "en"
-        assert row_2[self.ORIGINAL_MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
-        assert row_2[self.ORIGINAL_LOCALE] == "und"
-        assert row_2[self.QUALIFY_BY_NATURE] == " "
-        assert row_2[self.QUALIFY_BY_ACTION] == " "
-        assert row_2[self.MESSAGE_OWNER_FULL_NAME] == "James T. Expert"
-        assert row_2[self.MESSAGE_OWNER_USERNAME] == ""
-        assert row_2[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
-        assert row_2[self.HARVESTER_FULL_NAME] == "Maximilien de Robespierre"
-        assert row_2[self.HARVESTER_USERNAME] == ""
-        assert row_2[self.NUGGET] == "Yes"
-        assert row_2[self.STATE] == "PUBLISHED"
-        assert row_2[self.TAG1] == ""
-        assert row_2[self.TAG2] == ""
+        # assert last_row[self.THEMATIC] == "Lower taxes"
+        assert last_row[self.MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
+        assert last_row[self.CONTENT_HARVESTED] == "variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces."
+        assert last_row[self.CONTENT_LOCALE] == "en"
+        assert last_row[self.ORIGINAL_MESSAGE] == "post body with some text so we can test harvesting features. I'm writing a very topical comment with an unrelated source, hoping it would make people angry and make them write answers. I have read in '17O Solid-State NMR Spectroscopy of Functional Oxides for Energy Conversion' thesis by Halat, D. M. (2018) that variable-temperature spectra indicate the onset of oxide-ion motion involving the interstitials at 130 \xc2\xb0C, which is linked to an orthorhombic\xe2\x88\x92tetragonal phase transition. For the V-doped phases, an oxide-ion conduction mechanism is observed that involves oxygen exchange between the Bi-O sublattice and rapidly rotating VO4 tetrahedral units. The more poorly conducting P-doped phase exhibits only vacancy conduction with no evidence of sublattice exchange, a result ascribed to the differing propensities of the dopants to undergo variable oxygen coordination. So I think it would be a very bad idea to allow hot beverages in coworking spaces. But it looks like people don't really care about scientific evidence around here."
+        assert last_row[self.ORIGINAL_LOCALE] == "und"
+        assert last_row[self.QUALIFY_BY_NATURE] == " "
+        assert last_row[self.QUALIFY_BY_ACTION] == " "
+        assert last_row[self.MESSAGE_OWNER_FULL_NAME] == "James T. Expert"
+        assert last_row[self.MESSAGE_OWNER_USERNAME] == ""
+        assert last_row[self.PUBLISHED_ON] == "2000-01-04 00:00:00"
+        assert last_row[self.HARVESTER_FULL_NAME] == "Maximilien de Robespierre"
+        assert last_row[self.HARVESTER_USERNAME] == ""
+        assert last_row[self.NUGGET] == "Yes"
+        assert last_row[self.STATE] == "PUBLISHED"
+        assert last_row[self.TAG1] == ""
+        assert last_row[self.TAG2] == ""
 
 
 """
