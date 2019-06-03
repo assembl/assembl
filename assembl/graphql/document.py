@@ -3,6 +3,7 @@ from graphene.relay import Node
 import ntpath
 from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.settings import aslist
 import magic
 
 from graphene_sqlalchemy import SQLAlchemyObjectType
