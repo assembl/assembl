@@ -395,6 +395,7 @@ exports[`AnswerForm component should render a answer form 1`] = `
           }
           toolbarPosition="top"
           withAttachmentButton={true}
+          withHeaderButton={false}
           withSideToolbar={false}
         />
         <div

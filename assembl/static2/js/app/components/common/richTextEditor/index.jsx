@@ -25,6 +25,7 @@ type Props = {
   textareaRef?: Function,
   toolbarPosition: ToolbarPosition,
   withAttachmentButton: boolean,
+  withHeaderButton?: boolean,
   withSideToolbar?: boolean
 };
 
@@ -43,6 +44,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
     handleInputFocus: undefined,
     toolbarPosition: 'top',
     withAttachmentButton: false,
+    withHeaderButton: false,
     withSideToolbar: false
   };
 
@@ -64,7 +66,10 @@ export default class RichTextEditor extends React.Component<Props, State> {
     const components = {};
     components.LinkButton = LinkButton;
     components.Modal = Modal;
-    const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
+    let toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
+    if (props.withHeaderButton) {
+      toolbarStructure = [HeadlineTwoButton, HeadlineThreeButton, ...toolbarStructure];
+    }
     const plugins = [linkPlugin];
 
     if (props.withAttachmentButton) {
@@ -175,8 +180,12 @@ export default class RichTextEditor extends React.Component<Props, State> {
           const attachmentButton = this.props.withAttachmentButton ? <AttachmentButton {...externalProps} /> : '';
           return (
             <div>
-              <HeadlineTwoButton {...externalProps} />
-              <HeadlineThreeButton {...externalProps} />
+              {this.props.withHeaderButton ? (
+                <React.Fragment>
+                  <HeadlineTwoButton {...externalProps} />
+                  <HeadlineThreeButton {...externalProps} />
+                </React.Fragment>
+              ) : null}
               <BoldButton {...externalProps} />
               <ItalicButton {...externalProps} />
               <UnorderedListButton {...externalProps} />

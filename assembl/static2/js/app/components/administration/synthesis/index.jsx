@@ -94,6 +94,7 @@ class CreateSynthesisForm extends React.Component<Props> {
                             component={MultilingualRichTextFieldAdapter}
                             label={I18n.t('debate.syntheses.body')}
                             withAttachmentButton
+                            withHeaderButton
                             withSideToolbar
                             // toolbarPosition="top"
                           />
