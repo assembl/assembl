@@ -3,6 +3,8 @@ from graphene.relay import Node
 import ntpath
 from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import HTTPUnauthorized
+from pyramid.settings import aslist
+import magic
 
 from graphene_sqlalchemy import SQLAlchemyObjectType
 
@@ -65,9 +67,18 @@ class UploadDocument(graphene.Mutation):
             # with path using "/". Using ntpath works for both Linux and Windows path
             filename = ntpath.basename(context.POST[uploaded_file].filename)
             extension = filename.split('.')[~0]
-            if extension not in get_config()['attachment_allowed_extensions']:
-                error = _('Sorry, this file type is not allowed.')
+            allowed_extensions = aslist(get_config()['attachment_allowed_extensions'])
+            allowed_filetypes = get_config()['attachment_allowed_mime_types']
+            if extension not in allowed_extensions:
+                error = _('Sorry, this file type is not allowed. The file types allowed are: %s' % ', '.join(allowed_extensions))
                 raise HTTPUnauthorized(context.localizer.translate(error))
+            content = context.POST[uploaded_file].file.read()
+            context.POST[uploaded_file].file.seek(0)
+            filetype = magic.from_buffer(content, mime=True)
+            if filetype not in allowed_filetypes:
+                error = _('Sorry, this file type is not allowed. The file types allowed are: %s' % ', '.join(allowed_extensions))
+                raise HTTPUnauthorized(context.localizer.translate(error))
+
             mime_type = context.POST[uploaded_file].type
             document = models.File(
                 discussion=discussion,
