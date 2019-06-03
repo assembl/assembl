@@ -12,7 +12,7 @@ type DraftBlockType = string;
 type DraftInlineStyle = Immutable.OrderedSet<string>;
 /* end temporary dummy types */
 
-type ToolbarPosition = 'top' | 'bottom' | 'sticky';
+type ToolbarPosition = 'top' | 'bottom' | 'sticky' | 'side';
 
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
 

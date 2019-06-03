@@ -25,8 +25,7 @@ type Props = {
   textareaRef?: Function,
   toolbarPosition: ToolbarPosition,
   withAttachmentButton: boolean,
-  withHeaderButton?: boolean,
-  withSideToolbar?: boolean
+  withHeaderButton?: boolean
 };
 
 type State = {
@@ -44,8 +43,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
     handleInputFocus: undefined,
     toolbarPosition: 'top',
     withAttachmentButton: false,
-    withHeaderButton: false,
-    withSideToolbar: false
+    withHeaderButton: false
   };
 
   constructor(props: Props): void {
@@ -82,7 +80,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
       components.Attachments = Attachments;
       components.AttachmentButton = AttachmentButton;
     }
-    if (props.withSideToolbar) {
+    if (props.toolbarPosition === 'side') {
       const sideToolbarPlugin = createSideToolbarPlugin({
         structure: toolbarStructure,
         dropDown: false
@@ -199,7 +197,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
   }
 
   render() {
-    const { editorState, onChange, placeholder, textareaRef, withSideToolbar } = this.props;
+    const { editorState, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     const { Attachments, Modal, Toolbar } = this.components;
 
@@ -231,7 +229,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
           It should be fixed in draft-js-plugin v3
          */}
         {Toolbar ? <Toolbar /> : null}
-        {withSideToolbar ? this.renderSideToolbar() : null}
+        {toolbarPosition === 'side' ? this.renderSideToolbar() : null}
         {Attachments ? <Attachments /> : null}
       </div>
     );

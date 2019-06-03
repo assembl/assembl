@@ -98,8 +98,7 @@ class CreateSynthesisForm extends React.Component<Props> {
                             label={I18n.t('debate.syntheses.body')}
                             withAttachmentButton
                             withHeaderButton
-                            withSideToolbar
-                            // toolbarPosition="top"
+                            toolbarPosition="side"
                           />
                         </div>
                       </Section>
