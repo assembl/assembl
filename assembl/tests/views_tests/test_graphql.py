@@ -1761,7 +1761,7 @@ mutation uploadDocument($file: String!) {
                              "file": "variables.file"
                          })
     assert res.errors
-    assert res.errors[0].message == "Sorry, this file type is not allowed."
+    assert res.errors[0].message == "Sorry, this file type is not allowed. The file types allowed are: pdf, jpeg, jpg, png"
 
 
 
