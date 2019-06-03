@@ -194,3 +194,9 @@ attachment_allowed_extensions:
   - png
   - gif
   - jpg
+
+  # The mime types that are allowed for uploaded files
+  # on thread module
+  # To be completed if needed
+  attachment_allowed_mime_types:
+    - image/png

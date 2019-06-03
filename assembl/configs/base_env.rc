@@ -121,7 +121,7 @@ _package_install = false
 # _assembl_wheel_dir = /home/assembl_user/assembl_wheels
 _webmaster_user = webmaster
 # A *_user_password that is passed can be used to automatically switch between users in fabric
-_webmaster_user_password = 
+_webmaster_user_password =
 _ssh_port = 22
 
 # Optional - Path to SSL Stapling certificates, must be single file
@@ -173,3 +173,8 @@ theme_base =
 # on thread module
 # To be completed if needed
 attachment_allowed_extensions = pdf doc docx ppt pptx xls xlsx jpeg png gif jpg
+
+# The mime types that are allowed for uploaded files
+# on thread module
+# To be completed if needed
+attachment_allowed_mime_types = image/png
