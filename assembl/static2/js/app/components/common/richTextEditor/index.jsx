@@ -8,7 +8,6 @@ import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
 import { HeadlineThreeButton, HeadlineTwoButton } from 'draft-js-buttons';
 // from our workspaces
 /* eslint-disable import/no-extraneous-dependencies */
-import createSideToolbarPlugin from 'draft-js-side-toolbar-plugin';
 import createAttachmentPlugin from 'draft-js-attachment-plugin';
 import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
@@ -85,41 +84,28 @@ export default class RichTextEditor extends React.Component<Props, State> {
       components.Attachments = Attachments;
       components.AttachmentButton = AttachmentButton;
     }
-    if (props.toolbarPosition === 'side') {
-      const sideToolbarPlugin = createSideToolbarPlugin({
-        structure: toolbarStructure,
-        dropDown: false
-      });
-      plugins.push(sideToolbarPlugin);
 
-      const { SideToolbar } = sideToolbarPlugin;
-      this.components = {
-        SideToolbar: SideToolbar,
-        ...components
-      };
-    } else {
-      const staticToolbarPlugin = createToolbarPlugin({
-        structure: toolbarStructure,
-        // we need this for toolbar plugin to add css classes to buttons and toolbar
-        theme: {
-          buttonStyles: {
-            active: 'active',
-            button: 'btn btn-default',
-            buttonWrapper: 'btn-group'
-          },
-          toolbarStyles: {
-            toolbar: classNames('editor-toolbar', props.toolbarPosition)
-          }
+    const staticToolbarPlugin = createToolbarPlugin({
+      structure: toolbarStructure,
+      // we need this for toolbar plugin to add css classes to buttons and toolbar
+      theme: {
+        buttonStyles: {
+          active: 'active',
+          button: 'btn btn-default',
+          buttonWrapper: 'btn-group'
+        },
+        toolbarStyles: {
+          toolbar: classNames('editor-toolbar', props.toolbarPosition)
         }
-      });
-      plugins.push(staticToolbarPlugin);
+      }
+    });
+    plugins.push(staticToolbarPlugin);
 
-      const { Toolbar } = staticToolbarPlugin;
-      this.components = {
-        Toolbar: Toolbar,
-        ...components
-      };
-    }
+    const { Toolbar } = staticToolbarPlugin;
+    this.components = {
+      Toolbar: Toolbar,
+      ...components
+    };
     this.plugins = plugins;
 
     this.state = {
@@ -196,32 +182,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
     return 'not-handled';
   };
 
-  renderSideToolbar() {
-    const { AttachmentButton, SideToolbar, LinkButton } = this.components;
-    return (
-      <SideToolbar config={{ dropDown: false }}>
-        {(externalProps) => {
-          const attachmentButton = this.props.withAttachmentButton ? <AttachmentButton {...externalProps} /> : '';
-          return (
-            <div>
-              {this.props.withHeaderButton ? (
-                <React.Fragment>
-                  <HeadlineTwoButton {...externalProps} />
-                  <HeadlineThreeButton {...externalProps} />
-                </React.Fragment>
-              ) : null}
-              <BoldButton {...externalProps} />
-              <ItalicButton {...externalProps} />
-              <UnorderedListButton {...externalProps} />
-              <LinkButton {...externalProps} />
-              {attachmentButton}
-            </div>
-          );
-        }}
-      </SideToolbar>
-    );
-  }
-
   render() {
     const { editorState, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
@@ -256,7 +216,6 @@ export default class RichTextEditor extends React.Component<Props, State> {
           It should be fixed in draft-js-plugin v3
          */}
           {toolbarPosition === 'top' || toolbarPosition === 'bottom' ? <Toolbar /> : null}
-          {toolbarPosition === 'side' ? this.renderSideToolbar() : null}
           {toolbarPosition === 'sticky' ? (
             <div className="editor-toolbar-sticky" style={{ top: this.state.toolbarOffset }}>
               <Toolbar />

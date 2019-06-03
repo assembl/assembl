@@ -96,25 +96,10 @@ module.exports = {
         },
         {
             test: /\.css$/,
-            exclude: /draft-js-side-toolbar-plugin/,
             use: [
               MiniCssExtractPlugin.loader,
               'css-loader',
             ]
-        },
-        {
-          test: /draft-js-side-toolbar-plugin.*\.css$/,
-          use: [
-            MiniCssExtractPlugin.loader, {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                importLoaders: 1,
-                localIdentName: 'draftJsToolbar__[local]__[hash:base64:5]',
-              }
-            },
-            { loader: 'postcss-loader' },
-          ],
         },
         {
             test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
