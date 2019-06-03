@@ -31,7 +31,7 @@ type Props = {
   client: ApolloClient,
   editLocale: string,
   lang: string,
-  displayLanguageMenu: Function,
+  displayLanguageMenu: (isHidden: boolean) => void,
   routeParams: {
     slug: string,
     synthesisId: string

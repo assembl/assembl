@@ -24,12 +24,15 @@ export type Props = {
   /** Modal custom message */
   modalBodyMessage?: string,
   /** callback function handled by the parent component */
-  onDeleteCallback?: Function
+  onDeleteCallback?: () => void
 };
 
 type GraphQLProps = {
   /** Mutation function name issued with deletePostMutation */
-  deleteSynthesis: Function
+  deleteSynthesis: ({
+    refetchQueries: Array<RefetchQuery>,
+    variables: { id: string }
+  }) => void
 };
 
 type LocalProps = Props & GraphQLProps;
@@ -45,24 +48,21 @@ const DeleteSynthesisButton = ({
   const displayConfirmationModal = () => {
     const title = <Translate value="debate.confirmDeletionTitle" />;
     const body = <Translate value={modalBodyMessage || 'debate.synthesis.confirmDeletionBody'} />;
+    const onClick = () => {
+      deleteSynthesis({
+        refetchQueries: refetchQueries || [],
+        variables: { id: synthesisPostId }
+      });
+      closeModal();
+      if (onDeleteCallback) {
+        onDeleteCallback();
+      }
+    };
     const footer = [
       <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
         <Translate value="debate.confirmDeletionButtonCancel" />
       </Button>,
-      <Button
-        key="delete"
-        onClick={() => {
-          deleteSynthesis({
-            refetchQueries: refetchQueries || [],
-            variables: { id: synthesisPostId }
-          });
-          closeModal();
-          if (onDeleteCallback) {
-            onDeleteCallback();
-          }
-        }}
-        className="button-submit button-dark"
-      >
+      <Button key="delete" onClick={onClick} className="button-submit button-dark">
         <Translate value="debate.confirmDeletionButtonDelete" />
       </Button>
     ];

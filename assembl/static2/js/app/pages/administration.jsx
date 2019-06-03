@@ -47,7 +47,7 @@ type Props = {
   updateVoteModules: Function,
   updateVoteSessionPage: Function,
   updateVoteProposals: Function,
-  displayLanguageMenu: Function,
+  displayLanguageMenu: (isHidden: boolean) => void,
   updateLandingPageModules: Function,
   updateTextFields: Function,
   timeline: Timeline,

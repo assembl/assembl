@@ -79,10 +79,8 @@ export default class LoadSaveReinitializeForm<TO: { [string]: any }, TI: { [stri
     const warningValuesHaveChanged =
       warningValues && initialValues && warningValues.some(value => values[value] !== initialValues[value]);
     if (withWarningModal && warningValuesHaveChanged && warningMessageKey) {
-      // $FlowFixMe
       return displayConfirmationModal(() => this.runMutations(values), warningMessageKey);
     }
-    // $FlowFixMe
     return this.runMutations(values);
   };
 

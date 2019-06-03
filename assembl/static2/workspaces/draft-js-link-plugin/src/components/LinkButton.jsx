@@ -2,6 +2,7 @@
 import classNames from 'classnames';
 import * as React from 'react';
 import { I18n } from 'react-redux-i18n';
+import { type EditorState } from 'draft-js';
 // from workspaces
 // eslint-disable-next-line import/no-extraneous-dependencies
 import EditorUtils, { constants } from 'assembl-editor-utils';
@@ -11,6 +12,9 @@ import type { DraftJSPluginStore, Theme } from '../index';
 
 const { ENTITY_TYPES } = constants;
 
+type GetEditorState = void => EditorState;
+type SetEditorState = EditorState => void;
+
 type Props = {
   closeModal: void => void,
   setModalContent: (React.Node, string) => void,
@@ -18,8 +22,8 @@ type Props = {
   theme: Theme,
   onRemoveLinkAtSelection: () => void,
   formatLink?: string => string,
-  setEditorState?: Function,
-  getEditorState?: Function
+  setEditorState?: SetEditorState,
+  getEditorState?: GetEditorState
 };
 
 export default class LinkButton extends React.Component<Props> {
