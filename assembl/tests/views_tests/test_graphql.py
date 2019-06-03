@@ -1666,7 +1666,7 @@ mutation myMutation($postId: ID!, $subject: String, $body: String!) {
             }}}
 
 
-def test_mutation_upload_document(graphql_request, idea_in_thread_phase):
+def test_mutation_upload_document_generic_mimetypes(graphql_request, idea_in_thread_phase):
     import os
     from io import BytesIO
 
@@ -1698,6 +1698,43 @@ mutation uploadDocument($file: String!) {
     assert res.data['uploadDocument']['document']['title'] == u"image.png"
     assert res.data['uploadDocument']['document']['externalUrl'].endswith(
         '/data')
+
+def test_mutation_upload_document_specific_mimetypes(graphql_request, idea_in_thread_phase):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO('%PDF-1.3\n%\xc4\xe5\xf2\xe5\xeb\xa7\xf3\xa0\xd0\xc4\xc6\n4 0 obj\n<< /Length 5 0 R /Filter /FlateDecode >>\nstream\nx\x01\xc5\x9d\xdb\xd2\x1c\xc7q\xe7\xef\xe7)fc/\xfca\x83\x18L\x1f')
+        filename = u'path/to/doc.pdf'
+        type = 'application/pdf'
+
+    graphql_request.POST['variables.file'] = FieldStorage()
+    res = schema.execute(u"""
+mutation uploadDocument($file: String!) {
+    uploadDocument(
+        file: $file,
+    ) {
+        document {
+            ... on Document {
+                id
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+                         variable_values={
+                             "file": "variables.file"
+                         })
+    assert res.data['uploadDocument']['document']['id'] is not None
+    assert res.data['uploadDocument']['document']['title'] == u"doc.pdf"
+    assert res.data['uploadDocument']['document']['externalUrl'].endswith(
+        '/data')
+
+
+
+
 
 def test_mutation_upload_document_extension_forbidden(graphql_request, idea_in_thread_phase):
     import os
