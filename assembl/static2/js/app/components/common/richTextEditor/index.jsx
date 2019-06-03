@@ -23,7 +23,7 @@ type Props = {
   onChange: Function,
   placeholder?: string,
   textareaRef?: Function,
-  toolbarPosition: string,
+  toolbarPosition: ToolbarPosition,
   withAttachmentButton: boolean,
   withSideToolbar?: boolean
 };

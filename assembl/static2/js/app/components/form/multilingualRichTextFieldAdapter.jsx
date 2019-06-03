@@ -19,7 +19,7 @@ type Props = {
     value: multilingualValue
   },
   label: string,
-  toolbarPosition: string,
+  toolbarPosition: ToolbarPosition,
   withAttachmentButton: boolean,
   withSideToolbar: boolean
 } & FieldRenderProps;
