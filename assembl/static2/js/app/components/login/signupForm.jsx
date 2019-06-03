@@ -24,7 +24,7 @@ import LegalForm from './legalForm';
 import SignupCheckbox from './signupCheckbox';
 import BackButton from '../../../app/components/debate/common/backButton';
 import Helper from '../common/helper';
-import { defaultPasswordRequirements } from '../../constants';
+import PasswordRequirements from '../common/passwordRequirements';
 
 type Props = {
   hasTermsAndConditions: boolean,
@@ -172,20 +172,7 @@ class SignupForm extends React.Component<Props, State> {
                         required={field.required}
                       />
                       {field.identifier === 'PASSWORD' ? (
-                        <Helper
-                          classname="title"
-                          helperText={
-                            <React.Fragment>
-                              <p className="annotation no-margin">{I18n.t('login.passwordRequirementIntro')}</p>
-                              <ul>
-                                {defaultPasswordRequirements.map(passwordRequirement => (
-                                  <li className="annotation no-margin">{I18n.t(`login.${passwordRequirement}`)}</li>
-                                ))}
-                              </ul>
-                            </React.Fragment>
-                          }
-                        >
-                          )
+                        <Helper classname="title" helperText={<PasswordRequirements />}>
                           <FormControl
                             type={field.fieldType.toLowerCase()}
                             name={field.identifier === 'CUSTOM' ? field.id : field.identifier.toLowerCase()}

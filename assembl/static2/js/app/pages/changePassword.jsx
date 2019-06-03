@@ -9,7 +9,7 @@ import { getAuthorizationToken, getDiscussionSlug } from '../utils/globalFunctio
 import { postChangePassword } from '../services/authenticationService';
 import { get } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
-import { defaultPasswordRequirements } from '../constants';
+import PasswordRequirements from '../components/common/passwordRequirements';
 
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -85,19 +85,7 @@ class ChangePassword extends React.Component {
                   placeholder={I18n.t('login.newPassword')}
                   onChange={this.handleChangePassword}
                 />
-                <Helper
-                  classname="title"
-                  helperText={
-                    <React.Fragment>
-                      <p className="annotation no-margin">{I18n.t('login.passwordRequirementIntro')}</p>
-                      <ul>
-                        {defaultPasswordRequirements.map(passwordRequirement => (
-                          <li className="annotation no-margin">{I18n.t(`login.${passwordRequirement}`)}</li>
-                        ))}
-                      </ul>
-                    </React.Fragment>
-                  }
-                />
+                <Helper classname="title" helperText={<PasswordRequirements />} />
               </FormGroup>
               <FormGroup className="margin-m">
                 <FormControl

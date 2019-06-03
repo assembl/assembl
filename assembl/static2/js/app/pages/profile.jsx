@@ -12,6 +12,8 @@ import ConfiguredField, { type ConfiguredFieldType } from '../components/common/
 import CookiesSelectorContainer from '../components/cookies/cookiesSelectorContainer';
 import { get, getContextual } from '../utils/routeMap';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
+import Helper from '../components/common/helper';
+import PasswordRequirements from '../components/common/passwordRequirements';
 import UserQuery from '../graphql/userQuery.graphql';
 import ProfileFieldsQuery from '../graphql/ProfileFields.graphql';
 import UpdateUserMutation from '../graphql/mutations/updateUser.graphql';
@@ -185,9 +187,12 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                   </div>
                   {hasPassword && (
                     <div>
-                      <h2 className="dark-title-2 margin-l">
-                        <Translate value="profile.password" />
-                      </h2>
+                      <div className="align-flex">
+                        <h2 className="dark-title-2 margin-l">
+                          <Translate value="profile.password" />
+                        </h2>
+                        <Helper classname="title margin-m" helperText={<PasswordRequirements />} />
+                      </div>
                       <div className="profile-form center">
                         <ModifyPasswordForm id={id} />
                       </div>
