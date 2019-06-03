@@ -83,8 +83,11 @@ class CreateSynthesisForm extends React.Component<Props> {
                         />
                         <div className="flex">
                           <Field name="image" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
-                          <Helper helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass=" " />
-                          {/* TODO: add image to the helper */}
+                          <Helper
+                            helperUrl="/static2/img/helpers/helper1.png"
+                            helperText={I18n.t('debate.syntheses.pictureHelper')}
+                            popOverClass=""
+                          />
                         </div>
                         <div className="richtext-large">
                           <Field
