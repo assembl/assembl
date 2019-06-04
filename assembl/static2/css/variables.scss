@@ -70,7 +70,7 @@ $margin-section-xxs: 70px;
 $margin-section-xxxs: 60px;
 $margin-section-tiny: 30px;
 
-$fonts-dir: '//s3-eu-west-1.amazonaws.com/bluenove-assembl-fonts';
+$fonts-dir: '//s3-eu-west-1.amazonaws.com/bluenove-assembl-fonts' !default;
 
 @font-face {
   font-family: 'latoRegular';
