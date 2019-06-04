@@ -215,15 +215,14 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .post-left {
-    width: 93%;
-    padding: 40px;
+    width: 100%;
+    padding: 20px 0 20px 30px;
   }
 
   .post-right {
     width: 42px;
     position: relative;
     text-align: center;
-    background-color: $first-color-light;
 
     .answers {
       display: none;
@@ -247,7 +246,7 @@ $deleted-post-border: 1px solid $light-grey !default;
   .box {
     border: none;
     margin: 0 auto;
-    max-width: 600px;
+    max-width: 900px;
     position: relative;
     text-align: left;
     padding: 0;
