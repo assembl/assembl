@@ -625,7 +625,7 @@ def push_built_themes_to_remote_bucket(c):
     install_build_dependencies,
     install_node_and_yarn,
     configure_github_user,
-    add_github_bot_ssh_keys("azertyuiop"),
+    add_github_bot_ssh_keys,
     clear_aptitude_cache)
 def prepare_cicd_build(c):
     """
