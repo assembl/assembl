@@ -535,7 +535,7 @@ def extract_taxonomy_csv(request):
         ).options(
             joinedload(m.Extract.tags_associations),
             joinedload_all('content.body.entries'),
-        ).all()
+        ).order_by(m.Extract.id).all()
 
     extract_list = []
     user_prefs = LanguagePreferenceCollection.getCurrent()
@@ -600,7 +600,7 @@ def extract_taxonomy_csv(request):
         harvested_on = unicode(extract.creation_date.replace(microsecond=0))
         nugget = "Yes" if extract.important else "No"
         state = getattr(extract, 'extract_state', ExtractStates.PUBLISHED.value)
-        tags = [t.value for t in extract.tags]
+        tags = sorted([t.value for t in extract.tags])
 
         user_info = user_info_by_id.get(content.creator_id, None)
         if user_info is None:

@@ -1082,8 +1082,8 @@ class TestTaxonomyExport(AbstractExport):
         assert first_row[self.HARVESTER_USERNAME] == ""
         assert first_row[self.NUGGET] == "No"
         assert first_row[self.STATE] == "PUBLISHED"
-        assert first_row[self.TAG1] == "foo"
-        assert first_row[self.TAG2] == "bar"
+        assert first_row[self.TAG1] == "bar"
+        assert first_row[self.TAG2] == "foo"
 
         last_row = result[-1]
         # Depending on tests execution order, the thematic can change
