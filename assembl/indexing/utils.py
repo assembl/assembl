@@ -276,9 +276,10 @@ def get_data(content):
 
             data['idea_id'] = idea_id
             related_idea = Idea.get(idea_id[0])
-            data['message_view_override'] = related_idea.message_view_override
             if isinstance(related_idea, Question):
                 related_idea = related_idea.parents[0]
+
+            data['message_view_override'] = related_idea.message_view_override
             # we take the title of the first idea in the list for now (in v2, posts are attached to only one idea)
             populate_from_langstring_prop(
                 related_idea, data, 'title', 'idea_title')

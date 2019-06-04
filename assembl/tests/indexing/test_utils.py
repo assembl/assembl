@@ -1,6 +1,8 @@
 # -*- coding=utf-8 -*-
 import datetime
 
+from graphql_relay.node.node import from_global_id
+
 from assembl.indexing.utils import get_data
 
 def test_get_data_for_extract(phases, extract_submitted_in_post_related_to_sub_idea_1_1_1, participant2_user, post_related_to_sub_idea_1_1_1, subidea_1_1_1):
@@ -52,6 +54,40 @@ def test_get_data_for_post(phases, admin_user, post_related_to_sub_idea_1_1_1, s
     assert data['sentiment_tags'] == []
     assert data['subject_other'] == u'A post subject related to sub_idea_1_1_1'
     assert data['type'] == 'post'
+
+
+def test_get_data_for_post_survey(test_session, phases, admin_user, thematic_and_question, proposition_id):
+    from assembl.models import Post, Question
+    post = test_session.query(Post).get(int(from_global_id(proposition_id)[1]))
+    question = test_session.query(Question).get(int(from_global_id(thematic_and_question[1])[1]))
+    uid, data = get_data(post)
+    assert uid == 'post:{}'.format(post.id)
+    assert data['id'] == post.id
+    assert data['body_fr'] == u'une proposition...'
+    assert data['creator_id'] == admin_user.id
+    assert data['_parent'] == 'user:{}'.format(admin_user.id)
+    assert data['discussion_id'] == post.discussion.id
+    assert data['idea_id'] == [question.id]
+    assert data['idea_title_en'] == u'Understanding the dynamics and issues'
+    assert data['idea_title_fr'] == u'Comprendre les dynamiques et les enjeux'
+    assert data['message_view_override'] == u'survey'
+    assert data['phase_id'] == phases['survey'].id
+    assert data['phase_identifier'] == u'survey'
+    assert data['creation_date'].date() == datetime.date.today()
+    assert data['creator_display_name'] == u'mr_admin_user'
+    assert data['sentiment_counts'] == {
+        'consensus': 0,
+        'controversy': 1,
+        'disagree': 0,
+        'dont_understand': 0,
+        'like': 0,
+        'more_info': 0,
+        'popularity': 0,
+        'total': 0}
+    assert data['sentiment_tags'] == []
+    assert data['subject_en'] == u'Proposal'
+    assert data['subject_fr'] == u'Proposition'
+    assert data['type'] == 'proposition_post'
 
 
 def test_get_data_for_synthesis_post(phases, participant1_user, synthesis_post_1):
