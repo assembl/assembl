@@ -225,6 +225,9 @@ class AssemblStrategy(PyramidStrategy):
     def request_path(self):
         return self.request.path
 
+    def request_url(self):
+        return self.request.url
+
     def request_port(self):
         return self.request.host_port
 

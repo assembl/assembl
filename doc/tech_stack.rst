@@ -68,7 +68,7 @@ google_api_python_client_
   Used in :py:class:`assembl.nlp.translation_service.GoogleTranslationService` to communicate with the google translation service and translate messages
 
 imaplib2_
-  Used to retrieve messages from an IMAP server, through the :py:mod:`assembl.tasks.imap` celery process or the :py:class:`assembl.tasks.imaplib2_source_reader.IMAPReader`.
+  Used to retrieve messages from an IMAP server, through the :py:mod:`assembl.processes.imap` celery process or the :py:class:`assembl.processes.imaplib2_source_reader.IMAPReader`.
 
 iso639_
   Translate between ISO-639-1 and ISO-639-2 language codes.
@@ -83,7 +83,7 @@ jwzthreading_
   Used to deduce thread order of imported mail messages
 
 kombu_
-  Inter-process messaging. Uses Redis_. Used by Celery_ and directly by the :py:mod:`assembl.tasks.source_reader`
+  Inter-process messaging. Uses Redis_. Used by Celery_ and directly by the :py:mod:`assembl.processes.source_reader`
 
 langdetect_
   Guess the original language of a message. Used in :py:mod:`assembl.nlp.translation_service`
@@ -134,7 +134,7 @@ pytz_
   Convert local time to UTC and back.
 
 pyzmq_
-  Use the ZeroMQ_ messaging bus from python. Used for the :py:mod:`assembl.tasks.changes_router`.
+  Use the ZeroMQ_ messaging bus from python. Used for the :py:mod:`assembl.processes.changes_router`.
 
 sentry-sdk
   Send error reports to Sentry_.
@@ -158,13 +158,13 @@ six_
   Abstract some of the differences between Python2 and Python3
 
 sockjs_tornado_
-  Serve a websocket connection using Tornado_. Used by the :py:mod:`assembl.tasks.changes_router`.
+  Serve a websocket connection using Tornado_. Used by the :py:mod:`assembl.processes.changes_router`.
 
 SQLAlchemy_
   The Object-Relational Mapper; allows us to use Python classes backed by database storage.
 
 tornado_
-  Another Web server, used by the :py:mod:`assembl.tasks.changes_router`.
+  Another Web server, used by the :py:mod:`assembl.processes.changes_router`.
 
 transaction_
   An abstraction for atomic transactions, most Pyramid web requests are wrapped in a transaction.
@@ -221,7 +221,7 @@ uwsgitop_
   Monitor UWSGI_
 
 flower_
-  Monitor Celery_ tasks
+  Monitor Celery_ processes
 
 PdbSublimeTextSupport_
   Shows debug code location in Sublime Text
@@ -315,7 +315,7 @@ a SQLAlchemy_ event handler.
 
 Some other operations are asynchronous and handled by processes. Those that are 
 operations that run and terminate, such as email notifications, are modeled as 
-Celery_ tasks, using Kombu_ and Redis_ for communication. Long-standing tasks, 
+Celery_ processes, using Kombu_ and Redis_ for communication. Long-standing processes, 
 such as IMAP clients, use Kombu_ directly.
 
 

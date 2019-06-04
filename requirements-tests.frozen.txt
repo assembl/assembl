@@ -55,7 +55,6 @@ executor==19.1            # via rotate-backups
 fabric==1.14.0
 fasteners==0.14.1         # via executor
 feedparser==5.2.1
-first==2.0.1              # via pip-tools
 flake8==3.6.0
 flaky==3.1.1
 funcsigs==1.0.2           # via mock
@@ -73,6 +72,7 @@ humanfriendly==4.8        # via coloredlogs, executor, property-manager, rotate-
 idna==2.6                 # via cryptography
 imagesize==1.0.0          # via sphinx
 imaplib2==2.45.0
+invoke==1.2.0
 ipaddress==1.0.19         # via cryptography
 ipython-genutils==0.2.0   # via traitlets
 ipython==4.2.0
@@ -154,6 +154,7 @@ rotate-backups==4.4
 rsa==3.4.2                # via oauth2client
 s3transfer==0.1.13        # via boto3
 scandir==1.7              # via pathlib2
+semantic-version==2.6.0
 sentry-sdk==0.5.3
 simpleeval==0.9.1         # via rotate-backups
 simplegeneric==0.8.1      # via ipython
@@ -183,6 +184,7 @@ venusian==1.1.0           # via pyramid
 verboselogs==1.7
 vine==1.1.4               # via amqp
 waitress==1.1.0           # via webtest
+watchtower==0.5.4
 watson_developer_cloud==2.4.1
 webob==1.6.1
 websocket-client==0.47.0  # via watson-developer-cloud

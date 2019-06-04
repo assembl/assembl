@@ -7,11 +7,12 @@ from alembic import context
 from pyramid.paster import bootstrap
 
 from assembl.lib.sqla import (
-    get_session_maker, configure_engine, get_metadata)
+    get_session_maker, configure_engine, get_metadata,
+    connection_url)
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.indexing.changes import configure_indexing
-from assembl.lib.migration import bootstrap_db_data
+# from assembl.lib.migration import bootstrap_db_data
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -20,7 +21,7 @@ config = context.config
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 fileConfig(config.config_file_name)
-_config = config.file_config._sections['app:assembl']
+_config = config.get_section('app:assembl')
 _config['in_migration'] = True
 set_config(_config)
 pyramid_env = bootstrap(config.config_file_name)
@@ -61,13 +62,15 @@ def run_migrations_offline():
     script output.
 
     """
-    url = config.get_main_option("sqlalchemy.url")
+    url = connection_url(config.get_section('app:assembl')
+        ) or config.get_main_option("sqlalchemy.url")
     context.configure(url=url)
 
     with context.begin_transaction():
         context.run_migrations(pyramid_env=pyramid_env)
-        session_maker = get_session_maker()
+        # session_maker = get_session_maker()
         # bootstrap_db_data(session_maker)
+
 
 if context.is_offline_mode():
     run_migrations_offline()

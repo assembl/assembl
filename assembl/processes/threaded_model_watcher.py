@@ -84,9 +84,13 @@ class ThreadedModelEventWatcher(object):
         self.queue.put(('processAccountModified', id))
 
 
-def includeme(config):
+def configure_threaded_watcher(settings):
     from . import resolver
-    class_name = config.get_settings().get(
+    class_name = settings.get(
         'assembl.threadedmodelwatcher',
         "assembl.lib.model_watcher.BaseModelEventWatcher")
     ThreadDispatcher.mw_class = resolver.resolve(class_name)
+
+
+def includeme(config):
+    configure_threaded_watcher(config.get_settings())

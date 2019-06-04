@@ -1,0 +1,22 @@
+# Sample service file for direct urlmetadata startup
+# On Ubuntu 15.10 and later you need to drop it in 
+# /etc/systemd/system/urlmetadata.service
+# And then run
+# systemctl enable urlmetadata
+
+[Unit]
+Description=urlmetadata
+
+[Service]
+# These are the lines you have to modify for your environment. This assumes Assembl is running under the urlmetadata_user user.
+User=assembl_user
+Group=www-data
+
+Type=simple
+Restart=on-failure
+ExecStart=/bin/bash -c 'cd /home/assembl_user && exec ./venv3/bin/python3 -murl_metadata'
+KillMode=control-group
+TimeoutStopSec=120
+
+[Install]
+WantedBy=multi-user.target

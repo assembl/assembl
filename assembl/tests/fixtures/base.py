@@ -22,7 +22,7 @@ import assembl
 from assembl.lib.config import get_config
 from assembl.lib.migration import bootstrap_db, bootstrap_db_data
 from assembl.lib.sqla import get_session_maker
-from assembl.tasks import configure as configure_tasks
+from assembl.processes import configure as configure_tasks
 from assembl.auth import R_SYSADMIN
 from ..utils import PyramidWebTestRequest
 from ..utils import clear_rows, drop_tables
@@ -61,13 +61,12 @@ def db_tables(request, empty_db):
     assert app_settings_file
     from assembl.conftest import engine
     bootstrap_db(app_settings_file, engine)
-    transaction.commit()
 
     def fin():
         print "finalizer db_tables"
         session = empty_db()
         drop_tables(get_config(), session)
-        transaction.commit()
+        session.commit()
     request.addfinalizer(fin)
     return empty_db  # session_factory
 
@@ -102,6 +101,17 @@ def test_app_no_perm(request, base_registry, db_tables):
     app.PyramidWebTestRequest = PyramidWebTestRequest
     PyramidWebTestRequest._pyramid_app = app.app
     PyramidWebTestRequest._registry = base_registry
+
+    def fin():
+        print "finalizer test_app_no_perm"
+        session = db_tables()
+        with transaction.manager:
+            clear_rows(get_config(), session)
+        from assembl.models import Locale, LangString
+        Locale.reset_cache()
+        LangString.reset_cache()
+    request.addfinalizer(fin)
+
     return app
 
 
@@ -117,40 +127,20 @@ def test_webrequest(request, test_app_no_perm):
     request.addfinalizer(fin)
     return req
 
+
 @pytest.fixture(scope="function")
 def test_dummy_web_request(request):
     """A dummy request fixture"""
     return testing.DummyRequest()
 
 
-@pytest.fixture(scope="module")
-def db_default_data(
-        request, db_tables, base_registry):
-    """An SQLAlchemy Session Maker fixture that is preloaded
-    with all Assembl tables, constraints, relationships, etc."""
-
-    bootstrap_db_data(db_tables)
-    transaction.commit()
-
-    def fin():
-        print "finalizer db_default_data"
-        session = db_tables()
-        clear_rows(get_config(), session)
-        transaction.commit()
-        from assembl.models import Locale, LangString
-        Locale.reset_cache()
-        LangString.reset_cache()
-    request.addfinalizer(fin)
-    return db_tables  # session_factory
-
-
 @pytest.fixture(scope="function")
-def test_session(request, db_default_data):
+def test_session(request, test_app_no_perm, db_tables):
     """An SQLAlchemy Session Maker fixture (A DB connection session)-
     Use this session fixture for all fixture that require database
     access"""
 
-    session = db_default_data()
+    session = db_tables()
 
     def fin():
         print "finalizer test_session"
@@ -211,8 +201,78 @@ def test_adminuser_webrequest(request, admin_user, test_app_no_perm):
     return req
 
 
+def get_resources_html(uuid, theme_name="default"):
+    return """
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Caching</title>
+        <link href="/build/themes/default/theme_default_web.8bbb970b0346866e3dac.css" rel="stylesheet">
+        <link href="/build/themes/{uuid}/{theme_name}/theme_{theme_name}_web.8bbb970b0346866e3dac.css" rel="stylesheet">
+        <link href="/build/bundle.5f3e474ec0d2193c8af5.css" rel="stylesheet">
+        <link href="/build/searchv1.04e4e4b2fab45a2ab04e.css" rel="stylesheet">
+      </head>
+      <body>
+        <script type="text/javascript" src="/build/themes/default//theme_default_web.ed5786109ac04600f1d5.js"></script>
+        <script type="text/javascript" src="/build/themes/{uuid}/{theme_name}/theme_{theme_name}_web.ed5786109ac04600f1d5.js"></script>
+        <script type="text/javascript" src="/build/bundle.5aae461a0604ace7cd31.js"></script>
+        <script type="text/javascript" src="/build/searchv1.b8939cd89ebdedfd2901.js"></script>
+      </body>
+    </html>
+    """.format(theme_name=theme_name, uuid=uuid)
+
+
 @pytest.fixture(scope="function")
-def test_app(request, admin_user, test_app_no_perm):
+def static_asset_resources_html(request):
+    import os
+    import shutil
+    import uuid
+    build_path = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
+        'static2/build'
+    )
+    resources_html_path = os.path.join(build_path, 'resources.html')
+    resources_html_tmp = os.path.join(build_path, 'resources.html.tmp')
+    resources_file_created = False
+    build_folder_created = False
+    resource_file_moved = False
+
+    def write_resouces_to_disk():
+        Uuid = uuid.uuid4().hex
+        resources_html = get_resources_html(Uuid)
+        with open(resources_html_path, 'w') as f:
+            f.seek(0)
+            f.write(resources_html)
+
+    if not os.path.exists(build_path):
+        os.mkdir(build_path)
+        build_folder_created = True
+    if not os.path.exists(resources_html_path):
+        write_resouces_to_disk()
+        resources_file_created = True
+    else:
+        # resouce html exists, change file name temporarily for the test
+        # This happens when testing on local machine where a static2 build folder has already been done
+        shutil.move(resources_html_path, resources_html_tmp)
+        write_resouces_to_disk()
+        resource_file_moved = True
+
+    def fin():
+        # Clean up the file creations after assertions
+        if build_folder_created:
+            shutil.rmtree(build_path)
+        elif resources_file_created:
+            os.unlink(resources_html_path)
+        elif resource_file_moved:
+            os.unlink(resources_html_path)
+            shutil.move(resources_html_tmp, resources_html_path)
+
+    request.addfinalizer(fin)
+
+
+@pytest.fixture(scope="function")
+def test_app(request, static_asset_resources_html, admin_user, test_app_no_perm):
     """A configured Assembl fixture with permissions
     and an admin user logged in"""
 
@@ -283,6 +343,7 @@ def test_app_no_login(request, test_app_no_perm):
     config.set_authentication_policy(dummy_policy)
 
     return test_app_no_perm
+
 
 @pytest.fixture(scope="function")
 def test_app_no_login_real_policy(request, test_app_no_perm):

@@ -1617,6 +1617,7 @@ mutation uploadDocument($file: String!) {
             ... on Document {
                 id
                 externalUrl
+                title
             }
         }
     }
@@ -1626,16 +1627,43 @@ mutation uploadDocument($file: String!) {
                              "file": "variables.file"
                          })
     assert res.data['uploadDocument']['document']['id'] is not None
+    assert res.data['uploadDocument']['document']['title'] == u"image.png"
     assert res.data['uploadDocument']['document']['externalUrl'].endswith(
         '/data')
-#    assert json.loads(json.dumps(res.data)) == {
-#        u'uploadDocument': {
-#            u'document': {
-#                u'id': u'1',
-#                u'externalUrl': u'http://localhost:6543/data/Discussion/1/documents/1/data',
-#            }
-#        }
-#    }
+
+
+def test_mutation_upload_document_windows_path(graphql_request, idea_in_thread_phase):
+    import os
+    from io import BytesIO
+
+    class FieldStorage(object):
+        file = BytesIO(os.urandom(16))
+        filename = ur'C:\path\to\image.png'
+        type = 'image/png'
+
+    graphql_request.POST['variables.file'] = FieldStorage()
+    res = schema.execute(u"""
+mutation uploadDocument($file: String!) {
+    uploadDocument(
+        file: $file,
+    ) {
+        document {
+            ... on Document {
+                id
+                externalUrl
+                title
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+                         variable_values={
+                             "file": "variables.file"
+                         })
+    assert res.data['uploadDocument']['document']['id'] is not None
+    assert res.data['uploadDocument']['document']['title'] == u"image.png"
+    assert res.data['uploadDocument']['document']['externalUrl'].endswith(
+        '/data')
 
 
 def test_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):

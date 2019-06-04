@@ -15,7 +15,7 @@ from .langstrings import LangString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import AbstractAgentAccount, AgentProfile
-from ..tasks.source_reader import PullSourceReader, ReaderError, ReaderStatus
+from ..processes.source_reader import PullSourceReader, ReaderError, ReaderStatus
 
 
 class FeedFetcher(object):

@@ -205,7 +205,7 @@ In ``local.ini``
     mail.tls = true
     imap_domain = ...
     discussion_callbacks =
-        assembl.tasks.create_vmm_source.CreateVMMMailboxAtDiscussionCreation
+        assembl.processes.create_vmm_source.CreateVMMMailboxAtDiscussionCreation
 
 
 Testing

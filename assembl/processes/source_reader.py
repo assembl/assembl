@@ -11,20 +11,20 @@ from datetime import datetime, timedelta
 from abc import ABCMeta, abstractmethod
 from logging.config import fileConfig
 
-from assembl.lib import logging
 from pyramid.paster import get_appsettings
 from zope.component import getGlobalSiteManager
 from kombu import BrokerConnection, Exchange, Queue
 from kombu.mixins import ConsumerMixin
 from kombu.utils.debug import setup_logging
-from sqlalchemy import event, inspect
+from sqlalchemy import inspect
 from sqlalchemy.exc import TimeoutError
 
-from assembl.tasks import configure
-from assembl.lib.sentry import capture_exception
-from assembl.lib.config import set_config
-from assembl.lib.enum import OrderedEnum
-from assembl.lib.sqla import configure_engine
+from ..lib import logging
+from ..lib.sentry import capture_exception
+from ..lib.config import set_config
+from ..lib.enum import OrderedEnum
+from ..lib.sqla import configure_engine
+from . import configure
 
 log = logging.getLogger()
 pool_counter = 0
@@ -98,8 +98,8 @@ known_transitions = {
 }
 
 disconnected_states = set((
-        ReaderStatus.CLIENT_ERROR, ReaderStatus.IRRECOVERABLE_ERROR,
-        ReaderStatus.CLOSED, ReaderStatus.SHUTDOWN))
+    ReaderStatus.CLIENT_ERROR, ReaderStatus.IRRECOVERABLE_ERROR,
+    ReaderStatus.CLOSED, ReaderStatus.SHUTDOWN))
 
 
 # Connection constants
@@ -174,7 +174,6 @@ class SourceReader(Thread):
         self.after_login = True
 
     def successful_read(self):
-        from assembl.models import ContentSource
         self.last_read = datetime.utcnow()
         self.reset_errors()
         self.reimporting = False
@@ -189,7 +188,6 @@ class SourceReader(Thread):
 
     def new_error(self, reader_error, status=None, expected=True):
         import traceback
-        from assembl.models import ContentSource
         log.error(traceback.format_exc())
         if not expected:
             capture_exception()
@@ -259,17 +257,17 @@ class SourceReader(Thread):
     def wake(self):
         print "SourceReader.wake"
         if self.status in (ReaderStatus.PAUSED, ReaderStatus.CLOSED) and (
-                datetime.utcnow() - max(self.last_prod, self.last_read)
-                > self.min_time_between_reads):
+                datetime.utcnow() - max(self.last_prod, self.last_read) >
+                self.min_time_between_reads):
             self.event.set()
         elif self.status == ReaderStatus.TRANSIENT_ERROR and (
-                datetime.utcnow() - max(self.last_prod, self.last_error_status)
-                > self.transient_error_backoff):
+                datetime.utcnow() - max(self.last_prod, self.last_error_status) >
+                self.transient_error_backoff):
             # Exception: transient backoff escalation can be cancelled by wake
             self.event.set()
-        elif (self.status == ReaderStatus.READING
-            and (datetime.utcnow() - self.last_read_started)
-                > self.reading_takes_too_long):
+        elif (self.status == ReaderStatus.READING and (
+              datetime.utcnow() - self.last_read_started) >
+                self.reading_takes_too_long):
             try:
                 self.do_close()
                 self.new_error(ReadingForTooLong())
@@ -347,8 +345,8 @@ class SourceReader(Thread):
                     continue  # to next read cycle
                 if not self.is_connected():
                     break
-                if (self.last_read - self.last_prod
-                        > self.max_idle_period):
+                if (self.last_read - self.last_prod >
+                        self.max_idle_period):
                     # Nobody cares, I can stop reading
                     try:
                         if self.status == ReaderStatus.WAIT_FOR_PUSH:
@@ -409,7 +407,7 @@ class SourceReader(Thread):
         pass
 
     def setup(self):
-        from assembl.models import ContentSource
+        from ..models import ContentSource
         backoff = 0.5 + uniform(0, 0.5)
         while self.source is None:
             try:
@@ -466,8 +464,8 @@ class PullSourceReader(SourceReader):
         pass
 
 
-
 # Kombu communication. Does not work yet.
+
 
 _exchange = Exchange(QUEUE_NAME)
 _queue = Queue(
@@ -516,7 +514,7 @@ class SourceDispatcher(ConsumerMixin):
         else:
             source_id = body.get("source", None)
             if not source_id:
-                raise ValueError("source not defined in "+repr(body))
+                raise ValueError("source not defined in " + repr(body))
             self.read(source_id, **body)
         message.ack()
 
@@ -569,7 +567,6 @@ def includeme(config):
     _producer_connection = BrokerConnection(url)
 
 
-
 if __name__ == '__main__':
     if len(sys.argv) != 2:
         print "usage: python source_reader.py configuration.ini"
@@ -601,6 +598,7 @@ if __name__ == '__main__':
            settings.get('celery_tasks.imap.broker'))
     with BrokerConnection(url) as conn:
         sourcedispatcher = SourceDispatcher(conn)
+
         def shutdown(*args):
             sourcedispatcher.shutdown()
         signal.signal(signal.SIGTERM, shutdown)

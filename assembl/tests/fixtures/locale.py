@@ -127,10 +127,7 @@ def non_linguistic_locale(request, test_session, locale_cache):
 
     locale = Locale.get_or_create(Locale.NON_LINGUISTIC, test_session)
 
-    def fin():
-        test_session.delete(locale)
-
-    request.addfinalizer(fin)
+    # DO NOT DELETE core locales.
     return locale
 
 
@@ -142,10 +139,7 @@ def undefined_locale(request, test_session, locale_cache):
 
     locale = Locale.get_or_create(Locale.UNDEFINED, test_session)
 
-    def fin():
-        test_session.delete(locale)
-
-    request.addfinalizer(fin)
+    # DO NOT DELETE core locales.
     return locale
 
 
@@ -156,10 +150,7 @@ def fr_from_en_locale(request, test_session, locale_cache, en_locale, fr_locale)
     from assembl.models.langstrings import Locale
     locale = Locale.create_mt_locale(en_locale, fr_locale, db=test_session)
 
-    def fin():
-        test_session.delete(locale)
-
-    request.addfinalizer(fin)
+    # DO NOT DELETE core locales.
     return locale
 
 

@@ -154,6 +154,7 @@ def get_social_autologin(request, discussion=None, next_view=None):
         if landing_page:
             next_view = request.route_path('new_home',
                                            discussion_slug=discussion.slug)
+        # TODO: This path should be removed
         else:
             next_view = request.route_path('home',
                                            discussion_slug=discussion.slug)
@@ -954,7 +955,7 @@ def do_password_change(request):
         if logged_in:
             # L+: send onwards to discussion
             return HTTPFound(location=request.route_url(
-                'home' if discussion else 'discussion_list',
+                'new_home' if discussion else 'discussion_list',
                 discussion_slug=discussion.slug))
         else:
             # L-: offer to login

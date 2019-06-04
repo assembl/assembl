@@ -8,15 +8,39 @@ from pyramid.security import (Everyone, Authenticated, forget)
 from pyramid.httpexceptions import HTTPNotFound
 from pyisemail import is_email
 from pyramid.authentication import SessionAuthenticationPolicy
+from pyramid.threadlocal import get_current_request
+import transaction
 
 from assembl.lib.locale import _
-from ..lib.sqla import get_session_maker
+from ..lib.sqla import get_session_maker, mark_changed
 from . import R_SYSADMIN, P_READ, SYSTEM_ROLES
 from .password import verify_data_token, Validity
 from ..models.auth import (
     User, Role, UserRole, LocalUserRole, Permission,
     DiscussionPermission, AgentProfile,
-    EmailAccount)
+    EmailAccount, IdentityProvider)
+from ..models.social_auth import SocialAuthAccount
+
+
+def update_forced_social_auth_display_name(backend_cls, session=None):
+    """
+    Utility function to update the forced display name of a social auth account across server.
+    Userfull for scenarios where the display_name structure has been updated and the change must be
+    propagated across the database.
+    """
+    session = session or get_session_maker()()
+    idp = IdentityProvider.get_by_type(backend_cls.name, create=False)
+    with transaction.manager:
+        social_auth_accounts = idp.agent_accounts
+        for account in social_auth_accounts:
+            if isinstance(account, SocialAuthAccount):
+                data = account.extra_data
+                display_name = backend_cls.get_display_name(data)
+                if display_name:
+                    data['forced_display_name'] = display_name
+                account.extra_data = data
+                session.flush()
+        mark_changed(session)
 
 
 def get_user(request):
@@ -125,7 +149,6 @@ def discussion_from_request(request):
 
 
 def get_current_discussion():
-    from pyramid.threadlocal import get_current_request
     r = get_current_request()
     # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
     assert r
@@ -133,7 +156,6 @@ def get_current_discussion():
 
 
 def get_current_user_id():
-    from pyramid.threadlocal import get_current_request
     r = get_current_request()
     # CAN ONLY BE CALLED IF THERE IS A CURRENT REQUEST.
     assert r
@@ -392,8 +414,21 @@ def maybe_auto_subscribe(user, discussion, check_authorization=True):
     return True
 
 
-def add_user(name, email, password, role, force=False, username=None,
-             localrole=None, discussion=None, change_old_password=True, db=None,
+def _make_fake_request(discussion):
+    from pyramid.scripting import _make_request, prepare
+    request = None
+    if discussion:
+        request = _make_request('/debate/' + discussion.slug)
+        request.matchdict = {'discussion_slug': discussion.slug}
+    r = prepare(request)
+    return r['request'], r['closer']
+
+
+def add_user(name, email, password=None, role=R_SYSADMIN, force=False, username=None,
+             localrole=None, discussion=None, change_old_password=True,
+             send_password_change=False, resend_if_not_logged_in=False,
+             text_message=None, html_message=None, sender_name=None,
+             message_subject=None, db=None, request=None, flush=True,
              **kwargs):
     from assembl.models import Discussion, Username
     db = db or Discussion.default_db
@@ -401,16 +436,15 @@ def add_user(name, email, password, role, force=False, username=None,
     all_roles = {r.name: r for r in db.query(Role).all()}
     user = None
     created_user = True
-    if discussion and localrole:
+    if discussion and not isinstance(discussion, Discussion):
         if isinstance(discussion, (str, unicode)):
-            discussion_ob = db.query(Discussion).filter_by(
+            discussion = db.query(Discussion).filter_by(
                 slug=discussion).first()
-            assert discussion_ob,\
+            assert discussion,\
                 "Discussion with slug %s does not exist" % (discussion,)
         elif isinstance(discussion, int):
-            discussion_ob = db.query(Discussion).get(discussion)
-        discussion = discussion_ob
-        assert discussion
+            discussion = db.query(Discussion).get(discussion)
+            assert discussion
 
     existing_email = None
     if email:
@@ -495,7 +529,7 @@ def add_user(name, email, password, role, force=False, username=None,
             db.add(UserRole(user=user, role=role))
 
     created_localrole = False
-    if localrole:
+    if localrole and discussion:
         localrole = all_roles[localrole]
         lur = None
         if old_user:
@@ -505,11 +539,30 @@ def add_user(name, email, password, role, force=False, username=None,
             created_localrole = True
             db.add(LocalUserRole(
                 user=user, role=localrole, discussion=discussion))
-    # Do this at login
-    # if discussion:
-    #     user.get_notification_subscriptions(discussion.id)
-    if kwargs.get('flush', True):
+
+    if flush:
         db.flush()
+
+    status_in_discussion = None
+    if resend_if_not_logged_in and discussion and not (created_user or created_localrole):
+        status_in_discussion = user.get_status_in_discussion(discussion.id)
+    if send_password_change and (
+            created_user or created_localrole or (
+                resend_if_not_logged_in and (
+                    status_in_discussion is None or
+                    not status_in_discussion.first_visit))):
+        from assembl.views.auth.views import send_change_password_email
+        closer = None
+        request = request or get_current_request()
+        if not request:
+            request, closer = _make_fake_request(discussion)
+
+        send_change_password_email(
+            request, user, email, subject=message_subject,
+            text_body=text_message, html_body=html_message,
+            discussion=discussion, sender_name=sender_name, welcome=True)
+        if closer:
+            closer()
 
     return (user, created_user, created_localrole)
 
@@ -541,20 +594,10 @@ def add_multiple_users_csv(
                 "Name too short: <%s> at line %d")) % (name, i))
         (user, created_user, created_localrole) = add_user(
             name, email, None, None, True, localrole=with_role,
-            discussion=discussion_id, change_old_password=False)
-        status_in_discussion = None
-        if send_password_change and not (created_user or created_localrole):
-            status_in_discussion = user.get_status_in_discussion(discussion_id)
-        if send_password_change and (
-                created_user or created_localrole or (
-                    resend_if_not_logged_in and (
-                        status_in_discussion is None or
-                        not status_in_discussion.first_visit))):
-            from assembl.views.auth.views import send_change_password_email
-            from assembl.models import Discussion
-            discussion = Discussion.get(discussion_id)
-            send_change_password_email(
-                request, user, email, subject=message_subject,
-                text_body=text_message, html_body=html_message,
-                discussion=discussion, sender_name=sender_name, welcome=True)
+            discussion=discussion_id, change_old_password=False,
+            send_password_change=send_password_change,
+            resend_if_not_logged_in=resend_if_not_logged_in,
+            text_message=text_message, html_message=html_message,
+            sender_name=sender_name, message_subject=message_subject,
+            request=request)
     return i

@@ -1,0 +1,86 @@
+_extends: base_env.yaml
+DEFAULT:
+  db_user: assembl_test
+  db_password: assembl_test
+  db_database: assembl_test
+_internal:
+  wsginame: dev.wsgi
+  urlhost: localhost
+  uses_nginx: false
+  uses_bluenove_actionable: false
+  gitbranch: develop
+  webmaster_user:
+  is_production_env: false
+  ini_file: testing.ini
+  requirement_inputs: requirements.in requirements-doc.in requirements-tests.in
+  build_docs: false
+  can_test: true
+under_test: true
+theme_base : "%(code_root)s/assembl/static2/build/themes/develop"
+pyramid.default_locale_name: en
+assembl_handle_exceptions: false
+tm.attempts: 2
+debugtoolbar.enabled: false
+sqlalchemy.echo: True
+login_providers: google-oauth2
+use_elasticsearch: false
+assembl.domain: assembl.net
+beaker.session.cookie_expires: false
+beaker.session.elevated_expires: 86400
+dogpile_cache.expiration_time: 600
+public_hostname: localhost
+public_port: 6546
+accept_secure_connection: false
+require_secure_connection: false
+changes_socket: ipc:///tmp/assembl_changes/3
+changes_websocket_port: 8088
+changes_websocket_proxied: false
+assembl.imodeleventwatcher: assembl.models.notification.ModelEventWatcherNotificationSubscriptionDispatcher
+celery_tasks.imodeleventwatcher: assembl.lib.model_watcher.BaseModelEventWatcher
+celery_tasks.broker: redis://localhost:6379/4
+celery_tasks.num_workers: 2
+test_with_zope: false
+web_analytics_piwik_script:
+sentry_dsn:
+saml_country: FR
+saml_state: Hauts-de-Seine
+saml_locality: Levallois-Perret
+saml_org: Bluenove
+saml_email: testing@assembl.net
+mail.tls: false
+pyramid.debug_routematch: true
+handoff_to_nginx: false
+upload_root: var/test_uploads
+frozen_requirements: requirements-tests.frozen.txt
+ini_files: production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl saml_test.ini RC_DATA
+
+handlers:
+  keys: console
+logger_alembic:
+  handlers:
+  level: INFO
+logger_assembl:
+  handlers:
+  level: INFO
+logger_root:
+  handlers: console
+  level: INFO
+logger_sentry:
+  handlers:
+  level: INFO
+logger_sqlalchemy:
+  handlers:
+  level: INFO
+pipeline:main:
+  pipeline: assembl
+server:main:
+  port: 6546
+supervisor:
+  autostart_celery: false
+  autostart_celery_notify_beat: false
+  autostart_source_reader: false
+  autostart_changes_router: false
+  autostart_urlmetadata: false
+  autostart_uwsgi: false
+uwsgi:
+  processes: 4

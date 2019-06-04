@@ -29,7 +29,7 @@ from assembl.lib import logging
 from ..lib.sqla import Base
 from ..lib.sqla_types import URLString
 from ..lib.parsedatetime import parse_datetime
-from ..tasks.source_reader import PullSourceReader, ReaderStatus
+from ..processes.source_reader import PullSourceReader, ReaderStatus
 from .langstrings import LangString
 from .generic import PostSource, ContentSourceIDs
 from .post import ImportedPost
@@ -746,7 +746,7 @@ class FacebookGenericSource(PostSource):
             self._create_fb_user(creator, users_db)
 
     def _create_or_update_post(self, post, creator, posts_db, reimport):
-        from ..tasks.translate import translate_content
+        from ..processes.translate import translate_content
         post_id = post.get('id')
         assembl_post = posts_db.get(post_id, None)
         if assembl_post:

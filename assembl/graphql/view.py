@@ -3,18 +3,19 @@ from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.security import Everyone
 from pyramid.request import Response
 from graphql_wsgi import graphql_wsgi as graphql_wsgi_wrapper
-from graphql_wsgi.main import get_graphql_params as original_get_graphql_params
-import graphql_wsgi.main
+from graphql.execution.middleware import MiddlewareManager
 
 from assembl.auth import CrudPermissions
 from assembl.auth.util import get_permissions
 from assembl.auth.util import find_discussion_from_slug
 from assembl.graphql.schema import Schema
 from assembl.lib.logging import getLogger
+from assembl.lib.sqla import get_session_maker
 
 
 class LoggingMiddleware(object):
     def resolve(self, next, source, gargs, context, info, *args, **kwargs):
+        log = getLogger()
         if source is None:
             modified_variables = {}
             for key, value in info.variable_values.items():
@@ -22,33 +23,27 @@ class LoggingMiddleware(object):
                     modified_variables[key] = 'xxxxxxxxxxxxx'
                 else:
                     modified_variables[key] = value
-
-            getLogger().debug(
+            log.debug(
                 'graphql', op=info.operation.operation,
                 opname=info.operation.name.value, vars=modified_variables)
-        return next(source, gargs, context, info, *args, **kwargs)
+        try:
+            return next(source, gargs, context, info, *args, **kwargs)
+        except Exception as e:
+            log.error("graphql_error", exc_info=True)
+            raise e
 
 
-def get_graphql_params(request, data):
-    query, variables, operation_name = original_get_graphql_params(request, data)
-    modified_variables = {}
-    if variables is not None:
-        for key, value in variables.items():
-            if 'password' in key or 'Password' in key:
-                modified_variables[key] = 'xxxxxxxxxxxxx'
-            else:
-                modified_variables[key] = value
-
-    operation = query.split()[0]
-    getLogger().debug(
-        'graphql', op=operation,
-        opname=operation_name, vars=modified_variables)
-
-    return query, variables, operation_name
-
-
-# monkey patch get_graphql_params for logging
-graphql_wsgi.main.get_graphql_params = get_graphql_params
+class ReadOnlyMiddleware(object):
+    def resolve(self, next, source, gargs, context, info, *args, **kwargs):
+        session = get_session_maker()()
+        ro = session.readonly
+        if info.operation.operation == 'query' and info.operation.name.value != u'Post':
+            # Post query has a side-effect with maybe_translate so it requires a db write.
+            session.set_readonly()
+        try:
+            return next(source, gargs, context, info, *args, **kwargs)
+        finally:
+            session.set_readonly(ro)
 
 
 # Only allow POST+OPTIONS (query may be GET, but mutations should always be a POST,
@@ -98,10 +93,9 @@ def graphql_api(request):
     if check_read_permission and not discussion.user_can(user_id, CrudPermissions.READ, permissions):
         raise HTTPUnauthorized()
 
-    # Using a middleware transforms the request to a promise that
-    # doesn't play nice with multiprocesses or multithreading and sqlalchemy session.
-    # We monkey patch get_graphql_params for logging instead.
-    solver = graphql_wsgi_wrapper(Schema)  # , middleware=[LoggingMiddleware()])
+    middleware = MiddlewareManager(
+        LoggingMiddleware(), ReadOnlyMiddleware(), wrap_in_promise=False)
+    solver = graphql_wsgi_wrapper(Schema, middleware=middleware)
     response = solver(request)
     if has_cors:
         response.headerlist.extend(cors_headers)

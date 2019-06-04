@@ -29,6 +29,19 @@ def test_cache_key(test_session):
         creator=None,
         session=test_session)
     fn = test_cache_key
-    result = d.generate_redis_key(fn) 
+    result = d.generate_redis_key(fn)
     expected_result = "test_cache_key_" + str(d.id) + "_21_42"
     assert result(d, 21, 42) == expected_result
+    test_session.delete(d.table_of_contents)
+    test_session.delete(d.root_idea)
+    test_session.delete(d.next_synthesis)
+    preferences = d.preferences
+    d.preferences = None
+    d.preferences_id = None
+    for ut in d.user_templates:
+        for ns in ut.notification_subscriptions:
+            ns.delete()
+        ut.delete()
+    test_session.delete(preferences)
+    test_session.delete(d)
+    test_session.flush()

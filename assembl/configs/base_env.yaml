@@ -1,0 +1,180 @@
+DEFAULT:
+  db_host: localhost
+  db_user: assembl
+  # TODO: If generated remotely, fetch in fabfile
+  db_password: assembl
+  db_database: assembl
+  sentry_scheme: https
+  sentry_host: localhost
+_internal:
+  postgres_db_user: postgres
+  postgres_db_password:
+  # We now use systemd instead of a global supervisor
+  uses_global_supervisor: false
+  uses_memcache: true
+  uses_nginx: true
+  uses_uwsgi: true
+  uses_bluenove_actionable: false
+  gitrepo: https://github.com/assembl/assembl.git
+  gitbranch: master
+  is_production_env: true
+  # Legacy: Can be prod.wsgi, staging.wsgi or dev.wsgi.
+  wsginame: prod.wsgi
+  ini_file: local.ini
+  projectname: assembl
+
+  # Is assembl installed as a python package in the venv, or as a development package
+  package_install: false
+  sentry_db_host: localhost
+  # _sentry_db_password:
+  requirement_inputs: requirements.in requirements-chrouter.in
+  hosts:
+  webmaster_user: webmaster
+  webmaster_user_password:
+  github:
+    user: "Bluenove Bot"
+    email: "assembl.admin@bluenove.com"
+    repo: "git@github.com:assembl/assembl.git"
+  node:
+    version: '10.13.0'
+    npm: '6.4.1'
+
+ini_files: production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
+# The file that will hold the generated random keys.
+random_file: random.ini
+db_schema: public
+smtp_host: localhost
+imap_host: localhost
+piwik_host: localhost
+url_metadata_host: localhost
+changes_websocket_host: localhost
+# AWS S3 config
+aws_bucket_name:
+aws_access_key_id:
+aws_secret_access_key:
+attachment_service: hashfs
+node_version: 10.13.0
+
+# The port to use for the websocket (client frontends will connect to this)
+# In prod, your firewall needs to allow this through or proxy it through nginx
+# UNIQUE_PER_SERVER
+# Convention:
+# 8085 thru 8087: reserved for development
+# 8088 thru 8089: reserved for automated testing
+# 8090-: production
+changes_websocket_port: 8090
+# Whether the websocket is proxied by nginx, and exposed through the public_port
+changes_websocket_proxied: true
+changes_prefix: /socket
+accept_secure_connection: true
+require_secure_connection: true
+# This is global technical contact, not often used by Assembl discussions
+admin_email: assembl.admin@bluenove.com
+# Replace with your admin email if necessary, used by Assembl discussions
+assembl.admin_email: webmaster@%(public_hostname)s
+assembl.generic_errors: false
+memcached_host: localhost
+mysql_host: localhost
+webpack_host: localhost
+nginx_ipv6: true
+hsts_header: true
+use_letsencrypt: true
+csp_header: |-
+  default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net
+ssl_dhparam: /etc/ssl/certs/dhparam.pem
+
+elasticsearch_version: 5.6.2
+elasticsearch_host: localhost
+elasticsearch_index: assembl
+elasticsearch_port: 9200
+borg_password:
+frozen_requirements: requirements-prod.frozen.txt
+
+# External hostname: Will almost always be overridden in a host-specific rc file.
+# Note that unlike _hosts, the DNS for public_hostname need not exist at time of creation.
+public_hostname:
+# Name of server, if different from public_hostname. Plural because could be applied to many servers.
+# Will use public_hostname if empty
+redis_host: localhost
+# ZMQ model changes local socket (backend will connect to this)
+# UNIQUE_PER_SERVER
+# Convention:
+# /0 - /3: reserved for development
+# /4: reserved for automated testing
+# /5 - /12: production
+redis_socket: 5
+# The port to use for the websocket (client frontends will connect to this)
+# In prod, your firewall needs to allow this through or proxy it through nginx
+# UNIQUE_PER_SERVER
+# Convention:
+# 8085 thru 8087: reserved for development
+# 8088 thru 8089: reserved for automated testing
+# 8090-: production
+changes_websocket_port: 8090
+# ZMQ model changes local socket (backend will connect to this)
+# UNIQUE_PER_SERVER
+# Convention:
+# /0 thru /2: reserved for development
+# /3 thru /4: reserved for automated testing
+# /5-: production
+changes_socket: ipc:///tmp/assembl_changes/5
+disallow_robots: false
+
+
+# Those need to be overridden in the server-specific file
+# _postgres_db_password
+# _user
+# _projectpath
+# _dbdumps_dir
+# Activate bugherd on staging/preproduction servers only
+# bugherd_url
+# bugherd_key
+# wsginame
+
+# Optional - Path to SSL Stapling certificates, must be single file
+# on server
+ocsp_path:
+
+supervisor:
+  autostart_celery: true
+  autostart_source_reader: true
+  autostart_changes_router: true
+  autostart_pserve: false
+  autostart_nodesass: false
+  autostart_gulp: false
+  autostart_webpack: false
+  autostart_uwsgi: true
+  autostart_elasticsearch: true
+  autostart_urlmetadata: true
+
+alembic:
+  # The base in production.ini uses 'here' so it can works without .rc file;
+  # but if we have a .rc file, we can be more precise.
+  script_location: "%(code_root)s/assembl/alembic"
+
+# Use socket if not defined
+uwsgi_port:
+uwsgi_host: localhost
+
+# Machines format: machine_id,machine_name,machine_password/...others
+# The first machine is the Robot used for Bigdatext
+machines:
+
+visit_analytics_region_redis_expiration_time: 3600
+
+# Show errors on exception views
+visible_errors: false
+
+# Fail2ban configurations
+
+# Time in seconds to be banned
+bantime: 3600
+# Time in seconds that is the window in which a filter occurs
+findtime: 60
+# Number of matches of a filter in the findtime window
+maxretry: 10
+
+# The bucket path where all themes for the server are stored
+# Can be either a URL or a local filesystem path
+# IF URL, there should be no query strings
+theme_base: ""

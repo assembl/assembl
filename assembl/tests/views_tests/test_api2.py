@@ -18,8 +18,6 @@ from assembl.models import (
     BaseIdeaWidgetLink,
     AbstractVoteSpecification
 )
-from assembl.views import extract_resources_hash, extract_v1_resources_hash
-
 
 JSON_HEADER = {"Content-Type": "application/json"}
 
@@ -1249,58 +1247,3 @@ class TestExtractCsvVoters(AbstractExport):
 
     # TODO: Add more unit tests for votes export API.
 """
-
-def get_resources_html(theme_name="default"):
-    return """
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Caching</title>
-        <link href="/build/theme_{theme_name}_web.8bbb970b0346866e3dac.css" rel="stylesheet">
-        <link href="/build/bundle.5f3e474ec0d2193c8af5.css" rel="stylesheet">
-        <link href="/build/searchv1.04e4e4b2fab45a2ab04e.css" rel="stylesheet">
-      </head>
-      <body>
-        <script type="text/javascript" src="/build/theme_{theme_name}_web.ed5786109ac04600f1d5.js"></script>
-        <script type="text/javascript" src="/build/bundle.5aae461a0604ace7cd31.js"></script>
-        <script type="text/javascript" src="/build/searchv1.b8939cd89ebdedfd2901.js"></script>
-      </body>
-    </html>
-    """.format(theme_name=theme_name)
-
-
-class TestResources(object):
-
-    def test_get_resources_hash(self):
-        theme_name = "my_theme"
-        resources_hash = extract_resources_hash(get_resources_html(theme_name), theme_name)
-        expected = {
-            'bundle_hash': '5aae461a0604ace7cd31',
-            'theme_hash': '8bbb970b0346866e3dac',
-            'bundle_css_hash': '5f3e474ec0d2193c8af5'
-        }
-        assert expected['bundle_hash'] == resources_hash['bundle_hash']
-        assert expected['theme_hash'] == resources_hash['theme_hash']
-        assert expected['bundle_css_hash'] == resources_hash['bundle_css_hash']
-
-    def test_get_v1_resources_hash(self):
-        resources_hash = extract_v1_resources_hash(get_resources_html())
-        expected = {
-            'search_hash': 'b8939cd89ebdedfd2901',
-            'search_css_hash': '04e4e4b2fab45a2ab04e'
-        }
-        assert expected['search_hash'] == resources_hash['search_hash']
-        assert expected['search_css_hash'] == resources_hash['search_css_hash']
-
-    def test_get_null_resources_hash(self):
-        theme_name = "my_theme"
-        resources_hash = extract_resources_hash("", theme_name)
-        expected = {
-            'bundle_hash': None,
-            'theme_hash': None,
-            'bundle_css_hash': None
-        }
-        assert expected['bundle_hash'] == resources_hash['bundle_hash']
-        assert expected['theme_hash'] == resources_hash['theme_hash']
-        assert expected['bundle_css_hash'] == resources_hash['bundle_css_hash']

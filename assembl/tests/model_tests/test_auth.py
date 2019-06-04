@@ -2,8 +2,6 @@
 from datetime import datetime
 from sqlalchemy import func
 
-from assembl.models.notification import (
-    ModelEventWatcherNotificationSubscriptionDispatcher)
 from assembl.models import Username
 
 

@@ -369,5 +369,52 @@ def collection_add_json(request, json=None):
         return CreationResponse(first, user_id, permissions, view)
 
 
+@view_config(route_name='health_check', request_method='GET', renderer='string')
+def health_check(request):
+    """
+    Simple health check
+    TODO: Add connection to URLMetadata
+    TODO: Ensure SQS is empty and reachable (for celery)
+    TODO: Ensure S3 buckets used on this server are reachable
+    """
+    import requests
+    from telnetlib import Telnet
+    from assembl.lib import config
+    # test connection to database
+    db = Discussion.default_db
+    db.execute("select 1")
+
+    # test connection to elasticsearch
+    if config.get('use_elasticsearch', False):
+        host = config.get('elasticsearch_host', "")
+        port = config.get('elasticsearch_port', "")
+        path = "http://{}{}".format(host, ':%s' % port if port else '')
+        resp = requests.get(path)
+        if resp.status_code != 200:
+            return resp.status_code
+
+    # Test connection to memcached
+    if 'memcached' in config.get('beaker.session.type', ''):
+        def test_memcache_connection(host):
+            port = config.get('beaker.session.url', 23)
+            if isinstance(port, basestring):
+                port = int(port.split(":")[1])
+            try:
+                tn = Telnet(host, port)
+                tn.close()
+            except:
+                raise Exception("Change to HTTP Exception")
+
+        hosts = config.get('memcached_host', '')
+        if ';' in hosts:
+            for host in hosts.split(";"):
+                test_memcache_connection(host)
+        else:
+            test_memcache_connection(host)
+
+    return "OK"
+
+
 def includeme(config):
+    config.add_route('health_check', '/health_check')
     config.include('.discussion')

@@ -1,4 +1,4 @@
 [flake8]
 max-line-length=160
 ignore = E501,F403,E722,E123,E124,W504
-exclude = assembl/alembic/*,assembl/indexing/*,assembl/lib/*,assembl/locale/*,assembl/nlp/*,assembl/scripts/*,assembl/semantic/*,assembl/static/*,assembl/static2/*,assembl/tasks/*,assembl/templates/*,assembl/tests/*,assembl/tweens/*,assembl/view_def/*,assembl/views/*
+exclude = assembl/alembic/*,assembl/indexing/*,assembl/lib/*,assembl/locale/*,assembl/nlp/*,assembl/scripts/*,assembl/semantic/*,assembl/static/*,assembl/static2/*,assembl/processes/*,assembl/tasks/*,assembl/templates/*,assembl/tests/*,assembl/tweens/*,assembl/view_def/*,assembl/views/*

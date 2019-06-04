@@ -1,0 +1,78 @@
+_extends: base_env.yaml
+public_hostname: localhost
+ini_files: production.ini no_sentry.ini develop_overlay.ini RANDOM:random.ini.tmpl RC_DATA
+# ZMQ model changes local socket (backend will connect to this)
+# UNIQUE_PER_SERVER
+# Convention:
+# /0 - /3: reserved for development
+# /4: reserved for automated testing
+# /5 - /12: production
+redis_socket: 0
+# Change this to the port visible from the outside
+# Typically 80 for prod, 6543 for dev
+# In dev, will often match server:main__port unless proxying
+public_port: 6543
+# Other public_port values
+# public_port: 9991
+# public_port: 8080
+package_install: false
+accept_secure_connection: false
+require_secure_connection: false
+
+# If not proxied by nginx or something, public_port in app:main needs to match
+# this value
+# UNIQUE_PER_SERVER
+# Default port is 6543.
+# Convention:
+# 6543 thru 6545: reserved for development
+# 6546 thru 6547: reserved for automated testing
+# 6548-: production
+web_analytics_piwik_url:
+web_analytics_piwik_script:
+# The port to use for the websocket (client frontends will connect to this)
+# In prod, your firewall needs to allow this through or proxy it through nginx
+# UNIQUE_PER_SERVER
+# Convention:
+# 8085 thru 8087: reserved for development
+# 8088 thru 8089: reserved for automated testing
+# 8090-: production
+changes_websocket_port: 8085
+changes_websocket_proxied: false
+# ZMQ model changes local socket (backend will connect to this)
+# UNIQUE_PER_SERVER
+# Convention:
+# /0 thru /2: reserved for development
+# /3 thru /4: reserved for automated testing
+# /5-: production
+changes_socket: ipc:///tmp/assembl_changes/0
+env.wsginame: dev.wsgi
+celery_tasks.num_workers: 3
+use_letsencrypt: false
+
+# If you want to see emails, run this in another console:
+# python -m smtpd -n -c DebuggingServer
+mail.port: 8025
+mail.host: localhost
+
+theme_base: "%(code_root)s/static2/build/themes/develop"
+disable_notification: true
+visible_errors: true
+frozen_requirements: requirements-dev.frozen.txt
+_internal:
+  uses_nginx: false
+  uses_uwsgi: false
+  uses_bluenove_actionable: false
+  is_production_env: false
+  cloud: false
+  wsginame: dev.wsgi
+  gitbranch: develop
+  requirement_inputs: requirements.in requirements-chrouter.in requirements-dev.in requirements-doc.in requirements-tests.in
+  build_docs: false
+  can_test: true
+  webmaster_user: webmaster
+supervisor:
+  autostart_celery_notify_beat: false
+  autostart_webpack: true
+  autostart_uwsgi: false
+  autostart_source_reader: false
+server:main__port: 6543

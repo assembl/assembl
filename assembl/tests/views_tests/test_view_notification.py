@@ -27,9 +27,9 @@ def local_to_absolute(uri):
 
 
 def test_default_notifications(test_app, test_session, discussion, participant1_user):
-    from assembl.auth import R_PARTICIPANT
-    from assembl.models.auth import Role, LocalUserRole
     # Set conditions for user to be subscribable
+    discussion_id = discussion.id
+    participant1_user_id = participant1_user.id
     participant1_user.update_agent_status_last_visit(discussion)
     test_session.flush()
     # Template created
@@ -40,17 +40,18 @@ def test_default_notifications(test_app, test_session, discussion, participant1_
     # Get the user's notification subscriptions (accessing this route makes the backend materialize user's missing notification subscriptions, based on discussion notification settings, which are set through discussion's user_template notification subscriptions). Should not be empty.
     response = test_app.get(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions' % (
-            discussion.id, participant1_user.id))
+            discussion_id, participant1_user_id))
     assert response.status_code == 200
     user_notif_subsc = response.json
     assert len(user_notif_subsc)
     # Template now have subscriptions
+    # test_session.refresh(template)
     discussion.db.expire(template, ['notification_subscriptions'])
     assert len(template.notification_subscriptions) >= 3
     # Get the template's subscriptions.
     response = test_app.get(
         '/data/Discussion/%d/user_templates/-/notification_subscriptions' % (
-            discussion.id,))
+            discussion_id,))
     assert response.status_code == 200
     template_notif_subsc = response.json
     assert len(template_notif_subsc) >= 3
@@ -66,13 +67,13 @@ def test_default_notifications(test_app, test_session, discussion, participant1_
     t_unsub_id = NotificationSubscription.get_database_id(t_unsub['@id'])
     response = test_app.put_json(
         '/data/Discussion/%d/user_templates/-/notification_subscriptions/%d' % (
-        discussion.id, t_unsub_id),
+            discussion_id, t_unsub_id),
         t_unsub)
     assert response.status_code == 200  # or 204?
     # Check if the user's subscriptions were affected
     response = test_app.get(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions' % (
-            discussion.id, participant1_user.id))
+            discussion_id, participant1_user_id))
     assert response.status_code == 200
     user_notif_subsc_new = response.json
     assert len(user_notif_subsc_new) > len(user_notif_subsc)
@@ -84,13 +85,13 @@ def test_default_notifications(test_app, test_session, discussion, participant1_
     t_unsub['status'] = "INACTIVE_DFT"
     response = test_app.put_json(
         '/data/Discussion/%d/user_templates/-/notification_subscriptions/%d' % (
-        discussion.id, t_unsub_id),
+            discussion_id, t_unsub_id),
         t_unsub)
     assert response.status_code == 200  # or 204?
     # Check if the user's subscriptions were affected again
     response = test_app.get(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions' % (
-            discussion.id, participant1_user.id))
+            discussion_id, participant1_user_id))
     assert response.status_code == 200
     user_notif_subsc_3 = response.json
     print user_notif_subsc_3

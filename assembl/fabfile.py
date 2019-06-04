@@ -17,6 +17,7 @@ from __future__ import with_statement
 from os import getenv
 import sys
 import re
+import json
 from getpass import getuser
 from shutil import copyfile
 from time import sleep, strftime, time
@@ -50,6 +51,7 @@ from fabric.context_managers import shell_env
 # logger.setLevel(logging.DEBUG)
 
 
+AMAZON_METADATA_URL = "http://169.254.169.254/latest/meta-data"
 DEFAULT_SECTION = "DEFAULT"
 _local_file = __file__
 if _local_file.endswith('.pyc'):
@@ -73,14 +75,19 @@ def running_locally(hosts=None, alt_env=None):
     return set(hosts) - set(['localhost', '127.0.0.1']) == set()
 
 
+def get_user_password_from_config(user):
+    return env.get('%s_user_password' % user, None)
+
+
 def sudo(*args, **kwargs):
     sudoer = env.get("sudoer", None) or env.get("user")
-    with settings(user=sudoer,
-                  sudo_prefix='sudo -i -S -p \'{}\''.format(env.sudo_prompt)):
-        if sudoer == "root":
-            run(*args, **kwargs)
+    # Generic ability for a defined user to have capabilities to run commands on machine without
+    # being a sudo user
+    with settings(user=sudoer):
+        if sudoer in ("root",):
+            return run(*args, **kwargs)
         else:
-            fabsudo(*args, **kwargs)
+            return fabsudo(*args, **kwargs)
 
 
 def get_prefixed(key, alt_env=None, default=None):
@@ -153,12 +160,7 @@ def as_bool(b):
 
 
 def populate_secrets():
-    try:
-        import boto3  # noqa
-        import json
-    except ImportError:
-        # we don't have boto3 yet
-        return
+    import boto3  # noqa
 
     # ignore if you don't have secrets it means you are on your desktop.
     # so we don't need a AWS account to start locally
@@ -207,6 +209,9 @@ def sanitize_env():
         env.projectpath, '%s_dumps' % env.get("projectname", 'assembl')))
     env.ini_file = env.get('ini_file', 'local.ini')
     env.group = env.get('group', env.user)
+    env.wheel_path = env.get('assembl_wheel_dir', os.path.join('/home/%s/' % env.user, 'assembl_wheels'))
+    env.webmaster_user = env.get('webmaster_user', 'webmaster')
+    env.package_install = as_bool(env.get('package_install', False))
     populate_secrets()
 
 
@@ -290,6 +295,13 @@ def getmtime(path):
 
 def listdir(path):
     return run("ls " + path).split()
+
+
+def warn_only(string, use_sudo=False):
+    with settings(warn_only=True):
+        if use_sudo:
+            return sudo(string)
+        return run(string)
 
 
 @task
@@ -507,19 +519,27 @@ def migrate_local_ini(backup=False):
             os.unlink(local_file_name)
 
 
-@task
-def supervisor_restart():
-    "Restart supervisor itself."
+def supervisor_shutdown(retries=10):
+    """
+    Shutdown Assembl's supervisor
+    """
     with hide('running', 'stdout'):
         venvcmd("supervisorctl shutdown")
-    while True:
-        sleep(5)
+    print(yellow("Waiting for supervisor to shutdown"))
+    while retries > 0:
+        sleep(6)
         result = venvcmd("supervisorctl status", warn_only=True)
         if not result.failed:
             break
-        # otherwise still in shutdown mode
+        retries -= 1
     # Another supervisor, upstart, etc may be watching it, give it more time
-    sleep(5)
+    sleep(6)
+
+
+@task
+def supervisor_restart():
+    """Restart supervisor itself."""
+    execute(supervisor_shutdown)
     result = venvcmd("supervisorctl status")
     if "no such file" in result:
         venvcmd("supervisord")
@@ -691,7 +711,8 @@ def app_reload():
 
 
 def as_venvcmd(cmd, chdir=False):
-    cmd = '. %s/bin/activate && %s' % (env.venvpath, cmd)
+    venvpath = env.get("venvpath", None) or "./venv"
+    cmd = 'source %s/bin/activate && %s' % (venvpath, cmd)
     if chdir:
         cmd = 'cd %s && %s' % (env.projectpath, cmd)
     return cmd
@@ -725,9 +746,7 @@ def get_db_dump_name():
 
 
 def get_versioned_db_dump_name():
-    bumpversion_config = SafeConfigParser()
-    bumpversion_config.read(join(env.projectpath, '.bumpversion.cfg'))
-    current_version = bumpversion_config.get('bumpversion', 'current_version')
+    current_version = venvcmd('python -c "import pkg_resources; print pkg_resources.require(\'assembl\')[0].version"')
     return 'db_{}_{}.sql.pgdump'.format(env.wsginame, current_version or strftime('%Y%m%d'))
 
 
@@ -744,7 +763,7 @@ def printenv():
 
 # # Virtualenv
 @task
-def build_virtualenv():
+def build_virtualenv(with_setuptools=False):
     """
     Build the virtualenv
     """
@@ -755,7 +774,10 @@ def build_virtualenv():
         print(cyan('The virtualenv seems to already exist, so we don\'t try to create it again'))
         print(cyan('(otherwise the virtualenv command would produce an error)'))
         return
-    run('python2 -mvirtualenv --no-setuptools %(venvpath)s' % env)
+    setup_tools = ''
+    if not with_setuptools:
+        setup_tools = '--no-setuptools'
+    run('python2 -mvirtualenv %s %s' % (setup_tools, env.venvpath))
     # create the virtualenv with --no-setuptools to avoid downgrading setuptools that may fail
     if env.uses_bluenove_actionable and not is_integration_env():
         execute(install_bluenove_actionable)
@@ -817,6 +839,10 @@ def install_url_metadata_source():
         print cyan("Cloning git repository")
         with cd("%(projectpath)s/.." % env):
             run('git clone git://github.com/assembl/url_metadata.git')
+    else:
+        print cyan("Url Metadata service being updated...")
+        with cd("%(projectpath)s/.." % env):
+            run('git pull')
     venvcmd_py3('pip install -e ../url_metadata')
 
 
@@ -876,6 +902,59 @@ def is_db_updated():
     return current in history
 
 
+def _sync_uploads_folder(local=False):
+    # Sync uploads folder
+    install_awscli()
+    with shell_env(
+        AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+        AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+    ):
+        cmd = '{}/var/uploads s3://{}/uploads'.format(env.projectpath, env.aws_bucket_name)
+        if local:
+            cmd = 's3://{}/uploads {} --delete'.format(env.aws_bucket_name, get_upload_dir())
+            venvcmd('aws s3 sync %s' % cmd)
+        else:
+            if exists(get_upload_dir()):
+                venvcmd('aws s3 cp %s' % cmd)
+            else:
+                print(red("There is no uploads folder to sync with Amazon S3!"))
+
+
+@task
+def sync_with_remote_upload_folder():
+    """
+    Syncronize the uploads folder on the host with S3 bucket
+    """
+    _sync_uploads_folder()
+
+
+@task
+def sync_with_local_upload_folder():
+    """
+    Syncronize a remote uploads folder, on S3 bucket, with the local uploads folder
+    """
+    _sync_uploads_folder(local=True)
+
+
+@task
+def reset_upload_folder():
+    if env.wsginame == 'staging.wsginame':
+        # Ensure an uploads folder
+        remote_uploads_exists = False
+        local_upload_exists = exists(get_upload_dir())
+        with shell_env(
+            AWS_ACCESS_KEY_ID=env.aws_access_key_id,
+            AWS_SECRET_ACCESS_KEY=env.aws_secret_access_key
+        ):
+            remote_uploads_exists = venvcmd('aws s3 ls s3://{}/uploads | wc -l'.format(env.aws_bucket_name))
+            remote_uploads_exists = False if exists == '0' else True
+
+        if local_upload_exists and not remote_uploads_exists:
+            execute(sync_with_remote_upload_folder)
+        else:
+            execute(sync_with_local_upload_folder)
+
+
 @task
 def reset_db():
     """
@@ -898,10 +977,12 @@ def reset_db():
             # If the dump don't exist, we create it
             print(cyan('Create a new dump'))
             execute(database_dump_aws)
+            execute(sync_with_remote_upload_folder)
         else:
             # Otherwise, we restore the last dump
             print(cyan('Restore the last dump'))
             execute(database_restore_aws)
+            execute(sync_with_local_upload_folder)
 
         # Update the dump only when the schema of the database changes
         if not is_db_updated():
@@ -917,6 +998,9 @@ def database_dump_aws():
     """
     Dumps the database on an amazon s3 object storage
     """
+    if not exists(env.dbdumps_dir):
+        run('mkdir -m700 %s' % env.dbdumps_dir)
+
     install_awscli()
     with prefix(venv_prefix()), \
         cd(env.projectpath), \
@@ -949,14 +1033,11 @@ def database_dump_aws():
 
 _processes_to_restart_without_backup = [
     "dev:pserve", "celery", "changes_router",
-    "celery_notify", "source_reader"]
+    "celery_notify_beat", "source_reader"]
 
 
 _processes_to_restart_with_backup = _processes_to_restart_without_backup + [
-    "dev:gulp", "dev:webpack", "edgesense",
-    "elasticsearch", "celery_notify_beat",
-    "celery_translate", "maintenance_uwsgi",
-    "metrics", "metrics_py", "prod:uwsgi"]
+    "dev:gulp", "dev:webpack", "elasticsearch", "maintenance_uwsgi", "prod:uwsgi"]
 
 
 @task
@@ -965,18 +1046,19 @@ def database_restore_aws(backup=False):
     Restores the database backed up on the amazon s3 object storage
     """
     install_awscli()
-    if not backup:
-        assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
-        processes = filter_autostart_processes(_processes_to_restart_without_backup)
-    else:
-        processes = filter_autostart_processes(_processes_to_restart_with_backup)
+    # if not backup:
+    #     assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+    #     processes = filter_autostart_processes(_processes_to_restart_without_backup)
+    # else:
+    #     processes = filter_autostart_processes(_processes_to_restart_with_backup)
 
     if(env.wsginame != 'dev.wsgi'):
         execute(webservers_stop)
-        processes.append("prod:uwsgi")  # possibly not autostarted
+        # processes.append("prod:uwsgi")  # possibly not autostarted
 
-    for process in processes:
-        supervisor_process_stop(process)
+    # for process in processes:
+    #     supervisor_process_stop(process)
+    execute(supervisor_shutdown)
 
     # Kill postgres processes in order to be able to drop tables
     # execute(postgres_user_detach)
@@ -1018,11 +1100,12 @@ def database_restore_aws(backup=False):
         # Remove the downloaded dump from the local host
         run('rm -f {}'.format(filename))
 
-    for process in processes:
-        supervisor_process_start(process)
+    # for process in processes:
+    #     supervisor_process_start(process)
 
-    if(env.wsginame != 'dev.wsgi'):
-        execute(webservers_start)
+    venvcmd('supervisord')
+    # if(env.wsginame != 'dev.wsgi'):
+    #     execute(webservers_start)
 
 
 @task
@@ -1133,11 +1216,6 @@ def bootstrap_from_checkout(backup=False):
     """
     execute(updatemaincode, backup=backup)
     execute(build_virtualenv)
-    if not is_integration_env():
-        if env.is_production_env:
-            execute(install_url_metadata_wheel)
-        else:
-            execute(install_url_metadata_source)
     execute(app_update_dependencies, backup=backup)
     execute(app_setup, backup=backup)
     execute(check_and_create_database_user)
@@ -1168,6 +1246,29 @@ def regenerate_rc_file():
     Regenerates RC file from ini file to restore production server from backup
     """
     venvcmd('assembl-ini-files migrate -i local.ini -r {random} {rc}' (env.rcfile))
+
+
+@task
+def bootstrap_from_wheel():
+    """
+    The de-facto way to bootstrap the dev-staging server in a CI/CD context
+    """
+
+    # The database changes/alterations no longer should happen in the assembl instance
+    # The elasticsearch reindexing is a cluster migration, should happen with database
+    # independent of a single instance
+
+    # File permissions are redundant under AWS conditions (using roles instead)
+    # URL metadata changes are independent now
+    execute(app_setup)
+    execute(check_and_create_database_user)
+    execute(set_file_permissions)
+    execute(reset_upload_folder)
+    execute(reset_db)
+    execute(reindex_elasticsearch)
+    execute(install_url_metadata_wheel)
+    execute(setup_nginx_file)
+    # Restart webserver
 
 
 def clone_repository():
@@ -1235,8 +1336,9 @@ def get_robot_machine():
 
 def is_integration_env():
     # Centralize checking whether in CI/CD env
-    if getenv('TRAVIS_COMMIT', None):
-        return True
+    # Travis (https://docs.travis-ci.com/user/environment-variables/)
+    # Gitlab (https://docs.gitlab.com/ee/ci/variables/)
+    return getenv('CI', False)
 
 
 @task
@@ -1324,7 +1426,8 @@ def restart_bluenove_actionable():
 @task
 def app_setup(backup=False):
     """Setup the environment so the application can run"""
-    venvcmd('pip install -e ./')
+    if not env.package_install:
+        venvcmd('pip install -e ./')
     execute(setup_var_directory)
     if not exists(env.ini_file):
         execute(create_local_ini)
@@ -1472,19 +1575,103 @@ def generate_dh_group():
 
 
 @task
-def setup_nginx_file(ready_for_production=False):
+def update_nginx_file():
     """Creates nginx config file from template."""
     # Deleting any existing nginx configurations already existing
-    if exists("/etc/nginx/sites-enabled/assembl.%s" % (env.public_hostname)):
-        sudo("rm /etc/nginx/sites-enabled/assembl.%s" % (env.public_hostname))
-    if exists("/etc/nginx/sites-enabled/assembl.%s" % (env.server_ip_address)):
-        sudo("rm /etc/nginx.sites-enabled/assembl.%s" % (env.server_ip_address))
-    fill_template('assembl/templates/system/nginx_default.jinja2', env, 'assembl.%s' % (env.public_hostname))
-    sudoer = env.get("sudoer", None) or env.get("user")
-    with settings(user=sudoer):
-        put("assembl.%s" % (env.public_hostname), "/etc/nginx/sites-available/assembl.%s" % (env.public_hostname), use_sudo=True)
-    sudo("ln -s /etc/nginx/sites-available/assembl.%s /etc/nginx/sites-enabled/" % env.public_hostname)
-    sudo("/etc/init.d/nginx restart")
+    file = join(os.getcwd(), env.public_hostname)
+    rc_info = filter_global_names(combine_rc(env['rcfile']))
+    fill_template('nginx_default.jinja2', rc_info, file)
+    # Have to change users with settings due to put operation
+    with settings(user=env.user):
+        nginx_path = "%s/var/share/assembl.nginx" % env.projectpath
+        run('cp %(file)s %(file)s.bak' % {'file': nginx_path})
+        put(file, nginx_path)
+        run("sudo /etc/init.d/nginx restart")
+
+
+@task
+def setup_nginx_file():
+    sudo('ln -s %s/var/share/assembl.nginx /etc/nginx/sites-available/assembl.nginx' % env.projectpath)
+
+
+def get_s3_file(bucket, key, destination=None):
+    import boto3
+    s3 = boto3.client('s3')
+    try:
+        ob = s3.get_object(Bucket=bucket, Key=key)
+        content = ob['Body'].read()
+        if destination:
+            with open(destination, 'w') as f:
+                f.write(content)
+        return content
+    except s3.exceptions.NoSuchKey:
+        return None
+
+
+@task
+def get_aws_localrc():
+    assert running_locally()
+    import requests
+    r = requests.get(AMAZON_METADATA_URL + '/iam/info')
+    assert r.ok
+    account = r.json()['InstanceProfileArn'].split(':')[4]
+    # This introduces a convention: local.rc files
+    # for a given amazon account will be stored in
+    # s3://bluenove-assembl-configurations/local_{account_id}.rc
+    content = get_s3_file(
+        'bluenove-assembl-configurations',
+        'local_%s.rc' % account,
+        env.projectpath + '/local.rc')
+    extends_re = re.compile(r'\b_extends\s*=\s*(\w+\.rc)')
+    match = extends_re.search(content)
+    while match:
+        key = match.group(1)
+        ex_content = get_s3_file('bluenove-assembl-configurations', key)
+        if not ex_content:
+            break
+        with open(key, 'w') as f:
+            f.write(ex_content)
+        match = extends_re.search(ex_content)
+    if not content:
+        raise RuntimeError("local_%s.rc was not defined in S3" % account)
+
+
+@task
+def setup_aws_default_region():
+    assert running_locally()
+    import requests
+    r = requests.get(AMAZON_METADATA_URL + '/placement/availability-zone')
+    assert r.ok
+    region = r.content[:-1]
+    run('aws configure set region ' + region)
+
+
+@task
+def aws_instance_startup():
+    """Operations to startup a fresh aws instance from an assembl AMI"""
+    if not env.projectpath:
+        # Assumption: Started from project directory
+        env.projectpath = os.getcwd()
+    setup_aws_default_region()
+    get_aws_localrc()
+    if not exists(env.projectpath + "/local.rc"):
+        raise RuntimeError("Missing local.rc file")
+    env['rcfile'] = "local.rc"
+    load_rcfile_config()
+    aws_server_startup_from_local()
+
+
+@task
+def aws_server_startup_from_local():
+    """Update files that depend on local.rc and restart nginx, supervisor"""
+    create_local_ini()
+    venvcmd('assembl-ini-files populate %s' % (env.ini_file))
+    fill_template('assembl/templates/system/nginx_default.jinja2', env, 'var/share/assembl.nginx')
+    if is_supervisord_running():
+        supervisor_restart()
+    else:
+        venvcmd('supervisord')
+    webservers_reload()
 
 
 @task
@@ -1496,7 +1683,11 @@ def webservers_reload():
         # Nginx (sudo is part of command line here because we don't have full
         # sudo access
         print(cyan("Reloading nginx"))
-        if (env.get('sudo_user'), None) and exists('/etc/init.d/nginx'):
+        if env.webmaster_user:
+            with settings(user=env.webmaster_user):
+                if exists('/etc/init.d/nginx'):
+                    run('sudo /etc/init.d/nginx reload')
+        if (env.get('sudo_user', None) and exists('/etc/init.d/nginx')):
             sudo('/etc/init.d/nginx reload')
         elif exists('/etc/init.d/nginx'):
             run('sudo /etc/init.d/nginx reload')
@@ -1528,6 +1719,7 @@ def webservers_start():
     if env.uses_nginx:
         # Nginx
         if exists('/etc/init.d/nginx'):
+            # Have to ensure that the env.user has visudo rights to call this
             sudo('/etc/init.d/nginx start')
         elif env.mac and exists('/usr/local/nginx/sbin/nginx'):
             sudo('/usr/local/nginx/sbin/nginx')
@@ -1740,6 +1932,7 @@ def generate_certificate():
         sudo("certbot certonly --webroot -w /var/www/html -d " + hostname)
     cron_command = '12 3 * * 3 letsencrypt renew && /etc/init.d/nginx reload'
     sudo(create_add_to_crontab_command(cron_command))
+    execute(generate_dh_group)
 
 
 # # Server packages
@@ -1867,8 +2060,10 @@ def install_memcached():
 
 @task
 def install_fail2ban():
-    print(cyan('Installing fail2ban'))
-    if not env.mac:
+    if env.mac:
+        return
+    if not exists('/usr/bin/fail2ban-client'):
+        print(cyan('Installing fail2ban'))
         sudo('apt-get install -y fail2ban')
 
 
@@ -1918,10 +2113,10 @@ def set_file_permissions():
             run('chmod -R g-rw ' + code_path)
             chgrp_rec(code_path, webgrp)
 
-        run('chgrp {webgrp} . {path}/var {path}/var/run'.format(webgrp=webgrp, path=project_path))
+        run('chgrp {webgrp} . {path}/var {path}/var/run {path}/var/share'.format(webgrp=webgrp, path=project_path))
         run('chgrp -R {webgrp} {path}/assembl/static {path}/assembl/static2'.format(webgrp=webgrp, path=code_path))
         run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))
-        run('chmod -R g+rxs {path}/var/run'.format(path=project_path))
+        run('chmod -R g+rxs {path}/var/run {path}/var/share'.format(path=project_path))
         run('chmod -R g+rxs ' + upload_dir)
         run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
         run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
@@ -2081,7 +2276,7 @@ def check_if_database_exists():
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
-        return not checkDatabase.failed
+        return not checkDatabase.failed and checkDatabase == '1'
 
 
 def check_if_db_tables_exist():
@@ -2089,7 +2284,7 @@ def check_if_db_tables_exist():
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command="SELECT count(*) from permission", database=env.db_database,
             password=env.db_password, host=env.db_host, user=env.db_user))
-        return not checkDatabase.failed
+        return not checkDatabase.failed and int(checkDatabase.strip('()L,')) > 0
 
 
 def check_if_first_user_exists():
@@ -2244,11 +2439,11 @@ def database_delete():
     execute(check_and_create_database_user)
 
     with settings(warn_only=True), hide('stdout'):
-
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
             command="SELECT 1 FROM pg_database WHERE datname='%s'" % (env.db_database),
             password=env.db_password, host=env.db_host, user=env.db_user))
-    if not checkDatabase.failed:
+
+    if not checkDatabase.failed and checkDatabase == '1':
         print(yellow("Cannot connect to database, trying to create"))
         deleteDatabase = run('PGPASSWORD=%s dropdb --host=%s --username=%s %s' % (
             env.db_password, env.postgres_db_host, env.db_user, env.db_database))
@@ -2358,6 +2553,7 @@ def setup_var_directory():
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'log')))
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'run')))
     run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'db')))
+    run('mkdir -p %s' % normpath(join(env.projectpath, 'var', 'share')))
     run('mkdir -p %s' % get_upload_dir())
 
 
@@ -2634,7 +2830,7 @@ def create_first_admin_user():
     "Create a user with admin rights, email given in env. as first_admin_email"
     email = env.get("first_admin_email", None)
     assert email, "Please set the first_admin_email in the .rc environment"
-    venvcmd("assembl-add-user -m %s -u admin -n Admin -p admin --bypass-password %s" % (
+    venvcmd("assembl-add-user -m %s -u admin -n Admin -p admin --send-password-change %s" % (
         email, env.ini_file))
 
 
@@ -3094,39 +3290,43 @@ def add_user_to_group(user, group):
 @task
 def set_fail2ban_configurations():
     """Utilize configurations to populate and push fail2ban configs, must be done as a sudo user"""
-    if exists('/etc/fail2ban'):
-        from jinja2 import Environment, FileSystemLoader
-        # This is done locally
-        template_folder = os.path.join(local_code_root, 'assembl', 'templates', 'system')
-        jenv = Environment(
-            loader=FileSystemLoader(template_folder),
-            autoescape=lambda t: False)
-        filters = [f for f in os.listdir(template_folder) if f.startswith('filter-')]
-        filters.append('jail.local.jinja2')
-        filters_to_file = {}
-        for f in filters:
-            with NamedTemporaryFile(delete=False) as f2:
-                filters_to_file[f] = f2.name
-        try:
-            # populate jail and/or filters
-            print("Generating template files")
-            for (template_name, temp_path) in filters_to_file.items():
-                with open(temp_path, 'w') as f:
-                    filter_template = jenv.get_template(template_name)
-                    f.write(filter_template.render(**env))
+    if env.mac:
+        return
 
-                final_name = template_name[:-7]  # remove .jinja2 extension
-                final_path = '/etc/fail2ban/'
-                if final_name.startswith('filter-'):
-                    final_name = final_name[7:]  # Remove filter-
-                    final_name += '.conf'  # add extension
-                    final_path += 'filter.d/'
-                final_path = join(final_path, final_name)
-                put(temp_path, final_path)
+    execute(install_fail2ban)
 
-        finally:
-            for path in filters_to_file.values():
-                os.unlink(path)
+    from jinja2 import Environment, FileSystemLoader
+    # This is done locally
+    template_folder = os.path.join(local_code_root, 'assembl', 'templates', 'system')
+    jenv = Environment(
+        loader=FileSystemLoader(template_folder),
+        autoescape=lambda t: False)
+    filters = [f for f in os.listdir(template_folder) if f.startswith('filter-')]
+    filters.append('jail.local.jinja2')
+    filters_to_file = {}
+    for f in filters:
+        with NamedTemporaryFile(delete=False) as f2:
+            filters_to_file[f] = f2.name
+    try:
+        # populate jail and/or filters
+        print("Generating template files")
+        for (template_name, temp_path) in filters_to_file.items():
+            with open(temp_path, 'w') as f:
+                filter_template = jenv.get_template(template_name)
+                f.write(filter_template.render(**env))
+
+            final_name = template_name[:-7]  # remove .jinja2 extension
+            final_path = '/etc/fail2ban/'
+            if final_name.startswith('filter-'):
+                final_name = final_name[7:]  # Remove filter-
+                final_name += '.conf'  # add extension
+                final_path += 'filter.d/'
+            final_path = join(final_path, final_name)
+            put(temp_path, final_path)
+
+    finally:
+        for path in filters_to_file.values():
+            os.unlink(path)
 
 
 @task
@@ -3166,3 +3366,227 @@ def install_jq():
             run('brew install jq')
         else:
             sudo('apt-get install -y jq')
+
+
+@task
+def secure_sshd_fail2ban():
+    if env.mac:
+        return
+    # Fail2ban needs verbose logging for full security
+    sudo("sed -i 's/LogLevel .*/LogLevel VERBOSE/' /etc/ssh/sshd_config")
+    sudo('service ssh restart')
+
+
+@task
+def create_wheelhouse(dependency_links=None):
+    if not dependency_links:
+        dependency_links = run('grep "git+http" %(here)s/requirements-dev.frozen.txt > %(here)s/deps.txt' % {
+                               'here': local_code_root})
+    tmp_wheel_path = os.path.join(local_code_root, 'wheelhouse')
+    cmd = 'pip wheel --wheel-dir=%s --process-dependency-links -r %s' % (tmp_wheel_path, dependency_links)
+    if is_integration_env():
+        run(cmd)
+    else:
+        venvcmd(cmd)
+
+
+def create_wheel_name(sha1, ref, tag):
+    """
+    Follows the recommended naming scheme of PEP 491 (https://www.python.org/dev/peps/pep-0491/#file-name-convention)
+    """
+    import sys
+    distribution = "assembl"
+    python_version = "py%s%s" % sys.version_info[0], sys.version_info[1]
+    platform = "any"
+    build_hash = "0" + sha1
+    if ref == tag:
+        # CI condition of a tag (which should only ever be put on master)
+        version = 'master-%s' % tag
+    else:
+        version = '%s-none' % ref
+    return "{distribution}-{version}-{build_hash}-{python_version}-none-{platform}.whl".format(
+        distribution=distribution,
+        version=version,
+        build_hash=build_hash,
+        python_version=python_version,
+        platform=platform)
+
+
+def update_wheels_json_data(json_data):
+    if is_integration_env():
+        # Assumption is Gitlab CI
+        commit_hash = getenv('CI_COMMIT_SHORT_SHA', None)
+        tag = getenv('CI_COMMIT_TAG', None)
+        ref = getenv('CI_COMMIT_REF_NAME', None)
+    else:
+        # Take the latest HEAD
+        commit_hash = local('git rev-parse --short HEAD')
+        ref = local('git symbolic-ref --short HEAD')
+        tag = local('git describe --tags HEAD')
+        if re.match(r"[\d\.]+-\d+-.+", tag):
+            # The commit does not have a tag associated
+            tag = None
+    # Debugging purposes for Gitlab
+    print "CI_COMMIT_REF_NAME: %s" % ref
+    print "CI_COMMIT_TAG: %s" % tag
+    print "CI_COMMIT_REF_NAME: %s" % commit_hash
+    if tag and tag not in json_data:
+            json_data[tag] = {'sha1': commit_hash, 'wheel_name': create_wheel_name(commit_hash, ref, tag)}
+    else:
+        # update the links for the branches
+        json_data[ref] = {'sha1': commit_hash, 'wheel_name': create_wheel_name(commit_hash, ref, tag)}
+    return json_data
+
+
+def write_update_json_data(json_filepath):
+    import json
+    with open(json_filepath, 'w+') as fp:
+        json_data = fp.read()
+        if not json_data:
+            json_data = {}
+        else:
+            json_data = json.loads(json_data)
+        json_data = update_wheels_json_data(json_data)
+        fp.seek(0)
+        json.dump(json_data, fp)
+
+
+@task
+def push_wheelhouse(house=None):
+    """
+    Push dependency links wheelhouse to either:
+    A) an S3 bucket
+    B) a remote folder via SSH
+    C) a local folder
+    """
+    tmp_wheel_path = house if house else os.path.join(local_code_root, 'wheelhouse')
+    wheel_path = env.wheelhouse
+    json_filename = 'special-wheels.json'
+    if not wheel_path:
+        print(red("No wheelhouse location was defined in configuration. Cannot continue..."))
+        sys.exit(1)
+    elif not tmp_wheel_path:
+        print(red("There is no local wheelhouse to push. Quitting..."))
+        sys.exit(1)
+
+    if wheel_path.strip().startswith('s3://'):
+        import botocore
+        import boto3  # noqa
+
+        s3 = boto3.resource('s3')
+        bucket_name = 'bluenove-assembl-wheelhouse'
+        bucket = s3.Bucket(bucket_name)
+        exists = True
+        try:
+            s3.meta.client.head_bucket(Bucket=bucket_name)
+        except botocore.exceptions.ClientError as e:
+            error_code = e.response['Error']['Code']
+            if error_code == '404':
+                exists = False
+        if not exists:
+            print(red("The Bluenove wheelhouse bucket does not exist on S3. Please create it before continuing..."))
+            return sys.exit(1)
+
+        # There must exist a JSON file which holds links to the latest wheels on various branches, along with version tags
+        json_filepath = os.path.join(local_code_root, json_filename)
+        bucket.download_file(json_filename, json_filepath)
+
+        indexable_names = set()
+        existing_wheels = set()
+        for key in bucket:
+            if key.name == json_filename:
+                # Don't add the JSON file to the indexable list
+                continue
+            indexable_names.add(key.name)
+            existing_wheels.add(key.name)
+
+        for filename in os.listdir(tmp_wheel_path):
+            if filename in indexable_names:
+                continue
+            indexable_names.add(filename)
+
+        write_update_json_data(json_filepath)
+        json_data = json.load(json_filepath)
+
+        output = os.path.join(local_code_root, 'index.html')
+        fill_template('wheelhouse_index.jinja2', {'wheelhouse': indexable_names}, output)
+        s3.Object(bucket_name, 'index.html').put(Body=open(output, 'rb'))
+
+        for file in os.listdir(tmp_wheel_path):
+            if file not in existing_wheels:
+                s3.put_object()
+
+        # put empty objects for S3-redirections (https://docs.aws.amazon.com/AmazonS3/latest/dev/how-to-page-redirect.html)
+        for key, value in json_data.iteritems():
+            s3.Object(bucket_name, key).put(Body='', Metadata={
+                'x-amz-website-redirect-location': '/%s' % value.wheel_name
+            })
+
+    elif wheel_path.strip().startswith('local://'):
+        local('cp -r %s %s' % (tmp_wheel_path, wheel_path.split('local://')[1]))
+    else:
+        run('cp -r %s %s' % (tmp_wheel_path, wheel_path))
+
+
+@task
+def push_built_themes_to_remote_bucket():
+    """
+    Push webpack built themes CSS + JS files of themes into respective S3 bucket.
+    Expects boto3, zip, to be pre-installed.
+
+
+    Output:
+        - Two S3 buckets with a folder structure matching the build folder of both gulp and webpack, respectively
+        - a compressed and uncompressed versions of js + css files locally and on S3 bucket
+    """
+    import boto3  # noqa
+    s3 = boto3.resource('s3')
+    v2_build_path = os.path.join(code_root(), 'assembl/static2/build/themes')
+    v1_build_path = os.path.join(code_root(), 'assembl/static/build/')
+    v2_bucket_name = 'bluenove-client-themes'
+    v1_bucket_name = 'bluenove-deprecated-client-themes'
+    buckets = ((1, v1_bucket_name), (2, v2_bucket_name))
+
+    def determine_content_type(path):
+        ext = os.path.splitext(path)[1]
+        if ext:
+            if re.match(r'.*js$', ext):
+                return 'text/javascript'
+            elif re.match(r'.*css$', ext):
+                return 'text/css'
+        return 'application/octet-stream'
+
+    def determine_content_encoding(path):
+        basename, _ = os.path.splitext(path)
+        if 'compressed_' in basename:
+            return 'gzip'
+        return None
+
+    def compress_file(path):
+        # Only compress css + js files
+        base, ext = os.path.splitext(path)
+        basename = os.path.basename(base)
+        zip_file = os.path.join(os.path.dirname(path), 'compressed_' + basename + ext)
+        if ext:
+            if re.match(r'.*js$', ext) or re.match(r'.*css$', ext):
+                local('gzip -vkc -9 %s > %s' % (path, zip_file))
+        else:
+            print(yellow("No files of JS/CSS type to compress"))
+
+    for theme_version, bucket_name in buckets:
+        if theme_version == 1:
+            theme_path = v1_build_path
+        else:
+            theme_path = v2_build_path
+        # Push all content to S3, even if the files exist on S3, reupload them
+        for root, dirs, files in os.walk(theme_path):
+            for filename in files:
+                local_path = os.path.join(root, filename)
+                s3_path = os.path.relpath(local_path, theme_path)
+                configs = {
+                    'ACL': 'public-read',
+                    'ContentType': determine_content_type(local_path),
+                    'CacheControl': 'max-age=3600',
+                    'ContentEncoding': determine_content_encoding(local_path)
+                }
+                s3.meta.client.upload_file(local_path, bucket_name, s3_path, configs)

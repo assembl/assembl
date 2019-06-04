@@ -174,7 +174,9 @@ class UpdateUser(graphene.Mutation):
 
                 from ..auth.password import verify_password
                 for p in user.old_passwords:
-                    if verify_password(new_password, p.password):
+                    # When users are auto-created, their first password is None
+                    old_pass = p.password or ""
+                    if verify_password(new_password, old_pass):
                         raise Exception(u"005: The new password has to be different than the last 5 passwords you set.")
 
                 user.password_p = new_password

@@ -12,7 +12,7 @@ from assembl.models import ContentSource
 from assembl.auth.util import get_permissions
 from ..traversal import InstanceContext
 from . import JSON_HEADER
-from assembl.tasks.source_reader import wake
+from assembl.processes.source_reader import wake
 
 
 @view_config(context=InstanceContext, request_method='POST',

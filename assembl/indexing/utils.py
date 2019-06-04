@@ -1,10 +1,11 @@
 from collections import defaultdict
 
+import simplejson as json
+from elasticsearch.client import Elasticsearch, TransportError
+
 from assembl.lib import config
 from assembl.lib.locale import strip_country
 from assembl.lib.clean_input import unescape
-from elasticsearch.client import Elasticsearch
-
 from assembl.indexing.settings import index_languages, get_index_settings, MAPPINGS
 
 
@@ -21,16 +22,89 @@ def connect():
     return _es
 
 
+def check_analysis_settings(index_name):
+    es = connect()
+    settings = get_index_settings(config)['index_settings']
+    try:
+        current = es.indices.get_settings(index_name)
+        current = current[index_name]['settings']['index']
+        return compare_dicts_ref(
+            stringify_dict(settings), current,
+            # this setting does not stick for some reason
+            lambda k: k != 'split_on_numerics')
+    except (TransportError, KeyError):
+        return False
+
+
+def push_analysis_settings(index_name):
+    es = connect()
+    settings = get_index_settings(config)['index_settings']
+    es.indices.close(index_name)
+    es.indices.put_settings({'analysis': settings['analysis']}, index_name)
+    es.indices.open(index_name)
+
+
+def stringify_dict(d):
+    if isinstance(d, bool):
+        return 'true' if bool else 'false'
+    if isinstance(d, int):
+        return str(d)
+    if isinstance(d, dict):
+        return {k: stringify_dict(v) for (k, v) in d.items()}
+    if isinstance(d, list):
+        return [stringify_dict(i) for i in d]
+    return unicode(d)
+
+
 def create_index(index_name):
     """Create the index and return connection.
     """
     es = connect()
-    settings = get_index_settings(config)['index_settings']
     exists = es.indices.exists(index_name)
+    if exists:
+        valid_analysis_settings = check_analysis_settings(index_name)
+        if not valid_analysis_settings:
+            try:
+                push_analysis_settings(index_name)
+                assert check_analysis_settings(index_name)
+            except Exception as e:
+                print e
+                # cannot push settings on amazon
+                delete_index(index_name)
+                exists = False
+
     if not exists:
-        es.indices.create(index=index_name, body={'settings': settings})
+        settings = get_index_settings(config)['index_settings']
+        es.indices.create(index_name, {'settings': settings})
 
     return es
+
+
+def compare_dicts_ref(reference, state, key_filter=None):
+    """Ensure that state is conformant to reference where defined."""
+    if isinstance(reference, dict) != isinstance(reference, dict):
+        return False
+    if not isinstance(reference, dict):
+        return reference == state
+    for key in reference.keys():
+        if key_filter and not key_filter(key):
+            continue
+        if key not in state:
+            return False
+        if not compare_dicts_ref(reference[key], state[key], key_filter):
+            return False
+    return True
+
+
+def check_mapping(index_name):
+    """Check if the mapping on ES resembles the intended one"""
+    es = connect()
+    try:
+        result = es.indices.get(index_name)
+        mappings = result[index_name]['mappings']
+        return compare_dicts_ref(MAPPINGS, mappings, lambda k: k != '_routing')
+    except Exception:
+        return False
 
 
 def create_index_and_mapping(index_name):
@@ -39,10 +113,17 @@ def create_index_and_mapping(index_name):
     es = create_index(index_name)
     for doc_type, mapping in MAPPINGS.items():
         es.indices.put_mapping(
-                index=index_name,
-                doc_type=doc_type,
-                body=mapping
-            )
+            index=index_name,
+            doc_type=doc_type,
+            body=mapping)
+
+
+def maybe_create_and_reindex(index_name, session):
+    """Reindex all contents if mapping is missing our outdated"""
+    if not (check_mapping(index_name) and check_analysis_settings(index_name)):
+        from .reindex import reindex_all_contents
+        create_index_and_mapping(index_name)
+        reindex_all_contents(session)
 
 
 def delete_index(index_name):

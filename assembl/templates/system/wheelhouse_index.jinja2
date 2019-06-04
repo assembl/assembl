@@ -1,0 +1,13 @@
+<html>
+	<body>
+		<ul>
+			{% for wheel in wheelhouse %}
+                {% if hashes[wheel] %}
+                    <li><a href="{{ wheel }}#sha256={{ hashes[wheel] }}">{{ wheel }}</a></li>
+                {% else %}
+				    <li><a href="{{ wheel }}">{{ wheel }}</a></li>
+                {% endif %}
+			{% endfor %}
+		</ul>
+	</body>
+</html>

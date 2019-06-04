@@ -114,13 +114,21 @@ _package_install = false
 # bugherd_url
 # bugherd_key
 # wsginame
+# For servers that are using wheel-based installations
+# _package_install = true
+# Wheelhouse is installed on the staging server. Can also be reached at dev-assembl.bluenove.com/wheelhouse
+# _wheelhouse = /home/assembl_user/wheelhouse
+# _assembl_wheel_dir = /home/assembl_user/assembl_wheels
+_webmaster_user = webmaster
+# A *_user_password that is passed can be used to automatically switch between users in fabric
+_webmaster_user_password = 
+_ssh_port = 22
 
 # Optional - Path to SSL Stapling certificates, must be single file
 # on server
 ocsp_path =
 
 supervisor__autostart_celery = true
-supervisor__autostart_celery_notification_dispatch = true
 supervisor__autostart_source_reader = true
 supervisor__autostart_changes_router = true
 supervisor__autostart_pserve = false
@@ -156,3 +164,7 @@ bantime = 3600
 findtime = 60
 # Number of matches of a filter in the findtime window
 maxretry = 10
+
+# To isolate themes, each have been put in a bucket. Declare where the bucket is for access
+# ie. https://<bucket-url>, or on local machine: /opts/assembl_themes/<bucket>/
+theme_base =

@@ -36,10 +36,11 @@ def main():
         cx.set_isolation_level(ISOLATION_LEVEL_AUTOCOMMIT)
     cur = cx.cursor()
     cur.execute(args.commands)
-    if args.print_one:
+    if args.print_one and cur.rowcount > 0:
         result = cur.fetchone()
         assert result
         print result
+
 
 if __name__ == '__main__':
     main()

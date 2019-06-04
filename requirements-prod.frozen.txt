@@ -68,6 +68,7 @@ httplib2==0.11.1          # via google-api-python-client, oauth2client
 humanfriendly==4.8        # via coloredlogs, executor, property-manager, rotate-backups
 idna==2.6                 # via cryptography
 imaplib2==2.45.0
+invoke==1.2.0
 ipaddress==1.0.19         # via cryptography
 ipython-genutils==0.2.0   # via traitlets
 ipython==4.2.0
@@ -135,6 +136,7 @@ rotate-backups==4.4
 rsa==3.4.2                # via oauth2client
 s3transfer==0.1.13        # via boto3
 scandir==1.7              # via pathlib2
+semantic-version==2.6.0
 sentry-sdk==0.5.3
 simpleeval==0.9.1         # via rotate-backups
 simplegeneric==0.8.1      # via ipython
@@ -159,6 +161,7 @@ uwsgitop==0.9
 venusian==1.1.0           # via pyramid
 verboselogs==1.7
 vine==1.1.4               # via amqp
+watchtower==0.5.4
 watson_developer_cloud==2.4.1
 webob==1.6.1
 websocket-client==0.47.0  # via watson-developer-cloud

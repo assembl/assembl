@@ -31,6 +31,7 @@ from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
 from sqlalchemy.engine import strategies
+from sqlalchemy.engine.url import URL
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
@@ -43,9 +44,10 @@ from .zmqlib import get_pub_socket, send_changes
 from ..auth import *
 from .decl_enums import EnumSymbol, DeclEnumType
 from .utils import get_global_base_url
-from ..lib.config import get_config
+from .config import get_config
 from ..indexing.reindex import reindex_content
 from . import logging
+from .read_write_session import ReadWriteSession
 
 atexit_engines = []
 log = logging.getLogger()
@@ -156,6 +158,7 @@ class TableLockCreationThread(Thread):
         super(TableLockCreationThread, self).__init__()
         self.object_generator = object_generator
         self.lock_table_name = lock_table_name
+        self.lock_id = hash(lock_table_name)
         self.num_attempts = num_attempts
         self.success = None
         self.created = False
@@ -166,9 +169,10 @@ class TableLockCreationThread(Thread):
             for num in range(self.num_attempts):
                 db = session_maker()
                 # Get the ThreadTransactionManager in a quite horrible way.
-                tm = getattr(session_maker.session_factory.kw['extension'],
-                             'transaction_manager', None)
-                if tm is None:
+                if is_zopish():
+                    tm = session_maker.session_factory.kw[
+                        'extension'].transaction_manager
+                else:
                     # Ad hoc transaction manager. TODO: Use existing machinery.
                     # This is only used in testing, though.
 
@@ -182,10 +186,9 @@ class TableLockCreationThread(Thread):
                         db.commit()
                     tm = CommittingTm(db)
                 with tm:
-                    try:
-                        db.execute("LOCK TABLE %s IN EXCLUSIVE MODE NOWAIT" % (
-                            self.lock_table_name,))
-                    except OperationalError as e:
+                    got_lock = (db.execute("SELECT pg_try_advisory_xact_lock(%d)" % (
+                            self.lock_id,)).first(), )
+                    if not got_lock:
                         log.info("Could not get the table lock in attempt %d"
                                  % (num,))
                         sleep(random() / 10.0)
@@ -196,9 +199,12 @@ class TableLockCreationThread(Thread):
                     for ob in to_be_created:
                         self.created = True
                         db.add(ob)
-                # implicit commit of subtransaction
-                # We _should_ get the transient error reraised if we keep failing.
+                # implicit commit of subtransaction clears the lock
                 self.success = True
+                break
+            else:
+                log.error("Never obtained lock")
+                self.success = False
         except ObjectNotUniqueError as e:
             # Should not happen anymore. Log if so.
             self.success = False
@@ -397,7 +403,7 @@ class BaseOps(object):
                         discussion_id=None, view_def="changes"):
         """Ask for this object to be sent on the changes websocket.
 
-        See :py:mod:`assembl.tasks.changes_router`."""
+        See :py:mod:`assembl.processes.changes_router`."""
         if not connection:
             # WARNING: invalidate has to be called within an active transaction.
             # This should be the case in general, no need to add a transaction manager.
@@ -1666,6 +1672,7 @@ event.listen(mapper, 'before_update', update_timestamp)
 def make_session_maker(zope_tr=True, autoflush=True):
     return scoped_session(sessionmaker(
         autoflush=autoflush,
+        class_=ReadWriteSession,
         extension=ZopeTransactionExtension() if zope_tr else None))
 
 
@@ -1754,7 +1761,7 @@ def orm_delete_listener(mapper, connection, target):
 
 def before_commit_listener(session):
     """Create the Json representation of changed objects which will be
-    sent to the :py:mod:`assembl.tasks.changes_router`
+    sent to the :py:mod:`assembl.processes.changes_router`
 
     We have to do this before commit, while objects are still attached."""
     # If there hasn't been a flush yet, make sure any sql error occur BEFORE
@@ -1780,7 +1787,7 @@ def before_commit_listener(session):
 
 def after_commit_listener(session):
     """After commit, actually send the Json representation of changed objects
-    to the :py:mod:`assembl.tasks.changes_router`, through 0MQ."""
+    to the :py:mod:`assembl.processes.changes_router`, through 0MQ."""
     if not getattr(session, 'zsocket', None):
         session.zsocket = get_pub_socket()
     if getattr(session, 'cdict2', None):
@@ -1807,6 +1814,36 @@ event.listen(BaseOps, 'after_update', orm_update_listener, propagate=True)
 event.listen(BaseOps, 'after_delete', orm_delete_listener, propagate=True)
 
 
+def connection_url(settings, prefix='db_'):
+    db_host = settings.get(prefix + 'host', None)
+    db_user = settings.get(prefix + 'user', None)
+    db_database = settings.get(prefix + 'database', None)
+    rds_iam_role = settings.get(prefix + 'iam_role', None)
+    if not (db_host or db_user or db_database or rds_iam_role):
+        return None
+    # fallback to base prefix
+    db_host = db_host or settings.get('db_host')
+    db_user = db_user or settings.get('db_user')
+    db_database = db_database or settings.get('db_database')
+    rds_iam_role = rds_iam_role or settings.get('db_iam_role')
+    if rds_iam_role:
+        from .rds_token_url import IamRoleRdsTokenUrl
+        region = settings.get("aws_region", 'eu-west-1')
+        certificate = settings.get('rds_certificate', None)
+        if certificate:
+            query = {'sslmode': 'verify-full', 'sslrootcert': certificate}
+        else:
+            query = {'sslmode': 'require'}
+        return IamRoleRdsTokenUrl(
+            'postgresql+psycopg2', rds_iam_role, region, db_user,
+            db_host, database=db_database, query=query)
+    else:
+        query = {'sslmode': 'disable' if db_host == 'localhost' else 'require'}
+        password = settings.get(prefix + 'password', None) or settings.get('db_password')
+        return URL(
+            'postgresql+psycopg2', db_user, password, db_host, None, db_database, query)
+
+
 def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
                      **engine_kwargs):
     """Return an SQLAlchemy engine configured as per the provided config."""
@@ -1819,13 +1856,31 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
     engine = session_maker.session_factory.kw['bind']
     if engine:
         return engine
+    url = connection_url(settings)
+    settings['sqlalchemy.url'] = url
+    if hasattr(url, 'aws_region'):
+        entrypoint = url._get_entrypoint()
+        dialect_cls = entrypoint.get_dialect_cls(url)
+        dbapi = dialect_cls.dbapi()
+        dialect = dialect_cls(dbapi=dbapi)
+
+        def creator(*args, **kwargs):
+            return dialect.connect(
+                host=url.host, user=url.username, database=url.database,
+                password=url.password, port=url.port, **url.query)
+        engine_kwargs['creator'] = creator
+
     engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
-    session_maker.configure(bind=engine)
-    global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
-    if settings['sqlalchemy.url'].startswith('virtuoso:'):
-        db_schema = '.'.join((settings['db_schema'], settings['db_user']))
+    read_url = connection_url(settings, "dbro_")
+    if read_url:
+        settings = dict(settings)
+        settings['sqlalchemy.url'] = read_url
+        read_engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
     else:
-        db_schema = settings['db_schema']
+        read_engine = None
+    session_maker.configure(bind=engine, read_bind=read_engine)
+    global db_schema, _metadata, Base, TimestampedBase, ObsoleteBase, TimestampedObsolete
+    db_schema = settings['db_schema']
     _metadata = MetaData(schema=db_schema)
     Base, TimestampedBase = declarative_bases(_metadata, class_registry)
     obsolete = MetaData(schema=db_schema)

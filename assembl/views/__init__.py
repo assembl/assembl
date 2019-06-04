@@ -78,16 +78,81 @@ def get_theme_base_path(frontend_version=1):
     return theme_base_path
 
 
+def get_basename(path):
+    if path:
+        if path.endswith("/"):
+            return os.path.split(path)[0].split("/")[-1]
+        else:
+            return os.path.basename(path)
+
+
+def get_parent_path(path):
+    if path:
+        if path.endswith("/"):
+            return "/".join(os.path.split(path)[0].split("/")[:-1])
+        else:
+            return os.path.dirname(path)
+
+
+def is_url(path):
+    # Taken from https://stackoverflow.com/a/7160778
+    regex = re.compile(
+        r'^(?:http)s?://'  # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|'  # domain...
+        r'localhost|'  # localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})'  # ...or ip
+        r'(?::\d+)?'  # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+    return re.match(regex, path)
+
+
+def get_theme_base(config):
+    """Returns the full bucket path, as well a the bucket name. This is set in the
+    configuration of the server."""
+    from urlparse import urlunparse
+
+    def parse_path(path):
+        if path.endswith('/'):
+            base_bucket = path.split('/')[-2]
+            bucket_path = "/".join(path.split("/")[:-2])
+        else:
+            base_bucket = path.split('/')[-1]
+            bucket_path = "/".join(path.split("/")[:-1])
+        return (bucket_path, base_bucket)
+
+    bucket_path = config.get('theme_base', None)
+    if bucket_path:
+        if is_url(bucket_path):
+            parsed = urlparse(bucket_path)
+            path = parsed.path
+            base_path, theme_name = parse_path(path)
+            base_url = urlunparse((parsed.scheme, parsed.netloc, base_path, None, None, None))
+            return (base_url, theme_name)
+        else:
+            return parse_path(bucket_path)
+    return (None, None)
+
+
+def get_default_theme(mode):
+    """Fetch the locally built default theme"""
+    bucket_path, _ = get_theme_base(config)
+    if bucket_path and mode == 'development':
+        return get_parent_path(bucket_path)
+    return None
+
+
 def find_theme(theme_name, frontend_version=1):
     """
     Recursively looks for a theme with the provided name in the theme path folder
     @returns the theme path fragment relative to the theme base_path, or
     None if not found
     """
+
     current_theme = THEMES.get(frontend_version, {}).get(theme_name, None)
     if current_theme:
         return current_theme
 
+    # TODO: When V1 is completley deprecated, remove the logic of basepath for themes
     theme_base_path = get_theme_base_path(frontend_version)
     walk_results = os.walk(theme_base_path, followlinks=True)
     for (dirpath, dirnames, filenames) in walk_results:
@@ -104,7 +169,7 @@ def find_theme(theme_name, frontend_version=1):
     return None
 
 
-def get_theme_info(discussion, frontend_version=1):
+def get_theme_info_deprecated(discussion, frontend_version=1):
     """
     @return (theme_name, theme_relative_path) the relative path is relative to the theme_base_path.  See find_theme.
     """
@@ -113,14 +178,25 @@ def get_theme_info(discussion, frontend_version=1):
     if discussion:
         # Legacy code: Slug override
         theme_path = find_theme(discussion.slug, frontend_version)
-    if theme_path:
-        theme_name = discussion.slug
+    if not theme_path:
+        theme_path = 'default'
     else:
-        theme_path = find_theme(theme_name, frontend_version)
+        theme_path = find_theme(theme_name or 'default', frontend_version)
     if theme_path is not None:
         return (theme_name, theme_path)
     else:
         return ('default', 'default')
+
+
+def get_theme_name(discussion):
+    if discussion:
+        # For now, it's in extra_json
+        if discussion.preferences['extra_json'].get('theme_name', None):
+            theme_name = discussion.preferences['extra_json'].get('theme_name')
+        else:
+            theme_name = discussion.slug
+        return theme_name
+    return 'default'
 
 
 def get_resources_path():
@@ -129,7 +205,7 @@ def get_resources_path():
         'static2', 'build', 'resources.html')
 
 
-def extract_resources_hash(source, theme_name):
+def extract_resources_hash(source, theme_name, bucket_name='default'):
     def get_resource_hash(regex, resource):
         return resource and re.search(regex, resource)
 
@@ -140,7 +216,11 @@ def extract_resources_hash(source, theme_name):
         return get_resource_hash(r'/build/bundle\.(.*)\.css$', href)
 
     def get_theme_css_hash(href):
-        return get_resource_hash(r'/build/theme_' + re.escape(theme_name) + r'_web\.(.*)\.css$', href)
+        if bucket_name == 'default' or theme_name == 'default':
+            regex = r'/build/themes/default/theme_' + re.escape(theme_name) + r'_web\.(.*)\.css$'
+        else:
+            regex = r'/build/themes/' + re.escape(bucket_name) + '/[^/]+/theme_' + re.escape(theme_name) + r'_web\.(.*)\.css$'
+        return get_resource_hash(regex, href)
 
     soup = BeautifulSoup(source)
     bundle = soup.find(src=get_bundle_hash)
@@ -149,11 +229,12 @@ def extract_resources_hash(source, theme_name):
     return {
         'bundle_hash': get_bundle_hash(bundle['src']).group(1) if bundle else None,
         'bundle_css_hash': get_bundle_css_hash(bundle_css['href']).group(1) if bundle_css else None,
-        'theme_hash': get_theme_css_hash(theme_css['href']).group(1) if theme_css else None
+        'theme_css_file': get_theme_css_hash(theme_css['href']).group(0) if theme_css else None,
+        'theme_js_file': None
     }
 
 
-def get_resources_hash(theme_name):
+def get_resources_hash(theme_name, bucket_name='default'):
     current_resources = RESOURCES.get(theme_name, None)
     if current_resources:
         return current_resources
@@ -162,14 +243,61 @@ def get_resources_hash(theme_name):
     result = {
         'bundle_hash': None,
         'bundle_css_hash': None,
-        'theme_hash': None
+        'theme_css_file': None,
+        'theme_js_file': None
     }
     if os.path.exists(resources_path):
         with open(resources_path) as fp:
-            result = extract_resources_hash(fp, theme_name)
-
+            result = extract_resources_hash(fp, theme_name, bucket_name)
     RESOURCES[theme_name] = result
     return result
+
+
+def populate_theme_information(theme_name='default', version=2):
+    if version == 1:
+        # Lock V1 into default theme only. When view is deprecated, this code can be removed.
+        return {
+            'theme_relative_path': 'default',
+            'theme_name': 'default'
+        }
+    else:
+        if asbool(config.get('under_test')) or asbool(config.get('use_webpack_server')):
+            # Local development mode, use default always (for now)
+            data = {
+                # Used in dev
+                'theme_js_file': '/build/themes/default/theme_default_web.js',
+                # Used in testing
+                'full_theme_url': 'http://localhost/static2/build/themes/default/theme_default_web.css'
+            }
+        else:
+            # Production environment, currently handling only usecase of pulling from the s3 bucket
+            from urlparse import urljoin
+            theme_base, bucket_name = get_theme_base(config)
+            data = get_resources_hash(theme_name, bucket_name)
+            if not data.get('bundle_hash', None):
+                raise Exception("Cannot continue without more information regarding the bundle and themes")
+            if data.get('theme_css_file', None) is None:
+                data = get_resources_hash('default')
+            if not theme_base:
+                # If a configuration is not given, use the default theme that is put in the wheel
+                theme_path = data.get('theme_css_file', "") or ""
+                if theme_path.startswith('/'):
+                    default_path = os.path.join('static2', theme_path[1:])
+                else:
+                    default_path = os.path.join('static2', theme_path)
+                application_url = get_global_base_url()
+                full_path = urljoin(application_url, default_path)
+                data.update({'full_theme_url': full_path})
+                return data
+            data_css_file = data.get('theme_css_file')
+            if is_url(theme_base):
+                full_bucket_path = config.get('theme_base')
+                _css_parsed = data_css_file.split("/")
+                _i = _css_parsed.index(bucket_name)
+                path = "/".join(_css_parsed[_i + 1:])
+                full_url = urljoin(full_bucket_path, path)
+                data.update({'full_theme_url': full_url})
+        return data
 
 
 def extract_v1_resources_hash(source):
@@ -430,7 +558,7 @@ def get_default_context(request, **kwargs):
     if admin_email is None or admin_email is '':
         raise HTTPInternalServerError(explanation="Assembl MUST have an admin_email configured in order to operate.")
 
-    theme_name, theme_relative_path = get_theme_info(discussion)
+    theme_name, theme_relative_path = get_theme_info_deprecated(discussion)
     node_env = os.getenv('NODE_ENV', 'production')
     under_test = bool(config.get('under_test') or False)
     base = dict(

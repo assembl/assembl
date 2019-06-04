@@ -3,7 +3,7 @@ Data interdependence in the frontend
 
 Assembl is characterized by highly interdependent data, and allowing for live updates incurs significant complexity. The most complex issues revolve around the Idea-Post relationship, where each idea is connected to a subset of all posts. Here is how this relationship is handled as of 2016/08.
 
-In general, we have tended to load model collections in the frontend, in the :js:class:`CollectionManager`. Those collections can be kept up-to-date with the WebSocket (see :py:mod:`assembl.tasks.changes_router` and :py:func:`assembl.lib.sqla.before_commit_listener`), and views can listen to backbone add/update events normally. However, various linking objects are not handled by the :js:class:`CollectionManager`, and the information is put in the objects that are linked.
+In general, we have tended to load model collections in the frontend, in the :js:class:`CollectionManager`. Those collections can be kept up-to-date with the WebSocket (see :py:mod:`assembl.processes.changes_router` and :py:func:`assembl.lib.sqla.before_commit_listener`), and views can listen to backbone add/update events normally. However, various linking objects are not handled by the :js:class:`CollectionManager`, and the information is put in the objects that are linked.
 
 If the websocket is disconnected, we need to re-fetch the model collections; this is currently only implemented for the message structure collection. See :js:func:`getAllMessageStructureCollectionPromise`.
 

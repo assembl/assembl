@@ -13,7 +13,6 @@ This is the startup module, which sets up the various components:
 
 """
 
-import transaction
 from pyramid.config import Configurator
 from pyramid.authorization import ACLAuthorizationPolicy
 from pyramid_beaker import session_factory_from_settings
@@ -36,6 +35,7 @@ resolver = DottedNameResolver(__package__)
 
 def main(global_config, **settings):
     """ Return a Pyramid WSGI application. """
+    settings = dict(global_config, **settings)
     settings['config_uri'] = global_config['__file__']
 
     # here we create the engine and bind it to the (not really a) session
@@ -47,6 +47,11 @@ def main(global_config, **settings):
         from assembl.lib import signals
         signals.listen()
 
+    # setup before logging
+    region = settings.get('aws_region', None)
+    if region:
+        import boto3
+        boto3.setup_default_session(region_name=region)
     import os
     if 'UWSGI_ORIGINAL_PROC_NAME' in os.environ:
         # uwsgi does not load logging properly
@@ -77,7 +82,7 @@ def main(global_config, **settings):
     config.include('.indexing')
     config.include('.lib.logging')
     # Tasks first, because it includes ZCA registration (for now)
-    config.include('.tasks')
+    config.include('.processes')
 
     config.include('.lib.zmqlib')
     session_factory = session_factory_from_settings(settings)
@@ -91,14 +96,6 @@ def main(global_config, **settings):
             callback=authentication_callback)
         config.set_authentication_policy(auth_policy)
         config.set_authorization_policy(ACLAuthorizationPolicy())
-    # ensure default roles and permissions at startup
-    from models import get_session_maker
-    if not settings.get('in_migration', False):
-        with transaction.manager:
-            session = get_session_maker()
-            from .lib.migration import bootstrap_db_data
-            bootstrap_db_data(session, settings['config_uri'] != "testing.ini")
-
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('static2', 'static2', cache_max_age=3600)
     config.include('.graphql')  # This MUST be above views import
@@ -119,6 +116,14 @@ def main(global_config, **settings):
     config.include('.view_def')
 
     wsgi_app = config.make_wsgi_app()
+
+    # ensure default roles and permissions at startup
+    if not settings.get('in_migration', False):
+        from .lib.migration import bootstrap_db, bootstrap_db_data, bootstrap_indexing
+        db = bootstrap_db(settings['config_uri'])
+        bootstrap_db_data(db, settings['config_uri'] != "testing.ini")
+        bootstrap_indexing(db)
+
     if asbool(settings.get('sqltap', False)):
         import sqltap.wsgi
         wsgi_app = sqltap.wsgi.SQLTapMiddleware(wsgi_app)

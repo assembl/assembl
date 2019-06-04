@@ -5,7 +5,7 @@
   {# Override the main CSS. #}
   {% if NODE_ENV != 'development' %}
   <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/bundle.{{bundle_css_hash}}.css" />
-  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/theme_{{theme_name}}_web.{{theme_hash}}.css" />
+  <link type="text/css" rel="stylesheet" href="{{ full_theme_url }}" />
   {% endif %}
 {% endblock %}
 
@@ -42,7 +42,7 @@
             {% include 'analytics_common.jinja2' %}
             {% if NODE_ENV == 'development' %}
                 <script src='{{REACT_URL}}/build/bundle.js'></script>
-                <script src="{{REACT_URL}}/build/theme_{{theme_name}}_web.js"></script>
+                <script src="{{REACT_URL}}{{theme_js_file}}"></script>
             {% else %}
                 <script src='{{REACT_URL}}/build/bundle.{{bundle_hash}}.js'></script>
             {% endif %}

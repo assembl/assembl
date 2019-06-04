@@ -34,8 +34,8 @@ from ...models import (
 )
 
 from .. import (
-    HTTPTemporaryRedirect, get_default_context as base_default_context,
-    get_locale_from_request, get_theme_info, get_resources_hash, sanitize_next_view)
+    HTTPTemporaryRedirect, get_default_context as base_default_context, populate_theme_information,
+    get_locale_from_request, get_theme_name, sanitize_next_view)
 from ...nlp.translation_service import DummyGoogleTranslationService
 from ..auth.views import get_social_autologin, get_login_context
 from pyramid.threadlocal import get_current_request
@@ -241,17 +241,12 @@ def react_base_view(request, required_permission=P_READ):
     user_id = get_non_expired_user_id(request) or Everyone
     discussion = old_context["discussion"] or None
     get_route = old_context["get_route"]
-    theme_name, theme_relative_path = get_theme_info(discussion, frontend_version=2)
+    theme_name = get_theme_name(discussion)
     node_env = os.getenv('NODE_ENV', 'production')
-    # wsginame values are defined in *.rc files
-    wsginame = get('wsginame', '')
-    bugherd_url = None
-    if wsginame in ('preprod.wsgi',):
-        bugherd_url = get('bugherd_url', None)
+    bugherd_url = get('bugherd_url', None)
 
     common_context = {
         "theme_name": theme_name,
-        "theme_relative_path": theme_relative_path,
         "REACT_URL": old_context['REACT_URL'],
         "NODE_ENV": node_env,
         "assembl_version": get_assembl_version(discussion),
@@ -261,7 +256,7 @@ def react_base_view(request, required_permission=P_READ):
         "sentry_dsn": get('sentry_dsn', ''),
         "bugherd_url": bugherd_url
     }
-    common_context.update(get_resources_hash(theme_name))
+    common_context.update(populate_theme_information(theme_name))
 
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, required_permission)

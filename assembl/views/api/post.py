@@ -28,7 +28,7 @@ from assembl.lib.clean_input import sanitize_html, sanitize_text
 from assembl.views.api import API_DISCUSSION_PREFIX
 from assembl.auth import P_READ, P_ADD_POST
 from assembl.auth.util import get_permissions
-from assembl.tasks.translate import (
+from assembl.processes.translate import (
     translate_content,
     PrefCollectionTranslationTable)
 from assembl.models import (

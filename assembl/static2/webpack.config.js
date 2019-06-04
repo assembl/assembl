@@ -14,11 +14,19 @@ var _ = require('lodash');
 function theme_entries() {
     var entries = {},
         paths = glob.sync('./css/themes/**/*_web.scss'),
-        i, path, parts, name;
+        i, path, parts, name, bucket;
     for (i = 0; i < paths.length; i++) {
         path = paths[i];
         parts = path.split('/');
-        name = 'theme_' + parts[parts.length - 2] + '_web';
+        theme_name = parts[parts.length - 2]
+        // Special case default, as it's not unique
+        if (theme_name === 'default') {
+          name = 'themes/' + theme_name + '/theme_' + theme_name + '_web'; 
+        }
+        else {
+          bucket = parts[parts.length - 3];
+          name = 'themes/' + bucket + '/' + theme_name + '/theme_' + theme_name + '_web';
+        }
         entries[name] = path;
     }
 //    paths = glob.sync('./css/themes/**/*_notifications.scss');

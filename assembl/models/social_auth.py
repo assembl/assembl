@@ -1,3 +1,4 @@
+
 """Models for integration of `Python Social Auth`_.
 
 .. _`Python Social Auth`: http://psa.matiasaguirre.net/
@@ -104,7 +105,7 @@ class SocialAuthAccount(
         ForeignKey('identity_provider.id',
                    ondelete='CASCADE', onupdate='CASCADE'),
         nullable=False)
-    identity_provider = relationship(IdentityProvider)
+    identity_provider = relationship(IdentityProvider, backref='agent_accounts')
     username = Column(Unicode(200))
     provider_domain = Column(String(255))
     uid = Column(String(UID_LENGTH), nullable=False)
@@ -306,8 +307,14 @@ class SocialAuthAccount(
         if fullname and not self.user.name:
             self.user.name = fullname
 
+    def get_forced_display_name(self):
+        if self.extra_data:
+            if 'forced_display_name' in self.extra_data and self.extra_data['forced_display_name']:
+                return self.extra_data['forced_display_name']
+        return None
+
     def display_name(self):
-        # TODO: format according to provider, ie @ for twitter.
+        # TODO: Remove this function in favour of get_forced_display_name in parent class and all children
         if self.username:
             name = self.username
         else:

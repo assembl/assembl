@@ -98,10 +98,6 @@ def copy_table(source_session, dest_session, source_table, dest_table):
 
 def engine_from_settings(config, full_config=False):
     settings = get_appsettings(config, 'assembl')
-    if settings['sqlalchemy.url'].startswith('virtuoso:'):
-        db_schema = '.'.join((settings['db_schema'], settings['db_user']))
-    else:
-        db_schema = settings['db_schema']
     set_config(settings, True)
     session = None
     if full_config:

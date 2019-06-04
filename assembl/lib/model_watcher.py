@@ -20,9 +20,9 @@ Different scenarios are defined in ``production.ini``:
 1. Noop: just print
 2. Direct: Invoke the :py:class:`assembl.models.notification.ModelEventWatcherNotificationSubscriptionDispatcher`
    immediately in-thread. (May run into issues with closed transactions.)
-3. Threaded: Send the CRUD event to another thread in the same process, using the :py:class:`assembl.tasks.threaded_model_watcher.ThreadedModelEventWatcher`
-4. Broker (preferred): Send the event to the :py:class:`assembl.tasks.notification_dispatch.ModelEventWatcherCelerySender`, which will
-   send it through the celery machinery to the :py:class:`assembl.tasks.notification_dispatch.ModelEventWatcherCeleryReceiver`.
+3. Threaded: Send the CRUD event to another thread in the same process, using the :py:class:`assembl.processes.threaded_model_watcher.ThreadedModelEventWatcher`
+4. Broker (preferred): Send the event to the :py:class:`assembl.processes.notification_dispatch.ModelEventWatcherCelerySender`, which will
+   send it through the celery machinery to the :py:class:`assembl.processes.notification_dispatch.ModelEventWatcherCeleryReceiver`.
 
 
 .. class:: IModelEventWatcher
@@ -190,4 +190,4 @@ def configure_model_watcher(registry, task_name):
         '.model_watcher.BaseModelEventWatcher').split()
     for class_name in class_names:
         cls = resolver.resolve(class_name)
-        registry.registerUtility(cls(), IModelEventWatcher, name=cls.__name__)
+        registry.registerUtility(cls(), IModelEventWatcher, name=class_name)

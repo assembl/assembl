@@ -33,8 +33,8 @@ from .langstrings import LangString
 from .generic import PostSource
 from .post import ImportedPost
 from .auth import EmailAccount
-from ..tasks.imap import import_mails
-from ..tasks.translate import translate_content
+from ..processes.imap import import_mails
+from ..processes.translate import translate_content
 
 
 class AbstractMailbox(PostSource):
@@ -744,7 +744,7 @@ class IMAPMailbox(AbstractMailbox):
                 AbstractMailbox.thread_mails(emails)
 
     def make_reader(self):
-        from assembl.tasks.imaplib2_source_reader import IMAPReader
+        from assembl.processes.imaplib2_source_reader import IMAPReader
         return IMAPReader(self.id)
 
     def get_send_address(self):

@@ -48,12 +48,10 @@ def main():
                         help="global user role (default: r:sysdamin.)")
     parser.add_argument("-l", "--localrole",
                         help="local user role")
+    parser.add_argument("-s", "--send-password-change", action="store_true",
+                        help="Send an email allowing the user to change password")
     parser.add_argument("-d", "--discussion",
                         help="slug of discussion context for local user role")
-    parser.add_argument(
-        "--bypass-password", action='store_true',
-        help="Do not ask for password now, use the application's password "
-        " recovery function to assign a password to this user later.")
     args = parser.parse_args()
     env = bootstrap(args.configuration)
     settings = get_appsettings(args.configuration, 'assembl')
@@ -91,7 +89,7 @@ def main():
         args.username = raw_input()
     if args.username.lower() == 's':
         args.username = getuser()
-    if not args.bypass_password:
+    if not args.send_password_change:
         while not args.password:
             password = getpass("Password:")
             password2 = getpass("Confirm password:")

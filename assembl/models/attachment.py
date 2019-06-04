@@ -101,7 +101,7 @@ class Document(DiscussionBoundBase):
     oembed_type = Column(String(1024), server_default="")
     mime_type = Column(String(1024), server_default="", doc=docs.Document.mime_type)
     # From metadata, not the user
-    title = Column(CoerceUnicode(1024), server_default="", doc=docs.Document.title)
+    title = Column(CoerceUnicode(1024), server_default="")
 
     # From metadata, not the user
     description = Column(

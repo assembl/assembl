@@ -1,12 +1,12 @@
-image: python:2.7
+image: ubuntu:latest
 
 stages:
   - test
   - build
-  - deploy_to_dev
-  - test_on_dev
-  - deploy_to_uat
-  - deploy_to_prod
+  - deploy_to_sandbox
+  # - test_integration
+  # - deploy_to_uat
+  # - deploy_to_prod
 
 cache:
   paths:
@@ -20,6 +20,7 @@ test_frontend:
     - tmp_master_for_ci_cd
   image: node:10
   before_script:
+    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
     - cd assembl/static2
     - yarn
@@ -30,65 +31,134 @@ test_frontend:
     - yarn run stylelint
     - yarn run flow --quiet
 
-test_integration_and_ui:
-  stage: test_on_dev
-  image: node:10
-  only:
-    - tmp_master_for_ci_cd
-  before_script:
-    - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
-    - sh scripts/prepare_integration_tests.sh
-  script:
-    # run integration tests
-    - yarn jest tests/integration
-    # run each ui test one by one
-    - yarn runinband
+# test_integration_and_ui:
+#   stage: test_integration
+#   image: node:10
+#   only:
+#     - tmp_master_for_ci_cd
+#   before_script:
+#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+#     - apt-get update
+#     - apt-get install -y sudo python python-pip python-dev build-essential
+#     - pip install virtualenv
+#     - cd $CI_PROJECT_DIR
+#     - python -mvirtualenv venv
+#     - source venv/bin/activate
+#     - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
+#     - "echo '_extends: aws.yaml' > invoke.yaml"
+#     - touch secrets.yaml
+#     - ln -s assembl/tasks .
+#     - inv build.prepare-integration-tests
+#   script:
+#     # run integration tests
+#     - yarn jest tests/integration
+#     # run each ui test one by one
+#     - yarn runinband
+
+# test_backend:
+#   stage: test
+#   only:
+#     - invoke
+#   before_script:
+#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+#     - apt-get update
+#     - apt-get install -y sudo python python-pip python-dev build-essential
+#     - pip install virtualenv
+#     - cd $CI_PROJECT_DIR
+#     - python -mvirtualenv venv
+#     - source venv/bin/activate
+#     - pip install $(egrep '(invoke|semantic-version)' requirements.in)
+#     - "echo '_extends: testing_aws.yaml' > invoke.yaml"
+#     - touch secrets.yaml
+#     - ln -s assembl/tasks .
+#     - inv sudoer.install-build-dependencies
+#     - ln -s requirements-tests.frozen.txt requirements.txt
+#     - inv build.update-pip-requirements
+#     - python setup.py develop
+#     - inv sudoer.install-database
+#     - inv build.compile-messages-catalog
+#   script:
+#     # run integration tests
+#     - source venv/bin/activate
+#     - inv -f assembl/configs/testing_aws.yaml deploy.create-local-ini
+#     - inv -f assembl/configs/testing_aws.yaml build.database-create
+#     - cat testing.ini
+#     - py.test assembl/tests
 
 build_wheel:
   stage: build
   only:
     - develop
+    - invoke
   variables:
-    DEVELOP_BRANCH: develop
-    MASTER_BRANCH: tmp_master_for_ci_cd
+    LC_ALL: C.UTF-8
+    LANG: en.UTF-8
+    GIT_STRATEGY: clone
   artifacts:
     paths:
       - dist/
   before_script:
-    - sh scripts/install_build_dependencies.sh
-    - sh scripts/install_node_and_yarn.sh
-    - sh scripts/configure_assembl_remote.sh
-    - eval $(ssh-agent -s) && sh scripts/configure_ssh.sh
-    - sh scripts/clear_apt_cache.sh
+    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+    - apt-get update
+    - apt-get install -y sudo python python-pip python-dev build-essential openssh-server
+    - pip install virtualenv
+    - cd $CI_PROJECT_DIR
+    - python -mvirtualenv venv
+    - source venv/bin/activate
+    - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
+    - "echo '_extends: aws.yaml' > invoke.yaml"
+    - touch secrets.yaml
+    - ln -s assembl/tasks .
+    - inv -e build.prepare-cicd-build
+    - mkdir wheelhouse
   script:
-    # bump the version, merge to master
-    - sh scripts/bump_assembl_version_and_push.sh
     # create the wheel and upload to pypi
-    - sh scripts/create_assembl_wheel.sh
-    # - twine upload -u bluenove --skip-existing dist/*
+    - source venv/bin/activate
+    - inv build.compile-static-assets
+    - pip wheel -w wheelhouse -r requirements-prod.frozen.txt
+    - inv build.create-wheel
+    - inv build.push-wheelhouse
+    - inv build.push-built-themes-to-remote-bucket
+    # # - twine upload -u bluenove --skip-existing dist/*
 
-deploy_to_dev:
-  stage: deploy_to_dev
+
+push_to_develop_server:
+  stage: deploy_to_sandbox
   only:
     - tmp_master_for_ci_cd
+    - rws_connections
+    - invoke
+  before_script:
+    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+    - apt-get update
+    - apt-get install -y sudo python python-pip python-dev build-essential
+    - pip install virtualenv
+    - cd $CI_PROJECT_DIR
+    - python -mvirtualenv venv
+    - source venv/bin/activate
+    - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
+    # Fetch the configurations of sandbox from S3
+    - "echo '_extends: aws.yaml' > invoke.yaml"
+    - touch secrets.yaml
+    - ln -s assembl/tasks .
   script:
-    # empty script for now
-    - sh scripts/echo.sh
+    - inv build.deploy-to-sandbox
 
-deploy_to_uat:
-  stage: deploy_to_uat
-  only:
-    - tmp_master_for_ci_cd
-  script:
-    # empty script for now
-    - sh scripts/echo.sh
+# deploy_to_uat:
+#   stage: deploy_to_uat
+#   only:
+#     - tmp_master_for_ci_cd
+#     - add_deploy_job
+#   script:
+#     # empty script for now
+#     - echo "Running deployment..."
 
-deploy_to_prod:
-  stage: deploy_to_prod
-  environment: PROD
-  only:
-    - tmp_master_for_ci_cd
-  script:
-    # fake script for now
-    - python scripts/deploy_to_prod.py
-  when: manual
+# deploy_to_prod:
+#   stage: deploy_to_prod
+#   environment: PROD
+#   only:
+#     - tmp_master_for_ci_cd
+#   script:
+#     # fake script for now
+#     - python scripts/deploy_to_prod.py
+#   when: manual

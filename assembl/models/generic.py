@@ -108,7 +108,7 @@ class ContentSource(DiscussionBoundBase):
         return sanitized
 
     def import_content(self, only_new=True):
-        from assembl.tasks.source_reader import wake
+        from assembl.processes.source_reader import wake
         wake(self.id, reimport=not only_new)
 
     def make_reader(self):
@@ -119,7 +119,7 @@ class ContentSource(DiscussionBoundBase):
 
     @property
     def connection_error_as_text(self):
-        from ..tasks.source_reader import ReaderStatus
+        from ..processes.source_reader import ReaderStatus
         return (ReaderStatus(self.connection_error).name
                 if self.connection_error is not None else None)
 
@@ -462,7 +462,7 @@ class Content(TombstonableMixin, DiscussionBoundBase):
             return body
 
     def maybe_translate(self, pref_collection=None, target_locales=None):
-        from assembl.tasks.translate import (
+        from assembl.processes.translate import (
             translate_content, PrefCollectionTranslationTable, LanguagesTranslationTable)
         service = self.discussion.translation_service()
         if service.canTranslate is not None:
