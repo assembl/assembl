@@ -75,6 +75,10 @@ msgstr ""
 msgid "Proposal"
 msgstr "Proposition"
 
+#: assembl/graphql/utils.py:59
+msgid "An error occurred. Please contact the administrator."
+msgstr "Une erreur est survenue. Veuillez contacter l'administrateur."
+
 #: assembl/lib/colander.py:174
 msgid "${val} cannot be serialized: ${err}"
 msgstr "${val} ne peut être sérialisé: ${err}"

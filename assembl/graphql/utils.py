@@ -8,11 +8,17 @@ from graphene.types.scalars import Scalar
 from graphene.relay import Node
 from graphql.language import ast
 from graphql.utils.ast_to_dict import ast_to_dict
+from pyramid.threadlocal import get_current_request
+from pyramid.i18n import TranslationStringFactory
+from sqlalchemy.exc import DataError
+import transaction
 
 from .langstring import langstring_from_input_entries
 from assembl import models
 from assembl.lib.sentry import capture_exception
 
+
+_ = TranslationStringFactory('assembl')
 
 publication_states_enum = PyEnum(
     'PublicationStates', [(k, k) for k in models.PublicationStates.values()])
@@ -45,8 +51,14 @@ def abort_transaction_on_exception(fn):
     def decorator(*args, **kwargs):
         try:
             return fn(*args, **kwargs)
+        except DataError:
+            transaction.abort()
+            capture_exception()
+            request = get_current_request()
+            error = request.localizer.translate(
+                _("An error occurred. Please contact the administrator."))
+            raise Exception(error)
         except Exception:
-            import transaction
             transaction.abort()
             capture_exception()
             raise
