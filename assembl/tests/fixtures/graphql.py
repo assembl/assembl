@@ -2,6 +2,7 @@
 from datetime import datetime
 import pytest
 
+from graphql_relay.node.node import from_global_id
 
 
 @pytest.fixture(scope="function")
@@ -359,7 +360,8 @@ mutation createThematicWithImage($file: String!) {
 
 
 @pytest.fixture(scope="function")
-def proposition_id(graphql_request, thematic_and_question):
+def proposition_id(request, test_session, graphql_request, thematic_and_question):
+    from assembl.models import PropositionPost
     from assembl.graphql.schema import Schema as schema
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
@@ -379,6 +381,12 @@ mutation myFirstMutation {
 }
 """ % first_question_id, context_value=graphql_request)
     post_id = res.data['createPost']['post']['id']
+    def fin():
+        print "proposition_id"
+        post = test_session.query(PropositionPost).get(int(from_global_id(post_id)[1]))
+        test_session.delete(post)
+        test_session.flush()
+    request.addfinalizer(fin)
     return post_id
 
 
