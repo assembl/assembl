@@ -180,6 +180,7 @@ def admin_user(request, test_session):
         user = test_session.query(User).get(uid)
         user_role = user.roles[0]
         test_session.delete(user_role)
+        account = user.accounts[0]
         test_session.delete(account)
         test_session.delete(user.username)
         test_session.delete(user)
