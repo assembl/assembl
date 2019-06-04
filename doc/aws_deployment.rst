@@ -29,7 +29,7 @@ The build machine is similar to an assembl box, with the difference of having th
 	sudo su - assembl_user
 	cd assembl
 	# If you rebased invoke recently
-	git fetch; git reset --hard origin/invoke
+	git fetch; git reset --hard origin/develop
 	# If it was just regular series of commits
 	git pull  # Default is invoke
 	rm -rf wheelhouse
