@@ -327,7 +327,7 @@ def add_github_bot_ssh_keys(c, private_key):
         else:
             print("The provided key was not found!")
     else:
-        c.run('echo "$GITHUB_BOT_SSH_KEY" | tr -d \'\r\' | ssh-add - > /dev/null')
+        c.run('echo "$GITHUB_BOT_SSH_KEY" | tr -d \'\r\' | ssh-add - > /dev/null', warn=True)
 
 
 
