@@ -320,6 +320,8 @@ def create_venv(c, path=None):
 def configure_github_user(c):
     c.run('git config --global user.email "%s"' % c.config._internal.github.user)
     c.run('git config --global user.name "%s"' % c.config._internal.github.email)
+
+    # Uncomment the line below after debug since Assemble repo should be fetch from Github, instead of pushing to Gitlab
     # c.run('git remote rm origin')
     # c.run('git remote add origin %s' % c.config._internal.github.repo)
 
@@ -330,14 +332,18 @@ def add_github_bot_ssh_keys(c, private_key=None):
     Adds the SSH private key of the bluenove-bot.
     In the CI environment, comes as ENV variable. Can be overriden by passing location of private key as an arg.
     """
-    if private_key:
-        if exists(private_key):
-            c.run("ssh-add %s" % private_key)
-        else:
-            print("The provided key was not found!")
-    else:
-        c.run('echo "$GITHUB_BOT_SSH_KEY" | tr -d \'\r\' | ssh-add - > /dev/null', warn=True)
+    # # run ssh-agent
+    # c.run('eval `ssh-agent -s`')
 
+    # if private_key:
+    #     if exists(private_key):
+    #         c.run("ssh-add %s" % private_key)
+    #     else:
+    #         print("The provided key was not found!")
+    # else:
+    #     # add key to the agent store
+    #     c.run('ssh-add <(echo "$GITHUB_BOT_SSH_KEY")')
+    c.run('echo "TODO_DELETE_add_github_bot_ssh_keys"')
 
 
 def delete_foreign_tasks(locals):
