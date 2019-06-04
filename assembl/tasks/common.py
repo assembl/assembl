@@ -316,7 +316,7 @@ def configure_github_user(c):
 
 
 @task()
-def add_github_bot_ssh_keys(c, private_key):
+def add_github_bot_ssh_keys(c, private_key=None):
     """
     Adds the SSH private key of the bluenove-bot.
     In the CI environment, comes as ENV variable. Can be overriden by passing location of private key as an arg.
