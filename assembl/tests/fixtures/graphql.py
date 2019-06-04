@@ -124,7 +124,7 @@ def phases(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "finalizer timeline"
+        print "finalizer phases"
         test_session.delete(survey)
         test_session.delete(thread)
         test_session.delete(multiColumns)
