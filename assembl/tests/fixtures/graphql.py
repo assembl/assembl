@@ -13,6 +13,7 @@ def graphql_request(request, test_adminuser_webrequest, discussion):
     req.method = 'POST'
     return req
 
+
 @pytest.fixture(scope="function")
 def graphql_request_with_moderation(request, test_adminuser_webrequest, discussion_with_moderation):
     """ A graphql request fixture with an ADMIN user authenticated """
@@ -20,6 +21,7 @@ def graphql_request_with_moderation(request, test_adminuser_webrequest, discussi
     req.matchdict = {"discussion_id": discussion_with_moderation.id}
     req.method = 'POST'
     return req
+
 
 @pytest.fixture(scope="function")
 def graphql_request_with_semantic_analysis(request, test_adminuser_webrequest, discussion_with_semantic_analysis):
@@ -29,6 +31,7 @@ def graphql_request_with_semantic_analysis(request, test_adminuser_webrequest, d
     req.method = 'POST'
     return req
 
+
 @pytest.fixture(scope="function")
 def graphql_request_with_translation(request, test_adminuser_webrequest, discussion_with_translation):
     """ A graphql request fixture with an ADMIN user authenticated """
@@ -36,6 +39,7 @@ def graphql_request_with_translation(request, test_adminuser_webrequest, discuss
     req.matchdict = {"discussion_id": discussion_with_translation.id}
     req.method = 'POST'
     return req
+
 
 @pytest.fixture(scope="function")
 def graphql_unauthenticated_request(request, test_webrequest, discussion):
@@ -139,7 +143,7 @@ def phases(request, test_session, discussion):
 
 
 @pytest.fixture(scope="function")
-def idea_in_thread_phase(phases, graphql_request):
+def idea_in_thread_phase(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -162,10 +166,19 @@ mutation myFirstMutation {
 """, context_value=graphql_request)
     assert res.errors is None
     idea_id = res.data['createThematic']['thematic']['id']
+
+    def fin():
+        from assembl.models import Idea
+        idea = test_session.query(Idea).get(int(from_global_id(idea_id)[1]))
+        test_session.delete(idea)
+        test_session.flush()
+
+    request.addfinalizer(fin)
     return idea_id
 
+
 @pytest.fixture(scope="function")
-def another_idea_in_thread_phase(phases, graphql_request):
+def another_idea_in_thread_phase(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -188,11 +201,19 @@ mutation myFirstMutation {
 """, context_value=graphql_request)
     assert res.errors is None
     idea_id = res.data['createIdea']['thematic']['id']
+
+    def fin():
+        from assembl.models import Idea
+        idea = test_session.query(Idea).get(int(from_global_id(idea_id)[1]))
+        test_session.delete(idea)
+        test_session.flush()
+
+    request.addfinalizer(fin)
     return idea_id
 
 
 @pytest.fixture(scope="function")
-def top_post_in_thread_phase(graphql_request, idea_in_thread_phase):
+def top_post_in_thread_phase(request, test_session, graphql_request, idea_in_thread_phase):
     from assembl.graphql.schema import Schema as schema
     idea_id = idea_in_thread_phase
     res = schema.execute(u"""
@@ -211,12 +232,18 @@ mutation myFirstMutation {
 }
 """ % idea_id, context_value=graphql_request)
     post_id = res.data['createPost']['post']['id']
+    def fin():
+        from assembl.models import Post
+        post = test_session.query(Post).get(int(from_global_id(post_id)[1]))
+        test_session.delete(post)
+        test_session.flush()
 
+    request.addfinalizer(fin)
     return post_id
 
 
 @pytest.fixture(scope="function")
-def thematic_and_question(phases, graphql_request):
+def thematic_and_question(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -245,11 +272,21 @@ mutation myFirstMutation {
 """, context_value=graphql_request)
     thematic_id = res.data['createThematic']['thematic']['id']
     first_question_id = res.data['createThematic']['thematic']['questions'][0]['id']
+
+    def fin():
+        from assembl.models import Idea, Question
+        idea = test_session.query(Idea).get(int(from_global_id(thematic_id)[1]))
+        test_session.delete(idea)
+        question = test_session.query(Question).get(int(from_global_id(first_question_id)[1]))
+        test_session.delete(question)
+        test_session.flush()
+
+    request.addfinalizer(fin)
     return thematic_id, first_question_id
 
 
 @pytest.fixture(scope="function")
-def thematic_with_question(phases, graphql_request):
+def thematic_with_question(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myMutation {
@@ -278,11 +315,21 @@ mutation myMutation {
 """, context_value=graphql_request)
     thematic_id = res.data['createThematic']['thematic']['id']
     first_question_id = res.data['createThematic']['thematic']['questions'][0]['id']
+
+    def fin():
+        from assembl.models import Idea, Question
+        idea = test_session.query(Idea).get(int(from_global_id(thematic_id)[1]))
+        test_session.delete(idea)
+        question = test_session.query(Question).get(int(from_global_id(first_question_id)[1]))
+        test_session.delete(question)
+        test_session.flush()
+
+    request.addfinalizer(fin)
     return thematic_id, first_question_id
 
 
 @pytest.fixture(scope="function")
-def second_thematic_with_questions(phases, graphql_request):
+def second_thematic_with_questions(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     res = schema.execute(u"""
 mutation myMutation {
@@ -321,11 +368,22 @@ mutation myMutation {
     thematic_id = res.data['createThematic']['thematic']['id']
     question_ids = [question['id']
         for question in res.data['createThematic']['thematic']['questions']]
+
+    def fin():
+        from assembl.models import Idea, Question
+        idea = test_session.query(Idea).get(int(from_global_id(thematic_id)[1]))
+        test_session.delete(idea)
+        for question_id in question_ids:
+            question = test_session.query(Question).get(int(from_global_id(question_id)[1]))
+            test_session.delete(question)
+        test_session.flush()
+
+    request.addfinalizer(fin)
     return thematic_id, question_ids
 
 
 @pytest.fixture(scope="function")
-def thematic_with_image(phases, graphql_request):
+def thematic_with_image(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
     import os
     from io import BytesIO
@@ -356,6 +414,13 @@ mutation createThematicWithImage($file: String!) {
 }
 """, context_value=graphql_request, variable_values={ "file": "variables.file" })
     thematic_id = res.data['createThematic']['thematic']['id']
+    def fin():
+        from assembl.models import Idea
+        idea = test_session.query(Idea).get(int(from_global_id(thematic_id)[1]))
+        test_session.delete(idea)
+        test_session.flush()
+
+    request.addfinalizer(fin)
     return thematic_id
 
 
@@ -439,7 +504,7 @@ def create_proposal_en_fr_x(request, session, discussion, creator_id,
     return post
 
 
-def create_proposal_x(graphql_request, first_question_id, idx, publication_state):
+def create_proposal_x(request, session, graphql_request, first_question_id, idx, publication_state):
     from assembl.graphql.schema import Schema as schema
     from assembl.models import PublicationStates
     body = "une proposition {}".format(idx)
@@ -464,11 +529,19 @@ mutation myFirstMutation {
 }
 """ % (first_question_id, body, publication_state),
         context_value=graphql_request)
-    return res.data['createPost']['post']['id']
+    post_id = res.data['createPost']['post']['id']
+    def fin():
+        from assembl.models import PropositionPost
+        post = session.query(PropositionPost).get(int(from_global_id(post_id)[1]))
+        session.delete(post)
+        session.flush()
+
+    request.addfinalizer(fin)
+    return post_id
 
 
 @pytest.fixture(scope="function")
-def proposals15published(graphql_request, admin_user, thematic_and_question):
+def proposals15published(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
     graphql_request.authenticated_userid = admin_user.id
     thematic_id, first_question_id = thematic_and_question
@@ -476,14 +549,14 @@ def proposals15published(graphql_request, admin_user, thematic_and_question):
     for idx in range(15):
         publication_state = PublicationStates.PUBLISHED.value
         proposal_id = create_proposal_x(
-            graphql_request, first_question_id, idx, publication_state)
+            request, test_session, graphql_request, first_question_id, idx, publication_state)
         proposals.append(proposal_id)
 
     return proposals
 
 
 @pytest.fixture(scope="function")
-def proposals(graphql_request, admin_user, thematic_and_question):
+def proposals(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
     graphql_request.authenticated_userid = admin_user.id
     thematic_id, first_question_id = thematic_and_question
@@ -495,14 +568,14 @@ def proposals(graphql_request, admin_user, thematic_and_question):
             publication_state = PublicationStates.PUBLISHED.value
 
         proposal_id = create_proposal_x(
-            graphql_request, first_question_id, idx, publication_state)
+            request, test_session, graphql_request, first_question_id, idx, publication_state)
         proposals.append(proposal_id)
 
     return proposals
 
 
 @pytest.fixture(scope="function")
-def proposals_no_pending(graphql_request, admin_user, thematic_and_question):
+def proposals_no_pending(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
     graphql_request.authenticated_userid = admin_user.id
     thematic_id, first_question_id = thematic_and_question
@@ -510,7 +583,7 @@ def proposals_no_pending(graphql_request, admin_user, thematic_and_question):
     for idx in range(10):
         publication_state = PublicationStates.PUBLISHED.value
         proposal_id = create_proposal_x(
-            graphql_request, first_question_id, idx, publication_state)
+            request, test_session, graphql_request, first_question_id, idx, publication_state)
         proposals.append(proposal_id)
 
     return proposals
