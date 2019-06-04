@@ -3,11 +3,13 @@
 import React from 'react';
 import { Grid, Col, FormGroup, FormControl, Button } from 'react-bootstrap';
 import { Translate, I18n } from 'react-redux-i18n';
+import Helper from '../components/common/helper';
+import inputHandler from '../utils/inputHandler';
 import { getAuthorizationToken, getDiscussionSlug } from '../utils/globalFunctions';
 import { postChangePassword } from '../services/authenticationService';
-import inputHandler from '../utils/inputHandler';
 import { get } from '../utils/routeMap';
 import { displayAlert } from '../utils/utilityManager';
+import PasswordRequirements from '../components/common/passwordRequirements';
 
 class ChangePassword extends React.Component {
   constructor(props) {
@@ -75,7 +77,7 @@ class ChangePassword extends React.Component {
                   <Translate value="login.oldPasswordWarning" />
                 </span>
               </div>
-              <FormGroup className="margin-m">
+              <FormGroup className="margin-m align-flex">
                 <FormControl
                   type="password"
                   name="password1"
@@ -83,6 +85,7 @@ class ChangePassword extends React.Component {
                   placeholder={I18n.t('login.newPassword')}
                   onChange={this.handleChangePassword}
                 />
+                <Helper classname="title" helperText={<PasswordRequirements />} />
               </FormGroup>
               <FormGroup className="margin-m">
                 <FormControl

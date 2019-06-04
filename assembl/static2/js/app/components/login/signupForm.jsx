@@ -23,6 +23,8 @@ import LegalContentsQuery from '../../graphql/LegalContents.graphql';
 import LegalForm from './legalForm';
 import SignupCheckbox from './signupCheckbox';
 import BackButton from '../../../app/components/debate/common/backButton';
+import Helper from '../common/helper';
+import PasswordRequirements from '../common/passwordRequirements';
 
 type Props = {
   hasTermsAndConditions: boolean,
@@ -146,7 +148,6 @@ class SignupForm extends React.Component<Props, State> {
       userGuidelinesText
     } = this.props;
     const { privacyPolicyIsChecked, termsAndConditionsIsChecked, userGuidelinesIsChecked } = this.state;
-
     const legalContentsType = {
       termsAndConditions: 'termsAndConditions',
       privacyPolicy: 'privacyPolicy',
@@ -162,7 +163,7 @@ class SignupForm extends React.Component<Props, State> {
               textFields.map((field) => {
                 if (field.__typename === 'TextField' && !field.hidden) {
                   return (
-                    <FormGroup key={field.id}>
+                    <FormGroup className={`${field.identifier.toLowerCase()}-form-group`} key={field.id}>
                       <FormControl
                         type={field.fieldType.toLowerCase()}
                         name={field.identifier === 'CUSTOM' ? field.id : field.identifier.toLowerCase()}
@@ -170,8 +171,16 @@ class SignupForm extends React.Component<Props, State> {
                         onChange={this.handleInput}
                         required={field.required}
                       />
-                      {field.identifier === 'PASSWORD2' ? (
-                        <p className="annotation no-margin">{I18n.t('login.passwordRequirement')}</p>
+                      {field.identifier === 'PASSWORD' ? (
+                        <Helper classname="title" helperText={<PasswordRequirements />}>
+                          <FormControl
+                            type={field.fieldType.toLowerCase()}
+                            name={field.identifier === 'CUSTOM' ? field.id : field.identifier.toLowerCase()}
+                            placeholder={field.required ? `${field.title}*` : field.title}
+                            onChange={this.handleInput}
+                            required={field.required}
+                          />
+                        </Helper>
                       ) : null}
                     </FormGroup>
                   );

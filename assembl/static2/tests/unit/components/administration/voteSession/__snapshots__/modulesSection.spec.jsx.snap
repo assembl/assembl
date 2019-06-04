@@ -26,13 +26,11 @@ exports[`ModulesSection component should render a ModuleSection component with t
           onChange={[Function]}
           title=""
         >
-          <Helper
-            additionalTextClasses=""
+          <Connect(Helper)
             classname="inline checkbox-title"
             helperText="The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions"
             helperUrl="/static2/img/helpers/helper4.png"
             label="Tokens vote"
-            popOverClass=""
           />
         </Checkbox>
         Immutable.List []
@@ -48,13 +46,11 @@ exports[`ModulesSection component should render a ModuleSection component with t
           onChange={[Function]}
           title=""
         >
-          <Helper
-            additionalTextClasses=""
+          <Connect(Helper)
             classname="inline checkbox-title"
             helperText="You can choose to have one or several gages"
             helperUrl="/static2/img/helpers/helper3.png"
             label="Gauge(s) vote"
-            popOverClass=""
           />
         </Checkbox>
         <div
@@ -70,13 +66,9 @@ exports[`ModulesSection component should render a ModuleSection component with t
                 value="administration.gaugeNumber"
               />
             </label>
-            <Helper
-              additionalTextClasses=""
-              classname=""
+            <Connect(Helper)
               helperText="Define gauges number"
               helperUrl="/static2/img/helpers/helper2.jpg"
-              label=""
-              popOverClass=""
             />
           </div>
           <SplitButton
@@ -255,13 +247,11 @@ exports[`ModulesSection component should render a ModulesSection component witho
           onChange={[Function]}
           title=""
         >
-          <Helper
-            additionalTextClasses=""
+          <Connect(Helper)
             classname="inline checkbox-title"
             helperText="The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions"
             helperUrl="/static2/img/helpers/helper4.png"
             label="Tokens vote"
-            popOverClass=""
           />
         </Checkbox>
         Immutable.List []
@@ -274,13 +264,11 @@ exports[`ModulesSection component should render a ModulesSection component witho
           onChange={[Function]}
           title=""
         >
-          <Helper
-            additionalTextClasses=""
+          <Connect(Helper)
             classname="inline checkbox-title"
             helperText="You can choose to have one or several gages"
             helperUrl="/static2/img/helpers/helper3.png"
             label="Gauge(s) vote"
-            popOverClass=""
           />
         </Checkbox>
         Immutable.List []
