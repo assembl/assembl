@@ -229,7 +229,7 @@ const Translations = {
       username: "Email ou nom d'utilisateur",
       fullName: "Nom complet",
       password2: "Répéter le mot de passe",
-      passwordRequirementIntro: "Votre mot de passe doit contenir au moins:",
+      passwordRequirementIntro: "Votre mot de passe doit contenir au moins :",
       specialCharacterPassword: "Un caractère spécial",
       figurePassword: "Un chiffre",
       upperCasePassword: "Une majuscule",
