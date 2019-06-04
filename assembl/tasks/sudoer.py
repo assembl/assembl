@@ -6,7 +6,7 @@ from common import (
     fill_template,
     is_integration_env,
     delete_foreign_tasks,
-    get_venv_site_packages,
+    get_assembl_code_path,
     exists as sudo_exists)
 
 
@@ -91,7 +91,7 @@ def install_database(c):
 @task
 def install_assembl_systemd(c, assembl_path=None):
     """Push assembl.service configuration on a server. Asseme cloud env only"""
-    base = get_venv_site_packages(c)
+    base = get_assembl_code_path(c)
     template_dir = join(base, 'templates/system/')
     template_path = join(template_dir, 'assembl.service.jinja2')
     assert sudo_exists(c, template_path, sudo=True)
@@ -106,7 +106,7 @@ def install_assembl_systemd(c, assembl_path=None):
 @task
 def install_uwsgicloudwatch_systemd(c, assembl_path=None):
     """Push uwsgicloudwatch.service configuration on a server"""
-    base = get_venv_site_packages(c)
+    base = get_assembl_code_path(c)
     template_dir = join(base, 'templates/system/')
     template_path = join(template_dir, 'uwsgicloudwatch.service.jinja2')
     assert sudo_exists(c, template_path, sudo=True)
@@ -121,7 +121,7 @@ def install_uwsgicloudwatch_systemd(c, assembl_path=None):
 @task
 def install_urlmetadata_systemd(c):
     """Push urlmetadata.service configuration on a server"""
-    base = get_venv_site_packages(c)
+    base = get_assembl_code_path(c)
     template_dir = join(base, 'templates/system/')
     template_path = join(template_dir, 'urlmetadata.service.jinja2.jinja2')
     assert sudo_exists(c, template_path, sudo=True)

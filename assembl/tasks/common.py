@@ -117,6 +117,13 @@ def get_venv_site_packages(c):
     return os.path.join('venv/lib/python2.7', 'site-packages', 'assembl')
 
 
+def get_assembl_code_path(c):
+    if is_cloud_env(c):
+        return get_venv_site_packages(c)
+    else:
+        return ""
+
+
 def is_cloud_env(c):
     # Attempts to find the key from the configurations. However, due to the recursive nature
     # of configuration files, if it is not yet in the config, makes a calculated guess of cloud vs non-cloud
@@ -136,7 +143,7 @@ def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
     if is_cloud_env(c):
-        code_root = os.path.join(os.getcwd(), get_venv_site_packages(c))
+        code_root = os.path.join(os.getcwd(), get_assembl_code_path(c))
         config_prefix = code_root + '/configs/'
     else:
         code_root = project_prefix
@@ -146,9 +153,11 @@ def setup_ctx(c):
     current['projectpath'] = project_prefix
     current['_internal'] = c.config.get('_internal') or {}
     current['_internal']['mac'] = sys.platform == 'darwin'
-    target = c.config.get('_extends', None)
+    target = c.config.get('_extends', None) 
     if not target and exists(c, 'invoke.yaml'):
         target = 'invoke.yaml'
+    elif not is_cloud_env(c):
+        target = 'mac.yaml'
     while target:
         if os.path.isabs(target):
             if exists(c, target):

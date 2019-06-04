@@ -11,7 +11,7 @@ from invoke.tasks import call
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
     create_venv, fill_template, get_s3_file, s3_file_exists, get_aws_account_id, delete_foreign_tasks,
-    get_venv_site_packages, is_cloud_env)
+    get_assembl_code_path, is_cloud_env)
 
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
@@ -340,7 +340,7 @@ def create_local_ini(c):
 def generate_nginx_conf(c):
     """Hard assumption that this is only used under the cloud condition"""
     if is_cloud_env(c):
-        path = os.path.join(get_venv_site_packages(c), 'templates/system/')
+        path = os.path.join(get_assembl_code_path(c), 'templates/system/')
         fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx',
                       default_dir=path, extra={'is_cloud': True})
 
@@ -409,7 +409,7 @@ def aws_instance_config_update_and_restart(c, nginx=False, celery=False):
 @task(install_wheel)
 def assembl_dir_permissions(c):
     with venv(c):
-        code_path = get_venv_site_packages(c)
+        code_path = get_assembl_code_path(c)
     c.run('chgrp -R www-data {path}/assembl/static {path}/assembl/static2'.format(path=code_path))
     c.run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
     c.run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
@@ -535,7 +535,7 @@ def code_root(c, alt_env=None):
         return local_code_root
     else:
         if (as_bool(get_prefixed('package_install', alt_env, False))):
-            return get_venv_site_packages(alt_env)
+            return get_assembl_code_path(alt_env)
         else:
             return get_prefixed('projectpath', alt_env, os.getcwd())
 
