@@ -187,17 +187,21 @@ class UpdateLegalContents:
 
 
 class VisitsAnalytics:
-    __doc__ = """This object describes the analytics data gathered on the debate throughout its total lifecycle. The analytics is carried out
-    by Matomo (formerly known as Piwik), an open-source anaytics engine."""
+    __doc__ = """This object describes the analytics data gathered on the debate throughout its total lifecycle.
+    The analytics is carried out by Matomo (formerly known as Piwik), an open-source anaytics engine."""
     sum_visits_length = """The total number of hours spent on the platform by all users."""
     nb_pageviews = """The total number of page views accumulated."""
     nb_uniq_pageviews = """The total number of unique page views."""
 
 
 class Synthesis:
-    __doc__ = """Class to model the synthesis of a discussion. A synthesis is one of the core features of Assembl that a debate administrator
-    uses to synthesize the main ideas of a debate. It has an introduction and a conclusion"""
+    __doc__ = """The graphql object for a synthesis of a discussion.
+    A synthesis is one of the core features of Assembl that a debate administrator
+    uses to synthesize the main ideas of a debate. It has an introduction and a conclusion."""
     id = Default.object_id % ("Synthesis",)
+    synthesis_type = """The type of Synthesis to be created"""
+    body = """The body of the full text synthesis."""
+    body_entries = Default.langstring_entries % ("The body in various languages.",)
     subject = """The subject of the synthesis."""
     subject_entries = Default.langstring_entries % ("The subject in various languages.",)
     introduction = """The introduction of the synthesis."""
@@ -205,9 +209,15 @@ class Synthesis:
     conclusion = """The conclusion of the synthesis."""
     conclusion_entries = Default.langstring_entries % ("This is the conclusion of the synthesis in different languages.",)
     ideas = """This is the list of ideas related to the synthesis."""
-    img = Default.document % ("""The img field is a header image URL/document object that will be visible on the Synthesis view's header.""")
+    img = Default.document % ("""This is a header image document object """
+                              """that will be visible on the Synthesis view's header.""")
     creation_date = """The creation date of the synthesis."""
     post = """Synthesis post to be created."""
+
+
+class DeleteSynthesis:
+    __doc__ = """A mutation that enables the deletion of a Synthesis."""
+    id = Default.node_id % "Synthesis post" + " This is the synthesis post identifier to be deleted."
 
 
 class TextFragmentIdentifier:
@@ -640,6 +650,29 @@ class UpdatePost:
     subject = "The subject of Post, updated in the original langauge of the Post."
     body = Default.string_entry % ("Post body") + " This is just a string input, and will update the original language body of the Post."
     attachments = "A list of Attachments to be appended to the Post."
+    publication_state = PostInterface.publication_state
+
+
+class CreateSynthesis:
+    __doc__ = """A mutation that enables a Synthesis to be created."""
+    synthesis_type = Synthesis.synthesis_type
+    body_entries = Synthesis.body_entries
+    subject_entries = Synthesis.subject_entries
+    introduction_entries = Synthesis.introduction_entries
+    conclusion_entries = Synthesis.conclusion_entries
+    image = """The uploaded image file"""
+    publication_state = PostInterface.publication_state
+
+
+class UpdateSynthesis:
+    __doc__ = """A mutation that enables a Synthesis to be updated."""
+    id = Default.node_id % "Synthesis" + " This is the identifier of the Synthesis to update."
+    synthesis_type = Synthesis.synthesis_type
+    body_entries = Synthesis.body_entries
+    subject_entries = Synthesis.subject_entries
+    introduction_entries = Synthesis.introduction_entries
+    conclusion_entries = Synthesis.conclusion_entries
+    image = CreateSynthesis.image
     publication_state = PostInterface.publication_state
 
 
@@ -1145,7 +1178,7 @@ class Resource:
     In effect, this is the \"src\" code inside of an iframe-based attachment to a Resource."""
     image = Default.document % ("An image attached to the Resource",)
     doc = Default.document % ("A file attached to the Resource",)
-    order = Default.document % ("The order of the Resource on the Resources Center page.")
+    order = Default.document % ("The order of the Resource on the Resources Center page.",)
 
 
 class CreateResource:

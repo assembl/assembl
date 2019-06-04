@@ -2,19 +2,20 @@
 All utility methods, classes and functions needed for testing applications
 """
 
+import os
+from contextlib import contextmanager
+from io import BytesIO
 from itertools import chain
 
-from sqlalchemy import inspect
-from webtest import TestRequest
-from webob.request import environ_from_url
 from pyramid.threadlocal import manager
-from contextlib import contextmanager
+from webob.request import environ_from_url
+from webtest import TestRequest
 
-from assembl.lib.sqla import (
-    get_session_maker, get_metadata, mark_changed)
-from assembl.lib import logging
 from assembl.auth import R_PARTICIPANT
-
+from assembl.lib import logging
+from assembl.lib.sqla import (
+    get_session_maker,
+    get_metadata, mark_changed)
 
 log = logging.getLogger()
 
@@ -90,7 +91,6 @@ def get_all_tables(app_settings, session, reversed=True):
     res = {row[0] for row in res}
     # get the ordered version to minimize cascade.
     # cascade does not exist on virtuoso.
-    import assembl.models
     ordered = [t.name for t in get_metadata().sorted_tables
                if t.name in res]
     ordered.extend([t for t in res if t not in ordered])
@@ -145,7 +145,6 @@ def api_call_to_fname(api_call, method="GET", **args):
     """Translate an API call to a filename containing most of the call information
 
     Used in :js:func:`ajaxMock`"""
-    import os
     import os.path
     base_fixture_dir = base_fixture_dirname()
     api_dir, fname = api_call.rsplit("/", 1)
@@ -211,3 +210,11 @@ def give_user_role(user, discussion, role=R_PARTICIPANT, session=None):
     _create_role_for_user(user, discussion, session=session, role=role)
     yield
     _delete_all_local_roles_for_user(user, discussion, session=session)
+
+
+class FakeUploadedFile(object):
+    file = BytesIO(os.urandom(16))
+
+    def __init__(self, filename, type):
+        self.filename = filename
+        self.type = type

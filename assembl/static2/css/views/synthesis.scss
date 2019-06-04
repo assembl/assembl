@@ -3,6 +3,17 @@
     top: 15%;
   }
 
+  .actions {
+    position: absolute;
+    right: 0;
+    list-style: none;
+    margin: 5px 5px 0 0;
+
+    li {
+      padding: 10px;
+    }
+  }
+
   .synthesis-side-menu {
     background-color: $white;
     padding: 30px;
@@ -99,4 +110,40 @@
       font-size: 20px;
     }
   }
+}
+
+.create-synthesis-button {
+  margin-bottom: 25px;
+}
+
+.synthesis-form {
+  .content-section {
+    margin-left: 70px;
+  }
+
+  .admin-box {
+    margin: 20px 0;
+    padding: 40px;
+    border-radius: 3px;
+  }
+
+  .url-field > .form-group,
+  .form-group > #title {
+    width: 400px;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .action-button {
+    margin-left: 20px;
+  }
+}
+
+.synthesis-iframe {
+  height: 1500px;
+  width: 100%;
+  border: none;
 }

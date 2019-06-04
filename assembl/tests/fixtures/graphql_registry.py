@@ -58,13 +58,13 @@ def graphql_registry():
             if op is None:  # not a query, should be a mutation
                 op = self.data['mutations'][key]
 
-            def include_fragments(text, included_fragments):
+            def include_fragments(graphql_text, included_fragments):
                 for fragment, content in self.data['fragments'].items():
-                    if fragment + '.graphql' in text and fragment not in included_fragments:
-                        text = include_fragments(content, included_fragments) + text
+                    if "/{}.graphql".format(fragment) in graphql_text and fragment not in included_fragments:
+                        graphql_text = include_fragments(content, included_fragments) + graphql_text
                         included_fragments.append(fragment)
 
-                return text
+                return graphql_text
 
             op = include_fragments(op, [])
             return op

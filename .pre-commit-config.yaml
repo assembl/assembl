@@ -22,7 +22,7 @@
     files: ".*/static2/.*jsx?$"
   - id: jest
     name: js tests
-    entry: bash -c "cd assembl/static2/; npm test"
+    entry: bash -c "cd assembl/static2/; npm test -- --maxWorkers=2"
     language: system
     files: ".*/static2/.*jsx?$"
   - id: prettier-js

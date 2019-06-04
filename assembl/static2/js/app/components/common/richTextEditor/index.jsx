@@ -3,15 +3,15 @@ import * as React from 'react';
 import { EditorState, RichUtils } from 'draft-js';
 import Editor from 'draft-js-plugins-editor';
 import classNames from 'classnames';
+import debounce from 'lodash/debounce';
 import createToolbarPlugin from 'draft-js-static-toolbar-plugin';
-
+import { HeadlineThreeButton, HeadlineTwoButton } from 'draft-js-buttons';
 // from our workspaces
 /* eslint-disable import/no-extraneous-dependencies */
 import createAttachmentPlugin from 'draft-js-attachment-plugin';
 import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
 /* eslint-enable import/no-extraneous-dependencies */
-
 import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
 import { addProtocol } from '../../../utils/linkify';
 
@@ -23,16 +23,20 @@ type Props = {
   onChange: Function,
   placeholder?: string,
   textareaRef?: Function,
-  toolbarPosition: string,
-  withAttachmentButton: boolean
+  toolbarPosition: ToolbarPosition,
+  withAttachmentButton: boolean,
+  withHeaderButton?: boolean
 };
 
 type State = {
-  editorHasFocus: boolean
+  editorHasFocus: boolean,
+  toolbarOffset: number
 };
 
 export default class RichTextEditor extends React.Component<Props, State> {
   editor: ?Editor;
+
+  toolbarRef: {| current: null | HTMLElement |};
 
   plugins: Array<DraftPlugin>;
 
@@ -41,12 +45,14 @@ export default class RichTextEditor extends React.Component<Props, State> {
   static defaultProps = {
     handleInputFocus: undefined,
     toolbarPosition: 'top',
-    withAttachmentButton: false
+    withAttachmentButton: false,
+    withHeaderButton: false
   };
 
   constructor(props: Props): void {
     super(props);
     this.editor = React.createRef();
+    this.toolbarRef = React.createRef();
     const modalPlugin = createModalPlugin();
     const { closeModal, setModalContent, Modal } = modalPlugin;
     const modalConfig = {
@@ -60,8 +66,14 @@ export default class RichTextEditor extends React.Component<Props, State> {
     const { LinkButton } = linkPlugin;
 
     const components = {};
-    const toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
+    components.LinkButton = LinkButton;
+    components.Modal = Modal;
+    let toolbarStructure = [BoldButton, ItalicButton, UnorderedListButton, LinkButton];
+    if (props.withHeaderButton) {
+      toolbarStructure = [HeadlineTwoButton, HeadlineThreeButton, ...toolbarStructure];
+    }
     const plugins = [linkPlugin];
+
     if (props.withAttachmentButton) {
       const attachmentPlugin = createAttachmentPlugin({
         ...modalConfig
@@ -70,6 +82,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
       toolbarStructure.push(AttachmentButton);
       plugins.push(attachmentPlugin);
       components.Attachments = Attachments;
+      components.AttachmentButton = AttachmentButton;
     }
 
     const staticToolbarPlugin = createToolbarPlugin({
@@ -88,20 +101,40 @@ export default class RichTextEditor extends React.Component<Props, State> {
     });
     plugins.push(staticToolbarPlugin);
 
-    this.plugins = plugins;
     const { Toolbar } = staticToolbarPlugin;
     this.components = {
-      Modal: Modal,
       Toolbar: Toolbar,
       ...components
     };
+    this.plugins = plugins;
 
     this.state = {
-      editorHasFocus: false
+      editorHasFocus: false,
+      toolbarOffset: 0
     };
   }
 
-  handleEditorFocus = (): void => {
+  componentWillMount() {
+    window.addEventListener('scroll', this.setToolbarOffset);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.setToolbarOffset);
+  }
+
+  setToolbarOffset = debounce(() => {
+    const toolbar = this.toolbarRef.current;
+    if (!toolbar) {
+      return;
+    }
+    if (toolbar.offsetTop <= window.pageYOffset) {
+      this.setState({ toolbarOffset: window.pageYOffset - toolbar.offsetTop });
+    } else {
+      this.setState({ toolbarOffset: 0 });
+    }
+  }, 20);
+
+  handleEditorFocus = () => {
     const { handleInputFocus } = this.props;
     this.setState(
       {
@@ -150,38 +183,46 @@ export default class RichTextEditor extends React.Component<Props, State> {
   };
 
   render() {
-    const { editorState, onChange, placeholder, textareaRef } = this.props;
+    const { editorState, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     const { Attachments, Modal, Toolbar } = this.components;
+
     return (
-      <div className={divClassName} ref={textareaRef}>
-        <div className="editor-header">
-          {editorState.getCurrentContent().hasText() && placeholder ? (
-            <div className="editor-label form-label">{placeholder}</div>
-          ) : (
-            <div className="editor-label form-label">&nbsp;</div>
-          )}
-          <div className="clear" />
-        </div>
-        <Modal />
-        <div onClick={this.focusEditor}>
-          <Editor
-            editorState={editorState}
-            onChange={onChange}
-            onFocus={this.handleEditorFocus}
-            placeholder={placeholder}
-            plugins={this.plugins}
-            ref={this.editor}
-            handleReturn={this.handleReturn}
-            spellCheck
-          />
-        </div>
-        {/*
+      <div ref={this.toolbarRef}>
+        <div className={divClassName} ref={textareaRef}>
+          <div className="editor-header">
+            {editorState.getCurrentContent().hasText() && placeholder ? (
+              <div className="editor-label form-label">{placeholder}</div>
+            ) : (
+              <div className="editor-label form-label">&nbsp;</div>
+            )}
+            <div className="clear" />
+          </div>
+          <Modal />
+          <div onClick={this.focusEditor}>
+            <Editor
+              editorState={editorState}
+              onChange={onChange}
+              onFocus={this.handleEditorFocus}
+              placeholder={placeholder}
+              plugins={this.plugins}
+              ref={this.editor}
+              handleReturn={this.handleReturn}
+              spellCheck
+            />
+          </div>
+          {/*
           we have to move toolbar in css for now since there is a bug in draft-js-plugin
           It should be fixed in draft-js-plugin v3
          */}
-        <Toolbar />
-        {Attachments ? <Attachments /> : null}
+          {toolbarPosition === 'top' || toolbarPosition === 'bottom' ? <Toolbar /> : null}
+          {toolbarPosition === 'sticky' ? (
+            <div className="editor-toolbar-sticky" style={{ top: this.state.toolbarOffset }}>
+              <Toolbar />
+            </div>
+          ) : null}
+          {Attachments ? <Attachments /> : null}
+        </div>
       </div>
     );
   }

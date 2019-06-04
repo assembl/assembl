@@ -8,7 +8,7 @@ import { getPartialTree, getChildren } from '../../utils/tree';
 import IdeaSynthesis from './IdeaSynthesis';
 import { getDomElementOffset } from '../../utils/globalFunctions';
 
-import type { SynthesisIdea } from './IdeaSynthesis';
+import type { SynthesisIdea } from './types.flow';
 
 type IdeaSynthesisTreeProps = {
   rootIdea: SynthesisIdea,

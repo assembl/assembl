@@ -1,0 +1,21 @@
+#import "../fragments/MultilingualSynthesisPost.graphql"
+
+mutation updateSynthesis(
+  $id: ID!
+  $image: String
+  $bodyEntries: [LangStringEntryInput]!
+  $subjectEntries: [LangStringEntryInput]!
+  $publicationState: PublicationStates!
+) {
+  updateSynthesis(
+    id: $id
+    image: $image
+    bodyEntries: $bodyEntries
+    subjectEntries: $subjectEntries
+    publicationState: $publicationState
+  ) {
+    synthesisPost {
+      ...MultilingualSynthesisPost
+    }
+  }
+}

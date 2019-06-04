@@ -5,25 +5,30 @@ import { compose, graphql } from 'react-apollo';
 import { Col, Grid, Row } from 'react-bootstrap';
 import debounce from 'lodash/debounce';
 
+import { renderRichtext } from '../utils/linkify';
 import Header from '../components/common/header';
 import Section from '../components/common/section';
 import SynthesisQuery from '../graphql/SynthesisQuery.graphql';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import IdeaSynthesisTree from '../components/synthesis/IdeaSynthesisTree';
-import { getPartialTree, getChildren } from '../utils/tree';
+import { getChildren, getPartialTree } from '../utils/tree';
 import SideMenu from '../components/synthesis/sideMenu';
 import { getDomElementOffset } from '../utils/globalFunctions';
+import type { Synthesis } from '../components/synthesis/types.flow';
+import { deleteButton, editButton } from '../components/synthesis/actions';
+import SynthesesQuery from '../graphql/SynthesesQuery.graphql';
 
 type SynthesisProps = {
-  synthesis: Object,
-  routeParams: RouterParams,
-  synthesisPostId: string
+  synthesis: Synthesis,
+  routeParams: { slug: string, synthesisId: string },
+  synthesisPostId: string,
+  lang: string
 };
 
 type SynthesisState = {
   introBlock: ?HTMLElement,
-  sideMenuNode: ?HTMLElement,
   conclusionBlock: ?HTMLElement,
+  sideMenuNode: ?HTMLElement,
   sideMenuIsHidden: boolean,
   ideaOnScroll?: string,
   sideMenuHeight: number,
@@ -106,7 +111,7 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
   render() {
     const { synthesis, routeParams, synthesisPostId } = this.props;
     const { sideMenuIsHidden, ideaOnScroll, sideMenuOverflow, setSideMenuHeight } = this.state;
-    const { introduction, conclusion, ideas, subject } = synthesis;
+    const { introduction, conclusion, body, ideas, subject } = synthesis;
     const sortedIdeas = [...ideas].sort((a, b) => {
       if (a.live.order < b.live.order) {
         return -1;
@@ -118,10 +123,25 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
     });
     const { roots, descendants } = getPartialTree(sortedIdeas);
     const hasSiblings = roots.length > 1;
+
+    const updateSynthesesQuery = {
+      query: SynthesesQuery,
+      variables: {
+        lang: this.props.lang
+      }
+    };
+    const refetchQueries = [updateSynthesesQuery];
+    const redirectToSyntheses = true;
     return (
       <div className="synthesis-page">
         <div className="background-light">
           <Header title={subject} imgUrl={synthesis.img ? synthesis.img.externalUrl : ''} type="synthesis" />
+          <div className="action-buttons">
+            <ul className="actions flex">
+              {editButton(synthesisPostId)}
+              {deleteButton(synthesisPostId, refetchQueries, redirectToSyntheses)}
+            </ul>
+          </div>
           <Grid fluid>
             {introduction && (
               <Section title="introduction" translate className="synthesis-block" innerRef={this.updateIntroBlock}>
@@ -131,6 +151,13 @@ export class DumbSynthesis extends React.Component<SynthesisProps, SynthesisStat
                   </Col>
                 </Row>
               </Section>
+            )}
+            {body && (
+              <Row>
+                <Col mdOffset={3} md={8} smOffset={1} sm={10}>
+                  {renderRichtext(body)}
+                </Col>
+              </Row>
             )}
             <Row className="background-grey synthesis-tree">
               <Col

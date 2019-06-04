@@ -12,11 +12,35 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
       title="Foo"
       type="synthesis"
     />
+    <div
+      className="action-buttons"
+    >
+      <ul
+        className="actions flex"
+      />
+    </div>
     <Grid
       bsClass="container"
       componentClass="div"
       fluid={true}
     >
+      <Row
+        bsClass="row"
+        componentClass="div"
+      >
+        <Col
+          bsClass="col"
+          componentClass="div"
+          md={8}
+          mdOffset={3}
+          sm={10}
+          smOffset={1}
+        >
+          <p>
+            yolo
+          </p>
+        </Col>
+      </Row>
       <Row
         bsClass="row"
         className="background-grey synthesis-tree"
@@ -59,6 +83,7 @@ exports[`Synthesis component should match Synthesis snapshot 1`] = `
               ]
             }
             show={false}
+            synthesisPostId="yop"
           />
         </Col>
         <Col

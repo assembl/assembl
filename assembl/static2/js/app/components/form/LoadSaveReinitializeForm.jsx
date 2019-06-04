@@ -14,34 +14,34 @@ import { Form } from 'react-final-form';
 import type { MutationsPromises, SaveStatus } from './types.flow';
 import { displayConfirmationModal } from '../../utils/administration/displayConfirmationModal';
 
-type TOriginalValues = {| [string]: any |};
-
-export type TInitialValues = { [string]: any };
-
-type Props = {
+type Props<TOriginalValues, TFormValues> = {
   load: (fetchPolicy: FetchPolicy) => Promise<TOriginalValues>,
   loading: React.Node,
-  postLoadFormat: ?(TOriginalValues) => TInitialValues,
-  createMutationsPromises: (TInitialValues, TInitialValues) => MutationsPromises,
+  postLoadFormat: ?(TOriginalValues) => TFormValues,
+  // createMutationsPromises(currentValues, nextValues)
+  createMutationsPromises: (TFormValues, TFormValues) => MutationsPromises,
   save: MutationsPromises => Promise<SaveStatus>,
-  afterSave?: TInitialValues => void,
+  afterSave?: TFormValues => void,
   mutators?: { [string]: Mutator },
   warningMessageKey?: string,
   withWarningModal?: boolean,
   warningValues?: Array<string>
 };
 
-type State = {
+type State<TOriginalValues, TInitialValues> = {
   initialValues: ?TInitialValues,
   isLoading: boolean,
   originalValues: ?TOriginalValues
 };
 
-export default class LoadSaveReinitializeForm extends React.Component<Props, State> {
-  state = {
+export default class LoadSaveReinitializeForm<TO: { [string]: any }, TI: { [string]: any }> extends React.Component<
+  Props<TO, TI>,
+  State<TO, TI>
+> {
+  state: State<TO, TI> = {
+    initialValues: undefined,
     isLoading: false,
-    originalValues: undefined,
-    initialValues: undefined
+    originalValues: undefined
   };
 
   componentDidMount() {
@@ -51,15 +51,15 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
   load = async (fetchPolicy: FetchPolicy = 'cache-first') => {
     const { load, postLoadFormat } = this.props;
     this.setState({ isLoading: true });
-    const originalValues = await load(fetchPolicy);
-    const initialValues = postLoadFormat ? postLoadFormat(originalValues) : originalValues;
+    const originalValues: TO = await load(fetchPolicy);
+    const initialValues: TI = postLoadFormat ? postLoadFormat(originalValues) : (originalValues: any);
     this.setState({
       isLoading: false,
       initialValues: initialValues
     });
   };
 
-  runMutations = async (values: TInitialValues) => {
+  runMutations = async (values: TI) => {
     const { createMutationsPromises, save, afterSave } = this.props;
     if (this.state.initialValues) {
       const mutationPromises = createMutationsPromises(values, this.state.initialValues);
@@ -72,7 +72,7 @@ export default class LoadSaveReinitializeForm extends React.Component<Props, Sta
     }
   };
 
-  save = (values: TInitialValues) => {
+  save = (values: any) => {
     const { withWarningModal, warningValues, warningMessageKey } = this.props;
     const { initialValues } = this.state;
     // We check if any of the values that need to be warned about have been changed

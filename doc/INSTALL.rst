@@ -75,7 +75,7 @@ or:
     git clone https://github.com/assembl/assembl.git
     cd assembl
     fab -f assembl/fabfile.py -c assembl/configs/develop.rc install_single_server
-    fab -f assembl/fabfile.py -c assembl/configs/develop.rc bootstrap_from_checkout
+    VIRTUAL_ENV=$(pwd)/venv fab -f assembl/fabfile.py -c assembl/configs/develop.rc bootstrap_from_checkout
 
 
 Note: If on Mac: replace ``assembl/configs/develop.rc`` with ``assembl/configs/mac.rc``.

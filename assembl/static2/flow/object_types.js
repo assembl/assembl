@@ -12,6 +12,8 @@ type DraftBlockType = string;
 type DraftInlineStyle = Immutable.OrderedSet<string>;
 /* end temporary dummy types */
 
+type ToolbarPosition = 'top' | 'bottom' | 'sticky';
+
 export type IdeaMessageColumns = Array<IdeaMessageColumnFragment>;
 
 export type TreeItem = {

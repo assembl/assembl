@@ -2,7 +2,6 @@ import os.path
 from datetime import datetime
 
 import graphene
-from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
 from pyramid.httpexceptions import HTTPUnauthorized
@@ -29,16 +28,12 @@ from .langstring import (LangStringEntry, resolve_best_langstring_entries,
 from .sentiment import SentimentCounts, SentimentTypes
 from .types import SecureObjectType, SQLAlchemyInterface
 from .user import AgentProfile
-from .utils import DateTime, abort_transaction_on_exception
+from .utils import DateTime, PublicationStates, abort_transaction_on_exception
 from .synthesis import Synthesis
 from .extract import Extract, ExtractStates, ExtractNatures
 from .tag import Tag
 
 _ = TranslationStringFactory('assembl')
-
-publication_states_enum = PyEnum(
-    'PublicationStates', [(k, k) for k in models.PublicationStates.values()])
-PublicationStates = graphene.Enum.from_enum(publication_states_enum)
 
 
 class IdeaContentLink(graphene.ObjectType):

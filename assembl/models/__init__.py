@@ -232,6 +232,7 @@ from .idea_content_link import (  # noqa: E402, F401
 )
 from .idea_graph_view import (  # noqa: E402, F401
     ExplicitSubGraphView,
+    FullTextSynthesis,
     IdeaGraphView,
     SubGraphIdeaAssociation,
     SubGraphIdeaLinkAssociation,

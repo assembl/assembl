@@ -19,12 +19,14 @@ type Props = {
     value: multilingualValue
   },
   label: string,
+  toolbarPosition: ToolbarPosition,
   withAttachmentButton: boolean
 } & FieldRenderProps;
 
 const RichTextFieldAdapter = ({
   editLocale,
   withAttachmentButton,
+  toolbarPosition,
   input: { name, onBlur, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
@@ -38,7 +40,7 @@ const RichTextFieldAdapter = ({
         {...rest}
         editorState={valueInLocale}
         placeholder={label}
-        toolbarPosition="bottom"
+        toolbarPosition={toolbarPosition}
         onChange={es => onChange({ ...value, [editLocale]: es })}
         withAttachmentButton={withAttachmentButton}
       />
@@ -49,6 +51,7 @@ const RichTextFieldAdapter = ({
 };
 
 RichTextFieldAdapter.defaultProps = {
+  toolbarPosition: 'bottom',
   withAttachmentButton: false
 };
 

@@ -4,7 +4,7 @@ import { type ApolloClient, withApollo } from 'react-apollo';
 import { I18n, Translate } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 
-import LoadSaveReinitializeForm, { type TInitialValues } from '../../../form/LoadSaveReinitializeForm';
+import LoadSaveReinitializeForm from '../../../form/LoadSaveReinitializeForm';
 import SaveButton from '../../saveButton';
 import SectionTitle from '../../sectionTitle';
 import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
@@ -31,16 +31,17 @@ const PersonalizeInterface = ({ client }: Props) => (
         postLoadFormat={postLoadFormat}
         createMutationsPromises={createMutationsPromises(client)}
         save={save}
-        afterSave={(values: TInitialValues) => {
+        afterSave={(values) => {
           // Update the title and the favicon of the page
           const head = document.head;
           if (head) {
             // Update the title
             const pageTitle = head.getElementsByTagName('title')[0];
-            if (pageTitle) pageTitle.text = values.title;
+            if (pageTitle) pageTitle.text = values.title || '';
             // Update the favicon
             const faviconLink = head.querySelector('link[rel="icon"]');
             // Use the default favicon if favicon is null
+            // $FlowFixMe Cannot get `values.favicon.externalUrl` because property `externalUrl` is missing in `String`
             let faviconUrl = values.favicon ? values.favicon.externalUrl : DEFAULT_FAVICON;
             faviconUrl = typeof faviconUrl === 'object' ? window.URL.createObjectURL(faviconUrl) : faviconUrl;
             if (faviconLink) faviconLink.setAttribute('href', faviconUrl);

@@ -210,7 +210,6 @@ export const DumbPostBody = ({
   });
   // Only non-special URLs (like Youtube or SketchFab) will be transformed
   // We need to add the URLs previews to the end of each post (See URLMetadataLoader)
-  // const urls = body && [...getUrls(body.replace(/<\/p>/gi, ' </p>'))].filter(url => !isSpecialURL(url));
   const afterLoad = () => {
     if (measureTreeHeight) measureTreeHeight(400);
   };
@@ -252,11 +251,6 @@ export const DumbPostBody = ({
             replacementComponents={postBodyReplacementComponents(afterLoad, isHarvesting)}
             contentLocale={contentLocale}
           />
-          {/* {urls && (
-            <div className="urls-container">
-              {urls.map(url => <URLMetadataLoader key={url} url={url} afterLoad={afterLoad} />)}
-            </div>
-          )} */}
         </div>
       )}
     </div>

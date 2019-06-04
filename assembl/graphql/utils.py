@@ -2,13 +2,21 @@ from datetime import datetime
 import os.path
 import pytz
 
+import graphene
+from graphene.pyutils.enum import Enum as PyEnum
 from graphene.types.scalars import Scalar
+from graphene.relay import Node
 from graphql.language import ast
 from graphql.utils.ast_to_dict import ast_to_dict
 
 from .langstring import langstring_from_input_entries
 from assembl import models
 from assembl.lib.sentry import capture_exception
+
+
+publication_states_enum = PyEnum(
+    'PublicationStates', [(k, k) for k in models.PublicationStates.values()])
+PublicationStates = graphene.Enum.from_enum(publication_states_enum)
 
 
 class DateTime(Scalar):
@@ -234,3 +242,9 @@ def create_idea_announcement(user_id, discussion, idea, title_langstring, descri
         quote=quote,
         summary=summary_langstring)
     return idea_announcement
+
+
+def get_primary_id(graphql_id):
+    """Get database primary key of an object from its graphql id.
+    """
+    return int(Node.from_global_id(graphql_id)[1])

@@ -549,28 +549,3 @@ mutation myFirstMutation {
     schema.execute(
         mutation,
         context_value=graphql_request)
-
-
-@pytest.fixture(scope="function")
-def synthesis_in_syntheses(graphql_request, synthesis_post_1):
-    from assembl.graphql.schema import Schema as schema
-    res = schema.execute(
-        u"""query SynthesesQuery($lang: String!) {
-            syntheses {
-                ... on Synthesis {
-                  id
-                  subject(lang: $lang)
-                  ideas {
-                    ... on Idea {
-                      img { externalUrl }
-                    }
-                  }
-                }
-              } }
-        """,
-        context_value=graphql_request,
-        variable_values={
-            "lang": "en"
-        })
-    assert res.data
-    return res

@@ -1,0 +1,58 @@
+#import "./IdeaMessageColumn.graphql"
+#import "./ADocument.graphql"
+
+fragment SynthesisPost on Post {
+  id
+  publishesSynthesis {
+    ... on Synthesis {
+      id
+      synthesisType
+      subject(lang: $lang)
+      introduction(lang: $lang)
+      body(lang: $lang)
+      conclusion(lang: $lang)
+      creationDate
+      img {
+        ...ADocument
+      }
+      ideas {
+        ... on Idea {
+          id
+          ancestors
+          title(lang: $lang)
+          synthesisTitle(lang: $lang)
+          live {
+            ... on Idea {
+              id
+              order
+              numPosts
+              numContributors
+              messageColumns {
+                ...IdeaMessageColumn
+              }
+              messageViewOverride
+              img {
+                externalUrl
+              }
+              posts {
+                edges {
+                  node {
+                    ... on Post {
+                      sentimentCounts {
+                        like
+                        disagree
+                        dontUnderstand
+                        moreInfo
+                      }
+                      publicationState
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

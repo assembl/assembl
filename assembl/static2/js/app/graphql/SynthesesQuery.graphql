@@ -1,3 +1,5 @@
+#import "./fragments/ADocument.graphql"
+
 query SynthesesQuery($lang: String!) {
   syntheses {
     ... on Synthesis {
@@ -5,10 +7,11 @@ query SynthesesQuery($lang: String!) {
       subject(lang: $lang)
       creationDate
       img {
-        externalUrl
+        ...ADocument
       }
       post {
         id
+        publicationState
       }
     }
   }

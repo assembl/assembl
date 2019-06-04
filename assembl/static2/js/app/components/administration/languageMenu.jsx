@@ -71,7 +71,7 @@ const Flag = ({ locale }: { locale: string }) => {
   }
 };
 
-const LanguageMenu = ({ changeLocale, editLocale, discussionPreferencesLanguages, isHidden }: Props) => {
+const LanguageMenu = ({ changeLocale, discussionPreferencesLanguages, editLocale, isHidden }: Props) => {
   if (!isHidden) {
     return (
       <div className="relative">

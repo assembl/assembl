@@ -24,6 +24,9 @@ from ..auth import (
 from .idea import Idea, IdeaLink, RootIdea, IdeaVisitor
 from assembl.views.traversal import AbstractCollectionDefinition
 
+FULLTEXT_SYNTHESIS_TYPE = 'fulltext_synthesis'
+STRUCTURED_SYNTHESIS_TYPE = 'synthesis'
+
 
 class defaultdictlist(defaultdict):
     def __init__(self):
@@ -67,7 +70,7 @@ class IdeaGraphView(DiscussionBoundBase):
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return (cls.discussion_id == discussion_id, )
+        return (cls.discussion_id == discussion_id,)
 
     crud_permissions = CrudPermissions(P_ADMIN_DISC)
 
@@ -489,6 +492,31 @@ class Synthesis(ExplicitSubGraphView):
 
 LangString.setup_ownership_load_event(
     Synthesis, ['subject', 'introduction', 'conclusion'])
+
+
+class FullTextSynthesis(Synthesis):
+
+    body_id = Column(
+        Integer(),
+        ForeignKey(LangString.id),
+        nullable=True,
+    )
+
+    body = relationship(
+        LangString,
+        lazy="subquery", single_parent=True,
+        primaryjoin=body_id == LangString.id,
+        backref=backref("synthesis_from_body", lazy="dynamic"),
+        cascade="all, delete-orphan",
+    )
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'fulltext_synthesis',
+    }
+
+
+LangString.setup_ownership_load_event(
+    FullTextSynthesis, ['body'])
 
 
 class SynthesisHtmlizationVisitor(IdeaVisitor):

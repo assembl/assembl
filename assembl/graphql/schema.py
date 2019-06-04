@@ -39,7 +39,7 @@ from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
-from assembl.graphql.synthesis import Synthesis
+from assembl.graphql.synthesis import Synthesis, CreateSynthesis, UpdateSynthesis, DeleteSynthesis
 from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
 from .configurable_fields import (
     ConfigurableFieldUnion, CreateTextField, UpdateTextField,
@@ -230,13 +230,13 @@ class Query(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return discussion.get_all_syntheses_query(
-            include_unpublished=False).order_by(
+            include_unpublished=False, user_id=context.authenticated_userid).order_by(
                 models.Synthesis.creation_date)
 
     def resolve_has_syntheses(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
-        query = discussion.get_all_syntheses_query(include_unpublished=False)
+        query = discussion.get_all_syntheses_query(include_unpublished=False, user_id=context.authenticated_userid)
         count = query.filter(
             models.Synthesis.is_next_synthesis != True).count()  # noqa: E712
         return True if count else False
@@ -489,6 +489,9 @@ class Mutations(graphene.ObjectType):
     delete_resource = DeleteResource.Field(description=docs.DeleteResource.__doc__)
     update_resource = UpdateResource.Field(description=docs.UpdateResource.__doc__)
     update_resources_center = UpdateResourcesCenter.Field(description=docs.UpdateResourcesCenter.__doc__)
+    create_synthesis = CreateSynthesis.Field(description=docs.CreateSynthesis.__doc__)
+    update_synthesis = UpdateSynthesis.Field(description=docs.UpdateSynthesis.__doc__)
+    delete_synthesis = DeleteSynthesis.Field(description=docs.DeleteSynthesis.__doc__)
     create_section = CreateSection.Field(description=docs.CreateSection.__doc__)
     delete_section = DeleteSection.Field(description=docs.DeleteSection.__doc__)
     update_section = UpdateSection.Field(description=docs.UpdateSection.__doc__)

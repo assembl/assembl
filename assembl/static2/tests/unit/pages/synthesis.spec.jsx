@@ -11,6 +11,7 @@ describe('Synthesis component', () => {
         id: 'fooId',
         subject: 'Foo',
         img: { externalUrl: 'http://foo.com/foo' },
+        body: '<p>yolo</p>',
         ideas: [
           {
             id: 'barId',
@@ -24,7 +25,8 @@ describe('Synthesis component', () => {
             ancestors: []
           }
         ]
-      }
+      },
+      synthesisPostId: 'yop'
     };
     const renderer = new ShallowRenderer();
     renderer.render(<DumbSynthesis {...props} />);

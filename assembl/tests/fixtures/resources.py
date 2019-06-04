@@ -58,7 +58,7 @@ def resource_with_image_and_doc(request, discussion, moderator_user, simple_file
     test_session.flush()
 
     def fin():
-        print "finalizer resource"
+        print "finalizer resource with image and doc"
         test_session.delete(resource_doc)
         test_session.delete(resource_image)
         test_session.delete(resource)

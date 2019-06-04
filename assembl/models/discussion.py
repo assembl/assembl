@@ -11,7 +11,7 @@ from pyramid.security import ALL_PERMISSIONS, Allow
 from pyramid.settings import asbool
 from pyramid.threadlocal import get_current_registry
 from sqlalchemy import (Boolean, Column, DateTime, ForeignKey, Integer,
-                        UnicodeText, event, func)
+                        UnicodeText, event, and_, or_, func)
 from sqlalchemy.orm import (backref, join, relationship, subqueryload,
                             with_polymorphic)
 from sqlalchemy.sql.expression import distinct, literal
@@ -382,36 +382,43 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         ).first()
 
     # returns a list of published and non-deleted syntheses, as well as the draft of the not yet published synthesis
-    def get_all_syntheses_query(self, include_unpublished=True, include_tombstones=False):
+    def get_all_syntheses_query(self, include_unpublished=True, include_tombstones=False, user_id=None):
         from .idea_graph_view import Synthesis
         from .post import SynthesisPost, PublicationStates
         condition = SynthesisPost.publication_state == PublicationStates.PUBLISHED
+        if user_id:
+            condition = or_(
+                condition,
+                and_(
+                    SynthesisPost.creator_id == user_id,
+                    SynthesisPost.publication_state == PublicationStates.DRAFT,
+                ),
+            )
         if not include_tombstones:
             condition = condition & SynthesisPost.tombstone_condition()
         if include_unpublished:
             condition = condition | (SynthesisPost.id == None)  # noqa: E711
-        return self.db.query(
-            Synthesis).outerjoin(SynthesisPost
-                                 ).options(
-                subqueryload('subject').subqueryload('entries'),
-                subqueryload('introduction').subqueryload('entries'),
-                subqueryload('conclusion').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload(
-                    'idea').joinedload('title').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload(
-                    'synthesis_title').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload('idea').joinedload(
-                    'description').subqueryload('entries'),
-                subqueryload('idea_assocs').joinedload(
-                    'idea').subqueryload('widget_links'),
-                subqueryload('idea_assocs').joinedload('idea').subqueryload(
-                    'attachments').joinedload('document'),
-                subqueryload('idea_assocs').joinedload(
-                    'idea').subqueryload('message_columns'),
-                subqueryload('idea_assocs').joinedload(
-                    'idea').joinedload('source_links'),
-                subqueryload('idealink_assocs').joinedload('idea_link'),
-                subqueryload(Synthesis.published_in_post)
+
+        return self.db.query(Synthesis).outerjoin(SynthesisPost).options(
+            subqueryload('subject').subqueryload('entries'),
+            subqueryload('introduction').subqueryload('entries'),
+            subqueryload('conclusion').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload(
+                'idea').joinedload('title').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload('idea').joinedload(
+                'synthesis_title').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload('idea').joinedload(
+                'description').subqueryload('entries'),
+            subqueryload('idea_assocs').joinedload(
+                'idea').subqueryload('widget_links'),
+            subqueryload('idea_assocs').joinedload('idea').subqueryload(
+                'attachments').joinedload('document'),
+            subqueryload('idea_assocs').joinedload(
+                'idea').subqueryload('message_columns'),
+            subqueryload('idea_assocs').joinedload(
+                'idea').joinedload('source_links'),
+            subqueryload('idealink_assocs').joinedload('idea_link'),
+            subqueryload(Synthesis.published_in_post)
         ).filter(Synthesis.discussion_id == self.id, condition)
 
     def get_permissions_by_role(self):
