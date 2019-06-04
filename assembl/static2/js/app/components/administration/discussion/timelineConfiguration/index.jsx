@@ -77,6 +77,7 @@ class TimelineFields extends React.Component<Props> {
                   </p>
                   <div className="panel-group">
                     <FieldArrayWithActions
+                      minItems={1}
                       errors={errors.phases}
                       usePanels
                       confirmDeletion
