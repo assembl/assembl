@@ -631,7 +631,7 @@ def prepare_cicd_build(c):
     """
     There is full assumption of being in CI/CD environment when calling this function
     """
-    project_path = os.gettenv('CI_PROJECT_DIR', c.config.code_root)
+    project_path = os.getenv('CI_PROJECT_DIR', c.config.code_root)
     with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
         c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
 
