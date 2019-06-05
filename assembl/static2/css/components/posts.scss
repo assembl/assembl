@@ -191,6 +191,13 @@ $deleted-post-border: 1px solid $light-grey !default;
 }
 
 .posts {
+  .post-body-title {
+    font-family: $font-family;
+    text-transform: uppercase;
+    font-size: 17px;
+    line-height: 24px;
+  }
+
   &.deleted-post {
     .body {
       font-style: italic;
