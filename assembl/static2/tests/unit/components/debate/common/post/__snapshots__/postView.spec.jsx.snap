@@ -67,11 +67,6 @@ exports[`Post component should render a PostView component and pass its props to
     level={1}
     modifiedSubject={
       <span>
-        <span
-          className="subject-prefix"
-        >
-          Rep. 1: 
-        </span>
         We need to hack the solid state HTTP alarm!
       </span>
     }
