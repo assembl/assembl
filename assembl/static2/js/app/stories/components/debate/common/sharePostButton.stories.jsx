@@ -16,7 +16,7 @@ const fictionMetaInfo: BrightMirrorFictionProps = {
 };
 
 export const defaultSharePostButtonProps: SharePostButtonProps = {
-  metaInfo: fictionMetaInfo,
+  routerParams: fictionMetaInfo,
   linkClassName: '',
   modalTitleMsgKey: 'debate.brightMirror.shareFiction',
   type: 'brightMirrorFiction'

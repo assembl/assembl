@@ -99,6 +99,8 @@ const getPathForModal = (type, params, elementId) => {
   switch (type) {
   case 'post':
     return { url: getFullPath('post', { ...params, element: elementId }) };
+  case 'questionPost':
+    return { url: getFullPath('questionPost', { ...params, element: elementId }).replace('#', '/#') };
   case 'idea':
     return { url: getFullPath('idea', params) };
   case 'voteSession':

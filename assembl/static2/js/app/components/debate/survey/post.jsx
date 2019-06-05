@@ -2,15 +2,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql, withApollo } from 'react-apollo';
-import { Translate, I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
 import classnames from 'classnames';
 
-import { getConnectedUserId, formatedSuggestedTagList, formatedTagList } from '../../../utils/globalFunctions';
-import Permissions, { connectedUserCan, connectedUserIsModerator, connectedUserIsAdmin } from '../../../utils/permissions';
+import { formatedSuggestedTagList, formatedTagList, getConnectedUserId, getDiscussionSlug } from '../../../utils/globalFunctions';
+import Permissions, { connectedUserCan, connectedUserIsAdmin, connectedUserIsModerator } from '../../../utils/permissions';
 import PostCreator from './postCreator';
 import Like from '../../svg/like';
 import Disagree from '../../svg/disagree';
-import { inviteUserToLogin, displayAlert, displayModal } from '../../../utils/utilityManager';
+import { displayAlert, displayModal, inviteUserToLogin } from '../../../utils/utilityManager';
 import addSentimentMutation from '../../../graphql/mutations/addSentiment.graphql';
 import deleteSentimentMutation from '../../../graphql/mutations/deleteSentiment.graphql';
 import validatePostMutation from '../../../graphql/mutations/validatePost.graphql';
@@ -18,13 +18,14 @@ import PostQuery from '../../../graphql/PostQuery.graphql';
 import {
   deleteMessageTooltip,
   deniedMessageTooltip,
-  likeTooltip,
   disagreeTooltip,
+  likeTooltip,
+  sharePostTooltip,
   validateMessageTooltip
 } from '../../common/tooltips';
 import { sentimentDefinitionsObject } from '../common/sentimentDefinitions';
 import StatisticsDoughnut from '../common/statisticsDoughnut';
-import { SMALL_SCREEN_WIDTH, DeletedPublicationStates, PublicationStates } from '../../../constants';
+import { DeletedPublicationStates, PublicationStates, SMALL_SCREEN_WIDTH } from '../../../constants';
 import manageErrorAndLoading from '../../common/manageErrorAndLoading';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
 import { withScreenWidth } from '../../common/screenDimensions';
@@ -35,9 +36,9 @@ import ValidatePostButton from '../common/validatePostButton';
 import TagOnPost from '../../tagOnPost/tagOnPost';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
-
 // Import types
 import type { Props as TagOnPostProps } from '../../../components/tagOnPost/tagOnPost';
+import SharePostButton from '../common/sharePostButton';
 
 type Props = {
   isPhaseCompleted: boolean,
@@ -48,9 +49,12 @@ type Props = {
   data: {
     post: PostFragment
   },
+  identifier: string,
   lang: string,
   originalLocale: string,
+  phaseId: string,
   questionId: string,
+  questionIndex: string,
   screenWidth: number,
   themeId: string,
   isHarvesting: boolean,
@@ -194,7 +198,17 @@ class Post extends React.Component<Props> {
       return null;
     }
 
-    const { contentLocale, lang, screenWidth, originalLocale, questionId, themeId, isHarvesting } = this.props;
+    const {
+      contentLocale,
+      identifier,
+      isHarvesting,
+      lang,
+      originalLocale,
+      questionId,
+      questionIndex,
+      screenWidth,
+      themeId
+    } = this.props;
     const { debateData } = this.props.debate;
     const translate = contentLocale !== originalLocale;
 
@@ -291,7 +305,28 @@ class Post extends React.Component<Props> {
       tagList: formatedTagList(post.tags),
       suggestedTagList: formatedSuggestedTagList(post.keywords)
     };
-
+    const slug = getDiscussionSlug();
+    if (!slug) {
+      return <></>;
+    }
+    const sharePostButtonProps = {
+      linkClassName: 'share',
+      routerParams: {
+        slug: slug,
+        phase: identifier,
+        questionId: questionId,
+        questionIndex: questionIndex,
+        themeId: themeId
+      },
+      element: post.id,
+      modalTitleMsgKey: 'debate.share',
+      type: 'questionPost'
+    };
+    const shareButton = (
+      <button className="overflow-action overflow-action-default">
+        <SharePostButton {...sharePostButtonProps} />
+      </button>
+    );
     return (
       <div className={classnames('shown box', { pending: isPending })} id={post.id}>
         <div className="content">
@@ -325,6 +360,11 @@ class Post extends React.Component<Props> {
               </div>
             ) : null}
             <div className="actions">
+              {!isPending ? (
+                <ResponsiveOverlayTrigger placement="top" tooltip={sharePostTooltip}>
+                  {shareButton}
+                </ResponsiveOverlayTrigger>
+              ) : null}
               {userIsModerator && isPending ? (
                 <ResponsiveOverlayTrigger placement="top" tooltip={validateMessageTooltip}>
                   {validatePostButton}
@@ -376,6 +416,11 @@ class Post extends React.Component<Props> {
           </div>
           {screenWidth < SMALL_SCREEN_WIDTH && (
             <div className="actions">
+              {!isPending ? (
+                <ResponsiveOverlayTrigger placement="top" tooltip={sharePostTooltip}>
+                  {shareButton}
+                </ResponsiveOverlayTrigger>
+              ) : null}
               {userCanDeleteThisMessage ? (
                 <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip}>
                   {deleteButton}
