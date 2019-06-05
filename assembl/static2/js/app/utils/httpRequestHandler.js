@@ -1,7 +1,8 @@
 import urljoin from 'url-join';
 import Cookies from 'js-cookie';
 
-import { getCSRFToken, basePath } from './csrf';
+import { getCSRFToken } from './csrf';
+import { basePath } from './server';
 
 const convertToURLEncodedString = obj =>
   Object.keys(obj)
@@ -13,7 +14,7 @@ const getResponseContentType = xhr =>
 
 const useCSRFProtection = document.getElementById('useCSRFProtection')
   ? document.getElementById('useCSRFProtection').value
-  : null;
+  : 'false';
 
 /*
   A global async method that returns a Promisified ajax call

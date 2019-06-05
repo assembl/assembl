@@ -33,7 +33,7 @@ const myFragmentMatcher = new IntrospectionFragmentMatcher({
 const dataIdFromObject = o => o.id;
 const useCSRFProtection = document.getElementById('useCSRFProtection')
   ? document.getElementById('useCSRFProtection').value
-  : null;
+  : 'false';
 
 const networkInterface = createNetworkInterface({
   uri: getFullPath('graphql', { slug: getDiscussionSlug() }),

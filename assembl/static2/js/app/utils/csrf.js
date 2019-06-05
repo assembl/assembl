@@ -1,20 +1,10 @@
 import request from 'superagent';
 import urljoin from 'url-join';
 
-export const basePath = () => {
-  const useStargate = document.getElementById('useStargate') ? document.getElementById('useStargate').value : null;
-
-  let path = `${window.location.protocol}//${window.location.host}`;
-
-  if (useStargate === 'true') {
-    path = `${window.location.protocol}//${window.location.hostname}:3000`; // move to config ?
-  }
-
-  return path;
-};
+import { basePath } from './server';
 
 export async function getCSRFToken() {
-  // Get CSRF token, not the response cointains nothing as the cookie is set directly!!
+  // Get CSRF token, note the response contains nothing as the cookie is set directly!!
   const responseToken = await request.get(urljoin(basePath(), '/v1/generateToken')).withCredentials();
 
   return responseToken;
