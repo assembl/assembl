@@ -1013,7 +1013,7 @@ class Notification(Base):
         headers['List-Unsubscribe'] = frontendUrls.getUserNotificationSubscriptionsConfigurationUrl()
 
         sender = u"%s <%s>" % (
-            self.event_source_object().creator.name,
+            self.event_source_object().creator.display_name(),
             self.get_from_email_address())
         recipient = self.get_to_email_address()
         message = Message(
