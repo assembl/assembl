@@ -80,7 +80,7 @@ function getPostUrl(ideaId, postId, phaseIdentifier, messageViewOverride, slug, 
       slug: slug,
       phase: phaseIdentifier,
       themeId: ideaBase64id,
-      element: postBase64id
+      postId: postBase64id
     });
   } else if (messageViewOverride === MESSAGE_VIEW.survey) {
     return getRoute('questionPost', {
@@ -88,14 +88,14 @@ function getPostUrl(ideaId, postId, phaseIdentifier, messageViewOverride, slug, 
       phase: phaseIdentifier,
       questionId: ideaBase64id,
       questionIndex: 1,
-      element: postBase64id
+      postId: postBase64id
     });
   } else if (extractId) {
     return getRoute('extract', {
       slug: slug,
       phase: phaseIdentifier,
       themeId: ideaBase64id,
-      element: postBase64id,
+      postId: postBase64id,
       extractId: extractBase64id
     });
   }

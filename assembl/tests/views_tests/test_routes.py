@@ -317,7 +317,7 @@ def test_route_discussion_post_v2(
     phase_id = thread_phase.graphene_id()
     post_id = post_related_to_sub_idea_1.graphene_id()
     expected_path = furl.get_frontend_url(
-        'post', phase=phase_identifier, themeId=idea_id, phaseId=phase_id, element=post_id)
+        'post', phase=phase_identifier, themeId=idea_id, phaseId=phase_id, postId=post_id)
 
     assert expected_path in headers['Location']
 

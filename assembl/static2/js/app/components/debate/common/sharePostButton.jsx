@@ -15,16 +15,16 @@ export type Props = {
   /** Type that defines how to build the URL to share with getPathForModal
    in utilityManager, check routes.json for the URL format */
   type: string,
-  element?: ?string
+  postId?: ?string
 };
 
-const SharePostButton = ({ routerParams, linkClassName, modalTitleMsgKey, type, element }: Props) => {
+const SharePostButton = ({ routerParams, linkClassName, modalTitleMsgKey, type, postId }: Props) => {
   const titleComponent = <Translate value={modalTitleMsgKey} />;
   const openShareModalParams = {
     routerParams: routerParams,
     title: titleComponent,
     type: type,
-    elementId: element
+    postId: postId
   };
 
   return (
@@ -34,6 +34,6 @@ const SharePostButton = ({ routerParams, linkClassName, modalTitleMsgKey, type, 
   );
 };
 SharePostButton.defaultProps = {
-  element: null
+  postId: null
 };
 export default SharePostButton;

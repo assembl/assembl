@@ -107,7 +107,7 @@ export class PostActions extends React.Component<Props> {
                     type: 'post',
                     title: modalTitle,
                     routerParams: routerParams,
-                    elementId: postId,
+                    postId: postId,
                     social: useSocial
                   })
                 }

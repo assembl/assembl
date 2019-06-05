@@ -318,7 +318,7 @@ class Post extends React.Component<Props> {
         questionIndex: questionIndex,
         themeId: themeId
       },
-      element: post.id,
+      postId: post.id,
       modalTitleMsgKey: 'debate.share',
       type: 'questionPost'
     };

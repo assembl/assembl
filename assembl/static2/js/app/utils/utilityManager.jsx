@@ -95,12 +95,12 @@ export const closeModal = () => {
   modalManager.component.setState({ showModal: false });
 };
 
-const getPathForModal = (type, params, elementId) => {
+const getPathForModal = (type, params, postId) => {
   switch (type) {
   case 'post':
-    return { url: getFullPath('post', { ...params, element: elementId }) };
+    return { url: getFullPath('post', { ...params, postId: postId }) };
   case 'questionPost':
-    return { url: getFullPath('questionPost', { ...params, element: elementId }).replace('#', '/#') };
+    return { url: getFullPath('questionPost', { ...params, postId: postId }).replace('#', '/#') };
   case 'idea':
     return { url: getFullPath('idea', params) };
   case 'voteSession':
@@ -112,13 +112,13 @@ const getPathForModal = (type, params, elementId) => {
   case 'brightMirrorFiction':
     return { url: getFullPath('brightMirrorFiction', { ...params }) };
   default:
-    return { url: getFullPath('post', { ...params, element: elementId }) };
+    return { url: getFullPath('post', { ...params, postId: postId }) };
   }
 };
 
 export const openShareModal = (options) => {
-  const { type, title, routerParams, elementId, social, isFooter, footer } = options;
-  const pathForModal = getPathForModal(type, routerParams, elementId);
+  const { footer, isFooter, postId, routerParams, social, title, type } = options;
+  const pathForModal = getPathForModal(type, routerParams, postId);
   const modalBody = <SocialShare url={pathForModal.url} onClose={closeModal} social={social} />;
   return displayModal(title, modalBody, isFooter, footer);
 };
