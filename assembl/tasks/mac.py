@@ -3,7 +3,11 @@ import getpass
 import build
 
 from os.path import join, normpath
-from .common import (venv, task, exists, delete_foreign_tasks)
+from .common import (
+    venv, task, exists, delete_foreign_tasks, setup_var_directory, get_upload_dir,
+    get_assembl_code_path, chgrp_rec, _processes_to_restart_without_backup, _processes_to_restart_with_backup,
+    filter_autostart_processes, supervisor_process_stop, remote_db_path, is_supervisord_running, webservers_start,
+    app_reload, webservers_reload)
 from ConfigParser import SafeConfigParser
 from contextlib import nested
 
@@ -213,12 +217,12 @@ def bootstrap_from_checkout(c, backup=False):
     Creates the virtualenv and install the app from git checkout
     """
     print('Bootstraping')
-    # updatemaincode(c, backup=backup)
+    updatemaincode(c, backup=backup)
     build_virtualenv(c)
     create_venv_python_3(c)
     app_update_dependencies(c, backup=backup)
     app_setup(c, backup=backup)
-    """check_and_create_database_user(c)
+    build.check_and_create_database_user(c)
     app_compile_nodbupdate(c)
     set_file_permissions(c)
     if not backup:
@@ -227,9 +231,6 @@ def bootstrap_from_checkout(c, backup=False):
         database_restore(c)
     app_reload(c)
     webservers_reload(c)
-    if not is_integration_env() and env.wsginame != 'dev.wsgi':
-        create_backup_script(c)
-        create_alert_disk_space_script(c)"""
     print('Bootstraping finished')
 
 
@@ -343,21 +344,6 @@ def separate_pip_install(c, package, wrapper=None):
     c.run(cmd)
 
 
-def get_upload_dir(c, path=None):
-    path = path or c.config.get('upload_root', 'var/uploads')
-    if path != '/':
-        path = join(c.config.projectpath, path)
-    return path
-
-
-def setup_var_directory(c):
-    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'log')))
-    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'run')))
-    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'db')))
-    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'share')))
-    c.run('mkdir -p %s' % get_upload_dir(c))
-
-
 @task()
 def app_setup(c, backup=False):
     """Setup the environment so the application can run"""
@@ -387,6 +373,108 @@ def create_local_ini(c):
     with venv(c):
         c.run("python2 -m assembl.scripts.ini_files compose -o %s %s" % (
             c.config._internal.ini_file, c.config.rcfile))
+
+
+@task()
+def app_compile_nodbupdate(c):
+    """Separated mostly for tests, which need to run alembic manually"""
+    app_setup(c)
+    build.compile_stylesheets(c)
+    build.compile_messages(c)
+    build.compile_javascript(c)
+
+
+@task()
+def set_file_permissions(c):
+    """Set file permissions for an isolated platform environment"""
+    setup_var_directory(c)
+    webgrp = '_www'
+    # This should cover most cases.
+    if webgrp not in c.run('groups').stdout.split():
+        c.sudo('dseditgroup -o edit -a {user} -t user {webgrp}'.format(
+            webgrp=webgrp, user=c.config.user))
+    with c.cd(c.config.projectpath):
+        upload_dir = get_upload_dir(c)
+        project_path = c.config.projectpath
+        code_path = get_assembl_code_path(c)
+        c.run('chmod -R o-rwx ' + project_path)
+        c.run('chmod -R g-rw ' + project_path)
+        chgrp_rec(c, project_path, webgrp)
+        chgrp_rec(c, upload_dir, webgrp, project_path)
+
+        if not (code_path.startswith(project_path)):
+            c.run('chmod -R o-rwx ' + code_path)
+            c.run('chmod -R g-rw ' + code_path)
+            chgrp_rec(c, code_path, webgrp)
+
+        c.run('chgrp {webgrp} . {path}/var {path}/var/run {path}/var/share'.format(webgrp=webgrp, path=project_path))
+        c.run('chgrp -R {webgrp} {path}/assembl/static {path}/assembl/static2'.format(webgrp=webgrp, path=code_path))
+        c.run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))
+        c.run('chmod -R g+rxs {path}/var/run {path}/var/share'.format(path=project_path))
+        c.run('chmod -R g+rxs ' + upload_dir)
+        c.run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
+        c.run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
+        c.run('find {path}/assembl/static2 -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
+        c.run('find {path}/assembl/static2 -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
+        # allow postgres user to use pypsql
+        c.run('chmod go+x {path}/assembl/scripts'.format(path=code_path))
+        c.run('chmod go+r {path}/assembl/scripts/pypsql.py'.format(path=code_path))
+
+
+def app_db_install(c):
+    """
+    Install db the first time and fake migrations
+    """
+    build.database_create(c)
+    with venv(c):
+        c.run('assembl-db-manage %s bootstrap' % (c.config._internal.ini_file))
+
+
+@task()
+def database_restore(c, backup=False):
+    """
+    Restores the database backed up on the remote server
+    """
+
+    if not backup:
+        assert(c.config.wsginame in ('staging.wsgi', 'dev.wsgi'))
+        processes = filter_autostart_processes(_processes_to_restart_without_backup)
+    else:
+        processes = filter_autostart_processes(_processes_to_restart_with_backup)
+
+    for process in processes:
+        supervisor_process_stop(process)
+
+    # Kill postgres processes in order to be able to drop tables
+    # execute(postgres_user_detach)
+
+    # Drop db
+    dropped = c.run('PGPASSWORD=%s dropdb --host=%s --username=%s --no-password %s' % (
+        c.config.db_password,
+        c.config.db_host,
+        c.config.db_user,
+        c.config.db_database), warn=True)
+
+    assert dropped.succeeded or "does not exist" in dropped, \
+        "Could not drop the database"
+
+    # Create db
+    build.database_create(c)
+
+    # Restore data
+    with venv(c), c.cd(c.config.projectpath):
+        c.run('PGPASSWORD=%s pg_restore --no-owner --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
+            c.config.db_password,
+            c.config.db_user,
+            c.config.db_host,
+            c.config.db_database,
+            c.config.db_user,
+            remote_db_path()))
+
+    if not is_supervisord_running():
+        with venv(c): 
+            c.run('supervisord')
+    webservers_start(c)
 
 
 delete_foreign_tasks(locals())

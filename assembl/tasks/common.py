@@ -1,17 +1,30 @@
 import sys
 import os
 import os.path
+import re
+from os.path import join, normpath
 from contextlib import nested
 import base64
 import json
 
 from invoke import Task, task as base_task
 from os.path import dirname, realpath
+from time import sleep
+
 DEFAULT_SECTION = "DEFAULT"
 _local_file = __file__
 if _local_file.endswith('.pyc'):
     _local_file = _local_file[:-1]
 local_code_root = dirname(dirname(realpath(_local_file)))
+
+
+_processes_to_restart_without_backup = [
+    "pserve", "celery", "changes_router",
+    "source_reader"]
+
+
+_processes_to_restart_with_backup = _processes_to_restart_without_backup + [
+    "gulp", "webpack", "elasticsearch", "uwsgi"]
 
 
 def task(*args, **kwargs):
@@ -331,3 +344,242 @@ def delete_foreign_tasks(locals):
     for (name, func) in locals.items():
         if isinstance(func, Task) and func.__module__ != here and 'tasks.' in func.__module__:
             locals.pop(name)
+
+
+def setup_var_directory(c):
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'log')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'run')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'db')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'share')))
+    c.run('mkdir -p %s' % get_upload_dir(c))
+
+
+def get_upload_dir(c, path=None):
+    path = path or c.config.get('upload_root', 'var/uploads')
+    if path != '/':
+        path = join(c.config.projectpath, path)
+    return path
+
+
+def chgrp_rec(c, path, group, upto=None):
+    parts = path.split("/")
+    success = False
+    for i in range(len(parts), 1, -1):
+        path = "/".join(parts[:i])
+        if path == upto:
+            break
+        if not c.run('chgrp {group} {path}'.format(group=group, path=path), warn=True).ok:
+            break
+        if not c.run('chmod g+x {path}'.format(path=path), warn=True).ok:
+            break
+        success = True
+    assert success  # At least the full path
+
+
+def filter_autostart_processes(c, processes):
+    return [p for p in processes
+            if c.config.supervisor.get('autostart_' + p, False)]
+
+
+def get_db_dump_name():
+    return 'assembl-backup.pgdump'
+
+
+def remote_db_path(c):
+    return join(c.config.projectpath, get_db_dump_name())
+
+
+def supervisor_process_stop(c, process_name):
+    """
+    Assuming the supervisord process is running, stop one of its processes
+    """
+    print('Asking supervisor to stop %s' % process_name)
+    supervisor_pid_regex = re.compile(r'^\d+')
+    status_regex = re.compile(r'^%s\s*(\S*)' % process_name)
+    with venv(c):
+        supervisord_cmd_result = c.run("supervisorctl pid", warn=True, hide='out')
+    match = supervisor_pid_regex.match(supervisord_cmd_result)
+    if not match:
+        print('Supervisord doesn\'t seem to be running, nothing to stop')
+        return
+    for try_num in range(20):
+        with venv(c):
+            c.run("supervisorctl stop %s" % process_name)
+            status_cmd_result = c.run("supervisorctl status %s" % process_name, hide='out')
+
+        match = status_regex.match(status_cmd_result)
+        if match:
+            status = match.group(1)
+            if(status == 'STOPPED'):
+                print("%s is stopped" % process_name)
+                break
+            if(status == 'FATAL'):
+                print("%s had a fatal error" % process_name)
+                break
+            elif(status == 'RUNNING'):
+                with venv(c):
+                    c.run("supervisorctl stop %s" % process_name)
+            elif(status == 'STOPPING'):
+                print(status)
+            else:
+                print("unexpected status: %s" % status)
+            sleep(1)
+        else:
+            print('Unable to parse status (bad regex?)')
+            print(status_cmd_result)
+            exit()
+
+
+def is_supervisord_running(c):
+    with venv(c):
+        result = c.run('supervisorctl pid')
+    if 'no such file' in result:
+        return False
+    try:
+        pid = int(result)
+        if pid:
+            return True
+    except:
+        return False
+
+
+def webservers_start(c):
+    """
+    Start all webservers
+    """
+    if c.config._internal.uses_nginx:
+        # Nginx
+        if exists(c, '/etc/init.d/nginx'):
+            # Have to ensure that the env.user has visudo rights to call this
+            c.sudo('/etc/init.d/nginx start')
+        elif c.config.mac and exists('/usr/local/nginx/sbin/nginx'):
+            c.sudo('/usr/local/nginx/sbin/nginx')
+
+
+def is_supervisor_running(c):
+    with venv(c):
+        supervisord_cmd_result = c.run("supervisorctl avail", hide='both')
+        if supervisord_cmd_result.failed:
+            return False
+        else:
+            return True
+
+
+def app_reload(c):
+    """
+    Restart all necessary processes after an update
+    """
+    if c.config.uses_global_supervisor:
+        print('Asking supervisor to restart %(projectname)s' % c.config)
+        c.run("sudo /usr/bin/supervisorctl restart %(projectname)s" % c.config)
+    else:
+        if is_supervisor_running():
+            with venv(c):
+                c.run("supervisorctl stop dev:")
+                # supervisor config file may have changed
+                c.run("supervisorctl reread")
+                c.run("supervisorctl update")
+                processes = filter_autostart_processes([
+                    "celery_imap", "changes_router", "celery_notification_dispatch",
+                    "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
+                c.run("supervisorctl restart " + " ".join(processes))
+                if c.config.uses_uwsgi:
+                    c.run("supervisorctl restart prod:uwsgi")
+
+
+def webservers_reload(c):
+    """
+    Reload the webserver stack.
+    """
+    if c.config.uses_nginx:
+        # Nginx (sudo is part of command line here because we don't have full
+        # sudo access
+        print("Reloading nginx")
+        if c.config.webmaster_user:
+            if exists(c, '/etc/init.d/nginx'):
+                c.sudo('/etc/init.d/nginx reload -u %s' % c.config.webmaster_user)
+        if (c.config.get('sudo_user', None) and exists(c, '/etc/init.d/nginx')):
+            c.sudo('/etc/init.d/nginx reload')
+        elif exists(c, '/etc/init.d/nginx'):
+            c.run('sudo /etc/init.d/nginx reload')
+        elif c.config.mac:
+            c.sudo('killall -HUP nginx')
+
+    if c.config._internal.uses_bluenove_actionable:
+        restart_bluenove_actionable(c)
+    else:
+        stop_bluenove_actionable(c)
+
+
+def restart_bluenove_actionable(c):
+    """
+    Restart the bluenove_actionable app. Stop then start the app.
+    """
+    stop_bluenove_actionable(c)
+    start_bluenove_actionable(c)
+
+
+def stop_bluenove_actionable(c):
+    """
+    Stop the bluenove_actionable app.
+    """
+    path = join(c.config.projectpath, '..', 'bluenove-actionable')
+    if exists(c, path):
+        print('Stop bluenove-actionable')
+        with c.cd(path):
+            c.run('docker-compose down', warn=True)
+
+
+def start_bluenove_actionable(c):
+    """
+    Start the bluenove_actionable app.
+    To start the application we need three environment variables:
+    - URL_INSTANCE: The URL of the Assembl Instance.
+    - ROBOT_IDENTIFIER: The identifier of the Robot user (a machine).
+    - ROBOT_PASSWORD: The password of the Robot user.
+    If the Robot user is not configured, we can't start the bluenove_actionable app.
+    For more information, see the docker-compose.yml file in the bluenove_actionable project.
+    """
+    path = join(c.config.projectpath, '..', 'bluenove-actionable')
+    robot = get_robot_machine()
+    if exists(path) and robot:
+        print('run bluenove-actionable')
+        url_instance = c.config.public_hostname
+        if url_instance == 'localhost':
+            ip = c.run("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1")
+            url_instance = 'http://{}:{}'.format(ip, c.config.public_port)
+        """TODO: fix with shell_env
+        with c.cd(path):
+            with shell_env(
+                URL_INSTANCE=url_instance,
+                ROBOT_IDENTIFIER=robot.get('identifier'),
+                ROBOT_PASSWORD=robot.get('password')
+            ):
+                c.run('docker-compose up -d', warn=True)"""
+
+
+def get_robot_machine(c):
+    """
+    Return the configured robot machine: (the first configured machine)
+    """
+    # Retrieve the list of registered machines
+    # Machines format: machine_id,machine_name,machine_password/...others
+    machines = c.config.get('machines', '')
+    if machines:
+        # Get the first machine
+        robot = machines.split('/')[0]
+        # Retrieve the machine data
+        robot_data = robot.split(',')
+        # We must find three data (identifier, name and password)
+        if len(robot_data) != 3:
+            print("The data of the user machine are wrong! %s" % robot)
+            return None
+
+        return {
+            'identifier': robot_data[0].strip(),
+            'name': robot_data[1].strip(),
+            'password': robot_data[2].strip()
+        }
+
+    print("No user machine found!")
+    return None
