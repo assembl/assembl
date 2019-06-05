@@ -1,11 +1,11 @@
 import os
+import getpass
+import build
 
 from os.path import join, normpath
-
-from .common import (venv, venv_py3, task, exists, delete_foreign_tasks, get_assembl_code_path)
-from .build import (get_node_base_path, get_new_node_base_path)
-import getpass
-from ConfigParser import ConfigParser, SafeConfigParser
+from .common import (venv, task, exists, delete_foreign_tasks)
+from ConfigParser import SafeConfigParser
+from contextlib import nested
 
 
 core_dependencies = [
@@ -65,44 +65,9 @@ def create_venv_python_3(c):
     c.run('python3 -m virtualenv --python python3 %s' % venv3)
 
 
-@task()
-def update_npm_requirements_mac(c, force_reinstall=False):
-    """Normally not called manually"""
-    with c.cd(get_node_base_path(c)):
-        if force_reinstall:
-            with venv(c):
-                c.run('reinstall')
-        else:
-            with venv(c):
-                c.run('npm update')
-
-    yarn_path = '/usr/local/bin/yarn'
-    static2_path = get_new_node_base_path(c)
-    with c.cd(static2_path):
-        if exists(c, yarn_path):
-            if force_reinstall:
-                print('Removing node_modules directory...')
-                with venv(c):
-                    c.run('rm -rf {}'.format(os.path.join(static2_path, 'node_modules')))
-            with venv(c):
-                c.run(yarn_path)
-        else:
-            if force_reinstall:
-                with venv(c):
-                    c.run('reinstall')
-            else:
-                with venv(c):
-                    c.run('npm update')
-
-@task()
-def install_database(c):
-    """
-    Install a postgresql DB server
-    """
-    print('Installing Postgresql')
-    c.run('brew install postgresql')
-    c.run('brew tap homebrew/services')
-    c.run('brew services start postgres')
+def venv_py3_mac(c):
+    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
+    return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate'))
 
 
 @task()
@@ -112,7 +77,7 @@ def update_pip_requirements_mac(c, force_reinstall=False):
     """
     from .build import separate_pip_install
     with venv(c):
-        c.run('pip install -U setuptools "pip<10" ', True)
+        c.run('pip install -U setuptools "pip<10" ')
 
     if force_reinstall:
         with venv(c):
@@ -130,7 +95,18 @@ def update_pip_requirements_mac(c, force_reinstall=False):
             separate_pip_install(c, package, wrapper)
         cmd = "pip install -r %s/requirements.txt" % (c.config.projectpath)
         with venv(c):
-            c.run("yes w | %s" % cmd)
+            c.run("yes w | %s" % cmd, warn=True)
+
+
+@task()
+def install_database(c):
+    """
+    Install a postgresql DB server
+    """
+    print('Installing Postgresql')
+    c.run('brew install postgresql')
+    c.run('brew tap homebrew/services')
+    c.run('brew services start postgres')
 
 
 @task()
@@ -226,7 +202,6 @@ def install_single_server(c):
     install_elasticsearch(c)
     install_database(c)
     install_assembl_server_deps(c)
-    create_venv_python_3(c)
     install_services(c)
     install_borg(c)
     print('Assembl Server installed')
@@ -238,11 +213,12 @@ def bootstrap_from_checkout(c, backup=False):
     Creates the virtualenv and install the app from git checkout
     """
     print('Bootstraping')
-    updatemaincode(c, backup=backup)
-    """build_virtualenv(c)
+    # updatemaincode(c, backup=backup)
+    build_virtualenv(c)
+    create_venv_python_3(c)
     app_update_dependencies(c, backup=backup)
     app_setup(c, backup=backup)
-    check_and_create_database_user(c)
+    """check_and_create_database_user(c)
     app_compile_nodbupdate(c)
     set_file_permissions(c)
     if not backup:
@@ -273,12 +249,11 @@ def updatemaincode(c, backup=False):
             print('Updating url_metadata Git repository')
             with c.cd(path):
                 c.run('git pull')
-            with venv_py3(c):
+            with venv_py3_mac(c):
                 c.run('python3 -m pip install -e ../url_metadata')
 
 
-# # Virtualenv
-@task
+@task()
 def build_virtualenv(c, with_setuptools=False):
     """
     Build the virtualenv
@@ -298,7 +273,7 @@ def build_virtualenv(c, with_setuptools=False):
     setup_tools = ''
     if not with_setuptools:
         setup_tools = '--no-setuptools'
-    c.run('python2 -mvirtualenv %s %s' % (setup_tools, v))
+    c.run('python2 -mvirtualenv %s %s' % (setup_tools, "venv"))
 
     # Virtualenv does not reuse distutils.cfg from the homebrew python,
     # and that sometimes precludes building python modules.
@@ -319,6 +294,99 @@ def build_virtualenv(c, with_setuptools=False):
                 venv_config.set(sec, option, val)
             with open(vefile, 'w') as f:
                 venv_config.write(f)
+
+
+@task()
+def app_update_dependencies(c, force_reinstall=False, backup=False):
+    """
+    Updates all python and javascript dependencies.  Everything that requires a
+    network connection to update
+    """
+    if not backup:
+        ensure_requirements(c)
+    update_pip_requirements_mac(c, force_reinstall=force_reinstall)
+    build.update_node(c, force_reinstall=force_reinstall)
+    build.update_bower(c)
+    build.update_bower_requirements(c, force_reinstall=force_reinstall)
+    build.update_npm_requirements(c, force_reinstall=force_reinstall)
+
+
+def ensure_requirements(c):
+    "Copy the appropriate frozen requirements file into requirements.txt"
+    target = c.config.frozen_requirements
+    if target:
+        with c.cd(c.config.projectpath):
+            c.run("cp %s requirements.txt" % target)
+    else:
+        # TODO: Compare a hash in the generated requirements
+        # with the hash of the input files, to avoid regeneration
+        generate_new_requirements(c)
+
+
+def generate_new_requirements(c):
+    "Generate frozen requirements.txt file (with name taken from environment)."
+    ensure_pip_compile()
+    target = c.config.frozen_requirements or 'requirements.txt'
+    venv(" ".join(("pip-compile --output-file", target, c.config.requirement_inputs)))
+
+
+def ensure_pip_compile(c):
+    if not exists(c, c.config.venvpath + "/bin/pip-compile"):
+        separate_pip_install('pip-tools')
+
+
+def separate_pip_install(c, package, wrapper=None):
+    cmd = '%(venvpath)s/bin/pip install'
+    if wrapper:
+        cmd = wrapper % (cmd,)
+    cmd = "egrep '^%(package)s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(cmd)s" % dict(cmd=cmd, package=package, **c.config)
+    c.run(cmd)
+
+
+def get_upload_dir(c, path=None):
+    path = path or c.config.get('upload_root', 'var/uploads')
+    if path != '/':
+        path = join(c.config.projectpath, path)
+    return path
+
+
+def setup_var_directory(c):
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'log')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'run')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'db')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'share')))
+    c.run('mkdir -p %s' % get_upload_dir(c))
+
+
+@task()
+def app_setup(c, backup=False):
+    """Setup the environment so the application can run"""
+    if not c.config.package_install:
+        with venv(c):
+            c.run('pip install -e ./')
+    setup_var_directory(c)
+    if not exists(c, c.config._internal.ini_file):
+        create_local_ini(c)
+    if not backup:
+        with venv(c):
+            c.run('assembl-ini-files populate %s' % (c.config._internal.ini_file))
+    with c.cd(c.config.projectpath):
+        has_pre_commit = c.run('cat requirements.txt|grep pre-commit', warn=True)
+        if has_pre_commit and not exists(c, join(
+                c.config.projectpath, '.git/hooks/pre-commit')):
+            with venv(c):
+                c.run("pre-commit install")
+
+
+@task()
+def create_local_ini(c):
+    """Replace the local.ini file with one composed from the current .rc file"""
+    local_ini_path = os.path.join(c.config.projectpath, c.config._internal.ini_file)
+    if exists(local_ini_path):
+        c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
+    with venv(c):
+        c.run("python2 -m assembl.scripts.ini_files compose -o %s %s" % (
+            c.config._internal.ini_file, c.config.rcfile))
 
 
 delete_foreign_tasks(locals())
