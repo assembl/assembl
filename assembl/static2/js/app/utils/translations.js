@@ -310,6 +310,8 @@ const Translations = {
       title: "synthèse",
       seeConversation: "Voir la conversation",
       noSynthesisYet: "Il n'y a pas encore de synthèse disponible.",
+      noSynthesisYetCanCreate:
+        "Aucune synthèse n'a encore été créée, vous pouvez en créer une, puis la sauvegarder avant de la publier.",
       tableOfContents: "Sommaire"
     },
     common: {
@@ -1426,6 +1428,7 @@ const Translations = {
       title: "synthesis",
       seeConversation: "See the conversation",
       noSynthesisYet: "There is no synthesis available yet.",
+      noSynthesisYetCanCreate: "There is no synthesis available yet, you can create and save one, then publish it.",
       tableOfContents: "Table of contents"
     },
     debate: {
