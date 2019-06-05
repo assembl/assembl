@@ -7,7 +7,7 @@ export const basePath = () => {
   let path = `${window.location.protocol}//${window.location.host}`;
 
   if (useStargate === 'true') {
-    path = `${window.location.protocol}//localhost:3000`;
+    path = `${window.location.protocol}//${window.location.hostname}:3000`; // move to config ?
   }
 
   return path;
