@@ -58,7 +58,7 @@ type Props = {
   screenWidth: number,
   themeId: string,
   isHarvesting: boolean,
-  validatePost: Function
+  validatePost: any => Promise<void>
 };
 
 class Post extends React.Component<Props> {
@@ -307,7 +307,7 @@ class Post extends React.Component<Props> {
     };
     const slug = getDiscussionSlug();
     if (!slug) {
-      return <></>;
+      return null;
     }
     const sharePostButtonProps = {
       linkClassName: 'share',
