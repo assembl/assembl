@@ -13,7 +13,7 @@ from semantic_version import Version
 
 from .common import (
     venv, task, exists, is_integration_env, fill_template, configure_github_user,
-    add_github_bot_ssh_keys, get_s3_file, delete_foreign_tasks)
+    get_s3_file, delete_foreign_tasks)
 from .sudoer import (
     install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
     install_chrome_dependencies)
@@ -567,6 +567,46 @@ def push_wheelhouse(c, house=None):
 
 
 @task()
+def test_s3(c):
+    import boto3
+    region = c.config.get('aws_shared_region', 'eu-west-1')
+    s3 = boto3.resource('s3', region_name=region)
+    bucket_1 = s3.Bucket('bluenove-deprecated-client-themes')
+    bucket_2 = s3.Bucket('bluenove-client-themes')
+
+    last_modified_date = datetime(1939, 9, 1).replace(tzinfo=None)
+    for file in bucket_1.objects.all():
+        # print(file.key)
+        file_date = file.last_modified.replace(tzinfo=None)
+        if last_modified_date < file_date:
+            last_modified_date = file_date
+
+    print(last_modified_date)
+
+    # you can have more than one file with this date, so you must iterate again
+    for file in bucket_1.objects.all():
+        if file.last_modified.replace(tzinfo=None) == last_modified_date:
+            print(file.key)
+            print(last_modified_date)
+
+    print("#############################")
+
+    last_modified_date = datetime(1939, 9, 1).replace(tzinfo=None)
+    for file in bucket_2.objects.all():
+        # print(file.key)
+        file_date = file.last_modified.replace(tzinfo=None)
+        if last_modified_date < file_date:
+            last_modified_date = file_date
+
+    print(last_modified_date)
+
+    # you can have more than one file with this date, so you must iterate again
+    for file in bucket_2.objects.all():
+        if file.last_modified.replace(tzinfo=None) == last_modified_date:
+            print(file.key)
+            print(last_modified_date)
+
+@task()
 def push_built_themes_to_remote_bucket(c):
     """
     Push webpack built themes CSS + JS files of themes into respective S3 bucket.
@@ -578,6 +618,7 @@ def push_built_themes_to_remote_bucket(c):
         - a compressed and uncompressed versions of js + css files locally and on S3 bucket
     """
     import boto3
+
     region = c.config.get('aws_shared_region', 'eu-west-1')
     s3 = boto3.resource('s3', region_name=region)
     buckets = ((os.path.join(c.config.code_root, 'assembl/static/js/build/'),
@@ -625,13 +666,15 @@ def push_built_themes_to_remote_bucket(c):
     install_build_dependencies,
     install_node_and_yarn,
     configure_github_user,
-    add_github_bot_ssh_keys,
     clear_aptitude_cache)
 def prepare_cicd_build(c):
     """
     There is full assumption of being in CI/CD environment when calling this function
     """
     project_path = os.getenv('CI_PROJECT_DIR', c.config.code_root)
+    # add github.com as known host
+    c.run('ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts')
+
     with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
         c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
 

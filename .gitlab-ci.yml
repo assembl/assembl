@@ -15,24 +15,24 @@ cache:
 
 # test > test_frontend: OK for byw-invoke (temporary comment to run test faster)
 
-test_frontend:
-  stage: test
-  except:
-    - master
-    - tmp_master_for_ci_cd
-    - byw-invoke
-  image: node:10
-  before_script:
-    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-    - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-    - cd assembl/static2
-    - yarn
-  script:
-    # This will fail if any test fails or if the coverage has lowered
-    - yarn jest --coverage --maxWorkers 2
-    - yarn run eslint
-    - yarn run stylelint
-    - yarn run flow --quiet
+# test_frontend:
+#   stage: test
+#   except:
+#     - master
+#     - tmp_master_for_ci_cd
+#     # - byw-invoke
+#   image: node:10
+#   before_script:
+#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+#     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+#     - cd assembl/static2
+#     - yarn
+#   script:
+#     # This will fail if any test fails or if the coverage has lowered
+#     - yarn jest --coverage --maxWorkers 2
+#     - yarn run eslint
+#     - yarn run stylelint
+#     - yarn run flow --quiet
 
 # test_integration_and_ui:
 #   stage: test_integration
@@ -88,54 +88,27 @@ test_frontend:
 #     - cat testing.ini
 #     - py.test assembl/tests
 
-# byw_test_ssh_agent:
+
+# build_test_s3:
 #   stage: build
 #   only:
-#     - byw-invoke
-#   before_script:
-#     - whoami
-#   script:
-#     - apt-get update -qq
-#     - 'which ssh-agent || ( apt-get install -qq openssh-client )'
-#     - eval $(ssh-agent -s)
-#     - ssh-add <(echo "$GITHUB_BOT_SSH_KEY")
-#     - mkdir -p ~/.ssh
-#     - ssh-add -l
-
-byw_build_ssh_agent:
-  stage: build
-  only:
-    - byw-invoke
-  before_script:
-    - whoami
-  script:
-    - apt-get update -qq
-    - 'which ssh-agent || ( apt-get install -qq openssh-client )'
-    - mkdir -p ~/.ssh
-    - echo "$GITHUB_BOT_SSH_KEY" > ~/.ssh/id_rsa
-    - chmod 700 ~/.ssh
-    - chmod 600 ~/.ssh/id_rsa;
-    - eval $(ssh-agent -s)
-    - ssh-add ~/.ssh/id_rsa
-    - ssh-add -l
-
-# build_wheel:
-#   stage: build
-#   only:
-#     - develop
-#     - invoke
 #     - byw-invoke
 #   variables:
 #     LC_ALL: C.UTF-8
 #     LANG: en.UTF-8
 #     GIT_STRATEGY: clone
-#   artifacts:
-#     paths:
-#       - dist/
 #   before_script:
 #     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
 #     - apt-get update -qq
 #     - apt-get install -yqq sudo python python-pip python-dev build-essential openssh-server
+#     # ssh agent setup
+#     - eval $(ssh-agent -s)
+#     - ps -p $SSH_AGENT_PID
+#     # add github bot ssh key
+#     - echo "$GITHUB_BOT_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+#     - mkdir -p ~/.ssh
+#     - chmod 700 ~/.ssh
+#     # end of ssh agent setup
 #     - pip install virtualenv
 #     - cd $CI_PROJECT_DIR
 #     - python -mvirtualenv venv
@@ -144,40 +117,72 @@ byw_build_ssh_agent:
 #     - "echo '_extends: aws.yaml' > invoke.yaml"
 #     - touch secrets.yaml
 #     - ln -s assembl/tasks .
-#     - inv -e build.prepare-cicd-build
-#     - mkdir wheelhouse
 #   script:
-#     # create the wheel and upload to pypi
-#     - source venv/bin/activate
-#     - inv build.compile-static-assets
-#     - pip wheel -w wheelhouse -r requirements-prod.frozen.txt
-#     - inv build.create-wheel
-#     - inv build.push-wheelhouse
-#     - inv build.push-built-themes-to-remote-bucket
-#     # # - twine upload -u bluenove --skip-existing dist/*
+#     - inv build.test_s3
 
 
-push_to_develop_server:
-  stage: deploy_to_sandbox
+build_wheel:
+  stage: build
   only:
-    - tmp_master_for_ci_cd
-    - rws_connections
+    - develop
     - invoke
+    - byw-invoke
+  variables:
+    LC_ALL: C.UTF-8
+    LANG: en.UTF-8
+    GIT_STRATEGY: clone
   before_script:
     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-    - apt-get update
-    - apt-get install -y sudo python python-pip python-dev build-essential
+    - apt-get update -qq
+    - apt-get install -yqq sudo python python-pip python-dev build-essential openssh-server
+    # ssh agent setup
+    - eval $(ssh-agent -s)
+    - ps -p $SSH_AGENT_PID
+    # add github bot ssh key
+    - echo "$GITHUB_BOT_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    # end of ssh agent setup
     - pip install virtualenv
     - cd $CI_PROJECT_DIR
     - python -mvirtualenv venv
     - source venv/bin/activate
     - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
-    # Fetch the configurations of sandbox from S3
     - "echo '_extends: aws.yaml' > invoke.yaml"
     - touch secrets.yaml
     - ln -s assembl/tasks .
+    - inv -e build.prepare-cicd-build
+    - mkdir wheelhouse
   script:
-    - inv build.deploy-to-sandbox
+    - source venv/bin/activate
+    - inv build.compile-static-assets
+    - pip wheel -w wheelhouse -r requirements-prod.frozen.txt
+    - inv build.create-wheel
+    - inv build.push-wheelhouse
+    - inv build.push-built-themes-to-remote-bucket
+
+
+# push_to_develop_server:
+#   stage: deploy_to_sandbox
+#   only:
+#     - tmp_master_for_ci_cd
+#     - rws_connections
+#     - invoke
+#   before_script:
+#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+#     - apt-get update
+#     - apt-get install -y sudo python python-pip python-dev build-essential
+#     - pip install virtualenv
+#     - cd $CI_PROJECT_DIR
+#     - python -mvirtualenv venv
+#     - source venv/bin/activate
+#     - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
+#     # Fetch the configurations of sandbox from S3
+#     - "echo '_extends: aws.yaml' > invoke.yaml"
+#     - touch secrets.yaml
+#     - ln -s assembl/tasks .
+#   script:
+#     - inv build.deploy-to-sandbox
 
 # deploy_to_uat:
 #   stage: deploy_to_uat
