@@ -89,6 +89,11 @@
     .assembl-icon-check-box-declined:before {
       font-size: 20px;
     }
+
+    .answer-form-inner .form-group {
+      margin: 13px 0 0;
+      border: 1px solid $first-color-light;
+    }
   }
 
   .overflow-action {
@@ -249,7 +254,7 @@ $deleted-post-border: 1px solid $light-grey !default;
     max-width: 925px;
     position: relative;
     text-align: left;
-    padding: 0;
+    padding: 0 0 10px 0;
 
     .label {
       display: block;
@@ -267,7 +272,7 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .creator {
-      color: $second-color;
+      color: $black;
       padding: 0 0 0 10px;
 
       &.pending {
@@ -339,14 +344,22 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .answer-form {
-    background-color: $first-color-light;
+    width: 90%;
+    margin: auto;
+    background-color: $white;
     border-top: 2px solid $white;
-    padding: 40px;
+    border: 1px solid $first-color-light;
+    box-shadow: 3px 4px 4px 0 $first-color-light;
+    padding: 30px;
 
     .assembl-icon-back-arrow {
       &:before {
         font-size: $font-size-s;
       }
+    }
+
+    .DraftEditor-root {
+      border: solid 2px $first-color;
     }
 
     .answer-form-inner {
@@ -378,12 +391,20 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .collapsed-answer-form {
-    background-color: $first-color-light;
-    border-top: 2px solid $white;
+    background-color: $white;
     padding: 0 20px;
+
+    .rich-text-editor {
+      margin-top: 0;
+    }
 
     .editor-header {
       display: none;
+    }
+
+    .form-group {
+      border: $first-color solid 1px;
+      box-shadow: 1px 1px $first-color;
     }
 
     .public-DraftEditor-content {
@@ -796,8 +817,9 @@ $deleted-post-border: 1px solid $light-grey !default;
         }
       }
 
-      .answer-form-inner {
+      .answer-form-inner .form-group {
         margin: 13px 0 0;
+        border: 1px solid $first-color-light;
       }
 
       .assembl-icon-back-arrow {

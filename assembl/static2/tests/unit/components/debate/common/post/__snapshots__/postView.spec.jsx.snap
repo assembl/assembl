@@ -207,19 +207,19 @@ exports[`PostView component should render a post in view mode 1`] = `
         />
       </div>
     </div>
-  </div>
-  <div
-    className="collapsed-answer-form"
-  >
-    <Connect(Apollo(Apollo(DumbAnswerFormWithContext)))
-      handleAnswerClick={[Function]}
-      hideAnswerForm={[Function]}
-      ideaId="ABC123"
-      parentId="XYZ333"
-      phaseId="DEF345"
-      refetchIdea={[MockFunction]}
-      textareaRef={[Function]}
-    />
+    <div
+      className="collapsed-answer-form"
+    >
+      <Connect(Apollo(Apollo(DumbAnswerFormWithContext)))
+        handleAnswerClick={[Function]}
+        hideAnswerForm={[Function]}
+        ideaId="ABC123"
+        parentId="XYZ333"
+        phaseId="DEF345"
+        refetchIdea={[MockFunction]}
+        textareaRef={[Function]}
+      />
+    </div>
   </div>
 </div>
 `;

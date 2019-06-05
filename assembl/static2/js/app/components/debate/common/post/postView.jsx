@@ -306,20 +306,20 @@ class PostView extends React.PureComponent<Props, State> {
               />
             </div>
           </div>
+          {canReply && !isPending ? (
+            <div className={this.state.showAnswerForm ? 'answer-form' : 'collapsed-answer-form'}>
+              <AnswerForm
+                parentId={id}
+                ideaId={ideaId}
+                refetchIdea={refetchIdea}
+                textareaRef={answerTextareaRef}
+                hideAnswerForm={this.hideAnswerForm}
+                handleAnswerClick={this.handleAnswerClick}
+                phaseId={phaseId}
+              />
+            </div>
+          ) : null}
         </div>
-        {canReply && !isPending ? (
-          <div className={this.state.showAnswerForm ? 'answer-form' : 'collapsed-answer-form'}>
-            <AnswerForm
-              parentId={id}
-              ideaId={ideaId}
-              refetchIdea={refetchIdea}
-              textareaRef={answerTextareaRef}
-              hideAnswerForm={this.hideAnswerForm}
-              handleAnswerClick={this.handleAnswerClick}
-              phaseId={phaseId}
-            />
-          </div>
-        ) : null}
       </div>
     );
   }
