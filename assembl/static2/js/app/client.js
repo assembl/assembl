@@ -1,10 +1,13 @@
 import { ApolloClient, toIdValue, IntrospectionFragmentMatcher } from 'react-apollo';
 import { createNetworkInterface } from 'apollo-upload-client';
 import * as Sentry from '@sentry/browser';
+import Cookies from 'js-cookie';
+import co from 'co';
 
 import { getDiscussionSlug } from './utils/globalFunctions';
 import { getFullPath } from './utils/routeMap';
 import fetch from 'isomorphic-fetch'; // eslint-disable-line
+import { getCSRFToken } from './utils/csrf';
 
 const myFragmentMatcher = new IntrospectionFragmentMatcher({
   introspectionQueryResultData: {
@@ -28,6 +31,9 @@ const myFragmentMatcher = new IntrospectionFragmentMatcher({
 // http://dev.apollodata.com/react/query-splitting.html
 
 const dataIdFromObject = o => o.id;
+const useCSRFProtection = document.getElementById('useCSRFProtection')
+  ? document.getElementById('useCSRFProtection').value
+  : null;
 
 const networkInterface = createNetworkInterface({
   uri: getFullPath('graphql', { slug: getDiscussionSlug() }),
@@ -40,16 +46,28 @@ const networkInterface = createNetworkInterface({
 networkInterface.use([
   {
     applyMiddleware: function (req, next) {
-      Sentry.addBreadcrumb({
-        category: 'graphql',
-        message: `GraphQL operation: ${req.request.operationName}`,
-        data: {
-          variables: req.request.variables
-        },
-        level: 'info'
-      });
+      if (!req.options.headers) {
+        req.options.headers = {}; // Create the header object if needed.
+      }
+      co(async () => {
+        if (useCSRFProtection === 'true') {
+          const responseToken = await getCSRFToken();
+          if (responseToken.text === 'ok') {
+            req.options.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf');
+          }
+        }
 
-      next();
+        Sentry.addBreadcrumb({
+          category: 'graphql',
+          message: `GraphQL operation: ${req.request.operationName}`,
+          data: {
+            variables: req.request.variables
+          },
+          level: 'info'
+        });
+
+        next();
+      });
     }
   }
 ]);

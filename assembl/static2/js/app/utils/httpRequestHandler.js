@@ -1,3 +1,8 @@
+import urljoin from 'url-join';
+import Cookies from 'js-cookie';
+
+import { getCSRFToken, basePath } from './csrf';
+
 const convertToURLEncodedString = obj =>
   Object.keys(obj)
     .map(k => `${encodeURIComponent(k)}=${encodeURIComponent(obj[k])}`)
@@ -5,20 +10,36 @@ const convertToURLEncodedString = obj =>
 const getResponseContentType = xhr =>
   // eslint-disable-line no-unused-vars
   xhr.getResponseHeader('Content-Type').split(';')[0];
+
+const useCSRFProtection = document.getElementById('useCSRFProtection')
+  ? document.getElementById('useCSRFProtection').value
+  : null;
+
 /*
   A global async method that returns a Promisified ajax call
   @params payload [Object] The object that will be sent
   @params isJson [Boolean] Pass a flag if the object is JSON. Default is form header.
   @retuns [Promise]
 */
+
 export const xmlHttpRequest = obj =>
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    const url = obj.url;
+    const url = urljoin(basePath(), obj.url);
     let payload = obj.payload;
     xhr.open(obj.method, url);
     if (obj.method.toLowerCase() === 'post') {
       obj.headers = obj.headers || {}; // eslint-disable-line
+
+      // Go and fetch a CSRF token for the POST request if activated
+      if (useCSRFProtection === 'true') {
+        const reponseToken = await getCSRFToken();
+
+        if (reponseToken.text === 'ok') {
+          obj.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf'); // eslint-disable-line
+        }
+      }
+
       if (obj.isJson && obj.isJson === true) {
         obj.headers['Content-Type'] = 'application/json'; // eslint-disable-line
         payload = JSON.stringify(obj.payload);

@@ -178,3 +178,9 @@ maxretry: 10
 # Can be either a URL or a local filesystem path
 # IF URL, there should be no query strings
 theme_base: ""
+
+# Feature flags to control behaviour
+# 1. Use stargate the proxy ms ?
+# 2. Enable CSRF protection - this HAS to have stargate activate as well
+use_stargate: false
+use_csrf_protection: false

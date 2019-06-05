@@ -19,6 +19,8 @@
         <input type="hidden" name="elasticsearchLangIndexes" id="elasticsearchLangIndexes" value="{{ elasticsearch_lang_indexes }}" />
         {% if discussion %}
             <input type="hidden" name="assemblVersion" id="assemblVersion" value="{{ assembl_version }}" />
+            <input type="hidden" name="useStargate" id="useStargate" value="{{ use_stargate }}" />
+            <input type="hidden" name="useCSRFProtection" id="useCSRFProtection" value="{{ use_csrf_protection }}" />
             <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
             {#TODO: Harmonize code paths. There are two code paths for fetching a slug from front-end. 1) from the DOM, and 2) from API. #}
             <input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />

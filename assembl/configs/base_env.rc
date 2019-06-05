@@ -168,3 +168,9 @@ maxretry = 10
 # To isolate themes, each have been put in a bucket. Declare where the bucket is for access
 # ie. https://<bucket-url>, or on local machine: /opts/assembl_themes/<bucket>/
 theme_base =
+
+# Feature flags to control behaviour
+# 1. Use stargate the proxy ms ?
+# 2. Enable CSRF protection - this HAS to have stargate activate as well
+use_stargate = false
+use_csrf_protection = false

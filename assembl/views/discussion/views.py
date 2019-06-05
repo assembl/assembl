@@ -244,6 +244,8 @@ def react_base_view(request, required_permission=P_READ):
     theme_name = get_theme_name(discussion)
     node_env = os.getenv('NODE_ENV', 'production')
     bugherd_url = get('bugherd_url', None)
+    use_stargate = get('use_stargate') or 'false'
+    use_csrf_protection = get('use_csrf_protection') or 'false'
 
     common_context = {
         "theme_name": theme_name,
@@ -254,7 +256,9 @@ def react_base_view(request, required_permission=P_READ):
         "web_analytics": old_context['web_analytics'],
         "under_test": old_context['under_test'],
         "sentry_dsn": get('sentry_dsn', ''),
-        "bugherd_url": bugherd_url
+        "bugherd_url": bugherd_url,
+        "use_stargate": use_stargate,
+        "use_csrf_protection": use_csrf_protection
     }
     common_context.update(populate_theme_information(theme_name))
 

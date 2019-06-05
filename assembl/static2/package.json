@@ -99,6 +99,7 @@
     "apollo-upload-client": "^5.1.1",
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
+    "co": "4.6.0",
     "draft-convert": "^2",
     "draft-js": "^0.10.5",
     "draft-js-buttons": "^2.0.1",
@@ -116,6 +117,7 @@
     "immutable": "~3.7.4",
     "isomorphic-fetch": "^2.2.1",
     "jquery": "^3.3.1",
+    "js-cookie": "2.2.0",
     "linkifyjs": "^2.1.5",
     "lodash": "^4.17.11",
     "moment": "^2.22.0",
@@ -158,6 +160,7 @@
     "redux-thunk": "^2.1.0",
     "searchkit": "^2.3.0",
     "smoothscroll-polyfill": "^0.3.6",
+    "superagent": "5.0.5",
     "url-join": "^1.1.0"
   },
   "resolutions": {
