@@ -19,10 +19,11 @@ import {
   deleteVoteModule,
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
-import { displayCustomModal, displayModal, closeModal } from '../../../utils/utilityManager';
+import { displayModal, closeModal } from '../../../utils/utilityManager';
+// import { displayCustomModal } from '../../../utils/utilityManager';
 import { editorStateIsEmpty } from '../../../utils/draftjs';
 import { createRandomId } from '../../../utils/globalFunctions';
-import CustomizeGaugeForm from './customizeGaugeForm';
+// import CustomizeGaugeForm from './customizeGaugeForm';
 
 type VoteProposalFormProps = {
   index: number,
@@ -108,10 +109,10 @@ const DumbVoteProposalForm = ({
     return displayModal(modalTitle, body, includeFooter, footer);
   };
 
-  const settingsModal = (id) => {
-    const content = <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} />;
-    displayCustomModal(content, true, 'gauge-settings-modal');
-  };
+  // const settingsModal = (id) => {
+  //   const content = <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} />;
+  //   displayCustomModal(content, true, 'gauge-settings-modal');
+  // };
 
   const isTitleEmpty = title === '' || title === null;
 
@@ -210,7 +211,7 @@ const DumbVoteProposalForm = ({
               {pModule &&
                 pModule.get('id') && (
                   <div>
-                    <span
+                    {/* <span
                       className="inline settings-link"
                       onClick={() => {
                         settingsModal(pModule.get('id'));
@@ -218,7 +219,7 @@ const DumbVoteProposalForm = ({
                     >
                       <i className="assembl-icon-edit" />
                       <Translate value="administration.voteProposals.gaugeSettings" />
-                    </span>
+                    </span> */}
 
                     {pModule.get('isCustom') && (
                       <span
