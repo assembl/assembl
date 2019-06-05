@@ -250,11 +250,13 @@ def global_vote_results_csv(widget, request):
     # either each token count (for token votes) OR
     # sum of vote values, and count of votes otherwise.
     # Ideas are rows (and Idea.id is column 0)
-    def get_token_category_fieldname(token_category):
-        return token_category.name.best_lang(user_prefs).value.encode('utf-8')
+    def get_token_category_fieldname(title, token_category):
+        return '{} [{}]'.format(
+            token_category.name.best_lang(user_prefs).value.encode('utf-8'),
+            title.encode('utf-8'))
 
     def get_choice_average_fieldname(title):
-        return u'{title} - moyenne'.format(title=title).encode('utf-8')
+        return u'moyenne [{title}]'.format(title=title).encode('utf-8')
 
     def get_number_choice_fieldname(choice_value, template_spec):
         return u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8')
@@ -262,10 +264,13 @@ def global_vote_results_csv(widget, request):
     def get_text_choice_fieldname(choice):
         return choice.label.best_lang(user_prefs).value.encode('utf-8')
 
+    def get_total_votes_fieldname(title):
+        return '{} [{}]'.format(TOTAL_VOTES, title.encode('utf-8'))
+
     for title, template_spec in template_specs:
         if isinstance(template_spec, TokenVoteSpecification):
             for tokencat in template_spec.token_categories:
-                fieldnames.append(get_token_category_fieldname(tokencat))
+                fieldnames.append(get_token_category_fieldname(title, tokencat))
         else:
             fieldnames.append(get_choice_average_fieldname(title))
             if isinstance(template_spec, NumberGaugeVoteSpecification):
@@ -274,7 +279,7 @@ def global_vote_results_csv(widget, request):
             else:
                 for choice in template_spec.get_choices():
                     fieldnames.append(get_text_choice_fieldname(choice))
-        fieldnames.append(TOTAL_VOTES)
+        fieldnames.append(get_total_votes_fieldname(title))
 
     rows = []
     from assembl.graphql.vote_session import get_avg_choice
@@ -286,7 +291,7 @@ def global_vote_results_csv(widget, request):
             spec = spec_by_idea_id_and_template_specid.get((idea_id, template_spec.id), None)
             if isinstance(template_spec, TokenVoteSpecification):
                 for token_category in template_spec.token_categories:
-                    fieldname = get_token_category_fieldname(token_category)
+                    fieldname = get_token_category_fieldname(title, token_category)
                     if spec is None:
                         row[fieldname] = '-'
                     else:
@@ -356,7 +361,7 @@ def global_vote_results_csv(widget, request):
                         row[fieldname] = histogram.get(choice.value, 0)
 
             if spec is None:
-                row[TOTAL_VOTES] = '-'
+                row[get_total_votes_fieldname(title)] = '-'
             else:
                 vote_cls = spec.get_vote_class()
                 num_votes = spec.db.query(
@@ -365,7 +370,7 @@ def global_vote_results_csv(widget, request):
                     tombstone_date=None
                     ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end
                     ).count()
-                row[TOTAL_VOTES] = num_votes
+                row[get_total_votes_fieldname(title)] = num_votes
         rows.append(row)
     return fieldnames, rows
 
