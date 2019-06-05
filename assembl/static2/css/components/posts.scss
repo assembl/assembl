@@ -2,10 +2,16 @@
   font-size: $font-size-xs;
   font-family: $font-family6;
   display: flex;
-  align-items: center;
+  align-items: baseline;
 
   .translate-button {
     margin: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -693,6 +699,7 @@ $deleted-post-border: 1px solid $light-grey !default;
 
     .translate {
       padding: 20px 20px 0 25px;
+      display: flex;
     }
 
     .statistics-container {

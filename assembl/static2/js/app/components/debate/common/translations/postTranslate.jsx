@@ -2,11 +2,10 @@
 import * as React from 'react';
 import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Translate } from 'react-redux-i18n';
 
 import { updateContentLocaleById, updateContentLocaleByOriginalLocale } from '../../../../actions/contentLocaleActions';
 import LocalesQuery from '../../../../graphql/LocalesQuery.graphql';
-import SwitchButton from '../../../common/switchButton';
 import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { displayCustomModal } from '../../../../utils/utilityManager';
@@ -112,7 +111,7 @@ class PostTranslate extends React.Component<PostTranslateProps, PostTranslateSta
   };
 
   render() {
-    const { contentLocale, id, lang, originalLocale, translate } = this.props;
+    const { contentLocale, lang, originalLocale, translate } = this.props;
     const specialLocaleCodes = ['und', 'zxx']; // locale codes that can not be translated (unrecognized locales)
     // we need to display the component if the content was originaly in the language of the site but was previously translated:
     const isInInterfaceLanguage = originalLocale === lang && originalLocale === contentLocale;
@@ -131,13 +130,12 @@ class PostTranslate extends React.Component<PostTranslateProps, PostTranslateSta
             />
           </p>
         ) : null}
-        <SwitchButton
-          ref={this.props.afterLoad}
-          name={`switch-${id}`}
-          onChange={this.handleSubmit}
-          checked={translate}
-          labelRight={I18n.t('debate.thread.translate')}
-        />
+        <span className="translate-button" onClick={this.handleSubmit}>
+          <Translate
+            value={translate ? 'debate.thread.removeTranslation' : 'debate.thread.translate'}
+            ref={this.props.afterLoad}
+          />
+        </span>
       </div>
     );
   }
