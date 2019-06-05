@@ -10,6 +10,7 @@ import moment from 'moment';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
+import { getOriginalBodyAndSubject } from '../common/post';
 // Optimization: Should create commentQuery.graphql and adapt the query
 import CommentQuery from '../../../graphql/BrightMirrorFictionQuery.graphql';
 import UpdateCommentMutation from '../../../graphql/mutations/updatePost.graphql';
@@ -358,12 +359,13 @@ const mapQueryToProps = ({ data }) => {
           : EMPTY_STRING
     };
 
+    const { originalBody } = getOriginalBodyAndSubject(false, fiction.subjectEntries, fiction.bodyEntries);
     // Map graphQL returned data with local props
     return {
       authorUserId: creator ? creator.userId : USER_ID_NOT_FOUND,
       authorFullname: creator ? creator.displayName : noAuthorSpecified,
       circleAvatar: circleAvatarProps,
-      commentContent: fiction.body,
+      commentContent: originalBody,
       commentId: id,
       contentLocale: contentLocale,
       displayedPublishedDate: moment(fiction.creationDate)
