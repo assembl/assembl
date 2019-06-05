@@ -13,7 +13,10 @@
 
   .level {
     width: 925px;
-    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: 125px;
 
     .box {
       border-left: 4px solid $first-color;
