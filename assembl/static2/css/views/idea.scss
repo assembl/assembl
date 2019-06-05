@@ -30,6 +30,51 @@
     }
   }
 
+  .level-1,
+  .level-2,
+  .level-3,
+  .level-4 {
+    padding-bottom: $post-space;
+    padding-left: $tree-indentation*2;
+    border-top: 1px solid $first-color-light;
+    border-left: 1px solid $first-color-light;
+
+    .box {
+      border-top: none;
+    }
+
+    &:last-child {
+      border-left: none !important;
+      padding-bottom: 0 !important;
+    }
+  }
+
+  .level-5 {
+    padding-bottom: $post-space;
+
+    &:last-child {
+      padding-bottom: 0 !important;
+    }
+  }
+
+  .level-2 {
+    width: 885px;
+  }
+
+  .level-3 {
+    width: 845px;
+  }
+
+  .level-4 {
+    width: 805px;
+  }
+
+  @for $i from 5 through 12 {
+    .level-#{$i} {
+      width: 765px;
+    }
+  }
+
   .postfolded-container {
     cursor: pointer;
     position: relative;
@@ -92,7 +137,7 @@
   }
 
   .infinite-separator {
-    margin: 50px auto;
+    margin: $margin-section auto;
     width: 200px;
     border-bottom: 1px solid $first-color;
     position: relative;
@@ -101,36 +146,10 @@
       position: absolute;
       background-color: $page-bkg-grey;
       width: 50px;
+      padding: 0 15px 0 0;
       top: -8px;
       margin: 0 0 0 75px;
       text-align: center;
-    }
-  }
-
-  .level-1,
-  .level-2,
-  .level-3,
-  .level-4 {
-    padding-bottom: $post-space;
-    padding-left: $tree-indentation*2;
-    border-top: 1px solid $first-color-light;
-    border-left: 1px solid $first-color-light;
-
-    .box {
-      border-top: none;
-    }
-
-    &:last-child {
-      border-left: none !important;
-      padding-bottom: 0 !important;
-    }
-  }
-
-  .level-5 {
-    padding-bottom: $post-space;
-
-    &:last-child {
-      padding-bottom: 0 !important;
     }
   }
 
