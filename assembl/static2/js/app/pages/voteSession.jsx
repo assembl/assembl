@@ -138,7 +138,10 @@ class DumbVoteSession extends React.Component<Props, State> {
 
   componentWillMount() {
     window.addEventListener('resize', this.updateWindowWidth);
-    if (!this.props.isPhaseCompleted) {
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (!this.props.isPhaseCompleted && !this.props.loading && prevProps.loading) {
       window.addEventListener('scroll', this.setAvailableTokensSticky);
       this.setMyVotes();
     }
