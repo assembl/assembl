@@ -20,6 +20,7 @@ if __name__ == '__main__':
     settings = get_appsettings(config_fname, 'assembl')
     set_config(settings)
     logging.config.fileConfig(config_fname)
+    configure_zmq(settings['changes_socket'], False)
     configure_engine(settings, True)
     session = get_session_maker()()
     add_semantic_analysis_tab_to_all_discussions(session)
