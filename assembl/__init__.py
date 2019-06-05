@@ -98,6 +98,7 @@ def main(global_config, **settings):
         config.set_authorization_policy(ACLAuthorizationPolicy())
     config.add_static_view('static', 'static', cache_max_age=3600)
     config.add_static_view('static2', 'static2', cache_max_age=3600)
+    config.include('.private-graphql')
     config.include('.graphql')  # This MUST be above views import
 
     config.include('cornice')  # REST services library.
