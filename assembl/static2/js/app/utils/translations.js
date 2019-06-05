@@ -2,6 +2,7 @@
 const Translations = {
   fr: {
     globalError: "Il y a eu une erreur, merci de réessayer plus tard.",
+    postLoadError: "Une erreur est survenue au chargement de ce post.",
     here: "ici",
     yes: "oui",
     no: "non",
@@ -1078,6 +1079,7 @@ const Translations = {
   },
   en: {
     globalError: "Something went wrong. Please try again later.",
+    postLoadError: "Something went wrong when loading this post.",
     here: "here",
     yes: "yes",
     no: "no",

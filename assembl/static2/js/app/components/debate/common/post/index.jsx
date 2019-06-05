@@ -14,6 +14,7 @@ import hashLinkScroll from '../../../../utils/hashLinkScroll';
 import { getDomElementOffset } from '../../../../utils/globalFunctions';
 import NuggetsManager from '../../../common/nuggetsManager';
 import { DebateContext } from '../../../../app';
+import { withErrorBoundary } from './postErrorBoundary';
 
 const getSubjectPrefixString = fullLevel =>
   fullLevel && (
@@ -264,4 +265,4 @@ const withData: OperationComponent<Response> = graphql(PostQuery);
 
 // Absolutely don't use redux connect here to avoid performance issue.
 // Please pass the needed props from Tree component.
-export default compose(withData, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);
+export default compose(withData, withErrorBoundary, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);
