@@ -1338,16 +1338,17 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals15publis
                     u'hasPreviousPage': False,
                     u'hasNextPage': True
                 },
-                u'edges': [{u'node': {u'body': u'une proposition 0'}},
-                           {u'node': {u'body': u'une proposition 1'}},
-                           {u'node': {u'body': u'une proposition 2'}},
-                           {u'node': {u'body': u'une proposition 3'}},
-                           {u'node': {u'body': u'une proposition 4'}},
-                           {u'node': {u'body': u'une proposition 5'}},
-                           {u'node': {u'body': u'une proposition 6'}},
-                           {u'node': {u'body': u'une proposition 7'}},
+                u'edges': [{u'node': {u'body': u'une proposition 14'}},
+                           {u'node': {u'body': u'une proposition 13'}},
+                           {u'node': {u'body': u'une proposition 12'}},
+                           {u'node': {u'body': u'une proposition 11'}},
+                           {u'node': {u'body': u'une proposition 10'}},
+                           {u'node': {u'body': u'une proposition 9'}},
                            {u'node': {u'body': u'une proposition 8'}},
-                           {u'node': {u'body': u'une proposition 9'}}]
+                           {u'node': {u'body': u'une proposition 7'}},
+                           {u'node': {u'body': u'une proposition 6'}},
+                           {u'node': {u'body': u'une proposition 5'}}]
+
             }
         }
     }
@@ -1368,11 +1369,11 @@ def test_get_proposals_after(graphql_request, thematic_and_question, proposals15
                     u'hasPreviousPage': False,  # when we specify `after`, this is always False
                     u'hasNextPage': False
                 },
-                u'edges': [{u'node': {u'body': u'une proposition 10'}},
-                           {u'node': {u'body': u'une proposition 11'}},
-                           {u'node': {u'body': u'une proposition 12'}},
-                           {u'node': {u'body': u'une proposition 13'}},
-                           {u'node': {u'body': u'une proposition 14'}}]
+                u'edges': [{u'node': {u'body': u'une proposition 4'}},
+                           {u'node': {u'body': u'une proposition 3'}},
+                           {u'node': {u'body': u'une proposition 2'}},
+                           {u'node': {u'body': u'une proposition 1'}},
+                           {u'node': {u'body': u'une proposition 0'}}]
             }
         }
     }
@@ -1394,11 +1395,11 @@ def test_get_proposals_before(graphql_request, thematic_and_question, proposals1
                     u'hasPreviousPage': True,
                     u'hasNextPage': False  # when we specify `before`, this is always False
                 },
-                u'edges': [{u'node': {u'body': u'une proposition 6'}},
+                u'edges': [{u'node': {u'body': u'une proposition 8'}},
                            {u'node': {u'body': u'une proposition 7'}},
-                           {u'node': {u'body': u'une proposition 8'}},
-                           {u'node': {u'body': u'une proposition 9'}},
-                           {u'node': {u'body': u'une proposition 10'}}]
+                           {u'node': {u'body': u'une proposition 6'}},
+                           {u'node': {u'body': u'une proposition 5'}},
+                           {u'node': {u'body': u'une proposition 4'}}]
             }
         }
     }
@@ -1417,18 +1418,13 @@ def test_get_proposals_from_node(graphql_request, thematic_and_question, proposa
             u'posts': {
                 u'pageInfo': {
                     u'hasPreviousPage': False,
-                    u'hasNextPage': True
+                    u'hasNextPage': False
                 },
                 u'edges': [{u'node': {u'body': u'une proposition 4'}},
-                           {u'node': {u'body': u'une proposition 5'}},
-                           {u'node': {u'body': u'une proposition 6'}},
-                           {u'node': {u'body': u'une proposition 7'}},
-                           {u'node': {u'body': u'une proposition 8'}},
-                           {u'node': {u'body': u'une proposition 9'}},
-                           {u'node': {u'body': u'une proposition 10'}},
-                           {u'node': {u'body': u'une proposition 11'}},
-                           {u'node': {u'body': u'une proposition 12'}},
-                           {u'node': {u'body': u'une proposition 13'}}]
+                           {u'node': {u'body': u'une proposition 3'}},
+                           {u'node': {u'body': u'une proposition 2'}},
+                           {u'node': {u'body': u'une proposition 1'}},
+                           {u'node': {u'body': u'une proposition 0'}}]
             }
         }
     }

@@ -460,7 +460,7 @@ mutation myFirstMutation {
     return post_id
 
 
-@freeze_time("2018-2-1")
+@freeze_time("2018-2-1", tick=True)
 @pytest.fixture(scope="function")
 def proposals15published(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
