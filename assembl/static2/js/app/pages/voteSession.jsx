@@ -71,7 +71,6 @@ type Props = {
   proposals: Array<Proposal>,
   propositionsSectionTitle: string,
   randomProposals: Array<Proposal>,
-  refetchVoteSession: Function,
   seeCurrentVotes: boolean,
   subTitle: string,
   title: string
@@ -246,7 +245,7 @@ class DumbVoteSession extends React.Component<Props, State> {
   };
 
   submitVotes = () => {
-    const { addGaugeVote, addTokenVote, id, lang, refetchVoteSession } = this.props;
+    const { addGaugeVote, addTokenVote, id, lang } = this.props;
     const { userTokenVotes, userGaugeVotes } = this.state;
     this.setState({ submitting: true });
     const refetchQueries = [
@@ -274,7 +273,6 @@ class DumbVoteSession extends React.Component<Props, State> {
           })
             .then(() => {
               displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, [okButton], null);
-              refetchVoteSession();
             })
             .catch((error) => {
               displayAlert('danger', error.message);
@@ -467,8 +465,7 @@ export default compose(
         modules: modules,
         numParticipants: numParticipants,
         proposals: proposals,
-        randomProposals: shuffle(proposals),
-        refetchVoteSession: data.refetch
+        randomProposals: shuffle(proposals)
       };
     }
   }),
