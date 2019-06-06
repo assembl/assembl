@@ -34,6 +34,7 @@ The build machine is similar to an assembl box, with the difference of having th
 	git pull  # Default is invoke
 	rm -rf wheelhouse
 	rm -rf build
+	rm -rf dist # if exists
 	source venv/bin/activate
 
 	# Get the latest theme
