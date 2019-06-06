@@ -220,9 +220,10 @@ def global_vote_results_csv(widget, request):
     user_prefs = LanguagePreferenceCollection.getCurrent()
     # first fetch the ideas voted on
     ideas = widget.db.query(Idea
-                            ).join(AbstractVoteSpecification
-                                   ).filter(AbstractVoteSpecification.widget_id == widget.id
-                                            ).distinct().all()
+        ).join(Idea.criterion_for
+        ).filter(Idea.tombstone_date == None
+        ).filter(AbstractVoteSpecification.widget_id == widget.id
+        ).distinct().all()
     rowtitles = [(idea.safe_title(user_prefs, request.localizer), idea.id) for idea in ideas]
     rowtitles.sort()
     specs = widget.vote_specifications
@@ -403,6 +404,8 @@ def extract_voters(widget, request):  # widget is the vote session
     user_prefs = LanguagePreferenceCollection.getCurrent()
     fieldnames = ["Nom du contributeur", "Nom d'utilisateur du contributeur", VOTER_MAIL, "Date du vote", "Proposition"]
     query = widget.db.query(AbstractIdeaVote
+        ).join(AbstractIdeaVote.vote_spec
+        ).join(AbstractIdeaVote.idea  # this includes Idea.tombstone_date == None to not count votes of tombstoned proposals
         ).filter(AbstractVoteSpecification.widget_id==widget.id
         ).filter(AbstractIdeaVote.tombstone_date==None
         ).filter(AbstractIdeaVote.vote_date >= start
