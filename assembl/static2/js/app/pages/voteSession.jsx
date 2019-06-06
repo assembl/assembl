@@ -56,8 +56,8 @@ export type Proposal = {|
 |};
 
 type Props = {
-  addGaugeVote: Function,
-  addTokenVote: Function,
+  addGaugeVote: Object => Promise<void>,
+  addTokenVote: Object => Promise<void>,
   headerImageUrl: string,
   instructionsSectionContent: string,
   instructionsSectionTitle: string,
