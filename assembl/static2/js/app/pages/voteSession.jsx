@@ -20,7 +20,7 @@ import Proposals from '../components/voteSession/proposals';
 import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
-import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
+import { closeModal, displayAlert, displayModal, promptForLoginOr } from '../utils/utilityManager';
 import { manageErrorOnly } from '../components/common/manageErrorAndLoading';
 import Loader from '../components/common/loader';
 
@@ -255,6 +255,11 @@ class DumbVoteSession extends React.Component<Props, State> {
         variables: { ideaId: id, lang: lang }
       }
     ];
+    const okButton = (
+      <Button key="ok" onClick={closeModal} className="button-submit">
+        OK
+      </Button>
+    );
     userTokenVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((tokenCategories, voteSpecId) => {
         tokenCategories.forEach((voteValue, tokenCategoryId) => {
@@ -268,7 +273,7 @@ class DumbVoteSession extends React.Component<Props, State> {
             }
           })
             .then(() => {
-              displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, null, null);
+              displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, [okButton], null);
               refetchVoteSession();
             })
             .catch((error) => {
@@ -288,7 +293,7 @@ class DumbVoteSession extends React.Component<Props, State> {
           }
         })
           .then(() => {
-            displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, null, null);
+            displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, [okButton], null);
           })
           .catch((error) => {
             displayAlert('danger', error.message);
