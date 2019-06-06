@@ -56,23 +56,25 @@ export type Proposal = {|
 |};
 
 type Props = {
-  loading: boolean,
-  title: string,
-  subTitle: string,
-  seeCurrentVotes: boolean,
+  addGaugeVote: Function,
+  addTokenVote: Function,
   headerImageUrl: string,
-  instructionsSectionTitle: string,
   instructionsSectionContent: string,
+  instructionsSectionTitle: string,
+  id: string,
   isPhaseCompleted: boolean,
+  lang: string,
+  loading: boolean,
   modules: Array<VoteSpecification>,
   numParticipants: number,
   phaseId: string,
-  propositionsSectionTitle: string,
   proposals: Array<Proposal>,
+  propositionsSectionTitle: string,
   randomProposals: Array<Proposal>,
-  addGaugeVote: Function,
-  addTokenVote: Function,
-  refetchVoteSession: Function
+  refetchVoteSession: Function,
+  seeCurrentVotes: boolean,
+  subTitle: string,
+  title: string
 };
 
 export type RemainingTokensByCategory = Map<string, number>;
@@ -244,13 +246,20 @@ class DumbVoteSession extends React.Component<Props, State> {
   };
 
   submitVotes = () => {
-    const { addTokenVote, addGaugeVote, refetchVoteSession } = this.props;
+    const { addGaugeVote, addTokenVote, id, lang, refetchVoteSession } = this.props;
     const { userTokenVotes, userGaugeVotes } = this.state;
     this.setState({ submitting: true });
+    const refetchQueries = [
+      {
+        query: VoteSessionQuery,
+        variables: { ideaId: id, lang: lang }
+      }
+    ];
     userTokenVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((tokenCategories, voteSpecId) => {
         tokenCategories.forEach((voteValue, tokenCategoryId) => {
           addTokenVote({
+            refetchQueries: refetchQueries,
             variables: {
               voteSpecId: voteSpecId,
               proposalId: proposalId,
@@ -271,6 +280,7 @@ class DumbVoteSession extends React.Component<Props, State> {
     userGaugeVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((voteValue, voteSpecId) => {
         addGaugeVote({
+          refetchQueries: refetchQueries,
           variables: {
             voteSpecId: voteSpecId,
             proposalId: proposalId,
@@ -439,7 +449,6 @@ export default compose(
         numParticipants,
         proposals
       } = data.voteSession;
-
       return {
         error: data.error,
         loading: data.loading,
