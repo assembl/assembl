@@ -4,7 +4,7 @@ import activeHtml from 'react-active-html';
 import { postBodyReplacementComponents } from '../components/debate/common/post/postBody';
 
 function addIframeForStoryChief(html: string): string {
-  const url = /(<a href="(https:\/\/(bluenovev3.storychief.io)[^\s]+)".*?<\/a>)/gi;
+  const url = /(<a href="(https:\/\/(.*\.storychief\.io)[^\s]+)".*?<\/a>)/gi;
   return html.replace(url, '<iframe class="synthesis-iframe" src="$2"></iframe>');
 }
 
