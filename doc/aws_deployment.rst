@@ -18,7 +18,7 @@ The build machine is hosted within the Sandbox VPC (virtual private cloud). This
 	# Build machine
 	ssh ubuntu@<build-machine-ip>
 
-In order to get the IP addresses above, please consult with the AWS EC2 instances console. The build machine's name is currently `Temp_assembl_template`. Currently, the IP address is `10.0.16.56`. Please consult with the console, as this private IP address can change at any time.
+In order to get the IP addresses above, please consult with the AWS EC2 instances console. The build machine's name is currently `Build Machine`. Currently, the IP address is `10.0.16.56`. Please consult with the console, as this private IP address can change at any time.
 
 Build
 -----
