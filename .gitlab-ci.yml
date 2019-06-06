@@ -8,31 +8,31 @@ stages:
   # - deploy_to_uat
   # - deploy_to_prod
 
-cache:
-  paths:
-    - assembl/static2/node_modules/
-    - /usr/local/share/.cache/yarn/v2
+# cache:
+#   paths:
+#     # - assembl/static2/node_modules/
+#     # - /usr/local/share/.cache/yarn/v2
 
 # test > test_frontend: OK for byw-invoke (temporary comment to run test faster)
 
-# test_frontend:
-#   stage: test
-#   except:
-#     - master
-#     - tmp_master_for_ci_cd
-#     # - byw-invoke
-#   image: node:10
-#   before_script:
-#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-#     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-#     - cd assembl/static2
-#     - yarn
-#   script:
-#     # This will fail if any test fails or if the coverage has lowered
-#     - yarn jest --coverage --maxWorkers 2
-#     - yarn run eslint
-#     - yarn run stylelint
-#     - yarn run flow --quiet
+test_frontend:
+  stage: test
+  except:
+    - master
+    - tmp_master_for_ci_cd
+    - byw-invoke
+  image: node:10
+  before_script:
+    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+    - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+    - cd assembl/static2
+    - yarn
+  script:
+    # This will fail if any test fails or if the coverage has lowered
+    - yarn jest --coverage --maxWorkers 2
+    - yarn run eslint
+    - yarn run stylelint
+    - yarn run flow --quiet
 
 # test_integration_and_ui:
 #   stage: test_integration
@@ -89,44 +89,12 @@ cache:
 #     - py.test assembl/tests
 
 
-# build_test_s3:
-#   stage: build
-#   only:
-#     - byw-invoke
-#   variables:
-#     LC_ALL: C.UTF-8
-#     LANG: en.UTF-8
-#     GIT_STRATEGY: clone
-#   before_script:
-#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-#     - apt-get update -qq
-#     - apt-get install -yqq sudo python python-pip python-dev build-essential openssh-server
-#     # ssh agent setup
-#     - eval $(ssh-agent -s)
-#     - ps -p $SSH_AGENT_PID
-#     # add github bot ssh key
-#     - echo "$GITHUB_BOT_SSH_KEY" | tr -d '\r' | ssh-add - > /dev/null
-#     - mkdir -p ~/.ssh
-#     - chmod 700 ~/.ssh
-#     # end of ssh agent setup
-#     - pip install virtualenv
-#     - cd $CI_PROJECT_DIR
-#     - python -mvirtualenv venv
-#     - source venv/bin/activate
-#     - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
-#     - "echo '_extends: aws.yaml' > invoke.yaml"
-#     - touch secrets.yaml
-#     - ln -s assembl/tasks .
-#   script:
-#     - inv build.test_s3
-
-
 build_wheel:
   stage: build
   only:
     - develop
     - invoke
-    - byw-invoke
+    # - byw-invoke
   variables:
     LC_ALL: C.UTF-8
     LANG: en.UTF-8
@@ -162,27 +130,29 @@ build_wheel:
     - inv build.push-built-themes-to-remote-bucket
 
 
-# push_to_develop_server:
-#   stage: deploy_to_sandbox
-#   only:
-#     - tmp_master_for_ci_cd
-#     - rws_connections
-#     - invoke
-#   before_script:
-#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-#     - apt-get update
-#     - apt-get install -y sudo python python-pip python-dev build-essential
-#     - pip install virtualenv
-#     - cd $CI_PROJECT_DIR
-#     - python -mvirtualenv venv
-#     - source venv/bin/activate
-#     - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
-#     # Fetch the configurations of sandbox from S3
-#     - "echo '_extends: aws.yaml' > invoke.yaml"
-#     - touch secrets.yaml
-#     - ln -s assembl/tasks .
-#   script:
-#     - inv build.deploy-to-sandbox
+push_to_develop_server:
+  stage: deploy_to_sandbox
+  # only:
+  #   - tmp_master_for_ci_cd
+  #   - rws_connections
+  #   - invoke
+  only:
+    - byw-invoke
+  before_script:
+    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+    - apt-get update
+    - apt-get install -yqq sudo python python-pip python-dev build-essential
+    - pip install virtualenv
+    - cd $CI_PROJECT_DIR
+    - python -mvirtualenv venv
+    - source venv/bin/activate
+    - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
+    # Fetch the configurations of sandbox from S3
+    - "echo '_extends: aws.yaml' > invoke.yaml"
+    - touch secrets.yaml
+    - ln -s assembl/tasks .
+  script:
+    - inv build.deploy-to-sandbox
 
 # deploy_to_uat:
 #   stage: deploy_to_uat

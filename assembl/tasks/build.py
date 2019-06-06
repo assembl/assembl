@@ -567,46 +567,6 @@ def push_wheelhouse(c, house=None):
 
 
 @task()
-def test_s3(c):
-    import boto3
-    region = c.config.get('aws_shared_region', 'eu-west-1')
-    s3 = boto3.resource('s3', region_name=region)
-    bucket_1 = s3.Bucket('bluenove-deprecated-client-themes')
-    bucket_2 = s3.Bucket('bluenove-client-themes')
-
-    last_modified_date = datetime(1939, 9, 1).replace(tzinfo=None)
-    for file in bucket_1.objects.all():
-        # print(file.key)
-        file_date = file.last_modified.replace(tzinfo=None)
-        if last_modified_date < file_date:
-            last_modified_date = file_date
-
-    print(last_modified_date)
-
-    # you can have more than one file with this date, so you must iterate again
-    for file in bucket_1.objects.all():
-        if file.last_modified.replace(tzinfo=None) == last_modified_date:
-            print(file.key)
-            print(last_modified_date)
-
-    print("#############################")
-
-    last_modified_date = datetime(1939, 9, 1).replace(tzinfo=None)
-    for file in bucket_2.objects.all():
-        # print(file.key)
-        file_date = file.last_modified.replace(tzinfo=None)
-        if last_modified_date < file_date:
-            last_modified_date = file_date
-
-    print(last_modified_date)
-
-    # you can have more than one file with this date, so you must iterate again
-    for file in bucket_2.objects.all():
-        if file.last_modified.replace(tzinfo=None) == last_modified_date:
-            print(file.key)
-            print(last_modified_date)
-
-@task()
 def push_built_themes_to_remote_bucket(c):
     """
     Push webpack built themes CSS + JS files of themes into respective S3 bucket.
@@ -743,12 +703,12 @@ def get_deployment_clients(c):
     Fetches the list of accounts available to deploy to from a remote bucket
     Assume CI/CD Environment at all times
     """
-    get_s3_file('bluenove-assembl-deployments', 'clients.json', 'clients.json', c.config.aws_shared_region)
+    get_s3_file('bluenove-assembl-deployments', 'clients.json', 'clients.json')
 
 
 @task(get_deployment_clients)
 def deploy_to_sandbox(c):
-    with open('clients.json') as f:
+    with open('clients.jso') as f:
         data = json.load(f)
     client_info = data.get('sandbox', None)
     start_deploy_on_client(c, client_info['id'], client_info.get('region', None))
