@@ -9,7 +9,7 @@ from gzip import GzipFile
 from shutil import copyfileobj
 from cStringIO import StringIO
 
-from semantic_version import Version
+#from semantic_version import Version
 
 from .common import (
     venv, task, exists, is_integration_env, fill_template, configure_github_user,
