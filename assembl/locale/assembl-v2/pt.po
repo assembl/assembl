@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-06-14T14:06:30.001Z\n"
+"POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -12,6 +12,13 @@ msgstr ""
 "X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#. [accept]
+#. defaultMessage is:
+#. Accept
+#: messages.json
+msgid "accept"
+msgstr ""
+
 #. [accountDeleted]
 #. defaultMessage is:
 #. Your account has been successfully deleted
@@ -19,6 +26,14 @@ msgstr ""
 #, fuzzy
 msgid "accountDeleted"
 msgstr "Sua conta foi criada"
+
+#. [administration.activateModeration]
+#. defaultMessage is:
+#. Activate the moderation
+#: messages.json
+#, fuzzy
+msgid "administration.activateModeration"
+msgstr "Editar a discussão"
 
 #. [administration.addQuestion]
 #. defaultMessage is:
@@ -29,7 +44,7 @@ msgstr "Adicionar uma pergunta"
 
 #. [administration.addThematic]
 #. defaultMessage is:
-#. Add a theme
+#. Add a level %{level} theme
 #: messages.json
 msgid "administration.addThematic"
 msgstr "Adicionar um tema"
@@ -83,6 +98,14 @@ msgstr "Você precisa definir pelo menos um módulo de votação."
 #. You need to configure a vote session.
 #: messages.json
 msgid "administration.configureVoteSession"
+msgstr "Você precisa configurar uma sessão de voto."
+
+#. [administration.configureVoteSessionButton]
+#. defaultMessage is:
+#. Configure a vote session
+#: messages.json
+#, fuzzy
+msgid "administration.configureVoteSessionButton"
 msgstr "Você precisa configurar uma sessão de voto."
 
 #. [administration.confirmDeleteThematic]
@@ -147,12 +170,28 @@ msgstr ""
 msgid "administration.defineGaugeNumer"
 msgstr "Definir o número de indicadores"
 
+#. [administration.deleteAssociatedFile]
+#. defaultMessage is:
+#. Delete the associated file
+#: messages.json
+#, fuzzy
+msgid "administration.deleteAssociatedFile"
+msgstr "Excluir a pergunta"
+
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
 #: messages.json
 msgid "administration.deleteQuestion"
 msgstr "Excluir a pergunta"
+
+#. [administration.deleteSubThematicDisabled]
+#. defaultMessage is:
+#. You cannot delete a theme with sub-thematics.
+#: messages.json
+#, fuzzy
+msgid "administration.deleteSubThematicDisabled"
+msgstr "Excluir o tema"
 
 #. [administration.deleteThematic]
 #. defaultMessage is:
@@ -170,7 +209,7 @@ msgstr "Excluir a imagem associada a esta temática"
 
 #. [administration.discussion.0]
 #. defaultMessage is:
-#. Languages of the Discussion
+#. Discussion preferences
 #: messages.json
 msgid "administration.discussion.0"
 msgstr "Idiomas da Discussão"
@@ -188,6 +227,38 @@ msgstr "Termos & Condições e Menções legais"
 #: messages.json
 #, fuzzy
 msgid "administration.discussion.4"
+msgstr "Idiomas da Discussão"
+
+#. [administration.discussion.5]
+#. defaultMessage is:
+#. Edition of the phases
+#: messages.json
+#, fuzzy
+msgid "administration.discussion.5"
+msgstr "Idiomas da Discussão"
+
+#. [administration.discussion.6]
+#. defaultMessage is:
+#. Personalize the interface
+#: messages.json
+#, fuzzy
+msgid "administration.discussion.6"
+msgstr "Idiomas da Discussão"
+
+#. [administration.discussionPreferences.debateLogoLabel]
+#. defaultMessage is:
+#. Discussion logo
+#: messages.json
+#, fuzzy
+msgid "administration.discussionPreferences.debateLogoLabel"
+msgstr "Vídeo/Slides"
+
+#. [administration.discussionSlug]
+#. defaultMessage is:
+#. Slug of the debate
+#: messages.json
+#, fuzzy
+msgid "administration.discussionSlug"
 msgstr "Idiomas da Discussão"
 
 #. [administration.down]
@@ -211,6 +282,30 @@ msgstr "Editar a discussão"
 msgid "administration.exclusive"
 msgstr "Exclusivo"
 
+#. [administration.export.anonymity]
+#. defaultMessage is:
+#. Anonymity
+#: messages.json
+#, fuzzy
+msgid "administration.export.anonymity"
+msgstr "Exportar os dados do debate"
+
+#. [administration.export.anonymous]
+#. defaultMessage is:
+#. Make the data anonymous
+#: messages.json
+#, fuzzy
+msgid "administration.export.anonymous"
+msgstr "Exportar"
+
+#. [administration.export.contributions]
+#. defaultMessage is:
+#. Contributions of the participants
+#: messages.json
+#, fuzzy
+msgid "administration.export.contributions"
+msgstr "Exportar os dados do debate"
+
 #. [administration.export.defaultAnnotation]
 #. defaultMessage is:
 #. You can export all of the data by clicking on the export button
@@ -226,20 +321,28 @@ msgstr "Você pode exportar todos os dados ao clicar no botão Exportar"
 msgid "administration.export.defaultSectionTitle"
 msgstr "Exportar dados"
 
+#. [administration.export.endDate]
+#. defaultMessage is:
+#. End date
+#: messages.json
+#, fuzzy
+msgid "administration.export.endDate"
+msgstr "Exportar os dados do debate"
+
+#. [administration.export.exportDate]
+#. defaultMessage is:
+#. Export date
+#: messages.json
+#, fuzzy
+msgid "administration.export.exportDate"
+msgstr "Exportar os dados do debate"
+
 #. [administration.export.link]
 #. defaultMessage is:
 #. Export
 #: messages.json
 msgid "administration.export.link"
 msgstr "Exportar"
-
-#. [administration.export.multicolumnAnnotation]
-#. defaultMessage is:
-#. You can export all the Multi Column data by clicking on the Export button
-#: messages.json
-#, fuzzy
-msgid "administration.export.multicolumnAnnotation"
-msgstr "Você pode exportar todos os dados ao clicar no botão Exportar"
 
 #. [administration.export.noExportLanguage]
 #. defaultMessage is:
@@ -248,14 +351,63 @@ msgstr "Você pode exportar todos os dados ao clicar no botão Exportar"
 msgid "administration.export.noExportLanguage"
 msgstr "Mantenha as mensagens em seus idiomas originais"
 
-#. [administration.export.surveyAnnotation]
+#. [administration.export.presets.fullDebate]
 #. defaultMessage is:
-#. You can export all the survey module data by clicking on the Export button
+#. All of the debate
 #: messages.json
-msgid "administration.export.surveyAnnotation"
+#, fuzzy
+msgid "administration.export.presets.fullDebate"
+msgstr "Exportar os dados do debate"
+
+#. [administration.export.presets.lastMonth]
+#. defaultMessage is:
+#. Last month
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.lastMonth"
 msgstr ""
 "Você pode exportar todos os dados do módulo de pesquisa ao clicar no botão "
 "Exportar"
+
+#. [administration.export.presets.lastWeek]
+#. defaultMessage is:
+#. Last week
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.lastWeek"
+msgstr "Exportar os dados do debate"
+
+#. [administration.export.presets.phase]
+#. defaultMessage is:
+#. Phase %{count}
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.phase"
+msgstr "Exportar os dados do debate"
+
+#. [administration.export.presets.placeHolder]
+#. defaultMessage is:
+#. Presets
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.placeHolder"
+msgstr "Exportar os dados do debate"
+
+#. [administration.export.presets.today]
+#. defaultMessage is:
+#. Today
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.today"
+msgstr "Exportar os dados do debate"
+
+#. [administration.export.startDate]
+#. defaultMessage is:
+#. Start date
+#: messages.json
+#, fuzzy
+msgid "administration.export.startDate"
+msgstr "Exportar os dados do debate"
 
 #. [administration.export.taxonomyAnnotation]
 #. defaultMessage is:
@@ -275,16 +427,6 @@ msgstr ""
 msgid "administration.export.taxonomySectionTitle"
 msgstr "Exportar dados"
 
-#. [administration.export.threadAnnotation]
-#. defaultMessage is:
-#. You can export all the thread module data by clicking on the Export butotn
-#: messages.json
-#, fuzzy
-msgid "administration.export.threadAnnotation"
-msgstr ""
-"Você pode exportar todos os dados do módulo de pesquisa ao clicar no botão "
-"Exportar"
-
 #. [administration.export.title]
 #. defaultMessage is:
 #. Export the debate data
@@ -299,14 +441,33 @@ msgstr "Exportar os dados do debate"
 msgid "administration.export.translateTheMessagesIn"
 msgstr "Traduzir as mensagens em:"
 
-#. [administration.export.voteSessionAnnotation]
+#. [administration.export.translation]
 #. defaultMessage is:
-#. You can export all the vote session data by clicking on the Export button
+#. Translation of the data
 #: messages.json
-msgid "administration.export.voteSessionAnnotation"
+#, fuzzy
+msgid "administration.export.translation"
+msgstr ""
+"Você pode exportar todos os dados do módulo de pesquisa ao clicar no botão "
+"Exportar"
+
+#. [administration.export.vote.extractCsvVoters]
+#. defaultMessage is:
+#. Export vote details for each user
+#: messages.json
+#, fuzzy
+msgid "administration.export.vote.extractCsvVoters"
 msgstr ""
 "Você pode exportar todos os dados da sessão de votação ao clicar no botão "
 "Exportar"
+
+#. [administration.export.vote.voteResultsCsv]
+#. defaultMessage is:
+#. Export general data for the vote module
+#: messages.json
+#, fuzzy
+msgid "administration.export.vote.voteResultsCsv"
+msgstr "Exportar os dados do debate"
 
 #. [administration.gauge]
 #. defaultMessage is:
@@ -359,6 +520,14 @@ msgstr "Você pode escolher ter um ou vários indicadores"
 #: messages.json
 msgid "administration.gaugeVoteInstructions"
 msgstr "Instruções para o voto de indicação"
+
+#. [administration.goBackToThematic]
+#. defaultMessage is:
+#. Go back to thematic
+#: messages.json
+#, fuzzy
+msgid "administration.goBackToThematic"
+msgstr "Adicionar um tema"
 
 #. [administration.headerTitle]
 #. defaultMessage is:
@@ -471,6 +640,34 @@ msgstr ""
 msgid "administration.helpers.landingPage.video"
 msgstr ""
 
+#. [administration.helpers.surveyQuestion]
+#. defaultMessage is:
+#. The survey module is composed of one question and a response field dedicated to the participant. You can add questions by clicking on the + icon below.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.surveyQuestion"
+msgstr "Excluir a pergunta"
+
+#. [administration.helpers.timelinePhases]
+#. defaultMessage is:
+#. Choose a description and an image for each phase of the debate displayed in the landing page
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.timelinePhases"
+msgstr ""
+"Você pode decidir se o participante pode distribuir um único tipo de token "
+"(exclusivo) ou vários tipos de token por proposta."
+
+#. [administration.helpers.timelineTitle]
+#. defaultMessage is:
+#. Configure the title and the sub-title of the timeline section displayed in the landing page
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.timelineTitle"
+msgstr ""
+"Você pode decidir se o participante pode distribuir um único tipo de token "
+"(exclusivo) ou vários tipos de token por proposta."
+
 #. [administration.helpers.tokenCategoryNumber]
 #. defaultMessage is:
 #. Select the number of different token types for this vote
@@ -486,24 +683,6 @@ msgid "administration.helpers.tokenVoteInstructions"
 msgstr ""
 "Dependendo do objetivo do módulo de token, instigue os participantes a agir."
 
-#. [administration.helpers.voteSessionHeader]
-#. defaultMessage is:
-#. The top page header must contain an image and a title. The subtitle is optional.
-#: messages.json
-msgid "administration.helpers.voteSessionHeader"
-msgstr ""
-"O cabeçalho da página superior deve ter uma imagem e um título. O subtítulo "
-"é opcional."
-
-#. [administration.helpers.voteSessionInstructions]
-#. defaultMessage is:
-#. The instructions section must contain a title and a description that will guide the participants for their contribution.
-#: messages.json
-msgid "administration.helpers.voteSessionInstructions"
-msgstr ""
-"A seção de instruções deve ter um título e uma descrição que orientará os "
-"participantes a fazer sua contribuição."
-
 #. [administration.helpers.voteSessionProposalSection]
 #. defaultMessage is:
 #. The proposals section is introduced by a title. You define the title based on the proposal content.
@@ -513,14 +692,13 @@ msgstr ""
 "A seção de propostas é introduzida por um título. Você define o título com "
 "base no conteúdo da proposta."
 
-#. [administration.imageRequirements]
+#. [administration.informationOfTheDebate]
 #. defaultMessage is:
-#. The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 MB.
+#. Information of the debate
 #: messages.json
-msgid "administration.imageRequirements"
-msgstr ""
-"A imagem deve medir 480 px de altura e 1280 px de largura, e ter menos de 1 "
-"MB."
+#, fuzzy
+msgid "administration.informationOfTheDebate"
+msgstr "* Campos obrigatórios."
 
 #. [administration.instructions]
 #. defaultMessage is:
@@ -528,6 +706,14 @@ msgstr ""
 #: messages.json
 msgid "administration.instructions"
 msgstr "Configuração da seção de instruções"
+
+#. [administration.invalidSlug]
+#. defaultMessage is:
+#. Special characters are not allowed
+#: messages.json
+#, fuzzy
+msgid "administration.invalidSlug"
+msgstr "Valor mínimo"
 
 #. [administration.landingPage.header.buttonLabel]
 #. defaultMessage is:
@@ -539,9 +725,45 @@ msgstr ""
 "Cabeçalho da página superior. Ele contém o título e o subtítulo da conversa "
 "e um botão para acessar a conversa."
 
+#. [administration.landingPage.header.dateDescription]
+#. defaultMessage is:
+#. Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.dateDescription"
+msgstr ""
+"Cabeçalho da página superior. Ele contém o título e o subtítulo da conversa "
+"e um botão para acessar a conversa."
+
+#. [administration.landingPage.header.dateLabel]
+#. defaultMessage is:
+#. Enter the dates of the the debate that appear in the header.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.dateLabel"
+msgstr "Gerenciar os módulos"
+
+#. [administration.landingPage.header.endDate]
+#. defaultMessage is:
+#. To
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.endDate"
+msgstr "Gerenciar os módulos"
+
+#. [administration.landingPage.header.endDateError]
+#. defaultMessage is:
+#. The end date cannot be after the start date
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.endDateError"
+msgstr ""
+"Escolha os módulos que você quer ver na página de destino e seu respectivo "
+"posicionamento."
+
 #. [administration.landingPage.header.headerDescription]
 #. defaultMessage is:
-#. The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.
+#. The image must have a height of 480px and a width of 1480px. The weight must not exceed 300ko.
 #: messages.json
 #, fuzzy
 msgid "administration.landingPage.header.headerDescription"
@@ -579,6 +801,16 @@ msgstr ""
 "Cabeçalho da página superior. Ele contém o título e o subtítulo da conversa "
 "e um botão para acessar a conversa."
 
+#. [administration.landingPage.header.logoHelper]
+#. defaultMessage is:
+#. Choose the logo inside of the header
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.logoHelper"
+msgstr ""
+"Escolha os módulos que você quer ver na página de destino e seu respectivo "
+"posicionamento."
+
 #. [administration.landingPage.header.logoImage]
 #. defaultMessage is:
 #. Choose the header logo
@@ -589,12 +821,44 @@ msgstr ""
 "Cabeçalho da página superior. Ele contém o título e o subtítulo da conversa "
 "e um botão para acessar a conversa."
 
+#. [administration.landingPage.header.startDate]
+#. defaultMessage is:
+#. From
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.startDate"
+msgstr "Gerenciar os módulos"
+
+#. [administration.landingPage.header.startDateError]
+#. defaultMessage is:
+#. The start date cannot be after the end date
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.startDateError"
+msgstr "Gerenciar os módulos"
+
 #. [administration.landingPage.header.subtitleLabel]
 #. defaultMessage is:
 #. Debate subtitle
 #: messages.json
 #, fuzzy
 msgid "administration.landingPage.header.subtitleLabel"
+msgstr "Gerenciar os módulos"
+
+#. [administration.landingPage.header.successSave]
+#. defaultMessage is:
+#. The header has been updated successfully!
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.successSave"
+msgstr "Os módulos foram salvos com sucesso!"
+
+#. [administration.landingPage.header.timePlaceholder]
+#. defaultMessage is:
+#. Optional: Enter the dates of the debate
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.timePlaceholder"
 msgstr "Gerenciar os módulos"
 
 #. [administration.landingPage.header.title]
@@ -621,6 +885,14 @@ msgstr "Gerenciar os módulos"
 msgid "administration.landingPage.headerSuccessSave"
 msgstr "Os módulos foram salvos com sucesso!"
 
+#. [administration.landingPage.manageModules.confirmationModal]
+#. defaultMessage is:
+#. Are you sure you want to add a Text & Multimedia module to the landing page?
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.manageModules.confirmationModal"
+msgstr "Gerenciar os módulos"
+
 #. [administration.landingPage.manageModules.helper]
 #. defaultMessage is:
 #. Choose the modules you want to see in the landing page and their position.
@@ -629,6 +901,22 @@ msgid "administration.landingPage.manageModules.helper"
 msgstr ""
 "Escolha os módulos que você quer ver na página de destino e seu respectivo "
 "posicionamento."
+
+#. [administration.landingPage.manageModules.textAndMultimedia]
+#. defaultMessage is:
+#. Text & Multimedia
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.manageModules.textAndMultimedia"
+msgstr "Gerenciar os módulos"
+
+#. [administration.landingPage.manageModules.textAndMultimediaBtn]
+#. defaultMessage is:
+#. Add a Text & Multimedia module
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.manageModules.textAndMultimediaBtn"
+msgstr "Gerenciar os módulos"
 
 #. [administration.landingPage.manageModules.title]
 #. defaultMessage is:
@@ -643,6 +931,42 @@ msgstr "Gerenciar os módulos"
 #: messages.json
 msgid "administration.landingPage.successSave"
 msgstr "Os módulos foram salvos com sucesso!"
+
+#. [administration.landingPage.timeline.image]
+#. defaultMessage is:
+#. Choose the image for this phase
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.timeline.image"
+msgstr ""
+"Cabeçalho da página superior. Ele contém o título e o subtítulo da conversa "
+"e um botão para acessar a conversa."
+
+#. [administration.landingPage.timeline.imageDescription]
+#. defaultMessage is:
+#. The image must have a height of 500px and a width of 400px.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.timeline.imageDescription"
+msgstr ""
+"Cabeçalho da página superior. Ele contém o título e o subtítulo da conversa "
+"e um botão para acessar a conversa."
+
+#. [administration.landingPage.timeline.sectionTitle]
+#. defaultMessage is:
+#. Configure the title and the subtitle of the section
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.timeline.sectionTitle"
+msgstr "Gerenciar os módulos"
+
+#. [administration.landingPage.timeline.title]
+#. defaultMessage is:
+#. Timeline on the landing page
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.timeline.title"
+msgstr "Gerenciar os módulos"
 
 #. [administration.landingpage]
 #. defaultMessage is:
@@ -666,12 +990,28 @@ msgstr "Selecionar idiomas desejados abaixo"
 msgid "administration.legalContents.cookiesPolicyLabel"
 msgstr "Menções legais"
 
+#. [administration.legalContents.legalContentsValidation]
+#. defaultMessage is:
+#. Acceptation of the legal contents for users identified via SSO
+#: messages.json
+#, fuzzy
+msgid "administration.legalContents.legalContentsValidation"
+msgstr "Menções legais"
+
 #. [administration.legalContents.legalNoticeLabel]
 #. defaultMessage is:
 #. Legal notice
 #: messages.json
 #, fuzzy
 msgid "administration.legalContents.legalNoticeLabel"
+msgstr "Menções legais"
+
+#. [administration.legalContents.mandatoryLegalContentsValidation]
+#. defaultMessage is:
+#. Activate the modal to accept legal contents at the first visit.
+#: messages.json
+#, fuzzy
+msgid "administration.legalContents.mandatoryLegalContentsValidation"
 msgstr "Menções legais"
 
 #. [administration.legalContents.privacyPolicyLabel]
@@ -698,6 +1038,14 @@ msgstr "Os termos e condições e as menções legais foram salvos com sucesso!"
 msgid "administration.legalContents.termsAndConditionsLabel"
 msgstr "Termos e condições"
 
+#. [administration.legalContents.userGuidelinesLabel]
+#. defaultMessage is:
+#. User guidelines
+#: messages.json
+#, fuzzy
+msgid "administration.legalContents.userGuidelinesLabel"
+msgstr "Menções legais"
+
 #. [administration.maxValue]
 #. defaultMessage is:
 #. Maximum value
@@ -705,19 +1053,28 @@ msgstr "Termos e condições"
 msgid "administration.maxValue"
 msgstr "Valor máximo"
 
+#. [administration.menu.configureThematic]
+#. defaultMessage is:
+#. Configure the theme %{index}
+#: messages.json
+#, fuzzy
+msgid "administration.menu.configureThematic"
+msgstr "Você tem certeza que deseja excluir este tema?"
+
+#. [administration.menu.exportDebateData]
+#. defaultMessage is:
+#. Export the data
+#: messages.json
+#, fuzzy
+msgid "administration.menu.exportDebateData"
+msgstr "Exportar taxonomias"
+
 #. [administration.menu.exportTaxonomies]
 #. defaultMessage is:
 #. Export taxonomies
 #: messages.json
 msgid "administration.menu.exportTaxonomies"
 msgstr "Exportar taxonomias"
-
-#. [administration.menu.language]
-#. defaultMessage is:
-#. Discussion language
-#: messages.json
-msgid "administration.menu.language"
-msgstr "Idioma da discussão"
 
 #. [administration.menu.legalContents]
 #. defaultMessage is:
@@ -735,11 +1092,27 @@ msgstr "Termos e condições e menções legais"
 msgid "administration.menu.manageProfileOptions"
 msgstr "Editar seções do debate"
 
+#. [administration.menu.personalizeInterface]
+#. defaultMessage is:
+#. Personalize the interface
+#: messages.json
+#, fuzzy
+msgid "administration.menu.personalizeInterface"
+msgstr "Termos e condições e menções legais"
+
 #. [administration.menu.phase]
 #. defaultMessage is:
 #. Phase %{count} - %{description}
 #: messages.json
 msgid "administration.menu.phase"
+msgstr "Fase %{count} - %{description}"
+
+#. [administration.menu.preferences]
+#. defaultMessage is:
+#. Discussion preferences
+#: messages.json
+#, fuzzy
+msgid "administration.menu.preferences"
 msgstr "Fase %{count} - %{description}"
 
 #. [administration.menu.sections]
@@ -749,6 +1122,14 @@ msgstr "Fase %{count} - %{description}"
 msgid "administration.menu.sections"
 msgstr "Editar seções do debate"
 
+#. [administration.menu.timeline]
+#. defaultMessage is:
+#. Edit the phases
+#: messages.json
+#, fuzzy
+msgid "administration.menu.timeline"
+msgstr "linha do tempo"
+
 #. [administration.minValue]
 #. defaultMessage is:
 #. Minimum value
@@ -756,13 +1137,61 @@ msgstr "Editar seções do debate"
 msgid "administration.minValue"
 msgstr "Valor mínimo"
 
-#. [administration.multiColumn.0]
+#. [administration.moderation]
 #. defaultMessage is:
-#. Export Data
+#. Post pending for moderation
 #: messages.json
 #, fuzzy
-msgid "administration.multiColumn.0"
+msgid "administration.moderation"
+msgstr "Editar a discussão"
+
+#. [administration.modules.brightMirror]
+#. defaultMessage is:
+#. Bright Mirror module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.brightMirror"
+msgstr "Adicionar uma pergunta"
+
+#. [administration.modules.messageColumns]
+#. defaultMessage is:
+#. Multi-columns module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.messageColumns"
 msgstr "Idiomas da Discussão"
+
+#. [administration.modules.noModule]
+#. defaultMessage is:
+#. No module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.noModule"
+msgstr "Módulo de declaração"
+
+#. [administration.modules.survey]
+#. defaultMessage is:
+#. Survey module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.survey"
+msgstr "Definir temas"
+
+#. [administration.modules.thread]
+#. defaultMessage is:
+#. Thread module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.thread"
+msgstr "Tema"
+
+#. [administration.modules.voteSession]
+#. defaultMessage is:
+#. Vote module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.voteSession"
+msgstr "Configuração da página"
 
 #. [administration.nbTicks]
 #. defaultMessage is:
@@ -806,61 +1235,81 @@ msgstr "Não exclusivo"
 msgid "administration.numberValue"
 msgstr "Valor numérico"
 
-#. [administration.ph.descriptionBottom]
+#. [administration.personalizeInterface.favicon]
 #. defaultMessage is:
-#. Comments below video
+#. Favicon (visual 2)
 #: messages.json
-msgid "administration.ph.descriptionBottom"
-msgstr "Comentários abaixo do vídeo"
+#, fuzzy
+msgid "administration.personalizeInterface.favicon"
+msgstr ""
+"Dependendo do objetivo do módulo de token, instigue os participantes a agir."
 
-#. [administration.ph.descriptionTop]
+#. [administration.personalizeInterface.faviconInstruction]
 #. defaultMessage is:
-#. Comments above video
+#. Favicon should have a maximum height of 110px. Its extension should be .ico
 #: messages.json
-msgid "administration.ph.descriptionTop"
+#, fuzzy
+msgid "administration.personalizeInterface.faviconInstruction"
+msgstr ""
+"A seção de instruções deve ter um título e uma descrição que orientará os "
+"participantes a fazer sua contribuição."
+
+#. [administration.personalizeInterface.icoRequired]
+#. defaultMessage is:
+#. The favicon must be an .ico file only
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.icoRequired"
+msgstr "Usar página externa"
+
+#. [administration.personalizeInterface.logoInstruction]
+#. defaultMessage is:
+#. Logo should have a maximum height of 110px and a maximum width of 215px. The background must be transparent.
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.logoInstruction"
+msgstr ""
+"Dependendo do objetivo do módulo de token, instigue os participantes a agir."
+
+#. [administration.personalizeInterface.success]
+#. defaultMessage is:
+#. The interface personalization has been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.success"
+msgstr "Os recursos foram salvos com sucesso!"
+
+#. [administration.personalizeInterface.title]
+#. defaultMessage is:
+#. Web page Title (visual 1)
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.title"
+msgstr "Centro de recursos"
+
+#. [administration.personalizeInterface.titleFormTitle]
+#. defaultMessage is:
+#. Personalize the title of the page
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.titleFormTitle"
+msgstr "Editar número do recurso %{num}"
+
+#. [administration.ph.descriptionPhase]
+#. defaultMessage is:
+#. Description phase
+#: messages.json
+#, fuzzy
+msgid "administration.ph.descriptionPhase"
 msgstr "Comentários acima do vídeo"
 
-#. [administration.ph.headerSubtitle]
+#. [administration.ph.propositionSectionSubtitle]
 #. defaultMessage is:
-#. Header subtitle
+#. Section subtitle
 #: messages.json
-msgid "administration.ph.headerSubtitle"
-msgstr "Subtítulo do cabeçalho"
-
-#. [administration.ph.headerTitle]
-#. defaultMessage is:
-#. Header title
-#: messages.json
-msgid "administration.ph.headerTitle"
-msgstr "Título do cabeçalho"
-
-#. [administration.ph.instructionsContent]
-#. defaultMessage is:
-#. Instructions content
-#: messages.json
-msgid "administration.ph.instructionsContent"
-msgstr "Conteúdo das instruções"
-
-#. [administration.ph.instructionsTitle]
-#. defaultMessage is:
-#. Instructions title
-#: messages.json
-msgid "administration.ph.instructionsTitle"
-msgstr "Título das instruções"
-
-#. [administration.ph.mediaLink]
-#. defaultMessage is:
-#. Online media link (video, picture, etc..)
-#: messages.json
-msgid "administration.ph.mediaLink"
-msgstr "Link de mídia online (vídeo, foto, etc.)"
-
-#. [administration.ph.orAttachPicture]
-#. defaultMessage is:
-#. Or upload an image from your computer
-#: messages.json
-msgid "administration.ph.orAttachPicture"
-msgstr "Ou enviar uma imagem do seu computador"
+#, fuzzy
+msgid "administration.ph.propositionSectionSubtitle"
+msgstr "Título da seção"
 
 #. [administration.ph.propositionSectionTitle]
 #. defaultMessage is:
@@ -869,19 +1318,13 @@ msgstr "Ou enviar uma imagem do seu computador"
 msgid "administration.ph.propositionSectionTitle"
 msgstr "Título da seção"
 
-#. [administration.ph.quote]
+#. [administration.postsExistsWarning]
 #. defaultMessage is:
-#. Quote
+#. This thematic contains posts. If you change the module, you'll delete all messages associated to this thematic when you'll save.
 #: messages.json
-msgid "administration.ph.quote"
-msgstr "Citação"
-
-#. [administration.ph.title]
-#. defaultMessage is:
-#. *Title
-#: messages.json
-msgid "administration.ph.title"
-msgstr "*Título"
+#, fuzzy
+msgid "administration.postsExistsWarning"
+msgstr "Configuração da seção de instruções"
 
 #. [administration.previousStep]
 #. defaultMessage is:
@@ -889,6 +1332,14 @@ msgstr "*Título"
 #: messages.json
 msgid "administration.previousStep"
 msgstr "Passo anterior"
+
+#. [administration.profileOptions.LegalContentButton]
+#. defaultMessage is:
+#. Activate the mandatory validation of the legal contents
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.LegalContentButton"
+msgstr "Configuração do título da seção de proposta"
 
 #. [administration.profileOptions.addSelectFieldOption]
 #. defaultMessage is:
@@ -946,6 +1397,14 @@ msgstr "Excluir a seção"
 msgid "administration.profileOptions.deleteTextField"
 msgstr "Excluir a seção"
 
+#. [administration.profileOptions.hideTextField]
+#. defaultMessage is:
+#. Hide this field for the user
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.hideTextField"
+msgstr "Configuração do título da seção de proposta"
+
 #. [administration.profileOptions.introText]
 #. defaultMessage is:
 #. Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.
@@ -977,6 +1436,14 @@ msgstr "Excluir a seção"
 #, fuzzy
 msgid "administration.profileOptions.textFieldToggleRequired"
 msgstr "Usar página externa"
+
+#. [administration.profileOptions.toggleLegalContentIntro]
+#. defaultMessage is:
+#. Make the legal validation mandatory or not for a user after signing up in the platform by SSO.
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.toggleLegalContentIntro"
+msgstr "Configuração do título da seção de proposta"
 
 #. [administration.proposalSectionTitle]
 #. defaultMessage is:
@@ -1022,7 +1489,7 @@ msgstr "Documento"
 
 #. [administration.resourcesCenter.editResourceFormTitle]
 #. defaultMessage is:
-#. Edit resource number %{num}
+#. Edit resource number %{count}
 #: messages.json
 msgid "administration.resourcesCenter.editResourceFormTitle"
 msgstr "Editar número do recurso %{num}"
@@ -1103,6 +1570,14 @@ msgstr "Não, mostre os resultados apenas quando a votação estivar encerrada."
 #: messages.json
 msgid "administration.resultsVisible"
 msgstr "Sim, mesmo antes de ter votado."
+
+#. [administration.saveBeforeConfigureVoteSession]
+#. defaultMessage is:
+#. Please save before you can access to the vote session configuration
+#: messages.json
+#, fuzzy
+msgid "administration.saveBeforeConfigureVoteSession"
+msgstr "Você precisa configurar uma sessão de voto."
 
 #. [administration.saveFirstStep]
 #. defaultMessage is:
@@ -1196,6 +1671,38 @@ msgid "administration.seeCurrentVotes"
 msgstr ""
 "Você deseja que os participantes vejam a evolução das votações em andamento?"
 
+#. [administration.semanticAnalysis.activate]
+#. defaultMessage is:
+#. Activate the semantic analysis
+#: messages.json
+#, fuzzy
+msgid "administration.semanticAnalysis.activate"
+msgstr "Título"
+
+#. [administration.semanticAnalysis.description]
+#. defaultMessage is:
+#. Semantic analysis feature is only available for the following modules: thread, survey and Bright Mirror
+#: messages.json
+#, fuzzy
+msgid "administration.semanticAnalysis.description"
+msgstr "Adicionar uma seção"
+
+#. [administration.semanticAnalysis.title]
+#. defaultMessage is:
+#. Semantic Analysis
+#: messages.json
+#, fuzzy
+msgid "administration.semanticAnalysis.title"
+msgstr "Título"
+
+#. [administration.slugWarning]
+#. defaultMessage is:
+#. This modification causes a change in the address of the debate. Please take this change into account in further communications. To insure the continuity of the service, the previous address will still be operating.
+#: messages.json
+#, fuzzy
+msgid "administration.slugWarning"
+msgstr "Página de destino"
+
 #. [administration.step_x_total]
 #. defaultMessage is:
 #. Section %{num} on %{total}
@@ -1203,11 +1710,12 @@ msgstr ""
 msgid "administration.step_x_total"
 msgstr "Seção %{num} sobre %{total}"
 
-#. [administration.successLanguagePreference]
+#. [administration.successDiscussionPreference]
 #. defaultMessage is:
-#. Discussion language preferences have been saved with success!
+#. Discussion preferences have been saved with success!
 #: messages.json
-msgid "administration.successLanguagePreference"
+#, fuzzy
+msgid "administration.successDiscussionPreference"
 msgstr "As preferências de idioma da discussão foram salvas com sucesso!"
 
 #. [administration.successThemeCreation]
@@ -1217,26 +1725,237 @@ msgstr "As preferências de idioma da discussão foram salvas com sucesso!"
 msgid "administration.successThemeCreation"
 msgstr "Os temas foram salvos com sucesso!"
 
-#. [administration.survey.0]
+#. [administration.summary]
 #. defaultMessage is:
-#. Set themes
+#. Summary section configuration
 #: messages.json
-msgid "administration.survey.0"
+#, fuzzy
+msgid "administration.summary"
 msgstr "Definir temas"
 
-#. [administration.survey.1]
+#. [administration.survey.configThematic]
 #. defaultMessage is:
-#. Set questions
+#. Configure the theme
 #: messages.json
-msgid "administration.survey.1"
-msgstr "Definir perguntas"
+#, fuzzy
+msgid "administration.survey.configThematic"
+msgstr "Você tem certeza que deseja excluir este tema?"
 
-#. [administration.survey.2]
+#. [administration.survey.configThematics]
+#. defaultMessage is:
+#. Configure the themes
+#: messages.json
+#, fuzzy
+msgid "administration.survey.configThematics"
+msgstr "Você tem certeza que deseja excluir este tema?"
+
+#. [administration.survey.configThematicsHelperDescription]
+#. defaultMessage is:
+#. To change your choice, return to the general setting of the debate.
+#: messages.json
+#, fuzzy
+msgid "administration.survey.configThematicsHelperDescription"
+msgstr "Você precisa configurar uma sessão de voto."
+
+#. [administration.survey.configThematicsHelperTitle]
+#. defaultMessage is:
+#. You have chosen to configure a themes table.
+#: messages.json
+#, fuzzy
+msgid "administration.survey.configThematicsHelperTitle"
+msgstr "Confirmar exclusão"
+
+#. [administration.survey.createTable]
+#. defaultMessage is:
+#. Create the themes table
+#: messages.json
+#, fuzzy
+msgid "administration.survey.createTable"
+msgstr "Definir temas"
+
+#. [administration.survey.exportData]
 #. defaultMessage is:
 #. Export data
 #: messages.json
-msgid "administration.survey.2"
-msgstr "Exportar dados"
+#, fuzzy
+msgid "administration.survey.exportData"
+msgstr "Definir temas"
+
+#. [administration.tableOfThematics.bannerHeader]
+#. defaultMessage is:
+#. Top banner must include the thematic title defined previously, a background image and eventually a subtitle.
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.bannerHeader"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.bannerImagePickerLabel]
+#. defaultMessage is:
+#. Banner image
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.bannerImagePickerLabel"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.bannerSubtitleLabel]
+#. defaultMessage is:
+#. Top banner subtitle
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.bannerSubtitleLabel"
+msgstr "Gerenciar os módulos"
+
+#. [administration.tableOfThematics.columnColor]
+#. defaultMessage is:
+#. Column color
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnColor"
+msgstr "Tema"
+
+#. [administration.tableOfThematics.columnName]
+#. defaultMessage is:
+#. Column name
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnName"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.columnSynthesisBody]
+#. defaultMessage is:
+#. Column synthesis
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnSynthesisBody"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.columnSynthesisSubject]
+#. defaultMessage is:
+#. Column synthesis title
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnSynthesisSubject"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.columnTitle]
+#. defaultMessage is:
+#. Column title
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnTitle"
+msgstr "Confirmar exclusão"
+
+#. [administration.tableOfThematics.columnsConfiguration]
+#. defaultMessage is:
+#. Columns configuration
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnsConfiguration"
+msgstr "Você pode exportar todos os dados ao clicar no botão Exportar"
+
+#. [administration.tableOfThematics.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure that you wish to delete this theme?
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.confirmDeletionBody"
+msgstr "Você precisa configurar uma sessão de voto."
+
+#. [administration.tableOfThematics.confirmDeletionTitle]
+#. defaultMessage is:
+#. Delete %{title} theme
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.confirmDeletionTitle"
+msgstr "Confirmar exclusão"
+
+#. [administration.tableOfThematics.instructionHeader]
+#. defaultMessage is:
+#. Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.instructionHeader"
+msgstr "Título das instruções"
+
+#. [administration.tableOfThematics.instructionLabel]
+#. defaultMessage is:
+#. Instructions
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.instructionLabel"
+msgstr "Título das instruções"
+
+#. [administration.tableOfThematics.moduleTypeLabel]
+#. defaultMessage is:
+#. Participation module configuration
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.moduleTypeLabel"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.multiColumnsFormName1]
+#. defaultMessage is:
+#. 2 columns
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.multiColumnsFormName1"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.multiColumnsFormName2]
+#. defaultMessage is:
+#. 3 columns
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.multiColumnsFormName2"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.questionsHeader]
+#. defaultMessage is:
+#. Questions
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.questionsHeader"
+msgstr "Escolha a imagem de fundo do cabeçalho"
+
+#. [administration.tableOfThematics.quote]
+#. defaultMessage is:
+#. Quote
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.quote"
+msgstr "Tema"
+
+#. [administration.tableOfThematics.sectionTitleLabel]
+#. defaultMessage is:
+#. Section title
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.sectionTitleLabel"
+msgstr "Definir seções"
+
+#. [administration.tableOfThematics.summaryHeader]
+#. defaultMessage is:
+#. The 'Summary' section contains a brief abstract of the thematic and can be enriched with various medias.
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.summaryHeader"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.summaryLabel]
+#. defaultMessage is:
+#. Summary
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.summaryLabel"
+msgstr "Excluir a imagem associada a esta temática"
+
+#. [administration.tableOfThematics.thematicTitle]
+#. defaultMessage is:
+#. Thematic title
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.thematicTitle"
+msgstr "Excluir a imagem associada a esta temática"
 
 #. [administration.textValue]
 #. defaultMessage is:
@@ -1252,26 +1971,124 @@ msgstr "Valor textual"
 msgid "administration.thematic"
 msgstr "Tema"
 
-#. [administration.themeNum]
+#. [administration.timelineAdmin.addPhase]
 #. defaultMessage is:
-#. Theme %{index}
-#: messages.json
-msgid "administration.themeNum"
-msgstr "Tema %{index}"
-
-#. [administration.thread.0]
-#. defaultMessage is:
-#. Export Data
+#. Add a phase
 #: messages.json
 #, fuzzy
-msgid "administration.thread.0"
-msgstr "Tema"
+msgid "administration.timelineAdmin.addPhase"
+msgstr "linha do tempo"
 
-#. [administration.timeline]
+#. [administration.timelineAdmin.annotation]
 #. defaultMessage is:
-#. timeline
+#. This module has to be filled. * Fields are required
 #: messages.json
-msgid "administration.timeline"
+#, fuzzy
+msgid "administration.timelineAdmin.annotation"
+msgstr "* Campos obrigatórios."
+
+#. [administration.timelineAdmin.deletePhase]
+#. defaultMessage is:
+#. Delete the phase
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.deletePhase"
+msgstr "linha do tempo"
+
+#. [administration.timelineAdmin.descriptionPhaseLabel]
+#. defaultMessage is:
+#. Phase description
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.descriptionPhaseLabel"
+msgstr "Gerenciar os módulos"
+
+#. [administration.timelineAdmin.instruction1]
+#. defaultMessage is:
+#. Choose the number of phases for your debate
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction1"
+msgstr "Configuração da seção de instruções"
+
+#. [administration.timelineAdmin.instruction2]
+#. defaultMessage is:
+#. Fill in the required fields for each phase by selecting each tab
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction2"
+msgstr "Configuração da seção de instruções"
+
+#. [administration.timelineAdmin.instruction3]
+#. defaultMessage is:
+#. Choose the start and the end of your phase.
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction3"
+msgstr "Configuração da seção de instruções"
+
+#. [administration.timelineAdmin.instruction4]
+#. defaultMessage is:
+#. Choose the phase image for the timeline in the landing page.
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction4"
+msgstr "Configuração da seção de instruções"
+
+#. [administration.timelineAdmin.instruction5]
+#. defaultMessage is:
+#. Write the phase description.
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction5"
+msgstr "Configuração da seção de instruções"
+
+#. [administration.timelineAdmin.phase]
+#. defaultMessage is:
+#. Phase %{count}
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.phase"
+msgstr "Fase %{count} - %{description}"
+
+#. [administration.timelineAdmin.phaseLabel]
+#. defaultMessage is:
+#. Phase title
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.phaseLabel"
+msgstr "Fase %{count} - %{description}"
+
+#. [administration.timelineAdmin.selectEnd]
+#. defaultMessage is:
+#. Phase %{count}'s end date
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.selectEnd"
+msgstr "linha do tempo"
+
+#. [administration.timelineAdmin.selectStart]
+#. defaultMessage is:
+#. Phase %{count}'s start date
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.selectStart"
+msgstr "linha do tempo"
+
+#. [administration.timelineAdmin.successSave]
+#. defaultMessage is:
+#. The timeline has been sucessfully saved
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.successSave"
+msgstr "Os módulos foram salvos com sucesso!"
+
+#. [administration.timelineAdmin.warningLabel]
+#. defaultMessage is:
+#. The dates you have set for this phase are overlapping the previous phase or the next phase
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.warningLabel"
 msgstr "linha do tempo"
 
 #. [administration.token]
@@ -1326,6 +2143,30 @@ msgstr ""
 msgid "administration.tokenVoteInstructions"
 msgstr "Instruções para a votação por token"
 
+#. [administration.translationService.activate]
+#. defaultMessage is:
+#. Activate this option to allow users to translate messages
+#: messages.json
+#, fuzzy
+msgid "administration.translationService.activate"
+msgstr "Configuração do título da seção de propostas"
+
+#. [administration.translationService.description]
+#. defaultMessage is:
+#. Translation service should be activated when the semantic analysis is activated
+#: messages.json
+#, fuzzy
+msgid "administration.translationService.description"
+msgstr "Descrição"
+
+#. [administration.translationService.title]
+#. defaultMessage is:
+#. Translation service
+#: messages.json
+#, fuzzy
+msgid "administration.translationService.title"
+msgstr "Configuração do título da seção de propostas"
+
 #. [administration.unit]
 #. defaultMessage is:
 #. Unit
@@ -1355,20 +2196,6 @@ msgid "administration.videoHelp"
 msgstr ""
 "*Links de vídeo autorizados: \"https://www.youtube.com/embed/[videoId]\" ou "
 "\"https://player.vimeo.com/video/[videoId]?\""
-
-#. [administration.voteModulesIntroText1]
-#. defaultMessage is:
-#. You chose the vote module
-#: messages.json
-msgid "administration.voteModulesIntroText1"
-msgstr "Você escolhe o módulo de votação"
-
-#. [administration.voteModulesIntroText2]
-#. defaultMessage is:
-#. To modify your choice, modify the 
-#: messages.json
-msgid "administration.voteModulesIntroText2"
-msgstr "Para modificar a sua escolha, modifique a"
 
 #. [administration.voteProposals.addProposal]
 #. defaultMessage is:
@@ -1426,6 +2253,14 @@ msgstr "Excluir esta proposta"
 msgid "administration.voteProposals.description"
 msgstr "Descrição"
 
+#. [administration.voteProposals.edit]
+#. defaultMessage is:
+#. Modify
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.edit"
+msgstr "Título da proposta"
+
 #. [administration.voteProposals.gauge]
 #. defaultMessage is:
 #. Gauge %{number}
@@ -1470,7 +2305,7 @@ msgstr "Selecione pelo menos um módulo."
 
 #. [administration.voteSession.0]
 #. defaultMessage is:
-#. Page configuration
+#. Vote session page configuration
 #: messages.json
 msgid "administration.voteSession.0"
 msgstr "Configuração da página"
@@ -1496,12 +2331,13 @@ msgstr "Configurar as propostas de votação"
 msgid "administration.voteSession.3"
 msgstr "Exportar dados"
 
-#. [administration.voteSessionHeaderLabel]
+#. [administration.voteSession.configureVoteSession]
 #. defaultMessage is:
-#. Choose the header background image
+#. Configure vote session associated to the theme
 #: messages.json
-msgid "administration.voteSessionHeaderLabel"
-msgstr "Escolha a imagem de fundo do cabeçalho"
+#, fuzzy
+msgid "administration.voteSession.configureVoteSession"
+msgstr "Você precisa configurar uma sessão de voto."
 
 #. [administration.voteSessionSuccess]
 #. defaultMessage is:
@@ -1523,6 +2359,13 @@ msgstr "Voto de indicação(ões)"
 #: messages.json
 msgid "administration.voteWithTokens"
 msgstr "Votos por token"
+
+#. [and]
+#. defaultMessage is:
+#.  and 
+#: messages.json
+msgid "and"
+msgstr ""
 
 #. [cancel]
 #. defaultMessage is:
@@ -1552,20 +2395,6 @@ msgstr "Janela de discussão instantânea"
 msgid "chatframe.tooltip"
 msgstr "Assemb'Bot"
 
-#. [common.attachFileForm.label]
-#. defaultMessage is:
-#. Add an attachment
-#: messages.json
-msgid "common.attachFileForm.label"
-msgstr "Adicionar um anexo"
-
-#. [common.attachFileForm.submit]
-#. defaultMessage is:
-#. Submit
-#: messages.json
-msgid "common.attachFileForm.submit"
-msgstr "Enviar"
-
 #. [common.attachments.download]
 #. defaultMessage is:
 #. Download
@@ -1578,6 +2407,14 @@ msgstr "Baixar"
 #. Add a file
 #: messages.json
 msgid "common.editor.attachment"
+msgstr "Adicionar um arquivo"
+
+#. [common.editor.attachmentPlugin.title]
+#. defaultMessage is:
+#. Add an attachment
+#: messages.json
+#, fuzzy
+msgid "common.editor.attachmentPlugin.title"
 msgstr "Adicionar um arquivo"
 
 #. [common.editor.bold]
@@ -1594,11 +2431,58 @@ msgstr "Negrito"
 msgid "common.editor.bulletList"
 msgstr "Lista de marcadores"
 
+#. [common.editor.closeModal]
+#. defaultMessage is:
+#. Close
+#: messages.json
+#, fuzzy
+msgid "common.editor.closeModal"
+msgstr "Negrito"
+
 #. [common.editor.italic]
 #. defaultMessage is:
 #. Italic
 #: messages.json
 msgid "common.editor.italic"
+msgstr "Itálico"
+
+#. [common.editor.linkPlugin.editLinkForm.title]
+#. defaultMessage is:
+#. Edit the link
+#: messages.json
+#, fuzzy
+msgid "common.editor.linkPlugin.editLinkForm.title"
+msgstr "Lista de marcadores"
+
+#. [common.editor.linkPlugin.openInNewTab]
+#. defaultMessage is:
+#. Open link in new tab
+#: messages.json
+msgid "common.editor.linkPlugin.openInNewTab"
+msgstr ""
+
+#. [common.editor.linkPlugin.text]
+#. defaultMessage is:
+#. Link text
+#: messages.json
+#, fuzzy
+msgid "common.editor.linkPlugin.text"
+msgstr "Itálico"
+
+#. [common.editor.linkPlugin.title]
+#. defaultMessage is:
+#. Insert a link
+#: messages.json
+#, fuzzy
+msgid "common.editor.linkPlugin.title"
+msgstr "Lista de marcadores"
+
+#. [common.editor.linkPlugin.url]
+#. defaultMessage is:
+#. URL
+#: messages.json
+#, fuzzy
+msgid "common.editor.linkPlugin.url"
 msgstr "Itálico"
 
 #. [common.goUp]
@@ -1608,12 +2492,66 @@ msgstr "Itálico"
 msgid "common.goUp"
 msgstr "Voltar ao topo"
 
+#. [common.icons.error]
+#. defaultMessage is:
+#. Error icon
+#: messages.json
+#, fuzzy
+msgid "common.icons.error"
+msgstr "Negrito"
+
+#. [common.icons.tooltip]
+#. defaultMessage is:
+#. Tooltip icon
+#: messages.json
+#, fuzzy
+msgid "common.icons.tooltip"
+msgstr "Itálico"
+
+#. [common.loader.error]
+#. defaultMessage is:
+#. There is an error loading the analysis
+#: messages.json
+#, fuzzy
+msgid "common.loader.error"
+msgstr "Escolher um arquivo para enviar"
+
+#. [common.loader.loading]
+#. defaultMessage is:
+#. Loading...
+#: messages.json
+#, fuzzy
+msgid "common.loader.loading"
+msgstr "Escolher um arquivo para enviar"
+
+#. [common.loader.no-data]
+#. defaultMessage is:
+#. Not enough data to analyse
+#: messages.json
+#, fuzzy
+msgid "common.loader.no-data"
+msgstr "Negrito"
+
 #. [common.uploadButton]
 #. defaultMessage is:
 #. Choose a file to upload
 #: messages.json
 msgid "common.uploadButton"
 msgstr "Escolher um arquivo para enviar"
+
+#. [common.wordCountInformation.msg]
+#. defaultMessage is:
+#. TO BE DEFINED %{words}
+#: messages.json
+msgid "common.wordCountInformation.msg"
+msgstr ""
+
+#. [common.wordCountInformation.words]
+#. defaultMessage is:
+#. <span class='words-watson'>%{wordCount} words</span>
+#: messages.json
+msgid "common.wordCountInformation.words"
+msgstr ""
 
 #. [community.panelTitle]
 #. defaultMessage is:
@@ -1629,12 +2567,182 @@ msgstr "Bem-vindo à página da comunidade Assembl"
 msgid "conclusion"
 msgstr "Conclusão"
 
+#. [cookies.cgu]
+#. defaultMessage is:
+#. Terms and conditions
+#: messages.json
+msgid "cookies.cgu"
+msgstr ""
+
+#. [cookies.cguHelper]
+#. defaultMessage is:
+#. This cookie registers that you have accepted the terms and conditions of the consultation.
+#: messages.json
+msgid "cookies.cguHelper"
+msgstr ""
+
+#. [cookies.locale]
+#. defaultMessage is:
+#. Language
+#: messages.json
+#, fuzzy
+msgid "cookies.locale"
+msgstr "Menções legais"
+
+#. [cookies.localeHelper]
+#. defaultMessage is:
+#. This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.
+#: messages.json
+msgid "cookies.localeHelper"
+msgstr ""
+
+#. [cookies.matomo]
+#. defaultMessage is:
+#. Matomo
+#: messages.json
+msgid "cookies.matomo"
+msgstr ""
+
+#. [cookies.matomoHelper]
+#. defaultMessage is:
+#. This cookie is used for stasticial purposes regarding the participants of the consultation.
+#: messages.json
+msgid "cookies.matomoHelper"
+msgstr ""
+
+#. [cookies.matomoSettings]
+#. defaultMessage is:
+#. To modify this cookie's setting please click here
+#: messages.json
+msgid "cookies.matomoSettings"
+msgstr ""
+
+#. [cookies.privacyPolicy]
+#. defaultMessage is:
+#. Privacy policy
+#: messages.json
+msgid "cookies.privacyPolicy"
+msgstr ""
+
+#. [cookies.privacyPolicyHelper]
+#. defaultMessage is:
+#. This cookie registers that you have accepted the privacy policy of the consultation.
+#: messages.json
+#, fuzzy
+msgid "cookies.privacyPolicyHelper"
+msgstr "Menções legais"
+
+#. [cookies.required]
+#. defaultMessage is:
+#. This cookie is required
+#: messages.json
+#, fuzzy
+msgid "cookies.required"
+msgstr "Este campo é obrigatório."
+
+#. [cookies.userGuideline]
+#. defaultMessage is:
+#. User Guidelines
+#: messages.json
+msgid "cookies.userGuideline"
+msgstr ""
+
+#. [cookies.userGuidelineHelper]
+#. defaultMessage is:
+#. This cookie registers that you have accepted the user guidelines of the consultation.
+#: messages.json
+msgid "cookies.userGuidelineHelper"
+msgstr ""
+
+#. [cookies.userSession]
+#. defaultMessage is:
+#. User Session
+#: messages.json
+msgid "cookies.userSession"
+msgstr ""
+
+#. [cookies.userSessionHelper]
+#. defaultMessage is:
+#. This cookie is necessary to maintain the user connected on Assembl.
+#: messages.json
+msgid "cookies.userSessionHelper"
+msgstr ""
+
+#. [cookiesBar.accept]
+#. defaultMessage is:
+#. I agree
+#: messages.json
+msgid "cookiesBar.accept"
+msgstr ""
+
+#. [cookiesBar.cookiesNotice]
+#. defaultMessage is:
+#. Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
+#: messages.json
+msgid "cookiesBar.cookiesNotice"
+msgstr ""
+
+#. [cookiesBar.seeCookiesPolicy]
+#. defaultMessage is:
+#. See more
+#: messages.json
+msgid "cookiesBar.seeCookiesPolicy"
+msgstr ""
+
+#. [cookiesPolicy.analytics]
+#. defaultMessage is:
+#. Analytics and customization
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.analytics"
+msgstr "Menções legais"
+
+#. [cookiesPolicy.essential]
+#. defaultMessage is:
+#. Essential
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.essential"
+msgstr "Menções legais"
+
 #. [cookiesPolicy.headerTitle]
 #. defaultMessage is:
 #. Cookies
 #: messages.json
 #, fuzzy
 msgid "cookiesPolicy.headerTitle"
+msgstr "Menções legais"
+
+#. [cookiesPolicy.instructions]
+#. defaultMessage is:
+#. Select the cookies you wish to refuse below
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.instructions"
+msgstr "Menções legais"
+
+#. [cookiesPolicy.other]
+#. defaultMessage is:
+#. Other
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.other"
+msgstr "Menções legais"
+
+#. [cookiesPolicy.sectionTitle]
+#. defaultMessage is:
+#. Cookies policy
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.sectionTitle"
+msgstr "Menções legais"
+
+#. [cookiesPolicy.success]
+#. defaultMessage is:
+#. Your cookies configuration has been saved
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.success"
 msgstr "Menções legais"
 
 #. [date.format]
@@ -1650,6 +2758,14 @@ msgstr "LL"
 #: messages.json
 msgid "date.format2"
 msgstr "L"
+
+#. [date.format3]
+#. defaultMessage is:
+#. MM/DD/YYYY
+#: messages.json
+#, fuzzy
+msgid "date.format3"
+msgstr "LL"
 
 #. [debate.agree]
 #. defaultMessage is:
@@ -1671,6 +2787,417 @@ msgstr "%{count} concordo"
 #: messages.json
 msgid "debate.answer"
 msgstr "Eu respondo:"
+
+#. [debate.back]
+#. defaultMessage is:
+#. Back
+#: messages.json
+#, fuzzy
+msgid "debate.back"
+msgstr "Curtir"
+
+#. [debate.brightMirror.commentFiction.cancel]
+#. defaultMessage is:
+#. Cancel
+#: messages.json
+msgid "debate.brightMirror.commentFiction.cancel"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.commentHelper]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+msgid "debate.brightMirror.commentFiction.commentHelper"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.deleteComment]
+#. defaultMessage is:
+#. Delete this message
+#: messages.json
+msgid "debate.brightMirror.commentFiction.deleteComment"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.deleteCommentBodyMessage]
+#. defaultMessage is:
+#. Are you sure you want to delete this message?
+#: messages.json
+msgid "debate.brightMirror.commentFiction.deleteCommentBodyMessage"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.editComment]
+#. defaultMessage is:
+#. Edit this message
+#: messages.json
+msgid "debate.brightMirror.commentFiction.editComment"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.imageAlt]
+#. defaultMessage is:
+#. Let's talk illustration
+#: messages.json
+msgid "debate.brightMirror.commentFiction.imageAlt"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.label]
+#. defaultMessage is:
+#. Comments
+#: messages.json
+msgid "debate.brightMirror.commentFiction.label"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.instructionList]
+#. defaultMessage is:
+#. You can comment the text:
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.instructionList"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.instructionListOne]
+#. defaultMessage is:
+#. Underligne a quote
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.instructionListOne"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.instructionListThree]
+#. defaultMessage is:
+#. Write your comment, add an image or video and validate
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.instructionListThree"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.instructionListTwo]
+#. defaultMessage is:
+#. Click “Suggest” to open an input box
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.instructionListTwo"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.title]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.title"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.numberOfComments]
+#. defaultMessage is:
+#. %{count} messages
+#: messages.json
+msgid "debate.brightMirror.commentFiction.numberOfComments"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.numberOfComments_0]
+#. defaultMessage is:
+#. No message at the moment
+#: messages.json
+msgid "debate.brightMirror.commentFiction.numberOfComments_0"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.numberOfComments_1]
+#. defaultMessage is:
+#. %{count} message
+#: messages.json
+msgid "debate.brightMirror.commentFiction.numberOfComments_1"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.placeholder]
+#. defaultMessage is:
+#. Join the debate...
+#: messages.json
+msgid "debate.brightMirror.commentFiction.placeholder"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.strongTitle]
+#. defaultMessage is:
+#. Let's talk!
+#: messages.json
+msgid "debate.brightMirror.commentFiction.strongTitle"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.submit]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+msgid "debate.brightMirror.commentFiction.submit"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.title]
+#. defaultMessage is:
+#. Comment or debate on the text above
+#: messages.json
+msgid "debate.brightMirror.commentFiction.title"
+msgstr ""
+
+#. [debate.brightMirror.deleteFiction]
+#. defaultMessage is:
+#. Delete your text
+#: messages.json
+msgid "debate.brightMirror.deleteFiction"
+msgstr ""
+
+#. [debate.brightMirror.deleteFictionModalBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this text?
+#: messages.json
+msgid "debate.brightMirror.deleteFictionModalBody"
+msgstr ""
+
+#. [debate.brightMirror.deleteFictionSuccessMsg]
+#. defaultMessage is:
+#. Your text was deleted
+#: messages.json
+msgid "debate.brightMirror.deleteFictionSuccessMsg"
+msgstr ""
+
+#. [debate.brightMirror.draftEmptyTitle]
+#. defaultMessage is:
+#. Untitled
+#: messages.json
+msgid "debate.brightMirror.draftEmptyTitle"
+msgstr ""
+
+#. [debate.brightMirror.draftLabel]
+#. defaultMessage is:
+#. Draft
+#: messages.json
+msgid "debate.brightMirror.draftLabel"
+msgstr ""
+
+#. [debate.brightMirror.draftSuccessMsg]
+#. defaultMessage is:
+#. Your text has been saved successfully.
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.draftSuccessMsg"
+msgstr "Obrigado pela sua participação. Seu comentário foi enviado!"
+
+#. [debate.brightMirror.editFiction]
+#. defaultMessage is:
+#. Edit your text
+#: messages.json
+msgid "debate.brightMirror.editFiction"
+msgstr ""
+
+#. [debate.brightMirror.fiction]
+#. defaultMessage is:
+#. text
+#: messages.json
+msgid "debate.brightMirror.fiction"
+msgstr ""
+
+#. [debate.brightMirror.fillBodyLabel]
+#. defaultMessage is:
+#. Write your text
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.fillBodyLabel"
+msgstr "Escreva um comentário"
+
+#. [debate.brightMirror.fillEitherTitleContent]
+#. defaultMessage is:
+#. Please, write a title or a text
+#: messages.json
+msgid "debate.brightMirror.fillEitherTitleContent"
+msgstr ""
+
+#. [debate.brightMirror.noAuthorSpecified]
+#. defaultMessage is:
+#. No author specified
+#: messages.json
+msgid "debate.brightMirror.noAuthorSpecified"
+msgstr ""
+
+#. [debate.brightMirror.noContentSpecified]
+#. defaultMessage is:
+#. No content specified
+#: messages.json
+msgid "debate.brightMirror.noContentSpecified"
+msgstr ""
+
+#. [debate.brightMirror.noTitleSpecified]
+#. defaultMessage is:
+#. No title specified
+#: messages.json
+msgid "debate.brightMirror.noTitleSpecified"
+msgstr ""
+
+#. [debate.brightMirror.numberOfFictions]
+#. defaultMessage is:
+#. List of scenarios
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfFictions"
+msgstr "%{count} reações"
+
+#. [debate.brightMirror.numberOfFictions_0]
+#. defaultMessage is:
+#. No published scenarios
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfFictions_0"
+msgstr "%{count} reação"
+
+#. [debate.brightMirror.numberOfResponses]
+#. defaultMessage is:
+#. %{count} responses
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfResponses"
+msgstr "%{count} respostas a esta publicação"
+
+#. [debate.brightMirror.numberOfResponses_0]
+#. defaultMessage is:
+#. No response
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfResponses_0"
+msgstr "Nenhuma resposta a esta publicação"
+
+#. [debate.brightMirror.numberOfResponses_1]
+#. defaultMessage is:
+#. %{count} response
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfResponses_1"
+msgstr "%{count} resposta a esta publicação"
+
+#. [debate.brightMirror.postSuccessMsg]
+#. defaultMessage is:
+#. Thanks for your participation. Your text has been published successfully!
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.postSuccessMsg"
+msgstr "Obrigado pela sua participação. Seu comentário foi enviado!"
+
+#. [debate.brightMirror.saveDraft]
+#. defaultMessage is:
+#. Save
+#: messages.json
+msgid "debate.brightMirror.saveDraft"
+msgstr ""
+
+#. [debate.brightMirror.sentiment.dislike]
+#. defaultMessage is:
+#. Scary
+#: messages.json
+msgid "debate.brightMirror.sentiment.dislike"
+msgstr ""
+
+#. [debate.brightMirror.sentiment.dontUnderstand]
+#. defaultMessage is:
+#. Strengthen the plot
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.sentiment.dontUnderstand"
+msgstr "Não entendi"
+
+#. [debate.brightMirror.sentiment.like]
+#. defaultMessage is:
+#. Inspiring!
+#: messages.json
+msgid "debate.brightMirror.sentiment.like"
+msgstr ""
+
+#. [debate.brightMirror.sentiment.moreInfo]
+#. defaultMessage is:
+#. Enrich the style
+#: messages.json
+msgid "debate.brightMirror.sentiment.moreInfo"
+msgstr ""
+
+#. [debate.brightMirror.shareFiction]
+#. defaultMessage is:
+#. Share a short story
+#: messages.json
+msgid "debate.brightMirror.shareFiction"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.commentLabel]
+#. defaultMessage is:
+#. Your comment
+#: messages.json
+msgid "debate.brightMirror.sideComment.commentLabel"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.commenterSingleParticipation]
+#. defaultMessage is:
+#. 1 participant commented a quote.
+#: messages.json
+msgid "debate.brightMirror.sideComment.commenterSingleParticipation"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.commentersParticipation]
+#. defaultMessage is:
+#. %{count} participants commented quotes.
+#: messages.json
+msgid "debate.brightMirror.sideComment.commentersParticipation"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.commentersParticipation_1]
+#. defaultMessage is:
+#. %{count} participant commented quotes.
+#: messages.json
+msgid "debate.brightMirror.sideComment.commentersParticipation_1"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.confirmDeleteMsg]
+#. defaultMessage is:
+#. Are you sure you would like to delete this comment?
+#: messages.json
+msgid "debate.brightMirror.sideComment.confirmDeleteMsg"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.deleteSuccessMsg]
+#. defaultMessage is:
+#. Your comment has been deleted successfully!
+#: messages.json
+msgid "debate.brightMirror.sideComment.deleteSuccessMsg"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.deleteTooltip]
+#. defaultMessage is:
+#. Delete
+#: messages.json
+msgid "debate.brightMirror.sideComment.deleteTooltip"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.editSuccessMsg]
+#. defaultMessage is:
+#. Your comment has been edited successfully!
+#: messages.json
+msgid "debate.brightMirror.sideComment.editSuccessMsg"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.editTooltip]
+#. defaultMessage is:
+#. Edit
+#: messages.json
+msgid "debate.brightMirror.sideComment.editTooltip"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.submitSuccessMsg]
+#. defaultMessage is:
+#. Your comment has been published successfully!
+#: messages.json
+msgid "debate.brightMirror.sideComment.submitSuccessMsg"
+msgstr ""
+
+#. [debate.brightMirror.startFictionLabel]
+#. defaultMessage is:
+#. Write my text
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.startFictionLabel"
+msgstr "Iniciar um novo tópico"
+
+#. [debate.brightMirror.suggest]
+#. defaultMessage is:
+#. Suggest
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.suggest"
+msgstr "Assunto"
 
 #. [debate.confirmDeletionBody]
 #. defaultMessage is:
@@ -1700,6 +3227,22 @@ msgstr "Excluir"
 msgid "debate.confirmDeletionTitle"
 msgstr "Confirmar exclusão"
 
+#. [debate.confirmRefusalBody]
+#. defaultMessage is:
+#. Are you sure you want to reject this message?
+#: messages.json
+#, fuzzy
+msgid "debate.confirmRefusalBody"
+msgstr "Você tem certeza que deseja excluir esta mensagem?"
+
+#. [debate.confirmRefusalButton]
+#. defaultMessage is:
+#. Reject
+#: messages.json
+#, fuzzy
+msgid "debate.confirmRefusalButton"
+msgstr "Cancelar"
+
 #. [debate.copyLink]
 #. defaultMessage is:
 #. Copy the link to the clipboard
@@ -1712,6 +3255,14 @@ msgstr "Copiar o link para a área de transferência"
 #. Delete this message
 #: messages.json
 msgid "debate.deleteMessage"
+msgstr "Excluir esta mensagem"
+
+#. [debate.deniedMessage]
+#. defaultMessage is:
+#. Reject this message
+#: messages.json
+#, fuzzy
+msgid "debate.deniedMessage"
 msgstr "Excluir esta mensagem"
 
 #. [debate.disagree]
@@ -1807,7 +3358,7 @@ msgstr "Esta fase está encerrada. Você não pode mais responder."
 
 #. [debate.notStarted]
 #. defaultMessage is:
-#. The %{phaseName} phase has not started. Please come back from 
+#. The "%{phaseName}" phase has not started. Please come back from 
 #: messages.json
 msgid "debate.notStarted"
 msgstr "A fase %{phaseName} ainda não começou. Por favor, volte de"
@@ -1818,6 +3369,14 @@ msgstr "A fase %{phaseName} ainda não começou. Por favor, volte de"
 #: messages.json
 msgid "debate.post"
 msgstr "Publicar"
+
+#. [debate.postAwaitingModeration]
+#. defaultMessage is:
+#. Proposal awaiting moderation
+#: messages.json
+#, fuzzy
+msgid "debate.postAwaitingModeration"
+msgstr "Não entendi"
 
 #. [debate.question.backToQuestions]
 #. defaultMessage is:
@@ -1833,11 +3392,110 @@ msgstr "Voltar para as perguntas"
 msgid "debate.remaining_x_characters"
 msgstr "Você tem %{nbCharacters} caracteres restantes"
 
+#. [debate.semanticAnalysis.informationKeyword]
+#. defaultMessage is:
+#. Information on keywords
+#: messages.json
+msgid "debate.semanticAnalysis.informationKeyword"
+msgstr ""
+
+#. [debate.semanticAnalysis.keywordCloud]
+#. defaultMessage is:
+#. Keyword cloud
+#: messages.json
+msgid "debate.semanticAnalysis.keywordCloud"
+msgstr ""
+
+#. [debate.semanticAnalysis.keywordCloudDefinition]
+#. defaultMessage is:
+#. The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or "in the conversations related to the theme being addressed" pour le texte à mettre en thématique). The importance of each keyword is shown with font size.
+#: messages.json
+msgid "debate.semanticAnalysis.keywordCloudDefinition"
+msgstr ""
+
+#. [debate.semanticAnalysis.long]
+#. defaultMessage is:
+#. Analysis
+#: messages.json
+msgid "debate.semanticAnalysis.long"
+msgstr ""
+
+#. [debate.semanticAnalysis.noKeywordSelected]
+#. defaultMessage is:
+#. Select your keyword
+#: messages.json
+msgid "debate.semanticAnalysis.noKeywordSelected"
+msgstr ""
+
+#. [debate.semanticAnalysis.numberKeyword]
+#. defaultMessage is:
+#. Number of keywords
+#: messages.json
+msgid "debate.semanticAnalysis.numberKeyword"
+msgstr ""
+
+#. [debate.semanticAnalysis.occurence]
+#. defaultMessage is:
+#. Occurence
+#: messages.json
+msgid "debate.semanticAnalysis.occurence"
+msgstr ""
+
+#. [debate.semanticAnalysis.occurenceDefinition]
+#. defaultMessage is:
+#. frequency of keywords throughout the debate or throughout the discussions related to the theme being addressed.
+#: messages.json
+msgid "debate.semanticAnalysis.occurenceDefinition"
+msgstr ""
+
+#. [debate.semanticAnalysis.relevance]
+#. defaultMessage is:
+#. Relevance
+#: messages.json
+msgid "debate.semanticAnalysis.relevance"
+msgstr ""
+
+#. [debate.semanticAnalysis.relevanceDefinition]
+#. defaultMessage is:
+#. measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.
+#: messages.json
+msgid "debate.semanticAnalysis.relevanceDefinition"
+msgstr ""
+
+#. [debate.semanticAnalysis.sentimentAnalysis]
+#. defaultMessage is:
+#. Sentiment analysis
+#: messages.json
+msgid "debate.semanticAnalysis.sentimentAnalysis"
+msgstr ""
+
+#. [debate.semanticAnalysis.sentimentAnalysisDefinition]
+#. defaultMessage is:
+#. The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed).
+#: messages.json
+msgid "debate.semanticAnalysis.sentimentAnalysisDefinition"
+msgstr ""
+
+#. [debate.semanticAnalysis.short]
+#. defaultMessage is:
+#. Semantic
+#: messages.json
+msgid "debate.semanticAnalysis.short"
+msgstr ""
+
 #. [debate.share]
 #. defaultMessage is:
 #. Share
 #: messages.json
 msgid "debate.share"
+msgstr "Compartilhar"
+
+#. [debate.shareMail]
+#. defaultMessage is:
+#. Share the link via email
+#: messages.json
+#, fuzzy
+msgid "debate.shareMail"
 msgstr "Compartilhar"
 
 #. [debate.sharePost]
@@ -1877,7 +3535,7 @@ msgstr "Ver todas as opiniões"
 
 #. [debate.survey.endPhase]
 #. defaultMessage is:
-#. The %{closedPhaseName} phase is closed.
+#. The "%{closedPhaseName}" phase is closed.
 #: messages.json
 msgid "debate.survey.endPhase"
 msgstr "A fase %{closedPhaseName} está encerrada."
@@ -1889,6 +3547,14 @@ msgstr "A fase %{closedPhaseName} está encerrada."
 #, fuzzy
 msgid "debate.survey.loadRecentPosts"
 msgstr "Reações"
+
+#. [debate.survey.moderateProposalsTitle]
+#. defaultMessage is:
+#. Moderate these points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.moderateProposalsTitle"
+msgstr "Mais opiniões"
 
 #. [debate.survey.moreProposals]
 #. defaultMessage is:
@@ -1904,12 +3570,28 @@ msgstr "Mais opiniões"
 msgid "debate.survey.noProposals"
 msgstr "Não há opiniões disponíveis no momento. Seja o primeiro a contribuir!"
 
+#. [debate.survey.pendingProposals]
+#. defaultMessage is:
+#. See all pending points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.pendingProposals"
+msgstr "Não há opiniões disponíveis no momento. Seja o primeiro a contribuir!"
+
 #. [debate.survey.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your proposal has been sent!
 #: messages.json
 msgid "debate.survey.postSuccess"
 msgstr "Obrigado pela sua participação. Sua proposta foi enviada!"
+
+#. [debate.survey.postToBeValidated]
+#. defaultMessage is:
+#. Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postToBeValidated"
+msgstr "Você concorda com essas opiniões?"
 
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
@@ -1960,6 +3642,14 @@ msgstr "Reação"
 msgid "debate.survey.submit"
 msgstr "Enviar"
 
+#. [debate.survey.thematicNumerotation]
+#. defaultMessage is:
+#. Thematic %{count}
+#: messages.json
+#, fuzzy
+msgid "debate.survey.thematicNumerotation"
+msgstr "Reações"
+
 #. [debate.survey.themesTitle]
 #. defaultMessage is:
 #. Choose a theme!
@@ -1967,26 +3657,184 @@ msgstr "Enviar"
 msgid "debate.survey.themesTitle"
 msgstr "Escolha um tema!"
 
-#. [debate.survey.titleVideo]
-#. defaultMessage is:
-#. A video to better understand the subject...
-#: messages.json
-msgid "debate.survey.titleVideo"
-msgstr "Um vídeo para entender melhor o assunto..."
-
 #. [debate.survey.txtAreaPh]
 #. defaultMessage is:
-#. Write your point of view
+#. Write your point of view (minimum of 11 characters)
 #: messages.json
 msgid "debate.survey.txtAreaPh"
 msgstr "Escreva a sua opinião"
 
-#. [debate.syntheses]
+#. [debate.syntheses.body]
 #. defaultMessage is:
-#. Syntheses
+#. The synthesis body
 #: messages.json
-msgid "debate.syntheses"
+#, fuzzy
+msgid "debate.syntheses.body"
 msgstr "Sínteses"
+
+#. [debate.syntheses.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this synthesis?
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.confirmDeletionBody"
+msgstr "Você tem certeza que deseja excluir esta mensagem?"
+
+#. [debate.syntheses.createNewSynthesis]
+#. defaultMessage is:
+#. Create a new synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.createNewSynthesis"
+msgstr "Compartilhar esta síntese"
+
+#. [debate.syntheses.deleteSuccessMessage]
+#. defaultMessage is:
+#. The synthesis has been successfully deleted
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.deleteSuccessMessage"
+msgstr "Excluir esta mensagem"
+
+#. [debate.syntheses.deleteSynthesisTooltip]
+#. defaultMessage is:
+#. Delete the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.deleteSynthesisTooltip"
+msgstr "Compartilhar esta síntese"
+
+#. [debate.syntheses.editSynthesis]
+#. defaultMessage is:
+#. Edit the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.editSynthesis"
+msgstr "Compartilhar esta síntese"
+
+#. [debate.syntheses.editSynthesisTooltip]
+#. defaultMessage is:
+#. Edit the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.editSynthesisTooltip"
+msgstr "Compartilhar esta síntese"
+
+#. [debate.syntheses.picture]
+#. defaultMessage is:
+#. Picture of the synthesis' frame
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.picture"
+msgstr "Sínteses"
+
+#. [debate.syntheses.pictureHelper]
+#. defaultMessage is:
+#. This is the picture that will be shown to illustrate your synthesis in the syntheses page
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.pictureHelper"
+msgstr "Sínteses"
+
+#. [debate.syntheses.publishedOn]
+#. defaultMessage is:
+#. Published on 
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.publishedOn"
+msgstr "Sínteses"
+
+#. [debate.syntheses.save]
+#. defaultMessage is:
+#. Save
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.save"
+msgstr "Sínteses"
+
+#. [debate.syntheses.saveAndBackDraft]
+#. defaultMessage is:
+#. Save and back to draft
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.saveAndBackDraft"
+msgstr "Sínteses"
+
+#. [debate.syntheses.saveAndPost]
+#. defaultMessage is:
+#. Save and publish
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.saveAndPost"
+msgstr "Sínteses"
+
+#. [debate.syntheses.saveDraft]
+#. defaultMessage is:
+#. Save as draft
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.saveDraft"
+msgstr "Sínteses"
+
+#. [debate.syntheses.successSave]
+#. defaultMessage is:
+#. Synthesis successfully saved
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.successSave"
+msgstr "Sínteses"
+
+#. [debate.syntheses.summary]
+#. defaultMessage is:
+#. Syntheses summary
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.summary"
+msgstr "Sínteses"
+
+#. [debate.syntheses.title]
+#. defaultMessage is:
+#. Title of the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.title"
+msgstr "Sínteses"
+
+#. [debate.syntheses.url]
+#. defaultMessage is:
+#. URL of the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.url"
+msgstr "Sínteses"
+
+#. [debate.tagOnPost.alreadyAddedWarningMessage]
+#. defaultMessage is:
+#. Already added
+#: messages.json
+msgid "debate.tagOnPost.alreadyAddedWarningMessage"
+msgstr ""
+
+#. [debate.tagOnPost.suggestionContainerTitle]
+#. defaultMessage is:
+#. Suggested keywords:
+#: messages.json
+msgid "debate.tagOnPost.suggestionContainerTitle"
+msgstr ""
+
+#. [debate.tagOnPost.tagContainerAdminTitle]
+#. defaultMessage is:
+#. Add post-related keywords:
+#: messages.json
+msgid "debate.tagOnPost.tagContainerAdminTitle"
+msgstr ""
+
+#. [debate.tagOnPost.tagContainerTitle]
+#. defaultMessage is:
+#. Keywords in post:
+#: messages.json
+msgid "debate.tagOnPost.tagContainerTitle"
+msgstr ""
 
 #. [debate.themes]
 #. defaultMessage is:
@@ -2043,6 +3891,14 @@ msgstr "Mostrar 1 resposta"
 #: messages.json
 msgid "debate.thread.goToIdea"
 msgstr "Visualizar todas as mensagens"
+
+#. [debate.thread.guidelines]
+#. defaultMessage is:
+#. Guidelines
+#: messages.json
+#, fuzzy
+msgid "debate.thread.guidelines"
+msgstr "Esta publicação está relacionada com os seguintes temas:"
 
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
@@ -2135,6 +3991,14 @@ msgstr "editada"
 msgid "debate.thread.postSuccess"
 msgstr "Obrigado pela sua participação. Seu comentário foi enviado!"
 
+#. [debate.thread.postToBeValidated]
+#. defaultMessage is:
+#. Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postToBeValidated"
+msgstr "editada"
+
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
 #. See %{count} sub-thematics
@@ -2162,6 +4026,14 @@ msgstr "Mostrar original"
 #: messages.json
 msgid "debate.thread.startDiscussion"
 msgstr "Iniciar um novo tópico"
+
+#. [debate.thread.summary]
+#. defaultMessage is:
+#. Summary
+#: messages.json
+#, fuzzy
+msgid "debate.thread.summary"
+msgstr "Ver %{count} subtemáticas"
 
 #. [debate.thread.translate]
 #. defaultMessage is:
@@ -2198,12 +4070,36 @@ msgstr "Eu não quero traduzir todas as mensagens em %{language}."
 msgid "debate.thread.untranslateOnlyThisMessage"
 msgstr "Eu não quero traduzir somente esta mensagem."
 
+#. [debate.thread.voteForProposals]
+#. defaultMessage is:
+#. Vote for the proposals
+#: messages.json
+#, fuzzy
+msgid "debate.thread.voteForProposals"
+msgstr "Mais opiniões"
+
 #. [debate.toAnswer]
 #. defaultMessage is:
 #. Answer
 #: messages.json
 msgid "debate.toAnswer"
 msgstr "Responder"
+
+#. [debate.validateMessage]
+#. defaultMessage is:
+#. Accept this message
+#: messages.json
+#, fuzzy
+msgid "debate.validateMessage"
+msgstr "Excluir esta mensagem"
+
+#. [debate.validateSuccess]
+#. defaultMessage is:
+#. The contribution has been validated. It is now visible by all participants.
+#: messages.json
+#, fuzzy
+msgid "debate.validateSuccess"
+msgstr "Obrigado pela sua participação. Seu comentário foi enviado!"
 
 #. [debate.vote]
 #. defaultMessage is:
@@ -2240,20 +4136,6 @@ msgstr "Você já votou em outra categoria para esta proposta"
 msgid "debate.voteSession.isCompleted"
 msgstr "Esta fase da votação está encerrada. Obrigado pela sua participação!"
 
-#. [debate.voteSession.noVoteSession.text]
-#. defaultMessage is:
-#. An administrator must configure the vote session
-#: messages.json
-msgid "debate.voteSession.noVoteSession.text"
-msgstr "Um administrador deve configurar a sessão de votação"
-
-#. [debate.voteSession.noVoteSession.title]
-#. defaultMessage is:
-#. Vote session is not configured
-#: messages.json
-msgid "debate.voteSession.noVoteSession.title"
-msgstr "A sessão de votação não está configurada"
-
 #. [debate.voteSession.notEnoughTokens]
 #. defaultMessage is:
 #. You don't have enough tokens
@@ -2263,21 +4145,21 @@ msgstr "Você não tem tokens suficientes"
 
 #. [debate.voteSession.participantsCount]
 #. defaultMessage is:
-#. %{count} participants voted!
+#. %{count} participants have expressed themselves!
 #: messages.json
 msgid "debate.voteSession.participantsCount"
 msgstr "%{count} participantes votaram!"
 
 #. [debate.voteSession.participantsCount_0]
 #. defaultMessage is:
-#. No participant voted yet
+#. No participants have expressed themselves yet
 #: messages.json
 msgid "debate.voteSession.participantsCount_0"
 msgstr "Nenhum participante votou até agora"
 
 #. [debate.voteSession.participantsCount_1]
 #. defaultMessage is:
-#. %{count} participant voted
+#. %{count} participant has expressed himself/herself
 #: messages.json
 msgid "debate.voteSession.participantsCount_1"
 msgstr "%{count} participante votou!"
@@ -2293,7 +4175,7 @@ msgstr ""
 
 #. [debate.voteSession.remainingTokens]
 #. defaultMessage is:
-#. You have %{count} tokens remaining.
+#. %{count} tokens remaining
 #: messages.json
 msgid "debate.voteSession.remainingTokens"
 msgstr "Você tem %{count} tokens restantes."
@@ -2368,19 +4250,28 @@ msgstr "Resultados da votação: %{title}"
 msgid "debate.votes"
 msgstr "Votos"
 
-#. [debate.whatYouNeedToKnow]
-#. defaultMessage is:
-#. What you need to know
-#: messages.json
-msgid "debate.whatYouNeedToKnow"
-msgstr "O que você precisa saber"
-
 #. [delete]
 #. defaultMessage is:
 #. Delete
 #: messages.json
 msgid "delete"
 msgstr ""
+
+#. [deleteConfirmation.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure that you wish to delete this item?
+#: messages.json
+#, fuzzy
+msgid "deleteConfirmation.confirmDeletionBody"
+msgstr "Você tem certeza que deseja excluir esta mensagem?"
+
+#. [deleteConfirmation.confirmDeletionTitle]
+#. defaultMessage is:
+#. Delete an item
+#: messages.json
+#, fuzzy
+msgid "deleteConfirmation.confirmDeletionTitle"
+msgstr "Confirmar exclusão"
 
 #. [deletedUser]
 #. defaultMessage is:
@@ -2417,11 +4308,11 @@ msgstr "Desculpe, ocorreu um erro:"
 msgid "error.required"
 msgstr "Este campo é obrigatório."
 
-#. [footer.cookiePolicy]
+#. [footer.cookiesPolicy]
 #. defaultMessage is:
 #. Cookies
 #: messages.json
-msgid "footer.cookiePolicy"
+msgid "footer.cookiesPolicy"
 msgstr ""
 
 #. [footer.legalNotice]
@@ -2451,6 +4342,51 @@ msgstr "Siga-nos nas redes sociais"
 #: messages.json
 msgid "footer.terms"
 msgstr "Termos & Condições"
+
+#. [footer.userGuidelines]
+#. defaultMessage is:
+#. User guidelines
+#: messages.json
+#, fuzzy
+msgid "footer.userGuidelines"
+msgstr "Termos & Condições"
+
+#. [form.select.newOption]
+#. defaultMessage is:
+#. Create '%{option}'
+#: messages.json
+msgid "form.select.newOption"
+msgstr ""
+
+#. [form.select.noOptions]
+#. defaultMessage is:
+#. No options
+#: messages.json
+msgid "form.select.noOptions"
+msgstr ""
+
+#. [form.select.placeholder]
+#. defaultMessage is:
+#. Select...
+#: messages.json
+#, fuzzy
+msgid "form.select.placeholder"
+msgstr "Pesquisar"
+
+#. [globalError]
+#. defaultMessage is:
+#. Something went wrong. Please try again later.
+#: messages.json
+msgid "globalError"
+msgstr ""
+
+#. [harvesting.confirm]
+#. defaultMessage is:
+#. Confirm
+#: messages.json
+#, fuzzy
+msgid "harvesting.confirm"
+msgstr "Agora"
 
 #. [harvesting.confirmDeleteExtract]
 #. defaultMessage is:
@@ -2487,11 +4423,43 @@ msgstr "Editar o trecho"
 msgid "harvesting.enableHarvestingMode"
 msgstr "Ativar modo de palavras em destaque"
 
+#. [harvesting.harvestedExtractNumbers]
+#. defaultMessage is:
+#. %{extractNumber} extracts harvested on this message
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestedExtractNumbers"
+msgstr "Excluir o trecho"
+
+#. [harvesting.harvestedExtractNumbers_0]
+#. defaultMessage is:
+#. %{extractNumber} extract harvested on this message
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestedExtractNumbers_0"
+msgstr "Excluir o trecho"
+
+#. [harvesting.harvestedExtractNumbers_1]
+#. defaultMessage is:
+#. %{extractNumber} extract harvested on this message
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestedExtractNumbers_1"
+msgstr "Excluir o trecho"
+
 #. [harvesting.harvesting]
 #. defaultMessage is:
 #. Harvesting
 #: messages.json
 msgid "harvesting.harvesting"
+msgstr "Palavras em destaque"
+
+#. [harvesting.harvestingConfirmed]
+#. defaultMessage is:
+#. The extract was confirmed successfully.
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestingConfirmed"
 msgstr "Palavras em destaque"
 
 #. [harvesting.harvestingDeleted]
@@ -2501,12 +4469,28 @@ msgstr "Palavras em destaque"
 msgid "harvesting.harvestingDeleted"
 msgstr "O trecho foi apagado com sucesso."
 
+#. [harvesting.harvestingSubmitted]
+#. defaultMessage is:
+#. The extract is waiting for validation.
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestingSubmitted"
+msgstr "O trecho foi atualizado com sucesso."
+
 #. [harvesting.harvestingSuccess]
 #. defaultMessage is:
 #. The extract was updated successfully.
 #: messages.json
 msgid "harvesting.harvestingSuccess"
 msgstr "O trecho foi atualizado com sucesso."
+
+#. [harvesting.harvestingValidated]
+#. defaultMessage is:
+#. The extract was validated successfully.
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestingValidated"
+msgstr "O trecho foi apagado com sucesso."
 
 #. [harvesting.inProgress]
 #. defaultMessage is:
@@ -2557,6 +4541,110 @@ msgstr "Qualificar o trecho"
 msgid "harvesting.qualifyNature"
 msgstr "Qualificar por origem"
 
+#. [harvesting.reject]
+#. defaultMessage is:
+#. Reject
+#: messages.json
+#, fuzzy
+msgid "harvesting.reject"
+msgstr "Mover"
+
+#. [harvesting.submit]
+#. defaultMessage is:
+#. Submit
+#: messages.json
+#, fuzzy
+msgid "harvesting.submit"
+msgstr "Mover"
+
+#. [harvesting.tags.addTagSuccessMsg]
+#. defaultMessage is:
+#. Tag "%{tag}" has been successfully added.
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.addTagSuccessMsg"
+msgstr "O trecho foi atualizado com sucesso."
+
+#. [harvesting.tags.cancel]
+#. defaultMessage is:
+#. Cancel
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.cancel"
+msgstr "Agora"
+
+#. [harvesting.tags.deleteConfirmation.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure that you wish to delete this tag?
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.deleteConfirmation.confirmDeletionBody"
+msgstr "Você tem certeza que deseja excluir esta mensagem?"
+
+#. [harvesting.tags.deleteConfirmation.confirmDeletionTitle]
+#. defaultMessage is:
+#. Delete the tag "%{tag}"
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.deleteConfirmation.confirmDeletionTitle"
+msgstr "Confirmar exclusão"
+
+#. [harvesting.tags.edit]
+#. defaultMessage is:
+#. Click to edit the tag "%{tag}"
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.edit"
+msgstr "Editar o trecho"
+
+#. [harvesting.tags.label]
+#. defaultMessage is:
+#. Tags
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.label"
+msgstr "Palavras em destaque validadas"
+
+#. [harvesting.tags.removeTagSuccessMsg]
+#. defaultMessage is:
+#. Tag "%{tag}" has been successfully removed.
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.removeTagSuccessMsg"
+msgstr "O trecho foi atualizado com sucesso."
+
+#. [harvesting.tags.select.newOption]
+#. defaultMessage is:
+#. Create this tag '%{option}'
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.select.newOption"
+msgstr "Qualificar por ação"
+
+#. [harvesting.tags.select.noOptions]
+#. defaultMessage is:
+#. No tags
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.select.noOptions"
+msgstr "Qualificar por ação"
+
+#. [harvesting.tags.select.placeholder]
+#. defaultMessage is:
+#. Select tags
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.select.placeholder"
+msgstr "O trecho foi apagado com sucesso."
+
+#. [harvesting.tags.validate]
+#. defaultMessage is:
+#. Validate
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.validate"
+msgstr "Palavras em destaque validadas"
+
 #. [harvesting.validateExtract]
 #. defaultMessage is:
 #. Extract validated
@@ -2570,6 +4658,13 @@ msgstr "Trecho validado"
 #: messages.json
 msgid "harvesting.validated"
 msgstr "Palavras em destaque validadas"
+
+#. [here]
+#. defaultMessage is:
+#. here
+#: messages.json
+msgid "here"
+msgstr ""
 
 #. [home.accessButton]
 #. defaultMessage is:
@@ -2823,6 +4918,27 @@ msgstr "acessos"
 msgid "introduction"
 msgstr "Introdução"
 
+#. [legalContentsModal.iAccept]
+#. defaultMessage is:
+#. I have read and accepted 
+#: messages.json
+msgid "legalContentsModal.iAccept"
+msgstr ""
+
+#. [legalContentsModal.ofThePlatform]
+#. defaultMessage is:
+#.  of the platform.
+#: messages.json
+msgid "legalContentsModal.ofThePlatform"
+msgstr ""
+
+#. [legalContentsModal.title]
+#. defaultMessage is:
+#. Accept the legal contents
+#: messages.json
+msgid "legalContentsModal.title"
+msgstr ""
+
 #. [legalNotice.headerTitle]
 #. defaultMessage is:
 #. Legal Notice
@@ -2904,6 +5020,14 @@ msgstr "O e-mail informado já existe"
 msgid "login.existingUsername"
 msgstr "O nome de usuário informado já existe"
 
+#. [login.figurePassword]
+#. defaultMessage is:
+#. A figure
+#: messages.json
+#, fuzzy
+msgid "login.figurePassword"
+msgstr "Nova senha"
+
 #. [login.forgotPwd]
 #. defaultMessage is:
 #. Reset your password
@@ -2941,6 +5065,14 @@ msgstr ""
 msgid "login.invalidEmail"
 msgstr "O e-mail informado é inválido"
 
+#. [login.lengthPassword]
+#. defaultMessage is:
+#. 9 characters
+#: messages.json
+#, fuzzy
+msgid "login.lengthPassword"
+msgstr "Nova senha"
+
 #. [login.login]
 #. defaultMessage is:
 #. Log in
@@ -2969,6 +5101,14 @@ msgstr "Por favor, conecte-se"
 msgid "login.loginWithSocialMedia"
 msgstr "Que tal usar sua conta social?"
 
+#. [login.lowerCasePassword]
+#. defaultMessage is:
+#. A lowercase
+#: messages.json
+#, fuzzy
+msgid "login.lowerCasePassword"
+msgstr "Nova senha"
+
 #. [login.newPassword]
 #. defaultMessage is:
 #. New password
@@ -2989,6 +5129,14 @@ msgstr "Redigite a nova senha"
 #: messages.json
 msgid "login.noAccount"
 msgstr "Ainda não tem uma conta?"
+
+#. [login.oldPasswordWarning]
+#. defaultMessage is:
+#. Note: The new password must be different than the last 5 passwords.
+#: messages.json
+#, fuzzy
+msgid "login.oldPasswordWarning"
+msgstr "Senha"
 
 #. [login.password]
 #. defaultMessage is:
@@ -3019,6 +5167,14 @@ msgid "login.passwordChangeRequestSuccess"
 msgstr ""
 "Ótimo! Um e-mail foi enviado para a sua conta. Também não deixe de verificar "
 "a sua caixa de spam"
+
+#. [login.passwordRequirementIntro]
+#. defaultMessage is:
+#. Your password must contain at least:
+#: messages.json
+#, fuzzy
+msgid "login.passwordRequirementIntro"
+msgstr "Ops! Estamos com um problema. Tente novamente mais tarde."
 
 #. [login.resend]
 #. defaultMessage is:
@@ -3064,6 +5220,22 @@ msgstr "Criar conta"
 #: messages.json
 msgid "login.somethingWentWrong"
 msgstr "Foi mal! Ocorreu um erro por aqui. Tente novamente"
+
+#. [login.specialCharacterPassword]
+#. defaultMessage is:
+#. A special character
+#: messages.json
+#, fuzzy
+msgid "login.specialCharacterPassword"
+msgstr "Alterar Senha"
+
+#. [login.upperCasePassword]
+#. defaultMessage is:
+#. An uppercase
+#: messages.json
+#, fuzzy
+msgid "login.upperCasePassword"
+msgstr "Senha"
 
 #. [login.userName]
 #. defaultMessage is:
@@ -3135,13 +5307,6 @@ msgstr "página inicial"
 msgid "navbar.logout"
 msgstr "Sair"
 
-#. [navbar.profile]
-#. defaultMessage is:
-#. My profile
-#: messages.json
-msgid "navbar.profile"
-msgstr "Meu perfil"
-
 #. [navbar.resourcesCenter]
 #. defaultMessage is:
 #. Resources
@@ -3170,6 +5335,13 @@ msgstr "não"
 msgid "notFound.panelTitle"
 msgstr "Desculpe, esta página não existe"
 
+#. [postLoadError]
+#. defaultMessage is:
+#. Something went wrong when loading this post.
+#: messages.json
+msgid "postLoadError"
+msgstr ""
+
 #. [privacyPolicy.headerTitle]
 #. defaultMessage is:
 #. Privacy policy
@@ -3178,12 +5350,36 @@ msgstr "Desculpe, esta página não existe"
 msgid "privacyPolicy.headerTitle"
 msgstr "Menções legais"
 
+#. [privacyPolicy.iAccept]
+#. defaultMessage is:
+#. I have read and I accept the 
+#: messages.json
+#, fuzzy
+msgid "privacyPolicy.iAccept"
+msgstr "Menções legais"
+
+#. [privacyPolicy.link]
+#. defaultMessage is:
+#. the Privacy Policy
+#: messages.json
+#, fuzzy
+msgid "privacyPolicy.link"
+msgstr "Menções legais"
+
 #. [profile.changePassword]
 #. defaultMessage is:
 #. Change my password
 #: messages.json
 msgid "profile.changePassword"
 msgstr "Alterar a minha senha"
+
+#. [profile.cookies]
+#. defaultMessage is:
+#. Cookies configuration
+#: messages.json
+#, fuzzy
+msgid "profile.cookies"
+msgstr "Salvar"
 
 #. [profile.deleteMyAccount]
 #. defaultMessage is:
@@ -3258,7 +5454,7 @@ msgstr "Senha atual"
 
 #. [profile.panelTitle]
 #. defaultMessage is:
-#. Your account
+#. My account
 #: messages.json
 msgid "profile.panelTitle"
 msgstr "Sua conta"
@@ -3341,15 +5537,20 @@ msgstr ""
 msgid "profile.userName"
 msgstr "Nome de usuário"
 
-#. [redirectToV1]
+#. [profile.usernameInformations]
 #. defaultMessage is:
-#. You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.
+#. If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.
 #: messages.json
-msgid "redirectToV1"
+#, fuzzy
+msgid "profile.usernameInformations"
+msgstr "Informações pessoais"
+
+#. [refuse]
+#. defaultMessage is:
+#. Refuse
+#: messages.json
+msgid "refuse"
 msgstr ""
-"Você será redirecionado para a fase %{phaseName} dentro de alguns segundos. "
-"Pedimos desculpas pela mudança na interface, o Assembl está sendo "
-"aperfeiçoado. Se nada acontecer, clique no botão."
 
 #. [resourcesCenter.defaultHeaderTitle]
 #. defaultMessage is:
@@ -3399,6 +5600,14 @@ msgstr "Categorias"
 #: messages.json
 msgid "search.Creative participants"
 msgstr "Participantes criativos"
+
+#. [search.Extracts]
+#. defaultMessage is:
+#. Extracts
+#: messages.json
+#, fuzzy
+msgid "search.Extracts"
+msgstr "Ordenar"
 
 #. [search.Filter by date]
 #. defaultMessage is:
@@ -3562,6 +5771,22 @@ msgstr "Participantes reativos"
 msgid "search.Sort"
 msgstr "Ordenar"
 
+#. [search.State]
+#. defaultMessage is:
+#. State
+#: messages.json
+#, fuzzy
+msgid "search.State"
+msgstr "Origem"
+
+#. [search.agree]
+#. defaultMessage is:
+#. Agree
+#: messages.json
+#, fuzzy
+msgid "search.agree"
+msgstr "Discordo"
+
 #. [search.by]
 #. defaultMessage is:
 #. by
@@ -3604,6 +5829,14 @@ msgstr "Discordo"
 msgid "search.dont_understand"
 msgstr "Não entendi"
 
+#. [search.extract]
+#. defaultMessage is:
+#. Extracts
+#: messages.json
+#, fuzzy
+msgid "search.extract"
+msgstr "Ordenar"
+
 #. [search.facets.view_all]
 #. defaultMessage is:
 #. View all
@@ -3625,6 +5858,14 @@ msgstr "Ver menos"
 msgid "search.facets.view_more"
 msgstr "Ver mais"
 
+#. [search.harvested_on]
+#. defaultMessage is:
+#. Harvested on
+#: messages.json
+#, fuzzy
+msgid "search.harvested_on"
+msgstr "Publicado em"
+
 #. [search.hitstats.results_found]
 #. defaultMessage is:
 #. {hitCount} results found
@@ -3641,7 +5882,7 @@ msgstr "Ideias"
 
 #. [search.like]
 #. defaultMessage is:
-#. Like
+#. Agree
 #: messages.json
 msgid "search.like"
 msgstr "Concordo"
@@ -3659,6 +5900,22 @@ msgstr "Membro desde"
 #: messages.json
 msgid "search.more_info"
 msgstr "Preciso de mais informações"
+
+#. [search.number_of_contributions]
+#. defaultMessage is:
+#. Number of contributions
+#: messages.json
+#, fuzzy
+msgid "search.number_of_contributions"
+msgstr "contribuições"
+
+#. [search.number_of_users]
+#. defaultMessage is:
+#. Number of users
+#: messages.json
+#, fuzzy
+msgid "search.number_of_users"
+msgstr "Membro desde"
 
 #. [search.pagination.next]
 #. defaultMessage is:
@@ -3718,7 +5975,7 @@ msgstr "Pesquisar"
 
 #. [search.synthesis]
 #. defaultMessage is:
-#. Synthesis
+#. Syntheses
 #: messages.json
 msgid "search.synthesis"
 msgstr "Síntese"
@@ -3849,6 +6106,22 @@ msgstr "Questão"
 msgid "search.taxonomy_nature.knowledge"
 msgstr "Conhecimento"
 
+#. [search.taxonomy_state.PUBLISHED]
+#. defaultMessage is:
+#. Published
+#: messages.json
+#, fuzzy
+msgid "search.taxonomy_state.PUBLISHED"
+msgstr "Questão"
+
+#. [search.taxonomy_state.SUBMITTED]
+#. defaultMessage is:
+#. To validate
+#: messages.json
+#, fuzzy
+msgid "search.taxonomy_state.SUBMITTED"
+msgstr "Questão"
+
 #. [search.user]
 #. defaultMessage is:
 #. Participants
@@ -3861,6 +6134,14 @@ msgstr "Participantes"
 #. There is no synthesis available yet.
 #: messages.json
 msgid "synthesis.noSynthesisYet"
+msgstr "Ainda não há síntese disponível."
+
+#. [synthesis.noSynthesisYetCanCreate]
+#. defaultMessage is:
+#. There is no synthesis available yet, you can create and save one, then publish it.
+#: messages.json
+#, fuzzy
+msgid "synthesis.noSynthesisYetCanCreate"
 msgstr "Ainda não há síntese disponível."
 
 #. [synthesis.seeConversation]
@@ -3907,7 +6188,7 @@ msgstr "Eu li e aceito os"
 
 #. [termsAndConditions.link]
 #. defaultMessage is:
-#. Terms & Conditions
+#. the Terms & Conditions
 #: messages.json
 msgid "termsAndConditions.link"
 msgstr "Termos & Condições"
@@ -3928,6 +6209,28 @@ msgstr ""
 "Você não está autorizado a acessar a seção de administração. Entre em "
 "contato com o administrador do site."
 
+#. [userGuidelines.headerTitle]
+#. defaultMessage is:
+#. User guidelines
+#: messages.json
+#, fuzzy
+msgid "userGuidelines.headerTitle"
+msgstr "Menções legais"
+
+#. [userGuidelines.iAccept]
+#. defaultMessage is:
+#. I have read and I accept the 
+#: messages.json
+msgid "userGuidelines.iAccept"
+msgstr ""
+
+#. [userGuidelines.link]
+#. defaultMessage is:
+#. the user guidelines
+#: messages.json
+msgid "userGuidelines.link"
+msgstr ""
+
 #. [validate]
 #. defaultMessage is:
 #. Validate
@@ -3941,3 +6244,82 @@ msgstr "Validar"
 #: messages.json
 msgid "yes"
 msgstr "sim"
+
+#~ msgid "administration.helpers.voteSessionHeader"
+#~ msgstr ""
+#~ "O cabeçalho da página superior deve ter uma imagem e um título. O "
+#~ "subtítulo é opcional."
+
+#~ msgid "administration.imageRequirements"
+#~ msgstr ""
+#~ "A imagem deve medir 480 px de altura e 1280 px de largura, e ter menos de "
+#~ "1 MB."
+
+#~ msgid "administration.menu.language"
+#~ msgstr "Idioma da discussão"
+
+#~ msgid "administration.ph.descriptionBottom"
+#~ msgstr "Comentários abaixo do vídeo"
+
+#~ msgid "administration.ph.headerSubtitle"
+#~ msgstr "Subtítulo do cabeçalho"
+
+#~ msgid "administration.ph.headerTitle"
+#~ msgstr "Título do cabeçalho"
+
+#~ msgid "administration.ph.instructionsContent"
+#~ msgstr "Conteúdo das instruções"
+
+#~ msgid "administration.ph.mediaLink"
+#~ msgstr "Link de mídia online (vídeo, foto, etc.)"
+
+#~ msgid "administration.ph.orAttachPicture"
+#~ msgstr "Ou enviar uma imagem do seu computador"
+
+#~ msgid "administration.ph.quote"
+#~ msgstr "Citação"
+
+#~ msgid "administration.ph.title"
+#~ msgstr "*Título"
+
+#~ msgid "administration.survey.1"
+#~ msgstr "Definir perguntas"
+
+#~ msgid "administration.survey.2"
+#~ msgstr "Exportar dados"
+
+#~ msgid "administration.themeNum"
+#~ msgstr "Tema %{index}"
+
+#~ msgid "administration.voteModulesIntroText1"
+#~ msgstr "Você escolhe o módulo de votação"
+
+#~ msgid "administration.voteModulesIntroText2"
+#~ msgstr "Para modificar a sua escolha, modifique a"
+
+#~ msgid "common.attachFileForm.label"
+#~ msgstr "Adicionar um anexo"
+
+#~ msgid "common.attachFileForm.submit"
+#~ msgstr "Enviar"
+
+#~ msgid "debate.survey.titleVideo"
+#~ msgstr "Um vídeo para entender melhor o assunto..."
+
+#~ msgid "debate.voteSession.noVoteSession.text"
+#~ msgstr "Um administrador deve configurar a sessão de votação"
+
+#~ msgid "debate.voteSession.noVoteSession.title"
+#~ msgstr "A sessão de votação não está configurada"
+
+#~ msgid "debate.whatYouNeedToKnow"
+#~ msgstr "O que você precisa saber"
+
+#~ msgid "navbar.profile"
+#~ msgstr "Meu perfil"
+
+#~ msgid "redirectToV1"
+#~ msgstr ""
+#~ "Você será redirecionado para a fase %{phaseName} dentro de alguns "
+#~ "segundos. Pedimos desculpas pela mudança na interface, o Assembl está "
+#~ "sendo aperfeiçoado. Se nada acontecer, clique no botão."

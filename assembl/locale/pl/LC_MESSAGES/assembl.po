@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-05-29 11:04+0200\n"
+"POT-Creation-Date: 2019-06-07 19:10+0200\n"
 "PO-Revision-Date: 2018-05-18 16:17+0200\n"
 "Last-Translator: \n"
 "Language: pl\n"
@@ -21,29 +21,29 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: assembl/auth/util.py:151
+#: assembl/auth/util.py:173
 msgid "Your session has expired, you need to login again"
 msgstr ""
 
-#: assembl/auth/util.py:530
+#: assembl/auth/util.py:583
 msgid "The CSV file must have two columns"
 msgstr ""
 
-#: assembl/auth/util.py:537
+#: assembl/auth/util.py:590
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr ""
 
-#: assembl/auth/util.py:540
+#: assembl/auth/util.py:593
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr ""
 
-#: assembl/graphql/configurable_fields.py:331 assembl/views/api2/auth.py:504
+#: assembl/graphql/configurable_fields.py:331 assembl/views/api2/auth.py:493
 msgid "We already have a user with this username."
 msgstr ""
 
-#: assembl/graphql/configurable_fields.py:334 assembl/views/api2/auth.py:515
+#: assembl/graphql/configurable_fields.py:334 assembl/views/api2/auth.py:504
 msgid "The username must be less than 20 characters."
 msgstr ""
 
@@ -65,12 +65,16 @@ msgid ""
 "it is an error, please reconnect to the platform and try again."
 msgstr ""
 
-#: assembl/graphql/post.py:332
+#: assembl/graphql/post.py:330
 msgid "Sorry, you can no longer submit a post as the phase is now closed."
 msgstr ""
 
-#: assembl/graphql/post.py:372
+#: assembl/graphql/post.py:370
 msgid "Proposal"
+msgstr ""
+
+#: assembl/graphql/utils.py:59
+msgid "An error occurred. Please contact the administrator."
 msgstr ""
 
 #: assembl/lib/colander.py:174
@@ -81,123 +85,123 @@ msgstr ""
 msgid "${val} is not a string: ${err}"
 msgstr ""
 
-#: assembl/models/auth.py:641
+#: assembl/models/auth.py:655
 msgid "Straight rows of keys are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:642
+#: assembl/models/auth.py:656
 msgid "Short keyboard patterns are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:643
+#: assembl/models/auth.py:657
 msgid "Repeats like \"aaa\" are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:644
+#: assembl/models/auth.py:658
 msgid "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"."
 msgstr ""
 
-#: assembl/models/auth.py:645
+#: assembl/models/auth.py:659
 msgid "Sequences like abc or 6543 are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:646
+#: assembl/models/auth.py:660
 msgid "Recent years are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:647
+#: assembl/models/auth.py:661
 msgid "Dates are often easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:648
+#: assembl/models/auth.py:662
 msgid "This is a top-10 common password."
 msgstr ""
 
-#: assembl/models/auth.py:649
+#: assembl/models/auth.py:663
 msgid "This is a top-100 common password."
 msgstr ""
 
-#: assembl/models/auth.py:650
+#: assembl/models/auth.py:664
 msgid "This is a very common password."
 msgstr ""
 
-#: assembl/models/auth.py:651
+#: assembl/models/auth.py:665
 msgid "This is similar to a commonly used password."
 msgstr ""
 
-#: assembl/models/auth.py:652
+#: assembl/models/auth.py:666
 msgid "A word by itself is easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:653
+#: assembl/models/auth.py:667
 msgid "Names and surnames by themselves are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:654
+#: assembl/models/auth.py:668
 msgid "Common names and surnames are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:655
+#: assembl/models/auth.py:669
 msgid "Use a few words, avoid common phrases."
 msgstr ""
 
-#: assembl/models/auth.py:656
+#: assembl/models/auth.py:670
 msgid "No need for symbols, digits, or uppercase letters."
 msgstr ""
 
-#: assembl/models/auth.py:657
+#: assembl/models/auth.py:671
 msgid "Add another word or two. Uncommon words are better."
 msgstr ""
 
-#: assembl/models/auth.py:658
+#: assembl/models/auth.py:672
 msgid "Use a longer keyboard pattern with more turns."
 msgstr ""
 
-#: assembl/models/auth.py:659
+#: assembl/models/auth.py:673
 msgid "Avoid repeated words and characters."
 msgstr ""
 
-#: assembl/models/auth.py:660
+#: assembl/models/auth.py:674
 msgid "Avoid sequences."
 msgstr ""
 
-#: assembl/models/auth.py:661
+#: assembl/models/auth.py:675
 msgid "Avoid recent years."
 msgstr ""
 
-#: assembl/models/auth.py:662
+#: assembl/models/auth.py:676
 msgid "Avoid years that are associated with you."
 msgstr ""
 
-#: assembl/models/auth.py:663
+#: assembl/models/auth.py:677
 msgid "Avoid dates and years that are associated with you."
 msgstr ""
 
-#: assembl/models/auth.py:664
+#: assembl/models/auth.py:678
 msgid "Capitalization doesn't help very much."
 msgstr ""
 
-#: assembl/models/auth.py:665
+#: assembl/models/auth.py:679
 msgid "All-uppercase is almost as easy to guess as all-lowercase."
 msgstr ""
 
-#: assembl/models/auth.py:666
+#: assembl/models/auth.py:680
 msgid "Reversed words aren't much harder to guess."
 msgstr ""
 
-#: assembl/models/auth.py:667
+#: assembl/models/auth.py:681
 msgid "Predictable substitutions like '@' instead of 'a' don't help very much."
 msgstr ""
 
-#: assembl/models/auth.py:980
+#: assembl/models/auth.py:994
 msgid "Password shorter than ${minlen} characters"
 msgstr ""
 
-#: assembl/models/auth.py:991
+#: assembl/models/auth.py:1005
 msgid "Your password should include at least a ${class}"
 msgstr ""
 
-#: assembl/models/auth.py:1004
+#: assembl/models/auth.py:1018
 msgid "Please do not repeat an older password."
 msgstr ""
 
@@ -205,23 +209,23 @@ msgstr ""
 msgid "Unknown User ${uid}"
 msgstr ""
 
-#: assembl/models/idea.py:293 assembl/static/js/app/views/ideaPanel.js:211
+#: assembl/models/idea.py:282 assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr ""
 
-#: assembl/models/notification.py:620
+#: assembl/models/notification.py:619
 msgid "A synthesis is posted"
 msgstr ""
 
-#: assembl/models/notification.py:654
+#: assembl/models/notification.py:653
 msgid "Any message is posted to the discussion"
 msgstr ""
 
-#: assembl/models/notification.py:688
+#: assembl/models/notification.py:687
 msgid "Someone directly responds to one of your messages"
 msgstr ""
 
-#: assembl/models/notification.py:1084
+#: assembl/models/notification.py:1080
 msgid "SYNTHESIS: "
 msgstr ""
 
@@ -2393,10 +2397,6 @@ msgstr ""
 msgid "Your settings failed to update"
 msgstr ""
 
-#: assembl/tasks/email_discussion_creator.py:69
-msgid "Your consultation was created"
-msgstr ""
-
 #: assembl/templates/adminIndex.jinja2:3
 msgid "Administration"
 msgstr ""
@@ -2726,7 +2726,7 @@ msgid "Subject:"
 msgstr ""
 
 #: assembl/templates/admin/discussion_permissions.jinja2:125
-#: assembl/views/auth/views.py:1015
+#: assembl/views/auth/views.py:1017
 msgid "Welcome to {discussion_topic}."
 msgstr ""
 
@@ -4621,21 +4621,21 @@ msgstr ""
 msgid "unsubscribed"
 msgstr ""
 
-#: assembl/views/__init__.py:773
+#: assembl/views/__init__.py:904
 msgid "error"
 msgstr ""
 
-#: assembl/views/__init__.py:774
+#: assembl/views/__init__.py:905
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
 "accessible."
 msgstr ""
 
-#: assembl/views/__init__.py:775
+#: assembl/views/__init__.py:906
 msgid "We apologize for the inconvenience"
 msgstr ""
 
-#: assembl/views/__init__.py:776
+#: assembl/views/__init__.py:907
 msgid "Homepage"
 msgstr ""
 
@@ -4668,110 +4668,94 @@ msgstr ""
 msgid "The provided input combination is not valid."
 msgstr ""
 
-#: assembl/views/api2/auth.py:351
-msgid "The user does not exist"
-msgstr ""
-
 #: assembl/views/api2/auth.py:368
-msgid "This email does not exist"
-msgstr ""
-
-#: assembl/views/api2/auth.py:378
 msgid "Please give an identifier"
 msgstr ""
 
-#: assembl/views/api2/auth.py:384
-msgid "This user has no email"
-msgstr ""
-
-#: assembl/views/api2/auth.py:391
-msgid "This is not a user"
-msgstr ""
-
-#: assembl/views/api2/auth.py:415
+#: assembl/views/api2/auth.py:404
 msgid "The passwords that were entered are mismatched!"
 msgstr ""
 
-#: assembl/views/api2/auth.py:429 assembl/views/auth/views.py:968
-#: assembl/views/auth/views.py:1036
+#: assembl/views/api2/auth.py:418 assembl/views/auth/views.py:970
+#: assembl/views/auth/views.py:1038
 msgid "This link is not valid. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/api2/auth.py:432 assembl/views/auth/views.py:971
-#: assembl/views/auth/views.py:1039
+#: assembl/views/api2/auth.py:421 assembl/views/auth/views.py:973
+#: assembl/views/auth/views.py:1041
 msgid "This link has been used. Do you want us to send another?"
 msgstr ""
 
-#: assembl/views/api2/auth.py:465 assembl/views/auth/views.py:392
+#: assembl/views/api2/auth.py:454 assembl/views/auth/views.py:394
 msgid "Please use a name of at least 3 characters"
 msgstr ""
 
-#: assembl/views/api2/auth.py:474 assembl/views/auth/views.py:325
-#: assembl/views/auth/views.py:399
+#: assembl/views/api2/auth.py:463 assembl/views/auth/views.py:327
+#: assembl/views/auth/views.py:401
 msgid "This is not a valid email"
 msgstr ""
 
-#: assembl/views/api2/auth.py:483 assembl/views/auth/views.py:406
+#: assembl/views/api2/auth.py:472 assembl/views/auth/views.py:408
 msgid "We already have a user with this email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:495
+#: assembl/views/api2/auth.py:484
 msgid "No email."
 msgstr ""
 
-#: assembl/views/api2/auth.py:529
+#: assembl/views/api2/auth.py:518
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
 msgstr ""
 
-#: assembl/views/api2/auth.py:530
+#: assembl/views/api2/auth.py:519
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "one of ${emails} for support."
 msgstr ""
 
-#: assembl/views/auth/views.py:298
+#: assembl/views/auth/views.py:300
 #, python-format
 msgid "The username %s is already used"
 msgstr ""
 
-#: assembl/views/auth/views.py:317 assembl/views/auth/views.py:1050
+#: assembl/views/auth/views.py:319 assembl/views/auth/views.py:1052
 msgid "The passwords are not identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:410
+#: assembl/views/auth/views.py:412
 msgid "The passwords should be identical"
 msgstr ""
 
-#: assembl/views/auth/views.py:466
+#: assembl/views/auth/views.py:468
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email"
 " that does not exist."
 msgstr ""
 
-#: assembl/views/auth/views.py:523 assembl/views/auth/views.py:848
-#: assembl/views/auth/views.py:854
+#: assembl/views/auth/views.py:525 assembl/views/auth/views.py:850
+#: assembl/views/auth/views.py:856
 msgid "This user cannot be found"
 msgstr ""
 
-#: assembl/views/auth/views.py:541
+#: assembl/views/auth/views.py:543
 msgid "Invalid user and password"
 msgstr ""
 
-#: assembl/views/auth/views.py:605
+#: assembl/views/auth/views.py:607
 msgid "This email address is already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:606
+#: assembl/views/auth/views.py:608
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:614 assembl/views/auth/views.py:813
+#: assembl/views/auth/views.py:616 assembl/views/auth/views.py:815
 msgid "Confirmation requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:615 assembl/views/auth/views.py:814
+#: assembl/views/auth/views.py:617 assembl/views/auth/views.py:816
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. It contains a confirmation link, please click on"
@@ -4779,91 +4763,91 @@ msgid ""
 "confirmation e-mail (check your spams), click here."
 msgstr ""
 
-#: assembl/views/auth/views.py:663 assembl/views/auth/views.py:687
-#: assembl/views/auth/views.py:709
+#: assembl/views/auth/views.py:665 assembl/views/auth/views.py:689
+#: assembl/views/auth/views.py:711
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr ""
 
-#: assembl/views/auth/views.py:675
+#: assembl/views/auth/views.py:677
 msgid "This link was not valid. We sent another."
 msgstr ""
 
-#: assembl/views/auth/views.py:678
+#: assembl/views/auth/views.py:680
 msgid "This link has been used. We sent another."
 msgstr ""
 
-#: assembl/views/auth/views.py:691
+#: assembl/views/auth/views.py:693
 msgid "This link is not valid. Please attempt to login to get another one."
 msgstr ""
 
-#: assembl/views/auth/views.py:730
+#: assembl/views/auth/views.py:732
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr ""
 
-#: assembl/views/auth/views.py:735
+#: assembl/views/auth/views.py:737
 #, python-format
 msgid "Your email address %s has been confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:760
+#: assembl/views/auth/views.py:762
 msgid "Login failed, try again"
 msgstr ""
 
-#: assembl/views/auth/views.py:801
+#: assembl/views/auth/views.py:803
 msgid "This email is already confirmed."
 msgstr ""
 
-#: assembl/views/auth/views.py:822
+#: assembl/views/auth/views.py:824
 msgid "We do not know about this email."
 msgstr ""
 
-#: assembl/views/auth/views.py:901
+#: assembl/views/auth/views.py:903
 msgid "Password change requested"
 msgstr ""
 
-#: assembl/views/auth/views.py:902
+#: assembl/views/auth/views.py:904
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
 msgstr ""
 
-#: assembl/views/auth/views.py:983
+#: assembl/views/auth/views.py:985
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr ""
 
-#: assembl/views/auth/views.py:987
+#: assembl/views/auth/views.py:989
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr ""
 
-#: assembl/views/auth/views.py:990
+#: assembl/views/auth/views.py:992
 msgid "Please choose your password for security reasons."
 msgstr ""
 
-#: assembl/views/auth/views.py:1019
+#: assembl/views/auth/views.py:1021
 msgid "Change your password"
 msgstr ""
 
-#: assembl/views/auth/views.py:1058
+#: assembl/views/auth/views.py:1060
 msgid "Password changed"
 msgstr ""
 
-#: assembl/views/auth/views.py:1072
+#: assembl/views/auth/views.py:1074
 msgid "email"
 msgstr ""
 
-#: assembl/views/auth/views.py:1073
+#: assembl/views/auth/views.py:1075
 msgid "Please confirm your {confirm_what} with {assembl}"
 msgstr ""
 
-#: assembl/views/auth/views.py:1075
+#: assembl/views/auth/views.py:1077
 msgid "account"
 msgstr ""
 
-#: assembl/views/auth/views.py:1076
+#: assembl/views/auth/views.py:1078
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
@@ -4875,7 +4859,7 @@ msgid ""
 "The {assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:1083
+#: assembl/views/auth/views.py:1085
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
@@ -4884,7 +4868,7 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1088
+#: assembl/views/auth/views.py:1090
 msgid ""
 "Hello, {name}!\n"
 "\n"
@@ -4896,7 +4880,7 @@ msgid ""
 "The {assembl} Team"
 msgstr ""
 
-#: assembl/views/auth/views.py:1095
+#: assembl/views/auth/views.py:1097
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
@@ -4905,11 +4889,11 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr ""
 
-#: assembl/views/auth/views.py:1149
+#: assembl/views/auth/views.py:1151
 msgid "Request for password change"
 msgstr ""
 
-#: assembl/views/auth/views.py:1153
+#: assembl/views/auth/views.py:1155
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -4921,7 +4905,7 @@ msgid ""
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr ""
 
-#: assembl/views/auth/views.py:1159
+#: assembl/views/auth/views.py:1161
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
@@ -4935,7 +4919,7 @@ msgid ""
 "The {assembl} Team\n"
 msgstr ""
 
-#: assembl/views/discussion/views.py:56
+#: assembl/views/discussion/views.py:58
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr ""
@@ -4992,5 +4976,20 @@ msgstr ""
 #~ msgstr ""
 
 #~ msgid "join"
+#~ msgstr ""
+
+#~ msgid "Your consultation was created"
+#~ msgstr ""
+
+#~ msgid "The user does not exist"
+#~ msgstr ""
+
+#~ msgid "This email does not exist"
+#~ msgstr ""
+
+#~ msgid "This user has no email"
+#~ msgstr ""
+
+#~ msgid "This is not a user"
 #~ msgstr ""
 
