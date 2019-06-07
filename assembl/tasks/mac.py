@@ -5,9 +5,9 @@ import re
 from os.path import join, normpath
 from .common import (
     venv, task, exists, delete_foreign_tasks, setup_var_directory, get_upload_dir,
-    get_assembl_code_path, chgrp_rec, _processes_to_restart_without_backup, _processes_to_restart_with_backup,
+    chgrp_rec, _processes_to_restart_without_backup, _processes_to_restart_with_backup,
     filter_autostart_processes, supervisor_process_stop, remote_db_path, is_supervisord_running, webservers_start,
-    app_reload, webservers_reload)
+    app_reload, webservers_reload, get_node_base_path)
 from ConfigParser import SafeConfigParser
 from contextlib import nested
 
@@ -242,6 +242,10 @@ def updatemaincode(c, backup=False):
     """
     if not backup:
         print('Updating Git repository')
+        with c.cd(join(c.config.projectpath)):
+            c.run('git fetch')
+            c.run('git checkout %s' % c.config._internal.gitbranch)
+            c.run('git pull %s %s' % (c.config._internal.gitrepo, c.config._internal.gitbranch))
 
         path = join(c.config.projectpath, '..', 'url_metadata')
         if exists(c, path):
@@ -340,6 +344,72 @@ def app_update_dependencies(c, force_reinstall=False, backup=False):
     build.update_npm_requirements(c, force_reinstall=force_reinstall)
 
 
+@task()
+def app_reinstall_all_dependencies(c):
+    """
+    Reinstall all python and javascript dependencies.
+    Usefull after a OS upgrade, node upgrade, etc.
+    """
+    app_update_dependencies(c, force_reinstall=True)
+
+
+@task()
+def app_fullupdate(c):
+    """
+    Full Update: Update to latest git, update dependencies and compile app.
+    You need internet connectivity, and can't run this on a branch.
+    """
+    updatemaincode(c)
+    create_local_ini(c)
+    app_compile(c)
+
+
+@task()
+def app_update(c):
+    """
+    Fast Update: Update to latest git, compile app but don't update requirements
+    Useful for deploying hotfixes.  You need internet connectivity, and can't
+    run this on a branch.
+    """
+    updatemaincode(c)
+    app_compile_noupdate(c)
+
+
+@task()
+def app_compile(c):
+    """
+    Full Update: This is what you normally run after a git pull.
+    Doesn't touch git state, but updates requirements, rebuilds all
+    generated files annd restarts whatever needs restarting.
+    You need internet connectivity.  If you are on a plane, use
+    app_compile_noupdate instead.
+    """
+    app_update_dependencies(c)
+    app_compile_noupdate(c)
+
+
+@task()
+def app_compile_noupdate(c):
+    """
+    Fast Update: Doesn't touch git state, don't update requirements, and rebuild
+    all generated files. You normally do not need to have internet connectivity.
+    """
+    app_compile_nodbupdate(c)
+    app_db_update(c)
+    app_reload(c)
+    webservers_reload(c)
+
+
+@task()
+def app_db_update(c):
+    """
+    Migrates database using south
+    """
+    print('Migrating database')
+    with venv(c):
+        c.run('alembic -c %s upgrade head' % (c.config._internal.ini_file))
+
+
 def ensure_requirements(c):
     "Copy the appropriate frozen requirements file into requirements.txt"
     target = c.config.frozen_requirements
@@ -418,7 +488,7 @@ def set_file_permissions(c):
     webgrp = '_www'
     # This should cover most cases.
     if webgrp not in c.run('groups').stdout.split():
-        username = c.run("whoami").stdout.replace('\n','')
+        username = c.run("whoami").stdout.replace('\n', '')
         c.run('sudo dseditgroup -o edit -a {user} -t user {webgrp}'.format(
             webgrp=webgrp, user=username))
     with c.cd(c.config.projectpath):
