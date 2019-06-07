@@ -64,6 +64,7 @@ fasteners==0.14.1         # via executor
 feedparser==5.2.1
 flake8==3.6.0
 flaky==3.1.1
+freezegun==0.3.11
 funcsigs==1.0.2           # via mock
 future==0.15.2
 futures==3.2.0            # via s3transfer

@@ -325,6 +325,11 @@ class CreatePost(graphene.Mutation):
         idea_id = int(Node.from_global_id(idea_id)[1])
         in_reply_to_idea = models.Idea.get(idea_id)
 
+        phase = in_reply_to_idea.get_associated_phase()
+        if not (phase.start < datetime.now() < phase.end):
+            error = _("Sorry, you can no longer submit a post as the phase is now closed.")
+            raise HTTPUnauthorized(context.localizer.translate(error))
+
         if isinstance(in_reply_to_idea, models.Question):
             cls = models.PropositionPost
         else:

@@ -10,7 +10,7 @@ from assembl.graphql.schema import Schema as schema
 from assembl.graphql.utils import create_root_thematic
 from assembl import models
 from graphql_relay.node.node import from_global_id, to_global_id
-
+from freezegun import freeze_time
 
 def test_graphene_id():
     assert models.RootIdea.graphene_type() == 'Idea'
@@ -434,7 +434,7 @@ def test_get_thematic_via_node_query(graphql_request, graphql_registry, thematic
     assert result['questions'][0]['hasPendingPosts'] is False
     assert result['questions'][0]['posts']['edges'] == []
 
-
+@freeze_time("2018-2-1")
 def test_get_thematic_with_question_with_pending_posts(graphql_request, graphql_registry, thematic_and_question, proposals):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -675,6 +675,7 @@ mutation updateThematic($thematicId: ID!, $file: String!) {
                 u'img': None
             }}}
 
+@freeze_time("2018-2-1")
 def test_mutation_create_post(graphql_request, thematic_and_question):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
@@ -708,7 +709,65 @@ mutation myFirstMutation {
                 u'publicationState': u'PUBLISHED'
             }}}
 
+@freeze_time("2019-2-1")
+def test_mutation_create_post_phase_is_over(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        subject:"Proposition 1",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on Post {
+                subject,
+                body,
+                bodyEntries { localeCode value },
+                creator { name },
+                bodyMimeType
+                publicationState
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    assert res.errors[0].message == 'Sorry, you can no longer submit a post as the phase is now closed.'
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': None
+        }
 
+
+@freeze_time("2015-2-1")
+def test_mutation_create_post_phase_is_not_started(graphql_request, thematic_and_question):
+    thematic_id, first_question_id = thematic_and_question
+    res = schema.execute(u"""
+mutation myFirstMutation {
+    createPost(
+        ideaId:"%s",
+        subject:"Proposition 1",
+        body:"une proposition..."
+    ) {
+        post {
+            ... on Post {
+                subject,
+                body,
+                bodyEntries { localeCode value },
+                creator { name },
+                bodyMimeType
+                publicationState
+            }
+        }
+    }
+}
+""" % first_question_id, context_value=graphql_request)
+    assert res.errors[0].message == 'Sorry, you can no longer submit a post as the phase is now closed.'
+    assert json.loads(json.dumps(res.data)) == {
+        u'createPost': None
+        }
+
+
+@freeze_time("2018-2-1")
 def test_mutation_create_post_without_subject(graphql_request, thematic_and_question):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(u"""
@@ -738,11 +797,13 @@ mutation myFirstMutation {
             }}}
 
 
+@freeze_time("2018-3-1")
 def test_mutation_create_post_on_column(graphql_request,
                                         test_session,
-                                        idea_message_column_positive):
-    idea_id = to_global_id('Idea', idea_message_column_positive.idea_id)
-    classifier = idea_message_column_positive.message_classifier
+                                        idea_message_column_positive_on_thread_phase):
+    idea_id = to_global_id('Idea', idea_message_column_positive_on_thread_phase.idea_id)
+    idea_message_column_positive_on_thread_phase.idea.get_associated_phase()
+    classifier = idea_message_column_positive_on_thread_phase.message_classifier
     res = schema.execute(u"""
 mutation myFirstMutation {
     createPost(
@@ -769,7 +830,7 @@ mutation myFirstMutation {
     # Must remove the ICL before test completes in order to avoid db constraint
     # on idea fixture removal
     icl = test_session.query(models.IdeaRelatedPostLink).\
-        filter_by(idea_id=idea_message_column_positive.idea_id).first()
+        filter_by(idea_id=idea_message_column_positive_on_thread_phase.idea_id).first()
     test_session.delete(icl)
     test_session.flush()
 
@@ -1138,7 +1199,7 @@ query {
     assert res.data['node']['numContributors'] == 1
     assert res.data['node']['totalSentiments'] == 0
 
-
+@freeze_time("2018-3-1")
 def test_mutation_create_top_post(graphql_request, idea_in_thread_phase):
     idea_id = idea_in_thread_phase
     res = schema.execute(u"""
@@ -1172,6 +1233,7 @@ mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: I
             }}}
 
 
+@freeze_time("2018-3-1")
 def test_mutation_create_reply_post(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     idea_id = idea_in_thread_phase
     in_reply_to_post_id = top_post_in_thread_phase
@@ -1206,6 +1268,7 @@ mutation createPost($ideaId: ID!, $subject: String, $body: String!, $parentId: I
             }}}
 
 
+@freeze_time("2018-3-1")
 def test_mutation_create_reply_post_no_subject(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
     idea_id = idea_in_thread_phase
     in_reply_to_post_id = top_post_in_thread_phase
@@ -1260,6 +1323,7 @@ query QuestionPosts($id: ID!, $first: Int, $last: Int, $after: String, $before: 
 }
 """
 
+@freeze_time("2018-2-1")
 def test_get_proposals(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -1284,11 +1348,13 @@ def test_get_proposals(graphql_request, thematic_and_question, proposals15publis
                            {u'node': {u'body': u'une proposition 7'}},
                            {u'node': {u'body': u'une proposition 6'}},
                            {u'node': {u'body': u'une proposition 5'}}]
+
             }
         }
     }
 
 
+@freeze_time("2018-2-1")
 def test_get_proposals_after(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -1313,6 +1379,7 @@ def test_get_proposals_after(graphql_request, thematic_and_question, proposals15
     }
 
 
+@freeze_time("2018-2-1")
 def test_get_proposals_before(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(
@@ -1338,6 +1405,7 @@ def test_get_proposals_before(graphql_request, thematic_and_question, proposals1
     }
 
 
+@freeze_time("2018-2-1")
 def test_get_proposals_from_node(graphql_request, thematic_and_question, proposals15published):
     thematic_id, first_question_id = thematic_and_question
     res = schema.execute(

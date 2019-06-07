@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 import pytest
+from freezegun import freeze_time
 
 from graphql_relay.node.node import from_global_id
 
@@ -57,91 +58,7 @@ def graphql_participant1_request(request, test_participant1_webrequest, discussi
     return req
 
 
-@pytest.fixture(scope="function")
-def phases(request, test_session, discussion):
-    from assembl.models import DiscussionPhase, LangString
-    from assembl import models
-
-    survey = DiscussionPhase(
-        discussion=discussion,
-        identifier='survey',
-        title=LangString.create(u"survey phase title fixture", "en"),
-        description=LangString.create(u"survey phase description fixture", "en"),
-        start=datetime(2018, 1, 15, 9, 0, 0),
-        end=datetime(2018, 2, 15, 9, 0, 0),
-        interface_v1=False,
-        image_url=u'https://example.net/image.jpg',
-        is_thematics_table=True
-    )
-
-    thread = DiscussionPhase(
-        discussion = discussion,
-        identifier = 'thread',
-        title = LangString.create(u"thread phase title fixture", "en"),
-        description = LangString.create(u"thread phase description fixture", "en"),
-        start = datetime(2018, 2, 16, 9, 0, 0),
-        end = datetime(2018, 3, 15, 9, 0, 0),
-        interface_v1 = False,
-        image_url = u'https://example.net/image.jpg'
-    )
-
-    multiColumns = DiscussionPhase(
-        discussion = discussion,
-        identifier = 'multiColumns',
-        title = LangString.create(u"multiColumns phase title fixture", "en"),
-        description = LangString.create(u"multiColumns phase description fixture", "en"),
-        start = datetime(2018, 3, 16, 9, 0, 0),
-        end = datetime(2018, 4, 15, 9, 0, 0),
-        interface_v1 = False,
-        image_url = u'https://example.net/image.jpg'
-    )
-
-    voteSession = DiscussionPhase(
-        discussion = discussion,
-        identifier = 'voteSession',
-        title = LangString.create(u"voteSession phase title fixture", "en"),
-        description = LangString.create(u"voteSession phase description fixture", "en"),
-        start = datetime(2018, 4, 16, 9, 0, 0),
-        end = datetime(2018, 5, 15, 9, 0, 0),
-        interface_v1 = False,
-        image_url = u'https://example.net/image.jpg',
-        is_thematics_table = True
-    )
-
-    brightMirror = DiscussionPhase(
-        discussion = discussion,
-        identifier = 'brightMirror',
-        title = LangString.create(u"brightMirror phase title fixture", "en"),
-        description = LangString.create(u"brightMirror phase description fixture", "en"),
-        start = datetime(2018, 6, 16, 9, 0, 0),
-        end = datetime(2018, 7, 15, 9, 0, 0),
-        interface_v1 = False,
-        image_url = u'https://example.net/image.jpg',
-        is_thematics_table = True
-    )
-
-    # Create the phase
-    test_session.add(survey)
-    test_session.add(thread)
-    test_session.add(multiColumns)
-    test_session.add(voteSession)
-    test_session.add(brightMirror)
-    test_session.flush()
-
-    def fin():
-        print "finalizer phases"
-        test_session.delete(survey)
-        test_session.delete(thread)
-        test_session.delete(multiColumns)
-        test_session.delete(voteSession)
-        test_session.delete(brightMirror)
-        test_session.flush()
-
-    request.addfinalizer(fin)
-    phases = test_session.query(models.DiscussionPhase).all()
-    return {p.identifier: p for p in phases}
-
-
+@freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
 def idea_in_thread_phase(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
@@ -177,6 +94,7 @@ mutation myFirstMutation {
     return idea_id
 
 
+@freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
 def another_idea_in_thread_phase(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
@@ -212,6 +130,7 @@ mutation myFirstMutation {
     return idea_id
 
 
+@freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
 def top_post_in_thread_phase(request, test_session, graphql_request, idea_in_thread_phase):
     from assembl.graphql.schema import Schema as schema
@@ -241,7 +160,7 @@ mutation myFirstMutation {
     request.addfinalizer(fin)
     return post_id
 
-
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def thematic_and_question(request, test_session, phases, graphql_request):
     from assembl.graphql.schema import Schema as schema
@@ -424,6 +343,7 @@ mutation createThematicWithImage($file: String!) {
     return thematic_id
 
 
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def proposition_id(request, test_session, graphql_request, thematic_and_question):
     from assembl.models import PropositionPost
@@ -540,6 +460,7 @@ mutation myFirstMutation {
     return post_id
 
 
+@freeze_time("2018-2-1", tick=True)
 @pytest.fixture(scope="function")
 def proposals15published(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
@@ -555,6 +476,7 @@ def proposals15published(request, test_session, graphql_request, admin_user, the
     return proposals
 
 
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def proposals(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates
@@ -566,7 +488,6 @@ def proposals(request, test_session, graphql_request, admin_user, thematic_and_q
             publication_state = PublicationStates.SUBMITTED_AWAITING_MODERATION.value
         else:
             publication_state = PublicationStates.PUBLISHED.value
-
         proposal_id = create_proposal_x(
             request, test_session, graphql_request, first_question_id, idx, publication_state)
         proposals.append(proposal_id)
@@ -574,6 +495,7 @@ def proposals(request, test_session, graphql_request, admin_user, thematic_and_q
     return proposals
 
 
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def proposals_no_pending(request, test_session, graphql_request, admin_user, thematic_and_question):
     from assembl.models import PublicationStates

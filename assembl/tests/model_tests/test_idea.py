@@ -1,3 +1,5 @@
+from assembl.models import RootIdea
+
 def test_idea_copy(subidea_1_1, test_session):
     from datetime import datetime
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-02-04 16:22+0100\n"
+"POT-Creation-Date: 2019-05-29 11:04+0200\n"
 "PO-Revision-Date: 2017-08-26 01:06+0900\n"
 "Last-Translator: \n"
 "Language: ja\n"
@@ -18,23 +18,43 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
 
-#: assembl/auth/util.py:140
+#: assembl/auth/util.py:151
 msgid "Your session has expired, you need to login again"
 msgstr ""
 
-#: assembl/auth/util.py:519
+#: assembl/auth/util.py:530
 msgid "The CSV file must have two columns"
 msgstr "CSVファイルには2つの列が必要です"
 
-#: assembl/auth/util.py:526
+#: assembl/auth/util.py:537
 #, python-format
 msgid "Not an email: <%s> at line %d"
 msgstr "メールではない：<%s> ラインで %d"
 
-#: assembl/auth/util.py:529
+#: assembl/auth/util.py:540
 #, python-format
 msgid "Name too short: <%s> at line %d"
 msgstr "名前が短すぎます。：<%s> at line %d"
+
+#: assembl/graphql/configurable_fields.py:331 assembl/views/api2/auth.py:504
+msgid "We already have a user with this username."
+msgstr "既にこのユーザー名を持つユーザーがいます."
+
+#: assembl/graphql/configurable_fields.py:334 assembl/views/api2/auth.py:515
+msgid "The username must be less than 20 characters."
+msgstr "3文字以上の名前を使用してください"
+
+#: assembl/graphql/discussion.py:615
+msgid "Must pass at least one language to be saved"
+msgstr ""
+
+#: assembl/graphql/discussion.py:661
+msgid "This slug is an old slug of another debate, you can't use it."
+msgstr ""
+
+#: assembl/graphql/discussion.py:667
+msgid "This slug is already used by another debate, you can't use it."
+msgstr ""
 
 #: assembl/graphql/permissions_helpers.py:9
 msgid ""
@@ -42,7 +62,11 @@ msgid ""
 "it is an error, please reconnect to the platform and try again."
 msgstr ""
 
-#: assembl/graphql/post.py:362
+#: assembl/graphql/post.py:332
+msgid "Sorry, you can no longer submit a post as the phase is now closed."
+msgstr ""
+
+#: assembl/graphql/post.py:372
 msgid "Proposal"
 msgstr ""
 
@@ -54,123 +78,123 @@ msgstr "${val} シリアル化できません: ${err}"
 msgid "${val} is not a string: ${err}"
 msgstr "${val} 文字列ではありません：${err}"
 
-#: assembl/models/auth.py:634
+#: assembl/models/auth.py:641
 msgid "Straight rows of keys are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:635
+#: assembl/models/auth.py:642
 msgid "Short keyboard patterns are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:636
+#: assembl/models/auth.py:643
 msgid "Repeats like \"aaa\" are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:637
+#: assembl/models/auth.py:644
 msgid "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"."
 msgstr ""
 
-#: assembl/models/auth.py:638
+#: assembl/models/auth.py:645
 msgid "Sequences like abc or 6543 are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:639
+#: assembl/models/auth.py:646
 msgid "Recent years are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:640
+#: assembl/models/auth.py:647
 msgid "Dates are often easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:641
+#: assembl/models/auth.py:648
 msgid "This is a top-10 common password."
 msgstr ""
 
-#: assembl/models/auth.py:642
+#: assembl/models/auth.py:649
 msgid "This is a top-100 common password."
 msgstr ""
 
-#: assembl/models/auth.py:643
+#: assembl/models/auth.py:650
 msgid "This is a very common password."
 msgstr ""
 
-#: assembl/models/auth.py:644
+#: assembl/models/auth.py:651
 msgid "This is similar to a commonly used password."
 msgstr ""
 
-#: assembl/models/auth.py:645
+#: assembl/models/auth.py:652
 msgid "A word by itself is easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:646
+#: assembl/models/auth.py:653
 msgid "Names and surnames by themselves are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:647
+#: assembl/models/auth.py:654
 msgid "Common names and surnames are easy to guess."
 msgstr ""
 
-#: assembl/models/auth.py:648
+#: assembl/models/auth.py:655
 msgid "Use a few words, avoid common phrases."
 msgstr ""
 
-#: assembl/models/auth.py:649
+#: assembl/models/auth.py:656
 msgid "No need for symbols, digits, or uppercase letters."
 msgstr ""
 
-#: assembl/models/auth.py:650
+#: assembl/models/auth.py:657
 msgid "Add another word or two. Uncommon words are better."
 msgstr ""
 
-#: assembl/models/auth.py:651
+#: assembl/models/auth.py:658
 msgid "Use a longer keyboard pattern with more turns."
 msgstr ""
 
-#: assembl/models/auth.py:652
+#: assembl/models/auth.py:659
 msgid "Avoid repeated words and characters."
 msgstr ""
 
-#: assembl/models/auth.py:653
+#: assembl/models/auth.py:660
 msgid "Avoid sequences."
 msgstr ""
 
-#: assembl/models/auth.py:654
+#: assembl/models/auth.py:661
 msgid "Avoid recent years."
 msgstr ""
 
-#: assembl/models/auth.py:655
+#: assembl/models/auth.py:662
 msgid "Avoid years that are associated with you."
 msgstr ""
 
-#: assembl/models/auth.py:656
+#: assembl/models/auth.py:663
 msgid "Avoid dates and years that are associated with you."
 msgstr ""
 
-#: assembl/models/auth.py:657
+#: assembl/models/auth.py:664
 msgid "Capitalization doesn't help very much."
 msgstr ""
 
-#: assembl/models/auth.py:658
+#: assembl/models/auth.py:665
 msgid "All-uppercase is almost as easy to guess as all-lowercase."
 msgstr ""
 
-#: assembl/models/auth.py:659
+#: assembl/models/auth.py:666
 msgid "Reversed words aren't much harder to guess."
 msgstr ""
 
-#: assembl/models/auth.py:660
+#: assembl/models/auth.py:667
 msgid "Predictable substitutions like '@' instead of 'a' don't help very much."
 msgstr ""
 
-#: assembl/models/auth.py:952
+#: assembl/models/auth.py:980
 msgid "Password shorter than ${minlen} characters"
 msgstr ""
 
-#: assembl/models/auth.py:963
+#: assembl/models/auth.py:991
 msgid "Your password should include at least a ${class}"
 msgstr ""
 
-#: assembl/models/auth.py:976
+#: assembl/models/auth.py:1004
 msgid "Please do not repeat an older password."
 msgstr ""
 
@@ -178,7 +202,7 @@ msgstr ""
 msgid "Unknown User ${uid}"
 msgstr "不明なユーザ ${uid}"
 
-#: assembl/models/idea.py:274 assembl/static/js/app/views/ideaPanel.js:211
+#: assembl/models/idea.py:293 assembl/static/js/app/views/ideaPanel.js:211
 msgid "Idea"
 msgstr "アイデア"
 
@@ -198,205 +222,159 @@ msgstr "誰かがあなたのメッセージに応答しています"
 msgid "SYNTHESIS: "
 msgstr "シンセシス : "
 
-#: assembl/models/preferences.py:115 assembl/models/preferences.py:651
+#: assembl/models/preferences.py:116 assembl/models/preferences.py:605
 msgid "No special authentication"
 msgstr "特別な認証なし"
 
-#: assembl/models/preferences.py:409
+#: assembl/models/preferences.py:410
 msgid "Languages used"
 msgstr "使用言語"
 
-#: assembl/models/preferences.py:410
+#: assembl/models/preferences.py:411
 msgid "All languages expected in the discussion"
 msgstr "ディスカッションで期待されるすべての言語"
 
-#: assembl/models/preferences.py:420
+#: assembl/models/preferences.py:421
 msgid "Use landing page"
 msgstr "ランディングページを使用する"
 
-#: assembl/models/preferences.py:421
+#: assembl/models/preferences.py:422
 msgid ""
 "Are users directed to the landing page and phases at login, or diretly to"
 " the debate"
 msgstr "ログイン時にユーザーがリンク先ページやフェーズに誘導されましたか、もしくは討論に直接誘導されましたか"
 
-#: assembl/models/preferences.py:429 assembl/models/preferences.py:443
+#: assembl/models/preferences.py:430 assembl/models/preferences.py:436
 msgid "Translation service"
 msgstr "翻訳サービス"
 
-#: assembl/models/preferences.py:432
+#: assembl/models/preferences.py:433
 msgid "No translation"
 msgstr "翻訳がありません"
 
-#: assembl/models/preferences.py:434
-msgid "Dummy translation service (two steps)"
-msgstr "ダミー翻訳サービス(2ステップ)"
-
-#: assembl/models/preferences.py:436
-msgid "Dummy translation service (one step)"
-msgstr "ダミー翻訳サービス(ワンステップ)"
-
-#: assembl/models/preferences.py:438
-msgid "Dummy translation service (two steps) with errors"
-msgstr "エラーのあるダミー翻訳サービス(２ステップ)"
-
-#: assembl/models/preferences.py:440
-msgid "Dummy translation service (one step) with errors"
-msgstr "エラーのあるダミー翻訳サービス(1ステップ)"
-
-#: assembl/models/preferences.py:442
+#: assembl/models/preferences.py:435
 msgid "Google Translate"
 msgstr "グーグル翻訳"
 
-#: assembl/models/preferences.py:455
+#: assembl/models/preferences.py:448
 msgid "Panel order in simple view"
 msgstr "シンプルなビューでのパネルオーダー"
 
-#: assembl/models/preferences.py:458
+#: assembl/models/preferences.py:451
 msgid "Navigation, Idea, Messages"
 msgstr "ナビゲーション、アイデア、メッセージ"
 
-#: assembl/models/preferences.py:459
+#: assembl/models/preferences.py:452
 msgid "Navigation, Messages, Idea"
 msgstr "ナビゲーション、メッセージ、アイデア"
 
-#: assembl/models/preferences.py:460
+#: assembl/models/preferences.py:453
 msgid "Order of panels"
 msgstr "パネルの順序"
 
-#: assembl/models/preferences.py:472
+#: assembl/models/preferences.py:465
 msgid "Extra JSON parameters"
 msgstr "追加のJSONパラメータ"
 
-#: assembl/models/preferences.py:474
+#: assembl/models/preferences.py:467
 msgid "Parameters for quick frontend settings"
 msgstr "クイックフロントエンド設定のパラメータ"
 
-#: assembl/models/preferences.py:483
+#: assembl/models/preferences.py:476
 msgid "Terms of use URL"
 msgstr "利用規約のURL"
 
-#: assembl/models/preferences.py:485
+#: assembl/models/preferences.py:478
 msgid "URL of a document presenting terms of use for the discussion"
 msgstr "議論のための利用規約のURL"
 
-#: assembl/models/preferences.py:494
+#: assembl/models/preferences.py:487
 msgid "Video URL"
 msgstr "動画のURL"
 
-#: assembl/models/preferences.py:496
+#: assembl/models/preferences.py:489
 msgid "URL of a video presenting the discussion"
 msgstr "ディスカッションを紹介するビデオのURL"
 
-#: assembl/models/preferences.py:505
+#: assembl/models/preferences.py:498
 msgid "Tab title"
 msgstr "メッセージのタイトル"
 
-#: assembl/models/preferences.py:507
+#: assembl/models/preferences.py:500
 msgid "Title which appears on the tab, by default assembl"
 msgstr ""
 
-#: assembl/models/preferences.py:515
+#: assembl/models/preferences.py:508
 msgid "Mandatory legal contents validation"
 msgstr ""
 
-#: assembl/models/preferences.py:517
+#: assembl/models/preferences.py:510
 msgid "Activate or not mandatory validation of legal contents after SSO login."
 msgstr ""
 
-#: assembl/models/preferences.py:526
+#: assembl/models/preferences.py:519
 msgid "Video description"
 msgstr "動画の説明"
 
-#: assembl/models/preferences.py:528
+#: assembl/models/preferences.py:521
 msgid "Description of the video presenting the discussion"
 msgstr "ディスカッションを紹介するビデオの説明"
 
-#: assembl/models/preferences.py:537
+#: assembl/models/preferences.py:530
 msgid "Social sharing"
 msgstr "ソーシャルシェアリング"
 
-#: assembl/models/preferences.py:540
+#: assembl/models/preferences.py:533
 msgid "Show the share button on posts and ideas"
 msgstr "投稿とアイデアの共有ボタンを表示する"
 
-#: assembl/models/preferences.py:551
+#: assembl/models/preferences.py:544
 msgid "Private social sharing"
 msgstr "ソーシャルシェアリング"
 
-#: assembl/models/preferences.py:553
+#: assembl/models/preferences.py:546
 msgid "Publicizing or privatizing social sharing"
 msgstr ""
 
-#: assembl/models/preferences.py:562
+#: assembl/models/preferences.py:555
 msgid "Generic Errors"
 msgstr ""
 
-#: assembl/models/preferences.py:564
+#: assembl/models/preferences.py:557
 msgid "Display a generic error message."
 msgstr ""
 
-#: assembl/models/preferences.py:573
+#: assembl/models/preferences.py:566
 msgid "Extra data for CSV reports"
 msgstr ""
 
-#: assembl/models/preferences.py:576
+#: assembl/models/preferences.py:569
 msgid "data taken from social_auth's extra_data to add to CSV reports"
 msgstr ""
 
-#: assembl/models/preferences.py:588
+#: assembl/models/preferences.py:581
 msgid "Require anti-virus check"
 msgstr ""
 
-#: assembl/models/preferences.py:591
+#: assembl/models/preferences.py:584
 msgid "Run an anti-virus on file attachments"
 msgstr ""
 
-#: assembl/models/preferences.py:602
-msgid "Get keywords from Watson"
+#: assembl/models/preferences.py:594
+#, fuzzy
+#| msgid "activate web annotation"
+msgid "Activate semantic analysis"
+msgstr "Web注釈を有効にする"
+
+#: assembl/models/preferences.py:596
+msgid "Use Watson for semantic analysis"
 msgstr ""
 
-#: assembl/models/preferences.py:604
-msgid "Use Watson to identify keywords"
-msgstr ""
-
-#: assembl/models/preferences.py:611
-msgid "Get concepts from Watson"
-msgstr ""
-
-#: assembl/models/preferences.py:613
-msgid "Use Watson to identify concepts"
-msgstr ""
-
-#: assembl/models/preferences.py:620
-msgid "Get categories from Watson"
-msgstr ""
-
-#: assembl/models/preferences.py:622
-msgid "Use Watson to identify categories"
-msgstr ""
-
-#: assembl/models/preferences.py:629
-msgid "Get sentiments from Watson"
-msgstr ""
-
-#: assembl/models/preferences.py:631
-msgid "Use Watson to identify sentiments"
-msgstr ""
-
-#: assembl/models/preferences.py:638
-msgid "Get emotions from Watson"
-msgstr ""
-
-#: assembl/models/preferences.py:640
-msgid "Use Watson to identify emotions"
-msgstr ""
-
-#: assembl/models/preferences.py:653
+#: assembl/models/preferences.py:607
 msgid "Authentication service type"
 msgstr "認証サービスの種類"
 
-#: assembl/models/preferences.py:655
+#: assembl/models/preferences.py:609
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -406,63 +384,63 @@ msgstr ""
 "この議論のためのon-social-"
 "authバックエンドとして定義されるプライマリ認証サーバー。参加者はこのサーバーに自動ログインし、ディスカッションの自動登録にはこのバックエンドからのアカウントが必要です."
 
-#: assembl/models/preferences.py:670
+#: assembl/models/preferences.py:624
 msgid "Allow access to moderated text"
 msgstr "モデレートされたテキストへのアクセスを許可する"
 
-#: assembl/models/preferences.py:673
+#: assembl/models/preferences.py:627
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr "モデレートされた投稿は、デフォルトで隠されているかアクセス不能になっていますか ?"
 
-#: assembl/models/preferences.py:686
+#: assembl/models/preferences.py:640
 msgid "Idea panel opens automatically"
 msgstr "アイデアパネルが自動的に開きます"
 
-#: assembl/models/preferences.py:689
+#: assembl/models/preferences.py:643
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
 msgstr "アイデアがクリックされるとアイデアパネルが自動的に開きますか？ (そして、特別なセクションがクリックされたときに閉じますか？)"
 
-#: assembl/models/preferences.py:701
+#: assembl/models/preferences.py:655
 msgid "Ids of columns in column view"
 msgstr "カラムビューのカラムのID"
 
-#: assembl/models/preferences.py:703
+#: assembl/models/preferences.py:657
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "マルチカラムビューのカラムの（順序付けられた）識別子は何ですか?"
 
-#: assembl/models/preferences.py:716
+#: assembl/models/preferences.py:670
 msgid "Default colors of columns in column view"
 msgstr "カラムビュー内のカラムのデフォルトの色"
 
-#: assembl/models/preferences.py:718
+#: assembl/models/preferences.py:672
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr "マルチカラムビューのカラムの（デフォルトの）テーマカラーは何ですか ?"
 
-#: assembl/models/preferences.py:730
+#: assembl/models/preferences.py:684
 msgid "Names of columns in column view"
 msgstr "カラムビューのカラム名"
 
-#: assembl/models/preferences.py:732
+#: assembl/models/preferences.py:686
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
 msgstr "各列の言語で、マルチカラムビューの（デフォルトの）カラムの名前は何ですか ?"
 
-#: assembl/models/preferences.py:745
+#: assembl/models/preferences.py:699
 msgid "Default permissions"
 msgstr "デフォルトのアクセス許可"
 
-#: assembl/models/preferences.py:748
+#: assembl/models/preferences.py:702
 msgid "The basic permissions for a new discussion"
 msgstr "新しいディスカッションのためのベーシックのアクセス許可"
 
-#: assembl/models/preferences.py:830
+#: assembl/models/preferences.py:788
 msgid "Require Email Domain"
 msgstr "電子メールドメインを要求する"
 
-#: assembl/models/preferences.py:833
+#: assembl/models/preferences.py:791
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -473,141 +451,140 @@ msgstr ""
 "これらのドメインからの電子メールを少なくとも一つ含むアカウントだけがこのディスカッションに自動登録することができます. "
 "これが空であれば誰でも自動登録することができます."
 
-#: assembl/models/preferences.py:849
+#: assembl/models/preferences.py:807
 msgid "Whitelist on authentication service"
 msgstr "認証サービスの種類"
 
-#: assembl/models/preferences.py:852
+#: assembl/models/preferences.py:810
 msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
-#: assembl/models/preferences.py:864
+#: assembl/models/preferences.py:822
 msgid "Whitelist on standard registration"
 msgstr ""
 
-#: assembl/models/preferences.py:867
+#: assembl/models/preferences.py:825
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:879
+#: assembl/models/preferences.py:837
 msgid "Discussion administrators"
 msgstr "ディスカッションの統計"
 
-#: assembl/models/preferences.py:882
+#: assembl/models/preferences.py:840
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
 
-#: assembl/models/preferences.py:895
+#: assembl/models/preferences.py:853
 msgid "Show CI Dashboard"
 msgstr "CIダッシュボードを表示する"
 
-#: assembl/models/preferences.py:898
+#: assembl/models/preferences.py:856
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "パネルグループウィンドウにCIダッシュボードを表示する"
 
-#: assembl/models/preferences.py:910
+#: assembl/models/preferences.py:868
 msgid "URL of CI Dashboard"
 msgstr "CIダッシュボードのURL"
 
-#: assembl/models/preferences.py:912
+#: assembl/models/preferences.py:870
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "CIダッシュボードに表示されるビジュアライゼーションの設定"
 
-#: assembl/models/preferences.py:930
+#: assembl/models/preferences.py:888
 msgid "Catalyst Visualizations"
 msgstr "Catalystの可視化"
 
-#: assembl/models/preferences.py:933
+#: assembl/models/preferences.py:891
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "利用可能なCatalystの可視化に関するJSONの説明"
 
-#: assembl/models/preferences.py:945
+#: assembl/models/preferences.py:903
 msgid "Navigation sections"
 msgstr "ナビゲーションセクション"
 
-#: assembl/models/preferences.py:948
+#: assembl/models/preferences.py:906
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
 msgstr "ナビゲーションセクションに表示するCatalystの可視化のJSON仕様"
 
-#: assembl/models/preferences.py:961
+#: assembl/models/preferences.py:919
 msgid "Catalyst translations"
 msgstr "Catalystの翻訳"
 
-#: assembl/models/preferences.py:964
+#: assembl/models/preferences.py:922
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "Jed（JSON）形式のCatalystの可視化に適用される翻訳"
 
-#: assembl/models/preferences.py:981
+#: assembl/models/preferences.py:939
 msgid "Default Table of Ideas Collapsed state"
 msgstr "アイデアの折りたたまれた状態のデフォルトの表"
 
-#: assembl/models/preferences.py:984
+#: assembl/models/preferences.py:942
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
 msgstr "アイデアの表の各アイデアのデフォルトの展開/折りたたみ状態。ユーザーは、アイデアを開いたり閉じたりすることでオーバーライドすることができます"
 
-#: assembl/models/preferences.py:999
+#: assembl/models/preferences.py:957
 msgid "Preference data"
 msgstr "プリファレンスデータ"
 
-#: assembl/models/preferences.py:1002
+#: assembl/models/preferences.py:960
 msgid "The preference configuration; override only with care"
 msgstr "プリファレンス設定。慎重にオーバーライドすること"
 
-#: assembl/models/preferences.py:1014
+#: assembl/models/preferences.py:972
 msgid "Cookies banner"
 msgstr "クッキーのバナー"
 
-#: assembl/models/preferences.py:1017
+#: assembl/models/preferences.py:975
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "Piwikクッキーを無効にするためのバナーを表示する"
 
-#: assembl/models/preferences.py:1029
+#: assembl/models/preferences.py:987
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:1032
+#: assembl/models/preferences.py:990
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:1042
+#: assembl/models/preferences.py:1000
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:1045
+#: assembl/models/preferences.py:1003
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:1055 assembl/models/preferences.py:1058
+#: assembl/models/preferences.py:1013 assembl/models/preferences.py:1016
 msgid "Harvesting translation"
 msgstr "Catalystの翻訳"
 
-#: assembl/models/preferences.py:1066
+#: assembl/models/preferences.py:1024
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr ""
 
-#: assembl/models/preferences.py:1069
+#: assembl/models/preferences.py:1027
 msgid ""
 "A list of valid domain names or IP addresses that are allowed to make "
 "CORS api calls to the GraphQL API"
 msgstr ""
 
-#: assembl/models/preferences.py:1079
+#: assembl/models/preferences.py:1037
 #, fuzzy
-#| msgid "Published without moderation"
 msgid "Use moderation"
 msgstr "モデレートなしで公開"
 
-#: assembl/models/preferences.py:1080
+#: assembl/models/preferences.py:1038
 msgid "Is the moderation activated or not"
 msgstr ""
 
@@ -960,7 +937,6 @@ msgid ""
 msgstr "このディスカッションへようこそ。 Assemblを使い始めるのに役立つ一連のヒントを作成しました."
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
-#: assembl/templates/join0.jinja2:6
 msgid "Join the discussion"
 msgstr "ディスカッションに参加する"
 
@@ -2423,22 +2399,6 @@ msgstr "投稿者"
 #: assembl/templates/idea_in_synthesis.jinja2:16
 msgid "See the conversation around this idea"
 msgstr "このアイデア周辺の会話を見る"
-
-#: assembl/templates/join0.jinja2:7
-#, fuzzy, python-format
-#| msgid "you must first join this discussion"
-msgid "This is you first visit to the discussion '%s'."
-msgstr "あなたはまずこのディスカッションに参加する必要があります"
-
-#: assembl/templates/join0.jinja2:9
-msgid "By entering, you agree to receive the following notifications:"
-msgstr ""
-
-#: assembl/templates/join0.jinja2:17
-#, fuzzy
-#| msgid "Log in"
-msgid "join"
-msgstr "ログイン"
 
 #: assembl/templates/login.jinja2:30
 #, python-format
@@ -4639,21 +4599,21 @@ msgstr "登録解除"
 msgid "unsubscribed"
 msgstr "登録解除されました"
 
-#: assembl/views/__init__.py:755
+#: assembl/views/__init__.py:773
 msgid "error"
 msgstr ""
 
-#: assembl/views/__init__.py:756
+#: assembl/views/__init__.py:774
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
 "accessible."
 msgstr ""
 
-#: assembl/views/__init__.py:757
+#: assembl/views/__init__.py:775
 msgid "We apologize for the inconvenience"
 msgstr ""
 
-#: assembl/views/__init__.py:758
+#: assembl/views/__init__.py:776
 msgid "Homepage"
 msgstr ""
 
@@ -4682,76 +4642,68 @@ msgstr "読んだ投稿を表示するには、ログインしている必要が
 msgid "Your message is empty"
 msgstr "あなたのメッセージは空です"
 
-#: assembl/views/api2/auth.py:46
+#: assembl/views/api2/auth.py:47
 msgid "The provided input combination is not valid."
 msgstr ""
 
-#: assembl/views/api2/auth.py:350
+#: assembl/views/api2/auth.py:351
 msgid "The user does not exist"
 msgstr "ユーザーが存在しません"
 
-#: assembl/views/api2/auth.py:367
+#: assembl/views/api2/auth.py:368
 msgid "This email does not exist"
 msgstr "このメールは存在しません"
 
-#: assembl/views/api2/auth.py:377
+#: assembl/views/api2/auth.py:378
 msgid "Please give an identifier"
 msgstr "識別子を与えてください"
 
-#: assembl/views/api2/auth.py:383
+#: assembl/views/api2/auth.py:384
 msgid "This user has no email"
 msgstr "このユーザーのメールはありません"
 
-#: assembl/views/api2/auth.py:390
+#: assembl/views/api2/auth.py:391
 msgid "This is not a user"
 msgstr "これはユーザーではありません"
 
-#: assembl/views/api2/auth.py:414
+#: assembl/views/api2/auth.py:415
 msgid "The passwords that were entered are mismatched!"
 msgstr "入力されたパスワードが一致していません"
 
-#: assembl/views/api2/auth.py:428 assembl/views/auth/views.py:968
+#: assembl/views/api2/auth.py:429 assembl/views/auth/views.py:968
 #: assembl/views/auth/views.py:1036
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "このリンクは無効です。別のリンクを受信しますか？"
 
-#: assembl/views/api2/auth.py:431 assembl/views/auth/views.py:971
+#: assembl/views/api2/auth.py:432 assembl/views/auth/views.py:971
 #: assembl/views/auth/views.py:1039
 msgid "This link has been used. Do you want us to send another?"
 msgstr "このリンクは使用されています。別のリンクを受信しますか？"
 
-#: assembl/views/api2/auth.py:461 assembl/views/auth/views.py:392
+#: assembl/views/api2/auth.py:465 assembl/views/auth/views.py:392
 msgid "Please use a name of at least 3 characters"
 msgstr "3文字以上の名前を使用してください"
 
-#: assembl/views/api2/auth.py:470 assembl/views/auth/views.py:325
+#: assembl/views/api2/auth.py:474 assembl/views/auth/views.py:325
 #: assembl/views/auth/views.py:399
 msgid "This is not a valid email"
 msgstr "これは有効なメールではありません"
 
-#: assembl/views/api2/auth.py:479 assembl/views/auth/views.py:406
+#: assembl/views/api2/auth.py:483 assembl/views/auth/views.py:406
 msgid "We already have a user with this email."
 msgstr "既にこのメールアドレスを利用しているユーザーがいます。"
 
-#: assembl/views/api2/auth.py:491
+#: assembl/views/api2/auth.py:495
 msgid "No email."
 msgstr "メールはありません."
 
-#: assembl/views/api2/auth.py:498
-msgid "We already have a user with this username."
-msgstr "既にこのユーザー名を持つユーザーがいます."
-
-#: assembl/views/api2/auth.py:509
-msgid "The username must be less than 20 characters."
-msgstr "3文字以上の名前を使用してください"
-
-#: assembl/views/api2/auth.py:523
+#: assembl/views/api2/auth.py:529
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "${emails} for support."
 msgstr ""
 
-#: assembl/views/api2/auth.py:524
+#: assembl/views/api2/auth.py:530
 msgid ""
 "Your email domain has not been approved for registration. Please contact "
 "one of ${emails} for support."
@@ -5025,3 +4977,57 @@ msgstr "slug=%s のディスカッションは見つかりませんでした"
 
 #~ msgid "Secret for assembl as a client of the authentication server"
 #~ msgstr "認証サーバーのクライアントとしてのAssemblの暗証"
+
+#~ msgid "Dummy translation service (two steps)"
+#~ msgstr "ダミー翻訳サービス(2ステップ)"
+
+#~ msgid "Dummy translation service (one step)"
+#~ msgstr "ダミー翻訳サービス(ワンステップ)"
+
+#~ msgid "Dummy translation service (two steps) with errors"
+#~ msgstr "エラーのあるダミー翻訳サービス(２ステップ)"
+
+#~ msgid "Dummy translation service (one step) with errors"
+#~ msgstr "エラーのあるダミー翻訳サービス(1ステップ)"
+
+#~ msgid "Get keywords from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify keywords"
+#~ msgstr ""
+
+#~ msgid "Get concepts from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify concepts"
+#~ msgstr ""
+
+#~ msgid "Get categories from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify categories"
+#~ msgstr ""
+
+#~ msgid "Get sentiments from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify sentiments"
+#~ msgstr ""
+
+#~ msgid "Get emotions from Watson"
+#~ msgstr ""
+
+#~ msgid "Use Watson to identify emotions"
+#~ msgstr ""
+
+# | msgid "you must first join this discussion"
+#~ msgid "This is you first visit to the discussion '%s'."
+#~ msgstr "あなたはまずこのディスカッションに参加する必要があります"
+
+#~ msgid "By entering, you agree to receive the following notifications:"
+#~ msgstr ""
+
+# | msgid "Log in"
+#~ msgid "join"
+#~ msgstr "ログイン"
+
