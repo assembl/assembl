@@ -9,7 +9,7 @@ var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob');
 var _ = require('lodash');
-
+const TerserPlugin = require('terser-webpack-plugin');
 
 function theme_entries() {
     var entries = {},
@@ -21,7 +21,7 @@ function theme_entries() {
         theme_name = parts[parts.length - 2]
         // Special case default, as it's not unique
         if (theme_name === 'default') {
-          name = 'themes/' + theme_name + '/theme_' + theme_name + '_web'; 
+          name = 'themes/' + theme_name + '/theme_' + theme_name + '_web';
         }
         else {
           bucket = parts[parts.length - 3];
@@ -132,9 +132,10 @@ module.exports = {
     },
     mode: 'production',
     optimization: {
-        minimizer: [
-            new UglifyJsPlugin({ sourceMap: true, parallel: true, cache: true })
-        ]
+      minimizer: [new TerserPlugin({
+        cache: true,
+        parallel: true,
+      })]
     },
     plugins: [
         new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
