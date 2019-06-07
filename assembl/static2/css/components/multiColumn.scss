@@ -17,6 +17,10 @@ $column-synthesis-height: 320px;
     .post-left {
       padding: 0;
     }
+
+    .post-right {
+      background-color: $white;
+    }
   }
 
   .column-tree {
@@ -160,10 +164,6 @@ $column-synthesis-height: 320px;
     padding-left: $column-half-gutter;
     padding-right: $column-half-gutter;
     position: static;
-
-    .level-0 {
-      width: auto;
-    }
   }
 }
 
