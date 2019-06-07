@@ -20,7 +20,7 @@ test_frontend:
   except:
     - master
     - tmp_master_for_ci_cd
-    - byw-invoke
+    # - byw-invoke
   image: node:10
   before_script:
     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
@@ -94,7 +94,7 @@ build_wheel:
   only:
     - develop
     - invoke
-    # - byw-invoke
+    - byw-invoke
   variables:
     LC_ALL: C.UTF-8
     LANG: en.UTF-8

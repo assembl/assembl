@@ -9,7 +9,7 @@ from gzip import GzipFile
 from shutil import copyfileobj
 from cStringIO import StringIO
 
-#from semantic_version import Version
+# from semantic_version import Version
 
 from .common import (
     venv, task, exists, is_integration_env, fill_template, configure_github_user,
@@ -708,7 +708,7 @@ def get_deployment_clients(c):
 
 @task(get_deployment_clients)
 def deploy_to_sandbox(c):
-    with open('clients.jso') as f:
+    with open('clients.json') as f:
         data = json.load(f)
     client_info = data.get('sandbox', None)
     start_deploy_on_client(c, client_info['id'], client_info.get('region', None))
