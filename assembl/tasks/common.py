@@ -10,6 +10,7 @@ import json
 from invoke import Task, task as base_task
 from os.path import dirname, realpath
 from time import sleep
+from ConfigParser import RawConfigParser
 
 DEFAULT_SECTION = "DEFAULT"
 _local_file = __file__
@@ -25,6 +26,9 @@ _processes_to_restart_without_backup = [
 
 _processes_to_restart_with_backup = _processes_to_restart_without_backup + [
     "gulp", "webpack", "elasticsearch", "uwsgi"]
+
+
+_known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
 
 def task(*args, **kwargs):
@@ -458,7 +462,7 @@ def webservers_start(c):
 
 def is_supervisor_running(c):
     with venv(c):
-        supervisord_cmd_result = c.run("supervisorctl avail", hide='both')
+        supervisord_cmd_result = c.run("supervisorctl avail", hide='both', warn=True)
         if supervisord_cmd_result.failed:
             return False
         else:
@@ -469,21 +473,21 @@ def app_reload(c):
     """
     Restart all necessary processes after an update
     """
-    if c.config.uses_global_supervisor:
+    if c.config._internal.uses_global_supervisor:
         print('Asking supervisor to restart %(projectname)s' % c.config)
         c.run("sudo /usr/bin/supervisorctl restart %(projectname)s" % c.config)
     else:
-        if is_supervisor_running():
+        if is_supervisor_running(c):
             with venv(c):
                 c.run("supervisorctl stop dev:")
                 # supervisor config file may have changed
                 c.run("supervisorctl reread")
                 c.run("supervisorctl update")
-                processes = filter_autostart_processes([
+                processes = filter_autostart_processes(c, [
                     "celery_imap", "changes_router", "celery_notification_dispatch",
                     "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
                 c.run("supervisorctl restart " + " ".join(processes))
-                if c.config.uses_uwsgi:
+                if c.config._internal.uses_uwsgi:
                     c.run("supervisorctl restart prod:uwsgi")
 
 
@@ -491,13 +495,13 @@ def webservers_reload(c):
     """
     Reload the webserver stack.
     """
-    if c.config.uses_nginx:
+    if c.config._internal.uses_nginx:
         # Nginx (sudo is part of command line here because we don't have full
         # sudo access
         print("Reloading nginx")
-        if c.config.webmaster_user:
+        if c.config._internal.webmaster_user:
             if exists(c, '/etc/init.d/nginx'):
-                c.sudo('/etc/init.d/nginx reload -u %s' % c.config.webmaster_user)
+                c.sudo('/etc/init.d/nginx reload -u %s' % c.config._internal.webmaster_user)
         if (c.config.get('sudo_user', None) and exists(c, '/etc/init.d/nginx')):
             c.sudo('/etc/init.d/nginx reload')
         elif exists(c, '/etc/init.d/nginx'):
@@ -583,3 +587,84 @@ def get_robot_machine(c):
 
     print("No user machine found!")
     return None
+
+
+def ensureSection(config, section):
+    """Ensure that config has that section"""
+    if section.lower() != 'default' and not config.has_section(section):
+        config.add_section(section)
+
+
+def val_to_ini(val):
+    if val is None:
+        return ''
+    if isinstance(val, bool):
+        return str(val).lower()
+    if isinstance(val, (dict, list)):
+        return json.dumps(val)
+    return val
+
+
+def yaml_to_ini(yaml_conf, default_section='app:assembl'):
+    """Convert a .yaml file to a ConfigParser (.ini-like object)
+
+    Items are assumed to be in app:assembl section,
+        unless prefixed by "{section}__" .
+    Keys prefixed with an underscore are not passed on.
+    Keys prefixed with a star are put in the global (DEFAULT) section.
+    Value of '__delete_key__' is eliminated if existing.
+    """
+    p = RawConfigParser()
+    ensureSection(p, default_section)
+    for key, val in yaml_conf.iteritems():
+        if key.startswith('_'):
+            continue
+        if isinstance(val, dict):
+            if key in _known_invoke_sections:
+                continue
+            ensureSection(p, key)
+            for subk, subv in val.iteritems():
+                p.set(key, subk, val_to_ini(subv))
+        else:
+            if val == '__delete_key__':
+                # Allow to remove a variable from rc
+                # so we can fall back to underlying ini
+                p.remove_option(default_section, key)
+            else:
+                p.set(default_section, key, val_to_ini(val))
+    return p
+
+
+@task()
+def create_local_ini(c):
+    """Compose local.ini from the given .yaml file"""
+    from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
+    assert running_locally(c)
+    c.config.DEFAULT = c.config.get('DEFAULT', {})
+    c.config.DEFAULT['code_root'] = c.config.code_root  # Is this used?
+    # Special case: uwsgi does not do internal computations.
+    if 'uwsgi' not in c.config:
+        c.config.uwsgi = {}
+    c.config.uwsgi.virtualenv = c.config.projectpath + '/venv'
+    ini_sequence = c.config.get('ini_files', None)
+    assert ini_sequence, "Define ini_files"
+    ini_sequence = ini_sequence.split()
+    base = RawConfigParser()
+    random_file = c.config.get('random_file', None)
+    for overlay in ini_sequence:
+        if overlay == 'RC_DATA':
+            overlay = yaml_to_ini(c.config)
+        elif overlay.startswith('RANDOM'):
+            templates = overlay.split(':')[1:]
+            overlay = populate_random(
+                random_file, templates, extract_saml_info(c.config))
+        else:
+            overlay = find_ini_file(overlay, os.path.join(c.config.code_root, 'assembl', 'configs'))
+            assert overlay, "Cannot find " + overlay
+        combine_ini(base, overlay)
+    ini_file_name = c.config.get('_internal', {}).get('ini_file', 'local.ini')
+    local_ini_path = os.path.join(c.config.projectpath, ini_file_name)
+    if exists(c, local_ini_path):
+        c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
+    with open(local_ini_path, 'w') as f:
+        base.write(f)

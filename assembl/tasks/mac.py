@@ -1,7 +1,7 @@
 import os
 import getpass
 import build
-
+import re
 from os.path import join, normpath
 from .common import (
     venv, task, exists, delete_foreign_tasks, setup_var_directory, get_upload_dir,
@@ -65,8 +65,8 @@ def create_venv_python_3(c):
         print("Found an already existing virtual env with python 3")
         return
     print("Creating a fresh virtual env with python 3")
-    c.run('chmod -R o-rwx ' + venv3)
     c.run('python3 -m virtualenv --python python3 %s' % venv3)
+    c.run('chmod -R o-rwx ' + venv3)
 
 
 def venv_py3_mac(c):
@@ -87,19 +87,21 @@ def update_pip_requirements_mac(c, force_reinstall=False):
         with venv(c):
             c.run("pip install --ignore-installed -r %s/requirements.txt" % (c.config.projectpath))
     else:
+        mac_version = c.run("defaults read loginwindow SystemVersionStampAsString").stdout
+        pycurl_mac = 'env PYCURL_SSL_LIBRARY=openssl MACOSX_DEPLOYMENT_TARGET="{mac_version}" LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include"'.format(mac_version=mac_version)
         specials = [
             # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
             ("lxml", None, None),
             # Thanks to https://github.com/pypa/pip/issues/4453 disable wheel separately.
             ("dm.xmlsec.binding", "%s --install-option='-q'", "%s --install-option='-q'"),
-            ("pycurl", None, 'env PYCURL_SSL_LIBRARY=openssl MACOSX_DEPLOYMENT_TARGET="10.13" LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include" %s'),
+            ("pycurl", None, pycurl_mac + ' %s'),
         ]
         for package, wrapper, mac_wrapper in specials:
             wrapper = mac_wrapper
             separate_pip_install(c, package, wrapper)
-        cmd = "pip install -r %s/requirements.txt" % (c.config.projectpath)
+        cmd = "pip install --no-cache-dir -r %s/requirements.txt" % (c.config.projectpath)
         with venv(c):
-            c.run("yes w | %s" % cmd, warn=True)
+            c.run(cmd, warn=True)
 
 
 @task()
@@ -240,10 +242,6 @@ def updatemaincode(c, backup=False):
     """
     if not backup:
         print('Updating Git repository')
-        with c.cd(join(c.config.projectpath)):
-            c.run('git fetch')
-            c.run('git checkout %s' % c.config._internal.gitbranch)
-            c.run('git pull %s %s' % (c.config._internal.gitrepo, c.config._internal.gitbranch))
 
         path = join(c.config.projectpath, '..', 'url_metadata')
         if exists(c, path):
@@ -298,6 +296,36 @@ def build_virtualenv(c, with_setuptools=False):
 
 
 @task()
+def update_node(c, force_reinstall=False):
+    """
+    Install node and npm to latest version specified. This is done inside of a virtual environment.
+    """
+    n_version = c.config._internal.node.version
+    npm_version = c.config._internal.node.npm
+    node_version_cmd_regex = re.compile(r'v' + n_version.replace('.', r'\.'))
+    with venv(c, True):
+        node_version_cmd_result = c.run('node --version', echo=True).stdout
+    match = node_version_cmd_regex.match(str(node_version_cmd_result))
+    if not match or force_reinstall:
+        # Stop gulp and webpack because otherwise node may be busy
+        # TODO: Implement supervisor_process_stop
+        # supervisor_process_stop('dev:gulp')
+        # supervisor_process_stop('dev:webpack')
+        with venv(c, True):
+            c.run("rm -rf venv/lib/node_modules/")
+            c.run("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
+            c.run("nodeenv --node=%s --npm=%s --python-virtualenv assembl/static/js" % (n_version, npm_version))
+        upgrade_yarn_mac(c)
+        with c.cd(get_node_base_path(c)):
+            with venv(c):
+                c.run("npm install reinstall -g")
+
+        build.update_npm_requirements(force_reinstall=True)
+    else:
+        print "Node version OK"
+
+
+@task()
 def app_update_dependencies(c, force_reinstall=False, backup=False):
     """
     Updates all python and javascript dependencies.  Everything that requires a
@@ -306,7 +334,7 @@ def app_update_dependencies(c, force_reinstall=False, backup=False):
     if not backup:
         ensure_requirements(c)
     update_pip_requirements_mac(c, force_reinstall=force_reinstall)
-    build.update_node(c, force_reinstall=force_reinstall)
+    update_node(c, force_reinstall=force_reinstall)
     build.update_bower(c)
     build.update_bower_requirements(c, force_reinstall=force_reinstall)
     build.update_npm_requirements(c, force_reinstall=force_reinstall)
@@ -366,13 +394,12 @@ def app_setup(c, backup=False):
 
 @task()
 def create_local_ini(c):
-    """Replace the local.ini file with one composed from the current .rc file"""
+    """Replace the local.ini file with one composed from the current yaml file"""
     local_ini_path = os.path.join(c.config.projectpath, c.config._internal.ini_file)
-    if exists(local_ini_path):
+    if exists(c, local_ini_path):
         c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
     with venv(c):
-        c.run("python2 -m assembl.scripts.ini_files compose -o %s %s" % (
-            c.config._internal.ini_file, c.config.rcfile))
+        c.run("inv common.create-local-ini")
 
 
 @task()
@@ -391,12 +418,13 @@ def set_file_permissions(c):
     webgrp = '_www'
     # This should cover most cases.
     if webgrp not in c.run('groups').stdout.split():
-        c.sudo('dseditgroup -o edit -a {user} -t user {webgrp}'.format(
-            webgrp=webgrp, user=c.config.user))
+        username = c.run("whoami").stdout.replace('\n','')
+        c.run('sudo dseditgroup -o edit -a {user} -t user {webgrp}'.format(
+            webgrp=webgrp, user=username))
     with c.cd(c.config.projectpath):
         upload_dir = get_upload_dir(c)
         project_path = c.config.projectpath
-        code_path = get_assembl_code_path(c)
+        code_path = os.getcwd()
         c.run('chmod -R o-rwx ' + project_path)
         c.run('chmod -R g-rw ' + project_path)
         chgrp_rec(c, project_path, webgrp)
@@ -406,7 +434,7 @@ def set_file_permissions(c):
             c.run('chmod -R o-rwx ' + code_path)
             c.run('chmod -R g-rw ' + code_path)
             chgrp_rec(c, code_path, webgrp)
-
+        
         c.run('chgrp {webgrp} . {path}/var {path}/var/run {path}/var/share'.format(webgrp=webgrp, path=project_path))
         c.run('chgrp -R {webgrp} {path}/assembl/static {path}/assembl/static2'.format(webgrp=webgrp, path=code_path))
         c.run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))

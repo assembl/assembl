@@ -11,55 +11,7 @@ from invoke.tasks import call
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
     create_venv, fill_template, get_s3_file, s3_file_exists, get_aws_account_id, delete_foreign_tasks,
-    get_assembl_code_path, is_cloud_env)
-
-_known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
-
-
-def val_to_ini(val):
-    if val is None:
-        return ''
-    if isinstance(val, bool):
-        return str(val).lower()
-    if isinstance(val, (dict, list)):
-        return json.dumps(val)
-    return val
-
-
-def ensureSection(config, section):
-    """Ensure that config has that section"""
-    if section.lower() != 'default' and not config.has_section(section):
-        config.add_section(section)
-
-
-def yaml_to_ini(yaml_conf, default_section='app:assembl'):
-    """Convert a .yaml file to a ConfigParser (.ini-like object)
-
-    Items are assumed to be in app:assembl section,
-        unless prefixed by "{section}__" .
-    Keys prefixed with an underscore are not passed on.
-    Keys prefixed with a star are put in the global (DEFAULT) section.
-    Value of '__delete_key__' is eliminated if existing.
-    """
-    p = RawConfigParser()
-    ensureSection(p, default_section)
-    for key, val in yaml_conf.iteritems():
-        if key.startswith('_'):
-            continue
-        if isinstance(val, dict):
-            if key in _known_invoke_sections:
-                continue
-            ensureSection(p, key)
-            for subk, subv in val.iteritems():
-                p.set(key, subk, val_to_ini(subv))
-        else:
-            if val == '__delete_key__':
-                # Allow to remove a variable from rc
-                # so we can fall back to underlying ini
-                p.remove_option(default_section, key)
-            else:
-                p.set(default_section, key, val_to_ini(val))
-    return p
+    get_assembl_code_path, is_cloud_env, yaml_to_ini)
 
 
 @task()
