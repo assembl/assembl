@@ -158,7 +158,8 @@
     "redux-thunk": "^2.1.0",
     "searchkit": "^2.3.0",
     "smoothscroll-polyfill": "^0.3.6",
-    "url-join": "^1.1.0"
+    "url-join": "^1.1.0",
+    "terser-webpack-plugin": "^1.3.0"
   },
   "resolutions": {
     "*/lodash": "^4.17.11",
