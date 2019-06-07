@@ -236,6 +236,28 @@ $deleted-post-border: 1px solid $light-grey !default;
   .post-left {
     width: 100%;
     padding: 20px 10px 20px 30px;
+
+    .meta {
+      display: flex;
+
+      .author .assembl-icon-back-arrow {
+        font-size: 12px;
+        padding-left: 6px;
+        padding-right: 6px;
+      }
+
+      .published-date {
+        font-size: 12px;
+        font-weight: 300;
+        line-height: 1.91;
+        margin-left: 4px;
+
+        &:before {
+          content: '-';
+          margin-right: 4px;
+        }
+      }
+    }
   }
 
   .post-right {
@@ -373,8 +395,6 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .answer-form-inner {
-      margin: 13px;
-
       .editor-label {
         padding-top: 16px;
       }
@@ -828,11 +848,6 @@ $deleted-post-border: 1px solid $light-grey !default;
         }
       }
 
-      .answer-form-inner .form-group {
-        margin: 13px 0 0;
-        border: 1px solid $first-color-light;
-      }
-
       .assembl-icon-back-arrow {
         padding: 0;
       }
@@ -845,6 +860,14 @@ $deleted-post-border: 1px solid $light-grey !default;
 }
 
 @media screen and (max-width: $screen-xxs-max) {
+  .translate {
+    flex-direction: column;
+
+    .translate-button {
+      margin: 0;
+    }
+  }
+
   .posts {
     .post-right {
       .answers {
@@ -852,6 +875,32 @@ $deleted-post-border: 1px solid $light-grey !default;
         display: block;
         padding: 6px 0 0 17px;
       }
+    }
+
+    .post-left {
+      .meta {
+        flex-direction: column;
+
+        .author {
+          word-wrap: break-word;
+        }
+
+        .published-date {
+          margin-left: 0;
+        }
+
+        .published-date:before {
+          display: none;
+        }
+      }
+    }
+
+    .answer-form {
+      width: 100%;
+    }
+
+    .post-body-title {
+      font-size: 13px;
     }
   }
 

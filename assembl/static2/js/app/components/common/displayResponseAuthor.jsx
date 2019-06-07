@@ -4,7 +4,7 @@ import React from 'react';
 export type displayResponseAuthorProps = {
   authorFullname: string,
   /** Circle avatar props */
-  parentPostAuthorFullname: string,
+  parentPostAuthorFullname: ?string,
   /** Comment displayed published date */
   displayedPublishedDate: string,
   /** Comment published date */
@@ -23,7 +23,7 @@ const displayResponseAuthor = ({
     <p className="author">
       <strong>{authorFullname}</strong>
       <span className="parent-info">
-        <span className="assembl-icon-back-arrow" />
+        {parentPostAuthorFullname ? <span className="assembl-icon-back-arrow" /> : null}
         {parentPostAuthorFullname}
       </span>
     </p>

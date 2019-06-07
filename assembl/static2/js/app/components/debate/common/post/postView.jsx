@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { Translate, I18n } from 'react-redux-i18n';
 import classnames from 'classnames';
+import moment from 'moment';
 import {
   getDomElementOffset,
   elementContainsSelection,
@@ -9,8 +10,8 @@ import {
   formatedTagList
 } from '../../../../utils/globalFunctions';
 import { connectedUserIsModerator, connectedUserIsAdmin } from '../../../../utils/permissions';
+import DisplayResponseAuthor from '../../../common/displayResponseAuthor';
 import Attachments from '../../../common/attachments';
-import ProfileLine from '../../../common/profileLine';
 import PostActions from '../../common/postActions';
 import AnswerForm from '../../thread/answerForm';
 import Nuggets from '../../thread/nuggets';
@@ -132,17 +133,18 @@ class PostView extends React.PureComponent<Props, State> {
 
   render() {
     const {
-      bodyMimeType,
-      dbId,
-      indirectIdeaContentLinks,
-      creator,
-      modified,
-      sentimentCounts,
-      mySentiment,
       attachments,
+      bodyMimeType,
+      creator,
+      dbId,
       extracts,
-      publicationState,
+      indirectIdeaContentLinks,
       keywords,
+      modified,
+      mySentiment,
+      parentPostCreator,
+      publicationState,
+      sentimentCounts,
       tags
     } = this.props.data.post;
     const {
@@ -171,6 +173,8 @@ class PostView extends React.PureComponent<Props, State> {
       isHarvestable,
       isDebateModerated
     } = this.props;
+
+    const parentPostAuthorFullname = parentPostCreator ? parentPostCreator.displayName : null;
     const isPending = publicationState === PublicationStates.SUBMITTED_AWAITING_MODERATION;
     const isPendingPostForModerator = connectedUserIsModerator() && isPending;
     const translate = contentLocale !== originalLocale;
@@ -204,7 +208,6 @@ class PostView extends React.PureComponent<Props, State> {
     if (creator.isDeleted) {
       userName = I18n.t('deletedUser');
     }
-    const userNameClasses = classnames({ pending: isPending });
 
     const tagOnPostProps: TagOnPostProps = {
       isAdmin: connectedUserIsAdmin(),
@@ -217,6 +220,10 @@ class PostView extends React.PureComponent<Props, State> {
       suggestionList: relatedIdeasTitles,
       suggestionContainerTitle: I18n.t('debate.thread.linkIdea')
     };
+
+    const displayedPublishedDate = moment(creationDate)
+      .locale(contentLocale)
+      .fromNow();
 
     return (
       <div
@@ -247,13 +254,12 @@ class PostView extends React.PureComponent<Props, State> {
           <div className="post-row">
             <div className="post-left">
               {creator && (
-                <ProfileLine
-                  userNameModerationClasses={userNameClasses}
-                  userId={creator.userId}
-                  userName={userName}
-                  creationDate={creationDate}
-                  locale={lang}
-                  modified={modified}
+                <DisplayResponseAuthor
+                  authorFullname={userName}
+                  displayedPublishedDate={displayedPublishedDate}
+                  parentPostAuthorFullname={parentPostAuthorFullname}
+                  publishedDate={creationDate}
+                  displayIsEdited={modified}
                 />
               )}
               <PostBody
