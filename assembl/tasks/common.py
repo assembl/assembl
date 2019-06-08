@@ -173,7 +173,7 @@ def setup_ctx(c):
     target = c.config.get('_extends', None) 
     if not target and exists(c, 'invoke.yaml'):
         target = 'invoke.yaml'
-    elif not is_cloud_env(c):
+    elif not target and not is_cloud_env(c):
         target = 'mac.yaml'
     while target:
         if os.path.isabs(target):

@@ -36,6 +36,7 @@ const Header = ({ timeline, title, subtitle, headerImage, logoImage, buttonLabel
     <section className="home-section header-section">
       <Grid fluid className="max-container header-content-container">
         <div className="header-content">
+          <pre>DEBUG CICD</pre>
           {logoImage && logoImage.externalUrl ? <img className="header-logo" src={logoImage.externalUrl} alt="logo" /> : null}
           <div className="max-text-width">
             {title ? <h1 className="light-title-1">{title}</h1> : null}
