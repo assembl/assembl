@@ -90,14 +90,14 @@
     "webpack-dev-server": "^3.1.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0",
-    "@babel/runtime": "^7.0.0",
+    "@babel/runtime-corejs2": "^7.4.5",
     "@material-ui/core": "^3.9.0",
     "@material-ui/lab": "^3.0.0-alpha.28",
     "@sentry/browser": "4.2.4",
     "apollo-upload-client": "^5.1.1",
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
+    "core-js": "^2.0.0",
     "draft-convert": "^2",
     "draft-js": "^0.10.5",
     "draft-js-buttons": "^2.0.1",
@@ -155,6 +155,7 @@
     "react-wordcloud": "https://github.com/assembl/react-wordcloud.git#9c26980",
     "redux": "^3.7.2",
     "redux-thunk": "^2.1.0",
+    "regenerator-runtime": "^0.13.2",
     "searchkit": "^2.3.0",
     "smoothscroll-polyfill": "^0.3.6",
     "url-join": "^1.1.0"
