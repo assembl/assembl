@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import InnerBoxSubmit from '../../../../../../js/app/components/debate/brightMirror/sideComment/innerBoxSubmit';
 import { defaultInnerBoxSubmitProps } from '../../../../../../js/app/stories/components/debate/brightMirror/sideComment/innerBoxSubmit.stories'; // eslint-disable-line max-len

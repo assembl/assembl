@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow, mount } from 'enzyme';
 import { NavDropdown } from 'react-bootstrap';
 

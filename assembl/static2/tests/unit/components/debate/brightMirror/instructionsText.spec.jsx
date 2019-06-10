@@ -2,7 +2,7 @@
 import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 // Component imports
 import InstructionsText from '../../../../../js/app/components/debate/brightMirror/instructionsText';
 import { customInstructionsText } from '../../../../../js/app/stories/components/debate/brightMirror/instructionsText.stories';

@@ -2,7 +2,7 @@
 import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import FictionBodyToolbar from '../../../../../js/app/components/debate/brightMirror/fictionBodyToolbar';
 import CommentHelperButton from '../../../../../js/app/components/debate/common/commentHelperButton';

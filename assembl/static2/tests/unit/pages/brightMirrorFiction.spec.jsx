@@ -3,7 +3,7 @@ import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import { Map } from 'immutable';
 import configureStore from 'redux-mock-store';
 

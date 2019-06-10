@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
