@@ -1608,6 +1608,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                 className="rc-slider-handle no-value"
                 onBlur={[Function]}
                 onKeyDown={[Function]}
+                onMouseDown={[Function]}
                 role="slider"
                 style={
                   Object {
