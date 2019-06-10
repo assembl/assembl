@@ -23,7 +23,7 @@ describe('<SemanticAnalysis /> - with shallow', () => {
   });
 
   it('should render a level-1 Title component if data loaded', () => {
-    expect(wrapper.find('Title [level=1]')).toHaveLength(1);
+    expect(wrapper.find('Title[level=1]')).toHaveLength(1);
   });
 
   it('should render a Description component if data loaded', () => {
@@ -39,11 +39,11 @@ describe('<SemanticAnalysis /> - with shallow', () => {
   });
 
   it('should render 2 level-2 TitleWithTooltip components if data loaded', () => {
-    expect(wrapper.find('TitleWithTooltip [level=2]')).toHaveLength(2);
+    expect(wrapper.find('TitleWithTooltip[level=2]')).toHaveLength(2);
   });
 
   it('should render a level-2 Title component if data loaded', () => {
-    expect(wrapper.find('Title [level=2]')).toHaveLength(1);
+    expect(wrapper.find('Title[level=2]')).toHaveLength(1);
   });
 
   it('should render a KeywordInfo component if data loaded', () => {

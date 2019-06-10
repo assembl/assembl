@@ -29,6 +29,6 @@ describe('<SharePostButton /> - with shallow', () => {
 
   it('should render one Link with a share icon embedded', () => {
     expect(wrapper.find(Link)).toHaveLength(1);
-    expect(wrapper.find('span [className="assembl-icon-share"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-share"]')).toHaveLength(1);
   });
 });

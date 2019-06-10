@@ -33,23 +33,23 @@ describe('<InnerBoxView /> - default with shallow', () => {
   });
 
   it('should render author name', () => {
-    expect(wrapper.find('div [className="username"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="username"]')).toHaveLength(1);
   });
 
   it('should render creation date', () => {
-    expect(wrapper.find('div [className="harvesting-date"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="harvesting-date"]')).toHaveLength(1);
   });
 
   it('should render body', () => {
-    expect(wrapper.find('div [className="body-container"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="body-container"]')).toHaveLength(1);
   });
 
   it('should not render navigation arrows', () => {
-    expect(wrapper.find('div [className="assembl-icon-down-open grey"]')).toHaveLength(0);
+    expect(wrapper.find('div[className="assembl-icon-down-open grey"]')).toHaveLength(0);
   });
 
   it('should render menu button', () => {
-    expect(wrapper.find('Button [className="action-menu-btn"]')).toHaveLength(1);
+    expect(wrapper.find('Button[className="action-menu-btn"]')).toHaveLength(1);
   });
 });
 
@@ -61,24 +61,24 @@ describe('<InnerBoxView /> - multiple with shallow', () => {
   });
 
   it('should render author name', () => {
-    expect(wrapper.find('div [className="username"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="username"]')).toHaveLength(1);
   });
 
   it('should render creation date', () => {
-    expect(wrapper.find('div [className="harvesting-date"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="harvesting-date"]')).toHaveLength(1);
   });
 
   it('should render body', () => {
-    expect(wrapper.find('div [className="body-container"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="body-container"]')).toHaveLength(1);
   });
 
   it('should render navigation arrows', () => {
-    expect(wrapper.find('div [className="assembl-icon-angle-left grey"]')).toHaveLength(1);
-    expect(wrapper.find('div [className="assembl-icon-angle-right grey"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="assembl-icon-angle-left grey"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="assembl-icon-angle-right grey"]')).toHaveLength(1);
   });
 
   it('should render menu button', () => {
-    expect(wrapper.find('Button [className="action-menu-btn"]')).toHaveLength(1);
+    expect(wrapper.find('Button[className="action-menu-btn"]')).toHaveLength(1);
   });
 });
 
@@ -90,31 +90,31 @@ describe('<InnerBoxView /> - with mount', () => {
   });
 
   it('should display delete button', () => {
-    wrapper.find('Button [className="action-menu-btn"]').simulate('click');
-    expect(wrapper.find('Button [className="delete-btn"]')).toHaveLength(1);
+    wrapper.find('Button[className="action-menu-btn"]').simulate('click');
+    expect(wrapper.find('Button[className="delete-btn"]')).toHaveLength(1);
   });
 
   it('should call delete Post', () => {
     const deleteSpy = jest.fn(() => {});
     wrapper.setProps({ ...defaultInnerBoxViewProps, deletePost: deleteSpy });
 
-    wrapper.find('Button [className="action-menu-btn"]').simulate('click');
-    wrapper.find('Button [className="delete-btn"]').simulate('click');
+    wrapper.find('Button[className="action-menu-btn"]').simulate('click');
+    wrapper.find('Button[className="delete-btn"]').simulate('click');
 
     expect(deleteSpy).toHaveBeenCalled();
   });
 
   it('should display edit button', () => {
-    wrapper.find('Button [className="action-menu-btn"]').simulate('click');
-    expect(wrapper.find('Button [className="edit-btn"]')).toHaveLength(1);
+    wrapper.find('Button[className="action-menu-btn"]').simulate('click');
+    expect(wrapper.find('Button[className="edit-btn"]')).toHaveLength(1);
   });
 
   it('should call setEditMode', () => {
     const editSpy = jest.fn(() => {});
     wrapper.setProps({ ...defaultInnerBoxViewProps, setEditMode: editSpy });
 
-    wrapper.find('Button [className="action-menu-btn"]').simulate('click');
-    wrapper.find('Button [className="edit-btn"]').simulate('click');
+    wrapper.find('Button[className="action-menu-btn"]').simulate('click');
+    wrapper.find('Button[className="edit-btn"]').simulate('click');
 
     expect(editSpy).toHaveBeenCalled();
   });

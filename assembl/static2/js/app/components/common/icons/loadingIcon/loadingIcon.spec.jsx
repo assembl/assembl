@@ -17,6 +17,6 @@ describe('<LoadingIcon /> - with shallow', () => {
   });
 
   it('should render a loading icon', () => {
-    expect(wrapper.find('svg [className="icon spinner"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="icon spinner"]')).toHaveLength(1);
   });
 });

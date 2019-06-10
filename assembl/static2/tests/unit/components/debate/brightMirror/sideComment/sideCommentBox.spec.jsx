@@ -32,7 +32,7 @@ describe('<SideCommentBox /> - default with shallow', () => {
   });
 
   it('should render number in header', () => {
-    expect(wrapper.find('div [className="extracts-nb-msg"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="extracts-nb-msg"]')).toHaveLength(1);
   });
 
   it('should render InnerBoxView', () => {
@@ -44,7 +44,7 @@ describe('<SideCommentBox /> - default with shallow', () => {
   });
 
   it('should not render extract numbering', () => {
-    expect(wrapper.find('div [className="extracts-numbering"]')).toHaveLength(0);
+    expect(wrapper.find('div[className="extracts-numbering"]')).toHaveLength(0);
   });
 
   it('should display edit form', () => {
@@ -66,7 +66,7 @@ describe('<SideCommentBox /> - multiple with shallow', () => {
   });
 
   it('should render number in header', () => {
-    expect(wrapper.find('div [className="extracts-nb-msg"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="extracts-nb-msg"]')).toHaveLength(1);
   });
 
   it('should render InnerBoxView', () => {
@@ -78,7 +78,7 @@ describe('<SideCommentBox /> - multiple with shallow', () => {
   });
 
   it('should render extract numbering', () => {
-    expect(wrapper.find('div [className="extracts-numbering"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="extracts-numbering"]')).toHaveLength(1);
   });
 });
 
@@ -90,7 +90,7 @@ describe('<SideCommentBox /> - submitting with shallow', () => {
   });
 
   it('should not render number in header', () => {
-    expect(wrapper.find('div [className="extracts-nb-msg"]')).toHaveLength(0);
+    expect(wrapper.find('div[className="extracts-nb-msg"]')).toHaveLength(0);
   });
 
   it('should not render InnerBoxView', () => {
@@ -102,7 +102,7 @@ describe('<SideCommentBox /> - submitting with shallow', () => {
   });
 
   it('should render extract numbering', () => {
-    expect(wrapper.find('div [className="extracts-numbering"]')).toHaveLength(0);
+    expect(wrapper.find('div[className="extracts-numbering"]')).toHaveLength(0);
   });
 });
 
@@ -114,7 +114,7 @@ describe('<SideCommentBox /> - can reply with shallow', () => {
   });
 
   it('should render number in header', () => {
-    expect(wrapper.find('div [className="extracts-nb-msg"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="extracts-nb-msg"]')).toHaveLength(1);
   });
 
   it('should render InnerBoxView', () => {
@@ -139,7 +139,7 @@ describe('<SideCommentBox /> - with reply with shallow', () => {
   });
 
   it('should render number in header', () => {
-    expect(wrapper.find('div [className="extracts-nb-msg"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="extracts-nb-msg"]')).toHaveLength(1);
   });
 
   it('should render InnerBoxView', () => {

@@ -29,12 +29,12 @@ describe('<ToggleCommentButton /> - with shallow', () => {
 
   it('should render one Link with a expanded icon embedded', () => {
     expect(wrapper.find(Link)).toHaveLength(1);
-    expect(wrapper.find('span [className="assembl-icon-up-open"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-up-open"]')).toHaveLength(1);
   });
 
   it('should render one collapse icon when isExpanded is false', () => {
     wrapper.setProps({ isExpanded: false });
-    expect(wrapper.find('span [className="assembl-icon-down-open"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-down-open"]')).toHaveLength(1);
   });
 
   it('should execute onClickHandler when clicking on the component', () => {

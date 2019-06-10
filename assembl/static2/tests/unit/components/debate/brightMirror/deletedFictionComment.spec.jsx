@@ -37,7 +37,7 @@ describe('<DeletedFictionComment /> - with shallow', () => {
   });
 
   it('should display the number of child comments', () => {
-    expect(wrapper.find('Translate [value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
+    expect(wrapper.find('Translate[value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
   });
 
   it('should display a "toggle comment" button', () => {
@@ -45,11 +45,11 @@ describe('<DeletedFictionComment /> - with shallow', () => {
   });
 
   it('should display the default deleted message by author', () => {
-    expect(wrapper.find('Translate [value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
+    expect(wrapper.find('Translate[value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
   });
 
   it('should display the default deleted message by admin', () => {
     wrapper.setProps({ isDeletedByAuthor: false });
-    expect(wrapper.find('Translate [value="debate.thread.postDeletedByAdmin"]')).toHaveLength(1);
+    expect(wrapper.find('Translate[value="debate.thread.postDeletedByAdmin"]')).toHaveLength(1);
   });
 });

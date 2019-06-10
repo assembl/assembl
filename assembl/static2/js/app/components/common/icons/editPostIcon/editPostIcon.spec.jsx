@@ -24,7 +24,7 @@ describe('<EditPostIcon /> - with shallow', () => {
   });
 
   it('should render a svg with editPostIcon class', () => {
-    expect(wrapper.find('svg [className="editPostIcon"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="editPostIcon"]')).toHaveLength(1);
     expect(wrapper.find('path')).toHaveLength(1);
   });
 });

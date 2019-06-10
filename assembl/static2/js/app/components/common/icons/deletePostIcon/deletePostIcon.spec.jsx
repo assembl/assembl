@@ -24,7 +24,7 @@ describe('<DeletePostIcon /> - with shallow', () => {
   });
 
   it('should render a svg with deletePostIcon class', () => {
-    expect(wrapper.find('svg [className="deletePostIcon"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="deletePostIcon"]')).toHaveLength(1);
     expect(wrapper.find('path')).toHaveLength(2);
   });
 });

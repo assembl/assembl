@@ -44,11 +44,11 @@ describe('<SemanticAnalysisForDiscussion /> - with shallow', () => {
   });
 
   it('should render a div with semantic-analysis-container class', () => {
-    expect(wrapper.find('div [className="semantic-analysis-container"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="semantic-analysis-container"]')).toHaveLength(1);
   });
 
   it('should render a banner', () => {
-    expect(wrapper.find('div [className="banner"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="banner"]')).toHaveLength(1);
   });
 
   it('should render a SemanticAnalysis component', () => {

@@ -24,6 +24,6 @@ describe('<MailIcon /> - with shallow', () => {
   });
 
   it('should render a svg composed by 2 path', () => {
-    expect(wrapper.find('svg [className="mailIcon"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="mailIcon"]')).toHaveLength(1);
   });
 });

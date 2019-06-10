@@ -24,6 +24,6 @@ describe('<ToolbarSlider /> - with shallow', () => {
 
   it('should render a <Slider /> with a cursor', () => {
     /** expect WithStyles(Slider) and not just Slider because of its parent MuiThemeProvider component */
-    expect(wrapper.find('WithStyles(Slider) [thumb]')).toHaveLength(1);
+    expect(wrapper.find('WithStyles(Slider)[thumb]')).toHaveLength(1);
   });
 });

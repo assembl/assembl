@@ -43,7 +43,7 @@ describe('<TitleWithTooltip /> - with shallow', () => {
   });
 
   it('should render a modal when you click on the icon', () => {
-    wrapper.find('div [className="titleTooltip-container"]').simulate('click');
+    wrapper.find('div[className="titleTooltip-container"]').simulate('click');
     expect(displayModal).toHaveBeenCalledTimes(1);
   });
 });

@@ -32,8 +32,8 @@ describe('<SentimentBar /> - with shallow', () => {
 
   it('should render an error message if value is incorrect (<0 or >1)', () => {
     wrapper.setProps({ value: -1 });
-    expect(wrapper.find('p [className="error"]')).toHaveLength(1);
+    expect(wrapper.find('p[className="error"]')).toHaveLength(1);
     wrapper.setProps({ value: 2 });
-    expect(wrapper.find('p [className="error"]')).toHaveLength(1);
+    expect(wrapper.find('p[className="error"]')).toHaveLength(1);
   });
 });

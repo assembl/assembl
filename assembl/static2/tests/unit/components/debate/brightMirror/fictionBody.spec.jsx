@@ -80,13 +80,13 @@ describe('<FictionBody /> - with mount', () => {
   });
 
   it('should display the fiction content', () => {
-    const fictionContent: string = wrapper.find('div [className="post-body-content body"]').text();
+    const fictionContent: string = wrapper.find('div[className="post-body-content body"]').text();
     expect(fictionContent).toEqual(defaultContent);
   });
 
   it('should display "no content specified" when content is set to null', () => {
     wrapper.setProps({ content: '' });
-    const fictionContent: string = wrapper.find('div [className="post-body-content body"]').text();
+    const fictionContent: string = wrapper.find('div[className="post-body-content body"]').text();
     expect(fictionContent).toEqual('no content specified');
   });
 });

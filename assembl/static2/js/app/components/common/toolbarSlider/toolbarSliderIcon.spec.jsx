@@ -27,6 +27,6 @@ describe('<ToolbarSliderIcon /> - with shallow', () => {
 
   it('should render the value in a paragraph with className passed as props', () => {
     wrapper.setProps({ textClassName: 'classNamePassed' });
-    expect(wrapper.find('p [className="classNamePassed"]')).toHaveLength(1);
+    expect(wrapper.find('p[className="classNamePassed"]')).toHaveLength(1);
   });
 });

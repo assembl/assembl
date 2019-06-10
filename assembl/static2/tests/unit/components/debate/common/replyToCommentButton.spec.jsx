@@ -31,7 +31,7 @@ describe('<ReplyToCommentButton /> - with shallow', () => {
   it('should render one Link with a reply icon embedded with a tooltip', () => {
     expect(wrapper.find(Link)).toHaveLength(1);
     expect(wrapper.find(ResponsiveOverlayTrigger)).toHaveLength(1);
-    expect(wrapper.find('span [className="assembl-icon-back-arrow"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-back-arrow"]')).toHaveLength(1);
   });
 
   it('should execute onClickHandler when clicking on the component', () => {

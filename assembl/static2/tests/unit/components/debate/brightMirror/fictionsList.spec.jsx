@@ -19,11 +19,11 @@ describe('<FictionsList /> - with shallow', () => {
   });
 
   it('should render title', () => {
-    expect(wrapper.find('h1 [className="dark-title-1"]')).toHaveLength(1);
+    expect(wrapper.find('h1[className="dark-title-1"]')).toHaveLength(1);
   });
 
   it('should render fiction list', () => {
-    expect(wrapper.find('MasonryComponent [className="fictions-list"]')).toHaveLength(1);
+    expect(wrapper.find('MasonryComponent[className="fictions-list"]')).toHaveLength(1);
   });
 
   it('should render fiction previews', () => {

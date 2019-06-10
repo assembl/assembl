@@ -20,6 +20,6 @@ describe('<SentimentBarIcon /> - with shallow', () => {
   });
 
   it('should render a loading icon', () => {
-    expect(wrapper.find('svg [className="icon"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="icon"]')).toHaveLength(1);
   });
 });

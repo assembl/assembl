@@ -23,6 +23,6 @@ describe('<SideCommentAnchor /> - default with shallow', () => {
   });
 
   it('should render suggest text', () => {
-    expect(wrapper.find('span [className="suggest"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="suggest"]')).toHaveLength(1);
   });
 });

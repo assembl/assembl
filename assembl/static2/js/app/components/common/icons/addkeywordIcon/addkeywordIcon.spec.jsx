@@ -24,6 +24,6 @@ describe('<AddkeywordIcon /> - with shallow', () => {
   });
 
   it('should render a svg with addkeyword-icon class', () => {
-    expect(wrapper.find('svg [className="addkeyword-icon"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="addkeyword-icon"]')).toHaveLength(1);
   });
 });

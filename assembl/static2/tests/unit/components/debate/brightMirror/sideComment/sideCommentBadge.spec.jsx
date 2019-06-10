@@ -23,10 +23,10 @@ describe('<SideCommentBadge /> - default with shallow', () => {
   });
 
   it('should render icon', () => {
-    expect(wrapper.find('span [className="assembl-icon-suggest"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-suggest"]')).toHaveLength(1);
   });
 
   it('should render number of comments', () => {
-    expect(wrapper.find('div [className="badge-total"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="badge-total"]')).toHaveLength(1);
   });
 });

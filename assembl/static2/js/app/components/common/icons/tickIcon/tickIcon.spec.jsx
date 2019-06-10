@@ -24,6 +24,6 @@ describe('<TickIcon /> - with shallow', () => {
   });
 
   it('should render a svg composed by 2 path', () => {
-    expect(wrapper.find('svg [className="tickIcon"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="tickIcon"]')).toHaveLength(1);
   });
 });

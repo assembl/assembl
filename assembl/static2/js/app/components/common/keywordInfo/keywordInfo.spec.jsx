@@ -27,6 +27,6 @@ describe('<KeywordInfo /> - with shallow', () => {
   });
 
   it('should render 2 paragraphs info', () => {
-    expect(wrapper.find('p [className="info"]')).toHaveLength(2);
+    expect(wrapper.find('p[className="info"]')).toHaveLength(2);
   });
 });

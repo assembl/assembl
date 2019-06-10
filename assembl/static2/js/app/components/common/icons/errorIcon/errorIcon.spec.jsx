@@ -17,8 +17,8 @@ describe('<ErrorIcon /> - with shallow', () => {
   });
 
   it('should render an error icon', () => {
-    expect(wrapper.find('g [className="arrow1"]')).toHaveLength(1);
-    expect(wrapper.find('g [className="arrow2"]')).toHaveLength(1);
-    expect(wrapper.find('text [className="mark"]')).toHaveLength(1);
+    expect(wrapper.find('g[className="arrow1"]')).toHaveLength(1);
+    expect(wrapper.find('g[className="arrow2"]')).toHaveLength(1);
+    expect(wrapper.find('text[className="mark"]')).toHaveLength(1);
   });
 });

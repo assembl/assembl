@@ -37,12 +37,12 @@ describe('<TagOnPost /> - with shallow', () => {
     });
 
     it('should render a title', () => {
-      expect(wrapper.find('div [className="title"]')).toHaveLength(1);
-      expect(wrapper.find('div [className="title"]').text()).toEqual(I18n.t('debate.tagOnPost.tagContainerAdminTitle'));
+      expect(wrapper.find('div[className="title"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="title"]').text()).toEqual(I18n.t('debate.tagOnPost.tagContainerAdminTitle'));
     });
 
     it('should render a list of tags', () => {
-      expect(wrapper.find('div [className="tag-list"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="tag-list"]')).toHaveLength(1);
     });
   });
 
@@ -56,12 +56,12 @@ describe('<TagOnPost /> - with shallow', () => {
     });
 
     it('should render a title', () => {
-      expect(wrapper.find('div [className="title"]')).toHaveLength(1);
-      expect(wrapper.find('div [className="title"]').text()).toEqual(I18n.t('debate.tagOnPost.tagContainerTitle'));
+      expect(wrapper.find('div[className="title"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="title"]').text()).toEqual(I18n.t('debate.tagOnPost.tagContainerTitle'));
     });
 
     it('should render a list of tags', () => {
-      expect(wrapper.find('div [className="tag-list"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="tag-list"]')).toHaveLength(1);
     });
   });
 });

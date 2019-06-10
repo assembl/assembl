@@ -22,12 +22,12 @@ describe('AddModuleButton component', () => {
   const wrapper = shallow(<AddModuleButton {...props} />);
 
   it('should render a non disabled button', () => {
-    expect(wrapper.find('Button [disabled=false]')).toHaveLength(1);
+    expect(wrapper.find('Button[disabled=false]')).toHaveLength(1);
   });
 
   it('should render a disabled button', () => {
     wrapper.setProps({ allDuplicatesAreChecked: false });
-    expect(wrapper.find('Button [disabled=true]')).toHaveLength(1);
+    expect(wrapper.find('Button[disabled=true]')).toHaveLength(1);
   });
 
   it('should render a modal when you click on the button', () => {

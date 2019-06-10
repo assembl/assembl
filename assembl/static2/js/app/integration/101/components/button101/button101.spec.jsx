@@ -34,18 +34,18 @@ describe('<Button101 /> - with shallow', () => {
   });
 
   it('should render one info Button with specified values', () => {
-    expect(wrapper.find('Button [bsStyle="info"] [disabled=false]')).toHaveLength(1);
+    expect(wrapper.find('Button[bsStyle="info"][disabled=false]')).toHaveLength(1);
     expect(wrapper.contains('Custom label')).toBe(true);
   });
 
   it('should render one danger Button', () => {
     wrapper.setProps({ type: 'danger' });
-    expect(wrapper.find('Button [bsStyle="danger"]')).toHaveLength(1);
+    expect(wrapper.find('Button[bsStyle="danger"]')).toHaveLength(1);
   });
 
   it('should render one disabled Button', () => {
     wrapper.setProps({ isDisabled: true });
-    expect(wrapper.find('Button [disabled=true]')).toHaveLength(1);
+    expect(wrapper.find('Button[disabled=true]')).toHaveLength(1);
   });
 
   it('should render one Button that can be clicked', () => {

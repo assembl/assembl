@@ -46,7 +46,7 @@ describe('<FictionHeader /> - with shallow', () => {
   });
 
   it('should display the article published date', () => {
-    expect(wrapper.find(`time [dateTime="${defaultFictionHeader.publishedDate}"]`)).toHaveLength(1);
+    expect(wrapper.find(`time[dateTime="${defaultFictionHeader.publishedDate}"]`)).toHaveLength(1);
     expect(wrapper.contains(defaultFictionHeader.displayedPublishedDate)).toBe(true);
   });
 });

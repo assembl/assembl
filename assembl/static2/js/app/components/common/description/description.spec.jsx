@@ -26,7 +26,7 @@ describe('<Description /> - with shallow', () => {
   });
 
   it('should render a unique div which has a classname', () => {
-    expect(wrapper.find('div [className="description"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="description"]')).toHaveLength(1);
   });
 
   it('should render children props', () => {

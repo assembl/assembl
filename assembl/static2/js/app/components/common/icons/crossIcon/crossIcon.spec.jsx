@@ -24,6 +24,6 @@ describe('<CrossIcon /> - with shallow', () => {
   });
 
   it('should render a svg with cross-icon class', () => {
-    expect(wrapper.find('svg [className="cross-icon"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="cross-icon"]')).toHaveLength(1);
   });
 });

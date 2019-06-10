@@ -29,7 +29,7 @@ describe('<CommentHelperButton /> - with shallow', () => {
 
   it('should render one Button with a suggest icon embedded', () => {
     expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find('span [className="assembl-icon-suggest"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-suggest"]')).toHaveLength(1);
   });
 
   it('should execute onClickHandler when clicking on the component', () => {

@@ -123,7 +123,7 @@ describe('<FictionComment /> - with mount', () => {
     });
 
     it('should display the comment published date', () => {
-      expect(wrapper.find(`time [dateTime="${defaultFictionCommentGraphQL.publishedDate}"]`)).toHaveLength(1);
+      expect(wrapper.find(`time[dateTime="${defaultFictionCommentGraphQL.publishedDate}"]`)).toHaveLength(1);
       expect(wrapper.contains(defaultFictionCommentGraphQL.displayedPublishedDate)).toBe(true);
     });
 
