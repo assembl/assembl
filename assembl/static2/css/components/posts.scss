@@ -200,8 +200,7 @@ $deleted-post-border: 1px solid $light-grey !default;
   .post-body-title {
     font-family: $font-family;
     text-transform: uppercase;
-    font-size: 17px;
-    line-height: 24px;
+    font-size: $font-size-sm;
     margin-top: 10px;
   }
 
@@ -241,13 +240,13 @@ $deleted-post-border: 1px solid $light-grey !default;
       display: flex;
 
       .author .assembl-icon-back-arrow {
-        font-size: 12px;
+        font-size: $font-size-xs;
         padding-left: 6px;
         padding-right: 6px;
       }
 
       .published-date {
-        font-size: 12px;
+        font-size: $font-size-xs;
         font-weight: 300;
         line-height: 1.91;
         margin-left: 4px;

@@ -32,7 +32,7 @@ type Props = PostProps & {
   handleEditClick: Function,
   isHarvesting: boolean,
   isHarvestable: boolean,
-  modifiedSubject: React.Element<any>,
+  modifiedSubject: ?React.Element<any>,
   multiColumns: boolean,
   subject: string,
   timeline: Timeline,

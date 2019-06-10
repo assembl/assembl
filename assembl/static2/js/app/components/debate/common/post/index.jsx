@@ -182,7 +182,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
-    const modifiedSubject = <span>{subject ? subject.replace('Re: ', '') : ''}</span>;
+    const modifiedSubject = subject ? <span>{subject.replace('Re: ', '')}</span> : null;
 
     const editPostareaRef = (el: ?HTMLTextAreaElement) => {
       this.editPostarea = el;
