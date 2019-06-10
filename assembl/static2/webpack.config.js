@@ -9,7 +9,7 @@ var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob');
 var _ = require('lodash');
-const TerserPlugin = require('terser-webpack-plugin');
+
 
 function theme_entries() {
     var entries = {},
@@ -132,10 +132,9 @@ module.exports = {
     },
     mode: 'production',
     optimization: {
-      minimizer: [new TerserPlugin({
-        cache: true,
-        parallel: true,
-      })]
+        minimizer: [
+            new UglifyJsPlugin({ sourceMap: true, parallel: true, cache: true })
+        ]
     },
     plugins: [
         new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
