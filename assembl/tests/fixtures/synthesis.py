@@ -19,7 +19,6 @@ def fulltext_synthesis_post(request, discussion, moderator_user, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer synthesis"
         test_session.delete(synthesis_post)
         test_session.flush()
 
@@ -31,6 +30,7 @@ def fulltext_synthesis_post(request, discussion, moderator_user, test_session):
 @pytest.fixture(scope="function")
 def fulltext_synthesis_post_with_image(request, discussion, moderator_user, simple_file, test_session):
     from assembl import models
+
     synthesis_post = models.SynthesisPost(
         publication_state=models.PublicationStates.DRAFT,
         discussion=discussion,
@@ -51,13 +51,12 @@ def fulltext_synthesis_post_with_image(request, discussion, moderator_user, simp
         post=synthesis_post,
         title=u"Synthesis image",
         creator=moderator_user,
-        attachmentPurpose='IMAGE'
+        attachmentPurpose=models.AttachmentPurpose.IMAGE.value
     )
     test_session.add(synthesis_post)
     test_session.flush()
 
     def fin():
-        print "finalizer synthesis post with image"
         test_session.delete(synthesis_image)
         test_session.delete(synthesis_post)
         test_session.flush()

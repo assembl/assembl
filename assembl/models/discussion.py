@@ -151,6 +151,17 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
         LangString, lazy="select", single_parent=True, primaryjoin=user_guidelines_id == LangString.id,
         backref=backref("discussion_from_user_guidelines", lazy="dynamic"), cascade="all, delete-orphan")
 
+    text_multimedia_title_id = Column(Integer(), ForeignKey(LangString.id))
+    text_multimedia_title = relationship(
+        LangString, lazy="select", single_parent=True, primaryjoin=text_multimedia_title_id == LangString.id,
+        backref=backref("discussion_from_text_multimedia_title", lazy="dynamic"), cascade="all, delete-orphan")
+
+    text_multimedia_body_id = Column(Integer(), ForeignKey(LangString.id))
+    text_multimedia_body = relationship(
+        LangString, lazy="select", single_parent=True, primaryjoin=text_multimedia_body_id == LangString.id,
+        backref=backref("discussion_from_text_multimedia_body", lazy="dynamic"), cascade="all, delete-orphan")
+
+
     @classmethod
     def get_naming_column_name(cls):
         return "slug"

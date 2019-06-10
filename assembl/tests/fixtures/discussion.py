@@ -1,14 +1,39 @@
 import os
+
 import pytest
 from sqlalchemy import inspect
 
 from assembl.auth import P_READ, R_PARTICIPANT
 
 
+def add_test_attachment(session=None, discussion=None, creator=None, purpose=None):
+    from assembl.models import DiscussionAttachment, File, AttachmentPurpose
+    # add a privacy policy attachment to the discussion
+    document = File(
+        discussion=discussion,
+        mime_type='image/png',
+        title='simple_image.png'
+    )
+    session.add(document)
+    document.add_raw_data(os.urandom(256))
+    session.add(document)
+    attachment = DiscussionAttachment(
+        discussion=discussion,
+        document=document,
+        creator_id=creator.id,
+        title='A privacy policy attachment',
+        attachmentPurpose=AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value
+    )
+
+    session.add(attachment)
+    session.add(discussion)
+    return document, attachment
+
+
 @pytest.fixture(scope="function")
 def discussion(request, test_session, participant2_user, default_preferences):
     """An empty Discussion fixture with default preferences"""
-    from assembl.models import Discussion, DiscussionAttachment, File, LangString, AttachmentPurpose
+    from assembl.models import Discussion, LangString, AttachmentPurpose
 #    from assembl.lib.migration import create_default_discussion_data
     with test_session.no_autoflush:
         d = Discussion(
@@ -19,6 +44,7 @@ def discussion(request, test_session, participant2_user, default_preferences):
         d.discussion_locales = ['en', 'fr', 'de']
         d.legal_notice = LangString.create(
             u"We need to input the optical HDD sensor!", "en")
+
         tac = LangString.create(
             u"You can't quantify the driver without quantifying the 1080p JSON protocol!", "en")
         tac.add_value(
@@ -43,25 +69,23 @@ def discussion(request, test_session, participant2_user, default_preferences):
             u"Discuss bananas", u"en")
         d.button_label = button_label
 
-        # add a privacy policy attachment to the discussion
-        document = File(
-            discussion=d,
-            mime_type='image/png',
-            title='simple_image.png'
-        )
-        test_session.add(document)
-        document.add_raw_data(os.urandom(256))
-        test_session.add(document)
-        attachment = DiscussionAttachment(
-            discussion=d,
-            document=document,
-            creator_id=participant2_user.id,
-            title='A privacy policy attachment',
-            attachmentPurpose=AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value
+        document, attachment = add_test_attachment(
+            session=test_session, discussion=d, creator=participant2_user,
+            purpose=AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value,
         )
 
-        test_session.add(attachment)
-        test_session.add(d)
+        d.text_multimedia_title = LangString.create(
+            u"Multimedia title EN", "en")
+
+        d.text_multimedia_body = LangString.create(
+            u"Multimedia body EN", "en")
+
+        m_document_1, m_attachment_1 = add_test_attachment(
+            session=test_session, discussion=d, creator=participant2_user,
+            purpose=AttachmentPurpose.IMAGE.value,
+        )
+
+
         # create_default_discussion_data(d)
         # Don't create default discussion data (permissions, sections) here
         # because it takes too much time to run all tests.
@@ -77,13 +101,14 @@ def discussion(request, test_session, participant2_user, default_preferences):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion"
         discussion = d
         if inspect(discussion).detached:
             # How did this happen?
             discussion = test_session.query(Discussion).get(d.id)
         test_session.delete(attachment)
         test_session.delete(document)
+        test_session.delete(m_attachment_1)
+        test_session.delete(m_document_1)
         test_session.delete(discussion.table_of_contents)
         test_session.delete(discussion.root_idea)
         test_session.delete(discussion.next_synthesis)
@@ -130,7 +155,6 @@ def discussion2(request, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion2"
         test_session.delete(d.table_of_contents)
         test_session.delete(d.root_idea)
         test_session.delete(d.next_synthesis)

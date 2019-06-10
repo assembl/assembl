@@ -1,19 +1,22 @@
 import os.path
+from urlparse import urljoin
+
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyObjectType
-from urlparse import urljoin
-
-from assembl import models
-from assembl.auth import CrudPermissions
+from pyramid.i18n import TranslationStringFactory
 
 import assembl.graphql.docstrings as docs
+from assembl import models
+from assembl.auth import CrudPermissions
 from .attachment import Attachment
 from .document import Document
-from .types import SecureObjectType
+from .idea import TagResult, SentimentAnalysisResult
 from .langstring import (
     LangStringEntry, LangStringEntryInput, resolve_langstring,
     resolve_langstring_entries, update_langstring_from_input_entries)
+from .permissions_helpers import require_cls_permission, require_instance_permission
+from .types import SecureObjectType
 from .utils import (
     abort_transaction_on_exception,
     create_attachment,
@@ -21,9 +24,6 @@ from .utils import (
     get_attachments_with_purpose,
     get_attachment_with_purpose,
     DateTime)
-from .idea import TagResult, SentimentAnalysisResult
-from .permissions_helpers import require_cls_permission, require_instance_permission
-from pyramid.i18n import TranslationStringFactory
 
 _ = TranslationStringFactory('assembl')
 
@@ -63,6 +63,14 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     nlp_sentiment = graphene.Field(SentimentAnalysisResult, description=docs.Discussion.nlp_sentiment)
     slug = graphene.String(description=docs.Discussion.slug)
     login_data = graphene.Field(URLMeta, next_view=graphene.String(required=False))
+    text_multimedia_body = graphene.String(
+        lang=graphene.String(description=docs.Discussion.text_multimedia_body),
+        description=docs.Discussion.text_multimedia_body)
+    text_multimedia_body_entries = graphene.List(LangStringEntry, description=docs.Discussion.text_multimedia_title)
+    text_multimedia_title = graphene.String(
+        lang=graphene.String(description=docs.Discussion.text_multimedia_title),
+        description=docs.Discussion.text_multimedia_title)
+    text_multimedia_title_entries = graphene.List(LangStringEntry, description=docs.Discussion.text_multimedia_title)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -182,6 +190,18 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         if result:
             result = result[0]
             return result
+
+    def resolve_text_multimedia_title(self, args, context, info):
+        return _resolve_langstring_field(args, context, 'text_multimedia_title')
+
+    def resolve_text_multimedia_title_entries(self, args, context, info):
+        return _resolve_langstring_entries_field(context, 'text_multimedia_title')
+
+    def resolve_text_multimedia_body(self, args, context, info):
+        return _resolve_langstring_field(args, context, 'text_multimedia_body')
+
+    def resolve_text_multimedia_body_entries(self, args, context, info):
+        return _resolve_langstring_entries_field(context, 'text_multimedia_body')
 
 
 class UpdateDiscussion(graphene.Mutation):
@@ -679,6 +699,45 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         return UpdateDiscussionPreferences(preferences=discussion.preferences)
 
 
+class UpdateDiscussionTextMultimedia(graphene.Mutation):
+    __doc__ = docs.UpdateDiscussionTextMultimedia.__doc__
+
+    class Input:
+        text_multimedia_body_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussionTextMultimedia.text_multimedia_body_entries)
+        text_multimedia_title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussionTextMultimedia.text_multimedia_title_entries)
+
+    discussion = graphene.Field(lambda: Discussion)
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        cls = models.Discussion
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+
+        require_instance_permission(CrudPermissions.UPDATE, discussion, context)
+
+        with cls.default_db.no_autoflush as db:
+            text_multimedia_title_entries = args.get('text_multimedia_title_entries')
+            if text_multimedia_title_entries is not None and len(text_multimedia_title_entries) == 0:
+                raise Exception(
+                    'Text multimedia title entries needs at least one entry')
+
+            update_langstring_from_input_entries(
+                discussion, 'text_multimedia_title', text_multimedia_title_entries)
+
+            text_multimedia_body_entries = args.get('text_multimedia_body_entries')
+            if text_multimedia_body_entries is not None and len(text_multimedia_body_entries) == 0:
+                raise Exception(
+                    'Text multimedia body entries needs at least one entry')
+
+            update_langstring_from_input_entries(
+                discussion, 'text_multimedia_body', text_multimedia_body_entries)
+
+        db.flush()
+        return UpdateDiscussionTextMultimedia(discussion=discussion)
+
+
 def update_legal_contents_attachments(context, discussion, new_attachments, purpose):
     """Create, update, delete legal contents attachments for a legal contents field."""
     original_ln_attachments = get_attachments_with_purpose(
@@ -870,3 +929,19 @@ class VisitsAnalytics(graphene.ObjectType):
 
     def resolve_nb_uniq_pageviews(self, args, context, info):
         return self.generic_resolver(args, context, info, "nb_uniq_pageviews")
+
+
+def _resolve_langstring_field(args, context, name):
+    discussion_id = context.matchdict['discussion_id']
+    discussion = models.Discussion.get(discussion_id)
+    return resolve_langstring(getattr(discussion, name), args.get('lang'))
+
+
+def _resolve_langstring_entries_field(context, name):
+    discussion_id = context.matchdict['discussion_id']
+    discussion = models.Discussion.get(discussion_id)
+    value = getattr(discussion, name)
+    if value:
+        return resolve_langstring_entries(discussion, name)
+
+    return []

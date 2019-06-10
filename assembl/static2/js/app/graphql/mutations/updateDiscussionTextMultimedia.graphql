@@ -1,0 +1,21 @@
+#import "../fragments/LangString.graphql"
+
+mutation UpdateDiscussionTextMultimedia(
+  $textMultimediaTitleEntries: [LangStringEntryInput!]
+  $textMultimediaBodyEntries: [LangStringEntryInput!]
+) {
+  updateDiscussionTextMultimedia(
+    textMultimediaTitleEntries: $textMultimediaTitleEntries
+    textMultimediaBodyEntries: $textMultimediaBodyEntries
+  ) {
+    discussion {
+      id
+      textMultimediaBodyEntries {
+        ...langStringEntry
+      }
+      textMultimediaTitleEntries {
+        ...langStringEntry
+      }
+    }
+  }
+}

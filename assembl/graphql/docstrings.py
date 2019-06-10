@@ -84,6 +84,8 @@ class Discussion:
     nlp_sentiment = "The aggregated sentiment analysis on the posts"
     start_date = "The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase."
     end_date = "The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase."
+    text_multimedia_title = "Title of multimedia text on landing page"
+    text_multimedia_body = "Body of multimedia text on landing page"
 
 
 class UpdateDiscussion:
@@ -95,6 +97,8 @@ class UpdateDiscussion:
     subtitle_entries = """The subtitle contents shown on the landing page of a discussion, just above the \"follow\" button, under the title content. """
     start_date = "The start date of a discussion, optionally set. If not set, will be calculated from the first phase"
     end_date = "The end date of a discussion, optionally set. If not set, will be calculated from the end of last phase"
+    text_multimedia_title_entries = Discussion.text_multimedia_title
+    text_multimedia_body_entries = Discussion.text_multimedia_body
 
 
 class LangString:
@@ -169,6 +173,27 @@ class UpdateDiscussionPreferences:
     with_translation = DiscussionPreferences.with_translation
     with_semantic_analysis = DiscussionPreferences.with_semantic_analysis
     slug = DiscussionPreferences.slug
+
+
+class DiscussionTextMultimedia:
+    __doc__ = """A discussion can have many preferences. This metadata object describes these preferences."""
+    languages = """A list of LocalePreference metadata objects on the discussion which describe the languages supported by the debate."""
+    tab_title = """The title in the tab."""
+    favicon = Default.document % ("""The site favicon.""",)
+    logo = Default.document % ("""The site logo.""",)
+    with_moderation = """A Boolean flag indicating whether the moderation is activated or not."""
+    with_translation = """A Boolean flag indicating wheter the users have the possibility to translate the messages or not."""
+    with_semantic_analysis = "A Boolean flag indicating wheter the semantic analysis is activated or not."
+    slug = Discussion.slug
+    old_slugs = """List of previous used slugs for this discussion"""
+
+
+class UpdateDiscussionTextMultimedia:
+    __doc__ = """A way to save Discussion text multimedia preferences on a debate."""
+    text_multimedia_title = Default.string_entry % ("Text multimedia title",)
+    text_multimedia_title_entries = Default.langstring_entries % ("Text multimedia title",)
+    text_multimedia_body = Default.string_entry % ("Text multimedia body",)
+    text_multimedia_body_entries = Default.langstring_entries % ("Text multimedia body",)
 
 
 class UpdateLegalContents:

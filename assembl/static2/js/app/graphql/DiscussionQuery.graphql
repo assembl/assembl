@@ -15,14 +15,17 @@ query DiscussionData($nextView: String, $lang: String) {
     }
     title(lang: $lang)
     titleEntries {
+      # bbb
       ...langStringEntry
     }
     subtitle(lang: $lang)
     subtitleEntries {
+      # bbb
       ...langStringEntry
     }
     buttonLabel(lang: $lang)
     buttonLabelEntries {
+      # bbb
       ...langStringEntry
     }
     homepageUrl
@@ -32,5 +35,7 @@ query DiscussionData($nextView: String, $lang: String) {
     }
     startDate
     endDate
+    textMultimediaTitle(lang: $lang)
+    textMultimediaBody(lang: $lang)
   }
 }

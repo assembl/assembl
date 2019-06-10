@@ -1,0 +1,7 @@
+#import "./fragments/MultilingualDiscussion.graphql"
+
+query MultilingualDiscussionData($nextView: String) {
+  discussion {
+    ...MultilingualDiscussion
+  }
+}

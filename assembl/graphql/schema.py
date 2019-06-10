@@ -20,7 +20,7 @@ from assembl.graphql.discussion import (Discussion, UpdateDiscussion, Discussion
                                         UpdateLegalContents,
                                         ResourcesCenter,
                                         UpdateDiscussionPreferences,
-                                        UpdateResourcesCenter, VisitsAnalytics)
+                                        UpdateResourcesCenter, VisitsAnalytics, UpdateDiscussionTextMultimedia)
 from assembl.graphql.document import UploadDocument
 from assembl.graphql.idea import (CreateThematic, DeleteThematic,
                                   IdeaUnion, UpdateThematic, UpdateIdeas)
@@ -482,6 +482,8 @@ class Mutations(graphene.ObjectType):
     delete_sentiment = DeleteSentiment.Field(description=docs.DeleteSentiment.__doc__)
     upload_document = UploadDocument.Field(description=docs.UploadDocument.__doc__)
     update_discussion_preferences = UpdateDiscussionPreferences.Field(description=docs.UpdateDiscussionPreferences.__doc__)
+    update_discussion_text_multimedia = UpdateDiscussionTextMultimedia.Field(
+        description=docs.UpdateDiscussionTextMultimedia.__doc__)
     create_resource = CreateResource.Field(description=docs.CreateResource.__doc__)
     delete_resource = DeleteResource.Field(description=docs.DeleteResource.__doc__)
     update_resource = UpdateResource.Field(description=docs.UpdateResource.__doc__)
