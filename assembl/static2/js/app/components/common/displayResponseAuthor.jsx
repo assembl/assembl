@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 
 export type displayResponseAuthorProps = {
   authorFullname: string,
@@ -9,7 +9,7 @@ export type displayResponseAuthorProps = {
   displayedPublishedDate: string,
   /** Comment published date */
   publishedDate: string,
-  displayIsEdited: any
+  displayIsEdited: ?React.Element<any>
 };
 
 const displayResponseAuthor = ({
