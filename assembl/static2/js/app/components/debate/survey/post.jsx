@@ -295,9 +295,21 @@ class Post extends React.Component<Props> {
         linkClassName="overflow-action"
       />
     );
+    const deleteButtonOverlay = userCanDeleteThisMessage ? (
+      <ResponsiveOverlayTrigger placement="top" tooltip={isPendingForModerator ? deniedMessageTooltip : deleteMessageTooltip}>
+        {deleteButton}
+      </ResponsiveOverlayTrigger>
+    ) : null;
+
     const validatePostButton = (
       <ValidatePostButton postId={post.id} refetchQueries={refetchQueries} linkClassName="overflow-action" />
     );
+    const validateButtonOverlay =
+      userIsModerator && isPending ? (
+        <ResponsiveOverlayTrigger placement="top" tooltip={validateMessageTooltip}>
+          {validatePostButton}
+        </ResponsiveOverlayTrigger>
+      ) : null;
 
     const tagOnPostProps: TagOnPostProps = {
       isAdmin: connectedUserIsAdmin(),
@@ -327,6 +339,13 @@ class Post extends React.Component<Props> {
         <SharePostButton {...sharePostButtonProps} />
       </button>
     );
+    const shareButtonOverlay = !isPending ? (
+      <ResponsiveOverlayTrigger placement="top" tooltip={sharePostTooltip}>
+        {shareButton}
+      </ResponsiveOverlayTrigger>
+    ) : null;
+    const isSmallScreen = screenWidth < SMALL_SCREEN_WIDTH;
+
     return (
       <div className={classnames('shown box', { pending: isPending })} id={post.id}>
         <div className="content">
@@ -346,7 +365,7 @@ class Post extends React.Component<Props> {
           />
           <TagOnPost {...tagOnPostProps} />
           <div className={classnames('post-footer', { pending: isPending })}>
-            {!isPending ? (
+            {!isPending && (
               <div className="sentiments">
                 <div className="sentiment-label">
                   <Translate value="debate.survey.react" />
@@ -358,31 +377,16 @@ class Post extends React.Component<Props> {
                   {disagreeComponent}
                 </ResponsiveOverlayTrigger>
               </div>
-            ) : null}
+            )}
             <div className="actions">
-              {!isPending ? (
-                <ResponsiveOverlayTrigger placement="top" tooltip={sharePostTooltip}>
-                  {shareButton}
-                </ResponsiveOverlayTrigger>
-              ) : null}
-              {userIsModerator && isPending ? (
-                <ResponsiveOverlayTrigger placement="top" tooltip={validateMessageTooltip}>
-                  {validatePostButton}
-                </ResponsiveOverlayTrigger>
-              ) : null}
-              {userCanDeleteThisMessage ? (
-                <ResponsiveOverlayTrigger
-                  placement="top"
-                  tooltip={isPendingForModerator ? deniedMessageTooltip : deleteMessageTooltip}
-                >
-                  {deleteButton}
-                </ResponsiveOverlayTrigger>
-              ) : null}
+              {shareButtonOverlay}
+              {validateButtonOverlay}
+              {deleteButtonOverlay}
             </div>
           </div>
         </div>
         <div className={classnames('statistic', { pending: isPending })}>
-          {screenWidth < SMALL_SCREEN_WIDTH && (
+          {isSmallScreen && (
             <div className="sentiments">
               <ResponsiveOverlayTrigger placement="top" tooltip={likeTooltip}>
                 <Translate value="debate.agree" className="sentiment-label-sm agree" />
@@ -414,18 +418,11 @@ class Post extends React.Component<Props> {
               </div>
             </div>
           </div>
-          {screenWidth < SMALL_SCREEN_WIDTH && (
+          {isSmallScreen && (
             <div className="actions">
-              {!isPending ? (
-                <ResponsiveOverlayTrigger placement="top" tooltip={sharePostTooltip}>
-                  {shareButton}
-                </ResponsiveOverlayTrigger>
-              ) : null}
-              {userCanDeleteThisMessage ? (
-                <ResponsiveOverlayTrigger placement="top" tooltip={deleteMessageTooltip}>
-                  {deleteButton}
-                </ResponsiveOverlayTrigger>
-              ) : null}
+              {shareButtonOverlay}
+              {validateButtonOverlay}
+              {deleteButtonOverlay}
             </div>
           )}
         </div>
