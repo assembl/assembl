@@ -163,7 +163,8 @@
   "resolutions": {
     "*/lodash": "^4.17.11",
     "*/prop-types": "^15.7.0",
-    "*/react-is": "^16.7.0"
+    "*/react-is": "^16.7.0",
+    "react-redux-i18n/react-i18nify": "1.9.1"
   },
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
