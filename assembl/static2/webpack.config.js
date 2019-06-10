@@ -64,6 +64,8 @@ module.exports = {
                   ['@babel/plugin-transform-runtime', { helpers: true, corejs: 2 }]
                 ],
                 presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
+                                    // Exclude transforms that make all code slower
+                                    "exclude": ["transform-typeof-symbol"],
                                     "debug": false, "useBuiltIns": "entry", "corejs": 2 }],
                           "@babel/preset-react", "@babel/preset-flow"]
               }
