@@ -153,7 +153,7 @@
     "react-tag-input": "https://github.com/assembl/react-tags.git#2db56d5",
     "react-tweet-embed": "^1.0.8",
     "react-virtualized": "9.18.5",
-    "react-wordcloud": "https://github.com/assembl/react-wordcloud.git#9c26980",
+    "react-wordcloud": "https://github.com/assembl/react-wordcloud.git#943ae18",
     "redux": "^3.7.2",
     "redux-thunk": "^2.1.0",
     "regenerator-runtime": "^0.13.2",
