@@ -45,7 +45,7 @@ describe('<InnerBoxView /> - default with shallow', () => {
   });
 
   it('should not render navigation arrows', () => {
-    expect(wrapper.find('div[className="assembl-icon-down-open grey"]')).toHaveLength(0);
+    expect(wrapper.find('span[className="assembl-icon-angle-right"]')).toHaveLength(0);
   });
 
   it('should render menu button', () => {
@@ -73,8 +73,8 @@ describe('<InnerBoxView /> - multiple with shallow', () => {
   });
 
   it('should render navigation arrows', () => {
-    expect(wrapper.find('div[className="assembl-icon-angle-left grey"]')).toHaveLength(1);
-    expect(wrapper.find('div[className="assembl-icon-angle-right grey"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-angle-left grey"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-angle-right grey"]')).toHaveLength(1);
   });
 
   it('should render menu button', () => {
