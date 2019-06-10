@@ -1,6 +1,7 @@
 $white: #fff;
 $black: #000;
 $light-grey: #eceeed;
+$medium-grey: #d8d8d6;
 $grey: #666;
 
 $orange: #ffd58f;
@@ -99,7 +100,8 @@ $fonts-dir: '//s3-eu-west-1.amazonaws.com/bluenove-assembl-fonts' !default;
 @font-face {
   font-family: 'LatoSemiBold';
   src: url('#{$fonts-dir}/Lato-Semibold.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Semibold.woff') format('woff'), url('#{$fonts-dir}/Lato-Semibold.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Semibold.woff') format('woff'),
+    url('#{$fonts-dir}/Lato-Semibold.ttf') format('truetype');
 }
 
 @font-face {
@@ -111,13 +113,15 @@ $fonts-dir: '//s3-eu-west-1.amazonaws.com/bluenove-assembl-fonts' !default;
 @font-face {
   font-family: 'LatoLightItalic';
   src: url('#{$fonts-dir}/Lato-LightItalic.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-LightItalic.woff') format('woff'), url('#{$fonts-dir}/Lato-LightItalic.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-LightItalic.woff') format('woff'),
+    url('#{$fonts-dir}/Lato-LightItalic.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoHairline';
   src: url('#{$fonts-dir}/Lato-Hairline.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Hairline.woff') format('woff'), url('#{$fonts-dir}/Lato-Hairline.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Hairline.woff') format('woff'),
+    url('#{$fonts-dir}/Lato-Hairline.ttf') format('truetype');
 }
 
 $font-family: 'latoRegular';
