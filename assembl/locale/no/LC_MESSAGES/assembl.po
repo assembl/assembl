@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-07 19:10+0200\n"
+"POT-Creation-Date: 2019-06-11 11:29+0200\n"
 "PO-Revision-Date: 2018-05-18 16:16+0200\n"
 "Last-Translator: \n"
 "Language: nb_NO\n"
@@ -53,6 +53,10 @@ msgstr ""
 
 #: assembl/graphql/discussion.py:667
 msgid "This slug is already used by another debate, you can't use it."
+msgstr ""
+
+#: assembl/graphql/document.py:79
+msgid "Sorry, this file type is not allowed."
 msgstr ""
 
 #: assembl/graphql/permissions_helpers.py:9
