@@ -12,7 +12,7 @@
   }
 
   .level {
-    width: 925px;
+    width: $post-size;
     display: flex;
     flex-direction: column;
     margin-left: auto;
@@ -226,7 +226,7 @@
   }
 }
 
-@media screen and (max-width: 925px) {
+@media screen and (max-width: $post-size) {
   .idea {
     .padding-left-right {
       padding-left: 10px;
