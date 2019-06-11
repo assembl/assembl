@@ -187,7 +187,7 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
                   </div>
                   {hasPassword && (
                     <div>
-                      <div className="align-flex">
+                      <div className="center-align-flex">
                         <h2 className="dark-title-2 margin-l">
                           <Translate value="profile.password" />
                         </h2>

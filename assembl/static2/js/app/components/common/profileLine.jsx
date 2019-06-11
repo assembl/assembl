@@ -29,7 +29,7 @@ class ProfileLine extends React.PureComponent<Props> {
     const userNameClasses = classnames('creator', userNameModerationClasses);
     return (
       <div className="profileLine">
-        <div className="align-flex">
+        <div className="baseline-align-flex">
           <div>
             <AvatarImage userId={userId} userName={userName} />
           </div>

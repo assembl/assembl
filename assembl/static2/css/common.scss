@@ -392,9 +392,14 @@ strong {
   justify-content: center;
 }
 
-.align-flex {
+.center-align-flex {
   display: flex;
   align-items: center;
+}
+
+.baseline-align-flex {
+  display: flex;
+  align-items: baseline;
 }
 
 .content-section {

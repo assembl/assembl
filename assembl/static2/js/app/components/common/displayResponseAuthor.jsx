@@ -9,7 +9,7 @@ export type displayResponseAuthorProps = {
   displayedPublishedDate: string,
   /** Comment published date */
   publishedDate: string,
-  displayIsEdited: ?React.Element<any>
+  displayIsEdited: React.Node
 };
 
 const displayResponseAuthor = ({

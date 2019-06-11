@@ -7,7 +7,7 @@ type DeletedByType = 'user' | 'admin';
 
 type DeletedPostProps = {
   id: string,
-  subject: ?React.Element<any>,
+  subject: React.Node,
   deletedBy: DeletedByType
 };
 

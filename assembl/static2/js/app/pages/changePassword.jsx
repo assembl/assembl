@@ -77,7 +77,7 @@ class ChangePassword extends React.Component {
                   <Translate value="login.oldPasswordWarning" />
                 </span>
               </div>
-              <FormGroup className="margin-m align-flex">
+              <FormGroup className="margin-m center-align-flex">
                 <FormControl
                   type="password"
                   name="password1"

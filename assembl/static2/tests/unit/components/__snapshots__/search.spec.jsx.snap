@@ -44,7 +44,7 @@ exports[`Hits components DumbExtractHit component should render an extract hit 1
         className="profileLine"
       >
         <div
-          className="align-flex"
+          className="baseline-align-flex"
         >
           <div>
             <img
@@ -195,7 +195,7 @@ exports[`Hits components PostHit component should render a post hit 1`] = `
         className="profileLine"
       >
         <div
-          className="align-flex"
+          className="baseline-align-flex"
         >
           <div>
             <img
@@ -293,7 +293,7 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
         className="profileLine"
       >
         <div
-          className="align-flex"
+          className="baseline-align-flex"
         >
           <div>
             <img
