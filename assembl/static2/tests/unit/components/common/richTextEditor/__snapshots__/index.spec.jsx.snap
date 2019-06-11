@@ -271,3 +271,13 @@ exports[`RichTextEditor component should render a rich text editor 1`] = `
   </div>
 </div>
 `;
+
+exports[`RichtextEditor with counter should display characters count if activated 1`] = `
+<div
+  className="editor-counter"
+>
+  6
+   / 
+  1000
+</div>
+`;

@@ -59,6 +59,7 @@ const TextMultimedia = ({ client, lang, editLocale }: Props) => (
                 component={MultilingualRichTextFieldAdapter}
                 label={I18n.t('administration.textMultimediaBody')}
                 withAttachmentButton
+                withCharacterCounter={10000}
               />
             </div>
           </AdminForm>

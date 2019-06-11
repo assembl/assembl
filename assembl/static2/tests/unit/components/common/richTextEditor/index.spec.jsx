@@ -52,3 +52,50 @@ describe('RichTextEditor component', () => {
     });
   });
 });
+
+describe('RichtextEditor with counter', () => {
+  it('should count characters', () => {
+    const contentState = ContentState.createFromText('foobar');
+    const editorState = EditorState.createWithContent(contentState);
+    const onChangeSpy = jest.fn();
+    const props = {
+      editorState: editorState,
+      onChange: onChangeSpy,
+      placeholder: 'Write here',
+      withCharacterCounter: 1000
+    };
+    const wrapper = mount(<RichTextEditor {...props} onChange={onChangeSpy} />);
+    const actual = wrapper.instance().getCharCount();
+    expect(actual).toBe(6);
+  });
+
+  it('should display characters count if activated', () => {
+    const contentState = ContentState.createFromText('foobar');
+    const editorState = EditorState.createWithContent(contentState);
+    const onChangeSpy = jest.fn();
+    const props = {
+      editorState: editorState,
+      onChange: onChangeSpy,
+      placeholder: 'Write here',
+      withCharacterCounter: 1000
+    };
+    const wrapper = mount(<RichTextEditor {...props} onChange={onChangeSpy} />);
+    const actual = wrapper.instance().getCounter();
+    expect(actual).toMatchSnapshot();
+  });
+
+  it('should not display characters count if not activated', () => {
+    const contentState = ContentState.createFromText('foobar');
+    const editorState = EditorState.createWithContent(contentState);
+    const onChangeSpy = jest.fn();
+    const props = {
+      editorState: editorState,
+      onChange: onChangeSpy,
+      placeholder: 'Write here',
+      withCharacterCounter: 0
+    };
+    const wrapper = mount(<RichTextEditor {...props} onChange={onChangeSpy} />);
+    const actual = wrapper.instance().getCounter();
+    expect(actual).toBeNull();
+  });
+});

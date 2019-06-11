@@ -11,6 +11,7 @@ import { HeadlineThreeButton, HeadlineTwoButton } from 'draft-js-buttons';
 import createAttachmentPlugin from 'draft-js-attachment-plugin';
 import createLinkPlugin from 'draft-js-link-plugin';
 import createModalPlugin from 'draft-js-modal-plugin';
+import punycode from 'punycode';
 /* eslint-enable import/no-extraneous-dependencies */
 import { BoldButton, ItalicButton, UnorderedListButton } from './buttons';
 import { addProtocol } from '../../../utils/linkify';
@@ -25,6 +26,7 @@ type Props = {
   textareaRef?: Function,
   toolbarPosition: ToolbarPosition,
   withAttachmentButton: boolean,
+  withCharacterCounter: number,
   withHeaderButton?: boolean
 };
 
@@ -46,6 +48,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
     handleInputFocus: undefined,
     toolbarPosition: 'top',
     withAttachmentButton: false,
+    withCharacterCounter: 0,
     withHeaderButton: false
   };
 
@@ -182,20 +185,66 @@ export default class RichTextEditor extends React.Component<Props, State> {
     return 'not-handled';
   };
 
+  getToolbar() {
+    const { Toolbar } = this.components;
+    const { toolbarPosition } = this.props;
+    if (toolbarPosition === 'top' || toolbarPosition === 'bottom') {
+      return <Toolbar />;
+    } else if (toolbarPosition === 'sticky') {
+      return (
+        <div className="editor-toolbar-sticky" style={{ top: this.state.toolbarOffset }}>
+          <Toolbar />
+        </div>
+      );
+    }
+    return null;
+  }
+
+  getCharCount() {
+    // https://github.com/draft-js-plugins/draft-js-plugins/blob/master/draft-js-counter-plugin/src/CharCounter/index.js
+    const { editorState } = this.props;
+    const decodeUnicode = str => punycode.ucs2.decode(str); // func to handle unicode characters
+    const plainText = editorState.getCurrentContent().getPlainText('');
+    const regex = /(?:\r\n|\r|\n)/g; // new line, carriage return, line feed
+    const cleanString = plainText.replace(regex, '').trim(); // replace above characters w/ nothing
+    return decodeUnicode(cleanString).length;
+  }
+
+  getCounter() {
+    if (this.props.withCharacterCounter) {
+      return (
+        <div className="editor-counter">
+          {this.getCharCount()} / {this.props.withCharacterCounter}
+        </div>
+      );
+    }
+    return null;
+  }
+
+  getPlaceholder() {
+    const { editorState, placeholder } = this.props;
+    return editorState.getCurrentContent().hasText() && placeholder ? (
+      <div className="editor-label form-label">{placeholder}</div>
+    ) : (
+      <div className="editor-label form-label">&nbsp;</div>
+    );
+  }
+
+  getAttachments() {
+    const { Attachments } = this.components;
+    return Attachments ? <Attachments /> : null;
+  }
+
   render() {
-    const { editorState, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
+    const { editorState, onChange, placeholder, textareaRef } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
-    const { Attachments, Modal, Toolbar } = this.components;
+    const { Modal } = this.components;
 
     return (
       <div ref={this.toolbarRef}>
         <div className={divClassName} ref={textareaRef}>
           <div className="editor-header">
-            {editorState.getCurrentContent().hasText() && placeholder ? (
-              <div className="editor-label form-label">{placeholder}</div>
-            ) : (
-              <div className="editor-label form-label">&nbsp;</div>
-            )}
+            {this.getPlaceholder()}
             <div className="clear" />
           </div>
           <Modal />
@@ -215,13 +264,9 @@ export default class RichTextEditor extends React.Component<Props, State> {
           we have to move toolbar in css for now since there is a bug in draft-js-plugin
           It should be fixed in draft-js-plugin v3
          */}
-          {toolbarPosition === 'top' || toolbarPosition === 'bottom' ? <Toolbar /> : null}
-          {toolbarPosition === 'sticky' ? (
-            <div className="editor-toolbar-sticky" style={{ top: this.state.toolbarOffset }}>
-              <Toolbar />
-            </div>
-          ) : null}
-          {Attachments ? <Attachments /> : null}
+          {this.getToolbar()}
+          {this.getAttachments()}
+          {this.getCounter()}
         </div>
       </div>
     );

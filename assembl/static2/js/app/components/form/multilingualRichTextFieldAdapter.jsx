@@ -20,16 +20,18 @@ type Props = {
   },
   label: string,
   toolbarPosition: ToolbarPosition,
-  withAttachmentButton: boolean
+  withAttachmentButton: boolean,
+  withCharacterCounter: number
 } & FieldRenderProps;
 
 const RichTextFieldAdapter = ({
   editLocale,
-  withAttachmentButton,
-  toolbarPosition,
   input: { name, onBlur, onChange, value, ...otherListeners },
   label,
   meta: { error, touched },
+  toolbarPosition,
+  withAttachmentButton,
+  withCharacterCounter,
   ...rest
 }: Props) => {
   const valueInLocale = value[editLocale] || EditorState.createEmpty();
@@ -40,9 +42,10 @@ const RichTextFieldAdapter = ({
         {...rest}
         editorState={valueInLocale}
         placeholder={label}
-        toolbarPosition={toolbarPosition}
         onChange={es => onChange({ ...value, [editLocale]: es })}
+        toolbarPosition={toolbarPosition}
         withAttachmentButton={withAttachmentButton}
+        withCharacterCounter={withCharacterCounter}
       />
       {/* Warning: we can't use Error component here because having 2 fields with the same name breaks links in Editor */}
       {touched && error ? <HelpBlock>{error}</HelpBlock> : null}
