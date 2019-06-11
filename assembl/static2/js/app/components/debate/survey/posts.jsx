@@ -24,12 +24,15 @@ type Props = {
   posts: {
     edges: Array<PostNode>
   },
+  params: Object,
   networkStatus: number,
   defaultContentLocaleMapping: Map,
+  identifier: string,
   isPhaseCompleted: boolean,
   fetchMore: Function,
   refetch: Function,
   questionId: string,
+  questionIndex: string,
   themeId: string,
   updateContentLocaleMapping: Function
 };
@@ -62,7 +65,7 @@ export class DumbPosts extends React.Component<Props> {
   }
 
   render() {
-    const { isModerating, networkStatus, fetchMore, refetch, themeId, posts, questionId, isPhaseCompleted } = this.props;
+    const { isModerating, networkStatus, params, fetchMore, refetch, themeId, posts, questionId, isPhaseCompleted } = this.props;
     return (
       <FlatList
         items={posts}
@@ -78,7 +81,9 @@ export class DumbPosts extends React.Component<Props> {
           isPhaseCompleted: isPhaseCompleted,
           isModerating: isModerating,
           originalLocale: item.node.originalLocale,
+          identifier: params.phase,
           questionId: questionId,
+          questionIndex: params.questionIndex,
           themeId: themeId
         })}
       />

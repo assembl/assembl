@@ -290,7 +290,7 @@ class FrontendUrls(object):
                         'phaseId': phase.graphene_id(),
                         'questionId': first_idea.graphene_id(),
                         'questionIndex': questionIndex,
-                        'element': post.graphene_id()
+                        'postId': post.graphene_id()
                     })
                 elif first_idea.message_view_override == MessageView.brightMirror.value:
                     route = self.get_frontend_url('brightMirrorFiction', **{
@@ -305,7 +305,7 @@ class FrontendUrls(object):
                         'phase': phase.identifier,
                         'phaseId': phase.graphene_id(),
                         'themeId': first_idea.graphene_id(),
-                        'element': post.graphene_id()
+                        'postId': post.graphene_id()
                     })
 
                 return urljoin(self.discussion.get_base_url(), route)

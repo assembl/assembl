@@ -87,7 +87,7 @@ const FictionToolbar = ({
 
   const sharePostButtonProps: SharePostButtonProps = {
     linkClassName: 'share',
-    metaInfo: { ...fictionMetaInfo },
+    routerParams: { ...fictionMetaInfo },
     modalTitleMsgKey: 'debate.brightMirror.shareFiction',
     type: 'brightMirrorFiction'
   };
