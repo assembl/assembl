@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { type ApolloClient, compose, withApollo } from 'react-apollo';
+import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { connect } from 'react-redux';
 import { Field } from 'react-final-form';
 import { I18n } from 'react-redux-i18n';
@@ -17,6 +17,7 @@ import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAda
 import MultilingualRichTextFieldAdapter from '../../../form/multilingualRichTextFieldAdapter';
 import SectionTitle from '../../../administration/sectionTitle';
 import { compareEditorState } from '../../../form/utils';
+import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
 
 type Props = {
   client: ApolloClient,
@@ -26,17 +27,12 @@ type Props = {
 
 const loading = <Loader />;
 
-// TODO remove all $FlowFixMe when the load.js and the save.js are done
-
 const TextMultimedia = ({ client, lang, editLocale }: Props) => (
   <LoadSaveReinitializeForm
-    // $FlowFixMe
-    load={() => load()}
+    load={fetchPolicy => load(client, fetchPolicy)}
     loading={loading}
     postLoadFormat={postLoadFormat}
-    // $FlowFixMe
     createMutationsPromises={createMutationsPromises(client, lang)}
-    // $FlowFixMe
     save={save}
     validate={validate}
     mutators={{
@@ -52,14 +48,14 @@ const TextMultimedia = ({ client, lang, editLocale }: Props) => (
               <Field
                 required
                 editLocale={editLocale}
-                name="title"
+                name="textMultimediaTitle"
                 component={MultilingualTextFieldAdapter}
                 label={I18n.t('administration.textMultimediaTitle')}
               />
               <Field
                 required
                 editLocale={editLocale}
-                name="body"
+                name="textMultimediaBody"
                 component={MultilingualRichTextFieldAdapter}
                 label={I18n.t('administration.textMultimediaBody')}
                 withAttachmentButton
@@ -77,4 +73,15 @@ const mapStateToProps = state => ({
   editLocale: state.admin.editLocale
 });
 
-export default compose(connect(mapStateToProps), withApollo)(TextMultimedia);
+export default compose(
+  connect(mapStateToProps),
+  graphql(DiscussionQuery, {
+    options: ({ editLocale }) => ({
+      variables: {
+        lang: editLocale,
+        nextView: null
+      }
+    })
+  }),
+  withApollo
+)(TextMultimedia);

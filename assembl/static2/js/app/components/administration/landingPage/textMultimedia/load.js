@@ -1,35 +1,30 @@
 // @flow
-import type { TextAndMultimediaValues } from './types.flow';
-import { convertEntriesToI18nValue, convertEntriesToI18nRichText } from '../../../form/utils';
+import type { ApolloClient } from 'react-apollo';
+import type { MultilingualTextMultimedia, TextMultimediaValues } from './types.flow';
+import { convertEntriesToI18nRichText, convertEntriesToI18nValue } from '../../../form/utils';
+import MultilingualDiscussionQuery from '../../../../graphql/MultilingualDiscussionQuery.graphql';
 
-// TODO replace the mock by the query
-const mockDataFromQuery = {
-  titleEntries: [
-    { value: 'Titre de la section text et multimedia', localeCode: 'fr' },
-    { value: 'Text and multimedia title', localeCode: 'en' }
-  ],
-  layout: 1,
-  bodyEntries: [
-    { value: '<p>Body de la section text et multimedia</p>', localeCode: 'fr' },
-    { value: '<p>Text and multimedia body</p>', localeCode: 'en' }
-  ]
+export const load = async (
+  client: ApolloClient,
+  fetchPolicy: FetchPolicy
+): Promise<{ discussion: MultilingualTextMultimedia | null }> => {
+  const { data } = await client.query({
+    query: MultilingualDiscussionQuery,
+    fetchPolicy: fetchPolicy
+  });
+  return data;
 };
 
-export const load = () => mockDataFromQuery;
-
-export function postLoadFormat(): TextAndMultimediaValues {
+export const postLoadFormat = ({ discussion }: { discussion: MultilingualTextMultimedia | null }): TextMultimediaValues => {
+  if (!discussion) {
+    return { textMultimediaBody: {}, textMultimediaTitle: {} };
+  }
   return {
-    title: convertEntriesToI18nValue(mockDataFromQuery.titleEntries),
-    layout: mockDataFromQuery.layout,
-    body: convertEntriesToI18nRichText(mockDataFromQuery.bodyEntries),
-    // TODO add the I18n in the label
-    layoutOptions: [
-      { label: '1 zone', isChecked: mockDataFromQuery.layout === 1 },
-      { label: '2 zones', isChecked: mockDataFromQuery.layout === 2 },
-      { label: '2 zones', isChecked: mockDataFromQuery.layout === 3 },
-      { label: '3 zones', isChecked: mockDataFromQuery.layout === 4 },
-      { label: '4 zones', isChecked: mockDataFromQuery.layout === 5 },
-      { label: '3 zones', isChecked: mockDataFromQuery.layout === 6 }
-    ]
+    textMultimediaBody: discussion.textMultimediaBodyEntries
+      ? convertEntriesToI18nRichText(discussion.textMultimediaBodyEntries)
+      : {},
+    textMultimediaTitle: discussion.textMultimediaTitleEntries
+      ? convertEntriesToI18nValue(discussion.textMultimediaTitleEntries)
+      : {}
   };
-}
+};
