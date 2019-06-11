@@ -240,6 +240,8 @@ $deleted-post-border: 1px solid $light-grey !default;
       display: flex;
 
       .author .assembl-icon-back-arrow {
+        display: inline-block;
+        transform: scaleX(-1);
         font-size: $font-size-xs;
         padding-left: 6px;
         padding-right: 6px;
