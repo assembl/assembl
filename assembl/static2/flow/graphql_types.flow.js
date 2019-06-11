@@ -453,17 +453,7 @@ export type BrightMirrorFictionQuery = {|
                 // A url to an image or a document to be attached.
                 externalUrl: ?string,
                 // The MIME-Type of the file uploaded.
-                mimeType: ?string,
-                // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-                //
-                // "unchecked": The AV did not make a check on this file.
-                //
-                // "passed": The AV did a pass on this file, and it passed AV check.
-                //
-                // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-                // accessed by the application.
-                //
-                avChecked: ?string
+                mimeType: ?string
               |}
             |}>,
             // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
@@ -655,7 +645,11 @@ export type DiscussionDataQuery = {|
     // The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase.
     startDate: ?any,
     // The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase.
-    endDate: ?any
+    endDate: ?any,
+    // Title of multimedia text on landing page
+    textMultimediaTitle: ?string,
+    // Body of multimedia text on landing page
+    textMultimediaBody: ?string
   |}
 |};
 
@@ -1184,6 +1178,81 @@ export type LocalesQueryQuery = {|
   |}>
 |};
 
+export type MultilingualDiscussionDataQueryVariables = {|
+  nextView?: ?string
+|};
+
+export type MultilingualDiscussionDataQuery = {|
+  // The discussion object metadata.
+  discussion: ?{|
+    // The ID of the object.
+    id: string,
+    // A list of possible languages of the entity as LangStringEntry objects. %s
+    buttonLabelEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase.
+    endDate: ?any,
+    // The file representing the header of the landing page. A file metadata object, described by the Document object.
+    headerImage: ?{|
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string,
+      // The filename title.
+      title: ?string,
+      // A url to an image or a document to be attached.
+      externalUrl: ?string
+    |},
+    // A URL for the homepage (optional). Often placed on the logo.
+    homepageUrl: ?string,
+    loginData: ?{|
+      local: ?boolean,
+      url: string
+    |},
+    // The file representing the logo of the debate. A file metadata object, described by the Document object.
+    logoImage: ?{|
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string,
+      // A url to an image or a document to be attached.
+      externalUrl: ?string,
+      // The filename title.
+      title: ?string
+    |},
+    // Title of multimedia text on landing page
+    textMultimediaBodyEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // Title of multimedia text on landing page
+    textMultimediaTitleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase.
+    startDate: ?any,
+    // A list of possible languages of the entity as LangStringEntry objects. %s
+    subtitleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // A list of possible languages of the entity as LangStringEntry objects. %s
+    titleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>
+  |}
+|};
+
 export type MultilingualSynthesisQueryQueryVariables = {|
   id: string
 |};
@@ -1204,6 +1273,26 @@ export type MultilingualSynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string,
+        // A graphene Field containing the state of the publication of a certain post. The options are:
+        // DRAFT,
+        //
+        // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+        //
+        // SUBMITTED_AWAITING_MODERATION,
+        //
+        // PUBLISHED,
+        //
+        // MODERATED_TEXT_ON_DEMAND,
+        //
+        // MODERATED_TEXT_NEVER_AVAILABLE,
+        //
+        // DELETED_BY_USER,
+        //
+        // DELETED_BY_ADMIN,
+        //
+        // WIDGET_SCOPED
+        //
+        publicationState: ?PublicationStates,
         // Graphene Field modeling a relationship to a published synthesis.
         publishesSynthesis: ?{|
           // The ID of the object.
@@ -1226,8 +1315,14 @@ export type MultilingualSynthesisQueryQuery = {|
           |}>,
           // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
           img: ?{|
+            // The ID of the object.
+            id: string,
+            // The filename title.
+            title: ?string,
             // A url to an image or a document to be attached.
-            externalUrl: ?string
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string
           |}
         |}
       }
@@ -1496,17 +1591,7 @@ export type PostQuery = {|
             // A url to an image or a document to be attached.
             externalUrl: ?string,
             // The MIME-Type of the file uploaded.
-            mimeType: ?string,
-            // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-            //
-            // "unchecked": The AV did not make a check on this file.
-            //
-            // "passed": The AV did a pass on this file, and it passed AV check.
-            //
-            // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-            // accessed by the application.
-            //
-            avChecked: ?string
+            mimeType: ?string
           |}
         |}>,
         // Keywords associated with the post, according to NLP engine.
@@ -2016,8 +2101,14 @@ export type SynthesesQueryQuery = {|
     creationDate: ?any,
     // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
     img: ?{|
+      // The ID of the object.
+      id: string,
+      // The filename title.
+      title: ?string,
       // A url to an image or a document to be attached.
-      externalUrl: ?string
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string
     |},
     // Synthesis post to be created.
     post: ?{|
@@ -2086,8 +2177,14 @@ export type SynthesisQueryQuery = {|
           creationDate: ?any,
           // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
           img: ?{|
+            // The ID of the object.
+            id: string,
+            // The filename title.
+            title: ?string,
             // A url to an image or a document to be attached.
-            externalUrl: ?string
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string
           |},
           // This is the list of ideas related to the synthesis.
           ideas: ?Array<?{
@@ -3848,17 +3945,7 @@ export type createPostMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // Keywords associated with the post, according to NLP engine.
@@ -4019,7 +4106,8 @@ export type createSynthesisMutationVariables = {|
   image?: ?string,
   bodyEntries: Array<?LangStringEntryInput>,
   subjectEntries: Array<?LangStringEntryInput>,
-  synthesisType: SynthesisTypes
+  synthesisType: SynthesisTypes,
+  publicationState: PublicationStates
 |};
 
 export type createSynthesisMutation = {|
@@ -4028,6 +4116,26 @@ export type createSynthesisMutation = {|
     synthesisPost: ?{|
       // The ID of the object.
       id: string,
+      // A graphene Field containing the state of the publication of a certain post. The options are:
+      // DRAFT,
+      //
+      // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+      //
+      // SUBMITTED_AWAITING_MODERATION,
+      //
+      // PUBLISHED,
+      //
+      // MODERATED_TEXT_ON_DEMAND,
+      //
+      // MODERATED_TEXT_NEVER_AVAILABLE,
+      //
+      // DELETED_BY_USER,
+      //
+      // DELETED_BY_ADMIN,
+      //
+      // WIDGET_SCOPED
+      //
+      publicationState: ?PublicationStates,
       // Graphene Field modeling a relationship to a published synthesis.
       publishesSynthesis: ?{|
         // The ID of the object.
@@ -4050,8 +4158,14 @@ export type createSynthesisMutation = {|
         |}>,
         // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
         img: ?{|
+          // The ID of the object.
+          id: string,
+          // The filename title.
+          title: ?string,
           // A url to an image or a document to be attached.
-          externalUrl: ?string
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string
         |}
       |}
     |}
@@ -4593,6 +4707,35 @@ export type updateDiscussionPreferenceMutation = {|
   |}
 |};
 
+export type UpdateDiscussionTextMultimediaMutationVariables = {|
+  textMultimediaTitleEntries?: ?Array<LangStringEntryInput>,
+  textMultimediaBodyEntries?: ?Array<LangStringEntryInput>
+|};
+
+export type UpdateDiscussionTextMultimediaMutation = {|
+  // A way to save Discussion text multimedia preferences on a debate.
+  updateDiscussionTextMultimedia: ?{|
+    discussion: ?{|
+      // The ID of the object.
+      id: string,
+      // Title of multimedia text on landing page
+      textMultimediaBodyEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      // Title of multimedia text on landing page
+      textMultimediaTitleEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>
+    |}
+  |}
+|};
+
 export type updateExtractMutationVariables = {|
   extractId: string,
   ideaId?: ?string,
@@ -5077,17 +5220,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // A Attachments for terms and conditions. in a given language.
@@ -5103,17 +5236,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // A Attachments for cookies policy. in a given language.
@@ -5129,17 +5252,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // A Attachments for privacy policy. in a given language.
@@ -5155,17 +5268,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // A Attachments for user guidelines. in a given language.
@@ -5181,17 +5284,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>
     |}
@@ -5491,17 +5584,7 @@ export type updatePostMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // Keywords associated with the post, according to NLP engine.
@@ -5816,9 +5899,9 @@ export type updateShareCountMutation = {|
 export type updateSynthesisMutationVariables = {|
   id: string,
   image?: ?string,
-  lang: string,
   bodyEntries: Array<?LangStringEntryInput>,
-  subjectEntries: Array<?LangStringEntryInput>
+  subjectEntries: Array<?LangStringEntryInput>,
+  publicationState: PublicationStates
 |};
 
 export type updateSynthesisMutation = {|
@@ -5827,160 +5910,57 @@ export type updateSynthesisMutation = {|
     synthesisPost: ?{|
       // The ID of the object.
       id: string,
+      // A graphene Field containing the state of the publication of a certain post. The options are:
+      // DRAFT,
+      //
+      // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+      //
+      // SUBMITTED_AWAITING_MODERATION,
+      //
+      // PUBLISHED,
+      //
+      // MODERATED_TEXT_ON_DEMAND,
+      //
+      // MODERATED_TEXT_NEVER_AVAILABLE,
+      //
+      // DELETED_BY_USER,
+      //
+      // DELETED_BY_ADMIN,
+      //
+      // WIDGET_SCOPED
+      //
+      publicationState: ?PublicationStates,
       // Graphene Field modeling a relationship to a published synthesis.
       publishesSynthesis: ?{|
         // The ID of the object.
         id: string,
         // The type of Synthesis to be created
         synthesisType: SynthesisTypes,
-        // The subject of the synthesis.
-        subject: ?string,
-        // The introduction of the synthesis.
-        introduction: ?string,
-        // The body of the full text synthesis.
-        body: ?string,
-        // The conclusion of the synthesis.
-        conclusion: ?string,
-        // The creation date of the synthesis.
-        creationDate: ?any,
+        // A list of possible languages of the entity as LangStringEntry objects. The subject in various languages.
+        subjectEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        // A list of possible languages of the entity as LangStringEntry objects. The body in various languages.
+        bodyEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
         // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
         img: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string
-        |},
-        // This is the list of ideas related to the synthesis.
-        ideas: ?Array<?{
           // The ID of the object.
           id: string,
-          // A list of Relay.Node ID's representing the parents Ideas of the Idea.
-          ancestors: ?Array<?string>,
-          // The title of the Idea, often shown in the Idea header itself.
+          // The filename title.
           title: ?string,
-          // A Synthesis title in a given language.
-          synthesisTitle: ?string,
-          // The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea.
-          live: ?{
-            // The ID of the object.
-            id: string,
-            // The order of the Idea, Thematic, Question in the idea tree.
-            order: ?number,
-            // The total number of active posts on that idea (excludes deleted posts).
-            numPosts: ?number,
-            // The total number of users who contributed to the Idea/Thematic/Question.
-            //
-            // Contribution is counted as either as a sentiment set, a post created.
-            numContributors: ?number,
-            // A list of IdeaMessageColumn objects, if any set, on an Idea.
-            messageColumns: ?Array<?{|
-              // A CSS color that will be used to theme the column.
-              color: ?string,
-              // A Synthesis done on the column, of type Post.
-              columnSynthesis: ?{|
-                // The ID of the object.
-                id: string,
-                // A Subject of the post in a given language.
-                subject: ?string,
-                // A Body of the post (the main content of the post). in a given language.
-                body: ?string,
-                // The SentimentType that the API calling User has on the Post, if any.
-                mySentiment: ?SentimentTypes,
-                // A list of SentimentCounts which counts each sentiment expressed. These include:
-                //
-                // Like,
-                //
-                // Agree,
-                //
-                // Disagree,
-                //
-                // Like,
-                //
-                // Don't Understand
-                //
-                // More Info
-                //
-                sentimentCounts: ?{|
-                  // The number of Sentiments disagreeing with the post.
-                  disagree: ?number,
-                  // The number of Sentiments expressing "dont_understand" on the Post.
-                  dontUnderstand: ?number,
-                  // The number of Sentiments expressed "like" on the post.
-                  like: ?number,
-                  // The number of Sentiments requesting "more_info" on the post.
-                  moreInfo: ?number
-                |}
-              |},
-              // The order of the message column in the Idea/Thematic.
-              index: ?number,
-              // The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer.
-              messageClassifier: string,
-              // A The name of the column in a given language.
-              name: ?string,
-              // The number of posts contributed to only this column.
-              numPosts: ?number,
-              // A The title of the column in a given language.
-              title: ?string
-            |}>,
-            // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
-            messageViewOverride: ?string,
-            // Header image associated with the idea. A file metadata object, described by the Document object.
-            img: ?{|
-              // A url to an image or a document to be attached.
-              externalUrl: ?string
-            |},
-            // A list of all Posts under the Idea. These include posts of the subIdeas.
-            posts: ?{|
-              edges: Array<?{|
-                // The item at the end of the edge
-                node: ?{|
-                  // A list of SentimentCounts which counts each sentiment expressed. These include:
-                  //
-                  // Like,
-                  //
-                  // Agree,
-                  //
-                  // Disagree,
-                  //
-                  // Like,
-                  //
-                  // Don't Understand
-                  //
-                  // More Info
-                  //
-                  sentimentCounts: ?{|
-                    // The number of Sentiments expressed "like" on the post.
-                    like: ?number,
-                    // The number of Sentiments disagreeing with the post.
-                    disagree: ?number,
-                    // The number of Sentiments expressing "dont_understand" on the Post.
-                    dontUnderstand: ?number,
-                    // The number of Sentiments requesting "more_info" on the post.
-                    moreInfo: ?number
-                  |},
-                  // A graphene Field containing the state of the publication of a certain post. The options are:
-                  // DRAFT,
-                  //
-                  // SUBMITTED_IN_EDIT_GRACE_PERIOD,
-                  //
-                  // SUBMITTED_AWAITING_MODERATION,
-                  //
-                  // PUBLISHED,
-                  //
-                  // MODERATED_TEXT_ON_DEMAND,
-                  //
-                  // MODERATED_TEXT_NEVER_AVAILABLE,
-                  //
-                  // DELETED_BY_USER,
-                  //
-                  // DELETED_BY_ADMIN,
-                  //
-                  // WIDGET_SCOPED
-                  //
-                  publicationState: ?PublicationStates
-                |}
-              |}>
-            |}
-          }
-        }>
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string
+        |}
       |}
     |}
   |}
@@ -6541,17 +6521,7 @@ export type ADocumentFragment = {|
   // A url to an image or a document to be attached.
   externalUrl: ?string,
   // The MIME-Type of the file uploaded.
-  mimeType: ?string,
-  // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-  //
-  // "unchecked": The AV did not make a check on this file.
-  //
-  // "passed": The AV did a pass on this file, and it passed AV check.
-  //
-  // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-  // accessed by the application.
-  //
-  avChecked: ?string
+  mimeType: ?string
 |};
 
 export type AgentProfileInfoFragment = {|
@@ -6590,17 +6560,7 @@ export type AttachmentFragment = {|
     // A url to an image or a document to be attached.
     externalUrl: ?string,
     // The MIME-Type of the file uploaded.
-    mimeType: ?string,
-    // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-    //
-    // "unchecked": The AV did not make a check on this file.
-    //
-    // "passed": The AV did a pass on this file, and it passed AV check.
-    //
-    // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-    // accessed by the application.
-    //
-    avChecked: ?string
+    mimeType: ?string
   |}
 |};
 
@@ -6841,17 +6801,7 @@ export type BrightMirrorFictionFragment = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
@@ -7087,17 +7037,7 @@ export type ExtractCommentFragment = {|
       // A url to an image or a document to be attached.
       externalUrl: ?string,
       // The MIME-Type of the file uploaded.
-      mimeType: ?string,
-      // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-      //
-      // "unchecked": The AV did not make a check on this file.
-      //
-      // "passed": The AV did a pass on this file, and it passed AV check.
-      //
-      // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-      // accessed by the application.
-      //
-      avChecked: ?string
+      mimeType: ?string
     |}
   |}>,
   // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
@@ -7267,17 +7207,7 @@ export type FictionExtractFragment = {|
         // A url to an image or a document to be attached.
         externalUrl: ?string,
         // The MIME-Type of the file uploaded.
-        mimeType: ?string,
-        // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-        //
-        // "unchecked": The AV did not make a check on this file.
-        //
-        // "passed": The AV did a pass on this file, and it passed AV check.
-        //
-        // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-        // accessed by the application.
-        //
-        avChecked: ?string
+        mimeType: ?string
       |}
     |}>,
     // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
@@ -7539,9 +7469,97 @@ export type langStringEntryFragment = {|
   value: ?string
 |};
 
+export type MultilingualDiscussionFragment = {|
+  // The ID of the object.
+  id: string,
+  // A list of possible languages of the entity as LangStringEntry objects. %s
+  buttonLabelEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase.
+  endDate: ?any,
+  // The file representing the header of the landing page. A file metadata object, described by the Document object.
+  headerImage: ?{|
+    // The MIME-Type of the file uploaded.
+    mimeType: ?string,
+    // The filename title.
+    title: ?string,
+    // A url to an image or a document to be attached.
+    externalUrl: ?string
+  |},
+  // A URL for the homepage (optional). Often placed on the logo.
+  homepageUrl: ?string,
+  loginData: ?{|
+    local: ?boolean,
+    url: string
+  |},
+  // The file representing the logo of the debate. A file metadata object, described by the Document object.
+  logoImage: ?{|
+    // The MIME-Type of the file uploaded.
+    mimeType: ?string,
+    // A url to an image or a document to be attached.
+    externalUrl: ?string,
+    // The filename title.
+    title: ?string
+  |},
+  // Title of multimedia text on landing page
+  textMultimediaBodyEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // Title of multimedia text on landing page
+  textMultimediaTitleEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase.
+  startDate: ?any,
+  // A list of possible languages of the entity as LangStringEntry objects. %s
+  subtitleEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // A list of possible languages of the entity as LangStringEntry objects. %s
+  titleEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>
+|};
+
 export type MultilingualSynthesisPostFragment = {|
   // The ID of the object.
   id: string,
+  // A graphene Field containing the state of the publication of a certain post. The options are:
+  // DRAFT,
+  //
+  // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+  //
+  // SUBMITTED_AWAITING_MODERATION,
+  //
+  // PUBLISHED,
+  //
+  // MODERATED_TEXT_ON_DEMAND,
+  //
+  // MODERATED_TEXT_NEVER_AVAILABLE,
+  //
+  // DELETED_BY_USER,
+  //
+  // DELETED_BY_ADMIN,
+  //
+  // WIDGET_SCOPED
+  //
+  publicationState: ?PublicationStates,
   // Graphene Field modeling a relationship to a published synthesis.
   publishesSynthesis: ?{|
     // The ID of the object.
@@ -7564,8 +7582,14 @@ export type MultilingualSynthesisPostFragment = {|
     |}>,
     // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
     img: ?{|
+      // The ID of the object.
+      id: string,
+      // The filename title.
+      title: ?string,
       // A url to an image or a document to be attached.
-      externalUrl: ?string
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string
     |}
   |}
 |};
@@ -7796,17 +7820,7 @@ export type PostFragment = {|
       // A url to an image or a document to be attached.
       externalUrl: ?string,
       // The MIME-Type of the file uploaded.
-      mimeType: ?string,
-      // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-      //
-      // "unchecked": The AV did not make a check on this file.
-      //
-      // "passed": The AV did a pass on this file, and it passed AV check.
-      //
-      // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-      // accessed by the application.
-      //
-      avChecked: ?string
+      mimeType: ?string
     |}
   |}>,
   // Keywords associated with the post, according to NLP engine.
@@ -7940,8 +7954,14 @@ export type SynthesisPostFragment = {|
     creationDate: ?any,
     // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
     img: ?{|
+      // The ID of the object.
+      id: string,
+      // The filename title.
+      title: ?string,
       // A url to an image or a document to be attached.
-      externalUrl: ?string
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string
     |},
     // This is the list of ideas related to the synthesis.
     ideas: ?Array<?{
