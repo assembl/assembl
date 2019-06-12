@@ -28,8 +28,8 @@ from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModu
                                           UpdateLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
-from assembl.graphql.post import (AddPostAttachment, CreatePost, DeletePost,
-                                  ValidatePost, DeletePostAttachment, UndeletePost,
+from assembl.graphql.post import (CreatePost, DeletePost,
+                                  ValidatePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract, UpdateShareCount)
 from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
@@ -478,12 +478,9 @@ class Mutations(graphene.ObjectType):
     update_share_count = UpdateShareCount.Field(description=docs.UpdateShareCount.__doc__)
     delete_post = DeletePost.Field(description=docs.DeletePost.__doc__)
     validate_post = ValidatePost.Field(description=docs.ValidatePost.__doc__)
-    undelete_post = UndeletePost.Field(description=docs.UndeletePost.__doc__)
     add_sentiment = AddSentiment.Field(description=docs.AddSentiment.__doc__)
     delete_sentiment = DeleteSentiment.Field(description=docs.DeleteSentiment.__doc__)
-    add_post_attachment = AddPostAttachment.Field(description=docs.AddPostAttachment.__doc__)
     upload_document = UploadDocument.Field(description=docs.UploadDocument.__doc__)
-    delete_post_attachment = DeletePostAttachment.Field(description=docs.DeletePostAttachment.__doc__)
     update_discussion_preferences = UpdateDiscussionPreferences.Field(description=docs.UpdateDiscussionPreferences.__doc__)
     create_resource = CreateResource.Field(description=docs.CreateResource.__doc__)
     delete_resource = DeleteResource.Field(description=docs.DeleteResource.__doc__)

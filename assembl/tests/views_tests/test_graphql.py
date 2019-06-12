@@ -874,57 +874,6 @@ mutation myMutation($postId: ID!) {
             }}}
 
 
-def test_mutation_undelete_post(graphql_request, top_post_in_thread_phase):
-    res = schema.execute(u"""
-mutation myMutation($postId: ID!) {
-    deletePost(postId: $postId) {
-        post {
-            ... on Post {
-                subject
-                body
-                parentId
-                creator { name }
-                publicationState
-            }
-        }
-    }
-}
-""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
-    assert json.loads(json.dumps(res.data)) == {
-        u'deletePost': {
-            u'post': {
-                u'subject': u'Manger des choux à la crème',
-                u'body': None,
-                u'parentId': None,
-                u'creator': {u'name': u'Mr. Administrator'},
-                u'publicationState': 'DELETED_BY_USER'
-            }}}
-    res = schema.execute(u"""
-mutation myMutation($postId: ID!) {
-    undeletePost(postId: $postId) {
-        post {
-            ... on Post {
-                subject
-                body
-                parentId
-                creator { name }
-                publicationState
-            }
-        }
-    }
-}
-""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
-    assert json.loads(json.dumps(res.data)) == {
-        u'undeletePost': {
-            u'post': {
-                u'subject': u'Manger des choux à la crème',
-                u'body': u"Je recommande de manger des choux à la crème, c'est très bon, et ça permet de maintenir l'industrie de la patisserie française.",
-                u'parentId': None,
-                u'creator': {u'name': u'Mr. Administrator'},
-                u'publicationState': 'PUBLISHED'
-            }}}
-
-
 def test_mutation_add_sentiment(graphql_request, thematic_and_question, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {
@@ -1732,75 +1681,6 @@ mutation uploadDocument($file: String!) {
     assert res.data['uploadDocument']['document']['title'] == u"image.png"
     assert res.data['uploadDocument']['document']['externalUrl'].endswith(
         '/data')
-
-
-def test_mutation_delete_post_attachment(graphql_request, idea_in_thread_phase, top_post_in_thread_phase):
-    # TODO: write a test fixture that returns a post attachment id and remove AddPostAttachmentMutation everywhere
-    import os
-    from io import BytesIO
-
-    class FieldStorage(object):
-        file = BytesIO(os.urandom(16))
-        filename = u'path/to/image.png'
-        type = 'image/png'
-
-    graphql_request.POST['variables.attachment'] = FieldStorage()
-    res = schema.execute(u"""
-mutation addPostAttachment($postId: ID!, $file: String!) {
-    addPostAttachment(
-        postId: $postId,
-        file: $file,
-    ) {
-        post {
-            ... on Post {
-                attachments {
-                    id
-                }
-            }
-        }
-    }
-}
-""", context_value=graphql_request,
-                         variable_values={
-                             "postId": top_post_in_thread_phase,
-                             "file": "variables.attachment"
-                         })
-    assert res.errors is None
-    attachment_id = res.data['addPostAttachment']['post']['attachments'][-1]['id']
-
-    res = schema.execute(u"""
-mutation deletePostAttachment($postId: ID!, $attachmentId: ID!) {
-    deletePostAttachment(
-        postId: $postId,
-        attachmentId: $attachmentId,
-    ) {
-        post {
-            ... on Post {
-                attachments {
-                    document {
-                        id
-                        title
-                        externalUrl
-                        mimeType
-                    }
-                }
-            }
-        }
-    }
-}
-""", context_value=graphql_request,
-                         variable_values={
-                             "attachmentId": attachment_id,
-                             "postId": top_post_in_thread_phase,
-                         })
-
-    assert json.loads(json.dumps(res.data)) == {
-        u'deletePostAttachment': {
-            u'post': {
-                u'attachments': []
-            }
-        }
-    }
 
 
 def test_query_discussion_preferences(

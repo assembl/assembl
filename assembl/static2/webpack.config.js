@@ -29,19 +29,11 @@ function theme_entries() {
         }
         entries[name] = path;
     }
-//    paths = glob.sync('./css/themes/**/*_notifications.scss');
-//    for (i = 0; i < paths.length; i++) {
-//        path = paths[i];
-//        parts = path.split('/');
-//        name = 'theme_' + parts[parts.length - 2] + '_notifications';
-//        entries[name] = path;
-//    }
     return entries;
 }
 
 var general_entries = {
-    bundle: ['./js/app/index'],
-    searchv1: ['./js/app/searchv1']
+    bundle: ['./js/app/index']
 };
 
 module.exports = {
@@ -55,7 +47,7 @@ module.exports = {
     module: {
         rules: [
         {
-            test: /\.jsx?(\?v=\d)?$/,
+            test: /\.jsx?$/,
             use: {
               loader: 'babel-loader',
               options: {

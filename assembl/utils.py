@@ -130,23 +130,13 @@ def get_ideas_for_export(discussion, module_type=None):
 
 def get_ideas(phase, options=None):
     root_thematic = get_root_thematic_for_phase(phase)
-    discussion = phase.discussion
     if root_thematic is None:
         return []
 
     model = models.Idea
     query = model.query
-    if discussion.root_idea == root_thematic:
-        # thread phase is directly on discussion.root_idea,
-        # we need to remove all descendants of all the other phases
-        descendants_to_ignore = get_descendants(get_all_phase_root_ideas(discussion))
-        descendants = root_thematic.get_all_descendants(id_only=True, inclusive=False)
-        descendants = set(descendants) - set(descendants_to_ignore)
-        query = query.filter(model.id.in_(descendants))
-    else:
-        descendants_query = root_thematic.get_descendants_query(inclusive=False)
-        query = query.filter(model.id.in_(descendants_query))
-
+    descendants_query = root_thematic.get_descendants_query(inclusive=False)
+    query = query.filter(model.id.in_(descendants_query))
     query = query.outerjoin(
             models.Idea.source_links
         ).filter(

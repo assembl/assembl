@@ -111,8 +111,6 @@ script:
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run stylelint; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then grep -R 'Missing translation' tests/unit/; test -z "`grep -R 'Missing translation' tests/unit/`"; fi
   - if [ "$TO_TEST" = "FRONTEND" ]; then npm run build >/dev/null; fi
-#  - if [ "$TO_TEST" = "FRONTEND" ]; then bash -c "test `ls -l build/bundle.js|awk '{print $5}'` -gt 3670016 && echo 'build/bundle.js size exceed 3.5 MB, is this normal? It was previously around 3 MB. If this is normal, please update this check in .travis.yml (3.5 MB = 3.5*1024*1024 = 3670016)' && exit 1 || exit 0"; fi
-  - if [ "$TO_TEST" = "FRONTEND" ]; then ls -l build/bundle*.js; fi
 notifications:
   slack:
     rooms:

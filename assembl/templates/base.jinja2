@@ -57,9 +57,6 @@
     <link type="text/css" rel="stylesheet" href="/static/js/bower/jquery-oembed-all/jquery.oembed.css" />
  
     <link type="text/css" rel="stylesheet" href="/static/js/bower/hopscotch/dist/css/hopscotch.css" />
-    {% if NODE_ENV != 'development' %}
-    <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/searchv1.{{search_css_hash}}.css" />
-    {% endif %}
     {% endblock %}
 
     {% block extra_css %}{% endblock extra_css %}

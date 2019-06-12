@@ -212,13 +212,11 @@ def get_resources_html(uuid, theme_name="default"):
         <link href="/build/themes/default/theme_default_web.8bbb970b0346866e3dac.css" rel="stylesheet">
         <link href="/build/themes/{uuid}/{theme_name}/theme_{theme_name}_web.8bbb970b0346866e3dac.css" rel="stylesheet">
         <link href="/build/bundle.5f3e474ec0d2193c8af5.css" rel="stylesheet">
-        <link href="/build/searchv1.04e4e4b2fab45a2ab04e.css" rel="stylesheet">
       </head>
       <body>
         <script type="text/javascript" src="/build/themes/default//theme_default_web.ed5786109ac04600f1d5.js"></script>
         <script type="text/javascript" src="/build/themes/{uuid}/{theme_name}/theme_{theme_name}_web.ed5786109ac04600f1d5.js"></script>
         <script type="text/javascript" src="/build/bundle.5aae461a0604ace7cd31.js"></script>
-        <script type="text/javascript" src="/build/searchv1.b8939cd89ebdedfd2901.js"></script>
       </body>
     </html>
     """.format(theme_name=theme_name, uuid=uuid)
