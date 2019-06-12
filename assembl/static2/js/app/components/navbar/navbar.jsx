@@ -228,7 +228,7 @@ export default compose(
             loading: data.loading
           },
           logoData: null,
-          isSemanticAnalysisEnabled: null
+          isSemanticAnalysisEnabled: false
         };
       }
       return {
