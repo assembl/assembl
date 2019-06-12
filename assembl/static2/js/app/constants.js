@@ -208,12 +208,12 @@ export const ADMIN_MENU = {
       },
       textMultimedia: {
         title: 'administration.landingPage.textMultimedia.title',
+        sectionId: '3'
+      },
+      manageModules: {
+        title: 'administration.landingPage.manageModules.title',
         sectionId: '2'
       }
-      // manageModules: {
-      //   title: 'administration.landingPage.manageModules.title',
-      //   sectionId: '2'
-      // }
     }
   },
   resourcesCenter: {

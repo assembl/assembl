@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 
-// import ManageModules from '../components/administration/landingPage/manageModules';
+import ManageModules from '../components/administration/landingPage/manageModules';
 import CustomizeHeader from '../components/administration/landingPage/header/index';
 import TextMultimedia from '../components/administration/landingPage/textMultimedia';
 import Navbar from '../components/administration/navbar';
@@ -23,12 +23,12 @@ type Props = {
   route: Route,
   router: Router,
   section: string,
-  editLocale: string
-  // phasesHaveChanged: boolean,
-  // updateDiscussionPhase: Function,
-  // discussionPhases: Array<Object>,
-  // refetchTimeline: Function,
-  // timelineModuleId: string
+  editLocale: string,
+  phasesHaveChanged: boolean,
+  updateDiscussionPhase: Function,
+  discussionPhases: Array<Object>,
+  refetchTimeline: Function,
+  timelineModuleId: string
 };
 
 type State = {
@@ -96,13 +96,13 @@ class LandingPageAdmin extends React.Component<Props, State> {
     const { editLocale, section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
     // TODO: Remove this crap after migrating all of landing page to react-final-form
-    const showSaveButton = s => s !== '1' && s !== '2';
+    const showSaveButton = s => s !== '1';
     return (
       <div className="landing-page-admin">
         {showSaveButton(section) && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
         {section === '1' && <CustomizeHeader editLocale={editLocale} />}
-        {section === '2' && <TextMultimedia editLocale={editLocale} />}
-        {/* {section === '2' && <ManageModules {...this.props} />} */}
+        {section === '2' && <ManageModules {...this.props} />}
+        {section === '3' && <TextMultimedia editLocale={editLocale} />}
         {section && <Navbar currentStep={section} steps={['1', '2']} phaseIdentifier="landingPage" />}
       </div>
     );
