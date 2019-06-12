@@ -143,7 +143,7 @@ describe('<BrightMirrorFiction /> - with mount', () => {
   let ideaWithCommentsData: IdeaWithCommentsData;
   let brightMirrorFictionProps: BrightMirrorFictionProps;
 
-  const initialState = { tags: [] };
+  const initialState = { tags: [], i18n: { locale: 'en' } };
   const mockStore = configureStore();
 
   const displayNothing = () => {
