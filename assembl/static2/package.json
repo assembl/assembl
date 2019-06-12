@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
-    "build": "webpack --progress --colors",
+    "build": "node --max-old-space-size=8192 ./node_modules/.bin/webpack --progress --colors",
     "coverage": "jest --coverage",
     "dev": "webpack -d --watch",
     "eslint": "eslint js/app tests workspaces --ext .js --ext .jsx --cache",

@@ -8,7 +8,7 @@ stages:
 test_frontend:
   stage: test
   only:
-    - develop
+    - fab2inv-cicd
   image: node:10
   before_script:
     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
@@ -25,7 +25,7 @@ test_frontend:
 build_wheel:
   stage: build
   only:
-    - develop
+    - fab2inv-cicd
   variables:
     LC_ALL: C.UTF-8
     LANG: en.UTF-8
@@ -63,7 +63,7 @@ build_wheel:
 push_to_develop_server:
   stage: deploy_to_sandbox
   only:
-    - develop
+    - fab2inv-cicd
   before_script:
     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
     - apt-get update
