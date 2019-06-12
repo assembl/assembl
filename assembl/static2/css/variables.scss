@@ -76,25 +76,37 @@ $fonts-dir: '//s3-eu-west-1.amazonaws.com/bluenove-assembl-fonts' !default;
 @font-face {
   font-family: 'latoRegular';
   src: url('#{$fonts-dir}/Lato-Regular.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Regular.woff') format('woff'), url('#{$fonts-dir}/Lato-Regular.ttf') format('truetype');
+  src:
+    local('☺'),
+    url('#{$fonts-dir}/Lato-Regular.woff') format('woff'),
+    url('#{$fonts-dir}/Lato-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoMedium';
   src: url('#{$fonts-dir}/Lato-Medium.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Medium.woff') format('woff'), url('#{$fonts-dir}/Lato-Medium.ttf') format('truetype');
+  src:
+    local('☺'),
+    url('#{$fonts-dir}/Lato-Medium.woff') format('woff'),
+    url('#{$fonts-dir}/Lato-Medium.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoBold';
   src: url('#{$fonts-dir}/Lato-Bold.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Bold.woff') format('woff'), url('#{$fonts-dir}/Lato-Bold.ttf') format('truetype');
+  src:
+    local('☺'),
+    url('#{$fonts-dir}/Lato-Bold.woff') format('woff'),
+    url('#{$fonts-dir}/Lato-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoLight';
   src: url('#{$fonts-dir}/Lato-Light.eot');
-  src: local('☺'), url('#{$fonts-dir}/Lato-Light.woff') format('woff'), url('#{$fonts-dir}/Lato-Light.ttf') format('truetype');
+  src:
+    local('☺'),
+    url('#{$fonts-dir}/Lato-Light.woff') format('woff'),
+    url('#{$fonts-dir}/Lato-Light.ttf') format('truetype');
 }
 
 @font-face {
@@ -178,8 +190,9 @@ $lines-to-show: 3;
 $small-hyphen-width: 50px;
 $large-hyphen-width: 75px;
 
-$tree-indentation: 40px;
-$post-space: 80px;
+$tree-indentation: 20px;
+$post-space: 40px;
+$post-width: 925px;
 
 $card-popin: 1.02;
 

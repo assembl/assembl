@@ -22,13 +22,11 @@
 
       .author {
         .assembl-icon-back-arrow {
+          display: inline-block;
           font-size: $font-size-xxs;
           padding-left: 6px;
           padding-right: 6px;
-
-          &:before {
-            transform: scaleX(-1);
-          }
+          transform: scaleX(-1);
         }
       }
 
@@ -132,7 +130,8 @@
         padding-right: 0;
       }
 
-      .assembl-icon-back-arrow:before {
+      .assembl-icon-back-arrow {
+        display: inline-block;
         transform: scaleX(-1);
       }
 
