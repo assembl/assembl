@@ -1,8 +1,8 @@
 /* eslint no-underscore-dangle: 0, max-len: ["warn", 136] */
-/* global __resourceQuery */
 import React from 'react';
 import { Localize, Translate, I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
+import { Link } from 'react-router';
 
 import {
   ActionBar,
@@ -114,68 +114,40 @@ function getIdeaUrl(ideaId, phaseIdentifier, slug) {
   });
 }
 
-let Link;
-let getUrl;
 const slugElement = document.getElementById('discussion-slug');
 const slug = slugElement ? slugElement.value : '';
-// __resourceQuery is set by webpack, it is empty string or '?v=1' when this file is included from the searchv1.js bundle.
-// __resourceQuery is undefined in jest tests.
-const v1Interface = typeof __resourceQuery !== 'undefined' && __resourceQuery;
-if (v1Interface) {
-  // v1
-  // const querystring = require('querystring');
-  // const params = querystring.parse(__resourceQuery.slice(1));
-  // if (params.v === '1') {
-  Link = props => <a href={props.to} dangerouslySetInnerHTML={props.dangerouslySetInnerHTML} />;
-  getUrl = (hit) => {
-    const id = hit._source.id;
-    switch (hit._type) {
-    case 'synthesis':
-      return `${slug}/posts/local:Content/${id}`;
-    case 'user':
-      return undefined;
-    case 'idea':
-      return `${slug}/idea/local:Idea/${id}`;
-    default:
-      // post
-      return `${slug}/posts/local:Content/${id}`;
-    }
-  };
-  // }
-} else {
-  Link = require('react-router').Link; // eslint-disable-line
-  getUrl = (hit) => {
-    const id = hit._source.id;
-    switch (hit._type) {
-    case 'synthesis': {
-      const postBase64id = btoa(`Post:${id}`);
-      return getRoute('synthesis', { slug: slug, synthesisId: postBase64id });
-    }
-    case 'user':
-      return undefined;
-    case 'idea': {
-      const phaseIdentifier = hit._source.phase_identifier;
-      const ideaId = id;
-      return getIdeaUrl(ideaId, phaseIdentifier, slug);
-    }
-    case 'extract': {
-      const phaseIdentifier = hit._source.phase_identifier;
-      const ideaId = hit._source.idea_id[0];
-      const postId = hit._source.post_id;
-      const extractId = hit._source.id;
-      const messageViewOverride = hit._source.message_view_override;
-      return getPostUrl(ideaId, postId, phaseIdentifier, messageViewOverride, slug, extractId);
-    }
-    default: {
-      // post
-      const phaseIdentifier = hit._source.phase_identifier;
-      const ideaId = hit._source.idea_id[0];
-      const messageViewOverride = hit._source.message_view_override;
-      return getPostUrl(ideaId, id, phaseIdentifier, messageViewOverride, slug);
-    }
-    }
-  };
-}
+
+const getUrl = (hit) => {
+  const id = hit._source.id;
+  switch (hit._type) {
+  case 'synthesis': {
+    const postBase64id = btoa(`Post:${id}`);
+    return getRoute('synthesis', { slug: slug, synthesisId: postBase64id });
+  }
+  case 'user':
+    return undefined;
+  case 'idea': {
+    const phaseIdentifier = hit._source.phase_identifier;
+    const ideaId = id;
+    return getIdeaUrl(ideaId, phaseIdentifier, slug);
+  }
+  case 'extract': {
+    const phaseIdentifier = hit._source.phase_identifier;
+    const ideaId = hit._source.idea_id[0];
+    const postId = hit._source.post_id;
+    const extractId = hit._source.id;
+    const messageViewOverride = hit._source.message_view_override;
+    return getPostUrl(ideaId, postId, phaseIdentifier, messageViewOverride, slug, extractId);
+  }
+  default: {
+    // post
+    const phaseIdentifier = hit._source.phase_identifier;
+    const ideaId = hit._source.idea_id[0];
+    const messageViewOverride = hit._source.message_view_override;
+    return getPostUrl(ideaId, id, phaseIdentifier, messageViewOverride, slug);
+  }
+  }
+};
 
 const PublishedInfo = ({ date, publishedOnMsgId, userId, userName, relatedIdeasTitles, ideaUrl, onLinkClick }) => {
   const hasRelatedIdeasTitles = relatedIdeasTitles && relatedIdeasTitles.length > 0;
@@ -704,11 +676,7 @@ export class SearchComponent extends React.Component {
                 field="_type"
                 id="type"
                 title={I18n.t('search.Categories')}
-                include={
-                  !v1Interface && isExpert
-                    ? ['post', 'user', 'idea', 'extract', 'synthesis']
-                    : ['post', 'user', 'idea', 'synthesis']
-                }
+                include={isExpert ? ['post', 'user', 'idea', 'extract', 'synthesis'] : ['post', 'user', 'idea', 'synthesis']}
               />
               <Panel title={I18n.t('search.Messages')} className={messagesSelected ? null : 'hidden'}>
                 <MenuFilter
@@ -738,29 +706,28 @@ export class SearchComponent extends React.Component {
                 ) : null}
               </Panel>
               <Panel title={I18n.t('search.Extracts')} className={extractsSelected ? null : 'hidden'}>
-                {!v1Interface &&
-                  isExpert && (
-                    <div className="sk-panel">
-                      <MenuFilter
-                        listComponent={CheckboxItemList}
-                        field="extract_state"
-                        id="extract_state"
-                        title={I18n.t('search.State')}
-                      />
-                      <MenuFilter
-                        listComponent={CheckboxItemList}
-                        field="extract_nature"
-                        id="extract_nature"
-                        title={I18n.t('search.Nature')}
-                      />
-                      <MenuFilter
-                        listComponent={CheckboxItemList}
-                        field="extract_action"
-                        id="extract_action"
-                        title={I18n.t('search.Action')}
-                      />
-                    </div>
-                  )}
+                {isExpert && (
+                  <div className="sk-panel">
+                    <MenuFilter
+                      listComponent={CheckboxItemList}
+                      field="extract_state"
+                      id="extract_state"
+                      title={I18n.t('search.State')}
+                    />
+                    <MenuFilter
+                      listComponent={CheckboxItemList}
+                      field="extract_nature"
+                      id="extract_nature"
+                      title={I18n.t('search.Nature')}
+                    />
+                    <MenuFilter
+                      listComponent={CheckboxItemList}
+                      field="extract_action"
+                      id="extract_action"
+                      title={I18n.t('search.Action')}
+                    />
+                  </div>
+                )}
               </Panel>
               {isExpert ? (
                 <Panel title={I18n.t('search.Participants')} className={usersSelected ? null : 'hidden'}>
