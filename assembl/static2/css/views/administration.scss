@@ -4,31 +4,6 @@
   margin-bottom: 2em;
 }
 
-.tabbed-content {
-  .tabs-section {
-    padding: 10px 40px 40px;
-    text-align: center;
-    margin-bottom: 20px;
-  }
-
-  .tab-title {
-    border-bottom: $border-not-active;
-    color: $grey;
-    cursor: pointer;
-    display: block;
-    padding: 0 0 5px 0;
-  }
-
-  .tab-title-active {
-    border-bottom: $border-active;
-    color: $grey;
-    cursor: pointer;
-    display: block;
-    padding: 0 0 5px 0;
-    text-decoration: none;
-  }
-}
-
 .administration {
   .preferences-section,
   .legal-contents-administration {
