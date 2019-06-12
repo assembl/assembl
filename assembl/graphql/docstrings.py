@@ -686,11 +686,6 @@ class DeletePost:
     post_id = Default.node_id % "Post" + " This is the Post identifier that is to be deleted."
 
 
-class UndeletePost:
-    __doc__ = "A mutation called to resurrect Post after being deleted."
-    post_id = Default.node_id % "Post" + " This is the Post identifier that is to be resurrected."
-
-
 class ValidatePost:
 
     __doc__ = "A mutation to validate a submitted Post."

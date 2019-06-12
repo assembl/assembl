@@ -874,57 +874,6 @@ mutation myMutation($postId: ID!) {
             }}}
 
 
-def test_mutation_undelete_post(graphql_request, top_post_in_thread_phase):
-    res = schema.execute(u"""
-mutation myMutation($postId: ID!) {
-    deletePost(postId: $postId) {
-        post {
-            ... on Post {
-                subject
-                body
-                parentId
-                creator { name }
-                publicationState
-            }
-        }
-    }
-}
-""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
-    assert json.loads(json.dumps(res.data)) == {
-        u'deletePost': {
-            u'post': {
-                u'subject': u'Manger des choux à la crème',
-                u'body': None,
-                u'parentId': None,
-                u'creator': {u'name': u'Mr. Administrator'},
-                u'publicationState': 'DELETED_BY_USER'
-            }}}
-    res = schema.execute(u"""
-mutation myMutation($postId: ID!) {
-    undeletePost(postId: $postId) {
-        post {
-            ... on Post {
-                subject
-                body
-                parentId
-                creator { name }
-                publicationState
-            }
-        }
-    }
-}
-""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
-    assert json.loads(json.dumps(res.data)) == {
-        u'undeletePost': {
-            u'post': {
-                u'subject': u'Manger des choux à la crème',
-                u'body': u"Je recommande de manger des choux à la crème, c'est très bon, et ça permet de maintenir l'industrie de la patisserie française.",
-                u'parentId': None,
-                u'creator': {u'name': u'Mr. Administrator'},
-                u'publicationState': 'PUBLISHED'
-            }}}
-
-
 def test_mutation_add_sentiment(graphql_request, thematic_and_question, proposition_id):
     res = schema.execute(u"""
 mutation myFirstMutation {

@@ -670,28 +670,6 @@ class DeletePost(graphene.Mutation):
         return DeletePost(post=post)
 
 
-class UndeletePost(graphene.Mutation):
-    __doc__ = docs.UndeletePost.__doc__
-
-    class Input:
-        post_id = graphene.ID(required=True, description=docs.UndeletePost.post_id)
-
-    post = graphene.Field(lambda: Post)
-
-    @staticmethod
-    @abort_transaction_on_exception
-    def mutate(root, args, context, info):
-        post_id = args.get('post_id')
-        post_id = int(Node.from_global_id(post_id)[1])
-        post = models.Post.get(post_id)
-
-        require_instance_permission(CrudPermissions.DELETE, post, context)
-
-        post.undelete_post()
-        post.db.flush()
-        return UndeletePost(post=post)
-
-
 class AddPostExtract(graphene.Mutation):
     __doc__ = docs.AddPostExtract.__doc__
 
