@@ -7,3 +7,4 @@ pytest-mock==1.1
 pytest==2.9.2
 WebTest==2.0.21
 freezegun==0.3.11
+python-magic==0.4.15

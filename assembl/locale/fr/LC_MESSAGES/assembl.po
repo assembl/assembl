@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version:  Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-07 19:10+0200\n"
+"POT-Creation-Date: 2019-06-11 11:29+0200\n"
 "PO-Revision-Date: 2018-02-05 17:41+0100\n"
 "Last-Translator: Quentin Grimaud <quentin.grimaud@gmail.com>\n"
 "Language: fr\n"
@@ -66,6 +66,10 @@ msgid "This slug is already used by another debate, you can't use it."
 msgstr ""
 "Ce slug est déjà utilisé par un autre débat, vous ne pouvez pas "
 "l'utiliser."
+
+#: assembl/graphql/document.py:79
+msgid "Sorry, this file type is not allowed."
+msgstr "Désolé, vous ne pouvez pas poster de message car la phase est fermée."
 
 #: assembl/graphql/permissions_helpers.py:9
 msgid ""
@@ -5386,4 +5390,3 @@ msgstr "Nous n’avons pas de discussion sous le code=%s"
 
 #~ msgid "This is not a user"
 #~ msgstr "Ce n’est pas un utilisateur"
-
