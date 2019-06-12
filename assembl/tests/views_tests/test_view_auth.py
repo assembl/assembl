@@ -300,18 +300,18 @@ def test_change_password_token_too_short(test_app, participant1_user, user_langu
     with pytest.raises(AppError) as exception:
         response = test_app.post_json('/data/AgentProfile/do_password_change', my_json)
     assert "520 Unknown Server Error" in exception.value.message
-    assert "Password shorter than 5 characters" in exception.value.message
+    assert "Password shorter than 9 characters" in exception.value.message
     assert old_password == participant1_user.password
 
 def test_change_password_token_not_enough_complex(test_app_complex_password, participant1_user, user_language_preference_en_cookie):
     # Set Up
-    old_password, my_json = setup_change_password(participant1_user, "password")
+    old_password, my_json = setup_change_password(participant1_user, "password123")
 
     # Test API
     with pytest.raises(AppError) as exception:
         response = test_app_complex_password.post_json('/data/AgentProfile/do_password_change', my_json)
     assert "520 Unknown Server Error" in exception.value.message
-    assert "This is a top-10 common password." in exception.value.message
+    assert "This is a very common password.\\nAdd another word or two. Uncommon words are better." in exception.value.message
     assert old_password == participant1_user.password
 
 def test_change_password_token_dont_contain_special_chars(test_app_spec_chars_password, participant1_user, user_language_preference_en_cookie):
