@@ -88,6 +88,7 @@ class AddTag(graphene.Mutation):
         taggable_id = graphene.ID(required=True, description=docs.AddTag.taggable_id)
         value = graphene.String(required=True, description=docs.AddTag.value)
 
+    post = graphene.Field("assembl.graphql.post.Post")
     tag = graphene.Field(lambda: Tag)
 
     @staticmethod
@@ -96,12 +97,15 @@ class AddTag(graphene.Mutation):
         discussion_id = context.matchdict['discussion_id']
 
         taggable = None
+        post = None
         taggable_id = args.get('taggable_id', None)
         if taggable_id:
             taggable_node = Node.from_global_id(taggable_id)
             taggable_id = int(taggable_node[1])
             taggable = models.TaggableEntity.get_taggable_from_id(
                 taggable_node[0], taggable_id)
+            if isinstance(taggable, models.Post):
+                post = taggable
 
         require_instance_permission(CrudPermissions.CREATE, taggable, context)
         value = args.get('value').lower()
@@ -114,7 +118,7 @@ class AddTag(graphene.Mutation):
             taggable.tags = taggable.tags + [tag]
             db.flush()
 
-        return AddTag(tag=tag)
+        return AddTag(tag=tag, post=post)
 
 
 class RemoveTag(graphene.Mutation):
@@ -125,17 +129,21 @@ class RemoveTag(graphene.Mutation):
         id = graphene.ID(required=True, description=docs.RemoveTag.id)
 
     success = graphene.Boolean()
+    post = graphene.Field("assembl.graphql.post.Post")
 
     @staticmethod
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         taggable = None
+        post = None
         taggable_id = args.get('taggable_id', None)
         if taggable_id:
             taggable_node = Node.from_global_id(taggable_id)
             taggable_id = int(taggable_node[1])
             taggable = models.TaggableEntity.get_taggable_from_id(
                 taggable_node[0], taggable_id)
+            if isinstance(taggable, models.Post):
+                post = taggable
 
         db = taggable.db
         tag_id = args.get('id')
@@ -150,4 +158,4 @@ class RemoveTag(graphene.Mutation):
 
         db.flush()
 
-        return RemoveTag(success=True)
+        return RemoveTag(success=True, post=post)

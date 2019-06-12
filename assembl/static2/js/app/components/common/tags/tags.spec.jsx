@@ -28,7 +28,8 @@ describe('<Tags /> - with shallow', () => {
       addTag: jest.fn(),
       removeTag: jest.fn(),
       onTagListUpdateCallback: jest.fn(),
-      updateTags: jest.fn()
+      updateTags: jest.fn(),
+      contentLocale: 'fr'
     };
     wrapper = shallow(<DumbTags {...tagsProps} />);
   });

@@ -1,8 +1,13 @@
-mutation addTag($taggableId: ID!, $value: String!) {
+#import "../fragments/Post.graphql"
+
+mutation addTag($taggableId: ID!, $value: String!, $contentLocale: String!) {
   addTag(taggableId: $taggableId, value: $value) {
     tag {
       id
       value
+    }
+    post {
+      ...Post
     }
   }
 }
