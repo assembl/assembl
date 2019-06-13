@@ -1031,8 +1031,7 @@ class User(AgentProfile):
                     OldPassword(password=self.password))
             # keep only the last N+1 passwords (including current)
             keep_past_passwords = int(config.get("keep_past_passwords", 4))
-            for p in list(self.old_passwords[0:-keep_past_passwords]):
-                self.old_passwords.remove(p)
+            self.old_passwords = self.old_passwords[-keep_past_passwords:]
 
             # set the new password
             self.password = hash_password(password)
