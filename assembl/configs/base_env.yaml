@@ -179,10 +179,10 @@ maxretry: 10
 # IF URL, there should be no query strings
 theme_base: ""
 
-  # The mime types that are allowed for uploaded files
-  # on thread module
-  # To be completed if needed
-  attachment_allowed_mime_types:
-    - image/*
-    - video/*
-    - application/pdf
+# The mime types that are allowed for uploaded files
+# on thread module
+# To be completed if needed
+attachment_allowed_mime_types:
+  - image/*
+  - video/*
+  - application/pdf
