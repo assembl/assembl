@@ -124,13 +124,22 @@ exports[`PostView component should render a post in view mode 1`] = `
       <div
         className="post-left"
       >
-        <displayResponseAuthor
-          authorFullname="Dannie Treutel"
-          displayIsEdited={true}
-          displayedPublishedDate="il y a 7 ans"
-          parentPostAuthorFullname={null}
-          publishedDate="11/11/2011"
-        />
+        <div
+          className="post-header"
+        >
+          <CircleAvatar
+            size="34"
+            src="/static2/img/icons/avatar.png"
+            username="no-username"
+          />
+          <displayResponseAuthor
+            authorFullname="Dannie Treutel"
+            displayIsEdited={true}
+            displayedPublishedDate="il y a 7 ans"
+            parentPostAuthorFullname={null}
+            publishedDate="11/11/2011"
+          />
+        </div>
         <withRouter(Apollo(DumbPostBody))
           body="<p>You can't index the port without programming the wireless HTTP program!</p>"
           bodyDivRef={[Function]}

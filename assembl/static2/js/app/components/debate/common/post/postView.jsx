@@ -11,6 +11,7 @@ import {
 } from '../../../../utils/globalFunctions';
 import { connectedUserIsModerator, connectedUserIsAdmin } from '../../../../utils/permissions';
 import DisplayResponseAuthor from '../../../common/displayResponseAuthor';
+import CircleAvatar from '../../../common/circleAvatar';
 import Attachments from '../../../common/attachments';
 import PostActions from '../../common/postActions';
 import AnswerForm from '../../thread/answerForm';
@@ -253,15 +254,18 @@ class PostView extends React.PureComponent<Props, State> {
         <div className={classnames('box', { pending: isPending })} style={boxStyle}>
           <div className="post-row">
             <div className="post-left">
-              {creator && (
-                <DisplayResponseAuthor
-                  authorFullname={userName}
-                  displayedPublishedDate={displayedPublishedDate}
-                  parentPostAuthorFullname={parentPostAuthorFullname}
-                  publishedDate={creationDate}
-                  displayIsEdited={modified}
-                />
-              )}
+              <div className="post-header">
+                <CircleAvatar />
+                {creator && (
+                  <DisplayResponseAuthor
+                    authorFullname={userName}
+                    displayedPublishedDate={displayedPublishedDate}
+                    parentPostAuthorFullname={parentPostAuthorFullname}
+                    publishedDate={creationDate}
+                    displayIsEdited={modified}
+                  />
+                )}
+              </div>
               <PostBody
                 handleMouseUpWhileHarvesting={this.handleMouseUpWhileHarvesting}
                 body={body}

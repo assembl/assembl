@@ -49,6 +49,7 @@ exports[`Hits components DumbExtractHit component should render an extract hit 1
           <div>
             <img
               alt="Jewell Pouros"
+              className="avatar-logo"
               height="30"
               onError={[Function]}
               src="/user/id/foo/avatar/30"
@@ -200,6 +201,7 @@ exports[`Hits components PostHit component should render a post hit 1`] = `
           <div>
             <img
               alt="Paxton Pouros"
+              className="avatar-logo"
               height="30"
               onError={[Function]}
               src="/user/id/foo/avatar/30"
@@ -298,6 +300,7 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
           <div>
             <img
               alt="Annabelle Olson"
+              className="avatar-logo"
               height="30"
               onError={[Function]}
               src="/user/id/foo/avatar/30"

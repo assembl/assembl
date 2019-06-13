@@ -12,6 +12,7 @@ exports[`Storyshots InnerBoxView multiple comments 1`] = `
     >
       <img
         alt="John Doe User"
+        className="avatar-logo"
         height="30"
         onError={[Function]}
         src="/user/id/1/avatar/30"
@@ -92,6 +93,7 @@ exports[`Storyshots InnerBoxView single comment 1`] = `
     >
       <img
         alt="Odile Commenter"
+        className="avatar-logo"
         height="30"
         onError={[Function]}
         src="/user/id/2/avatar/30"

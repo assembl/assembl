@@ -236,8 +236,14 @@ $deleted-post-border: 1px solid $light-grey !default;
     width: 100%;
     padding: 20px 10px 20px 30px;
 
+    .post-header {
+      align-items: center;
+      display: flex;
+    }
+
     .meta {
       display: flex;
+      margin: 10px 0 0 5px;
 
       .author .assembl-icon-back-arrow {
         display: inline-block;
@@ -245,6 +251,10 @@ $deleted-post-border: 1px solid $light-grey !default;
         font-size: $font-size-xs;
         padding-left: 5px;
         padding-right: 5px;
+      }
+
+      .avatar-logo {
+        margin-right: 5px;
       }
 
       .published-date {
