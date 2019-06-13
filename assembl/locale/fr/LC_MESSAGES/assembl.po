@@ -69,7 +69,7 @@ msgstr ""
 
 #: assembl/graphql/document.py:79
 msgid "Sorry, this file type is not allowed."
-msgstr "Désolé, vous ne pouvez pas poster de message car la phase est fermée."
+msgstr "Désolé, ce type de fichier n'est pas autorisée."
 
 #: assembl/graphql/permissions_helpers.py:9
 msgid ""
