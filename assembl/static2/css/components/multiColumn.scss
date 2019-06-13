@@ -164,6 +164,11 @@ $column-synthesis-height: 320px;
     padding-left: $column-half-gutter;
     padding-right: $column-half-gutter;
     position: static;
+
+    .level-0 {
+      width: auto;
+      margin: 0;
+    }
   }
 }
 
@@ -214,6 +219,12 @@ $column-synthesis-height: 320px;
 
     .synthesis {
       height: $column-synthesis-height;
+    }
+  }
+
+  .column-tree {
+    .level-0 {
+      margin: auto !important; //to rewrite the css rules from idea.scss .idea .level
     }
   }
 
