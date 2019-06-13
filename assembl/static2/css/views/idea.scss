@@ -243,3 +243,9 @@
     }
   }
 }
+
+@media screen and (max-width: $screen-xxs-max) {
+  .idea .level-1 {
+    padding-right: 0;
+  }
+}

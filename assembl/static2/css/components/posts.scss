@@ -864,8 +864,15 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .post-left {
+      padding: 20px 10px 20px 10px;
+
+      .circle-avatar {
+        display: none;
+      }
+
       .meta {
         flex-direction: column;
+        margin: 0;
 
         .author {
           word-wrap: break-word;
