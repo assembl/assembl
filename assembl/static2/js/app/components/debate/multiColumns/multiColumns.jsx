@@ -12,7 +12,11 @@ const MultiColumns = ({ children }: Props) => {
       width: width
     })
   );
-  return <div className="multi-column-container">{newChildren}</div>;
+  return (
+    <div id="multi-column" className="multi-column-container">
+      {newChildren}
+    </div>
+  );
 };
 
 export default MultiColumns;

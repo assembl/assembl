@@ -4,7 +4,32 @@ $header-margin: 30px;
 $synthesis-padding: 15px;
 $column-synthesis-height: 320px;
 
+#multi-column {
+  .idea {
+    .level {
+      margin: auto;
+    }
+  }
+
+  .column-tree {
+    .post-left {
+      padding: 20px 10px 20px 10px;
+      width: 90%;
+    }
+  }
+
+  .synthesis {
+    .post-left {
+      width: 90%;
+    }
+  }
+}
+
 .column-view {
+  .level {
+    margin: auto;
+  }
+
   .synthesis {
     border: none;
     padding: $synthesis-padding;
@@ -204,6 +229,7 @@ $column-synthesis-height: 320px;
 
 .column-synthesis {
   .insert-box {
+    border: none;
     height: 100%;
 
     .insert-content {
@@ -219,12 +245,6 @@ $column-synthesis-height: 320px;
 
     .synthesis {
       height: $column-synthesis-height;
-    }
-  }
-
-  .column-tree {
-    .level-0 {
-      margin: auto !important; //to rewrite the css rules from idea.scss .idea .level
     }
   }
 

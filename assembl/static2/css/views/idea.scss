@@ -1,3 +1,17 @@
+#thread-view {
+  .level {
+    width: $post-width;
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+    margin-right: 125px;
+
+    .box {
+      border-left: 4px solid $first-color;
+    }
+  }
+}
+
 .idea {
   position: relative;
 
@@ -9,18 +23,6 @@
   .subject-prefix {
     color: $first-color-opacity-70;
     font-family: 'LatoLight';
-  }
-
-  .level {
-    width: $post-width;
-    display: flex;
-    flex-direction: column;
-    margin-left: auto;
-    margin-right: 125px;
-
-    .box {
-      border-left: 4px solid $first-color;
-    }
   }
 
   .no-rows {
@@ -169,7 +171,7 @@
 }
 
 @media screen and (min-width: $screen-xl-min) {
-  .idea {
+  #thread-view {
     .padding-left-right {
       padding-left: 110px;
       padding-right: 110px;
@@ -178,7 +180,7 @@
 }
 
 @media screen and (max-width: 992px) {
-  .idea {
+  #thread-view {
     .border-left {
       border-left: none;
     }
@@ -226,7 +228,7 @@
 }
 
 @media screen and (max-width: $post-width) {
-  .idea {
+  #thread-view {
     .padding-left-right {
       padding-left: 10px;
       padding-right: 10px;
@@ -245,7 +247,7 @@
 }
 
 @media screen and (max-width: $screen-xxs-max) {
-  .idea .level-1 {
+  #thread-view .level-1 {
     padding-right: 0;
   }
 }
