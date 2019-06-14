@@ -389,7 +389,7 @@ def get_db_dump_name():
     return 'assembl-backup.pgdump'
 
 
-def remote_db_path(c):
+def local_db_path(c):
     return join(c.config.projectpath, get_db_dump_name())
 
 
@@ -435,29 +435,37 @@ def supervisor_process_stop(c, process_name):
 
 
 def is_supervisord_running(c):
-    with venv(c):
+    with venv(c, True):
         result = c.run('supervisorctl pid')
-    if 'no such file' in result:
+    if not result or 'no such file' in result.stdout or 'refused connection' in result.stdout:
         return False
     try:
-        pid = int(result)
+        pid = int(result.stdout)
         if pid:
             return True
-    except:
+    except ValueError:
         return False
 
 
+@task()
 def webservers_start(c):
     """
     Start all webservers
     """
-    if c.config._internal.uses_nginx:
-        # Nginx
-        if exists(c, '/etc/init.d/nginx'):
-            # Have to ensure that the env.user has visudo rights to call this
-            c.sudo('/etc/init.d/nginx start')
-        elif c.config.mac and exists('/usr/local/nginx/sbin/nginx'):
-            c.sudo('/usr/local/nginx/sbin/nginx')
+    # Nginx
+    if exists(c, '/etc/init.d/nginx'):
+        # Have to ensure that the env.user has visudo rights to call this
+        c.sudo('/etc/init.d/nginx start')
+
+
+@task()
+def webservers_stop(c):
+    """
+    Stop all webservers
+    """
+    # Nginx
+    if exists(c, '/etc/init.d/nginx'):
+        c.sudo('/etc/init.d/nginx stop')
 
 
 def is_supervisor_running(c):
@@ -469,50 +477,20 @@ def is_supervisor_running(c):
             return True
 
 
-def app_reload(c):
-    """
-    Restart all necessary processes after an update
-    """
-    if c.config._internal.uses_global_supervisor:
-        print('Asking supervisor to restart %(projectname)s' % c.config)
-        c.run("sudo /usr/bin/supervisorctl restart %(projectname)s" % c.config)
-    else:
-        if is_supervisor_running(c):
-            with venv(c):
-                c.run("supervisorctl stop dev:")
-                # supervisor config file may have changed
-                c.run("supervisorctl reread")
-                c.run("supervisorctl update")
-                processes = filter_autostart_processes(c, [
-                    "celery_imap", "changes_router", "celery_notification_dispatch",
-                    "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
-                c.run("supervisorctl restart " + " ".join(processes))
-                if c.config._internal.uses_uwsgi:
-                    c.run("supervisorctl restart prod:uwsgi")
-
-
+@task()
 def webservers_reload(c):
     """
     Reload the webserver stack.
     """
-    if c.config._internal.uses_nginx:
-        # Nginx (sudo is part of command line here because we don't have full
-        # sudo access
-        print("Reloading nginx")
-        if c.config._internal.webmaster_user:
-            if exists(c, '/etc/init.d/nginx'):
-                c.sudo('/etc/init.d/nginx reload -u %s' % c.config._internal.webmaster_user)
-        if (c.config.get('sudo_user', None) and exists(c, '/etc/init.d/nginx')):
+    # Nginx (sudo is part of command line here because we don't have full
+    # sudo access
+    print("Reloading nginx")
+    if os.path.exists('/etc/init.d/nginx'):
+        result = c.sudo('/usr/sbin/nginx -t')
+        if "Command exited with status 0" in str(result):
             c.sudo('/etc/init.d/nginx reload')
-        elif exists(c, '/etc/init.d/nginx'):
-            c.run('sudo /etc/init.d/nginx reload')
-        elif c.config.mac:
-            c.sudo('killall -HUP nginx')
-
-    if c.config._internal.uses_bluenove_actionable:
-        restart_bluenove_actionable(c)
-    else:
-        stop_bluenove_actionable(c)
+        else:
+            print("Your Nginx configuration returned an error, please check your nginx configuration.")
 
 
 def restart_bluenove_actionable(c):

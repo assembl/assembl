@@ -6,8 +6,8 @@ from os.path import join, normpath
 from .common import (
     venv, task, exists, delete_foreign_tasks, setup_var_directory, get_upload_dir,
     chgrp_rec, _processes_to_restart_without_backup, _processes_to_restart_with_backup,
-    filter_autostart_processes, supervisor_process_stop, remote_db_path, is_supervisord_running, webservers_start,
-    app_reload, webservers_reload, get_node_base_path)
+    filter_autostart_processes, supervisor_process_stop, local_db_path, is_supervisord_running,
+    get_node_base_path, is_supervisor_running)
 from ConfigParser import SafeConfigParser
 from contextlib import nested
 
@@ -81,6 +81,7 @@ def update_pip_requirements_mac(c, force_reinstall=False):
     """
     from .build import separate_pip_install
     with venv(c):
+        # TODO: upgrade local dev pip to latest of py27
         c.run('pip install -U setuptools "pip<10" ')
 
     if force_reinstall:
@@ -88,7 +89,7 @@ def update_pip_requirements_mac(c, force_reinstall=False):
             c.run("pip install --ignore-installed -r %s/requirements.txt" % (c.config.projectpath))
     else:
         mac_version = c.run("defaults read loginwindow SystemVersionStampAsString").stdout
-        pycurl_mac = 'env PYCURL_SSL_LIBRARY=openssl MACOSX_DEPLOYMENT_TARGET="{mac_version}" LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include"'.format(mac_version=mac_version)
+        pycurl_mac = 'env PYCURL_SSL_LIBRARY=openssl MACOSX_DEPLOYMENT_TARGET="{mac_version}" LDFLAGS="-L/usr/local/opt/openssl/lib" CPPFLAGS="-I/usr/local/opt/openssl/include"'.format(mac_version='.'.join(mac_version.split('.', 2)[:2]))
         specials = [
             # setuptools and lxml need to be installed before compiling dm.xmlsec.binding
             ("lxml", None, None),
@@ -110,7 +111,7 @@ def install_database(c):
     Install a postgresql DB server
     """
     print('Installing Postgresql')
-    c.run('brew install postgresql')
+    c.run('brew install postgresql@9.6')
     c.run('brew tap homebrew/services')
     c.run('brew services start postgres')
 
@@ -119,7 +120,7 @@ def install_database(c):
 def install_java(c):
     """Install openjdk-11-jdk. Require sudo."""
     print('Installing Java')
-    c.run('brew cask install java')
+    c.run('brew cask install adoptopenjdk/openjdk/adoptopenjdk8')
 
 
 @task()
@@ -180,16 +181,6 @@ def install_services(c):
     c.run('brew tap homebrew/services')
     c.run('brew services start redis')
     c.run('brew services start memcached')
-    
-
-@task()
-def install_borg(c):
-    print("Installing borg")
-    c.run('brew cask install borgbackup')
-    ncftp_path = '/usr/local/bin/ncftp'
-    if not exists(c, ncftp_path):
-        print('Installing ncftp client')
-        c.run('brew install ncftp')
 
 
 @task(install_core_dependencies, upgrade_yarn_mac)
@@ -209,38 +200,39 @@ def install_single_server(c):
     install_database(c)
     install_assembl_server_deps(c)
     install_services(c)
-    install_borg(c)
     print('Assembl Server installed')
 
 
 @task()
-def bootstrap_from_checkout(c, backup=False):
+def bootstrap_from_checkout(c, from_dump=False, dump_path=None):
     """
-    Creates the virtualenv and install the app from git checkout
+        Creates the virtualenv and install the app from git checkout. `from_dump` allows to load a DB dump, `dump_path` allows to set the path to the DB dump
     """
+    from common import webservers_reload
+
     print('Bootstraping')
-    updatemaincode(c, backup=backup)
+    updatemaincode(c, from_dump=from_dump)
     build_virtualenv(c)
     create_venv_python_3(c)
-    app_update_dependencies(c, backup=backup)
-    app_setup(c, backup=backup)
+    app_update_dependencies(c, from_dump=from_dump)
+    app_setup(c, from_dump=from_dump)
     build.check_and_create_database_user(c)
     app_compile_nodbupdate(c)
     set_file_permissions(c)
-    if not backup:
+    if not from_dump:
         app_db_install(c)
     else:
-        database_restore(c)
+        database_restore(c, from_dump=from_dump, dump_path=dump_path)
     app_reload(c)
     webservers_reload(c)
     print('Bootstraping finished')
 
 
-def updatemaincode(c, backup=False):
+def updatemaincode(c, from_dump=False):
     """
     Update code and/or switch branch
     """
-    if not backup:
+    if not from_dump:
         print('Updating Git repository')
         with c.cd(join(c.config.projectpath)):
             c.run('git fetch')
@@ -257,7 +249,7 @@ def updatemaincode(c, backup=False):
 
 
 @task()
-def build_virtualenv(c, with_setuptools=False):
+def build_virtualenv(c, with_setuptools=True):
     """
     Build the virtualenv
     """
@@ -330,17 +322,15 @@ def update_node(c, force_reinstall=False):
 
 
 @task()
-def app_update_dependencies(c, force_reinstall=False, backup=False):
+def app_update_dependencies(c, force_reinstall=False, from_dump=False):
     """
     Updates all python and javascript dependencies.  Everything that requires a
     network connection to update
     """
-    if not backup:
+    if not from_dump:
         ensure_requirements(c)
     update_pip_requirements_mac(c, force_reinstall=force_reinstall)
     update_node(c, force_reinstall=force_reinstall)
-    build.update_bower(c)
-    build.update_bower_requirements(c, force_reinstall=force_reinstall)
     build.update_npm_requirements(c, force_reinstall=force_reinstall)
 
 
@@ -397,7 +387,26 @@ def app_compile_noupdate(c):
     app_compile_nodbupdate(c)
     app_db_update(c)
     app_reload(c)
-    webservers_reload(c)
+
+
+def app_reload(c):
+    """
+    Restart all necessary processes after an update
+    """
+    if c.config._internal.uses_global_supervisor:
+        print('Asking supervisor to restart %(projectname)s' % c.config)
+        c.run("sudo /usr/bin/supervisorctl restart %(projectname)s" % c.config)
+    else:
+        if is_supervisor_running(c):
+            with venv(c):
+                c.run("supervisorctl stop dev:")
+                # supervisor config file may have changed
+                c.run("supervisorctl reread")
+                c.run("supervisorctl update")
+                processes = filter_autostart_processes(c, [
+                    "celery_imap", "changes_router", "celery_notification_dispatch",
+                    "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
+                c.run("supervisorctl restart " + " ".join(processes))
 
 
 @task()
@@ -424,7 +433,7 @@ def ensure_requirements(c):
 
 def generate_new_requirements(c):
     "Generate frozen requirements.txt file (with name taken from environment)."
-    ensure_pip_compile()
+    ensure_pip_compile(c)
     target = c.config.frozen_requirements or 'requirements.txt'
     venv(" ".join(("pip-compile --output-file", target, c.config.requirement_inputs)))
 
@@ -443,15 +452,14 @@ def separate_pip_install(c, package, wrapper=None):
 
 
 @task()
-def app_setup(c, backup=False):
+def app_setup(c, from_dump=False):
     """Setup the environment so the application can run"""
-    if not c.config.package_install:
-        with venv(c):
-            c.run('pip install -e ./')
+    with venv(c):
+        c.run('pip install -e ./')
     setup_var_directory(c)
     if not exists(c, c.config._internal.ini_file):
         create_local_ini(c)
-    if not backup:
+    if not from_dump:
         with venv(c):
             c.run('assembl-ini-files populate %s' % (c.config._internal.ini_file))
     with c.cd(c.config.projectpath):
@@ -529,12 +537,11 @@ def app_db_install(c):
 
 
 @task()
-def database_restore(c, backup=False):
+def database_restore(c, from_dump=False, dump_path=None):
     """
-    Restores the database backed up on the remote server
+    Restores the database backed up on the local server
     """
-
-    if not backup:
+    if not from_dump:
         assert(c.config.wsginame in ('staging.wsgi', 'dev.wsgi'))
         processes = filter_autostart_processes(_processes_to_restart_without_backup)
     else:
@@ -551,7 +558,7 @@ def database_restore(c, backup=False):
         c.config.db_password,
         c.config.db_host,
         c.config.db_user,
-        c.config.db_database), warn=True)
+        c.config.db_database), warn=True, hide=True)
 
     assert dropped.succeeded or "does not exist" in dropped, \
         "Could not drop the database"
@@ -560,6 +567,11 @@ def database_restore(c, backup=False):
     build.database_create(c)
 
     # Restore data
+    if dump_path:
+        path = dump_path
+    else:
+        path = local_db_path(c)
+
     with venv(c), c.cd(c.config.projectpath):
         c.run('PGPASSWORD=%s pg_restore --no-owner --role=%s --host=%s --dbname=%s -U%s --schema=public %s' % (
             c.config.db_password,
@@ -567,12 +579,11 @@ def database_restore(c, backup=False):
             c.config.db_host,
             c.config.db_database,
             c.config.db_user,
-            remote_db_path()))
+            path), hide=True)
 
     if not is_supervisord_running():
-        with venv(c): 
+        with venv(c):
             c.run('supervisord')
-    webservers_start(c)
 
 
 delete_foreign_tasks(locals())

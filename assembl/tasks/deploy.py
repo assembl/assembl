@@ -2,7 +2,6 @@ import os
 import os.path
 import re
 from pprint import pprint
-import json
 from time import sleep
 from ConfigParser import RawConfigParser
 from getpass import getuser
@@ -11,7 +10,7 @@ from invoke.tasks import call
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
     create_venv, fill_template, get_s3_file, s3_file_exists, get_aws_account_id, delete_foreign_tasks,
-    get_assembl_code_path, is_cloud_env, yaml_to_ini)
+    get_assembl_code_path, is_cloud_env, yaml_to_ini, is_supervisord_running)
 
 
 @task()
@@ -181,19 +180,6 @@ def ensure_aws_invoke_yaml(c, override=False):
         get_aws_invoke_yaml(c)
 
 
-def is_supervisord_running(c):
-    with venv(c, True):
-        result = c.run('supervisorctl pid')
-    if not result or 'no such file' in result.stdout or 'refused connection' in result.stdout:
-        return False
-    try:
-        pid = int(result.stdout)
-        if pid:
-            return True
-    except ValueError:
-        return False
-
-
 @task()
 def supervisor_shutdown(c):
     """
@@ -223,34 +209,7 @@ def supervisor_restart(c):
             c.run("supervisord")
 
 
-@task()
-def webservers_stop(c):
-    """Stop all webservers."""
-    c.sudo('/etc/init.d/nginx stop')
 
-
-@task()
-def webservers_start(c):
-    """Start all webservers."""
-    c.sudo("/etc/init.d/nginx start")
-
-
-@task()
-def webservers_reload(c):
-    """
-    Reload the webserver stack.
-    """
-    # Nginx (sudo is part of command line here because we don't have full
-    # sudo access
-    print("Reloading nginx")
-    if os.path.exists('/etc/init.d/nginx'):
-        result = c.sudo('/usr/sbin/nginx -t')
-        if "Command exited with status 0" in str(result):
-            c.sudo('/etc/init.d/nginx reload')
-        else:
-            print("Your Nginx configuration returned an error, please check your nginx configuration.")
-    elif c.config.get(c.config.mac, False):
-        c.sudo('killall -HUP nginx')
 
 
 @task(call(ensure_aws_invoke_yaml, override=True))
@@ -313,6 +272,8 @@ def download_rds_pem(c, reset=False):
 @task(generate_nginx_conf, generate_supervisor_conf)
 def aws_server_startup_from_local(c):
     """Update files that depend on local.rc and restart nginx, supervisor"""
+    from common import webservers_reload
+    
     if is_supervisord_running(c):
         supervisor_restart(c)
     else:

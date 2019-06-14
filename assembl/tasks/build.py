@@ -634,6 +634,7 @@ def prepare_cicd_build(c):
     project_path = os.getenv('CI_PROJECT_DIR', c.config.code_root)
     # add github.com as known host
     c.run('ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts')
+    c.run('ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts')
 
     with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
         c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
