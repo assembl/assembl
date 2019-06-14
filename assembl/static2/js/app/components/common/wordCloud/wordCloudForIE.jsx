@@ -13,7 +13,7 @@ export type Props = {
 };
 
 const DEFAULT_NUMBER_OF_KEYWORDS_TO_DISPLAY = 20;
-const KEYWORD_REM = 30;
+const KEYWORD_REM = 10;
 
 const style = {
   cursor: 'pointer'
@@ -38,9 +38,11 @@ const keyword = (k: Keyword, i: number, onKeywordClick: (word: Keyword) => void)
   </div>
 );
 
-const WordCloudForIE = ({ keywords, numberOfKeywordsToDisplay, onKeywordClick }: Props) => (
-  <Fragment>{keywords.slice(0, numberOfKeywordsToDisplay).map((k, i) => keyword(k, i, onKeywordClick))}</Fragment>
-);
+const WordCloudForIE = ({ keywords, numberOfKeywordsToDisplay, onKeywordClick }: Props) => {
+  // Health check on the number of keywords to display
+  const sliceEndIndex = numberOfKeywordsToDisplay > keywords.length ? keywords.length : numberOfKeywordsToDisplay;
+  return <Fragment>{keywords.slice(0, sliceEndIndex).map((k, i) => keyword(k, i, onKeywordClick))}</Fragment>;
+};
 
 WordCloudForIE.defaultProps = {
   numberOfKeywordsToDisplay: DEFAULT_NUMBER_OF_KEYWORDS_TO_DISPLAY,
