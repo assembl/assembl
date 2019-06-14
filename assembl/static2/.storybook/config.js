@@ -68,6 +68,7 @@ function loadStories() {
   require('../js/app/components/common/titleTooltip/titleTooltip.stories.jsx');
   require('../js/app/components/common/titleWithTooltip/titleWithTooltip.stories.jsx');
   require('../js/app/components/common/wordCloud/responsiveWordCloud.stories.jsx');
+  require('../js/app/components/common/wordCloud/wordCloudForIE.stories.jsx');
   require('../js/app/components/common/keywordInfo/keywordInfo.stories');
   require('../js/app/components/common/sentimentBar/sentimentBar.stories.jsx');
   require('../js/app/components/common/wordCountInformation/wordCountInformation.stories.jsx');

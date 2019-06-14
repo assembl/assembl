@@ -382,3 +382,7 @@ export const formatedTagList = (tags: Tags): Array<TagProps> =>
       return result;
     }, [])
     : []);
+
+// Function that checks wheter the browser in IE from v6 to v11
+// eslint-disable-next-line
+export const isIE = () => /*@cc_on!@*/ false || !!document.documentMode;
