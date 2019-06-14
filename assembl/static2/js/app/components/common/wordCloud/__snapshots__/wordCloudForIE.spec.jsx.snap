@@ -1,0 +1,63 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Storyshots Semantic Analysis|WordCloudForIE default 1`] = `
+Array [
+  <div
+    onClick={[Function]}
+    style={
+      Object {
+        "cursor": "pointer",
+        "fontSize": "27px",
+      }
+    }
+  >
+    <a>
+      text five
+    </a>
+  </div>,
+  <div
+    onClick={[Function]}
+    style={
+      Object {
+        "cursor": "pointer",
+        "fontSize": "18px",
+      }
+    }
+  >
+    <a>
+      text three
+    </a>
+  </div>,
+]
+`;
+
+exports[`Storyshots Semantic Analysis|WordCloudForIE playground 1`] = `
+Array [
+  <div
+    onClick={[Function]}
+    style={
+      Object {
+        "cursor": "pointer",
+        "fontSize": "27px",
+      }
+    }
+  >
+    <a>
+      text five
+    </a>
+  </div>,
+  <div
+    onClick={[Function]}
+    style={
+      Object {
+        "cursor": "pointer",
+        "fontSize": "18px",
+      }
+    }
+  >
+    <a>
+      text three
+    </a>
+  </div>,
+]
+`;

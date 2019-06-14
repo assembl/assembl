@@ -12,9 +12,13 @@ import SentimentBar from '../../components/common/sentimentBar/sentimentBar';
 import WordCountInformation from '../../components/common/wordCountInformation/wordCountInformation';
 import Description from '../../components/common/description/description';
 import Title from '../../components/common/title/title';
+import WordCloudForIE from '../../components/common/wordCloud/wordCloudForIE';
 
 // Type imports
 import type { Keyword, SemanticAnalysisData } from '../../pages/semanticAnalysis/dataType';
+
+// Helper imports
+import { isIE } from '../../utils/globalFunctions';
 
 import { firstColor, secondColor } from '../../../../css/themes/default/_theme';
 
@@ -138,6 +142,24 @@ export class SemanticAnalysis extends Component<Props, State> {
       </div>
     );
 
+    const wordCloud = isIE() ? (
+      <WordCloudForIE
+        keywords={keywords}
+        numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
+        onKeywordClick={this.onKeywordClickHandler}
+      />
+    ) : (
+      <ResponsiveWordCloud
+        keywordsColor={firstColor}
+        keywordsColorActive={secondColor}
+        keywords={keywords}
+        numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
+        onWordClick={this.onKeywordClickHandler}
+        onMouseOverWord={this.onKeywordOverHandler}
+        onMouseOutWord={this.onKeywordOutHandler}
+      />
+    );
+
     return (
       <div className="semantic-analysis">
         {/** Description section */}
@@ -151,15 +173,7 @@ export class SemanticAnalysis extends Component<Props, State> {
 
         {/** WordCloud section */}
         <Col xs={12} md={8} className="no-padding md-wordcloud-padding sm-margin-m margin-s">
-          <ResponsiveWordCloud
-            keywordsColor={firstColor}
-            keywordsColorActive={secondColor}
-            keywords={keywords}
-            numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}
-            onWordClick={this.onKeywordClickHandler}
-            onMouseOverWord={this.onKeywordOverHandler}
-            onMouseOutWord={this.onKeywordOutHandler}
-          />
+          {wordCloud}
         </Col>
 
         {/** Toolbar section */}
