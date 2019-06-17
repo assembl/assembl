@@ -5,12 +5,7 @@ import { I18n } from 'react-redux-i18n';
 import ParticipantsCount from './participantsCount';
 import TokenVotesResults from './tokenVotesResults';
 import GaugeVotesResults from './gaugeVotesResults';
-import {
-  findTokenVoteModule,
-  filterGaugeVoteModules,
-  filterNumberGaugeVoteModules,
-  type VoteSpecification
-} from '../../pages/voteSession';
+import { findTokenVoteModule, filterGaugeVoteModules, type VoteSpecification } from '../../pages/voteSession';
 
 type Props = {
   modules: Array<VoteSpecification>,
@@ -45,9 +40,7 @@ const getColumnSizes: Function = (numberBoxToDisplay) => {
 const VotesInProgress = ({ modules, numParticipants }: Props) => {
   const tokenVoteModule = modules ? findTokenVoteModule(modules) : null;
   const tokenCategories = tokenVoteModule ? tokenVoteModule.tokenCategories : [];
-  const textGauges = filterGaugeVoteModules(modules);
-  const numberGauges = filterNumberGaugeVoteModules(modules);
-  const allGauges = [...textGauges, ...numberGauges];
+  const allGauges = filterGaugeVoteModules(modules);
   const numberBoxToDisplay: number = getNumberBoxToDisplay(tokenCategories, allGauges);
   const columnSizes: Array<number> = getColumnSizes(numberBoxToDisplay);
   let index = tokenVoteModule ? 2 : 0;
@@ -67,29 +60,32 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
             />
           </Col>
         )}
-      {textGauges.map((gauge) => {
-        const colSize = columnSizes[index];
-        index += 1;
-        const title =
-          gauge.averageLabel === null ? I18n.t('debate.voteSession.participantsCount', { count: 0 }) : gauge.averageLabel || '';
-        return (
-          <Col className="padding-s" xs={12} md={colSize} key={gauge.id}>
-            <GaugeVotesResults title={title} instructions={gauge.instructions} />
-          </Col>
-        );
-      })}
-      {numberGauges.map((gauge) => {
-        const colSize = columnSizes[index];
-        index += 1;
-        const title =
-          gauge.averageResult === null
-            ? I18n.t('debate.voteSession.participantsCount', { count: 0 })
-            : I18n.t('debate.voteSession.valueWithUnit', { num: gauge.averageResult, unit: gauge.unit || '' });
-        return (
-          <Col className="padding-s" xs={12} md={colSize} key={gauge.id}>
-            <GaugeVotesResults title={title} instructions={gauge.instructions} />
-          </Col>
-        );
+      {allGauges.map((gauge) => {
+        if (gauge.voteType === 'gauge_vote_specification') {
+          const colSize = columnSizes[index];
+          index += 1;
+          // $FlowFixMe title incompatible type
+          const title: string =
+            gauge.averageLabel === null ? I18n.t('debate.voteSession.participantsCount', { count: 0 }) : gauge.averageLabel || '';
+          return (
+            <Col className="padding-s" xs={12} md={colSize} key={gauge.id}>
+              <GaugeVotesResults title={title} instructions={gauge.instructions} />
+            </Col>
+          );
+        } else if (gauge.voteType === 'number_gauge_vote_specification') {
+          const colSize = columnSizes[index];
+          index += 1;
+          const title =
+            gauge.averageResult === null
+              ? I18n.t('debate.voteSession.participantsCount', { count: 0 })
+              : I18n.t('debate.voteSession.valueWithUnit', { num: gauge.averageResult, unit: gauge.unit || '' });
+          return (
+            <Col className="padding-s" xs={12} md={colSize} key={gauge.id}>
+              <GaugeVotesResults title={title} instructions={gauge.instructions} />
+            </Col>
+          );
+        }
+        return null;
       })}
     </Row>
   );

@@ -26,6 +26,7 @@ exports[`DumbCustomizeGaugeForm component should render a form to customize a ga
       choices={Immutable.List []}
       createChoice={[Function]}
       deleteChoice={[Function]}
+      handleDeleteGauge={null}
       handleGaugeChoiceLabelChange={[Function]}
       handleInstructionsChange={[Function]}
       handleMaxChange={[Function]}

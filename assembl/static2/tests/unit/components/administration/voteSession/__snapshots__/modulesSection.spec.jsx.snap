@@ -82,6 +82,15 @@ exports[`ModulesSection component should render a ModuleSection component with t
               bsClass="dropdown"
               disabled={false}
               divider={false}
+              eventKey={0}
+              header={false}
+            >
+              0
+            </MenuItem>
+            <MenuItem
+              bsClass="dropdown"
+              disabled={false}
+              divider={false}
               eventKey={1}
               header={false}
             >
