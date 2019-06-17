@@ -43,7 +43,7 @@ const VotesInProgress = ({ modules, numParticipants }: Props) => {
   const allGauges = filterGaugeVoteModules(modules);
   const numberBoxToDisplay: number = getNumberBoxToDisplay(tokenCategories, allGauges);
   const columnSizes: Array<number> = getColumnSizes(numberBoxToDisplay);
-  let index = tokenVoteModule ? 2 : 0;
+  let index = tokenVoteModule ? 2 : 1;
   return (
     <Row className="votes-in-progress background-grey">
       <Col className="padding-s" xs={12} md={columnSizes[0]}>
