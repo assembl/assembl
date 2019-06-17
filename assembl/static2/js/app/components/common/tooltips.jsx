@@ -32,6 +32,12 @@ export const deleteVoteProposalTooltip = (
   </Tooltip>
 );
 
+export const deleteGaugeTooltip = (
+  <Tooltip id="deleteGaugeTooltip">
+    <Translate value="administration.deleteGauge" />
+  </Tooltip>
+);
+
 export const upTooltip = (
   <Tooltip id="upTooltip">
     <Translate value="administration.up" />

@@ -25,6 +25,7 @@ type ModulesSectionProps = {
   gaugeModules: Object,
   editLocale: string,
   toggleModuleCheckbox: Function,
+  handleDeleteGauge: (id: string) => void,
   handleGaugeSelectChange: Function,
   handleSeeCurrentVotesChange: Function,
   seeCurrentVotes: boolean
@@ -34,6 +35,7 @@ const DumbModulesSection = ({
   tokenModules,
   editLocale,
   gaugeModules,
+  handleDeleteGauge,
   handleGaugeSelectChange,
   handleSeeCurrentVotesChange,
   seeCurrentVotes,
@@ -105,7 +107,9 @@ const DumbModulesSection = ({
                 </SplitButton>
               </div>
             ) : null}
-            {activeGaugeModulesIds.map((id, index) => <GaugeForm key={id} index={index} id={id} editLocale={editLocale} />)}
+            {activeGaugeModulesIds.map((id, index) => (
+              <GaugeForm key={id} handleDeleteGauge={handleDeleteGauge} index={index} id={id} editLocale={editLocale} />
+            ))}
             {(tokenModuleChecked || gaugeModuleChecked) && (
               <div className="margin-m">
                 <label htmlFor="seeCurrentVotes">
@@ -195,6 +199,9 @@ const mapDispatchToProps = (dispatch) => {
           }
         });
       }
+    },
+    handleDeleteGauge: (id) => {
+      dispatch(deleteVoteModule(id));
     },
     handleSeeCurrentVotesChange: checked => dispatch(updateVoteSessionPageSeeCurrentVotes(checked))
   };
