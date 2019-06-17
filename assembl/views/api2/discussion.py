@@ -1642,6 +1642,8 @@ def phase_csv_export(request):
     MORE_INFO = u"SVP + d'infos"
     THEMATIC_SHARE_COUNT = u"Nombre de share de la thématique"
     MESSAGE_SHARE_COUNT = u"Nombre de share de message"
+    CONTRIBUTIONS_COUNT = u"Nombre de participations"
+    CONTRIBUTORS_COUNT = u"Nombre de participants"
     fieldnames = [
         IDEA_LEVEL_1.encode('utf-8'),
         IDEA_LEVEL_2.encode('utf-8'),
@@ -1658,7 +1660,9 @@ def phase_csv_export(request):
         MORE_INFO.encode('utf-8'),
         THEMATIC_SHARE_COUNT.encode('utf-8'),
         MESSAGE_SHARE_COUNT.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')  # TODO
+        WATSON_SENTIMENT.encode('utf-8'), # TODO
+        CONTRIBUTIONS_COUNT.encode('utf-8'),
+        CONTRIBUTORS_COUNT.encode('utf-8')
     ]
     ideas = get_ideas_for_export(discussion)
     rows = []
@@ -1689,6 +1693,16 @@ def phase_csv_export(request):
         row[DONT_LIKE] = idea.get_total_sentiments("disagree")
         row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
         row[MORE_INFO] = idea.get_total_sentiments("more_info")
+        if idea.message_view_override == MessageView.voteSession.value:
+            if not idea.vote_session:
+                row[CONTRIBUTIONS_COUNT] = 0
+                row[CONTRIBUTORS_COUNT] = 0
+            else:
+                row[CONTRIBUTIONS_COUNT] = idea.vote_session.get_num_votes()
+                row[CONTRIBUTORS_COUNT] = idea.vote_session.get_voter_ids_query().count()
+        else:
+            row[CONTRIBUTORS_COUNT] = 0
+            row[CONTRIBUTIONS_COUNT] = 0
         # To be implemented
         # row[WATSON_SENTIMENT] = idea.sentiments()
         rows.append(convert_to_utf8(row))
