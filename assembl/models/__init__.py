@@ -386,3 +386,6 @@ def includeme(config):
     if settings.get('password_required_classes', None):
         from simplejson import loads
         settings['password_required_classes'] = loads(settings['password_required_classes'])
+    if settings.get('attachment_allowed_mime_types', None):
+        val = eval(settings.get('attachment_allowed_mime_types'))
+        settings['attachment_allowed_mime_types'] = val

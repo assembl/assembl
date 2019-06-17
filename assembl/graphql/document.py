@@ -69,7 +69,9 @@ class UploadDocument(graphene.Mutation):
             # Because the server is on GNU/Linux, os.path.basename will only work
             # with path using "/". Using ntpath works for both Linux and Windows path
             filename = ntpath.basename(context.POST[uploaded_file].filename)
-            allowed_filetypes = aslist(get_config()['attachment_allowed_mime_types'])
+            allowed_filetypes = get_config()['attachment_allowed_mime_types']
+            if not isinstance(allowed_filetypes, list):
+                allowed_filetypes = aslist(allowed_filetypes)
             content = context.POST[uploaded_file].file.read()
             context.POST[uploaded_file].file.seek(0)
             filetype = magic.from_buffer(content, mime=True)
