@@ -172,4 +172,4 @@ theme_base =
 # The mime types that are allowed for uploaded files
 # on thread module
 # To be completed if needed
-attachment_allowed_mime_types = image/* video/* application/pdf
+attachment_allowed_mime_types = image/* video/* application/pdf application/msword application/vnd.openxmlformats-officedocument.wordprocessingml.document application/vnd.ms-powerpoint application/vnd.openxmlformats-officedocument.presentationml.presentation application/vnd.ms-excel application/vnd.openxmlformats-officedocument.spreadsheetml.sheet
