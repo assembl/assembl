@@ -97,7 +97,7 @@ const DumbModulesSection = ({
                     handleGaugeSelectChange(eventKey, activeGaugeModulesIds);
                   }}
                 >
-                  {range(1, 11).map(value => (
+                  {range(0, 11).map(value => (
                     <MenuItem key={`gauge-item-${value}`} eventKey={value}>
                       {value}
                     </MenuItem>
