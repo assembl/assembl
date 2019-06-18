@@ -173,3 +173,7 @@ theme_base =
 # on thread module
 # To be completed if needed
 attachment_allowed_mime_types = image/\w+ video/\w+ application/(pdf|msword) application/vnd\.(.*ms.*|.*officedocument.*)
+
+# Password requirements
+minimum_password_length = 9
+password_required_classes = {"[a-z]": {"en": "lower-case letter"}, "[A-Z]": {"en": "upper-case letter"}, "\\d": {"en": "digit"}, "\\W": {"en": "special character"}}
