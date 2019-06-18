@@ -99,28 +99,28 @@ type FindTokenVoteModule = (Array<VoteSpecification>) => ?TokenVoteSpecification
 export const findTokenVoteModule: FindTokenVoteModule = modules => modules.find(m => m.voteType === 'token_vote_specification');
 
 // We sort the proposal modules by their voteSpecTemplateId to have the same order between proposals.
-const moduleComparator = (module1, module2) => {
-  if (!module1.voteSpecTemplateId || !module2.voteSpecTemplateId) {
-    return -1;
-  }
-  if (module1.voteSpecTemplateId < module2.voteSpecTemplateId) {
-    return -1;
-  }
-  if (module1.voteSpecTemplateId === module2.voteSpecTemplateId) {
-    return 0;
-  }
-  return 1;
-};
+// voteSpecTemplateId is the base64 string, it doesn't make much sens to sort on that.
+// parseFloat(atob(voteSpecTemplateId).split(':')[1]) yes
+// const moduleComparator = (module1, module2) => {
+//   if (!module1.voteSpecTemplateId || !module2.voteSpecTemplateId) {
+//     return -1;
+//   }
+//   if (module1.voteSpecTemplateId < module2.voteSpecTemplateId) {
+//     return -1;
+//   }
+//   if (module1.voteSpecTemplateId === module2.voteSpecTemplateId) {
+//     return 0;
+//   }
+//   return 1;
+// };
 
-// $FlowFixMe: if voteType === 'gauge_vote_specification', we know it is a GaugeVoteSpecification
-type FilterGaugeVoteModules = (Array<VoteSpecification>) => Array<GaugeVoteSpecification>;
-export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
-  modules.filter(module => module.voteType === 'gauge_vote_specification').sort(moduleComparator);
-
-// $FlowFixMe: if voteType === 'number_gauge_vote_specification', we know it is a NumberGaugeVoteSpecification
-type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGaugeVoteSpecification>;
-export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
-  modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
+// $FlowFixMe: we know it is a GaugeVoteSpecification or NumberGaugeVoteSpecification
+type SortGaugeVoteModules = (Array<VoteSpecification>) => Array<GaugeVoteSpecification | NumberGaugeVoteSpecification>;
+export const filterGaugeVoteModules: SortGaugeVoteModules = modules =>
+  modules.filter(
+    module => module.voteType === 'gauge_vote_specification' || module.voteType === 'number_gauge_vote_specification'
+  );
+// .sort(moduleComparator);
 
 class DumbVoteSession extends React.Component<Props, State> {
   availableTokensContainerRef: ?HTMLDivElement;

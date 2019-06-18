@@ -11,7 +11,6 @@ import VotesInProgress from './votesInProgress';
 import {
   findTokenVoteModule,
   filterGaugeVoteModules,
-  filterNumberGaugeVoteModules,
   type RemainingTokensByCategory,
   type UserTokenVotes,
   type UserGaugeVotes,
@@ -88,31 +87,35 @@ class Proposal extends React.Component<Props, State> {
             )}
 
             {modules &&
-              filterGaugeVoteModules(modules).map(module => (
-                <ChoiceGaugeVoteForProposal
-                  key={`${id}-GaugeVoteForProposal-${module.id}`}
-                  {...module}
-                  voteForProposal={voteForProposalGauge}
-                  proposalId={id}
-                  value={userGaugeVotes.getIn([id, module.id], null)}
-                />
-              ))}
-
-            {modules &&
-              filterNumberGaugeVoteModules(modules).map(module => (
-                <NumberGaugeVoteForProposal
-                  key={`${id}-NumberGaugeVoteForProposal-${module.id}`}
-                  minimum={module.minimum}
-                  maximum={module.maximum}
-                  nbTicks={module.nbTicks}
-                  unit={module.unit}
-                  instructions={module.instructions}
-                  {...module}
-                  voteForProposal={voteForProposalGauge}
-                  proposalId={id}
-                  value={userGaugeVotes.getIn([id, module.id], null)}
-                />
-              ))}
+              filterGaugeVoteModules(modules).map((module) => {
+                if (module.voteType === 'gauge_vote_specification') {
+                  return (
+                    <ChoiceGaugeVoteForProposal
+                      key={`${id}-GaugeVoteForProposal-${module.id}`}
+                      {...module}
+                      voteForProposal={voteForProposalGauge}
+                      proposalId={id}
+                      value={userGaugeVotes.getIn([id, module.id], null)}
+                    />
+                  );
+                } else if (module.voteType === 'number_gauge_vote_specification') {
+                  return (
+                    <NumberGaugeVoteForProposal
+                      key={`${id}-NumberGaugeVoteForProposal-${module.id}`}
+                      minimum={module.minimum}
+                      maximum={module.maximum}
+                      nbTicks={module.nbTicks}
+                      unit={module.unit}
+                      instructions={module.instructions}
+                      {...module}
+                      voteForProposal={voteForProposalGauge}
+                      proposalId={id}
+                      value={userGaugeVotes.getIn([id, module.id], null)}
+                    />
+                  );
+                }
+                return null;
+              })}
           </Col>
         </Row>
         {seeCurrentVotes &&

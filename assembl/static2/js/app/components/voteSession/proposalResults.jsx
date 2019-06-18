@@ -5,12 +5,7 @@ import { Col, Row } from 'react-bootstrap';
 import { ChoiceGaugeVoteForProposal, NumberGaugeVoteForProposal } from './gaugeVoteForProposal';
 import TokenVotesResults from './tokenVotesResults';
 import ParticipantsCount from './participantsCount';
-import {
-  findTokenVoteModule,
-  filterGaugeVoteModules,
-  filterNumberGaugeVoteModules,
-  type VoteSpecification
-} from '../../pages/voteSession';
+import { findTokenVoteModule, filterGaugeVoteModules, type VoteSpecification } from '../../pages/voteSession';
 
 type Props = {
   description: ?string,
@@ -45,35 +40,39 @@ class ProposalResults extends React.Component<Props> {
               )}
 
             {modules &&
-              filterGaugeVoteModules(modules).map(module => (
-                <div key={`${id}-GaugeVoteForProposal-${module.id}`}>
-                  <ChoiceGaugeVoteForProposal
-                    id={module.id}
-                    disabled
-                    instructions={module.instructions}
-                    choices={module.choices}
-                    proposalId={id}
-                    value={module.averageResult}
-                  />
-                </div>
-              ))}
-
-            {modules &&
-              filterNumberGaugeVoteModules(modules).map(module => (
-                <div key={`${id}-NumberGaugeVoteForProposal-${module.id}`}>
-                  <NumberGaugeVoteForProposal
-                    id={module.id}
-                    disabled
-                    instructions={module.instructions}
-                    minimum={module.minimum}
-                    maximum={module.maximum}
-                    nbTicks={module.nbTicks}
-                    unit={module.unit}
-                    proposalId={id}
-                    value={module.averageResult}
-                  />
-                </div>
-              ))}
+              filterGaugeVoteModules(modules).map((module) => {
+                if (module.voteType === 'gauge_vote_specification') {
+                  return (
+                    <div key={`${id}-GaugeVoteForProposal-${module.id}`}>
+                      <ChoiceGaugeVoteForProposal
+                        id={module.id}
+                        disabled
+                        instructions={module.instructions}
+                        choices={module.choices}
+                        proposalId={id}
+                        value={module.averageResult}
+                      />
+                    </div>
+                  );
+                } else if (module.voteType === 'number_gauge_vote_specification') {
+                  return (
+                    <div key={`${id}-NumberGaugeVoteForProposal-${module.id}`}>
+                      <NumberGaugeVoteForProposal
+                        id={module.id}
+                        disabled
+                        instructions={module.instructions}
+                        minimum={module.minimum}
+                        maximum={module.maximum}
+                        nbTicks={module.nbTicks}
+                        unit={module.unit}
+                        proposalId={id}
+                        value={module.averageResult}
+                      />
+                    </div>
+                  );
+                }
+                return null;
+              })}
           </Col>
         </Row>
       </div>

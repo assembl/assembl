@@ -10,6 +10,24 @@
       border-left: 4px solid $first-color;
     }
   }
+
+  .level-2 {
+    width: 885px;
+  }
+
+  .level-3 {
+    width: 845px;
+  }
+
+  .level-4 {
+    width: 805px;
+  }
+
+  @for $i from 5 through 12 {
+    .level-#{$i} {
+      width: 765px;
+    }
+  }
 }
 
 .idea {
@@ -59,24 +77,6 @@
 
     &:last-child {
       padding-bottom: 0;
-    }
-  }
-
-  .level-2 {
-    width: 885px;
-  }
-
-  .level-3 {
-    width: 845px;
-  }
-
-  .level-4 {
-    width: 805px;
-  }
-
-  @for $i from 5 through 12 {
-    .level-#{$i} {
-      width: 765px;
     }
   }
 

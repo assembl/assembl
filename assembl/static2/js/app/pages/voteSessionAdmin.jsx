@@ -200,6 +200,7 @@ export const isTextGaugeModule: TestModuleType = m =>
   m.voteType === 'gauge_vote_specification' || (m.type === 'gauge' && !m.isNumberGauge);
 export const isNumberGaugeModule: TestModuleType = m =>
   m.voteType === 'number_gauge_vote_specification' || (m.type === 'gauge' && Boolean(m.isNumberGauge));
+export const isGaugeModule: TestModuleType = m => isTextGaugeModule(m) || isNumberGaugeModule(m);
 
 export const getProposalValidationErrors = (p: VoteProposalMap, editLocale: string): ValidationErrors => {
   const errors = {};
@@ -371,35 +372,44 @@ class VoteSessionAdmin extends React.Component<Props, State> {
         lang: i18n.locale
       });
 
-    const getTextGaugeSpecMutationsPromises = items =>
-      getMutationsPromises({
-        items: items,
-        variablesCreator: createVariablesForTextGaugeMutation,
-        deleteVariablesCreator: createVariablesForDeleteMutation,
-        createMutation: createGaugeVoteSpecification,
-        updateMutation: updateGaugeVoteSpecification,
-        deleteMutation: deleteVoteSpecification,
-        lang: i18n.locale
+    const getGaugeSpecMutationsPromises = (modules) => {
+      const promises = [];
+      modules.forEach((module) => {
+        if (isTextGaugeModule(module)) {
+          const result = getMutationsPromises({
+            items: [module],
+            variablesCreator: createVariablesForTextGaugeMutation,
+            deleteVariablesCreator: createVariablesForDeleteMutation,
+            createMutation: createGaugeVoteSpecification,
+            updateMutation: updateGaugeVoteSpecification,
+            deleteMutation: deleteVoteSpecification,
+            lang: i18n.locale
+          });
+          if (result.length > 0) {
+            promises.push(result[0]);
+          }
+        } else if (isNumberGaugeModule(module)) {
+          const result = getMutationsPromises({
+            items: [module],
+            variablesCreator: createVariablesForNumberGaugeMutation,
+            deleteVariablesCreator: createVariablesForDeleteMutation,
+            createMutation: createNumberGaugeVoteSpecification,
+            updateMutation: updateNumberGaugeVoteSpecification,
+            deleteMutation: deleteVoteSpecification,
+            lang: i18n.locale
+          });
+          if (result.length > 0) {
+            promises.push(result[0]);
+          }
+        }
       });
-
-    const getNumberGaugeMutationsPromises = items =>
-      getMutationsPromises({
-        items: items,
-        variablesCreator: createVariablesForNumberGaugeMutation,
-        deleteVariablesCreator: createVariablesForDeleteMutation,
-        createMutation: createNumberGaugeVoteSpecification,
-        updateMutation: updateNumberGaugeVoteSpecification,
-        deleteMutation: deleteVoteSpecification,
-        lang: i18n.locale
-      });
+      return promises;
+    };
 
     const getMutationsForModules = (modules) => {
       const tokenVoteModules = modules.filter(isTokenVoteModule);
-      const textGaugeModules = modules.filter(isTextGaugeModule);
-      const numberGaugeModules = modules.filter(isNumberGaugeModule);
-      return getTokenVoteSpecMutationsPromises(tokenVoteModules)
-        .concat(getTextGaugeSpecMutationsPromises(textGaugeModules))
-        .concat(getNumberGaugeMutationsPromises(numberGaugeModules));
+      const gaugeModules = modules.filter(isGaugeModule);
+      return getTokenVoteSpecMutationsPromises(tokenVoteModules).concat(getGaugeSpecMutationsPromises(gaugeModules));
     };
     const voteSessionPageId = voteSessionPage.get('id');
 

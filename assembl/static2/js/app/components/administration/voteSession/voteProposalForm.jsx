@@ -43,6 +43,7 @@ type VoteProposalFormProps = {
   reactivateModule: Function,
   tokenModules: Object,
   gaugeModules: Object,
+  modulesById: Object,
   proposalModules: Object,
   validationErrors: ValidationErrors
 };
@@ -64,6 +65,7 @@ const DumbVoteProposalForm = ({
   handleDownClick,
   tokenModules,
   gaugeModules,
+  modulesById,
   proposalModules,
   associateModuleToProposal,
   cancelCustomization,
@@ -193,6 +195,7 @@ const DumbVoteProposalForm = ({
         {gaugeModules.map((voteSpecTemplateId, idx) => {
           const number = gaugeModules.size > 1 ? idx + 1 : '';
           const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === voteSpecTemplateId);
+          const voteSpecTemplate = modulesById.get(voteSpecTemplateId);
           return (
             <div key={voteSpecTemplateId}>
               <Checkbox
@@ -205,6 +208,12 @@ const DumbVoteProposalForm = ({
                   <Translate value="administration.voteProposals.customGauge" number={number} />
                 ) : (
                   <Translate value="administration.voteProposals.gauge" number={number} />
+                )}{' '}
+                -{' '}
+                {getEntryValueForLocale(
+                  voteSpecTemplate.get('instructionsEntries'),
+                  editLocale,
+                  getEntryValueForLocale(voteSpecTemplate.get('instructionsEntries'), 'en')
                 )}
               </Checkbox>
 
@@ -254,6 +263,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
     description: description || EditorState.createEmpty(),
     order: proposal.get('order'),
     proposalModules: proposal.get('modules').map(moduleId => modulesById.get(moduleId)),
+    modulesById: modulesById,
     tokenModules: modulesInOrder.filter(
       voteSpecTemplateId =>
         !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&

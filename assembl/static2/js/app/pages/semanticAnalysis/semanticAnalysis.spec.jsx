@@ -12,10 +12,16 @@ import ResponsiveWordCloud from '../../components/common/wordCloud/responsiveWor
 import KeywordInfo from '../../components/common/keywordInfo/keywordInfo';
 import SentimentBar from '../../components/common/sentimentBar/sentimentBar';
 import WordCountInformation from '../../components/common/wordCountInformation/wordCountInformation';
+import WordCloudForIE from '../../components/common/wordCloud/wordCloudForIE';
 
 import type { Props as SemanticAnalysisProps } from './semanticAnalysis';
 
 configure({ adapter: new Adapter() });
+
+// Mock browser type
+jest.mock('../../utils/globalFunctions', () => ({
+  isIE: jest.fn(() => false)
+}));
 
 describe('<SemanticAnalysis /> - with shallow', () => {
   let wrapper;
@@ -82,5 +88,9 @@ describe('<SemanticAnalysis /> - with shallow', () => {
 
   it('should render a SentimentBar component if data loaded', () => {
     expect(wrapper.find(SentimentBar)).toHaveLength(1);
+  });
+
+  it('should not render a WordCloudForIE component -  when browser is not IE 6-11', () => {
+    expect(wrapper.find(WordCloudForIE)).toHaveLength(0);
   });
 });

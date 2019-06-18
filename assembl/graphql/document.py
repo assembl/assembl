@@ -1,6 +1,7 @@
 import graphene
 from graphene.relay import Node
 import ntpath
+import re
 from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import HTTPUnauthorized
 from pyramid.settings import aslist
@@ -63,21 +64,27 @@ class UploadDocument(graphene.Mutation):
 
         require_cls_permission(CrudPermissions.CREATE, cls, context)
 
+        allowed_filetypes = aslist(get_config()['attachment_allowed_mime_types'])
+
+        def is_matched_type(s):
+            for mime in allowed_filetypes:
+                if re.match(mime, s):
+                    return True
+            return False
+
         uploaded_file = args.get('file')
         if uploaded_file is not None:
 
             # Because the server is on GNU/Linux, os.path.basename will only work
             # with path using "/". Using ntpath works for both Linux and Windows path
             filename = ntpath.basename(context.POST[uploaded_file].filename)
-            allowed_filetypes = aslist(get_config()['attachment_allowed_mime_types'])
             content = context.POST[uploaded_file].file.read()
             context.POST[uploaded_file].file.seek(0)
             filetype = magic.from_buffer(content, mime=True)
-            generic_mimetypes = [e.split('/')[0] for e in allowed_filetypes if e.split('/')[1] == '*']
-            specific_mimetypes = [e for e in allowed_filetypes if e.split('/')[1] != '*']
-            if filetype.split('/')[0] not in generic_mimetypes and filetype not in specific_mimetypes:
+
+            if not is_matched_type(filetype):
                 error = _('Sorry, this file type is not allowed.')
-                log.info("Mimetype %s wasn't found in allowed_filetypes" % filetype)
+                log.warn("A MIME-TYPE of %s was uploaded. It was not found in allowed_filetypes." % filetype)
                 raise HTTPUnauthorized(context.localizer.translate(error))
 
             mime_type = context.POST[uploaded_file].type

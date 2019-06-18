@@ -77,13 +77,7 @@ class AbstractVoteSpecification(DiscussionBoundBase):
 
     widget = relationship(
         "VotingWidget", backref=backref(
-            "vote_specifications", cascade="all, delete-orphan"))
-
-    criterion_idea = relationship(
-        Idea, backref="criterion_for")
-
-    retypeable_as = ("LickertVoteSpecification", "BinaryVoteSpecification",
-                     "MultipleChoiceVoteSpecification", "TokenVoteSpecification")
+            "vote_specifications", order_by=id, cascade="all, delete-orphan"))
 
     vote_spec_template_id = Column(
         Integer, ForeignKey("vote_specification.id"), nullable=True, index=True)
@@ -91,6 +85,12 @@ class AbstractVoteSpecification(DiscussionBoundBase):
     vote_spec_template = relationship(
         "AbstractVoteSpecification", remote_side=[id],
         backref="subspecifications")
+
+    criterion_idea = relationship(
+        Idea, backref=backref("criterion_for", order_by=vote_spec_template_id))
+
+    retypeable_as = ("LickertVoteSpecification", "BinaryVoteSpecification",
+                     "MultipleChoiceVoteSpecification", "TokenVoteSpecification")
 
     # if the module has been customized for a specific proposal
     is_custom = Column(Boolean, default=False)
@@ -615,7 +615,7 @@ class GaugeChoiceSpecification(DiscussionBoundBase):
 
     vote_specification = relationship(
         GaugeVoteSpecification, foreign_keys=(vote_specification_id,),
-        backref=backref("choices", cascade="all, delete-orphan"))
+        backref=backref("choices", order_by=value, cascade="all, delete-orphan"))
     label = relationship(
         LangString, foreign_keys=(label_id,),
         backref=backref("label_of_gauge_choice", lazy="dynamic"),
