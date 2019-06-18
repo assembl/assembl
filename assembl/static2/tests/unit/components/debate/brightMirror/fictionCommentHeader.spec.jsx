@@ -3,7 +3,7 @@ import React from 'react';
 import { Image } from 'react-bootstrap';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import FictionCommentHeader from '../../../../../js/app/components/debate/brightMirror/fictionCommentHeader';
 import type { FictionCommentHeaderProps } from '../../../../../js/app/components/debate/brightMirror/fictionCommentHeader';

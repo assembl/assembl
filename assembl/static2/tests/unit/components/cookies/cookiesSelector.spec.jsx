@@ -1,6 +1,6 @@
 import React from 'react';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import CookiesSelector from '../../../../js/app/components/cookies/cookiesSelector';
 import CookieSetter from '../../../../js/app/components/cookies/cookieSetter';
 

@@ -136,7 +136,7 @@ exports[`AnswerForm component should render a answer form 1`] = `
                             contenteditable="true"
                             role="textbox"
                             spellcheck="true"
-                            style="outline: none; white-space: pre-wrap; word-wrap: break-word;"
+                            style="outline: none; user-select: text; white-space: pre-wrap; word-wrap: break-word;"
                           >
                             <div
                               data-contents="true"
@@ -279,7 +279,7 @@ exports[`AnswerForm component should render a answer form 1`] = `
                             contenteditable="true"
                             role="textbox"
                             spellcheck="true"
-                            style="outline: none; white-space: pre-wrap; word-wrap: break-word;"
+                            style="outline: none; user-select: text; white-space: pre-wrap; word-wrap: break-word;"
                           >
                             <div
                               data-contents="true"

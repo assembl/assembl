@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import { OverlayTrigger } from 'react-bootstrap';
 
 import { PostActions } from '../../../../../js/app/components/debate/common/postActions';

@@ -5,11 +5,9 @@ Once you have made changes to this file, you have to run `supervisorctl restart 
 var path = require('path');
 var webpack = require('webpack');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
-var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob');
 var _ = require('lodash');
-
 
 function theme_entries() {
     var entries = {},
@@ -63,11 +61,12 @@ module.exports = {
                 plugins: [
                   '@babel/plugin-proposal-object-rest-spread',
                   '@babel/plugin-proposal-class-properties',
-                  ['@babel/plugin-transform-runtime', { helpers: true }]
+                  ['@babel/plugin-transform-runtime', { helpers: true, corejs: 2 }]
                 ],
                 presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
-                                    "debug": false, "useBuiltIns": "entry",
-                                    "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
+                                    // Exclude transforms that make all code slower
+                                    "exclude": ["transform-typeof-symbol"],
+                                    "debug": false, "useBuiltIns": "entry", "corejs": 2 }],
                           "@babel/preset-react", "@babel/preset-flow"]
               }
             },
@@ -123,11 +122,6 @@ module.exports = {
         },
     },
     mode: 'production',
-    optimization: {
-        minimizer: [
-            new UglifyJsPlugin({ sourceMap: true, parallel: true, cache: true })
-        ]
-    },
     plugins: [
         new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
         new HtmlWebpackPlugin({ title: 'Caching', filename: 'resources.html'}),

@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { configure, mount } from 'enzyme';
 import 'react-dates/initialize';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import CustomDateRangePicker from '../../../../../js/app/components/administration/dateRangePicker/customDateRangePicker';
 
