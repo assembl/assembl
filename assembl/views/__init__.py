@@ -523,6 +523,8 @@ def get_default_context(request, **kwargs):
     theme_name, theme_relative_path = get_theme_info_deprecated(discussion)
     node_env = os.getenv('NODE_ENV', 'production')
     under_test = bool(config.get('under_test') or False)
+    activate_mouseflow = bool(config.get('activate_mouseflow')) or False
+    mouseflow_website_id = config.get('mouseflow_website_id', None)
     base = dict(
         kwargs,
         request=request,
@@ -545,6 +547,8 @@ def get_default_context(request, **kwargs):
         minified_js=config.get('minified_js') or False,
         web_analytics=analytics_settings,
         analytics_url=analytics_url,
+        activate_mouseflow=activate_mouseflow,
+        mouseflow_website_id=mouseflow_website_id,
         help_url=help_url,
         socket_url=socket_url,
         REACT_URL=react_url,
