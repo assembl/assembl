@@ -1014,7 +1014,7 @@ class User(AgentProfile):
                     [results['feedback']['warning']] + results['feedback']['suggestions'])
         # refuse if reusing an old password
         for p in self.old_passwords:
-            if verify_password(password, p.password):
+            if verify_password(password, p.password if p else ""):
                 raise LocalizableError(_("Please do not repeat an older password."))
 
     @password_p.setter
