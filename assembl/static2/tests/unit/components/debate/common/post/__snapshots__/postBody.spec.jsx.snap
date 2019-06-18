@@ -117,6 +117,10 @@ exports[`Html component should render a html body with extracts 1`] = `
       https://github.com/
     </a>
   </React.Fragment>
+  <modalImage
+    className="atomic-image"
+    src="http://lorempixel.com/400/200/"
+  />
 </div>
 `;
 
@@ -171,6 +175,10 @@ exports[`Html component should render a html body without extracts 1`] = `
       https://github.com/
     </a>
   </React.Fragment>
+  <modalImage
+    className="atomic-image"
+    src="http://lorempixel.com/400/200/"
+  />
 </div>
 `;
 
@@ -208,6 +216,7 @@ exports[`PostBody component should render a post body 1`] = `
           "a": [Function],
           "annotation": [Function],
           "iframe": [Function],
+          "img": [Function],
         }
       }
     />
