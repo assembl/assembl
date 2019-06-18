@@ -485,6 +485,15 @@ def set_file_permissions(c):
         c.run('chmod go+r {path}/assembl/scripts/pypsql.py'.format(path=code_path))
 
 
+@task()
+def app_compile_nodbupdate(c):
+    """Separated mostly for tests, which need to run alembic manually"""
+    app_setup(c)
+    build.compile_stylesheets(c)
+    build.compile_messages(c)
+    build.compile_javascript(c)
+
+
 def app_db_install(c):
     """
     Install db the first time and fake migrations
