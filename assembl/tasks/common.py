@@ -170,11 +170,9 @@ def setup_ctx(c):
     current['projectpath'] = project_prefix
     current['_internal'] = c.config.get('_internal') or {}
     current['_internal']['mac'] = sys.platform == 'darwin'
-    target = c.config.get('_extends', None) 
+    target = c.config.get('_extends', None)
     if not target and exists(c, 'invoke.yaml'):
-        target = 'invoke.yaml'
-    elif not target and not is_cloud_env(c):
-        target = 'mac.yaml'
+        target = 'invoke.yaml'        
     while target:
         if os.path.isabs(target):
             if exists(c, target):
@@ -447,27 +445,6 @@ def is_supervisord_running(c):
         return False
 
 
-@task()
-def webservers_start(c):
-    """
-    Start all webservers
-    """
-    # Nginx
-    if exists(c, '/etc/init.d/nginx'):
-        # Have to ensure that the env.user has visudo rights to call this
-        c.sudo('/etc/init.d/nginx start')
-
-
-@task()
-def webservers_stop(c):
-    """
-    Stop all webservers
-    """
-    # Nginx
-    if exists(c, '/etc/init.d/nginx'):
-        c.sudo('/etc/init.d/nginx stop')
-
-
 def is_supervisor_running(c):
     with venv(c):
         supervisord_cmd_result = c.run("supervisorctl avail", hide='both', warn=True)
@@ -475,22 +452,6 @@ def is_supervisor_running(c):
             return False
         else:
             return True
-
-
-@task()
-def webservers_reload(c):
-    """
-    Reload the webserver stack.
-    """
-    # Nginx (sudo is part of command line here because we don't have full
-    # sudo access
-    print("Reloading nginx")
-    if os.path.exists('/etc/init.d/nginx'):
-        result = c.sudo('/usr/sbin/nginx -t')
-        if "Command exited with status 0" in str(result):
-            c.sudo('/etc/init.d/nginx reload')
-        else:
-            print("Your Nginx configuration returned an error, please check your nginx configuration.")
 
 
 def restart_bluenove_actionable(c):
@@ -567,12 +528,6 @@ def get_robot_machine(c):
     return None
 
 
-def ensureSection(config, section):
-    """Ensure that config has that section"""
-    if section.lower() != 'default' and not config.has_section(section):
-        config.add_section(section)
-
-
 def val_to_ini(val):
     if val is None:
         return ''
@@ -581,6 +536,12 @@ def val_to_ini(val):
     if isinstance(val, (dict, list)):
         return json.dumps(val)
     return val
+
+
+def ensureSection(config, section):
+    """Ensure that config has that section"""
+    if section.lower() != 'default' and not config.has_section(section):
+        config.add_section(section)
 
 
 def yaml_to_ini(yaml_conf, default_section='app:assembl'):
@@ -646,3 +607,15 @@ def create_local_ini(c):
         c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
     with open(local_ini_path, 'w') as f:
         base.write(f)
+
+
+def separate_pip_install(c, package, wrapper=None):
+    cmd = 'pip install'
+    if wrapper:
+        cmd = wrapper % (cmd,)
+    context_dict = dict(c.config)
+    cmd = cmd % context_dict
+    cmd = "egrep '^%(package)s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(cmd)s" % dict(
+        cmd=cmd, package=package, **context_dict)
+    with venv(c):
+        c.run(cmd)

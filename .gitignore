@@ -45,6 +45,7 @@ assembl/locale/*/LC_MESSAGES/*.jed.json
 /configs/local.rc
 /configs/bluenove-server-configs/
 local.rc
+invoke.yaml
 bluenove-server-configs/
 
 # app

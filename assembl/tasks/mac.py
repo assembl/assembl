@@ -7,7 +7,7 @@ from .common import (
     venv, task, exists, delete_foreign_tasks, setup_var_directory, get_upload_dir,
     chgrp_rec, _processes_to_restart_without_backup, _processes_to_restart_with_backup,
     filter_autostart_processes, supervisor_process_stop, local_db_path, is_supervisord_running,
-    get_node_base_path, is_supervisor_running)
+    get_node_base_path, is_supervisor_running, separate_pip_install)
 from ConfigParser import SafeConfigParser
 from contextlib import nested
 
@@ -26,6 +26,9 @@ core_dependencies = [
     'automake'
 ]
 
+@task()
+def create_yaml(c):
+    c.run("echo '_extends: mac.yaml' > invoke.yaml")
 
 @task()
 def install_core_dependencies(c):
@@ -33,14 +36,6 @@ def install_core_dependencies(c):
     c.run('brew install %s' % ' '.join(list(core_dependencies)))
     if not c.run('brew link libevent', quiet=True):
         c.sudo('brew link libevent')
-
-
-@task()
-def uninstall_lamp_mac(c):
-    """
-    Uninstalls lamp from development environment
-    """
-    c.run("brew uninstall php56-imagick php56 homebrew/apache/httpd24 mysql")
 
 
 @task()
@@ -77,9 +72,9 @@ def venv_py3_mac(c):
 @task()
 def update_pip_requirements_mac(c, force_reinstall=False):
     """
-    Update external dependencies on remote host.
+    Update external dependencies on local.
     """
-    from .build import separate_pip_install
+    separate_pip_install('pip-tools')
     with venv(c):
         # TODO: upgrade local dev pip to latest of py27
         c.run('pip install -U setuptools "pip<10" ')
@@ -183,11 +178,6 @@ def install_services(c):
     c.run('brew services start memcached')
 
 
-@task(install_core_dependencies, upgrade_yarn_mac)
-def install_assembl_server_deps(c):
-    print('Assembl Server dependencies installed')
-
-
 @task()
 def install_single_server(c):
     """
@@ -198,6 +188,7 @@ def install_single_server(c):
     install_java(c)
     install_elasticsearch(c)
     install_database(c)
+    install_core_dependencies(c)
     install_assembl_server_deps(c)
     install_services(c)
     print('Assembl Server installed')
@@ -208,10 +199,7 @@ def bootstrap_from_checkout(c, from_dump=False, dump_path=None):
     """
         Creates the virtualenv and install the app from git checkout. `from_dump` allows to load a DB dump, `dump_path` allows to set the path to the DB dump
     """
-    from common import webservers_reload
-
     print('Bootstraping')
-    updatemaincode(c, from_dump=from_dump)
     build_virtualenv(c)
     create_venv_python_3(c)
     app_update_dependencies(c, from_dump=from_dump)
@@ -224,28 +212,30 @@ def bootstrap_from_checkout(c, from_dump=False, dump_path=None):
     else:
         database_restore(c, from_dump=from_dump, dump_path=dump_path)
     app_reload(c)
-    webservers_reload(c)
     print('Bootstraping finished')
 
 
-def updatemaincode(c, from_dump=False):
+@task()
+def update_main_code(c):
     """
     Update code and/or switch branch
     """
-    if not from_dump:
-        print('Updating Git repository')
-        with c.cd(join(c.config.projectpath)):
-            c.run('git fetch')
-            c.run('git checkout %s' % c.config._internal.gitbranch)
-            c.run('git pull %s %s' % (c.config._internal.gitrepo, c.config._internal.gitbranch))
+    print('Updating Git repository')
+    with c.cd(join(c.config.projectpath)):
+        c.run('git fetch')
+        c.run('git checkout %s' % c.config._internal.gitbranch)
+        c.run('git pull %s %s' % (c.config._internal.gitrepo, c.config._internal.gitbranch))
 
-        path = join(c.config.projectpath, '..', 'url_metadata')
-        if exists(c, path):
-            print('Updating url_metadata Git repository')
-            with c.cd(path):
-                c.run('git pull')
-            with venv_py3_mac(c):
-                c.run('python3 -m pip install -e ../url_metadata')
+
+@task()
+def updateUrlMetaData(c):
+    path = join(c.config.projectpath, '..', 'url_metadata')
+    if exists(c, path):
+        print('Updating url_metadata Git repository')
+        with c.cd(path):
+            c.run('git pull')
+        with venv_py3_mac(c):
+            c.run('python3 -m pip install -e ../url_metadata')
 
 
 @task()
@@ -349,7 +339,7 @@ def app_fullupdate(c):
     Full Update: Update to latest git, update dependencies and compile app.
     You need internet connectivity, and can't run this on a branch.
     """
-    updatemaincode(c)
+    update_main_code(c)
     create_local_ini(c)
     app_compile(c)
 
@@ -361,7 +351,7 @@ def app_update(c):
     Useful for deploying hotfixes.  You need internet connectivity, and can't
     run this on a branch.
     """
-    updatemaincode(c)
+    update_main_code(c)
     app_compile_noupdate(c)
 
 
@@ -393,20 +383,11 @@ def app_reload(c):
     """
     Restart all necessary processes after an update
     """
-    if c.config._internal.uses_global_supervisor:
-        print('Asking supervisor to restart %(projectname)s' % c.config)
-        c.run("sudo /usr/bin/supervisorctl restart %(projectname)s" % c.config)
-    else:
-        if is_supervisor_running(c):
-            with venv(c):
-                c.run("supervisorctl stop dev:")
-                # supervisor config file may have changed
-                c.run("supervisorctl reread")
-                c.run("supervisorctl update")
-                processes = filter_autostart_processes(c, [
-                    "celery_imap", "changes_router", "celery_notification_dispatch",
-                    "celery_notify", "celery_notify_beat", "source_reader", "urlmetadata"])
-                c.run("supervisorctl restart " + " ".join(processes))
+    if is_supervisor_running(c):
+        with venv(c):
+            c.run("supervisorctl stop dev:")
+            c.run("supervisorctl update")
+            c.run("supervisorctl restart dev:")
 
 
 @task()
@@ -433,22 +414,8 @@ def ensure_requirements(c):
 
 def generate_new_requirements(c):
     "Generate frozen requirements.txt file (with name taken from environment)."
-    ensure_pip_compile(c)
     target = c.config.frozen_requirements or 'requirements.txt'
     venv(" ".join(("pip-compile --output-file", target, c.config.requirement_inputs)))
-
-
-def ensure_pip_compile(c):
-    if not exists(c, c.config.venvpath + "/bin/pip-compile"):
-        separate_pip_install('pip-tools')
-
-
-def separate_pip_install(c, package, wrapper=None):
-    cmd = '%(venvpath)s/bin/pip install'
-    if wrapper:
-        cmd = wrapper % (cmd,)
-    cmd = "egrep '^%(package)s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(cmd)s" % dict(cmd=cmd, package=package, **c.config)
-    c.run(cmd)
 
 
 @task()
@@ -478,15 +445,6 @@ def create_local_ini(c):
         c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
     with venv(c):
         c.run("inv common.create-local-ini")
-
-
-@task()
-def app_compile_nodbupdate(c):
-    """Separated mostly for tests, which need to run alembic manually"""
-    app_setup(c)
-    build.compile_stylesheets(c)
-    build.compile_messages(c)
-    build.compile_javascript(c)
 
 
 @task()
