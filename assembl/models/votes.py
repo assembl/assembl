@@ -615,7 +615,7 @@ class GaugeChoiceSpecification(DiscussionBoundBase):
 
     vote_specification = relationship(
         GaugeVoteSpecification, foreign_keys=(vote_specification_id,),
-        backref=backref("choices", cascade="all, delete-orphan"))
+        backref=backref("choices", order_by=value, cascade="all, delete-orphan"))
     label = relationship(
         LangString, foreign_keys=(label_id,),
         backref=backref("label_of_gauge_choice", lazy="dynamic"),
