@@ -105,7 +105,7 @@
     "draft-js-counter-plugin": "^2.0.1",
     "draft-js-plugins-editor": "^2.1.1",
     "draft-js-static-toolbar-plugin": "^2.0.2",
-    "final-form": "^4.11.0",
+    "final-form": "4.13.0",
     "final-form-arrays": "^1.1.1",
     "final-form-set-field-touched": "^1.0.0",
     "graphql": "^0.10.5",
