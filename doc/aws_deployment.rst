@@ -103,6 +103,16 @@ Fully Manual
 
 .. code-block:: sh
 	inv deploy.install-wheel
+	
+	# if you made LOCAL updates on the account_data.yaml, ensure to save
+	# your changes to S3
+	
+	# get latest config from s3
+	inv deploy.get-aws-invoke-yaml
+	
+	# update configs
+	inv deploy.create-local-ini
+	inv deploy.generate-nginx-conf
 
 	# restart server yourself
 	supervisorctl restart prod:
