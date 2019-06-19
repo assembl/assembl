@@ -162,7 +162,7 @@ python-magic==0.4.15
 python-openid==2.2.5      # via social-auth-core
 python-saml==2.4.2
 pytz==2016.4
-pyyaml==3.12              # via aspy.yaml, pre-commit
+pyyaml==5.1.1             # via aspy.yaml, pre-commit
 pyzmq==15.2.0
 redis==3.2.0
 repoze.lru==0.7           # via pyramid, pyramid-debugtoolbar
