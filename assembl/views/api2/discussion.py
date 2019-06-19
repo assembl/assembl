@@ -1689,10 +1689,10 @@ def phase_csv_export(request):
         else:
             row[TOP_POST_COUNT] = row[POSTED_MESSAGES_COUNT]
             row[NON_TOP_POST_COUNT] = 0
-        row[LIKE] = idea.get_total_sentiments("like")
-        row[DONT_LIKE] = idea.get_total_sentiments("disagree")
-        row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
-        row[MORE_INFO] = idea.get_total_sentiments("more_info")
+        row[LIKE] = idea.get_total_sentiments("like", start, end)
+        row[DONT_LIKE] = idea.get_total_sentiments("disagree", start, end)
+        row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand", start, end)
+        row[MORE_INFO] = idea.get_total_sentiments("more_info", start, end)
         if idea.message_view_override == MessageView.voteSession.value:
             if not idea.vote_session:
                 row[CONTRIBUTIONS_COUNT] = 0
