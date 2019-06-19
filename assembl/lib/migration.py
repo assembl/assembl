@@ -32,7 +32,6 @@ def locked_transaction(db, num):
     cnx = db.session_factory.kw['bind'].connect()
     cnx.execute("select pg_advisory_lock(%d)" % num).first()
     try:
-        session = db()
         with transaction.manager:
             session = db()
             yield session

@@ -27,7 +27,6 @@ use_elasticsearch: false
 assembl.domain: assembl.net
 beaker.session.cookie_expires: false
 beaker.session.elevated_expires: 86400
-session_timeout : 172800
 dogpile_cache.expiration_time: 600
 public_hostname: localhost
 public_port: 6546

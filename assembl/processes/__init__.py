@@ -1,7 +1,3 @@
-<<<<<<< HEAD
-=======
-<<<<<<<< HEAD:assembl/processes/__init__.py
->>>>>>> rename assembl/tasks -> assembl/processes
 """Background tasks for running Assembl.
 
 Tasks are kept running by Supervisord_.
@@ -48,14 +44,17 @@ def configure(registry, task_name):
     configure_threaded_watcher(settings)
     configure_model_watcher(registry, task_name)
     region = get('aws_region', 'eu-west-1')
+    broker = settings.get('celery_tasks.broker', '')
+
     config = {
         "CELERY_TASK_SERIALIZER": 'json',
         "CELERY_ACKS_LATE": True,
-        "CELERY_CACHE_BACKEND": settings.get('celery_tasks.broker', ''),
-        "CELERY_RESULT_BACKEND": settings.get('celery_tasks.broker', ''),
+	"CELERY_CACHE_BACKEND": broker,
         "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True,
         "BROKER_TRANSPORT_OPTIONS": {'region': region},
     }
+    if not broker.startswith('sqs'):
+        config["CELERY_RESULT_BACKEND"] = broker
     config['BROKER_URL'] = settings.get(
         '%s.broker' % (celery.main,), None
     ) or settings.get('celery_tasks.broker')
@@ -161,15 +160,3 @@ def includeme(config):
     configure(config.registry, 'assembl')
     config.include('.source_reader')
     config.include('.notification_dispatch')
-from invoke import Collection
-
-import common
-import sudoer
-import deploy
-import build
-
-ns = Collection()
-ns.add_collection(Collection.from_module(common))
-ns.add_collection(Collection.from_module(sudoer))
-ns.add_collection(Collection.from_module(deploy))
-ns.add_collection(Collection.from_module(build))
