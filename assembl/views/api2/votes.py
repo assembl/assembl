@@ -259,11 +259,11 @@ def global_vote_results_csv(widget, request):
     def get_choice_average_fieldname(title):
         return u'moyenne [{title}]'.format(title=title).encode('utf-8')
 
-    def get_number_choice_fieldname(choice_value, template_spec):
-        return u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8')
+    def get_number_choice_fieldname(choice_value, template_spec, title):
+        return u'{value} {unit} [{title}]'.format(value=choice_value, unit=template_spec.unit, title=title).encode('utf-8')
 
-    def get_text_choice_fieldname(choice):
-        return choice.label.best_lang(user_prefs).value.encode('utf-8')
+    def get_text_choice_fieldname(choice, title):
+        return '{} [{}]'.format(choice.label.best_lang(user_prefs).value.encode('utf-8'), title.encode('utf-8'))
 
     def get_total_votes_fieldname(title):
         return '{} [{}]'.format(TOTAL_VOTES, title.encode('utf-8'))
@@ -276,10 +276,10 @@ def global_vote_results_csv(widget, request):
             fieldnames.append(get_choice_average_fieldname(title))
             if isinstance(template_spec, NumberGaugeVoteSpecification):
                 for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                    fieldnames.append(get_number_choice_fieldname(choice_value, template_spec))
+                    fieldnames.append(get_number_choice_fieldname(choice_value, template_spec, title))
             else:
                 for choice in template_spec.get_choices():
-                    fieldnames.append(get_text_choice_fieldname(choice))
+                    fieldnames.append(get_text_choice_fieldname(choice, title))
         fieldnames.append(get_total_votes_fieldname(title))
 
     rows = []
@@ -313,11 +313,11 @@ def global_vote_results_csv(widget, request):
                     row[fieldname] = '-'
                     if isinstance(template_spec, NumberGaugeVoteSpecification):
                         for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                            fieldname = get_number_choice_fieldname(choice_value, template_spec)
+                            fieldname = get_number_choice_fieldname(choice_value, template_spec, title)
                             row[fieldname] = '-'
                     else:
                         for choice in template_spec.get_choices():
-                            fieldname = get_text_choice_fieldname(choice)
+                            fieldname = get_text_choice_fieldname(choice, title)
                             row[fieldname] = '-'
                 elif isinstance(template_spec, NumberGaugeVoteSpecification):
                     vote_cls = spec.get_vote_class()
@@ -339,7 +339,7 @@ def global_vote_results_csv(widget, request):
                         ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                     histogram = dict(q_histogram.all())
                     for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                        fieldname = get_number_choice_fieldname(choice_value, template_spec)
+                        fieldname = get_number_choice_fieldname(choice_value, template_spec, title)
                         row[fieldname] = histogram.get(choice_value, 0)
                 else:
                     vote_cls = spec.get_vote_class()
@@ -358,7 +358,7 @@ def global_vote_results_csv(widget, request):
                         ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                     histogram = dict(q_histogram.all())
                     for choice in template_spec.get_choices():
-                        fieldname = get_text_choice_fieldname(choice)
+                        fieldname = get_text_choice_fieldname(choice, title)
                         row[fieldname] = histogram.get(choice.value, 0)
 
             if spec is None:
