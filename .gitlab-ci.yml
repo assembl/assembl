@@ -1,31 +1,88 @@
 image: ubuntu:latest
 
 stages:
-  - test
+  # - test
   - build
-  - deploy_to_sandbox
+  # - deploy_to_sandbox
+  - test_integration
+  # - deploy_to_uat
+  # - deploy_to_prod
 
-test_frontend:
-  stage: test
-  only:
-    - develop
+# test_frontend:
+#   stage: test
+#   only:
+#     - gitlab-cicd-p2
+#   image: node:10
+#   before_script:
+#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+#     - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+#     - cd assembl/static2
+#     - yarn
+#   script:
+#     # This will fail if any test fails or if the coverage has lowered
+#     - yarn jest --coverage --maxWorkers 2
+#     - yarn run eslint
+#     - yarn run stylelint
+#     - yarn run flow --quiet
+
+test_integration_and_ui:
+  stage: test_integration
   image: node:10
+  only:
+    - gitlab-cicd-p2
   before_script:
     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-    - export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-    - cd assembl/static2
-    - yarn
+    - apt-get update
+    - apt-get install -y sudo python python-pip python-dev build-essential
+    - pip install virtualenv
+    - cd $CI_PROJECT_DIR
+    - python -mvirtualenv venv
+    - source venv/bin/activate
+    - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
+    - "echo '_extends: aws.yaml' > invoke.yaml"
+    - touch secrets.yaml
+    - ln -s assembl/tasks .
+    - inv build.prepare-integration-tests
   script:
-    # This will fail if any test fails or if the coverage has lowered
-    - yarn jest --coverage --maxWorkers 2
-    - yarn run eslint
-    - yarn run stylelint
-    - yarn run flow --quiet
+    # run integration tests
+    - yarn jest tests/integration
+    # run each ui test one by one
+    - yarn runinband
+
+# test_backend:
+#   stage: test
+#   only:
+#     - invoke
+#   before_script:
+#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+#     - apt-get update
+#     - apt-get install -y sudo python python-pip python-dev build-essential
+#     - pip install virtualenv
+#     - cd $CI_PROJECT_DIR
+#     - python -mvirtualenv venv
+#     - source venv/bin/activate
+#     - pip install $(egrep '(invoke|semantic-version)' requirements.in)
+#     - "echo '_extends: testing_aws.yaml' > invoke.yaml"
+#     - touch secrets.yaml
+#     - ln -s assembl/tasks .
+#     - inv sudoer.install-build-dependencies
+#     - ln -s requirements-tests.frozen.txt requirements.txt
+#     - inv build.update-pip-requirements
+#     - python setup.py develop
+#     - inv sudoer.install-database
+#     - inv build.compile-messages-catalog
+#   script:
+#     # run integration tests
+#     - source venv/bin/activate
+#     - inv -f assembl/configs/testing_aws.yaml deploy.create-local-ini
+#     - inv -f assembl/configs/testing_aws.yaml build.database-create
+#     - cat testing.ini
+#     - py.test assembl/tests
 
 build_wheel:
   stage: build
   only:
-    - develop
+    - gitlab-cicd-p2
   variables:
     LC_ALL: C.UTF-8
     LANG: en.UTF-8
@@ -59,23 +116,40 @@ build_wheel:
     - inv build.create-wheel
     - inv build.push-wheelhouse
     - inv build.push-built-themes-to-remote-bucket
+# push_to_develop_server:
+#   stage: deploy_to_sandbox
+#   only:
+#     - develop
+#   before_script:
+#     - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+#     - apt-get update
+#     - apt-get install -yqq sudo python python-pip python-dev build-essential
+#     - pip install virtualenv
+#     - cd $CI_PROJECT_DIR
+#     - python -mvirtualenv venv
+#     - source venv/bin/activate
+#     - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
+#     # Fetch the configurations of sandbox from S3
+#     - "echo '_extends: aws.yaml' > invoke.yaml"
+#     - touch secrets.yaml
+#     - ln -s assembl/tasks .
+#   script:
+#     - inv build.deploy-to-sandbox
+# deploy_to_uat:
+#   stage: deploy_to_uat
+#   only:
+#     - tmp_master_for_ci_cd
+#     - add_deploy_job
+#   script:
+#     # empty script for now
+#     - echo "Running deployment..."
 
-push_to_develop_server:
-  stage: deploy_to_sandbox
-  only:
-    - develop
-  before_script:
-    - ln -fs /usr/share/zoneinfo/UTC /etc/localtime
-    - apt-get update
-    - apt-get install -yqq sudo python python-pip python-dev build-essential
-    - pip install virtualenv
-    - cd $CI_PROJECT_DIR
-    - python -mvirtualenv venv
-    - source venv/bin/activate
-    - pip install $(egrep '(invoke|boto3|requests|jinja2|semantic-version)' requirements.in)
-    # Fetch the configurations of sandbox from S3
-    - "echo '_extends: aws.yaml' > invoke.yaml"
-    - touch secrets.yaml
-    - ln -s assembl/tasks .
-  script:
-    - inv build.deploy-to-sandbox
+# deploy_to_prod:
+#   stage: deploy_to_prod
+#   environment: PROD
+#   only:
+#     - tmp_master_for_ci_cd
+#   script:
+#     # fake script for now
+#     - python scripts/deploy_to_prod.py
+#   when: manual
