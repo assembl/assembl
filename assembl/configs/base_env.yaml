@@ -183,9 +183,6 @@ theme_base: ""
 # on thread module
 # To be completed if needed
 attachment_allowed_mime_types: "image/\\w+ video/\\w+ application/(pdf|msword) application/vnd\\.(.*ms.*|.*officedocument.*)"
-  - image/*
-  - video/*
-  - application/pdf
 
 # Password requirements
 minimum_password_length: 9
