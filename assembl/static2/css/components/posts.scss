@@ -315,9 +315,7 @@ $deleted-post-border: 1px solid $light-grey !default;
     .post-actions {
       width: 100%;
     }
-  }
 
-  .post-right {
     &.pending {
       background-color: $orange;
     }
@@ -403,6 +401,8 @@ $deleted-post-border: 1px solid $light-grey !default;
     padding: 30px;
 
     .assembl-icon-back-arrow {
+      padding-left: 10px;
+
       &:before {
         font-size: $font-size-s;
       }
@@ -420,10 +420,6 @@ $deleted-post-border: 1px solid $light-grey !default;
 
     .button-container {
       margin: 25px 0 0;
-    }
-
-    .assembl-icon-back-arrow {
-      padding-left: 10px;
     }
 
     .btn {
@@ -649,12 +645,18 @@ $deleted-post-border: 1px solid $light-grey !default;
 @media screen and (max-width: $screen-xs-max) {
   .proposals {
     .content {
+      text-align: left;
+
       .post-footer {
         margin: 5px 20px 0 25px;
 
         div {
           display: none;
         }
+      }
+
+      .user {
+        padding: 30px 20px 0;
       }
     }
 
@@ -725,14 +727,6 @@ $deleted-post-border: 1px solid $light-grey !default;
         display: flex;
         flex-direction: column;
         justify-content: center;
-      }
-    }
-
-    .content {
-      text-align: left;
-
-      .user {
-        padding: 30px 20px 0;
       }
     }
 

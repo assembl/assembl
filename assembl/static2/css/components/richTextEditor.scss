@@ -291,6 +291,7 @@
     color: $grey;
     font-family: $font-family6;
     position: absolute;
+    padding: 5px;
   }
 
   .DraftEditor-root {
@@ -300,10 +301,6 @@
   .DraftEditor-editorContainer {
     padding: 5px;
     background-color: $white;
-  }
-
-  .public-DraftEditorPlaceholder-root {
-    padding: 5px;
   }
 
   .public-DraftEditor-content {

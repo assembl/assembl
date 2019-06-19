@@ -124,6 +124,9 @@ $highlightColor: $first-color-light;
     width: 250px;
     float: left;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+    max-height: 600px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 
     .sk-panel {
       margin: 16px 0 0 0;
@@ -148,6 +151,10 @@ $highlightColor: $first-color-light;
     .sk-range-input {
       margin-top: 10px;
     }
+
+    .sk-select select {
+      width: 100%;
+    }
   }
 
   &__results {
@@ -171,6 +178,11 @@ $highlightColor: $first-color-light;
 
   .sk-hits-stats {
     line-height: 30px;
+  }
+
+  .sk-select,
+  .sk-toggle {
+    margin-left: 15px;
   }
 }
 
@@ -204,6 +216,8 @@ $highlightColor: $first-color-light;
 }
 
 .sk-search-box {
+  margin-right: 10px;
+
   form {
     position: relative;
   }
@@ -255,10 +269,6 @@ $highlightColor: $first-color-light;
 .sk-search-box,
 #search-expand {
   display: inline-block;
-}
-
-.sk-search-box {
-  margin-right: 10px;
 }
 
 .sk-range-filter {
@@ -365,23 +375,6 @@ $marginLeft: 80px;
       font-size: $imgtypeWidth;
       margin: 0;
     }
-  }
-}
-
-.sk-action-bar {
-  .sk-select,
-  .sk-toggle {
-    margin-left: 15px;
-  }
-}
-
-.sk-layout__filters {
-  max-height: 600px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  .sk-select select {
-    width: 100%;
   }
 }
 

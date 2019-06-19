@@ -71,6 +71,9 @@
 
   .help-block {
     color: $error !important;
+    font-size: $font-size-xxs;
+    margin: 5px 0 0 5px;
+    font-family: $font-family6;
   }
 
   .has-error > input {
@@ -190,6 +193,24 @@
 
   .admin-box {
     background-color: $white;
+
+    .intro-text {
+      display: flex;
+      flex-direction: column;
+      padding: 0 45px;
+      font-size: $font-size-s;
+      color: $grey;
+      font-family: $font-family4;
+
+      .timeline-link {
+        font-family: $font-family2;
+        text-decoration: underline;
+      }
+    }
+
+    .bold {
+      font-family: $font-family5;
+    }
 
     .dark-title-3 {
       font-size: 18px;
@@ -481,12 +502,6 @@
     margin: 0 0 5px 5px;
   }
 
-  .help-block {
-    font-size: $font-size-xxs;
-    margin: 5px 0 0 5px;
-    font-family: $font-family6;
-  }
-
   .description-block {
     color: $grey;
     font-size: $font-size-xxs;
@@ -595,26 +610,6 @@
           }
         }
       }
-    }
-  }
-
-  .admin-box {
-    .intro-text {
-      display: flex;
-      flex-direction: column;
-      padding: 0 45px;
-      font-size: $font-size-s;
-      color: $grey;
-      font-family: $font-family4;
-
-      .timeline-link {
-        font-family: $font-family2;
-        text-decoration: underline;
-      }
-    }
-
-    .bold {
-      font-family: $font-family5;
     }
   }
 

@@ -407,6 +407,12 @@
 
       span {
         color: $grey;
+
+        &:before {
+          font-size: 12px;
+          display: block;
+          margin: 0 0 0 -6px;
+        }
       }
 
       &:hover {
@@ -425,14 +431,6 @@
 
       &:active {
         box-shadow: none;
-      }
-
-      span {
-        &:before {
-          font-size: 12px;
-          display: block;
-          margin: 0 0 0 -6px;
-        }
       }
     }
   }

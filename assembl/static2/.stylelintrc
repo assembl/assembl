@@ -7,6 +7,7 @@
     "selector-list-comma-newline-after": null,
     "number-leading-zero": null,
     "max-line-length": 130,
-    "string-quotes": "single"
+    "string-quotes": "single",
+    "no-descending-specificity": null
   }
 }

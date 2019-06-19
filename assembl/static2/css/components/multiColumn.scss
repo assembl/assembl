@@ -100,9 +100,7 @@ $column-synthesis-height: 320px;
       }
     }
   }
-}
 
-.column-header {
   .start-discussion-container {
     max-width: $post-max-width;
     margin-left: auto;
@@ -140,17 +138,6 @@ $column-synthesis-height: 320px;
     button {
       display: block;
       text-overflow: ellipsis;
-    }
-
-    &:first-child {
-      padding-left: 0;
-    }
-
-    &:last-child {
-      padding-right: 0;
-    }
-
-    button {
       border: 0;
       width: 100%;
       outline: 0;
@@ -164,6 +151,14 @@ $column-synthesis-height: 320px;
         font-family: $font-family3;
       }
     }
+
+    &:first-child {
+      padding-left: 0;
+    }
+
+    &:last-child {
+      padding-right: 0;
+    }
   }
 }
 
@@ -171,33 +166,6 @@ $column-synthesis-height: 320px;
   display: flex;
   justify-content: center;
 
-  .column-header {
-    .box.synthesis {
-      padding-left: $column-half-gutter;
-      padding-right: $column-half-gutter;
-    }
-
-    .form-container {
-      max-width: $post-max-width;
-      margin-left: auto;
-      margin-right: auto;
-      margin-top: 40px;
-    }
-  }
-
-  .column-tree {
-    padding-left: $column-half-gutter;
-    padding-right: $column-half-gutter;
-    position: static;
-
-    .level-0 {
-      width: auto;
-      margin: 0;
-    }
-  }
-}
-
-.multi-column-container {
   .column-view {
     max-width: 45%;
 
@@ -223,6 +191,31 @@ $column-synthesis-height: 320px;
         margin-left: $column-half-gutter;
         margin-right: $column-half-gutter;
       }
+    }
+  }
+
+  .column-header {
+    .box.synthesis {
+      padding-left: $column-half-gutter;
+      padding-right: $column-half-gutter;
+    }
+
+    .form-container {
+      max-width: $post-max-width;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 40px;
+    }
+  }
+
+  .column-tree {
+    padding-left: $column-half-gutter;
+    padding-right: $column-half-gutter;
+    position: static;
+
+    .level-0 {
+      width: auto;
+      margin: 0;
     }
   }
 }

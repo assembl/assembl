@@ -54,7 +54,7 @@
   }
 
   .title-error-code {
-    font-family: latoBold;
+    font-family: $font-family3;
     font-size: 120px;
     text-align: center;
     color: $first-color;
@@ -63,7 +63,7 @@
   }
 
   .title-error {
-    font-family: latoBold;
+    font-family: $font-family3;
     font-size: 44px;
     text-align: center;
     color: $first-color;
@@ -73,7 +73,7 @@
   }
 
   .text {
-    font-family: latoMedium;
+    font-family: $font-family2;
     text-align: center;
     font-size: 20px;
     word-spacing: 2px;
@@ -89,7 +89,7 @@
   }
 
   button {
-    font-family: LatoMedium;
+    font-family: $font-family2;
     font-size: 12px;
     font-weight: bold;
     color: $second-color;
@@ -131,7 +131,9 @@
     transition-timing-function: ease-in;
   }
 
-  button:hover:before, button:focus:before, button:active:before {
+  button:hover:before,
+  button:focus:before,
+  button:active:before {
     -webkit-transform: scaleX(1);
     transform: scaleX(1);
   }

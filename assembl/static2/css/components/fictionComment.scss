@@ -180,6 +180,8 @@
 
 @media screen and (min-width: $screen-sm-min) {
   .comment-container {
+    padding-left: 40px;
+
     .circle-avatar {
       margin-top: 0;
     }
@@ -196,10 +198,6 @@
         }
       }
     }
-  }
-
-  .comment-container {
-    padding-left: 40px;
   }
 }
 
