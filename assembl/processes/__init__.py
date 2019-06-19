@@ -49,7 +49,7 @@ def configure(registry, task_name):
     config = {
         "CELERY_TASK_SERIALIZER": 'json',
         "CELERY_ACKS_LATE": True,
-	"CELERY_CACHE_BACKEND": broker,
+        "CELERY_CACHE_BACKEND": broker,
         "CELERY_STORE_ERRORS_EVEN_IF_IGNORED": True,
         "BROKER_TRANSPORT_OPTIONS": {'region': region},
     }
