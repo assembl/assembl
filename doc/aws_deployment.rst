@@ -108,7 +108,10 @@ Fully Manual
 	# your changes to S3
 	
 	# get latest config from s3
+	# for ASG:
 	inv deploy.get-aws-invoke-yaml
+	# for celery
+	inv deploy.get-aws-invoke-yaml --celery
 	
 	# update configs
 	inv deploy.create-local-ini
