@@ -81,7 +81,7 @@ class VoteSession(
             return phase.end != None and phase.end < datetime.utcnow()  # noqa: E711
         return False
 
-    def get_voter_ids_query(self):
+    def get_voter_ids_query(self, start=None, end=None):
         vote_specifications = []
         for proposal in self.idea.get_vote_proposals():
             vote_specifications.extend(proposal.criterion_for)
@@ -92,9 +92,13 @@ class VoteSession(
             ).filter(vote_class.vote_spec_id.in_(
                 [vote_spec.id for vote_spec in vote_specifications])
             ).distinct()
+        if start is not None:
+            query = query.filter(vote_class.vote_date >= start)
+        if end is not None:
+            query = query.filter(vote_class.vote_date <= end)
         return query
 
-    def get_num_votes(self):
+    def get_num_votes(self, start=None, end=None):
         vote_specifications = []
         for proposal in self.idea.get_vote_proposals():
             vote_specifications.extend(proposal.criterion_for)
@@ -105,6 +109,10 @@ class VoteSession(
             ).filter(vote_class.vote_spec_id.in_(
                 [vote_spec.id for vote_spec in vote_specifications])
             )
+        if start is not None:
+            query = query.filter(vote_class.vote_date >= start)
+        if end is not None:
+            query = query.filter(vote_class.vote_date <= end)
         # There is no distinct on purpose here.
         # For a token vote spec, voting on two categories is counted as 2 votes.
         return query.count()

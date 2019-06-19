@@ -1698,8 +1698,8 @@ def phase_csv_export(request):
                 row[CONTRIBUTIONS_COUNT] = 0
                 row[CONTRIBUTORS_COUNT] = 0
             else:
-                row[CONTRIBUTIONS_COUNT] = idea.vote_session.get_num_votes()
-                row[CONTRIBUTORS_COUNT] = idea.vote_session.get_voter_ids_query().count()
+                row[CONTRIBUTIONS_COUNT] = idea.vote_session.get_num_votes(start, end)
+                row[CONTRIBUTORS_COUNT] = idea.vote_session.get_voter_ids_query(start, end).count()
         else:
             row[CONTRIBUTORS_COUNT] = 0
             row[CONTRIBUTIONS_COUNT] = 0
