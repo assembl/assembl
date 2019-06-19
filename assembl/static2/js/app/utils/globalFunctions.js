@@ -383,6 +383,12 @@ export const formatedTagList = (tags: Tags): Array<TagProps> =>
     }, [])
     : []);
 
-// Function that checks wheter the browser in IE from v6 to v11
+// Function that checks whether the browser is IE from v6 to v11
 // eslint-disable-next-line
-export const isIE = () => /*@cc_on!@*/ false || !!document.documentMode;
+const isIE = () => /*@cc_on!@*/ false || !!document.documentMode;
+
+// Function that checks whether the browser is Edge
+const isEdge = () => !isIE() && !!window.StyleMedia;
+
+// Function that checks whether the browser is a Microsoft browser
+export const isMicrosoftBrowser = () => isIE() || isEdge();
