@@ -67,11 +67,6 @@ exports[`Post component should render a PostView component and pass its props to
     level={1}
     modifiedSubject={
       <span>
-        <span
-          className="subject-prefix"
-        >
-          Rep. 1: 
-        </span>
         We need to hack the solid state HTTP alarm!
       </span>
     }
@@ -129,14 +124,22 @@ exports[`PostView component should render a post in view mode 1`] = `
       <div
         className="post-left"
       >
-        <ProfileLine
-          creationDate="11/11/2011"
-          locale="fr"
-          modified={true}
-          userId="dannietreutel"
-          userName="Dannie Treutel"
-          userNameModerationClasses=""
-        />
+        <div
+          className="post-header"
+        >
+          <CircleAvatar
+            size="34"
+            src="/static2/img/icons/avatar.png"
+            username="no-username"
+          />
+          <displayResponseAuthor
+            authorFullname="Dannie Treutel"
+            displayIsEdited={true}
+            displayedPublishedDate="il y a 7 ans"
+            parentPostAuthorFullname={null}
+            publishedDate="11/11/2011"
+          />
+        </div>
         <withRouter(Apollo(DumbPostBody))
           body="<p>You can't index the port without programming the wireless HTTP program!</p>"
           bodyDivRef={[Function]}
@@ -207,19 +210,19 @@ exports[`PostView component should render a post in view mode 1`] = `
         />
       </div>
     </div>
-  </div>
-  <div
-    className="collapsed-answer-form"
-  >
-    <Connect(Apollo(Apollo(DumbAnswerFormWithContext)))
-      handleAnswerClick={[Function]}
-      hideAnswerForm={[Function]}
-      ideaId="ABC123"
-      parentId="XYZ333"
-      phaseId="DEF345"
-      refetchIdea={[MockFunction]}
-      textareaRef={[Function]}
-    />
+    <div
+      className="collapsed-answer-form"
+    >
+      <Connect(Apollo(Apollo(DumbAnswerFormWithContext)))
+        handleAnswerClick={[Function]}
+        hideAnswerForm={[Function]}
+        ideaId="ABC123"
+        parentId="XYZ333"
+        phaseId="DEF345"
+        refetchIdea={[MockFunction]}
+        textareaRef={[Function]}
+      />
+    </div>
   </div>
 </div>
 `;

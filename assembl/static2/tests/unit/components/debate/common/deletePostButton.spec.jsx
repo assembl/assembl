@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';
@@ -58,7 +58,7 @@ describe('<DeletePostButton /> - with mount', () => {
   it('should render one Button with a declined-checkbox icon embedded if the post is pending and you are a moderator', () => {
     wrapper.setProps({ isPendingForModerator: 'true' });
     expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find('span [className="assembl-icon-check-box-declined"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-check-box-declined"]')).toHaveLength(1);
   });
 
   it('should render a modal when you click on the button', () => {

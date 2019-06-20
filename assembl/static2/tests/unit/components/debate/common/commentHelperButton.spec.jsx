@@ -4,7 +4,7 @@ import { Button } from 'react-bootstrap';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import CommentHelperButton from '../../../../../js/app/components/debate/common/commentHelperButton';
@@ -29,7 +29,7 @@ describe('<CommentHelperButton /> - with shallow', () => {
 
   it('should render one Button with a suggest icon embedded', () => {
     expect(wrapper.find(Button)).toHaveLength(1);
-    expect(wrapper.find('span [className="assembl-icon-suggest"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-suggest"]')).toHaveLength(1);
   });
 
   it('should execute onClickHandler when clicking on the component', () => {

@@ -2,7 +2,7 @@ import React from 'react';
 import ShallowRenderer from 'react-test-renderer/shallow';
 import { ContentState, EditorState, RichUtils } from 'draft-js';
 import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import RichTextEditor from '../../../../../js/app/components/common/richTextEditor';
 

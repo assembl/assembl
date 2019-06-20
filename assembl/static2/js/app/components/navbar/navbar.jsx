@@ -25,7 +25,7 @@ import Logo from './Logo';
 import UserMenu from './UserMenu';
 import { addProtocol } from '../../utils/linkify';
 
-const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) => {
+const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses, isSemanticAnalysisEnabled }) => {
   switch (sectionType) {
   case 'RESOURCES_CENTER':
     return hasResourcesCenter;
@@ -36,6 +36,8 @@ const filterSection = ({ sectionType }, { hasResourcesCenter, hasSyntheses }) =>
   case 'HOMEPAGE':
     // The homepage button is the logo at the top left and it is renderered separately
     return false;
+  case 'SEMANTIC_ANALYSIS':
+    return isSemanticAnalysisEnabled;
   default:
     return true;
   }
@@ -134,14 +136,15 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
   };
 
   render = () => {
-    const { screenWidth, debate, phase, timeline, sectionData, logoData } = this.props;
+    const { screenWidth, debate, phase, timeline, sectionData, logoData, isSemanticAnalysisEnabled } = this.props;
     const sections = sectionData.sections;
     const { debateData } = debate;
     const { slug, isLargeLogo } = debateData;
     const flatWidth = this.state.flatWidth;
     const maxAppWidth = Math.min(APP_CONTAINER_MAX_WIDTH, screenWidth) - APP_CONTAINER_PADDING * 2;
     const screenTooSmall = flatWidth > maxAppWidth;
-    const filteredSections = sections.filter(sectionFilter(sectionData)).sort((a, b) => a.order - b.order);
+    const sectionFilterOptions = { ...sectionData, isSemanticAnalysisEnabled: isSemanticAnalysisEnabled };
+    const filteredSections = sections.filter(sectionFilter(sectionFilterOptions)).sort((a, b) => a.order - b.order);
     const { currentPhaseIdentifier, currentPhaseId } = getCurrentPhaseData(timeline);
     const mapOptions = {
       screenTooSmall: screenTooSmall,
@@ -157,6 +160,7 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
       logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : '',
       renderUserMenu: this.renderUserMenu
     };
+
     return (
       <div className="background-light">
         <Navbar fixedTop fluid className="no-padding">
@@ -223,7 +227,8 @@ export default compose(
             error: data.error,
             loading: data.loading
           },
-          logoData: null
+          logoData: null,
+          isSemanticAnalysisEnabled: false
         };
       }
       return {
@@ -231,7 +236,8 @@ export default compose(
           error: data.error,
           loading: data.loading
         },
-        logoData: data.discussionPreferences.logo
+        logoData: data.discussionPreferences.logo,
+        isSemanticAnalysisEnabled: data.discussionPreferences.withSemanticAnalysis
       };
     }
   }),

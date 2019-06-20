@@ -19,10 +19,11 @@ import {
   deleteVoteModule,
   undeleteModule
 } from '../../../actions/adminActions/voteSession';
-import { displayCustomModal, displayModal, closeModal } from '../../../utils/utilityManager';
+import { displayModal, closeModal } from '../../../utils/utilityManager';
+// import { displayCustomModal } from '../../../utils/utilityManager';
 import { editorStateIsEmpty } from '../../../utils/draftjs';
 import { createRandomId } from '../../../utils/globalFunctions';
-import CustomizeGaugeForm from './customizeGaugeForm';
+// import CustomizeGaugeForm from './customizeGaugeForm';
 
 type VoteProposalFormProps = {
   index: number,
@@ -42,6 +43,7 @@ type VoteProposalFormProps = {
   reactivateModule: Function,
   tokenModules: Object,
   gaugeModules: Object,
+  modulesById: Object,
   proposalModules: Object,
   validationErrors: ValidationErrors
 };
@@ -63,6 +65,7 @@ const DumbVoteProposalForm = ({
   handleDownClick,
   tokenModules,
   gaugeModules,
+  modulesById,
   proposalModules,
   associateModuleToProposal,
   cancelCustomization,
@@ -108,10 +111,10 @@ const DumbVoteProposalForm = ({
     return displayModal(modalTitle, body, includeFooter, footer);
   };
 
-  const settingsModal = (id) => {
-    const content = <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} />;
-    displayCustomModal(content, true, 'gauge-settings-modal');
-  };
+  // const settingsModal = (id) => {
+  //   const content = <CustomizeGaugeForm close={closeModal} gaugeModuleId={id} editLocale={editLocale} />;
+  //   displayCustomModal(content, true, 'gauge-settings-modal');
+  // };
 
   const isTitleEmpty = title === '' || title === null;
 
@@ -192,6 +195,7 @@ const DumbVoteProposalForm = ({
         {gaugeModules.map((voteSpecTemplateId, idx) => {
           const number = gaugeModules.size > 1 ? idx + 1 : '';
           const pModule = proposalModules.find(m => m.get('voteSpecTemplateId') === voteSpecTemplateId);
+          const voteSpecTemplate = modulesById.get(voteSpecTemplateId);
           return (
             <div key={voteSpecTemplateId}>
               <Checkbox
@@ -204,13 +208,19 @@ const DumbVoteProposalForm = ({
                   <Translate value="administration.voteProposals.customGauge" number={number} />
                 ) : (
                   <Translate value="administration.voteProposals.gauge" number={number} />
+                )}{' '}
+                -{' '}
+                {getEntryValueForLocale(
+                  voteSpecTemplate.get('instructionsEntries'),
+                  editLocale,
+                  getEntryValueForLocale(voteSpecTemplate.get('instructionsEntries'), 'en')
                 )}
               </Checkbox>
 
               {pModule &&
                 pModule.get('id') && (
                   <div>
-                    <span
+                    {/* <span
                       className="inline settings-link"
                       onClick={() => {
                         settingsModal(pModule.get('id'));
@@ -218,7 +228,7 @@ const DumbVoteProposalForm = ({
                     >
                       <i className="assembl-icon-edit" />
                       <Translate value="administration.voteProposals.gaugeSettings" />
-                    </span>
+                    </span> */}
 
                     {pModule.get('isCustom') && (
                       <span
@@ -253,6 +263,7 @@ const mapStateToProps = ({ admin }, { id, editLocale }) => {
     description: description || EditorState.createEmpty(),
     order: proposal.get('order'),
     proposalModules: proposal.get('modules').map(moduleId => modulesById.get(moduleId)),
+    modulesById: modulesById,
     tokenModules: modulesInOrder.filter(
       voteSpecTemplateId =>
         !modulesById.getIn([voteSpecTemplateId, 'proposalId']) &&

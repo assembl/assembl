@@ -2,7 +2,7 @@
 import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 // Components imports
 import DeletedFictionComment from '../../../../../js/app/components/debate/brightMirror/deletedFictionComment';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
@@ -37,7 +37,7 @@ describe('<DeletedFictionComment /> - with shallow', () => {
   });
 
   it('should display the number of child comments', () => {
-    expect(wrapper.find('Translate [value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
+    expect(wrapper.find('Translate[value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
   });
 
   it('should display a "toggle comment" button', () => {
@@ -45,11 +45,11 @@ describe('<DeletedFictionComment /> - with shallow', () => {
   });
 
   it('should display the default deleted message by author', () => {
-    expect(wrapper.find('Translate [value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
+    expect(wrapper.find('Translate[value="debate.thread.postDeletedByUser"]')).toHaveLength(1);
   });
 
   it('should display the default deleted message by admin', () => {
     wrapper.setProps({ isDeletedByAuthor: false });
-    expect(wrapper.find('Translate [value="debate.thread.postDeletedByAdmin"]')).toHaveLength(1);
+    expect(wrapper.find('Translate[value="debate.thread.postDeletedByAdmin"]')).toHaveLength(1);
   });
 });

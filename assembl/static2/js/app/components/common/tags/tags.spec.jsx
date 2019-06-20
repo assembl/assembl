@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import { DumbTags } from './tags';
@@ -28,7 +28,8 @@ describe('<Tags /> - with shallow', () => {
       addTag: jest.fn(),
       removeTag: jest.fn(),
       onTagListUpdateCallback: jest.fn(),
-      updateTags: jest.fn()
+      updateTags: jest.fn(),
+      contentLocale: 'fr'
     };
     wrapper = shallow(<DumbTags {...tagsProps} />);
   });

@@ -300,44 +300,6 @@ def populate_theme_information(theme_name='default', version=2):
         return data
 
 
-def extract_v1_resources_hash(source):
-    def get_resource_hash(regex, resource):
-        return resource and re.search(regex, resource)
-
-    def get_search_hash(src):
-        return get_resource_hash(r'/build/searchv1\.(.*)\.js$', src)
-
-    def get_search_css_hash(href):
-        return get_resource_hash(r'/build/searchv1\.(.*)\.css$', href)
-
-    soup = BeautifulSoup(source)
-    search = soup.find(src=get_search_hash)
-    search_css = soup.find(href=get_search_css_hash)
-    return {
-        'search_hash': get_search_hash(search['src']).group(1) if search else None,
-        'search_css_hash': get_search_css_hash(search_css['href']).group(1) if search_css else None
-    }
-
-
-def get_v1_resources_hash():
-    resources_id = "search_v1_resources"
-    current_resources = RESOURCES.get(resources_id, None)
-    if current_resources:
-        return current_resources
-
-    resources_path = get_resources_path()
-    result = {
-        'search_hash': None,
-        'search_css_hash': None
-    }
-    if os.path.exists(resources_path):
-        with open(resources_path) as fp:
-            result = extract_v1_resources_hash(fp)
-
-    RESOURCES[resources_id] = result
-    return result
-
-
 def get_provider_data(get_route, providers=None):
     from assembl.models.auth import IdentityProvider
     if providers is None:
@@ -610,7 +572,6 @@ def get_default_context(request, **kwargs):
         "get_discussion_url": get_discussion_url(),
         "discussion_title": discussion_title(),
     })
-    base.update(get_v1_resources_hash())
     return base
 
 

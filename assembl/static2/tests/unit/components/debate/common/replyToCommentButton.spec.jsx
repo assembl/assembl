@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import ReplyToCommentButton from '../../../../../js/app/components/debate/common/replyToCommentButton';
@@ -31,7 +31,7 @@ describe('<ReplyToCommentButton /> - with shallow', () => {
   it('should render one Link with a reply icon embedded with a tooltip', () => {
     expect(wrapper.find(Link)).toHaveLength(1);
     expect(wrapper.find(ResponsiveOverlayTrigger)).toHaveLength(1);
-    expect(wrapper.find('span [className="assembl-icon-back-arrow"]')).toHaveLength(1);
+    expect(wrapper.find('span[className="assembl-icon-back-arrow"]')).toHaveLength(1);
   });
 
   it('should execute onClickHandler when clicking on the component', () => {

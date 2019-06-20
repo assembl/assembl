@@ -4,6 +4,8 @@ import { OverlayTrigger, Popover } from 'react-bootstrap';
 import classnames from 'classnames';
 
 import { isMobile } from '../../utils/globalFunctions';
+import { MEDIUM_SCREEN_WIDTH } from '../../constants';
+import { withScreenWidth } from '../common/screenDimensions';
 
 type HelperProps = {
   label?: string,
@@ -11,7 +13,8 @@ type HelperProps = {
   helperText: string,
   classname?: string,
   additionalTextClasses?: string,
-  popOverClass?: string
+  popOverClass?: string,
+  screenWidth: number
 };
 
 const overflowMenu = (helperUrl, helperText, additionalTextClasses, popOverClass) => {
@@ -24,14 +27,14 @@ const overflowMenu = (helperUrl, helperText, additionalTextClasses, popOverClass
   );
 };
 
-const Helper = ({ label, helperUrl, helperText, classname, additionalTextClasses, popOverClass }: HelperProps) => (
+const Helper = ({ label, helperUrl, helperText, classname, additionalTextClasses, popOverClass, screenWidth }: HelperProps) => (
   <div className={classname}>
     {label && label}
     &nbsp;
     <OverlayTrigger
       trigger={['hover', 'focus', 'click']}
       rootClose
-      placement={isMobile.any() ? 'bottom' : 'right'}
+      placement={isMobile.any() || screenWidth <= MEDIUM_SCREEN_WIDTH ? 'bottom' : 'right'}
       overlay={overflowMenu(helperUrl, helperText, additionalTextClasses, popOverClass)}
     >
       <span className="assembl-icon-faq grey pointer" />
@@ -47,4 +50,4 @@ Helper.defaultProps = {
   popOverClass: ''
 };
 
-export default Helper;
+export default withScreenWidth(Helper);

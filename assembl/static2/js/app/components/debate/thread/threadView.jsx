@@ -48,7 +48,7 @@ class ThreadView extends React.Component<Props> {
           <TopPostFormContainer ideaId={ideaId} refetchIdea={refetchIdea} topPostsCount={posts.length} />
         ) : null}
         <Grid fluid className="background-grey">
-          <div className="max-container background-grey">
+          <div id="thread-view" className="max-container background-grey">
             <div className="content-section">
               <Tree
                 contentLocaleMapping={contentLocaleMapping}

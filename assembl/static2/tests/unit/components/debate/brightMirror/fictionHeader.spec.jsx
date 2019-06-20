@@ -2,7 +2,7 @@
 import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import FictionHeader from '../../../../../js/app/components/debate/brightMirror/fictionHeader';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
@@ -46,7 +46,7 @@ describe('<FictionHeader /> - with shallow', () => {
   });
 
   it('should display the article published date', () => {
-    expect(wrapper.find(`time [dateTime="${defaultFictionHeader.publishedDate}"]`)).toHaveLength(1);
+    expect(wrapper.find(`time[dateTime="${defaultFictionHeader.publishedDate}"]`)).toHaveLength(1);
     expect(wrapper.contains(defaultFictionHeader.displayedPublishedDate)).toBe(true);
   });
 });

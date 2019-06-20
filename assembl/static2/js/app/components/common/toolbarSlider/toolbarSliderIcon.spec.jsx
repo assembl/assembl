@@ -2,7 +2,7 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import ToolbarSliderIcon from './toolbarSliderIcon';
@@ -27,6 +27,6 @@ describe('<ToolbarSliderIcon /> - with shallow', () => {
 
   it('should render the value in a paragraph with className passed as props', () => {
     wrapper.setProps({ textClassName: 'classNamePassed' });
-    expect(wrapper.find('p [className="classNamePassed"]')).toHaveLength(1);
+    expect(wrapper.find('p[className="classNamePassed"]')).toHaveLength(1);
   });
 });

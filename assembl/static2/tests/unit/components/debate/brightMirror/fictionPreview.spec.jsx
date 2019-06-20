@@ -2,7 +2,7 @@
 import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import FictionPreview from '../../../../../js/app/components/debate/brightMirror/fictionPreview';
 import EditPostButton from '../../../../../js/app/components/debate/common/editPostButton';
@@ -44,11 +44,11 @@ describe('<FictionPreview /> - with shallow', () => {
     });
 
     it('should render author name', () => {
-      expect(wrapper.find('span [className="author"]')).toHaveLength(1);
+      expect(wrapper.find('span[className="author"]')).toHaveLength(1);
     });
 
     it('should render creation date', () => {
-      expect(wrapper.find('span [className="published-date"]')).toHaveLength(1);
+      expect(wrapper.find('span[className="published-date"]')).toHaveLength(1);
     });
 
     it('should render edit button when userCanEdit is true', () => {
@@ -74,7 +74,7 @@ describe('<FictionPreview /> - with shallow', () => {
     });
 
     it('should not render draft label', () => {
-      expect(wrapper.find('span [className="draft-label"]')).toHaveLength(0);
+      expect(wrapper.find('span[className="draft-label"]')).toHaveLength(0);
     });
   });
 
@@ -88,7 +88,7 @@ describe('<FictionPreview /> - with shallow', () => {
     });
 
     it('should render draft label', () => {
-      expect(wrapper.find('div [className="draft-label"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="draft-label"]')).toHaveLength(1);
     });
 
     it('should not render share button', () => {

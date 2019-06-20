@@ -10,6 +10,7 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
   >
     <div
       className="max-container background-grey"
+      id="thread-view"
     >
       <div
         className="content-section"
@@ -52,6 +53,7 @@ exports[`ThreadView component should render a TopPostForm 1`] = `
   >
     <div
       className="max-container background-grey"
+      id="thread-view"
     >
       <div
         className="content-section"

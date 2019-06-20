@@ -2,10 +2,16 @@
   font-size: $font-size-xs;
   font-family: $font-family6;
   display: flex;
-  align-items: center;
+  align-items: baseline;
 
   .translate-button {
     margin: 5px;
+    text-transform: uppercase;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
 
@@ -88,6 +94,11 @@
 
     .assembl-icon-check-box-declined:before {
       font-size: 20px;
+    }
+
+    .answer-form-inner .form-group {
+      margin: 13px 0 0;
+      border: 1px solid $first-color-light;
     }
   }
 
@@ -186,6 +197,13 @@ $deleted-post-border: 1px solid $light-grey !default;
 }
 
 .posts {
+  .post-body-title {
+    font-family: $font-family;
+    text-transform: uppercase;
+    font-size: $font-size-sm;
+    margin-top: 10px;
+  }
+
   &.deleted-post {
     .body {
       font-style: italic;
@@ -215,15 +233,48 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .post-left {
-    width: 93%;
-    padding: 40px;
+    width: 95%;
+    padding: 20px 10px 20px 30px;
+
+    .post-header {
+      align-items: center;
+      display: flex;
+    }
+
+    .meta {
+      display: flex;
+      margin: 10px 0 0 5px;
+
+      .author .assembl-icon-back-arrow {
+        display: inline-block;
+        transform: scaleX(-1);
+        font-size: $font-size-xs;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+
+      .avatar-logo {
+        margin-right: 5px;
+      }
+
+      .published-date {
+        font-size: $font-size-xs;
+        font-weight: 300;
+        line-height: 1.91;
+        margin-left: 5px;
+
+        &:before {
+          content: '-';
+          margin-right: 5px;
+        }
+      }
+    }
   }
 
   .post-right {
     width: 42px;
     position: relative;
     text-align: center;
-    background-color: $first-color-light;
 
     .answers {
       display: none;
@@ -240,48 +291,19 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
   }
 
-  .translate {
-    padding: 20px 0 0;
-  }
-
   .box {
     border: none;
     margin: 0 auto;
-    max-width: 600px;
+    max-width: $post-width;
     position: relative;
     text-align: left;
-    padding: 0;
+    padding: 0 0 10px 0;
 
     .label {
       display: block;
       white-space: normal;
       text-align: left;
       line-height: 12px;
-    }
-  }
-
-  .profileLine {
-    width: 109%;
-
-    img {
-      vertical-align: text-bottom;
-    }
-
-    .creator {
-      color: $second-color;
-      padding: 0 0 0 10px;
-
-      &.pending {
-        color: $orange;
-        text-transform: uppercase;
-      }
-    }
-
-    .date {
-      color: $grey;
-      font-size: $font-size-xs;
-      padding: 0 0 0 10px;
-      font-family: $font-family4;
     }
   }
 
@@ -340,9 +362,13 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .answer-form {
-    background-color: $first-color-light;
+    width: 90%;
+    margin: auto;
+    background-color: $white;
     border-top: 2px solid $white;
-    padding: 40px;
+    border: 1px solid $first-color-light;
+    box-shadow: 3px 4px 4px 0 $first-color-light;
+    padding: 30px;
 
     .assembl-icon-back-arrow {
       &:before {
@@ -350,9 +376,11 @@ $deleted-post-border: 1px solid $light-grey !default;
       }
     }
 
-    .answer-form-inner {
-      margin: 13px;
+    .DraftEditor-root {
+      border: solid 2px $first-color;
+    }
 
+    .answer-form-inner {
       .editor-label {
         padding-top: 16px;
       }
@@ -379,12 +407,20 @@ $deleted-post-border: 1px solid $light-grey !default;
   }
 
   .collapsed-answer-form {
-    background-color: $first-color-light;
-    border-top: 2px solid $white;
+    background-color: $white;
     padding: 0 20px;
+
+    .rich-text-editor {
+      margin-top: 0;
+    }
 
     .editor-header {
       display: none;
+    }
+
+    .form-group {
+      border: $first-color solid 1px;
+      box-shadow: 1px 1px $first-color;
     }
 
     .public-DraftEditor-content {
@@ -558,8 +594,6 @@ $deleted-post-border: 1px solid $light-grey !default;
       }
 
       .post-right {
-        border: 1px solid $first-color-light;
-
         .post-actions {
           .post-icons {
             border-top: none;
@@ -666,6 +700,7 @@ $deleted-post-border: 1px solid $light-grey !default;
 
     .translate {
       padding: 20px 20px 0 25px;
+      display: flex;
     }
 
     .statistics-container {
@@ -797,10 +832,6 @@ $deleted-post-border: 1px solid $light-grey !default;
         }
       }
 
-      .answer-form-inner {
-        margin: 13px 0 0;
-      }
-
       .assembl-icon-back-arrow {
         padding: 0;
       }
@@ -813,6 +844,14 @@ $deleted-post-border: 1px solid $light-grey !default;
 }
 
 @media screen and (max-width: $screen-xxs-max) {
+  .translate {
+    flex-direction: column;
+
+    .translate-button {
+      margin: 0;
+    }
+  }
+
   .posts {
     .post-right {
       .answers {
@@ -820,6 +859,39 @@ $deleted-post-border: 1px solid $light-grey !default;
         display: block;
         padding: 6px 0 0 17px;
       }
+    }
+
+    .post-left {
+      padding: 20px 10px 20px 10px;
+
+      .circle-avatar {
+        display: none;
+      }
+
+      .meta {
+        flex-direction: column;
+        margin: 0;
+
+        .author {
+          word-wrap: break-word;
+        }
+
+        .published-date {
+          margin-left: 0;
+        }
+
+        .published-date:before {
+          display: none;
+        }
+      }
+    }
+
+    .answer-form {
+      width: 100%;
+    }
+
+    .post-body-title {
+      font-size: $font-size-s;
     }
   }
 

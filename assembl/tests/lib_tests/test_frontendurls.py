@@ -14,7 +14,7 @@ def test_get_frontend_route_post(phases, discussion, idea_with_en_fr, reply_post
         'slug': discussion.slug,
         'phase': thread.identifier,
         'themeId': idea_id,
-        'element': element
+        'postId': element
     }
     resp = furl.get_frontend_url(route_name, **options)
     expected = "/{slug}/debate/{phase}/theme/{themeId}/#{element}".format(
@@ -70,7 +70,7 @@ def test_get_route_react_frontend_post(phases, discussion, test_webrequest,
     options = {
         'phase': thread.identifier,
         'themeId': idea_id,
-        'element': element
+        'postId': element
     }
 
     expected = "/{slug}/debate/{phase}/theme/{theme_id}/#{element}"\
@@ -92,7 +92,7 @@ def test_get_route_react_frontend_post_no_element(
     options = {
         'phase': thread.identifier,
         'themeId': idea_id,
-        'element': ''
+        'postId': ''
     }
 
     expected = "/{slug}/debate/{phase}/theme/{theme_id}/#{element}"\

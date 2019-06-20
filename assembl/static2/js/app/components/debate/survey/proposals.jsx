@@ -19,6 +19,7 @@ class Proposals extends React.Component {
   render() {
     const {
       hasPendingPosts,
+      identifier,
       isPhaseCompleted,
       questionIndex,
       questionId,
@@ -59,13 +60,15 @@ class Proposals extends React.Component {
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {postsToShow.map((post, index) => (
               <Post
-                themeId={themeId}
                 id={post.node.id}
+                identifier={identifier}
+                isPhaseCompleted={isPhaseCompleted}
+                key={post.node.id}
                 originalLocale={post.node.originalLocale}
                 postIndex={index}
                 questionId={questionId}
-                key={post.node.id}
-                isPhaseCompleted={isPhaseCompleted}
+                questionIndex={questionIndex}
+                themeId={themeId}
               />
             ))}
           </div>

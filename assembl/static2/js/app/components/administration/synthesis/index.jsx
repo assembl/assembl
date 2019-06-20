@@ -26,6 +26,7 @@ import LanguageMenu from '../languageMenu';
 import { browserHistory } from '../../../router';
 import { get as getLink } from '../../../utils/routeMap';
 import { PublicationStates } from '../../../constants';
+import { editorStateIsEmpty } from '../../../utils/draftjs';
 
 type Props = {
   client: ApolloClient,
@@ -63,6 +64,8 @@ class CreateSynthesisForm extends React.Component<Props> {
         mutators={{ ...arrayMutators }}
         render={({ form, handleSubmit, initialValues, pristine, submitting }) => {
           const isDraft = initialValues.publicationState === PublicationStates.DRAFT;
+          const bodyStates = form.getState().values.body;
+          const bodyHasText = !!Object.values(bodyStates).find((editorState: EditorState) => !editorStateIsEmpty(editorState));
           return (
             <div className="administration max-container synthesis-form">
               <FormWithRouter handleSubmit={handleSubmit} pristine={pristine} submitting={submitting}>
@@ -114,7 +117,7 @@ class CreateSynthesisForm extends React.Component<Props> {
                         <SubmitButton
                           name="post"
                           label={isDraft ? 'debate.syntheses.saveAndPost' : 'debate.syntheses.save'}
-                          disabled={(pristine && !isDraft) || submitting}
+                          disabled={(pristine && !isDraft) || submitting || !bodyHasText}
                           onClick={() => {
                             form.change('publicationState', PublicationStates.PUBLISHED);
                           }}

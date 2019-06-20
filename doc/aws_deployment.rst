@@ -18,7 +18,7 @@ The build machine is hosted within the Sandbox VPC (virtual private cloud). This
 	# Build machine
 	ssh ubuntu@<build-machine-ip>
 
-In order to get the IP addresses above, please consult with the AWS EC2 instances console. The build machine's name is currently `Temp_assembl_template`. Currently, the IP address is `10.0.16.56`. Please consult with the console, as this private IP address can change at any time.
+In order to get the IP addresses above, please consult with the AWS EC2 instances console. The build machine's name is currently `Build Machine`. Currently, the IP address is `10.0.16.56`. Please consult with the console, as this private IP address can change at any time.
 
 Build
 -----
@@ -29,11 +29,12 @@ The build machine is similar to an assembl box, with the difference of having th
 	sudo su - assembl_user
 	cd assembl
 	# If you rebased invoke recently
-	git fetch; git reset --hard origin/invoke
+	git fetch; git reset --hard origin/develop
 	# If it was just regular series of commits
 	git pull  # Default is invoke
 	rm -rf wheelhouse
 	rm -rf build
+	rm -rf dist # if exists
 	source venv/bin/activate
 
 	# Get the latest theme
@@ -102,6 +103,19 @@ Fully Manual
 
 .. code-block:: sh
 	inv deploy.install-wheel
+	
+	# if you made LOCAL updates on the account_data.yaml, ensure to save
+	# your changes to S3
+	
+	# get latest config from s3
+	# for ASG:
+	inv deploy.get-aws-invoke-yaml
+	# for celery
+	inv deploy.get-aws-invoke-yaml --celery
+	
+	# update configs
+	inv deploy.create-local-ini
+	inv deploy.generate-nginx-conf
 
 	# restart server yourself
 	supervisorctl restart prod:

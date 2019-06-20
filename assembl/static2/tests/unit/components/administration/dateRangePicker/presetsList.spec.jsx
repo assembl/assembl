@@ -1,6 +1,6 @@
 import React from 'react';
 import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import { datePickerPresets } from '../../../../../js/app/constants';
 import { getFullDebatePreset } from '../../../../../js/app/components/form/utils';

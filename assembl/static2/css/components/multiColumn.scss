@@ -4,7 +4,32 @@ $header-margin: 30px;
 $synthesis-padding: 15px;
 $column-synthesis-height: 320px;
 
+#multi-column {
+  .idea {
+    .level {
+      margin: auto;
+    }
+  }
+
+  .column-tree {
+    .post-left {
+      padding: 20px 10px 20px 10px;
+      width: 90%;
+    }
+  }
+
+  .synthesis {
+    .post-left {
+      width: 90%;
+    }
+  }
+}
+
 .column-view {
+  .level {
+    margin: auto;
+  }
+
   .synthesis {
     border: none;
     padding: $synthesis-padding;
@@ -16,6 +41,10 @@ $column-synthesis-height: 320px;
 
     .post-left {
       padding: 0;
+    }
+
+    .post-right {
+      background-color: $white;
     }
   }
 
@@ -163,6 +192,7 @@ $column-synthesis-height: 320px;
 
     .level-0 {
       width: auto;
+      margin: 0;
     }
   }
 }
@@ -199,6 +229,7 @@ $column-synthesis-height: 320px;
 
 .column-synthesis {
   .insert-box {
+    border: none;
     height: 100%;
 
     .insert-content {

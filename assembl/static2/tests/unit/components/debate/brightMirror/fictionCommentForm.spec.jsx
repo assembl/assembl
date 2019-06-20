@@ -2,7 +2,7 @@
 import React from 'react';
 // import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 // Components imports
 import FictionCommentForm from '../../../../../js/app/components/debate/brightMirror/fictionCommentForm';
 
@@ -42,16 +42,16 @@ describe('<FictionCommentForm /> - with shallow', () => {
 
     it('should render one TextareaAutosize with value', () => {
       expect(
-        wrapper.find('TextareaAutosize [value="Life was like a box of chocolates. You never know what you\'re gonna get."]')
+        wrapper.find('TextareaAutosize[value="Life was like a box of chocolates. You never know what you\'re gonna get."]')
       ).toHaveLength(1);
     });
 
     it('should render one cancel Button', () => {
-      expect(wrapper.find('Button [className="cancel"]')).toHaveLength(1);
+      expect(wrapper.find('Button[className="cancel"]')).toHaveLength(1);
     });
 
     it('should render one submit Button', () => {
-      expect(wrapper.find('Button [className="submit"]')).toHaveLength(1);
+      expect(wrapper.find('Button[className="submit"]')).toHaveLength(1);
     });
   });
 
@@ -70,7 +70,7 @@ describe('<FictionCommentForm /> - with shallow', () => {
     });
 
     it('should render one TextareaAutosize', () => {
-      expect(wrapper.find('TextareaAutosize [value=""]')).toHaveLength(1);
+      expect(wrapper.find('TextareaAutosize[value=""]')).toHaveLength(1);
     });
 
     describe('when the focus is not on the textarea', () => {
@@ -79,11 +79,11 @@ describe('<FictionCommentForm /> - with shallow', () => {
       });
 
       it('should render one cancel Button', () => {
-        expect(wrapper.find('Button [className="cancel"]')).toHaveLength(0);
+        expect(wrapper.find('Button[className="cancel"]')).toHaveLength(0);
       });
 
       it('should render one submit Button', () => {
-        expect(wrapper.find('Button [className="submit"]')).toHaveLength(0);
+        expect(wrapper.find('Button[className="submit"]')).toHaveLength(0);
       });
     });
 
@@ -93,11 +93,11 @@ describe('<FictionCommentForm /> - with shallow', () => {
       });
 
       it('should render one cancel Button', () => {
-        expect(wrapper.find('Button [className="cancel"]')).toHaveLength(1);
+        expect(wrapper.find('Button[className="cancel"]')).toHaveLength(1);
       });
 
       it('should render one submit Button', () => {
-        expect(wrapper.find('Button [className="submit"]')).toHaveLength(1);
+        expect(wrapper.find('Button[className="submit"]')).toHaveLength(1);
       });
 
       it('should render one enabled submit button when comment is filled', () => {
@@ -106,11 +106,11 @@ describe('<FictionCommentForm /> - with shallow', () => {
           commentTextareaValue: 'Qui sunt cumque.'
         };
         wrapper.setState({ ...fictionCommentFormState });
-        expect(wrapper.find('Button [className="submit"] [disabled=false]')).toHaveLength(1);
+        expect(wrapper.find('Button[className="submit"][disabled=false]')).toHaveLength(1);
       });
 
       it('should render one disabled submit button when comment is empty', () => {
-        expect(wrapper.find('Button [className="submit"] [disabled=true]')).toHaveLength(1);
+        expect(wrapper.find('Button[className="submit"][disabled=true]')).toHaveLength(1);
       });
 
       it('should render one submit button that can be clicked when comment is typed', () => {
@@ -120,7 +120,7 @@ describe('<FictionCommentForm /> - with shallow', () => {
           commentTextareaValue: 'Qui sunt cumque.'
         };
         wrapper.setState({ ...fictionCommentFormState });
-        wrapper.find('Button [className="submit"]').simulate('mousedown');
+        wrapper.find('Button[className="submit"]').simulate('mousedown');
 
         expect(spy).toHaveBeenCalledTimes(1);
       });
@@ -133,7 +133,7 @@ describe('<FictionCommentForm /> - with shallow', () => {
         };
 
         wrapper.setState({ ...fictionCommentFormState });
-        wrapper.find('Button [className="cancel"]').simulate('mousedown');
+        wrapper.find('Button[className="cancel"]').simulate('mousedown');
 
         expect(spy).toHaveBeenCalledTimes(1);
         expect(wrapper.state().commentTextareaValue).toEqual('');
@@ -142,11 +142,11 @@ describe('<FictionCommentForm /> - with shallow', () => {
 
     describe('when the focus is not on the textarea', () => {
       it('should render one cancel Button', () => {
-        expect(wrapper.find('Button [className="cancel"]')).toHaveLength(0);
+        expect(wrapper.find('Button[className="cancel"]')).toHaveLength(0);
       });
 
       it('should render one submit Button', () => {
-        expect(wrapper.find('Button [className="submit"]')).toHaveLength(0);
+        expect(wrapper.find('Button[className="submit"]')).toHaveLength(0);
       });
     });
   });

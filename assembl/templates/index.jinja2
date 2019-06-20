@@ -106,11 +106,6 @@
       {% set userId = 'system.Everyone' %}
     {% endif %}
 
-    {% if NODE_ENV != 'development' %}
-        <script src="{{REACT_URL}}/build/searchv1.{{search_hash}}.js"></script>
-    {% else %}
-        <script src="{{REACT_URL}}/build/searchv1.js"></script>
-    {% endif %}
     <script type="text/javascript">start_application = true;</script>
     <script type="application/json" id="users-json">{{ discussion.get_all_agents_preload(user) |safe }}</script>
     <script type="application/json" id="inheritance-json">{{ discussion.get_json_inheritance_for('User', 'Idea', 'IdeaLink', 'Post', 'Widget') |safe }}</script>

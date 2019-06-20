@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import SuggestionContainer from './suggestionContainer';
@@ -27,11 +27,11 @@ describe('<SuggestionContainer /> - with shallow', () => {
     });
 
     it('should render a title', () => {
-      expect(wrapper.find('div [className="title"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="title"]')).toHaveLength(1);
     });
 
     it('should render a list of 5 suggestions', () => {
-      expect(wrapper.find('div [className="suggestion-list"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="suggestion-list"]')).toHaveLength(1);
       expect(wrapper.find('span')).toHaveLength(5);
     });
   });
@@ -47,15 +47,15 @@ describe('<SuggestionContainer /> - with shallow', () => {
     });
 
     it('should render a title', () => {
-      expect(wrapper.find('div [className="title"]').text()).toEqual('custom-title');
+      expect(wrapper.find('div[className="title"]').text()).toEqual('custom-title');
     });
 
     it('should render a custom-prefix-container element', () => {
-      expect(wrapper.find('div [className="custom-prefix-container"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="custom-prefix-container"]')).toHaveLength(1);
     });
 
     it('should render a custom-prefix-list element', () => {
-      expect(wrapper.find('div [className="custom-prefix-list"]')).toHaveLength(1);
+      expect(wrapper.find('div[className="custom-prefix-list"]')).toHaveLength(1);
     });
   });
 });

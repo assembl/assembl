@@ -29,10 +29,10 @@ class ProfileLine extends React.PureComponent<Props> {
     const userNameClasses = classnames('creator', userNameModerationClasses);
     return (
       <div className="profileLine">
-        <div className="inline">
-          <AvatarImage userId={userId} userName={userName} />
-        </div>
-        <div className="user">
+        <div className="baseline-align-flex">
+          <div>
+            <AvatarImage userId={userId} userName={userName} />
+          </div>
           <div className={userNameClasses}>{userName}</div>
           {creationDate &&
             locale && (

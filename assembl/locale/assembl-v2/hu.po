@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2018-06-14T14:06:30.001Z\n"
+"POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -12,6 +12,13 @@ msgstr ""
 "X-Generator: Poedit 2.0.7\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#. [accept]
+#. defaultMessage is:
+#. Accept
+#: messages.json
+msgid "accept"
+msgstr ""
+
 #. [accountDeleted]
 #. defaultMessage is:
 #. Your account has been successfully deleted
@@ -19,6 +26,14 @@ msgstr ""
 #, fuzzy
 msgid "accountDeleted"
 msgstr "A fiókját létrehoztuk"
+
+#. [administration.activateModeration]
+#. defaultMessage is:
+#. Activate the moderation
+#: messages.json
+#, fuzzy
+msgid "administration.activateModeration"
+msgstr "A beszélgetés szerkesztése"
 
 #. [administration.addQuestion]
 #. defaultMessage is:
@@ -29,7 +44,7 @@ msgstr "Adjon meg egy kérdést"
 
 #. [administration.addThematic]
 #. defaultMessage is:
-#. Add a theme
+#. Add a level %{level} theme
 #: messages.json
 msgid "administration.addThematic"
 msgstr "Adjon meg egy témát"
@@ -83,6 +98,14 @@ msgstr "Legalább egy szavazási modult be kell állítania."
 #. You need to configure a vote session.
 #: messages.json
 msgid "administration.configureVoteSession"
+msgstr "Legalább egy szavazást be kell állítania."
+
+#. [administration.configureVoteSessionButton]
+#. defaultMessage is:
+#. Configure a vote session
+#: messages.json
+#, fuzzy
+msgid "administration.configureVoteSessionButton"
 msgstr "Legalább egy szavazást be kell állítania."
 
 #. [administration.confirmDeleteThematic]
@@ -146,12 +169,28 @@ msgstr ""
 msgid "administration.defineGaugeNumer"
 msgstr "A sablonok számának meghatározása"
 
+#. [administration.deleteAssociatedFile]
+#. defaultMessage is:
+#. Delete the associated file
+#: messages.json
+#, fuzzy
+msgid "administration.deleteAssociatedFile"
+msgstr "A kérdés törlése"
+
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
 #: messages.json
 msgid "administration.deleteQuestion"
 msgstr "A kérdés törlése"
+
+#. [administration.deleteSubThematicDisabled]
+#. defaultMessage is:
+#. You cannot delete a theme with sub-thematics.
+#: messages.json
+#, fuzzy
+msgid "administration.deleteSubThematicDisabled"
+msgstr "A téma törlése"
 
 #. [administration.deleteThematic]
 #. defaultMessage is:
@@ -169,7 +208,7 @@ msgstr "A témához társított kép törlése"
 
 #. [administration.discussion.0]
 #. defaultMessage is:
-#. Languages of the Discussion
+#. Discussion preferences
 #: messages.json
 msgid "administration.discussion.0"
 msgstr "A beszélgetés nyelvei"
@@ -187,6 +226,38 @@ msgstr "Általános szerződési feltételek és jogi nyilatkozat"
 #: messages.json
 #, fuzzy
 msgid "administration.discussion.4"
+msgstr "A beszélgetés nyelvei"
+
+#. [administration.discussion.5]
+#. defaultMessage is:
+#. Edition of the phases
+#: messages.json
+#, fuzzy
+msgid "administration.discussion.5"
+msgstr "A beszélgetés nyelvei"
+
+#. [administration.discussion.6]
+#. defaultMessage is:
+#. Personalize the interface
+#: messages.json
+#, fuzzy
+msgid "administration.discussion.6"
+msgstr "A beszélgetés nyelvei"
+
+#. [administration.discussionPreferences.debateLogoLabel]
+#. defaultMessage is:
+#. Discussion logo
+#: messages.json
+#, fuzzy
+msgid "administration.discussionPreferences.debateLogoLabel"
+msgstr "Videók/Diák"
+
+#. [administration.discussionSlug]
+#. defaultMessage is:
+#. Slug of the debate
+#: messages.json
+#, fuzzy
+msgid "administration.discussionSlug"
 msgstr "A beszélgetés nyelvei"
 
 #. [administration.down]
@@ -210,6 +281,30 @@ msgstr "A beszélgetés szerkesztése"
 msgid "administration.exclusive"
 msgstr "Exkluzív"
 
+#. [administration.export.anonymity]
+#. defaultMessage is:
+#. Anonymity
+#: messages.json
+#, fuzzy
+msgid "administration.export.anonymity"
+msgstr "A vitára vonatkozó adatok exportálása"
+
+#. [administration.export.anonymous]
+#. defaultMessage is:
+#. Make the data anonymous
+#: messages.json
+#, fuzzy
+msgid "administration.export.anonymous"
+msgstr "Exportálás"
+
+#. [administration.export.contributions]
+#. defaultMessage is:
+#. Contributions of the participants
+#: messages.json
+#, fuzzy
+msgid "administration.export.contributions"
+msgstr "A vitára vonatkozó adatok exportálása"
+
 #. [administration.export.defaultAnnotation]
 #. defaultMessage is:
 #. You can export all of the data by clicking on the export button
@@ -225,20 +320,28 @@ msgstr "Valamennyi adatot exportálhatja, ha az „exportálás” gombra kattin
 msgid "administration.export.defaultSectionTitle"
 msgstr "Adatok exportálása"
 
+#. [administration.export.endDate]
+#. defaultMessage is:
+#. End date
+#: messages.json
+#, fuzzy
+msgid "administration.export.endDate"
+msgstr "A vitára vonatkozó adatok exportálása"
+
+#. [administration.export.exportDate]
+#. defaultMessage is:
+#. Export date
+#: messages.json
+#, fuzzy
+msgid "administration.export.exportDate"
+msgstr "A vitára vonatkozó adatok exportálása"
+
 #. [administration.export.link]
 #. defaultMessage is:
 #. Export
 #: messages.json
 msgid "administration.export.link"
 msgstr "Exportálás"
-
-#. [administration.export.multicolumnAnnotation]
-#. defaultMessage is:
-#. You can export all the Multi Column data by clicking on the Export button
-#: messages.json
-#, fuzzy
-msgid "administration.export.multicolumnAnnotation"
-msgstr "Valamennyi adatot exportálhatja, ha az „exportálás” gombra kattint"
 
 #. [administration.export.noExportLanguage]
 #. defaultMessage is:
@@ -247,14 +350,63 @@ msgstr "Valamennyi adatot exportálhatja, ha az „exportálás” gombra kattin
 msgid "administration.export.noExportLanguage"
 msgstr "Hagyja az üzeneteket az eredeti nyelvükön"
 
-#. [administration.export.surveyAnnotation]
+#. [administration.export.presets.fullDebate]
 #. defaultMessage is:
-#. You can export all the survey module data by clicking on the Export button
+#. All of the debate
 #: messages.json
-msgid "administration.export.surveyAnnotation"
+#, fuzzy
+msgid "administration.export.presets.fullDebate"
+msgstr "A vitára vonatkozó adatok exportálása"
+
+#. [administration.export.presets.lastMonth]
+#. defaultMessage is:
+#. Last month
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.lastMonth"
 msgstr ""
 "Az „exportálás” gombra kattintva exportálhatja a „felmérés” mód valamennyi "
 "adatát"
+
+#. [administration.export.presets.lastWeek]
+#. defaultMessage is:
+#. Last week
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.lastWeek"
+msgstr "A vitára vonatkozó adatok exportálása"
+
+#. [administration.export.presets.phase]
+#. defaultMessage is:
+#. Phase %{count}
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.phase"
+msgstr "A vitára vonatkozó adatok exportálása"
+
+#. [administration.export.presets.placeHolder]
+#. defaultMessage is:
+#. Presets
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.placeHolder"
+msgstr "A vitára vonatkozó adatok exportálása"
+
+#. [administration.export.presets.today]
+#. defaultMessage is:
+#. Today
+#: messages.json
+#, fuzzy
+msgid "administration.export.presets.today"
+msgstr "A vitára vonatkozó adatok exportálása"
+
+#. [administration.export.startDate]
+#. defaultMessage is:
+#. Start date
+#: messages.json
+#, fuzzy
+msgid "administration.export.startDate"
+msgstr "A vitára vonatkozó adatok exportálása"
 
 #. [administration.export.taxonomyAnnotation]
 #. defaultMessage is:
@@ -274,16 +426,6 @@ msgstr ""
 msgid "administration.export.taxonomySectionTitle"
 msgstr "Adatok exportálása"
 
-#. [administration.export.threadAnnotation]
-#. defaultMessage is:
-#. You can export all the thread module data by clicking on the Export butotn
-#: messages.json
-#, fuzzy
-msgid "administration.export.threadAnnotation"
-msgstr ""
-"Az „exportálás” gombra kattintva exportálhatja a „felmérés” mód valamennyi "
-"adatát"
-
 #. [administration.export.title]
 #. defaultMessage is:
 #. Export the debate data
@@ -298,14 +440,33 @@ msgstr "A vitára vonatkozó adatok exportálása"
 msgid "administration.export.translateTheMessagesIn"
 msgstr "Az üzenetek lefordítása az alábbi nyelvre:"
 
-#. [administration.export.voteSessionAnnotation]
+#. [administration.export.translation]
 #. defaultMessage is:
-#. You can export all the vote session data by clicking on the Export button
+#. Translation of the data
 #: messages.json
-msgid "administration.export.voteSessionAnnotation"
+#, fuzzy
+msgid "administration.export.translation"
+msgstr ""
+"Az „exportálás” gombra kattintva exportálhatja a „felmérés” mód valamennyi "
+"adatát"
+
+#. [administration.export.vote.extractCsvVoters]
+#. defaultMessage is:
+#. Export vote details for each user
+#: messages.json
+#, fuzzy
+msgid "administration.export.vote.extractCsvVoters"
 msgstr ""
 "A szavazásra vonatkozó adatokat exportálhatja, ha az „exportálás” gombra "
 "kattint"
+
+#. [administration.export.vote.voteResultsCsv]
+#. defaultMessage is:
+#. Export general data for the vote module
+#: messages.json
+#, fuzzy
+msgid "administration.export.vote.voteResultsCsv"
+msgstr "A vitára vonatkozó adatok exportálása"
 
 #. [administration.gauge]
 #. defaultMessage is:
@@ -358,6 +519,14 @@ msgstr "Dönthet úgy, hogy egy vagy több sablonja legyen"
 #: messages.json
 msgid "administration.gaugeVoteInstructions"
 msgstr "A sablon alapján történő szavazásra vonatkozó utasítások"
+
+#. [administration.goBackToThematic]
+#. defaultMessage is:
+#. Go back to thematic
+#: messages.json
+#, fuzzy
+msgid "administration.goBackToThematic"
+msgstr "Adjon meg egy témát"
 
 #. [administration.headerTitle]
 #. defaultMessage is:
@@ -470,6 +639,34 @@ msgstr ""
 msgid "administration.helpers.landingPage.video"
 msgstr ""
 
+#. [administration.helpers.surveyQuestion]
+#. defaultMessage is:
+#. The survey module is composed of one question and a response field dedicated to the participant. You can add questions by clicking on the + icon below.
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.surveyQuestion"
+msgstr "A kérdés törlése"
+
+#. [administration.helpers.timelinePhases]
+#. defaultMessage is:
+#. Choose a description and an image for each phase of the debate displayed in the landing page
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.timelinePhases"
+msgstr ""
+"Választhat, hogy a résztvevő egyetlen (exkluzív) szavazatot adhat le, vagy "
+"javaslatonként több szavazatot."
+
+#. [administration.helpers.timelineTitle]
+#. defaultMessage is:
+#. Configure the title and the sub-title of the timeline section displayed in the landing page
+#: messages.json
+#, fuzzy
+msgid "administration.helpers.timelineTitle"
+msgstr ""
+"Választhat, hogy a résztvevő egyetlen (exkluzív) szavazatot adhat le, vagy "
+"javaslatonként több szavazatot."
+
 #. [administration.helpers.tokenCategoryNumber]
 #. defaultMessage is:
 #. Select the number of different token types for this vote
@@ -486,24 +683,6 @@ msgstr ""
 "A súlyozott szavazásos modul céljától függően ösztönözze arra a "
 "résztvevőket, hogy cselekedjenek."
 
-#. [administration.helpers.voteSessionHeader]
-#. defaultMessage is:
-#. The top page header must contain an image and a title. The subtitle is optional.
-#: messages.json
-msgid "administration.helpers.voteSessionHeader"
-msgstr ""
-"A kezdőlap fejlécének tartalmaznia kell egy képet és egy címet. Az alcím "
-"opcionális."
-
-#. [administration.helpers.voteSessionInstructions]
-#. defaultMessage is:
-#. The instructions section must contain a title and a description that will guide the participants for their contribution.
-#: messages.json
-msgid "administration.helpers.voteSessionInstructions"
-msgstr ""
-"Az utasításokra vonatkozó résznek tartalmaznia kell a címet és a leírást, "
-"amely iránymutatást ad a résztvevőknek a hozzájárulásuk során."
-
 #. [administration.helpers.voteSessionProposalSection]
 #. defaultMessage is:
 #. The proposals section is introduced by a title. You define the title based on the proposal content.
@@ -513,14 +692,13 @@ msgstr ""
 "A javaslatokra vonatkozó részt a cím vezeti be. A címet a javaslat tartalma "
 "alapján Ön határozhatja meg."
 
-#. [administration.imageRequirements]
+#. [administration.informationOfTheDebate]
 #. defaultMessage is:
-#. The image must have a height of 480 px and a width of 1280px. Its size has to be under 1 MB.
+#. Information of the debate
 #: messages.json
-msgid "administration.imageRequirements"
-msgstr ""
-"A képnek legalább 480 px magasnak és 1280 px szélesnek kell lennie. A kép "
-"mérete nem haladhatja meg az 1 MB-t."
+#, fuzzy
+msgid "administration.informationOfTheDebate"
+msgstr "* A mezők kitöltése kötelező."
 
 #. [administration.instructions]
 #. defaultMessage is:
@@ -528,6 +706,14 @@ msgstr ""
 #: messages.json
 msgid "administration.instructions"
 msgstr "Az utasításokra vonatkozó rész beállítása"
+
+#. [administration.invalidSlug]
+#. defaultMessage is:
+#. Special characters are not allowed
+#: messages.json
+#, fuzzy
+msgid "administration.invalidSlug"
+msgstr "Minimális érték"
 
 #. [administration.landingPage.header.buttonLabel]
 #. defaultMessage is:
@@ -539,9 +725,45 @@ msgstr ""
 "Kezdőlap fejléce. Tartalmazza a konzultáció címét és alcímét, valamint a "
 "konzultációra irányító gombot."
 
+#. [administration.landingPage.header.dateDescription]
+#. defaultMessage is:
+#. Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.dateDescription"
+msgstr ""
+"Kezdőlap fejléce. Tartalmazza a konzultáció címét és alcímét, valamint a "
+"konzultációra irányító gombot."
+
+#. [administration.landingPage.header.dateLabel]
+#. defaultMessage is:
+#. Enter the dates of the the debate that appear in the header.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.dateLabel"
+msgstr "A modulok kezelése"
+
+#. [administration.landingPage.header.endDate]
+#. defaultMessage is:
+#. To
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.endDate"
+msgstr "A modulok kezelése"
+
+#. [administration.landingPage.header.endDateError]
+#. defaultMessage is:
+#. The end date cannot be after the start date
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.endDateError"
+msgstr ""
+"Válassza ki a modulokat, amelyeket a kezdőlapon szeretne látni, és adja meg "
+"a helyzetüket."
+
 #. [administration.landingPage.header.headerDescription]
 #. defaultMessage is:
-#. The image must have a height of 450px and a width of 1280px. The weight must not exceed 1 MB.
+#. The image must have a height of 480px and a width of 1480px. The weight must not exceed 300ko.
 #: messages.json
 #, fuzzy
 msgid "administration.landingPage.header.headerDescription"
@@ -579,6 +801,16 @@ msgstr ""
 "Kezdőlap fejléce. Tartalmazza a konzultáció címét és alcímét, valamint a "
 "konzultációra irányító gombot."
 
+#. [administration.landingPage.header.logoHelper]
+#. defaultMessage is:
+#. Choose the logo inside of the header
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.logoHelper"
+msgstr ""
+"Válassza ki a modulokat, amelyeket a kezdőlapon szeretne látni, és adja meg "
+"a helyzetüket."
+
 #. [administration.landingPage.header.logoImage]
 #. defaultMessage is:
 #. Choose the header logo
@@ -589,12 +821,44 @@ msgstr ""
 "Kezdőlap fejléce. Tartalmazza a konzultáció címét és alcímét, valamint a "
 "konzultációra irányító gombot."
 
+#. [administration.landingPage.header.startDate]
+#. defaultMessage is:
+#. From
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.startDate"
+msgstr "A modulok kezelése"
+
+#. [administration.landingPage.header.startDateError]
+#. defaultMessage is:
+#. The start date cannot be after the end date
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.startDateError"
+msgstr "A modulok kezelése"
+
 #. [administration.landingPage.header.subtitleLabel]
 #. defaultMessage is:
 #. Debate subtitle
 #: messages.json
 #, fuzzy
 msgid "administration.landingPage.header.subtitleLabel"
+msgstr "A modulok kezelése"
+
+#. [administration.landingPage.header.successSave]
+#. defaultMessage is:
+#. The header has been updated successfully!
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.successSave"
+msgstr "A modulokat sikeresen mentette!"
+
+#. [administration.landingPage.header.timePlaceholder]
+#. defaultMessage is:
+#. Optional: Enter the dates of the debate
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.header.timePlaceholder"
 msgstr "A modulok kezelése"
 
 #. [administration.landingPage.header.title]
@@ -621,6 +885,14 @@ msgstr "A modulok kezelése"
 msgid "administration.landingPage.headerSuccessSave"
 msgstr "A modulokat sikeresen mentette!"
 
+#. [administration.landingPage.manageModules.confirmationModal]
+#. defaultMessage is:
+#. Are you sure you want to add a Text & Multimedia module to the landing page?
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.manageModules.confirmationModal"
+msgstr "A modulok kezelése"
+
 #. [administration.landingPage.manageModules.helper]
 #. defaultMessage is:
 #. Choose the modules you want to see in the landing page and their position.
@@ -629,6 +901,22 @@ msgid "administration.landingPage.manageModules.helper"
 msgstr ""
 "Válassza ki a modulokat, amelyeket a kezdőlapon szeretne látni, és adja meg "
 "a helyzetüket."
+
+#. [administration.landingPage.manageModules.textAndMultimedia]
+#. defaultMessage is:
+#. Text & Multimedia
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.manageModules.textAndMultimedia"
+msgstr "A modulok kezelése"
+
+#. [administration.landingPage.manageModules.textAndMultimediaBtn]
+#. defaultMessage is:
+#. Add a Text & Multimedia module
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.manageModules.textAndMultimediaBtn"
+msgstr "A modulok kezelése"
 
 #. [administration.landingPage.manageModules.title]
 #. defaultMessage is:
@@ -643,6 +931,42 @@ msgstr "A modulok kezelése"
 #: messages.json
 msgid "administration.landingPage.successSave"
 msgstr "A modulokat sikeresen mentette!"
+
+#. [administration.landingPage.timeline.image]
+#. defaultMessage is:
+#. Choose the image for this phase
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.timeline.image"
+msgstr ""
+"Kezdőlap fejléce. Tartalmazza a konzultáció címét és alcímét, valamint a "
+"konzultációra irányító gombot."
+
+#. [administration.landingPage.timeline.imageDescription]
+#. defaultMessage is:
+#. The image must have a height of 500px and a width of 400px.
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.timeline.imageDescription"
+msgstr ""
+"Kezdőlap fejléce. Tartalmazza a konzultáció címét és alcímét, valamint a "
+"konzultációra irányító gombot."
+
+#. [administration.landingPage.timeline.sectionTitle]
+#. defaultMessage is:
+#. Configure the title and the subtitle of the section
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.timeline.sectionTitle"
+msgstr "A modulok kezelése"
+
+#. [administration.landingPage.timeline.title]
+#. defaultMessage is:
+#. Timeline on the landing page
+#: messages.json
+#, fuzzy
+msgid "administration.landingPage.timeline.title"
+msgstr "A modulok kezelése"
 
 #. [administration.landingpage]
 #. defaultMessage is:
@@ -666,12 +990,28 @@ msgstr "Adja meg a kívánt nyelvet"
 msgid "administration.legalContents.cookiesPolicyLabel"
 msgstr "Jogi nyilatkozat"
 
+#. [administration.legalContents.legalContentsValidation]
+#. defaultMessage is:
+#. Acceptation of the legal contents for users identified via SSO
+#: messages.json
+#, fuzzy
+msgid "administration.legalContents.legalContentsValidation"
+msgstr "Jogi nyilatkozat"
+
 #. [administration.legalContents.legalNoticeLabel]
 #. defaultMessage is:
 #. Legal notice
 #: messages.json
 #, fuzzy
 msgid "administration.legalContents.legalNoticeLabel"
+msgstr "Jogi nyilatkozat"
+
+#. [administration.legalContents.mandatoryLegalContentsValidation]
+#. defaultMessage is:
+#. Activate the modal to accept legal contents at the first visit.
+#: messages.json
+#, fuzzy
+msgid "administration.legalContents.mandatoryLegalContentsValidation"
 msgstr "Jogi nyilatkozat"
 
 #. [administration.legalContents.privacyPolicyLabel]
@@ -700,6 +1040,14 @@ msgstr ""
 msgid "administration.legalContents.termsAndConditionsLabel"
 msgstr "Általános szerződési feltételek"
 
+#. [administration.legalContents.userGuidelinesLabel]
+#. defaultMessage is:
+#. User guidelines
+#: messages.json
+#, fuzzy
+msgid "administration.legalContents.userGuidelinesLabel"
+msgstr "Jogi nyilatkozat"
+
 #. [administration.maxValue]
 #. defaultMessage is:
 #. Maximum value
@@ -707,19 +1055,28 @@ msgstr "Általános szerződési feltételek"
 msgid "administration.maxValue"
 msgstr "Maximális érték"
 
+#. [administration.menu.configureThematic]
+#. defaultMessage is:
+#. Configure the theme %{index}
+#: messages.json
+#, fuzzy
+msgid "administration.menu.configureThematic"
+msgstr "Biztos, hogy törölni szeretné ezt a témát?"
+
+#. [administration.menu.exportDebateData]
+#. defaultMessage is:
+#. Export the data
+#: messages.json
+#, fuzzy
+msgid "administration.menu.exportDebateData"
+msgstr "Az osztályozások exportálása"
+
 #. [administration.menu.exportTaxonomies]
 #. defaultMessage is:
 #. Export taxonomies
 #: messages.json
 msgid "administration.menu.exportTaxonomies"
 msgstr "Az osztályozások exportálása"
-
-#. [administration.menu.language]
-#. defaultMessage is:
-#. Discussion language
-#: messages.json
-msgid "administration.menu.language"
-msgstr "A beszélgetés nyelve"
 
 #. [administration.menu.legalContents]
 #. defaultMessage is:
@@ -737,11 +1094,27 @@ msgstr "Általános szerződési feltételek és jogi nyilatkozat"
 msgid "administration.menu.manageProfileOptions"
 msgstr "A vitaszekciók szerkesztése"
 
+#. [administration.menu.personalizeInterface]
+#. defaultMessage is:
+#. Personalize the interface
+#: messages.json
+#, fuzzy
+msgid "administration.menu.personalizeInterface"
+msgstr "Általános szerződési feltételek és jogi nyilatkozat"
+
 #. [administration.menu.phase]
 #. defaultMessage is:
 #. Phase %{count} - %{description}
 #: messages.json
 msgid "administration.menu.phase"
+msgstr "%{count} – %{description} szakasz"
+
+#. [administration.menu.preferences]
+#. defaultMessage is:
+#. Discussion preferences
+#: messages.json
+#, fuzzy
+msgid "administration.menu.preferences"
 msgstr "%{count} – %{description} szakasz"
 
 #. [administration.menu.sections]
@@ -751,6 +1124,14 @@ msgstr "%{count} – %{description} szakasz"
 msgid "administration.menu.sections"
 msgstr "A vitaszekciók szerkesztése"
 
+#. [administration.menu.timeline]
+#. defaultMessage is:
+#. Edit the phases
+#: messages.json
+#, fuzzy
+msgid "administration.menu.timeline"
+msgstr "idővonal"
+
 #. [administration.minValue]
 #. defaultMessage is:
 #. Minimum value
@@ -758,13 +1139,61 @@ msgstr "A vitaszekciók szerkesztése"
 msgid "administration.minValue"
 msgstr "Minimális érték"
 
-#. [administration.multiColumn.0]
+#. [administration.moderation]
 #. defaultMessage is:
-#. Export Data
+#. Post pending for moderation
 #: messages.json
 #, fuzzy
-msgid "administration.multiColumn.0"
+msgid "administration.moderation"
+msgstr "A beszélgetés szerkesztése"
+
+#. [administration.modules.brightMirror]
+#. defaultMessage is:
+#. Bright Mirror module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.brightMirror"
+msgstr "Adjon meg egy kérdést"
+
+#. [administration.modules.messageColumns]
+#. defaultMessage is:
+#. Multi-columns module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.messageColumns"
 msgstr "A beszélgetés nyelvei"
+
+#. [administration.modules.noModule]
+#. defaultMessage is:
+#. No module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.noModule"
+msgstr "Témabejelentési modul"
+
+#. [administration.modules.survey]
+#. defaultMessage is:
+#. Survey module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.survey"
+msgstr "A témák beállítása"
+
+#. [administration.modules.thread]
+#. defaultMessage is:
+#. Thread module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.thread"
+msgstr "Téma"
+
+#. [administration.modules.voteSession]
+#. defaultMessage is:
+#. Vote module
+#: messages.json
+#, fuzzy
+msgid "administration.modules.voteSession"
+msgstr "Az oldal beállítása"
 
 #. [administration.nbTicks]
 #. defaultMessage is:
@@ -808,61 +1237,83 @@ msgstr "Nem exkluzív"
 msgid "administration.numberValue"
 msgstr "Számérték"
 
-#. [administration.ph.descriptionBottom]
+#. [administration.personalizeInterface.favicon]
 #. defaultMessage is:
-#. Comments below video
+#. Favicon (visual 2)
 #: messages.json
-msgid "administration.ph.descriptionBottom"
-msgstr "Megjegyzések a videó alatt"
+#, fuzzy
+msgid "administration.personalizeInterface.favicon"
+msgstr ""
+"A súlyozott szavazásos modul céljától függően ösztönözze arra a "
+"résztvevőket, hogy cselekedjenek."
 
-#. [administration.ph.descriptionTop]
+#. [administration.personalizeInterface.faviconInstruction]
 #. defaultMessage is:
-#. Comments above video
+#. Favicon should have a maximum height of 110px. Its extension should be .ico
 #: messages.json
-msgid "administration.ph.descriptionTop"
+#, fuzzy
+msgid "administration.personalizeInterface.faviconInstruction"
+msgstr ""
+"Az utasításokra vonatkozó résznek tartalmaznia kell a címet és a leírást, "
+"amely iránymutatást ad a résztvevőknek a hozzájárulásuk során."
+
+#. [administration.personalizeInterface.icoRequired]
+#. defaultMessage is:
+#. The favicon must be an .ico file only
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.icoRequired"
+msgstr "Használjon külső oldalt"
+
+#. [administration.personalizeInterface.logoInstruction]
+#. defaultMessage is:
+#. Logo should have a maximum height of 110px and a maximum width of 215px. The background must be transparent.
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.logoInstruction"
+msgstr ""
+"A súlyozott szavazásos modul céljától függően ösztönözze arra a "
+"résztvevőket, hogy cselekedjenek."
+
+#. [administration.personalizeInterface.success]
+#. defaultMessage is:
+#. The interface personalization has been saved with success!
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.success"
+msgstr "Az erőforrásokat sikeresen elmentette"
+
+#. [administration.personalizeInterface.title]
+#. defaultMessage is:
+#. Web page Title (visual 1)
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.title"
+msgstr "Erőforrásközpont"
+
+#. [administration.personalizeInterface.titleFormTitle]
+#. defaultMessage is:
+#. Personalize the title of the page
+#: messages.json
+#, fuzzy
+msgid "administration.personalizeInterface.titleFormTitle"
+msgstr "A/az %{num} erőforrás szerkesztése"
+
+#. [administration.ph.descriptionPhase]
+#. defaultMessage is:
+#. Description phase
+#: messages.json
+#, fuzzy
+msgid "administration.ph.descriptionPhase"
 msgstr "Megjegyzések a videó felett"
 
-#. [administration.ph.headerSubtitle]
+#. [administration.ph.propositionSectionSubtitle]
 #. defaultMessage is:
-#. Header subtitle
+#. Section subtitle
 #: messages.json
-msgid "administration.ph.headerSubtitle"
-msgstr "Fejléc alcíme"
-
-#. [administration.ph.headerTitle]
-#. defaultMessage is:
-#. Header title
-#: messages.json
-msgid "administration.ph.headerTitle"
-msgstr "Fejléc címe"
-
-#. [administration.ph.instructionsContent]
-#. defaultMessage is:
-#. Instructions content
-#: messages.json
-msgid "administration.ph.instructionsContent"
-msgstr "Az utasítások tartalma"
-
-#. [administration.ph.instructionsTitle]
-#. defaultMessage is:
-#. Instructions title
-#: messages.json
-msgid "administration.ph.instructionsTitle"
-msgstr "Az utasítások címe"
-
-#. [administration.ph.mediaLink]
-#. defaultMessage is:
-#. Online media link (video, picture, etc..)
-#: messages.json
-msgid "administration.ph.mediaLink"
-msgstr "Online médiumra való hivatkozás (videó, kép stb.)"
-
-#. [administration.ph.orAttachPicture]
-#. defaultMessage is:
-#. Or upload an image from your computer
-#: messages.json
-msgid "administration.ph.orAttachPicture"
-msgstr "Vagy kép feltöltése a számítógépéről"
+#, fuzzy
+msgid "administration.ph.propositionSectionSubtitle"
+msgstr "A rész címe"
 
 #. [administration.ph.propositionSectionTitle]
 #. defaultMessage is:
@@ -871,19 +1322,13 @@ msgstr "Vagy kép feltöltése a számítógépéről"
 msgid "administration.ph.propositionSectionTitle"
 msgstr "A rész címe"
 
-#. [administration.ph.quote]
+#. [administration.postsExistsWarning]
 #. defaultMessage is:
-#. Quote
+#. This thematic contains posts. If you change the module, you'll delete all messages associated to this thematic when you'll save.
 #: messages.json
-msgid "administration.ph.quote"
-msgstr "Idézet"
-
-#. [administration.ph.title]
-#. defaultMessage is:
-#. *Title
-#: messages.json
-msgid "administration.ph.title"
-msgstr "*Cím"
+#, fuzzy
+msgid "administration.postsExistsWarning"
+msgstr "Az utasításokra vonatkozó rész beállítása"
 
 #. [administration.previousStep]
 #. defaultMessage is:
@@ -891,6 +1336,14 @@ msgstr "*Cím"
 #: messages.json
 msgid "administration.previousStep"
 msgstr "Előző lépés"
+
+#. [administration.profileOptions.LegalContentButton]
+#. defaultMessage is:
+#. Activate the mandatory validation of the legal contents
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.LegalContentButton"
+msgstr "A „javaslat” rész címének beállítása"
 
 #. [administration.profileOptions.addSelectFieldOption]
 #. defaultMessage is:
@@ -948,6 +1401,14 @@ msgstr "A rész törlése"
 msgid "administration.profileOptions.deleteTextField"
 msgstr "A rész törlése"
 
+#. [administration.profileOptions.hideTextField]
+#. defaultMessage is:
+#. Hide this field for the user
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.hideTextField"
+msgstr "A „javaslat” rész címének beállítása"
+
 #. [administration.profileOptions.introText]
 #. defaultMessage is:
 #. Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.
@@ -979,6 +1440,14 @@ msgstr "A rész törlése"
 #, fuzzy
 msgid "administration.profileOptions.textFieldToggleRequired"
 msgstr "Használjon külső oldalt"
+
+#. [administration.profileOptions.toggleLegalContentIntro]
+#. defaultMessage is:
+#. Make the legal validation mandatory or not for a user after signing up in the platform by SSO.
+#: messages.json
+#, fuzzy
+msgid "administration.profileOptions.toggleLegalContentIntro"
+msgstr "A „javaslat” rész címének beállítása"
 
 #. [administration.proposalSectionTitle]
 #. defaultMessage is:
@@ -1024,7 +1493,7 @@ msgstr "Dokumentum"
 
 #. [administration.resourcesCenter.editResourceFormTitle]
 #. defaultMessage is:
-#. Edit resource number %{num}
+#. Edit resource number %{count}
 #: messages.json
 msgid "administration.resourcesCenter.editResourceFormTitle"
 msgstr "A/az %{num} erőforrás szerkesztése"
@@ -1105,6 +1574,14 @@ msgstr "Nem, csak akkor jelenjen meg az eredmény, ha a szavazás lezárul."
 #: messages.json
 msgid "administration.resultsVisible"
 msgstr "Igen, már a szavazás előtt."
+
+#. [administration.saveBeforeConfigureVoteSession]
+#. defaultMessage is:
+#. Please save before you can access to the vote session configuration
+#: messages.json
+#, fuzzy
+msgid "administration.saveBeforeConfigureVoteSession"
+msgstr "Legalább egy szavazást be kell állítania."
 
 #. [administration.saveFirstStep]
 #. defaultMessage is:
@@ -1199,6 +1676,38 @@ msgstr "cím"
 msgid "administration.seeCurrentVotes"
 msgstr "Szeretné, hogy a résztvevők időközben lássák a szavazás alakulását?"
 
+#. [administration.semanticAnalysis.activate]
+#. defaultMessage is:
+#. Activate the semantic analysis
+#: messages.json
+#, fuzzy
+msgid "administration.semanticAnalysis.activate"
+msgstr "URL"
+
+#. [administration.semanticAnalysis.description]
+#. defaultMessage is:
+#. Semantic analysis feature is only available for the following modules: thread, survey and Bright Mirror
+#: messages.json
+#, fuzzy
+msgid "administration.semanticAnalysis.description"
+msgstr "Rész hozzáadása"
+
+#. [administration.semanticAnalysis.title]
+#. defaultMessage is:
+#. Semantic Analysis
+#: messages.json
+#, fuzzy
+msgid "administration.semanticAnalysis.title"
+msgstr "URL"
+
+#. [administration.slugWarning]
+#. defaultMessage is:
+#. This modification causes a change in the address of the debate. Please take this change into account in further communications. To insure the continuity of the service, the previous address will still be operating.
+#: messages.json
+#, fuzzy
+msgid "administration.slugWarning"
+msgstr "Kezdőlap"
+
 #. [administration.step_x_total]
 #. defaultMessage is:
 #. Section %{num} on %{total}
@@ -1206,11 +1715,12 @@ msgstr "Szeretné, hogy a résztvevők időközben lássák a szavazás alakulá
 msgid "administration.step_x_total"
 msgstr "%{num}/%{total}. rész"
 
-#. [administration.successLanguagePreference]
+#. [administration.successDiscussionPreference]
 #. defaultMessage is:
-#. Discussion language preferences have been saved with success!
+#. Discussion preferences have been saved with success!
 #: messages.json
-msgid "administration.successLanguagePreference"
+#, fuzzy
+msgid "administration.successDiscussionPreference"
 msgstr "A beszélgetés nyelvére vonatkozó beállításokat sikeresen mentette!"
 
 #. [administration.successThemeCreation]
@@ -1220,26 +1730,237 @@ msgstr "A beszélgetés nyelvére vonatkozó beállításokat sikeresen mentette
 msgid "administration.successThemeCreation"
 msgstr "A témákat sikeresen mentette!"
 
-#. [administration.survey.0]
+#. [administration.summary]
 #. defaultMessage is:
-#. Set themes
+#. Summary section configuration
 #: messages.json
-msgid "administration.survey.0"
+#, fuzzy
+msgid "administration.summary"
 msgstr "A témák beállítása"
 
-#. [administration.survey.1]
+#. [administration.survey.configThematic]
 #. defaultMessage is:
-#. Set questions
+#. Configure the theme
 #: messages.json
-msgid "administration.survey.1"
-msgstr "A kérdések beállítása"
+#, fuzzy
+msgid "administration.survey.configThematic"
+msgstr "Biztos, hogy törölni szeretné ezt a témát?"
 
-#. [administration.survey.2]
+#. [administration.survey.configThematics]
+#. defaultMessage is:
+#. Configure the themes
+#: messages.json
+#, fuzzy
+msgid "administration.survey.configThematics"
+msgstr "Biztos, hogy törölni szeretné ezt a témát?"
+
+#. [administration.survey.configThematicsHelperDescription]
+#. defaultMessage is:
+#. To change your choice, return to the general setting of the debate.
+#: messages.json
+#, fuzzy
+msgid "administration.survey.configThematicsHelperDescription"
+msgstr "Legalább egy szavazást be kell állítania."
+
+#. [administration.survey.configThematicsHelperTitle]
+#. defaultMessage is:
+#. You have chosen to configure a themes table.
+#: messages.json
+#, fuzzy
+msgid "administration.survey.configThematicsHelperTitle"
+msgstr "A törlés megerősítése"
+
+#. [administration.survey.createTable]
+#. defaultMessage is:
+#. Create the themes table
+#: messages.json
+#, fuzzy
+msgid "administration.survey.createTable"
+msgstr "A témák beállítása"
+
+#. [administration.survey.exportData]
 #. defaultMessage is:
 #. Export data
 #: messages.json
-msgid "administration.survey.2"
-msgstr "Adatok exportálása"
+#, fuzzy
+msgid "administration.survey.exportData"
+msgstr "A témák beállítása"
+
+#. [administration.tableOfThematics.bannerHeader]
+#. defaultMessage is:
+#. Top banner must include the thematic title defined previously, a background image and eventually a subtitle.
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.bannerHeader"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.bannerImagePickerLabel]
+#. defaultMessage is:
+#. Banner image
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.bannerImagePickerLabel"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.bannerSubtitleLabel]
+#. defaultMessage is:
+#. Top banner subtitle
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.bannerSubtitleLabel"
+msgstr "A modulok kezelése"
+
+#. [administration.tableOfThematics.columnColor]
+#. defaultMessage is:
+#. Column color
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnColor"
+msgstr "Téma"
+
+#. [administration.tableOfThematics.columnName]
+#. defaultMessage is:
+#. Column name
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnName"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.columnSynthesisBody]
+#. defaultMessage is:
+#. Column synthesis
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnSynthesisBody"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.columnSynthesisSubject]
+#. defaultMessage is:
+#. Column synthesis title
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnSynthesisSubject"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.columnTitle]
+#. defaultMessage is:
+#. Column title
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnTitle"
+msgstr "A törlés megerősítése"
+
+#. [administration.tableOfThematics.columnsConfiguration]
+#. defaultMessage is:
+#. Columns configuration
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.columnsConfiguration"
+msgstr "Valamennyi adatot exportálhatja, ha az „exportálás” gombra kattint"
+
+#. [administration.tableOfThematics.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure that you wish to delete this theme?
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.confirmDeletionBody"
+msgstr "Legalább egy szavazást be kell állítania."
+
+#. [administration.tableOfThematics.confirmDeletionTitle]
+#. defaultMessage is:
+#. Delete %{title} theme
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.confirmDeletionTitle"
+msgstr "A törlés megerősítése"
+
+#. [administration.tableOfThematics.instructionHeader]
+#. defaultMessage is:
+#. Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.instructionHeader"
+msgstr "Az utasítások címe"
+
+#. [administration.tableOfThematics.instructionLabel]
+#. defaultMessage is:
+#. Instructions
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.instructionLabel"
+msgstr "Az utasítások címe"
+
+#. [administration.tableOfThematics.moduleTypeLabel]
+#. defaultMessage is:
+#. Participation module configuration
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.moduleTypeLabel"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.multiColumnsFormName1]
+#. defaultMessage is:
+#. 2 columns
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.multiColumnsFormName1"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.multiColumnsFormName2]
+#. defaultMessage is:
+#. 3 columns
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.multiColumnsFormName2"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.questionsHeader]
+#. defaultMessage is:
+#. Questions
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.questionsHeader"
+msgstr "A fejléc háttérképének kiválasztása"
+
+#. [administration.tableOfThematics.quote]
+#. defaultMessage is:
+#. Quote
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.quote"
+msgstr "Téma"
+
+#. [administration.tableOfThematics.sectionTitleLabel]
+#. defaultMessage is:
+#. Section title
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.sectionTitleLabel"
+msgstr "A részek beállítása"
+
+#. [administration.tableOfThematics.summaryHeader]
+#. defaultMessage is:
+#. The 'Summary' section contains a brief abstract of the thematic and can be enriched with various medias.
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.summaryHeader"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.summaryLabel]
+#. defaultMessage is:
+#. Summary
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.summaryLabel"
+msgstr "A témához társított kép törlése"
+
+#. [administration.tableOfThematics.thematicTitle]
+#. defaultMessage is:
+#. Thematic title
+#: messages.json
+#, fuzzy
+msgid "administration.tableOfThematics.thematicTitle"
+msgstr "A témához társított kép törlése"
 
 #. [administration.textValue]
 #. defaultMessage is:
@@ -1255,26 +1976,124 @@ msgstr "Szöveges érték"
 msgid "administration.thematic"
 msgstr "Téma"
 
-#. [administration.themeNum]
+#. [administration.timelineAdmin.addPhase]
 #. defaultMessage is:
-#. Theme %{index}
-#: messages.json
-msgid "administration.themeNum"
-msgstr "%{index} téma"
-
-#. [administration.thread.0]
-#. defaultMessage is:
-#. Export Data
+#. Add a phase
 #: messages.json
 #, fuzzy
-msgid "administration.thread.0"
-msgstr "Téma"
+msgid "administration.timelineAdmin.addPhase"
+msgstr "idővonal"
 
-#. [administration.timeline]
+#. [administration.timelineAdmin.annotation]
 #. defaultMessage is:
-#. timeline
+#. This module has to be filled. * Fields are required
 #: messages.json
-msgid "administration.timeline"
+#, fuzzy
+msgid "administration.timelineAdmin.annotation"
+msgstr "* A mezők kitöltése kötelező."
+
+#. [administration.timelineAdmin.deletePhase]
+#. defaultMessage is:
+#. Delete the phase
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.deletePhase"
+msgstr "idővonal"
+
+#. [administration.timelineAdmin.descriptionPhaseLabel]
+#. defaultMessage is:
+#. Phase description
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.descriptionPhaseLabel"
+msgstr "A modulok kezelése"
+
+#. [administration.timelineAdmin.instruction1]
+#. defaultMessage is:
+#. Choose the number of phases for your debate
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction1"
+msgstr "Az utasításokra vonatkozó rész beállítása"
+
+#. [administration.timelineAdmin.instruction2]
+#. defaultMessage is:
+#. Fill in the required fields for each phase by selecting each tab
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction2"
+msgstr "Az utasításokra vonatkozó rész beállítása"
+
+#. [administration.timelineAdmin.instruction3]
+#. defaultMessage is:
+#. Choose the start and the end of your phase.
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction3"
+msgstr "Az utasításokra vonatkozó rész beállítása"
+
+#. [administration.timelineAdmin.instruction4]
+#. defaultMessage is:
+#. Choose the phase image for the timeline in the landing page.
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction4"
+msgstr "Az utasításokra vonatkozó rész beállítása"
+
+#. [administration.timelineAdmin.instruction5]
+#. defaultMessage is:
+#. Write the phase description.
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.instruction5"
+msgstr "Az utasításokra vonatkozó rész beállítása"
+
+#. [administration.timelineAdmin.phase]
+#. defaultMessage is:
+#. Phase %{count}
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.phase"
+msgstr "%{count} – %{description} szakasz"
+
+#. [administration.timelineAdmin.phaseLabel]
+#. defaultMessage is:
+#. Phase title
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.phaseLabel"
+msgstr "%{count} – %{description} szakasz"
+
+#. [administration.timelineAdmin.selectEnd]
+#. defaultMessage is:
+#. Phase %{count}'s end date
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.selectEnd"
+msgstr "idővonal"
+
+#. [administration.timelineAdmin.selectStart]
+#. defaultMessage is:
+#. Phase %{count}'s start date
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.selectStart"
+msgstr "idővonal"
+
+#. [administration.timelineAdmin.successSave]
+#. defaultMessage is:
+#. The timeline has been sucessfully saved
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.successSave"
+msgstr "A modulokat sikeresen mentette!"
+
+#. [administration.timelineAdmin.warningLabel]
+#. defaultMessage is:
+#. The dates you have set for this phase are overlapping the previous phase or the next phase
+#: messages.json
+#, fuzzy
+msgid "administration.timelineAdmin.warningLabel"
 msgstr "idővonal"
 
 #. [administration.token]
@@ -1329,6 +2148,30 @@ msgstr ""
 msgid "administration.tokenVoteInstructions"
 msgstr "A súlyozott szavazásra vonatkozó utasítások"
 
+#. [administration.translationService.activate]
+#. defaultMessage is:
+#. Activate this option to allow users to translate messages
+#: messages.json
+#, fuzzy
+msgid "administration.translationService.activate"
+msgstr "A „javaslatok” rész címének beállítása"
+
+#. [administration.translationService.description]
+#. defaultMessage is:
+#. Translation service should be activated when the semantic analysis is activated
+#: messages.json
+#, fuzzy
+msgid "administration.translationService.description"
+msgstr "Leírás"
+
+#. [administration.translationService.title]
+#. defaultMessage is:
+#. Translation service
+#: messages.json
+#, fuzzy
+msgid "administration.translationService.title"
+msgstr "A „javaslatok” rész címének beállítása"
+
 #. [administration.unit]
 #. defaultMessage is:
 #. Unit
@@ -1358,20 +2201,6 @@ msgid "administration.videoHelp"
 msgstr ""
 "*Engedélyezett videólinkek: „https://www.youtube.com/embed/[videoId]” vagy "
 "„https://player.vimeo.com/video/[videoId]?”"
-
-#. [administration.voteModulesIntroText1]
-#. defaultMessage is:
-#. You chose the vote module
-#: messages.json
-msgid "administration.voteModulesIntroText1"
-msgstr "Ön választja ki a szavazási modult"
-
-#. [administration.voteModulesIntroText2]
-#. defaultMessage is:
-#. To modify your choice, modify the 
-#: messages.json
-msgid "administration.voteModulesIntroText2"
-msgstr "Döntése módosításához módosítsa az"
 
 #. [administration.voteProposals.addProposal]
 #. defaultMessage is:
@@ -1429,6 +2258,14 @@ msgstr "A javaslat törlése"
 msgid "administration.voteProposals.description"
 msgstr "Leírás"
 
+#. [administration.voteProposals.edit]
+#. defaultMessage is:
+#. Modify
+#: messages.json
+#, fuzzy
+msgid "administration.voteProposals.edit"
+msgstr "A javaslat címe"
+
 #. [administration.voteProposals.gauge]
 #. defaultMessage is:
 #. Gauge %{number}
@@ -1473,7 +2310,7 @@ msgstr "Legalább egy modult ki kell választania."
 
 #. [administration.voteSession.0]
 #. defaultMessage is:
-#. Page configuration
+#. Vote session page configuration
 #: messages.json
 msgid "administration.voteSession.0"
 msgstr "Az oldal beállítása"
@@ -1499,12 +2336,13 @@ msgstr "A szavazási javaslatok beállítása"
 msgid "administration.voteSession.3"
 msgstr "Adatok exportálása"
 
-#. [administration.voteSessionHeaderLabel]
+#. [administration.voteSession.configureVoteSession]
 #. defaultMessage is:
-#. Choose the header background image
+#. Configure vote session associated to the theme
 #: messages.json
-msgid "administration.voteSessionHeaderLabel"
-msgstr "A fejléc háttérképének kiválasztása"
+#, fuzzy
+msgid "administration.voteSession.configureVoteSession"
+msgstr "Legalább egy szavazást be kell állítania."
 
 #. [administration.voteSessionSuccess]
 #. defaultMessage is:
@@ -1526,6 +2364,13 @@ msgstr "Sablon(ok) alapján történő szavazás"
 #: messages.json
 msgid "administration.voteWithTokens"
 msgstr "Súlyozott szavazás"
+
+#. [and]
+#. defaultMessage is:
+#.  and 
+#: messages.json
+msgid "and"
+msgstr ""
 
 #. [cancel]
 #. defaultMessage is:
@@ -1555,20 +2400,6 @@ msgstr "Azonnali beszélgetés ablaka"
 msgid "chatframe.tooltip"
 msgstr "Assemb'Bot"
 
-#. [common.attachFileForm.label]
-#. defaultMessage is:
-#. Add an attachment
-#: messages.json
-msgid "common.attachFileForm.label"
-msgstr "Melléklet hozzáadása"
-
-#. [common.attachFileForm.submit]
-#. defaultMessage is:
-#. Submit
-#: messages.json
-msgid "common.attachFileForm.submit"
-msgstr "Leadás"
-
 #. [common.attachments.download]
 #. defaultMessage is:
 #. Download
@@ -1581,6 +2412,14 @@ msgstr "Letöltés"
 #. Add a file
 #: messages.json
 msgid "common.editor.attachment"
+msgstr "Fájl hozzáadása"
+
+#. [common.editor.attachmentPlugin.title]
+#. defaultMessage is:
+#. Add an attachment
+#: messages.json
+#, fuzzy
+msgid "common.editor.attachmentPlugin.title"
 msgstr "Fájl hozzáadása"
 
 #. [common.editor.bold]
@@ -1597,11 +2436,58 @@ msgstr "Félkövér"
 msgid "common.editor.bulletList"
 msgstr "Számozatlan lista"
 
+#. [common.editor.closeModal]
+#. defaultMessage is:
+#. Close
+#: messages.json
+#, fuzzy
+msgid "common.editor.closeModal"
+msgstr "Félkövér"
+
 #. [common.editor.italic]
 #. defaultMessage is:
 #. Italic
 #: messages.json
 msgid "common.editor.italic"
+msgstr "Dőlt"
+
+#. [common.editor.linkPlugin.editLinkForm.title]
+#. defaultMessage is:
+#. Edit the link
+#: messages.json
+#, fuzzy
+msgid "common.editor.linkPlugin.editLinkForm.title"
+msgstr "Számozatlan lista"
+
+#. [common.editor.linkPlugin.openInNewTab]
+#. defaultMessage is:
+#. Open link in new tab
+#: messages.json
+msgid "common.editor.linkPlugin.openInNewTab"
+msgstr ""
+
+#. [common.editor.linkPlugin.text]
+#. defaultMessage is:
+#. Link text
+#: messages.json
+#, fuzzy
+msgid "common.editor.linkPlugin.text"
+msgstr "Dőlt"
+
+#. [common.editor.linkPlugin.title]
+#. defaultMessage is:
+#. Insert a link
+#: messages.json
+#, fuzzy
+msgid "common.editor.linkPlugin.title"
+msgstr "Számozatlan lista"
+
+#. [common.editor.linkPlugin.url]
+#. defaultMessage is:
+#. URL
+#: messages.json
+#, fuzzy
+msgid "common.editor.linkPlugin.url"
 msgstr "Dőlt"
 
 #. [common.goUp]
@@ -1611,12 +2497,66 @@ msgstr "Dőlt"
 msgid "common.goUp"
 msgstr "Vissza a tetejére"
 
+#. [common.icons.error]
+#. defaultMessage is:
+#. Error icon
+#: messages.json
+#, fuzzy
+msgid "common.icons.error"
+msgstr "Félkövér"
+
+#. [common.icons.tooltip]
+#. defaultMessage is:
+#. Tooltip icon
+#: messages.json
+#, fuzzy
+msgid "common.icons.tooltip"
+msgstr "Dőlt"
+
+#. [common.loader.error]
+#. defaultMessage is:
+#. There is an error loading the analysis
+#: messages.json
+#, fuzzy
+msgid "common.loader.error"
+msgstr "Válassza ki a feltölteni kívánt fájlt"
+
+#. [common.loader.loading]
+#. defaultMessage is:
+#. Loading...
+#: messages.json
+#, fuzzy
+msgid "common.loader.loading"
+msgstr "Válassza ki a feltölteni kívánt fájlt"
+
+#. [common.loader.no-data]
+#. defaultMessage is:
+#. Not enough data to analyse
+#: messages.json
+#, fuzzy
+msgid "common.loader.no-data"
+msgstr "Félkövér"
+
 #. [common.uploadButton]
 #. defaultMessage is:
 #. Choose a file to upload
 #: messages.json
 msgid "common.uploadButton"
 msgstr "Válassza ki a feltölteni kívánt fájlt"
+
+#. [common.wordCountInformation.msg]
+#. defaultMessage is:
+#. TO BE DEFINED %{words}
+#: messages.json
+msgid "common.wordCountInformation.msg"
+msgstr ""
+
+#. [common.wordCountInformation.words]
+#. defaultMessage is:
+#. <span class='words-watson'>%{wordCount} words</span>
+#: messages.json
+msgid "common.wordCountInformation.words"
+msgstr ""
 
 #. [community.panelTitle]
 #. defaultMessage is:
@@ -1632,12 +2572,182 @@ msgstr "Üdvözöljük az Assembl közösségi oldalon"
 msgid "conclusion"
 msgstr "Összefoglalás"
 
+#. [cookies.cgu]
+#. defaultMessage is:
+#. Terms and conditions
+#: messages.json
+msgid "cookies.cgu"
+msgstr ""
+
+#. [cookies.cguHelper]
+#. defaultMessage is:
+#. This cookie registers that you have accepted the terms and conditions of the consultation.
+#: messages.json
+msgid "cookies.cguHelper"
+msgstr ""
+
+#. [cookies.locale]
+#. defaultMessage is:
+#. Language
+#: messages.json
+#, fuzzy
+msgid "cookies.locale"
+msgstr "Jogi nyilatkozat"
+
+#. [cookies.localeHelper]
+#. defaultMessage is:
+#. This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.
+#: messages.json
+msgid "cookies.localeHelper"
+msgstr ""
+
+#. [cookies.matomo]
+#. defaultMessage is:
+#. Matomo
+#: messages.json
+msgid "cookies.matomo"
+msgstr ""
+
+#. [cookies.matomoHelper]
+#. defaultMessage is:
+#. This cookie is used for stasticial purposes regarding the participants of the consultation.
+#: messages.json
+msgid "cookies.matomoHelper"
+msgstr ""
+
+#. [cookies.matomoSettings]
+#. defaultMessage is:
+#. To modify this cookie's setting please click here
+#: messages.json
+msgid "cookies.matomoSettings"
+msgstr ""
+
+#. [cookies.privacyPolicy]
+#. defaultMessage is:
+#. Privacy policy
+#: messages.json
+msgid "cookies.privacyPolicy"
+msgstr ""
+
+#. [cookies.privacyPolicyHelper]
+#. defaultMessage is:
+#. This cookie registers that you have accepted the privacy policy of the consultation.
+#: messages.json
+#, fuzzy
+msgid "cookies.privacyPolicyHelper"
+msgstr "Jogi nyilatkozat"
+
+#. [cookies.required]
+#. defaultMessage is:
+#. This cookie is required
+#: messages.json
+#, fuzzy
+msgid "cookies.required"
+msgstr "Ez a mező kötelező."
+
+#. [cookies.userGuideline]
+#. defaultMessage is:
+#. User Guidelines
+#: messages.json
+msgid "cookies.userGuideline"
+msgstr ""
+
+#. [cookies.userGuidelineHelper]
+#. defaultMessage is:
+#. This cookie registers that you have accepted the user guidelines of the consultation.
+#: messages.json
+msgid "cookies.userGuidelineHelper"
+msgstr ""
+
+#. [cookies.userSession]
+#. defaultMessage is:
+#. User Session
+#: messages.json
+msgid "cookies.userSession"
+msgstr ""
+
+#. [cookies.userSessionHelper]
+#. defaultMessage is:
+#. This cookie is necessary to maintain the user connected on Assembl.
+#: messages.json
+msgid "cookies.userSessionHelper"
+msgstr ""
+
+#. [cookiesBar.accept]
+#. defaultMessage is:
+#. I agree
+#: messages.json
+msgid "cookiesBar.accept"
+msgstr ""
+
+#. [cookiesBar.cookiesNotice]
+#. defaultMessage is:
+#. Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
+#: messages.json
+msgid "cookiesBar.cookiesNotice"
+msgstr ""
+
+#. [cookiesBar.seeCookiesPolicy]
+#. defaultMessage is:
+#. See more
+#: messages.json
+msgid "cookiesBar.seeCookiesPolicy"
+msgstr ""
+
+#. [cookiesPolicy.analytics]
+#. defaultMessage is:
+#. Analytics and customization
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.analytics"
+msgstr "Jogi nyilatkozat"
+
+#. [cookiesPolicy.essential]
+#. defaultMessage is:
+#. Essential
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.essential"
+msgstr "Jogi nyilatkozat"
+
 #. [cookiesPolicy.headerTitle]
 #. defaultMessage is:
 #. Cookies
 #: messages.json
 #, fuzzy
 msgid "cookiesPolicy.headerTitle"
+msgstr "Jogi nyilatkozat"
+
+#. [cookiesPolicy.instructions]
+#. defaultMessage is:
+#. Select the cookies you wish to refuse below
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.instructions"
+msgstr "Jogi nyilatkozat"
+
+#. [cookiesPolicy.other]
+#. defaultMessage is:
+#. Other
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.other"
+msgstr "Jogi nyilatkozat"
+
+#. [cookiesPolicy.sectionTitle]
+#. defaultMessage is:
+#. Cookies policy
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.sectionTitle"
+msgstr "Jogi nyilatkozat"
+
+#. [cookiesPolicy.success]
+#. defaultMessage is:
+#. Your cookies configuration has been saved
+#: messages.json
+#, fuzzy
+msgid "cookiesPolicy.success"
 msgstr "Jogi nyilatkozat"
 
 #. [date.format]
@@ -1653,6 +2763,14 @@ msgstr "LL"
 #: messages.json
 msgid "date.format2"
 msgstr "L"
+
+#. [date.format3]
+#. defaultMessage is:
+#. MM/DD/YYYY
+#: messages.json
+#, fuzzy
+msgid "date.format3"
+msgstr "LL"
 
 #. [debate.agree]
 #. defaultMessage is:
@@ -1674,6 +2792,417 @@ msgstr "%{count} arányban értek egyet"
 #: messages.json
 msgid "debate.answer"
 msgstr "Válaszolok:"
+
+#. [debate.back]
+#. defaultMessage is:
+#. Back
+#: messages.json
+#, fuzzy
+msgid "debate.back"
+msgstr "Kedvelés"
+
+#. [debate.brightMirror.commentFiction.cancel]
+#. defaultMessage is:
+#. Cancel
+#: messages.json
+msgid "debate.brightMirror.commentFiction.cancel"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.commentHelper]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+msgid "debate.brightMirror.commentFiction.commentHelper"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.deleteComment]
+#. defaultMessage is:
+#. Delete this message
+#: messages.json
+msgid "debate.brightMirror.commentFiction.deleteComment"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.deleteCommentBodyMessage]
+#. defaultMessage is:
+#. Are you sure you want to delete this message?
+#: messages.json
+msgid "debate.brightMirror.commentFiction.deleteCommentBodyMessage"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.editComment]
+#. defaultMessage is:
+#. Edit this message
+#: messages.json
+msgid "debate.brightMirror.commentFiction.editComment"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.imageAlt]
+#. defaultMessage is:
+#. Let's talk illustration
+#: messages.json
+msgid "debate.brightMirror.commentFiction.imageAlt"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.label]
+#. defaultMessage is:
+#. Comments
+#: messages.json
+msgid "debate.brightMirror.commentFiction.label"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.instructionList]
+#. defaultMessage is:
+#. You can comment the text:
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.instructionList"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.instructionListOne]
+#. defaultMessage is:
+#. Underligne a quote
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.instructionListOne"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.instructionListThree]
+#. defaultMessage is:
+#. Write your comment, add an image or video and validate
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.instructionListThree"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.instructionListTwo]
+#. defaultMessage is:
+#. Click “Suggest” to open an input box
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.instructionListTwo"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.modal.title]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+msgid "debate.brightMirror.commentFiction.modal.title"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.numberOfComments]
+#. defaultMessage is:
+#. %{count} messages
+#: messages.json
+msgid "debate.brightMirror.commentFiction.numberOfComments"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.numberOfComments_0]
+#. defaultMessage is:
+#. No message at the moment
+#: messages.json
+msgid "debate.brightMirror.commentFiction.numberOfComments_0"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.numberOfComments_1]
+#. defaultMessage is:
+#. %{count} message
+#: messages.json
+msgid "debate.brightMirror.commentFiction.numberOfComments_1"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.placeholder]
+#. defaultMessage is:
+#. Join the debate...
+#: messages.json
+msgid "debate.brightMirror.commentFiction.placeholder"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.strongTitle]
+#. defaultMessage is:
+#. Let's talk!
+#: messages.json
+msgid "debate.brightMirror.commentFiction.strongTitle"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.submit]
+#. defaultMessage is:
+#. Comment
+#: messages.json
+msgid "debate.brightMirror.commentFiction.submit"
+msgstr ""
+
+#. [debate.brightMirror.commentFiction.title]
+#. defaultMessage is:
+#. Comment or debate on the text above
+#: messages.json
+msgid "debate.brightMirror.commentFiction.title"
+msgstr ""
+
+#. [debate.brightMirror.deleteFiction]
+#. defaultMessage is:
+#. Delete your text
+#: messages.json
+msgid "debate.brightMirror.deleteFiction"
+msgstr ""
+
+#. [debate.brightMirror.deleteFictionModalBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this text?
+#: messages.json
+msgid "debate.brightMirror.deleteFictionModalBody"
+msgstr ""
+
+#. [debate.brightMirror.deleteFictionSuccessMsg]
+#. defaultMessage is:
+#. Your text was deleted
+#: messages.json
+msgid "debate.brightMirror.deleteFictionSuccessMsg"
+msgstr ""
+
+#. [debate.brightMirror.draftEmptyTitle]
+#. defaultMessage is:
+#. Untitled
+#: messages.json
+msgid "debate.brightMirror.draftEmptyTitle"
+msgstr ""
+
+#. [debate.brightMirror.draftLabel]
+#. defaultMessage is:
+#. Draft
+#: messages.json
+msgid "debate.brightMirror.draftLabel"
+msgstr ""
+
+#. [debate.brightMirror.draftSuccessMsg]
+#. defaultMessage is:
+#. Your text has been saved successfully.
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.draftSuccessMsg"
+msgstr "Köszönjük a részvételét. A megjegyzését elküldtük."
+
+#. [debate.brightMirror.editFiction]
+#. defaultMessage is:
+#. Edit your text
+#: messages.json
+msgid "debate.brightMirror.editFiction"
+msgstr ""
+
+#. [debate.brightMirror.fiction]
+#. defaultMessage is:
+#. text
+#: messages.json
+msgid "debate.brightMirror.fiction"
+msgstr ""
+
+#. [debate.brightMirror.fillBodyLabel]
+#. defaultMessage is:
+#. Write your text
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.fillBodyLabel"
+msgstr "Kérjük, írjon megjegyzést"
+
+#. [debate.brightMirror.fillEitherTitleContent]
+#. defaultMessage is:
+#. Please, write a title or a text
+#: messages.json
+msgid "debate.brightMirror.fillEitherTitleContent"
+msgstr ""
+
+#. [debate.brightMirror.noAuthorSpecified]
+#. defaultMessage is:
+#. No author specified
+#: messages.json
+msgid "debate.brightMirror.noAuthorSpecified"
+msgstr ""
+
+#. [debate.brightMirror.noContentSpecified]
+#. defaultMessage is:
+#. No content specified
+#: messages.json
+msgid "debate.brightMirror.noContentSpecified"
+msgstr ""
+
+#. [debate.brightMirror.noTitleSpecified]
+#. defaultMessage is:
+#. No title specified
+#: messages.json
+msgid "debate.brightMirror.noTitleSpecified"
+msgstr ""
+
+#. [debate.brightMirror.numberOfFictions]
+#. defaultMessage is:
+#. List of scenarios
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfFictions"
+msgstr "%{count} reakció"
+
+#. [debate.brightMirror.numberOfFictions_0]
+#. defaultMessage is:
+#. No published scenarios
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfFictions_0"
+msgstr "%{count} reakció"
+
+#. [debate.brightMirror.numberOfResponses]
+#. defaultMessage is:
+#. %{count} responses
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfResponses"
+msgstr "%{count} válasz van erre a bejegyzésre"
+
+#. [debate.brightMirror.numberOfResponses_0]
+#. defaultMessage is:
+#. No response
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfResponses_0"
+msgstr "Nincs válasz erre a bejegyzésre"
+
+#. [debate.brightMirror.numberOfResponses_1]
+#. defaultMessage is:
+#. %{count} response
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.numberOfResponses_1"
+msgstr "%{count} válasz van erre a bejegyzésre"
+
+#. [debate.brightMirror.postSuccessMsg]
+#. defaultMessage is:
+#. Thanks for your participation. Your text has been published successfully!
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.postSuccessMsg"
+msgstr "Köszönjük a részvételét. A megjegyzését elküldtük."
+
+#. [debate.brightMirror.saveDraft]
+#. defaultMessage is:
+#. Save
+#: messages.json
+msgid "debate.brightMirror.saveDraft"
+msgstr ""
+
+#. [debate.brightMirror.sentiment.dislike]
+#. defaultMessage is:
+#. Scary
+#: messages.json
+msgid "debate.brightMirror.sentiment.dislike"
+msgstr ""
+
+#. [debate.brightMirror.sentiment.dontUnderstand]
+#. defaultMessage is:
+#. Strengthen the plot
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.sentiment.dontUnderstand"
+msgstr "Nem értem"
+
+#. [debate.brightMirror.sentiment.like]
+#. defaultMessage is:
+#. Inspiring!
+#: messages.json
+msgid "debate.brightMirror.sentiment.like"
+msgstr ""
+
+#. [debate.brightMirror.sentiment.moreInfo]
+#. defaultMessage is:
+#. Enrich the style
+#: messages.json
+msgid "debate.brightMirror.sentiment.moreInfo"
+msgstr ""
+
+#. [debate.brightMirror.shareFiction]
+#. defaultMessage is:
+#. Share a short story
+#: messages.json
+msgid "debate.brightMirror.shareFiction"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.commentLabel]
+#. defaultMessage is:
+#. Your comment
+#: messages.json
+msgid "debate.brightMirror.sideComment.commentLabel"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.commenterSingleParticipation]
+#. defaultMessage is:
+#. 1 participant commented a quote.
+#: messages.json
+msgid "debate.brightMirror.sideComment.commenterSingleParticipation"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.commentersParticipation]
+#. defaultMessage is:
+#. %{count} participants commented quotes.
+#: messages.json
+msgid "debate.brightMirror.sideComment.commentersParticipation"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.commentersParticipation_1]
+#. defaultMessage is:
+#. %{count} participant commented quotes.
+#: messages.json
+msgid "debate.brightMirror.sideComment.commentersParticipation_1"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.confirmDeleteMsg]
+#. defaultMessage is:
+#. Are you sure you would like to delete this comment?
+#: messages.json
+msgid "debate.brightMirror.sideComment.confirmDeleteMsg"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.deleteSuccessMsg]
+#. defaultMessage is:
+#. Your comment has been deleted successfully!
+#: messages.json
+msgid "debate.brightMirror.sideComment.deleteSuccessMsg"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.deleteTooltip]
+#. defaultMessage is:
+#. Delete
+#: messages.json
+msgid "debate.brightMirror.sideComment.deleteTooltip"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.editSuccessMsg]
+#. defaultMessage is:
+#. Your comment has been edited successfully!
+#: messages.json
+msgid "debate.brightMirror.sideComment.editSuccessMsg"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.editTooltip]
+#. defaultMessage is:
+#. Edit
+#: messages.json
+msgid "debate.brightMirror.sideComment.editTooltip"
+msgstr ""
+
+#. [debate.brightMirror.sideComment.submitSuccessMsg]
+#. defaultMessage is:
+#. Your comment has been published successfully!
+#: messages.json
+msgid "debate.brightMirror.sideComment.submitSuccessMsg"
+msgstr ""
+
+#. [debate.brightMirror.startFictionLabel]
+#. defaultMessage is:
+#. Write my text
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.startFictionLabel"
+msgstr "Új folyam indítása"
+
+#. [debate.brightMirror.suggest]
+#. defaultMessage is:
+#. Suggest
+#: messages.json
+#, fuzzy
+msgid "debate.brightMirror.suggest"
+msgstr "Tárgy"
 
 #. [debate.confirmDeletionBody]
 #. defaultMessage is:
@@ -1703,6 +3232,22 @@ msgstr "Törlés"
 msgid "debate.confirmDeletionTitle"
 msgstr "A törlés megerősítése"
 
+#. [debate.confirmRefusalBody]
+#. defaultMessage is:
+#. Are you sure you want to reject this message?
+#: messages.json
+#, fuzzy
+msgid "debate.confirmRefusalBody"
+msgstr "Biztos, hogy szeretné törölni ezt az üzenetet?"
+
+#. [debate.confirmRefusalButton]
+#. defaultMessage is:
+#. Reject
+#: messages.json
+#, fuzzy
+msgid "debate.confirmRefusalButton"
+msgstr "Mégsem"
+
 #. [debate.copyLink]
 #. defaultMessage is:
 #. Copy the link to the clipboard
@@ -1715,6 +3260,14 @@ msgstr "Másolja a hivatkozást a vágólapra"
 #. Delete this message
 #: messages.json
 msgid "debate.deleteMessage"
+msgstr "Törölje ezt az üzenetet"
+
+#. [debate.deniedMessage]
+#. defaultMessage is:
+#. Reject this message
+#: messages.json
+#, fuzzy
+msgid "debate.deniedMessage"
 msgstr "Törölje ezt az üzenetet"
 
 #. [debate.disagree]
@@ -1810,7 +3363,7 @@ msgstr "Ez a szakasz lezárult. Már nem válaszolhat."
 
 #. [debate.notStarted]
 #. defaultMessage is:
-#. The %{phaseName} phase has not started. Please come back from 
+#. The "%{phaseName}" phase has not started. Please come back from 
 #: messages.json
 msgid "debate.notStarted"
 msgstr "A %{phaseName} szakasz még nem kezdődött el. Kérjük, jöjjön vissza"
@@ -1821,6 +3374,14 @@ msgstr "A %{phaseName} szakasz még nem kezdődött el. Kérjük, jöjjön vissz
 #: messages.json
 msgid "debate.post"
 msgstr "Közzététel"
+
+#. [debate.postAwaitingModeration]
+#. defaultMessage is:
+#. Proposal awaiting moderation
+#: messages.json
+#, fuzzy
+msgid "debate.postAwaitingModeration"
+msgstr "Nem értem"
 
 #. [debate.question.backToQuestions]
 #. defaultMessage is:
@@ -1836,11 +3397,110 @@ msgstr "Vissza a kérdésekhez"
 msgid "debate.remaining_x_characters"
 msgstr "%{nbCharacters} karaktere maradt"
 
+#. [debate.semanticAnalysis.informationKeyword]
+#. defaultMessage is:
+#. Information on keywords
+#: messages.json
+msgid "debate.semanticAnalysis.informationKeyword"
+msgstr ""
+
+#. [debate.semanticAnalysis.keywordCloud]
+#. defaultMessage is:
+#. Keyword cloud
+#: messages.json
+msgid "debate.semanticAnalysis.keywordCloud"
+msgstr ""
+
+#. [debate.semanticAnalysis.keywordCloudDefinition]
+#. defaultMessage is:
+#. The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or "in the conversations related to the theme being addressed" pour le texte à mettre en thématique). The importance of each keyword is shown with font size.
+#: messages.json
+msgid "debate.semanticAnalysis.keywordCloudDefinition"
+msgstr ""
+
+#. [debate.semanticAnalysis.long]
+#. defaultMessage is:
+#. Analysis
+#: messages.json
+msgid "debate.semanticAnalysis.long"
+msgstr ""
+
+#. [debate.semanticAnalysis.noKeywordSelected]
+#. defaultMessage is:
+#. Select your keyword
+#: messages.json
+msgid "debate.semanticAnalysis.noKeywordSelected"
+msgstr ""
+
+#. [debate.semanticAnalysis.numberKeyword]
+#. defaultMessage is:
+#. Number of keywords
+#: messages.json
+msgid "debate.semanticAnalysis.numberKeyword"
+msgstr ""
+
+#. [debate.semanticAnalysis.occurence]
+#. defaultMessage is:
+#. Occurence
+#: messages.json
+msgid "debate.semanticAnalysis.occurence"
+msgstr ""
+
+#. [debate.semanticAnalysis.occurenceDefinition]
+#. defaultMessage is:
+#. frequency of keywords throughout the debate or throughout the discussions related to the theme being addressed.
+#: messages.json
+msgid "debate.semanticAnalysis.occurenceDefinition"
+msgstr ""
+
+#. [debate.semanticAnalysis.relevance]
+#. defaultMessage is:
+#. Relevance
+#: messages.json
+msgid "debate.semanticAnalysis.relevance"
+msgstr ""
+
+#. [debate.semanticAnalysis.relevanceDefinition]
+#. defaultMessage is:
+#. measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.
+#: messages.json
+msgid "debate.semanticAnalysis.relevanceDefinition"
+msgstr ""
+
+#. [debate.semanticAnalysis.sentimentAnalysis]
+#. defaultMessage is:
+#. Sentiment analysis
+#: messages.json
+msgid "debate.semanticAnalysis.sentimentAnalysis"
+msgstr ""
+
+#. [debate.semanticAnalysis.sentimentAnalysisDefinition]
+#. defaultMessage is:
+#. The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed).
+#: messages.json
+msgid "debate.semanticAnalysis.sentimentAnalysisDefinition"
+msgstr ""
+
+#. [debate.semanticAnalysis.short]
+#. defaultMessage is:
+#. Semantic
+#: messages.json
+msgid "debate.semanticAnalysis.short"
+msgstr ""
+
 #. [debate.share]
 #. defaultMessage is:
 #. Share
 #: messages.json
 msgid "debate.share"
+msgstr "Megosztás"
+
+#. [debate.shareMail]
+#. defaultMessage is:
+#. Share the link via email
+#: messages.json
+#, fuzzy
+msgid "debate.shareMail"
 msgstr "Megosztás"
 
 #. [debate.sharePost]
@@ -1880,7 +3540,7 @@ msgstr "Valamennyi nézőpont megtekintése"
 
 #. [debate.survey.endPhase]
 #. defaultMessage is:
-#. The %{closedPhaseName} phase is closed.
+#. The "%{closedPhaseName}" phase is closed.
 #: messages.json
 msgid "debate.survey.endPhase"
 msgstr "A %{closedPhaseName} szakasz lezárult."
@@ -1892,6 +3552,14 @@ msgstr "A %{closedPhaseName} szakasz lezárult."
 #, fuzzy
 msgid "debate.survey.loadRecentPosts"
 msgstr "Reakciók"
+
+#. [debate.survey.moderateProposalsTitle]
+#. defaultMessage is:
+#. Moderate these points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.moderateProposalsTitle"
+msgstr "Több nézőpont"
 
 #. [debate.survey.moreProposals]
 #. defaultMessage is:
@@ -1907,12 +3575,28 @@ msgstr "Több nézőpont"
 msgid "debate.survey.noProposals"
 msgstr "Jelenleg nincsenek nézőpontok. Legyen Ön az első!"
 
+#. [debate.survey.pendingProposals]
+#. defaultMessage is:
+#. See all pending points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.pendingProposals"
+msgstr "Jelenleg nincsenek nézőpontok. Legyen Ön az első!"
+
 #. [debate.survey.postSuccess]
 #. defaultMessage is:
 #. Thanks for your participation. Your proposal has been sent!
 #: messages.json
 msgid "debate.survey.postSuccess"
 msgstr "Köszönjük a részvételét. Javaslatát elküldtük!"
+
+#. [debate.survey.postToBeValidated]
+#. defaultMessage is:
+#. Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postToBeValidated"
+msgstr "Egyetért ezekkel a nézőpontokkal?"
 
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
@@ -1963,6 +3647,14 @@ msgstr "Reakció"
 msgid "debate.survey.submit"
 msgstr "Leadás"
 
+#. [debate.survey.thematicNumerotation]
+#. defaultMessage is:
+#. Thematic %{count}
+#: messages.json
+#, fuzzy
+msgid "debate.survey.thematicNumerotation"
+msgstr "Reakciók"
+
 #. [debate.survey.themesTitle]
 #. defaultMessage is:
 #. Choose a theme!
@@ -1970,26 +3662,184 @@ msgstr "Leadás"
 msgid "debate.survey.themesTitle"
 msgstr "Válasszon témát!"
 
-#. [debate.survey.titleVideo]
-#. defaultMessage is:
-#. A video to better understand the subject...
-#: messages.json
-msgid "debate.survey.titleVideo"
-msgstr "A téma alaposabb megértését segítő videó"
-
 #. [debate.survey.txtAreaPh]
 #. defaultMessage is:
-#. Write your point of view
+#. Write your point of view (minimum of 11 characters)
 #: messages.json
 msgid "debate.survey.txtAreaPh"
 msgstr "Írja meg az Ön nézőpontját"
 
-#. [debate.syntheses]
+#. [debate.syntheses.body]
 #. defaultMessage is:
-#. Syntheses
+#. The synthesis body
 #: messages.json
-msgid "debate.syntheses"
+#, fuzzy
+msgid "debate.syntheses.body"
 msgstr "Összefoglalások"
+
+#. [debate.syntheses.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure you want to delete this synthesis?
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.confirmDeletionBody"
+msgstr "Biztos, hogy szeretné törölni ezt az üzenetet?"
+
+#. [debate.syntheses.createNewSynthesis]
+#. defaultMessage is:
+#. Create a new synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.createNewSynthesis"
+msgstr "Az összefoglalás megosztása"
+
+#. [debate.syntheses.deleteSuccessMessage]
+#. defaultMessage is:
+#. The synthesis has been successfully deleted
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.deleteSuccessMessage"
+msgstr "Törölje ezt az üzenetet"
+
+#. [debate.syntheses.deleteSynthesisTooltip]
+#. defaultMessage is:
+#. Delete the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.deleteSynthesisTooltip"
+msgstr "Az összefoglalás megosztása"
+
+#. [debate.syntheses.editSynthesis]
+#. defaultMessage is:
+#. Edit the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.editSynthesis"
+msgstr "Az összefoglalás megosztása"
+
+#. [debate.syntheses.editSynthesisTooltip]
+#. defaultMessage is:
+#. Edit the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.editSynthesisTooltip"
+msgstr "Az összefoglalás megosztása"
+
+#. [debate.syntheses.picture]
+#. defaultMessage is:
+#. Picture of the synthesis' frame
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.picture"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.pictureHelper]
+#. defaultMessage is:
+#. This is the picture that will be shown to illustrate your synthesis in the syntheses page
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.pictureHelper"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.publishedOn]
+#. defaultMessage is:
+#. Published on 
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.publishedOn"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.save]
+#. defaultMessage is:
+#. Save
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.save"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.saveAndBackDraft]
+#. defaultMessage is:
+#. Save and back to draft
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.saveAndBackDraft"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.saveAndPost]
+#. defaultMessage is:
+#. Save and publish
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.saveAndPost"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.saveDraft]
+#. defaultMessage is:
+#. Save as draft
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.saveDraft"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.successSave]
+#. defaultMessage is:
+#. Synthesis successfully saved
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.successSave"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.summary]
+#. defaultMessage is:
+#. Syntheses summary
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.summary"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.title]
+#. defaultMessage is:
+#. Title of the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.title"
+msgstr "Összefoglalások"
+
+#. [debate.syntheses.url]
+#. defaultMessage is:
+#. URL of the synthesis
+#: messages.json
+#, fuzzy
+msgid "debate.syntheses.url"
+msgstr "Összefoglalások"
+
+#. [debate.tagOnPost.alreadyAddedWarningMessage]
+#. defaultMessage is:
+#. Already added
+#: messages.json
+msgid "debate.tagOnPost.alreadyAddedWarningMessage"
+msgstr ""
+
+#. [debate.tagOnPost.suggestionContainerTitle]
+#. defaultMessage is:
+#. Suggested keywords:
+#: messages.json
+msgid "debate.tagOnPost.suggestionContainerTitle"
+msgstr ""
+
+#. [debate.tagOnPost.tagContainerAdminTitle]
+#. defaultMessage is:
+#. Add post-related keywords:
+#: messages.json
+msgid "debate.tagOnPost.tagContainerAdminTitle"
+msgstr ""
+
+#. [debate.tagOnPost.tagContainerTitle]
+#. defaultMessage is:
+#. Keywords in post:
+#: messages.json
+msgid "debate.tagOnPost.tagContainerTitle"
+msgstr ""
 
 #. [debate.themes]
 #. defaultMessage is:
@@ -2046,6 +3896,14 @@ msgstr "Mutasson 1 választ"
 #: messages.json
 msgid "debate.thread.goToIdea"
 msgstr "Az összes üzenet megtekintése"
+
+#. [debate.thread.guidelines]
+#. defaultMessage is:
+#. Guidelines
+#: messages.json
+#, fuzzy
+msgid "debate.thread.guidelines"
+msgstr "Ez a bejegyzés az alábbi témákkal kapcsolatos:"
 
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
@@ -2138,6 +3996,14 @@ msgstr "szerkesztve"
 msgid "debate.thread.postSuccess"
 msgstr "Köszönjük a részvételét. A megjegyzését elküldtük."
 
+#. [debate.thread.postToBeValidated]
+#. defaultMessage is:
+#. Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postToBeValidated"
+msgstr "szerkesztve"
+
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
 #. See %{count} sub-thematics
@@ -2165,6 +4031,14 @@ msgstr "Az eredeti megjelenítése"
 #: messages.json
 msgid "debate.thread.startDiscussion"
 msgstr "Új folyam indítása"
+
+#. [debate.thread.summary]
+#. defaultMessage is:
+#. Summary
+#: messages.json
+#, fuzzy
+msgid "debate.thread.summary"
+msgstr "A/az %{count} altéma megtekintése"
 
 #. [debate.thread.translate]
 #. defaultMessage is:
@@ -2201,12 +4075,36 @@ msgstr "A/az %{language} nyelven íródott üzeneteket nem szeretném lefordíta
 msgid "debate.thread.untranslateOnlyThisMessage"
 msgstr "Csak ezt az üzenetet nem szeretném lefordítani."
 
+#. [debate.thread.voteForProposals]
+#. defaultMessage is:
+#. Vote for the proposals
+#: messages.json
+#, fuzzy
+msgid "debate.thread.voteForProposals"
+msgstr "Több nézőpont"
+
 #. [debate.toAnswer]
 #. defaultMessage is:
 #. Answer
 #: messages.json
 msgid "debate.toAnswer"
 msgstr "Válasz"
+
+#. [debate.validateMessage]
+#. defaultMessage is:
+#. Accept this message
+#: messages.json
+#, fuzzy
+msgid "debate.validateMessage"
+msgstr "Törölje ezt az üzenetet"
+
+#. [debate.validateSuccess]
+#. defaultMessage is:
+#. The contribution has been validated. It is now visible by all participants.
+#: messages.json
+#, fuzzy
+msgid "debate.validateSuccess"
+msgstr "Köszönjük a részvételét. A megjegyzését elküldtük."
 
 #. [debate.vote]
 #. defaultMessage is:
@@ -2243,20 +4141,6 @@ msgstr "Már szavazott e javaslat másik kategóriájára"
 msgid "debate.voteSession.isCompleted"
 msgstr "Ez a szavazási szakasz lezárult. Köszönjük a részvételét!"
 
-#. [debate.voteSession.noVoteSession.text]
-#. defaultMessage is:
-#. An administrator must configure the vote session
-#: messages.json
-msgid "debate.voteSession.noVoteSession.text"
-msgstr "Egy adminisztrátornak be kell állítania a szavazást"
-
-#. [debate.voteSession.noVoteSession.title]
-#. defaultMessage is:
-#. Vote session is not configured
-#: messages.json
-msgid "debate.voteSession.noVoteSession.title"
-msgstr "A szavazás nincs beállítva"
-
 #. [debate.voteSession.notEnoughTokens]
 #. defaultMessage is:
 #. You don't have enough tokens
@@ -2266,21 +4150,21 @@ msgstr "Nincs elég szavazata"
 
 #. [debate.voteSession.participantsCount]
 #. defaultMessage is:
-#. %{count} participants voted!
+#. %{count} participants have expressed themselves!
 #: messages.json
 msgid "debate.voteSession.participantsCount"
 msgstr "%{count} résztvevő szavazott!"
 
 #. [debate.voteSession.participantsCount_0]
 #. defaultMessage is:
-#. No participant voted yet
+#. No participants have expressed themselves yet
 #: messages.json
 msgid "debate.voteSession.participantsCount_0"
 msgstr "Még egy résztvevő sem szavazott"
 
 #. [debate.voteSession.participantsCount_1]
 #. defaultMessage is:
-#. %{count} participant voted
+#. %{count} participant has expressed himself/herself
 #: messages.json
 msgid "debate.voteSession.participantsCount_1"
 msgstr "%{count} résztvevő szavazott"
@@ -2296,7 +4180,7 @@ msgstr ""
 
 #. [debate.voteSession.remainingTokens]
 #. defaultMessage is:
-#. You have %{count} tokens remaining.
+#. %{count} tokens remaining
 #: messages.json
 msgid "debate.voteSession.remainingTokens"
 msgstr "%{count} szavazata maradt."
@@ -2371,19 +4255,28 @@ msgstr "A szavazás eredményei: %{title}"
 msgid "debate.votes"
 msgstr "Szavazatok"
 
-#. [debate.whatYouNeedToKnow]
-#. defaultMessage is:
-#. What you need to know
-#: messages.json
-msgid "debate.whatYouNeedToKnow"
-msgstr "Mit kell tudnia?"
-
 #. [delete]
 #. defaultMessage is:
 #. Delete
 #: messages.json
 msgid "delete"
 msgstr ""
+
+#. [deleteConfirmation.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure that you wish to delete this item?
+#: messages.json
+#, fuzzy
+msgid "deleteConfirmation.confirmDeletionBody"
+msgstr "Biztos, hogy szeretné törölni ezt az üzenetet?"
+
+#. [deleteConfirmation.confirmDeletionTitle]
+#. defaultMessage is:
+#. Delete an item
+#: messages.json
+#, fuzzy
+msgid "deleteConfirmation.confirmDeletionTitle"
+msgstr "A törlés megerősítése"
 
 #. [deletedUser]
 #. defaultMessage is:
@@ -2420,11 +4313,11 @@ msgstr "Sajnáljuk, hiba történt:"
 msgid "error.required"
 msgstr "Ez a mező kötelező."
 
-#. [footer.cookiePolicy]
+#. [footer.cookiesPolicy]
 #. defaultMessage is:
 #. Cookies
 #: messages.json
-msgid "footer.cookiePolicy"
+msgid "footer.cookiesPolicy"
 msgstr ""
 
 #. [footer.legalNotice]
@@ -2454,6 +4347,51 @@ msgstr "Kövessen minket"
 #: messages.json
 msgid "footer.terms"
 msgstr "Általános szerződési feltételek"
+
+#. [footer.userGuidelines]
+#. defaultMessage is:
+#. User guidelines
+#: messages.json
+#, fuzzy
+msgid "footer.userGuidelines"
+msgstr "Általános szerződési feltételek"
+
+#. [form.select.newOption]
+#. defaultMessage is:
+#. Create '%{option}'
+#: messages.json
+msgid "form.select.newOption"
+msgstr ""
+
+#. [form.select.noOptions]
+#. defaultMessage is:
+#. No options
+#: messages.json
+msgid "form.select.noOptions"
+msgstr ""
+
+#. [form.select.placeholder]
+#. defaultMessage is:
+#. Select...
+#: messages.json
+#, fuzzy
+msgid "form.select.placeholder"
+msgstr "Keresés"
+
+#. [globalError]
+#. defaultMessage is:
+#. Something went wrong. Please try again later.
+#: messages.json
+msgid "globalError"
+msgstr ""
+
+#. [harvesting.confirm]
+#. defaultMessage is:
+#. Confirm
+#: messages.json
+#, fuzzy
+msgid "harvesting.confirm"
+msgstr "Most"
 
 #. [harvesting.confirmDeleteExtract]
 #. defaultMessage is:
@@ -2490,11 +4428,43 @@ msgstr "A kivonat szerkesztése"
 msgid "harvesting.enableHarvestingMode"
 msgstr "Kiemelési mód bekapcsolása"
 
+#. [harvesting.harvestedExtractNumbers]
+#. defaultMessage is:
+#. %{extractNumber} extracts harvested on this message
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestedExtractNumbers"
+msgstr "A kivonat törlése"
+
+#. [harvesting.harvestedExtractNumbers_0]
+#. defaultMessage is:
+#. %{extractNumber} extract harvested on this message
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestedExtractNumbers_0"
+msgstr "A kivonat törlése"
+
+#. [harvesting.harvestedExtractNumbers_1]
+#. defaultMessage is:
+#. %{extractNumber} extract harvested on this message
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestedExtractNumbers_1"
+msgstr "A kivonat törlése"
+
 #. [harvesting.harvesting]
 #. defaultMessage is:
 #. Harvesting
 #: messages.json
 msgid "harvesting.harvesting"
+msgstr "Kiemelés"
+
+#. [harvesting.harvestingConfirmed]
+#. defaultMessage is:
+#. The extract was confirmed successfully.
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestingConfirmed"
 msgstr "Kiemelés"
 
 #. [harvesting.harvestingDeleted]
@@ -2504,12 +4474,28 @@ msgstr "Kiemelés"
 msgid "harvesting.harvestingDeleted"
 msgstr "A kivonat törlése megtörtént."
 
+#. [harvesting.harvestingSubmitted]
+#. defaultMessage is:
+#. The extract is waiting for validation.
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestingSubmitted"
+msgstr "A kivonat frissítése megtörtént."
+
 #. [harvesting.harvestingSuccess]
 #. defaultMessage is:
 #. The extract was updated successfully.
 #: messages.json
 msgid "harvesting.harvestingSuccess"
 msgstr "A kivonat frissítése megtörtént."
+
+#. [harvesting.harvestingValidated]
+#. defaultMessage is:
+#. The extract was validated successfully.
+#: messages.json
+#, fuzzy
+msgid "harvesting.harvestingValidated"
+msgstr "A kivonat törlése megtörtént."
 
 #. [harvesting.inProgress]
 #. defaultMessage is:
@@ -2560,6 +4546,110 @@ msgstr "Csoportosítás kivonat szerint"
 msgid "harvesting.qualifyNature"
 msgstr "Csoportosítás jelleg szerint"
 
+#. [harvesting.reject]
+#. defaultMessage is:
+#. Reject
+#: messages.json
+#, fuzzy
+msgid "harvesting.reject"
+msgstr "Mozgatás"
+
+#. [harvesting.submit]
+#. defaultMessage is:
+#. Submit
+#: messages.json
+#, fuzzy
+msgid "harvesting.submit"
+msgstr "Mozgatás"
+
+#. [harvesting.tags.addTagSuccessMsg]
+#. defaultMessage is:
+#. Tag "%{tag}" has been successfully added.
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.addTagSuccessMsg"
+msgstr "A kivonat frissítése megtörtént."
+
+#. [harvesting.tags.cancel]
+#. defaultMessage is:
+#. Cancel
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.cancel"
+msgstr "Most"
+
+#. [harvesting.tags.deleteConfirmation.confirmDeletionBody]
+#. defaultMessage is:
+#. Are you sure that you wish to delete this tag?
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.deleteConfirmation.confirmDeletionBody"
+msgstr "Biztos, hogy szeretné törölni ezt az üzenetet?"
+
+#. [harvesting.tags.deleteConfirmation.confirmDeletionTitle]
+#. defaultMessage is:
+#. Delete the tag "%{tag}"
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.deleteConfirmation.confirmDeletionTitle"
+msgstr "A törlés megerősítése"
+
+#. [harvesting.tags.edit]
+#. defaultMessage is:
+#. Click to edit the tag "%{tag}"
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.edit"
+msgstr "A kivonat szerkesztése"
+
+#. [harvesting.tags.label]
+#. defaultMessage is:
+#. Tags
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.label"
+msgstr "Kiemelés jóváhagyva"
+
+#. [harvesting.tags.removeTagSuccessMsg]
+#. defaultMessage is:
+#. Tag "%{tag}" has been successfully removed.
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.removeTagSuccessMsg"
+msgstr "A kivonat frissítése megtörtént."
+
+#. [harvesting.tags.select.newOption]
+#. defaultMessage is:
+#. Create this tag '%{option}'
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.select.newOption"
+msgstr "Csoportosítás tevékenység szerint"
+
+#. [harvesting.tags.select.noOptions]
+#. defaultMessage is:
+#. No tags
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.select.noOptions"
+msgstr "Csoportosítás tevékenység szerint"
+
+#. [harvesting.tags.select.placeholder]
+#. defaultMessage is:
+#. Select tags
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.select.placeholder"
+msgstr "A kivonat törlése megtörtént."
+
+#. [harvesting.tags.validate]
+#. defaultMessage is:
+#. Validate
+#: messages.json
+#, fuzzy
+msgid "harvesting.tags.validate"
+msgstr "Kiemelés jóváhagyva"
+
 #. [harvesting.validateExtract]
 #. defaultMessage is:
 #. Extract validated
@@ -2573,6 +4663,13 @@ msgstr "A kivonat jóváhagyva"
 #: messages.json
 msgid "harvesting.validated"
 msgstr "Kiemelés jóváhagyva"
+
+#. [here]
+#. defaultMessage is:
+#. here
+#: messages.json
+msgid "here"
+msgstr ""
 
 #. [home.accessButton]
 #. defaultMessage is:
@@ -2826,6 +4923,27 @@ msgstr "látogatás"
 msgid "introduction"
 msgstr "Bevezetés"
 
+#. [legalContentsModal.iAccept]
+#. defaultMessage is:
+#. I have read and accepted 
+#: messages.json
+msgid "legalContentsModal.iAccept"
+msgstr ""
+
+#. [legalContentsModal.ofThePlatform]
+#. defaultMessage is:
+#.  of the platform.
+#: messages.json
+msgid "legalContentsModal.ofThePlatform"
+msgstr ""
+
+#. [legalContentsModal.title]
+#. defaultMessage is:
+#. Accept the legal contents
+#: messages.json
+msgid "legalContentsModal.title"
+msgstr ""
+
 #. [legalNotice.headerTitle]
 #. defaultMessage is:
 #. Legal Notice
@@ -2907,6 +5025,14 @@ msgstr "A megadott e-mail-cím már foglalt."
 msgid "login.existingUsername"
 msgstr "A megadott felhasználónév már foglalt."
 
+#. [login.figurePassword]
+#. defaultMessage is:
+#. A figure
+#: messages.json
+#, fuzzy
+msgid "login.figurePassword"
+msgstr "Új jelszó"
+
 #. [login.forgotPwd]
 #. defaultMessage is:
 #. Reset your password
@@ -2944,6 +5070,14 @@ msgstr ""
 msgid "login.invalidEmail"
 msgstr "Az Ön által megadott e-mail-cím nem érvényes"
 
+#. [login.lengthPassword]
+#. defaultMessage is:
+#. 9 characters
+#: messages.json
+#, fuzzy
+msgid "login.lengthPassword"
+msgstr "Új jelszó"
+
 #. [login.login]
 #. defaultMessage is:
 #. Log in
@@ -2972,6 +5106,14 @@ msgstr "Kérjük, csatlakozzon"
 msgid "login.loginWithSocialMedia"
 msgstr "Szeretne közösségi oldalt használni?"
 
+#. [login.lowerCasePassword]
+#. defaultMessage is:
+#. A lowercase
+#: messages.json
+#, fuzzy
+msgid "login.lowerCasePassword"
+msgstr "Új jelszó"
+
 #. [login.newPassword]
 #. defaultMessage is:
 #. New password
@@ -2992,6 +5134,14 @@ msgstr "Adja meg még egyszer az új jelszót"
 #: messages.json
 msgid "login.noAccount"
 msgstr "Még nincs fiókja?"
+
+#. [login.oldPasswordWarning]
+#. defaultMessage is:
+#. Note: The new password must be different than the last 5 passwords.
+#: messages.json
+#, fuzzy
+msgid "login.oldPasswordWarning"
+msgstr "Jelszó"
 
 #. [login.password]
 #. defaultMessage is:
@@ -3021,6 +5171,14 @@ msgstr "Ajjaj! Úgy tűnik, problémánk van. Kérjük, próbálja újra későb
 msgid "login.passwordChangeRequestSuccess"
 msgstr ""
 "Nagyszerű! E-mailt küldtünk Önnek! Ne feledje megnézni a „spam” mappában is"
+
+#. [login.passwordRequirementIntro]
+#. defaultMessage is:
+#. Your password must contain at least:
+#: messages.json
+#, fuzzy
+msgid "login.passwordRequirementIntro"
+msgstr "Ajjaj! Úgy tűnik, problémánk van. Kérjük, próbálja újra később!"
 
 #. [login.resend]
 #. defaultMessage is:
@@ -3067,6 +5225,22 @@ msgstr "Feliratkozás"
 #: messages.json
 msgid "login.somethingWentWrong"
 msgstr "Sajnáljuk! Hiba történt! Kérjük, próbálja meg később"
+
+#. [login.specialCharacterPassword]
+#. defaultMessage is:
+#. A special character
+#: messages.json
+#, fuzzy
+msgid "login.specialCharacterPassword"
+msgstr "Jelszó módosítása"
+
+#. [login.upperCasePassword]
+#. defaultMessage is:
+#. An uppercase
+#: messages.json
+#, fuzzy
+msgid "login.upperCasePassword"
+msgstr "Jelszó"
 
 #. [login.userName]
 #. defaultMessage is:
@@ -3138,13 +5312,6 @@ msgstr "kezdőlap"
 msgid "navbar.logout"
 msgstr "Kijelentkezés"
 
-#. [navbar.profile]
-#. defaultMessage is:
-#. My profile
-#: messages.json
-msgid "navbar.profile"
-msgstr "Profilom"
-
 #. [navbar.resourcesCenter]
 #. defaultMessage is:
 #. Resources
@@ -3173,6 +5340,13 @@ msgstr "nem"
 msgid "notFound.panelTitle"
 msgstr "Sajnáljuk, ez az oldal nem létezik"
 
+#. [postLoadError]
+#. defaultMessage is:
+#. Something went wrong when loading this post.
+#: messages.json
+msgid "postLoadError"
+msgstr ""
+
 #. [privacyPolicy.headerTitle]
 #. defaultMessage is:
 #. Privacy policy
@@ -3181,12 +5355,36 @@ msgstr "Sajnáljuk, ez az oldal nem létezik"
 msgid "privacyPolicy.headerTitle"
 msgstr "Jogi nyilatkozat"
 
+#. [privacyPolicy.iAccept]
+#. defaultMessage is:
+#. I have read and I accept the 
+#: messages.json
+#, fuzzy
+msgid "privacyPolicy.iAccept"
+msgstr "Jogi nyilatkozat"
+
+#. [privacyPolicy.link]
+#. defaultMessage is:
+#. the Privacy Policy
+#: messages.json
+#, fuzzy
+msgid "privacyPolicy.link"
+msgstr "Jogi nyilatkozat"
+
 #. [profile.changePassword]
 #. defaultMessage is:
 #. Change my password
 #: messages.json
 msgid "profile.changePassword"
 msgstr "A jelszavam módosítása"
+
+#. [profile.cookies]
+#. defaultMessage is:
+#. Cookies configuration
+#: messages.json
+#, fuzzy
+msgid "profile.cookies"
+msgstr "Mentés"
 
 #. [profile.deleteMyAccount]
 #. defaultMessage is:
@@ -3261,7 +5459,7 @@ msgstr "Jelenlegi jelszó"
 
 #. [profile.panelTitle]
 #. defaultMessage is:
-#. Your account
+#. My account
 #: messages.json
 msgid "profile.panelTitle"
 msgstr "Az Ön fiókja"
@@ -3344,15 +5542,20 @@ msgstr ""
 msgid "profile.userName"
 msgstr "Felhasználónév"
 
-#. [redirectToV1]
+#. [profile.usernameInformations]
 #. defaultMessage is:
-#. You will be redirected to the %{phaseName} phase in a few seconds. Assembl is being improved, please excuse us for the interface change. If nothing happens, click on the button.
+#. If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.
 #: messages.json
-msgid "redirectToV1"
+#, fuzzy
+msgid "profile.usernameInformations"
+msgstr "Személyes adatok"
+
+#. [refuse]
+#. defaultMessage is:
+#. Refuse
+#: messages.json
+msgid "refuse"
 msgstr ""
-"Néhány másodpercen belül továbbirányítjuk Önt a/az %{phaseName} szakaszra. "
-"Az Assembl fejlesztés alatt áll, elnézést kérünk a felület változásáért. Ha "
-"nem történik semmi, kattintson a gombra."
 
 #. [resourcesCenter.defaultHeaderTitle]
 #. defaultMessage is:
@@ -3402,6 +5605,14 @@ msgstr "Kategóriák"
 #: messages.json
 msgid "search.Creative participants"
 msgstr "Kreatív résztvevők"
+
+#. [search.Extracts]
+#. defaultMessage is:
+#. Extracts
+#: messages.json
+#, fuzzy
+msgid "search.Extracts"
+msgstr "Szűrés"
 
 #. [search.Filter by date]
 #. defaultMessage is:
@@ -3564,6 +5775,22 @@ msgstr "Reaktív résztvevők"
 msgid "search.Sort"
 msgstr "Szűrés"
 
+#. [search.State]
+#. defaultMessage is:
+#. State
+#: messages.json
+#, fuzzy
+msgid "search.State"
+msgstr "Jelleg"
+
+#. [search.agree]
+#. defaultMessage is:
+#. Agree
+#: messages.json
+#, fuzzy
+msgid "search.agree"
+msgstr "Nem értek egyet"
+
 #. [search.by]
 #. defaultMessage is:
 #. by
@@ -3606,6 +5833,14 @@ msgstr "Nem értek egyet"
 msgid "search.dont_understand"
 msgstr "Nem értem"
 
+#. [search.extract]
+#. defaultMessage is:
+#. Extracts
+#: messages.json
+#, fuzzy
+msgid "search.extract"
+msgstr "Szűrés"
+
 #. [search.facets.view_all]
 #. defaultMessage is:
 #. View all
@@ -3627,6 +5862,14 @@ msgstr "Kevesebb megtekintése"
 msgid "search.facets.view_more"
 msgstr "Több megtekintése"
 
+#. [search.harvested_on]
+#. defaultMessage is:
+#. Harvested on
+#: messages.json
+#, fuzzy
+msgid "search.harvested_on"
+msgstr "Közzététel dátuma:"
+
 #. [search.hitstats.results_found]
 #. defaultMessage is:
 #. {hitCount} results found
@@ -3643,7 +5886,7 @@ msgstr "Ötletek"
 
 #. [search.like]
 #. defaultMessage is:
-#. Like
+#. Agree
 #: messages.json
 msgid "search.like"
 msgstr "Kedvelés"
@@ -3661,6 +5904,22 @@ msgstr "óta tag"
 #: messages.json
 msgid "search.more_info"
 msgstr "Több információt kérek"
+
+#. [search.number_of_contributions]
+#. defaultMessage is:
+#. Number of contributions
+#: messages.json
+#, fuzzy
+msgid "search.number_of_contributions"
+msgstr "hozzájárulás"
+
+#. [search.number_of_users]
+#. defaultMessage is:
+#. Number of users
+#: messages.json
+#, fuzzy
+msgid "search.number_of_users"
+msgstr "óta tag"
 
 #. [search.pagination.next]
 #. defaultMessage is:
@@ -3720,7 +5979,7 @@ msgstr "Keresés"
 
 #. [search.synthesis]
 #. defaultMessage is:
-#. Synthesis
+#. Syntheses
 #: messages.json
 msgid "search.synthesis"
 msgstr "Összefoglalás"
@@ -3851,6 +6110,22 @@ msgstr "Probléma"
 msgid "search.taxonomy_nature.knowledge"
 msgstr "Tudás"
 
+#. [search.taxonomy_state.PUBLISHED]
+#. defaultMessage is:
+#. Published
+#: messages.json
+#, fuzzy
+msgid "search.taxonomy_state.PUBLISHED"
+msgstr "Probléma"
+
+#. [search.taxonomy_state.SUBMITTED]
+#. defaultMessage is:
+#. To validate
+#: messages.json
+#, fuzzy
+msgid "search.taxonomy_state.SUBMITTED"
+msgstr "Probléma"
+
 #. [search.user]
 #. defaultMessage is:
 #. Participants
@@ -3863,6 +6138,14 @@ msgstr "Résztvevők"
 #. There is no synthesis available yet.
 #: messages.json
 msgid "synthesis.noSynthesisYet"
+msgstr "Még nincs elérhető összefoglalás."
+
+#. [synthesis.noSynthesisYetCanCreate]
+#. defaultMessage is:
+#. There is no synthesis available yet, you can create and save one, then publish it.
+#: messages.json
+#, fuzzy
+msgid "synthesis.noSynthesisYetCanCreate"
 msgstr "Még nincs elérhető összefoglalás."
 
 #. [synthesis.seeConversation]
@@ -3909,7 +6192,7 @@ msgstr "Elolvastam és elfogadom az"
 
 #. [termsAndConditions.link]
 #. defaultMessage is:
-#. Terms & Conditions
+#. the Terms & Conditions
 #: messages.json
 msgid "termsAndConditions.link"
 msgstr "Általános szerződési feltételeket"
@@ -3930,6 +6213,28 @@ msgstr ""
 "Nem jogosult arra, hogy hozzáférjen az adminisztrációs részhez. Kérjük, "
 "lépjen kapcsolatba a weboldal adminisztrátorával."
 
+#. [userGuidelines.headerTitle]
+#. defaultMessage is:
+#. User guidelines
+#: messages.json
+#, fuzzy
+msgid "userGuidelines.headerTitle"
+msgstr "Jogi nyilatkozat"
+
+#. [userGuidelines.iAccept]
+#. defaultMessage is:
+#. I have read and I accept the 
+#: messages.json
+msgid "userGuidelines.iAccept"
+msgstr ""
+
+#. [userGuidelines.link]
+#. defaultMessage is:
+#. the user guidelines
+#: messages.json
+msgid "userGuidelines.link"
+msgstr ""
+
 #. [validate]
 #. defaultMessage is:
 #. Validate
@@ -3943,3 +6248,82 @@ msgstr "Jóváhagyás"
 #: messages.json
 msgid "yes"
 msgstr "igen"
+
+#~ msgid "administration.helpers.voteSessionHeader"
+#~ msgstr ""
+#~ "A kezdőlap fejlécének tartalmaznia kell egy képet és egy címet. Az alcím "
+#~ "opcionális."
+
+#~ msgid "administration.imageRequirements"
+#~ msgstr ""
+#~ "A képnek legalább 480 px magasnak és 1280 px szélesnek kell lennie. A kép "
+#~ "mérete nem haladhatja meg az 1 MB-t."
+
+#~ msgid "administration.menu.language"
+#~ msgstr "A beszélgetés nyelve"
+
+#~ msgid "administration.ph.descriptionBottom"
+#~ msgstr "Megjegyzések a videó alatt"
+
+#~ msgid "administration.ph.headerSubtitle"
+#~ msgstr "Fejléc alcíme"
+
+#~ msgid "administration.ph.headerTitle"
+#~ msgstr "Fejléc címe"
+
+#~ msgid "administration.ph.instructionsContent"
+#~ msgstr "Az utasítások tartalma"
+
+#~ msgid "administration.ph.mediaLink"
+#~ msgstr "Online médiumra való hivatkozás (videó, kép stb.)"
+
+#~ msgid "administration.ph.orAttachPicture"
+#~ msgstr "Vagy kép feltöltése a számítógépéről"
+
+#~ msgid "administration.ph.quote"
+#~ msgstr "Idézet"
+
+#~ msgid "administration.ph.title"
+#~ msgstr "*Cím"
+
+#~ msgid "administration.survey.1"
+#~ msgstr "A kérdések beállítása"
+
+#~ msgid "administration.survey.2"
+#~ msgstr "Adatok exportálása"
+
+#~ msgid "administration.themeNum"
+#~ msgstr "%{index} téma"
+
+#~ msgid "administration.voteModulesIntroText1"
+#~ msgstr "Ön választja ki a szavazási modult"
+
+#~ msgid "administration.voteModulesIntroText2"
+#~ msgstr "Döntése módosításához módosítsa az"
+
+#~ msgid "common.attachFileForm.label"
+#~ msgstr "Melléklet hozzáadása"
+
+#~ msgid "common.attachFileForm.submit"
+#~ msgstr "Leadás"
+
+#~ msgid "debate.survey.titleVideo"
+#~ msgstr "A téma alaposabb megértését segítő videó"
+
+#~ msgid "debate.voteSession.noVoteSession.text"
+#~ msgstr "Egy adminisztrátornak be kell állítania a szavazást"
+
+#~ msgid "debate.voteSession.noVoteSession.title"
+#~ msgstr "A szavazás nincs beállítva"
+
+#~ msgid "debate.whatYouNeedToKnow"
+#~ msgstr "Mit kell tudnia?"
+
+#~ msgid "navbar.profile"
+#~ msgstr "Profilom"
+
+#~ msgid "redirectToV1"
+#~ msgstr ""
+#~ "Néhány másodpercen belül továbbirányítjuk Önt a/az %{phaseName} "
+#~ "szakaszra. Az Assembl fejlesztés alatt áll, elnézést kérünk a felület "
+#~ "változásáért. Ha nem történik semmi, kattintson a gombra."

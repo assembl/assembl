@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import KeywordInfo from './keywordInfo';
@@ -27,6 +27,6 @@ describe('<KeywordInfo /> - with shallow', () => {
   });
 
   it('should render 2 paragraphs info', () => {
-    expect(wrapper.find('p [className="info"]')).toHaveLength(2);
+    expect(wrapper.find('p[className="info"]')).toHaveLength(2);
   });
 });

@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import type { Props } from '../../../../js/app/components/home/video';
 import { Video } from '../../../../js/app/components/home/video';

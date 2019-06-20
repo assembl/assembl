@@ -1014,7 +1014,7 @@ class User(AgentProfile):
                     [results['feedback']['warning']] + results['feedback']['suggestions'])
         # refuse if reusing an old password
         for p in self.old_passwords:
-            if verify_password(password, p.password):
+            if verify_password(password, p.password if p else ""):
                 raise LocalizableError(_("Please do not repeat an older password."))
 
     @password_p.setter
@@ -1031,8 +1031,7 @@ class User(AgentProfile):
                     OldPassword(password=self.password))
             # keep only the last N+1 passwords (including current)
             keep_past_passwords = int(config.get("keep_past_passwords", 4))
-            for p in list(self.old_passwords[0:-keep_past_passwords]):
-                self.old_passwords.remove(p)
+            self.old_passwords = self.old_passwords[-keep_past_passwords:]
 
             # set the new password
             self.password = hash_password(password)

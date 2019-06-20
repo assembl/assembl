@@ -93,29 +93,34 @@ def get_descendants(ideas):
     return descendants
 
 
-def get_multicolumns_ideas(discussion):
-    return get_ideas_for_export(discussion, MessageView.messageColumns.value)
+def get_multicolumns_ideas(discussion, start=None, end=None):
+    return get_ideas_for_export(discussion, MessageView.messageColumns.value, start=start, end=end)
 
 
-def get_survey_ideas(discussion):
-    return get_ideas_for_export(discussion, MessageView.survey.value)
+def get_survey_ideas(discussion, start=None, end=None):
+    return get_ideas_for_export(discussion, MessageView.survey.value, start=start, end=end)
 
 
-def get_thread_ideas(discussion):
-    return get_ideas_for_export(discussion, MessageView.thread.value)
+def get_thread_ideas(discussion, start=None, end=None):
+    return get_ideas_for_export(discussion, MessageView.thread.value, start=start, end=end)
 
 
-def get_bright_mirror_ideas(discussion):
-    return get_ideas_for_export(discussion, MessageView.brightMirror.value)
+def get_bright_mirror_ideas(discussion, start=None, end=None):
+    return get_ideas_for_export(discussion, MessageView.brightMirror.value, start=start, end=end)
 
 
-def get_vote_session_ideas(discussion):
-    return get_ideas_for_export(discussion, MessageView.voteSession.value)
+def get_vote_session_ideas(discussion, start=None, end=None):
+    return get_ideas_for_export(discussion, MessageView.voteSession.value, start=start, end=end)
 
 
-def get_ideas_for_export(discussion, module_type=None):
+def get_ideas_for_export(discussion, module_type=None, start=None, end=None):
     ideas = []
     for phase in discussion.timeline_events:
+        # If [start, end] and [phase.start, phase.end] don't overlap,
+        # don't export the ideas.
+        if phase.end < start or phase.start > end:
+            continue
+
         root_thematic = get_root_thematic_for_phase(phase)
         if root_thematic is not None:
             ideas_query = get_ideas(phase)
@@ -130,23 +135,13 @@ def get_ideas_for_export(discussion, module_type=None):
 
 def get_ideas(phase, options=None):
     root_thematic = get_root_thematic_for_phase(phase)
-    discussion = phase.discussion
     if root_thematic is None:
         return []
 
     model = models.Idea
     query = model.query
-    if discussion.root_idea == root_thematic:
-        # thread phase is directly on discussion.root_idea,
-        # we need to remove all descendants of all the other phases
-        descendants_to_ignore = get_descendants(get_all_phase_root_ideas(discussion))
-        descendants = root_thematic.get_all_descendants(id_only=True, inclusive=False)
-        descendants = set(descendants) - set(descendants_to_ignore)
-        query = query.filter(model.id.in_(descendants))
-    else:
-        descendants_query = root_thematic.get_descendants_query(inclusive=False)
-        query = query.filter(model.id.in_(descendants_query))
-
+    descendants_query = root_thematic.get_descendants_query(inclusive=False)
+    query = query.filter(model.id.in_(descendants_query))
     query = query.outerjoin(
             models.Idea.source_links
         ).filter(

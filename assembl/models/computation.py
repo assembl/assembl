@@ -8,7 +8,7 @@ from sqlalchemy import (
     DateTime,
     String,
 )
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import relationship, backref
 from sqlalchemy.dialects.postgresql import ENUM, JSONB
 
 from . import Base, DiscussionBoundBase
@@ -58,17 +58,13 @@ class ComputationOnPost(Computation, DiscussionBoundBase):
     __tablename__ = 'computation_on_post'
     id = Column(Integer, ForeignKey(Computation.id), primary_key=True)
     post_id = Column(Integer, ForeignKey("content.id"), index=True)
-    post = relationship("Content", backref="computations")
+    post = relationship("Content", backref=backref("computations", cascade="all, delete-orphan"))
     __mapper_args__ = {
         'polymorphic_identity': 'post',
     }
 
     def get_discussion_id(self):
-        from .generic import Content
-        post = self.post
-        if post is None:
-            post = Content.get(self.post_id)
-        return post.discussion_id
+        return self.post.discussion_id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
@@ -91,14 +87,10 @@ class ComputationOnIdea(Computation, DiscussionBoundBase):
     }
     id = Column(Integer, ForeignKey(Computation.id), primary_key=True)
     idea_id = Column(Integer, ForeignKey("idea.id"), index=True)
-    idea = relationship("Idea", backref="computations")
+    idea = relationship("Idea", backref=backref("computations", cascade="all, delete-orphan"))
 
     def get_discussion_id(self):
-        from .idea import Idea
-        idea = self.idea
-        if idea is None:
-            idea = Idea.get(self.idea_id)
-        return idea.discussion_id
+        return self.idea.discussion_id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):

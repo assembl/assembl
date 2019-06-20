@@ -4,27 +4,27 @@ import { Link } from 'react-router';
 import { Translate } from 'react-redux-i18n';
 // Utils imports
 import { openShareModal } from '../../../utils/utilityManager';
-// Type imports
-import type { BrightMirrorFictionProps } from '../../../pages/brightMirrorFiction';
 
 export type Props = {
   /** Meta information such as slug, phase, themeId, fictionId required by openShareModal > getPathForModal in utilityManager */
-  metaInfo: BrightMirrorFictionProps,
+  routerParams: RouterParams,
   /** Classname is the component needs to be styled */
-  linkClassName: ?string,
+  linkClassName: string,
   /** Sharing modal popup title */
   modalTitleMsgKey: string,
   /** Type that defines how to build the URL to share with getPathForModal
    in utilityManager, check routes.json for the URL format */
-  type: string
+  type: string,
+  postId?: ?string
 };
 
-const SharePostButton = ({ metaInfo, linkClassName, modalTitleMsgKey, type }: Props) => {
+const SharePostButton = ({ routerParams, linkClassName, modalTitleMsgKey, type, postId }: Props) => {
   const titleComponent = <Translate value={modalTitleMsgKey} />;
   const openShareModalParams = {
-    routerParams: metaInfo,
+    routerParams: routerParams,
     title: titleComponent,
-    type: type
+    type: type,
+    postId: postId
   };
 
   return (
@@ -33,5 +33,7 @@ const SharePostButton = ({ metaInfo, linkClassName, modalTitleMsgKey, type }: Pr
     </Link>
   );
 };
-
+SharePostButton.defaultProps = {
+  postId: null
+};
 export default SharePostButton;

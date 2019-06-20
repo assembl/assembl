@@ -14,13 +14,11 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
     <div
       className="form-container"
     >
-      <Helper
-        additionalTextClasses=""
+      <Connect(Helper)
         classname="title"
         helperText="The proposals section is introduced by a title. You define the title based on the proposal content."
         helperUrl="/static2/img/helpers/helper3.png"
         label="Proposal section title configuration"
-        popOverClass=""
       />
       <FormControlWithLabel
         helperText=""

@@ -1,12 +1,5 @@
 .circle-avatar {
-  height: 34px;
-  width: 34px;
+  height: 30px;
+  width: 30px;
   border-radius: 50%;
-}
-
-@media screen and (min-width: $screen-sm-min) {
-  .circle-avatar {
-    height: 40px;
-    width: 40px;
-  }
 }

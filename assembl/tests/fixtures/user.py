@@ -186,7 +186,7 @@ def moderator_user(request, test_session, discussion):
 
     from assembl.models import User, UserRole, Role, EmailAccount
     u = User(
-        name=u"Jane Doe", type="user", password="password", verified=True,
+        name=u"Jane Doe", type="user", password="password123ABC!", verified=True,
         last_assembl_login=datetime.utcnow())
     email = EmailAccount(email="janedoe@example.com", profile=u, verified=True)
     test_session.add(u)

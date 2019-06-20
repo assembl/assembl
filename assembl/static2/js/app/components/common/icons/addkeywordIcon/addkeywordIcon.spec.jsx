@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import AddkeywordIcon from './addkeywordIcon';
@@ -24,6 +24,6 @@ describe('<AddkeywordIcon /> - with shallow', () => {
   });
 
   it('should render a svg with addkeyword-icon class', () => {
-    expect(wrapper.find('svg [className="addkeyword-icon"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="addkeyword-icon"]')).toHaveLength(1);
   });
 });

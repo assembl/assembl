@@ -15,6 +15,7 @@ class AvatarImage extends React.PureComponent<Props> {
     const src = userId ? `/user/id/${userId}/avatar/30` : avatarIcon;
     return (
       <img
+        className="avatar-logo"
         src={src}
         width="30"
         height="30"

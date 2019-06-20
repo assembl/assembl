@@ -251,7 +251,6 @@
 .harvesting-box {
   background-color: $white;
   box-shadow: 2px 2px 4px 0 #ccc;
-  margin: 0 0 20px 18px;
   width: 295px;
 
   .harvesting-box-header {
@@ -445,7 +444,7 @@
     word-wrap: break-word;
 
     .extract-body {
-      min-width: 220px;
+      max-width: 250px;
     }
 
     .form-group {

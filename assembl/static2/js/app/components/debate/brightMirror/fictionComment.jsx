@@ -10,6 +10,7 @@ import moment from 'moment';
 import { getConnectedUserId } from '../../../utils/globalFunctions';
 import Permissions, { connectedUserCan } from '../../../utils/permissions';
 import { displayAlert } from '../../../utils/utilityManager';
+import { getOriginalBodyAndSubject } from '../common/post';
 // Optimization: Should create commentQuery.graphql and adapt the query
 import CommentQuery from '../../../graphql/BrightMirrorFictionQuery.graphql';
 import UpdateCommentMutation from '../../../graphql/mutations/updatePost.graphql';
@@ -21,6 +22,7 @@ import FictionCommentForm from './fictionCommentForm';
 import EditPostButton from '../common/editPostButton';
 import DeletePostButton from '../common/deletePostButton';
 import ResponsiveOverlayTrigger from '../../common/responsiveOverlayTrigger';
+import DisplayResponseAuthor from '../../common/displayResponseAuthor';
 import DeletedFictionComment from './deletedFictionComment';
 // Constant imports
 import { EMPTY_STRING, USER_ID_NOT_FOUND, DeletedPublicationStates, PublicationStates } from '../../../constants';
@@ -287,21 +289,13 @@ export class FictionComment extends Component<LocalFictionCommentProps, FictionC
     ) : null;
 
     const displayHeader = (
-      <header className="meta">
-        <p className="author">
-          <strong>{authorFullname}</strong>
-          <span className="parent-info">
-            <span className="assembl-icon-back-arrow" />
-            {parentPostAuthorFullname}
-          </span>
-        </p>
-        <p className="published-date">
-          <time dateTime={publishedDate} pubdate="true">
-            {displayedPublishedDate}
-          </time>
-          {displayIsEdited}
-        </p>
-      </header>
+      <DisplayResponseAuthor
+        authorFullname={authorFullname}
+        displayedPublishedDate={displayedPublishedDate}
+        parentPostAuthorFullname={parentPostAuthorFullname}
+        publishedDate={publishedDate}
+        displayIsEdited={displayIsEdited}
+      />
     );
 
     const displayCommentContent = isEditing ? (
@@ -358,12 +352,13 @@ const mapQueryToProps = ({ data }) => {
           : EMPTY_STRING
     };
 
+    const { originalBody } = getOriginalBodyAndSubject(false, fiction.subjectEntries, fiction.bodyEntries);
     // Map graphQL returned data with local props
     return {
       authorUserId: creator ? creator.userId : USER_ID_NOT_FOUND,
       authorFullname: creator ? creator.displayName : noAuthorSpecified,
       circleAvatar: circleAvatarProps,
-      commentContent: fiction.body,
+      commentContent: originalBody,
       commentId: id,
       contentLocale: contentLocale,
       displayedPublishedDate: moment(fiction.creationDate)

@@ -4,8 +4,10 @@ import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import { List, Map } from 'immutable';
 import range from 'lodash/range';
-import { SplitButton, MenuItem, Radio, FormGroup } from 'react-bootstrap';
+import { Button, FormGroup, MenuItem, OverlayTrigger, Radio, SplitButton } from 'react-bootstrap';
 
+import { confirmDeletionModal } from '../../form/fieldArrayWithActions';
+import { deleteGaugeTooltip } from '../../common/tooltips';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import { createRandomId } from '../../../utils/globalFunctions';
 import FormControlWithLabel from '../../common/formControlWithLabel';
@@ -44,6 +46,7 @@ type GaugeFormProps = {
   createChoice: string => void,
   deleteChoice: number => void,
   updateNbTicks: number => void,
+  handleDeleteGauge?: ((id: string) => void) | null,
   handleNumberGaugeCheck: Function,
   handleNumberGaugeUncheck: Function,
   handleMinChange: number => void,
@@ -107,6 +110,9 @@ export const changeNbTicks = ({
   }
 };
 
+const confirmDeletionTitle = <Translate value="administration.deleteGauge" />;
+const confirmDeletionBody = <Translate value="deleteConfirmation.confirmDeletionBody" />;
+
 const DumbGaugeForm = ({
   id,
   instructions,
@@ -121,6 +127,7 @@ const DumbGaugeForm = ({
   createChoice,
   deleteChoice,
   updateNbTicks,
+  handleDeleteGauge,
   handleNumberGaugeCheck,
   handleNumberGaugeUncheck,
   handleMinChange,
@@ -131,6 +138,16 @@ const DumbGaugeForm = ({
 }: GaugeFormProps) => (
   <div className="gauges-vote-form" id={`gauge-form-${index + 1}`}>
     {index !== null && <Translate value="administration.gauge" number={index + 1} />}
+    {handleDeleteGauge && (
+      <OverlayTrigger placement="top" overlay={deleteGaugeTooltip}>
+        <Button
+          onClick={() => confirmDeletionModal(confirmDeletionTitle, confirmDeletionBody, () => handleDeleteGauge(id))}
+          className="admin-icons"
+        >
+          <span className="assembl-icon-delete grey" />
+        </Button>
+      </OverlayTrigger>
+    )}
     <div className="flex margin-m">
       <FormControlWithLabel
         id={`gauge-vote-instructions-${index + 1}`}
@@ -209,6 +226,7 @@ const DumbGaugeForm = ({
 );
 
 DumbGaugeForm.defaultProps = {
+  handleDeleteGauge: null,
   index: null,
   minimum: 0,
   maximum: 10

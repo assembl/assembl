@@ -129,8 +129,9 @@ class TimelineFields extends React.Component<Props> {
                               picker={{ pickerType: I18n.t('administration.landingPage.header.startDate') }}
                               editLocale={editLocale}
                               placeHolder={startDatePickerPlaceholder}
-                              showTime={false}
-                              dateFormat="LL"
+                              showTime
+                              timeFormat="HH:mm"
+                              dateFormat="LLL"
                               form={form}
                               hasConflictingDates={conflictingDates}
                             />
@@ -141,8 +142,9 @@ class TimelineFields extends React.Component<Props> {
                               picker={{ pickerType: I18n.t('administration.landingPage.header.endDate') }}
                               editLocale={editLocale}
                               placeHolder={endDatePickerPlaceholder}
-                              showTime={false}
-                              dateFormat="LL"
+                              showTime
+                              timeFormat="HH:mm"
+                              dateFormat="LLL"
                               form={form}
                               hasConflictingDates={conflictingDates}
                             />

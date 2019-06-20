@@ -225,7 +225,6 @@ class Child extends React.PureComponent<Props, State> {
         className={classnames(`level level-${level}`, {
           'border-left child-level': level > 0,
           'no-shift': level > 3,
-          'padding-right': level > 4,
           hidden: hidden
         })}
         id={id}

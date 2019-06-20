@@ -1,5 +1,10 @@
-mutation removeTag($taggableId: ID!, $id: ID!) {
+#import "../fragments/Post.graphql"
+
+mutation removeTag($taggableId: ID!, $id: ID!, $contentLocale: String!) {
   removeTag(taggableId: $taggableId, id: $id) {
     success
+    post {
+      ...Post
+    }
   }
 }

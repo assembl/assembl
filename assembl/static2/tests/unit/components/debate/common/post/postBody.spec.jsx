@@ -44,7 +44,8 @@ describe('Html component', () => {
     rawHtml:
       'You can\'t <span id="message-body-local:Content/1010">index <a href="url">the port</a> without programming</div>' +
       ' the <div id="message-body-local:Content/2020">wireless HTTP program</div>! <iframe src="iframe-src"></iframe>' +
-      'Look at our website <a href="https://github.com/">https://github.com/</a>',
+      'Look at our website <a href="https://github.com/">https://github.com/</a>' +
+      '<img class="atomic-image" src="http://lorempixel.com/400/200/"/>',
     divRef: () => {},
     dbId: '3059',
     contentLocale: 'en'

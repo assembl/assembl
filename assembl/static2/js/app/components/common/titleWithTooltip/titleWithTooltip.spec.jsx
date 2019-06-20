@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import TitleWithTooltip from './titleWithTooltip';
@@ -43,7 +43,7 @@ describe('<TitleWithTooltip /> - with shallow', () => {
   });
 
   it('should render a modal when you click on the icon', () => {
-    wrapper.find('div [className="titleTooltip-container"]').simulate('click');
+    wrapper.find('div[className="titleTooltip-container"]').simulate('click');
     expect(displayModal).toHaveBeenCalledTimes(1);
   });
 });

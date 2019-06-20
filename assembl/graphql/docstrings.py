@@ -686,26 +686,10 @@ class DeletePost:
     post_id = Default.node_id % "Post" + " This is the Post identifier that is to be deleted."
 
 
-class UndeletePost:
-    __doc__ = "A mutation called to resurrect Post after being deleted."
-    post_id = Default.node_id % "Post" + " This is the Post identifier that is to be resurrected."
-
-
 class ValidatePost:
 
     __doc__ = "A mutation to validate a submitted Post."
     post_id = Default.node_id % "Post" + " This is the Post identifier that is to be validated."
-
-
-class AddPostAttachment:
-    __doc__ = "A mutation to add Attachment to a Post."
-    post_id = Default.node_id % ("Post") + " The identifier of the Post that the Attachment will be connected to."
-    file = "The path of the file to be attached."
-
-
-class DeletePostAttachment:
-    post_id = Default.node_id % ("Post") + " The identifier of the Post that the Attachment will be deleted from."
-    attachment_id = "The database identifier of the Attachement to be deleted."
 
 
 class AddPostExtract:

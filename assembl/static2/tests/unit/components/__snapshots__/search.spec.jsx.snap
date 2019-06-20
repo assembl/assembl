@@ -44,19 +44,18 @@ exports[`Hits components DumbExtractHit component should render an extract hit 1
         className="profileLine"
       >
         <div
-          className="inline"
+          className="baseline-align-flex"
         >
-          <img
-            alt="Jewell Pouros"
-            height="30"
-            onError={[Function]}
-            src="/user/id/foo/avatar/30"
-            width="30"
-          />
-        </div>
-        <div
-          className="user"
-        >
+          <div>
+            <img
+              alt="Jewell Pouros"
+              className="avatar-logo"
+              height="30"
+              onError={[Function]}
+              src="/user/id/foo/avatar/30"
+              width="30"
+            />
+          </div>
           <div
             className="creator"
           >
@@ -197,19 +196,18 @@ exports[`Hits components PostHit component should render a post hit 1`] = `
         className="profileLine"
       >
         <div
-          className="inline"
+          className="baseline-align-flex"
         >
-          <img
-            alt="Paxton Pouros"
-            height="30"
-            onError={[Function]}
-            src="/user/id/foo/avatar/30"
-            width="30"
-          />
-        </div>
-        <div
-          className="user"
-        >
+          <div>
+            <img
+              alt="Paxton Pouros"
+              className="avatar-logo"
+              height="30"
+              onError={[Function]}
+              src="/user/id/foo/avatar/30"
+              width="30"
+            />
+          </div>
           <div
             className="creator"
           >
@@ -297,19 +295,18 @@ exports[`Hits components SynthesisHit component should render a synthesis hit 1`
         className="profileLine"
       >
         <div
-          className="inline"
+          className="baseline-align-flex"
         >
-          <img
-            alt="Annabelle Olson"
-            height="30"
-            onError={[Function]}
-            src="/user/id/foo/avatar/30"
-            width="30"
-          />
-        </div>
-        <div
-          className="user"
-        >
+          <div>
+            <img
+              alt="Annabelle Olson"
+              className="avatar-logo"
+              height="30"
+              onError={[Function]}
+              src="/user/id/foo/avatar/30"
+              width="30"
+            />
+          </div>
           <div
             className="creator"
           >

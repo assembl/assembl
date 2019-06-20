@@ -2,7 +2,7 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 /* eslint-enable */
 
@@ -44,11 +44,11 @@ describe('<SemanticAnalysisForDiscussion /> - with shallow', () => {
   });
 
   it('should render a div with semantic-analysis-container class', () => {
-    expect(wrapper.find('div [className="semantic-analysis-container"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="semantic-analysis-container"]')).toHaveLength(1);
   });
 
   it('should render a banner', () => {
-    expect(wrapper.find('div [className="banner"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="banner"]')).toHaveLength(1);
   });
 
   it('should render a SemanticAnalysis component', () => {

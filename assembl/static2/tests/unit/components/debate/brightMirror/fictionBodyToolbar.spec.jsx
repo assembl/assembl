@@ -2,7 +2,7 @@
 import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import FictionBodyToolbar from '../../../../../js/app/components/debate/brightMirror/fictionBodyToolbar';
 import CommentHelperButton from '../../../../../js/app/components/debate/common/commentHelperButton';
@@ -30,12 +30,12 @@ describe('<FictionBodyToolbar /> - with shallow', () => {
     wrapper.setProps({
       mySentiment: null
     });
-    expect(wrapper.find('div [className="sentiment"]')).toHaveLength(4);
+    expect(wrapper.find('div[className="sentiment"]')).toHaveLength(4);
   });
 
   it('should render 4 icons, 1 active and 3 inactive if there is mySentiment', () => {
-    expect(wrapper.find('div [className="sentiment sentiment-active"]')).toHaveLength(1);
-    expect(wrapper.find('div [className="sentiment"]')).toHaveLength(3);
+    expect(wrapper.find('div[className="sentiment sentiment-active"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="sentiment"]')).toHaveLength(3);
   });
 
   it('should not render counts if none', () => {
@@ -47,11 +47,11 @@ describe('<FictionBodyToolbar /> - with shallow', () => {
         moreInfo: 0
       }
     });
-    expect(wrapper.find('div [className="sentiments-count margin-m"]')).toHaveLength(0);
+    expect(wrapper.find('div[className="sentiments-count margin-m"]')).toHaveLength(0);
   });
 
   it('should render counts if there is one at least', () => {
-    expect(wrapper.find('div [className="sentiments-count margin-m"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="sentiments-count margin-m"]')).toHaveLength(1);
   });
 
   it('should render counts icons and number corresponding', () => {
@@ -63,8 +63,8 @@ describe('<FictionBodyToolbar /> - with shallow', () => {
         moreInfo: 0
       }
     });
-    expect(wrapper.find('div [className="min-sentiment"]')).toHaveLength(3);
-    expect(wrapper.find('div [className="txt"]').text()).toEqual('7 réactions');
+    expect(wrapper.find('div[className="min-sentiment"]')).toHaveLength(3);
+    expect(wrapper.find('div[className="txt"]').text()).toEqual('7 réactions');
   });
 
   it('should render one CommentHelperButton', () => {

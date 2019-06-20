@@ -64,6 +64,7 @@ fasteners==0.14.1         # via executor
 feedparser==5.2.1
 flake8==3.6.0
 flaky==3.1.1
+freezegun==0.3.11
 funcsigs==1.0.2           # via mock
 future==0.15.2
 futures==3.2.0            # via s3transfer
@@ -155,6 +156,7 @@ pytest==2.9.2
 python-dateutil==2.5.3
 python-editor==1.0.3      # via alembic
 python-json-logger==0.1.8
+python-magic==0.4.15
 python-openid==2.2.5      # via social-auth-core
 python-saml==2.4.2
 pytz==2016.4

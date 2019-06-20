@@ -2,7 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { configure, mount } from 'enzyme';
 import 'react-dates/initialize';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import CustomDateRangePicker from '../../../../../js/app/components/administration/dateRangePicker/customDateRangePicker';
 
@@ -46,7 +46,7 @@ describe('<CustomDateRangePicker />', () => {
     wrapper = mount(<CustomDateRangePicker {...dateRangePickerProps} />);
   });
   it('should render a surrounding div with the appropriate class', () => {
-    expect(wrapper.find('div [className=\'date-range-picker\']')).toHaveLength(1);
+    expect(wrapper.find('div[className=\'date-range-picker\']')).toHaveLength(1);
   });
   it('should render a CustomDateRangePicker component', () => {
     expect(wrapper.find(CustomDateRangePicker)).toHaveLength(1);

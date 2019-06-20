@@ -3,7 +3,7 @@ import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import Description from './description';
@@ -26,7 +26,7 @@ describe('<Description /> - with shallow', () => {
   });
 
   it('should render a unique div which has a classname', () => {
-    expect(wrapper.find('div [className="description"]')).toHaveLength(1);
+    expect(wrapper.find('div[className="description"]')).toHaveLength(1);
   });
 
   it('should render children props', () => {

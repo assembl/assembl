@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import { configure, shallow, mount } from 'enzyme';
 import { NavDropdown } from 'react-bootstrap';
 
@@ -56,18 +56,18 @@ describe('<Avatar /> - with mount', () => {
 
   it('Should split the display name if is longer than or equal to 17 length', () => {
     wrapper.setProps({ displayName: 'Johnny the king of kings' });
-    const span = wrapper.find('span [className="user-account"]');
+    const span = wrapper.find('span[className="user-account"]');
     expect(span.text()).toEqual('Johnny the king o...');
   });
 
   it('Should not split the display name if is smaller than 17 length', () => {
-    const span = wrapper.find('span [className="user-account"]');
+    const span = wrapper.find('span[className="user-account"]');
     expect(span.text()).toEqual('Johnny');
   });
 
   it('Should not split the display name if split prop is false', () => {
     wrapper.setProps({ displayName: 'Johnny the king of kings', split: false });
-    const span = wrapper.find('span [className="user-account"]');
+    const span = wrapper.find('span[className="user-account"]');
     expect(span.text()).toEqual('Johnny the king of kings');
   });
 });

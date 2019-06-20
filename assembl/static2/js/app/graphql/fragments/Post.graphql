@@ -27,6 +27,9 @@ fragment Post on Post {
   creator {
     ...AgentProfileInfo
   }
+  parentPostCreator {
+    displayName
+  }
   # parentId already retrieved by IdeaWithPosts query
   # creationDate already retrieved by IdeaWithPosts query
   # messageClassifier already retrieved by IdeaWithPosts query

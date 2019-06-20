@@ -16,6 +16,7 @@ import PostTranslate from '../../common/translations/postTranslate';
 import Embed from '../../../common/urlPreview/embed';
 import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
 import { getExtractTagId, getExtractColor } from '../../../../utils/extract';
+import ModalImage from '../modalImage';
 
 type Props = {
   body: ?string,
@@ -101,6 +102,10 @@ export const postBodyReplacementComponents = (afterLoad?: Function, isHarvesting
         {origin}
       </React.Fragment>
     );
+  },
+  img: (attributes: Object) => {
+    const { className, src, alt, title } = attributes;
+    return <ModalImage className={className} src={src} alt={alt} title={title} />;
   },
   annotation: (attributes: Object) => {
     if (isHarvesting) {

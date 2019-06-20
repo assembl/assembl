@@ -1,54 +1,37 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Syntheses component should match empty Syntheses snapshot 1`] = `
-<section
-  className="themes-section"
+<div
+  className="container-fluid"
 >
   <div
-    className="max-container"
+    className="max-container syntheses-page"
   >
     <div
       className="title-section"
     >
-      <div>
-        <div
-          className="title-hyphen"
-        >
-           
-        </div>
-        <h1
-          className="section-title section-title1 dark-title-1"
-        >
-          <span>
-            Syntheses summary
-          </span>
-        </h1>
-      </div>
+      <div
+        className="title-hyphen"
+      />
+      <h1
+        className="dark-title-1 no-margin-left-xs"
+      >
+        <span>
+          Syntheses summary
+        </span>
+      </h1>
     </div>
     <div
-      className="content-section margin-l"
+      className="page-body"
     >
       <div
-        className="center create-synthesis-button"
-      >
-        <a
-          className="button-submit button-dark"
-          onClick={[Function]}
-          style={Object {}}
-        >
-          <span>
-            Create a new synthesis
-          </span>
-        </a>
-      </div>
-      <h2
-        className="dark-title-2 margin-left-xxl"
+        className="center margin-left-xxl syntheses-no-synthesis"
       >
         <span>
           There is no synthesis available yet.
         </span>
-      </h2>
+      </div>
     </div>
   </div>
-</section>
+</div>
 `;

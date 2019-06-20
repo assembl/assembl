@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { configure, shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import renderer from 'react-test-renderer';
 
 import PostBody from '../../../../../js/app/components/debate/common/post/postBody';
@@ -80,13 +80,13 @@ describe('<FictionBody /> - with mount', () => {
   });
 
   it('should display the fiction content', () => {
-    const fictionContent: string = wrapper.find('div [className="post-body-content body"]').text();
+    const fictionContent: string = wrapper.find('div[className="post-body-content body"]').text();
     expect(fictionContent).toEqual(defaultContent);
   });
 
   it('should display "no content specified" when content is set to null', () => {
     wrapper.setProps({ content: '' });
-    const fictionContent: string = wrapper.find('div [className="post-body-content body"]').text();
+    const fictionContent: string = wrapper.find('div[className="post-body-content body"]').text();
     expect(fictionContent).toEqual('no content specified');
   });
 });

@@ -3,7 +3,7 @@ import React from 'react';
 import { Tabs, Tab } from 'react-bootstrap';
 /* eslint-disable import/no-extraneous-dependencies */
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import ThematicTabs from './thematicTabs';

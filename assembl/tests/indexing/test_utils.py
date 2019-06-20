@@ -73,7 +73,7 @@ def test_get_data_for_post_survey(test_session, phases, admin_user, thematic_and
     assert data['message_view_override'] == u'survey'
     assert data['phase_id'] == phases['survey'].id
     assert data['phase_identifier'] == u'survey'
-    assert data['creation_date'].date() == datetime.date.today()
+    assert data['creation_date'].date() == datetime.date(2018, 2, 1)
     assert data['creator_display_name'] == u'mr_admin_user'
     assert data['sentiment_counts'] == {
         'consensus': 0,

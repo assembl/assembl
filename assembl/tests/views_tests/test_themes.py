@@ -1,7 +1,7 @@
 import pytest
 import uuid
 
-from assembl.views import find_theme, populate_theme_information, extract_resources_hash, extract_v1_resources_hash
+from assembl.views import find_theme, populate_theme_information, extract_resources_hash
 from assembl.tests.fixtures.base import get_resources_html
 
 
@@ -26,15 +26,6 @@ class TestResources(object):
         }
         assert expected['bundle_hash'] == resources_hash['bundle_hash']
         assert expected['bundle_css_hash'] == resources_hash['bundle_css_hash']
-
-    def test_get_v1_resources_hash(self):
-        resources_hash = extract_v1_resources_hash(get_resources_html("_"))
-        expected = {
-            'search_hash': 'b8939cd89ebdedfd2901',
-            'search_css_hash': '04e4e4b2fab45a2ab04e'
-        }
-        assert expected['search_hash'] == resources_hash['search_hash']
-        assert expected['search_css_hash'] == resources_hash['search_css_hash']
 
     def test_get_null_resources_hash(self):
         theme_name = "my_theme"

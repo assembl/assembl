@@ -20,7 +20,7 @@ import Proposals from '../components/voteSession/proposals';
 import ProposalsResults from '../components/voteSession/proposalsResults';
 import { getDomElementOffset, isMobile } from '../utils/globalFunctions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
-import { promptForLoginOr, displayAlert, displayModal } from '../utils/utilityManager';
+import { closeModal, displayAlert, displayModal, promptForLoginOr } from '../utils/utilityManager';
 import { manageErrorOnly } from '../components/common/manageErrorAndLoading';
 import Loader from '../components/common/loader';
 
@@ -56,23 +56,24 @@ export type Proposal = {|
 |};
 
 type Props = {
-  loading: boolean,
-  title: string,
-  subTitle: string,
-  seeCurrentVotes: boolean,
+  addGaugeVote: Object => Promise<void>,
+  addTokenVote: Object => Promise<void>,
   headerImageUrl: string,
-  instructionsSectionTitle: string,
   instructionsSectionContent: string,
+  instructionsSectionTitle: string,
+  id: string,
   isPhaseCompleted: boolean,
+  lang: string,
+  loading: boolean,
   modules: Array<VoteSpecification>,
   numParticipants: number,
   phaseId: string,
-  propositionsSectionTitle: string,
   proposals: Array<Proposal>,
+  propositionsSectionTitle: string,
   randomProposals: Array<Proposal>,
-  addGaugeVote: Function,
-  addTokenVote: Function,
-  refetchVoteSession: Function
+  seeCurrentVotes: boolean,
+  subTitle: string,
+  title: string
 };
 
 export type RemainingTokensByCategory = Map<string, number>;
@@ -98,28 +99,28 @@ type FindTokenVoteModule = (Array<VoteSpecification>) => ?TokenVoteSpecification
 export const findTokenVoteModule: FindTokenVoteModule = modules => modules.find(m => m.voteType === 'token_vote_specification');
 
 // We sort the proposal modules by their voteSpecTemplateId to have the same order between proposals.
-const moduleComparator = (module1, module2) => {
-  if (!module1.voteSpecTemplateId || !module2.voteSpecTemplateId) {
-    return -1;
-  }
-  if (module1.voteSpecTemplateId < module2.voteSpecTemplateId) {
-    return -1;
-  }
-  if (module1.voteSpecTemplateId === module2.voteSpecTemplateId) {
-    return 0;
-  }
-  return 1;
-};
+// voteSpecTemplateId is the base64 string, it doesn't make much sens to sort on that.
+// parseFloat(atob(voteSpecTemplateId).split(':')[1]) yes
+// const moduleComparator = (module1, module2) => {
+//   if (!module1.voteSpecTemplateId || !module2.voteSpecTemplateId) {
+//     return -1;
+//   }
+//   if (module1.voteSpecTemplateId < module2.voteSpecTemplateId) {
+//     return -1;
+//   }
+//   if (module1.voteSpecTemplateId === module2.voteSpecTemplateId) {
+//     return 0;
+//   }
+//   return 1;
+// };
 
-// $FlowFixMe: if voteType === 'gauge_vote_specification', we know it is a GaugeVoteSpecification
-type FilterGaugeVoteModules = (Array<VoteSpecification>) => Array<GaugeVoteSpecification>;
-export const filterGaugeVoteModules: FilterGaugeVoteModules = modules =>
-  modules.filter(module => module.voteType === 'gauge_vote_specification').sort(moduleComparator);
-
-// $FlowFixMe: if voteType === 'number_gauge_vote_specification', we know it is a NumberGaugeVoteSpecification
-type FilterNumberGaugeVoteModules = (Array<VoteSpecification>) => Array<NumberGaugeVoteSpecification>;
-export const filterNumberGaugeVoteModules: FilterNumberGaugeVoteModules = modules =>
-  modules.filter(module => module.voteType === 'number_gauge_vote_specification').sort(moduleComparator);
+// $FlowFixMe: we know it is a GaugeVoteSpecification or NumberGaugeVoteSpecification
+type SortGaugeVoteModules = (Array<VoteSpecification>) => Array<GaugeVoteSpecification | NumberGaugeVoteSpecification>;
+export const filterGaugeVoteModules: SortGaugeVoteModules = modules =>
+  modules.filter(
+    module => module.voteType === 'gauge_vote_specification' || module.voteType === 'number_gauge_vote_specification'
+  );
+// .sort(moduleComparator);
 
 class DumbVoteSession extends React.Component<Props, State> {
   availableTokensContainerRef: ?HTMLDivElement;
@@ -138,7 +139,16 @@ class DumbVoteSession extends React.Component<Props, State> {
 
   componentWillMount() {
     window.addEventListener('resize', this.updateWindowWidth);
-    if (!this.props.isPhaseCompleted) {
+    if (!this.props.isPhaseCompleted && !this.props.loading) {
+      // When the VoteSession query was already done, we go to another page
+      // and go back to the vote session page.
+      window.addEventListener('scroll', this.setAvailableTokensSticky);
+      this.setMyVotes();
+    }
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    if (!this.props.isPhaseCompleted && !this.props.loading && prevProps.loading) {
       window.addEventListener('scroll', this.setAvailableTokensSticky);
       this.setMyVotes();
     }
@@ -244,13 +254,25 @@ class DumbVoteSession extends React.Component<Props, State> {
   };
 
   submitVotes = () => {
-    const { addTokenVote, addGaugeVote, refetchVoteSession } = this.props;
+    const { addGaugeVote, addTokenVote, id, lang } = this.props;
     const { userTokenVotes, userGaugeVotes } = this.state;
     this.setState({ submitting: true });
+    const refetchQueries = [
+      {
+        query: VoteSessionQuery,
+        variables: { ideaId: id, lang: lang }
+      }
+    ];
+    const okButton = (
+      <Button key="ok" onClick={closeModal} className="button-submit">
+        OK
+      </Button>
+    );
     userTokenVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((tokenCategories, voteSpecId) => {
         tokenCategories.forEach((voteValue, tokenCategoryId) => {
           addTokenVote({
+            refetchQueries: refetchQueries,
             variables: {
               voteSpecId: voteSpecId,
               proposalId: proposalId,
@@ -259,8 +281,7 @@ class DumbVoteSession extends React.Component<Props, State> {
             }
           })
             .then(() => {
-              displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, null, null);
-              refetchVoteSession();
+              displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, [okButton], null);
             })
             .catch((error) => {
               displayAlert('danger', error.message);
@@ -271,6 +292,7 @@ class DumbVoteSession extends React.Component<Props, State> {
     userGaugeVotes.forEach((voteSpecs, proposalId) => {
       voteSpecs.forEach((voteValue, voteSpecId) => {
         addGaugeVote({
+          refetchQueries: refetchQueries,
           variables: {
             voteSpecId: voteSpecId,
             proposalId: proposalId,
@@ -278,7 +300,7 @@ class DumbVoteSession extends React.Component<Props, State> {
           }
         })
           .then(() => {
-            displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, null, null);
+            displayModal(null, I18n.t('debate.voteSession.postSuccess'), true, [okButton], null);
           })
           .catch((error) => {
             displayAlert('danger', error.message);
@@ -439,7 +461,6 @@ export default compose(
         numParticipants,
         proposals
       } = data.voteSession;
-
       return {
         error: data.error,
         loading: data.loading,
@@ -453,8 +474,7 @@ export default compose(
         modules: modules,
         numParticipants: numParticipants,
         proposals: proposals,
-        randomProposals: shuffle(proposals),
-        refetchVoteSession: data.refetch
+        randomProposals: shuffle(proposals)
       };
     }
   }),

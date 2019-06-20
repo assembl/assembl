@@ -70,7 +70,7 @@ export type BrightMirrorFictionProps = {
   themeId: string,
   /** Fiction identifier */
   fictionId: string
-};
+} & RouterParams;
 
 type AdditionalProps = {
   timeline: Timeline,

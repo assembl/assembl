@@ -200,6 +200,7 @@ class Survey extends React.Component<Props, State> {
                         questions.map((question, index) => (
                           <Proposals
                             hasPendingPosts={question.hasPendingPosts}
+                            identifier={identifier}
                             nbPostsToShow={3}
                             questionsLength={questions.length}
                             themeId={id}

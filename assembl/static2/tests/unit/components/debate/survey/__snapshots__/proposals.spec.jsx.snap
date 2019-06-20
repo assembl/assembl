@@ -34,6 +34,7 @@ exports[`Proposals component should display a list of proposals with pending pos
       originalLocale="en"
       postIndex={0}
       questionId="question-885432"
+      questionIndex={1}
       themeId="theme-187263"
     />
   </div>
@@ -92,6 +93,7 @@ exports[`Proposals component should display a list of proposals without pending 
       originalLocale="en"
       postIndex={0}
       questionId="question-885432"
+      questionIndex={1}
       themeId="theme-187263"
     />
   </div>

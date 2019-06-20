@@ -392,6 +392,16 @@ strong {
   justify-content: center;
 }
 
+.center-align-flex {
+  display: flex;
+  align-items: center;
+}
+
+.baseline-align-flex {
+  display: flex;
+  align-items: baseline;
+}
+
 .content-section {
   padding: 25px 0;
 }

@@ -2,7 +2,7 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import LoadingIcon from './loadingIcon';
@@ -17,6 +17,6 @@ describe('<LoadingIcon /> - with shallow', () => {
   });
 
   it('should render a loading icon', () => {
-    expect(wrapper.find('svg [className="icon spinner"]')).toHaveLength(1);
+    expect(wrapper.find('svg[className="icon spinner"]')).toHaveLength(1);
   });
 });

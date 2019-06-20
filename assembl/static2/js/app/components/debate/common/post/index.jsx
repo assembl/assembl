@@ -14,6 +14,7 @@ import hashLinkScroll from '../../../../utils/hashLinkScroll';
 import { getDomElementOffset } from '../../../../utils/globalFunctions';
 import NuggetsManager from '../../../common/nuggetsManager';
 import { DebateContext } from '../../../../app';
+import { withErrorBoundary } from './postErrorBoundary';
 
 const getSubjectPrefixString = fullLevel =>
   fullLevel && (
@@ -181,12 +182,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
     const translate = contentLocale !== originalLocale;
     const { body, subject, originalBody, originalSubject } = this.getBodyAndSubject(translate);
 
-    const modifiedSubject = (
-      <span>
-        {getSubjectPrefixString(fullLevel)}
-        {subject ? subject.replace('Re: ', '') : ''}
-      </span>
-    );
+    const modifiedSubject = subject ? <span>{subject.replace('Re: ', '')}</span> : null;
 
     const editPostareaRef = (el: ?HTMLTextAreaElement) => {
       this.editPostarea = el;
@@ -264,4 +260,4 @@ const withData: OperationComponent<Response> = graphql(PostQuery);
 
 // Absolutely don't use redux connect here to avoid performance issue.
 // Please pass the needed props from Tree component.
-export default compose(withData, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);
+export default compose(withData, withErrorBoundary, manageErrorAndLoading({ displayLoader: true }))(PostWithContext);
