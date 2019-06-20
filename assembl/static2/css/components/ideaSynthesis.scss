@@ -27,7 +27,6 @@ $small-margin: 5px;
       margin-bottom: $margin;
 
       .counter-with-icon {
-        color: $first-color;
         font-family: $font-family4;
         font-size: 12px;
         line-height: 26px;
@@ -107,7 +106,6 @@ $small-margin: 5px;
         display: inline;
 
         .doughnut-label-count {
-          color: $first-color;
           font-family: $font-family3;
           font-size: $font-size-s;
           line-height: 26px;
@@ -115,7 +113,6 @@ $small-margin: 5px;
         }
 
         .doughnut-label-text {
-          color: $first-color;
           font-family: $font-family4;
           font-size: $font-size-s;
           line-height: 26px;
@@ -126,7 +123,6 @@ $small-margin: 5px;
   }
 
   .idea-link {
-    color: $first-color;
     font-family: $font-family4;
     font-size: 12px;
     line-height: 26px;

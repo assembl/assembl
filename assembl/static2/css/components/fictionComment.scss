@@ -84,25 +84,6 @@
       .action-edit {
         margin-left: 15px;
         margin-right: 15px;
-
-        .editPostIcon {
-          path {
-            fill: $first-color;
-            stroke: $first-color;
-          }
-        }
-      }
-
-      .action-delete {
-        .deletePostIcon {
-          .group {
-            fill: $first-color;
-
-            .path {
-              stroke: $first-color;
-            }
-          }
-        }
       }
 
       .assembl-icon-up-open,

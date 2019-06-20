@@ -6,7 +6,6 @@
     width: 130px;
     height: 35px;
     border-radius: 4px;
-    background-color: $first-color;
     text-align: center;
     line-height: 35px;
     cursor: pointer;
@@ -19,7 +18,8 @@
     height: 0;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 5px solid $first-color;
+    border-top-style: solid;
+    border-top-width: 5px;
   }
 
   .suggest {

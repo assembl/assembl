@@ -83,12 +83,10 @@
   &.nav-justified {
     & > li > a {
       border-bottom: 2px solid $second-color;
-      color: $first-color;
       opacity: 0.35;
       outline: none;
 
       &:hover {
-        color: $first-color;
         opacity: 1;
       }
     }
@@ -98,7 +96,6 @@
       & > a:hover,
       & > a:focus {
         border: none;
-        color: $first-color;
         border-bottom: 2px solid $second-color;
         border-radius: 0;
         opacity: 1;

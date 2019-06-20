@@ -131,8 +131,6 @@
 }
 
 .collapsed-title {
-  background-color: $first-color-light;
-  color: $first-color;
   font-size: $font-size-m;
   margin: 0 0 $margin-section-xs 0;
   padding: 20px;
@@ -213,7 +211,6 @@
 
 .annotation {
   text-align: left;
-  color: $first-color;
   font-family: $font-family4;
   font-size: $font-size-xs;
   margin-top: 15px;

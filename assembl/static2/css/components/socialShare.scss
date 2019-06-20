@@ -22,8 +22,8 @@
     }
 
     &.btn-copy {
-      border: solid 1px $first-color;
-      background-color: $first-color;
+      border-style: solid;
+      border-width: 1px;
       color: $white;
 
       &:focus {
@@ -49,8 +49,8 @@
 
     &.btn-mail {
       background-color: $white;
-      border: solid 1px $first-color;
-      color: $first-color;
+      border-style: solid;
+      border-width: 1px;
       margin-top: 8px;
 
       &:focus {

@@ -65,9 +65,9 @@
     width: 60%;
     margin: 0 auto;
     padding: 5px 0;
-    border: 1px solid $first-color;
+    border-style: solid;
+    border-width: 1px;
     text-align: center;
-    color: $first-color;
     font-size: $font-size-sm;
     font-style: italic;
     letter-spacing: normal;

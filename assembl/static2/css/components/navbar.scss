@@ -215,6 +215,10 @@
   .assembl-icon-cancel:before {
     font-size: 25px;
     padding-left: 9px;
+
+    .active {
+      font-family: $font-family3;
+    }
   }
 
   .flat-navbar {

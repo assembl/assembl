@@ -14,7 +14,6 @@
 
 .debate-link.active {
   > .navbar-menu-item {
-    background-color: $first-color;
     color: $white !important;
   }
 
@@ -34,7 +33,6 @@
     width: 100%;
     right: 0;
     left: 0;
-    background-color: $first-color;
 
     .menu-container {
       position: fixed;
@@ -127,7 +125,6 @@
             background-position: top left;
             background-repeat: no-repeat;
             background-size: cover;
-            background-color: $first-color;
             position: relative;
           }
 
@@ -155,11 +152,9 @@
         }
 
         &.active {
-          background-color: $first-color-light;
-          color: $first-color;
-
           .thumb-img {
-            border: solid 2px $first-color;
+            border-style: solid;
+            border-width: 2px;
 
             .thumb-img-background {
               background-color: rgba(25, 40, 130, 0.5);
@@ -289,7 +284,8 @@
       .txt-area {
         background: $white;
         border-bottom: none;
-        border-left: 5px solid $first-color;
+        border-left-style: solid;
+        border-left-width: 5px;
         border-radius: initial;
         border-right: none;
         border-top: none;
@@ -321,7 +317,6 @@
     z-index: 0;
 
     .question-nav {
-      color: $first-color;
       height: $navbar-height;
 
       .question-numbers {
@@ -334,7 +329,6 @@
         }
 
         .bar {
-          background-color: $first-color;
           height: 6px;
           position: absolute;
           z-index: 2;
