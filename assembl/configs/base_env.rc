@@ -45,7 +45,7 @@ mysql_host=localhost
 webpack_host=localhost
 nginx_ipv6 = true
 use_letsencrypt = true
-csp_header = default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net
+csp_header = default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com *.mouseflow.com ; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com *.mouseflow.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net
 ssl_dhparam = /etc/ssl/certs/dhparam.pem
 
 elasticsearch_version=5.6.2
@@ -177,3 +177,7 @@ attachment_allowed_mime_types = image/\w+ video/\w+ application/(pdf|msword) app
 # Password requirements
 minimum_password_length = 9
 password_required_classes = {"[a-z]": {"en": "lower-case letter"}, "[A-Z]": {"en": "upper-case letter"}, "\\d": {"en": "digit"}, "\\W": {"en": "special character"}}
+
+# mouseflow activation variable and website id
+activate_mouseflow = false
+mouseflow_website_id =
