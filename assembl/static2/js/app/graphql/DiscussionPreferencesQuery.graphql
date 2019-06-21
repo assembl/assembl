@@ -14,5 +14,10 @@ query DiscussionPreferencesQuery {
     withModeration
     withTranslation
     withSemanticAnalysis
+    firstColor
+    firstColorLight
+    opacityColor
+    secondColor
+    minOpacityColor
   }
 }

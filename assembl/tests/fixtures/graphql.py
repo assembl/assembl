@@ -43,6 +43,15 @@ def graphql_request_with_translation(request, test_adminuser_webrequest, discuss
 
 
 @pytest.fixture(scope="function")
+def graphql_request_with_theme_colors(request, test_adminuser_webrequest, discussion_with_theme_color):
+    """ A graphql request fixture with an ADMIN user authenticated """
+    req = test_adminuser_webrequest
+    req.matchdict = {"discussion_id": discussion_with_theme_color.id}
+    req.method = 'POST'
+    return req
+
+
+@pytest.fixture(scope="function")
 def graphql_unauthenticated_request(request, test_webrequest, discussion):
     req = test_webrequest
     req.matchdict = {"discussion_id": discussion.id}

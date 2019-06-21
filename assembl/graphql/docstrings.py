@@ -123,6 +123,11 @@ class DiscussionPreferences:
     with_semantic_analysis = "A Boolean flag indicating wheter the semantic analysis is activated or not."
     slug = Discussion.slug
     old_slugs = """List of previous used slugs for this discussion"""
+    first_color = """Primary color for the theme"""
+    first_color_light = """Primary color light for the theme"""
+    opacity_color = """Opacity color for the theme"""
+    second_color = """Second color for the theme"""
+    min_opacity_color = """Minimum opacity color for the theme"""
 
 
 class ResourcesCenter:
@@ -169,6 +174,11 @@ class UpdateDiscussionPreferences:
     with_translation = DiscussionPreferences.with_translation
     with_semantic_analysis = DiscussionPreferences.with_semantic_analysis
     slug = DiscussionPreferences.slug
+    first_color = """Primary color for the theme"""
+    first_color_light = """Primary color light for the theme"""
+    opacity_color = """Opacity color for the theme"""
+    second_color = """Second color for the theme"""
+    min_opacity_color = """Minimum opacity color for the theme"""
 
 
 class UpdateLegalContents:
