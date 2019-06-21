@@ -19,6 +19,7 @@ import TextFieldAdapter from '../../../form/textFieldAdapter';
 import { slugAllowedCharacters } from '../../../../constants';
 import OnChangeFieldSetField from './OnChangeFieldSetField';
 import type { DiscussionPreferencesFormValues } from './types.flow';
+import ColorPickerFieldAdapter from '../../../form/colorPickerFieldAdapter';
 
 type Props = {
   client: ApolloClient,
@@ -141,6 +142,35 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                     isChecked
                     label={I18n.t('administration.semanticAnalysis.activate')}
                     type="checkbox"
+                  />
+                  <div className="separator" />
+                  <div className="title">
+                    <Translate value="administration.theme.themeColorsTitle" />
+                  </div>
+                  <Field
+                    component={ColorPickerFieldAdapter}
+                    name="firstColor"
+                    label={I18n.t('administration.theme.firstColor')}
+                  />
+                  <Field
+                    component={ColorPickerFieldAdapter}
+                    name="firstColorLight"
+                    label={I18n.t('administration.theme.firstColorLight')}
+                  />
+                  <Field
+                    component={ColorPickerFieldAdapter}
+                    name="secondColor"
+                    label={I18n.t('administration.theme.secondColor')}
+                  />
+                  <Field
+                    component={ColorPickerFieldAdapter}
+                    name="opacityColor"
+                    label={I18n.t('administration.theme.opacityColor')}
+                  />
+                  <Field
+                    component={ColorPickerFieldAdapter}
+                    name="minOpacityColor"
+                    label={I18n.t('administration.theme.minOpacityColor')}
                   />
                 </div>
               </AdminForm>

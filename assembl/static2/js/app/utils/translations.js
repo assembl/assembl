@@ -732,6 +732,14 @@ const Translations = {
       slugWarning:
         "Cette modification entraine un changement de l'adresse de la consultation. Intégrez ce changement dans vos prochaines communications. Pour assurer la continuité du service, la précédente adresse sera toujours opérationnelle.",
       invalidSlug: "Les caractères spéciaux ne sont pas autorisés",
+      theme: {
+        themeColorsTitle: "Couleurs du thème",
+        firstColor: "Couleur principale",
+        firstColorLight: "Couleur claire principale",
+        secondColor: "Seconde couleur",
+        opacityColor: "Couleur d'opacité",
+        minOpacityColor: "Couleur d'opacité minimale"
+      },
       menu: {
         phase: "Phase %{count} - %{description}",
         preferences: "Préférences de la discussion",
@@ -1833,6 +1841,14 @@ const Translations = {
       slugWarning:
         "This modification causes a change in the address of the debate. Please take this change into account in further communications. To insure the continuity of the service, the previous address will still be operating.",
       invalidSlug: "Special characters are not allowed",
+      theme: {
+        themeColorsTitle: "Theme colors",
+        firstColor: "Primary color",
+        firstColorLight: "Primary light color",
+        secondColor: "Second color",
+        opacityColor: "Opacity color",
+        minOpacityColor: "Minimum opacity color"
+      },
       menu: {
         phase: "Phase %{count} - %{description}",
         preferences: "Discussion preferences",

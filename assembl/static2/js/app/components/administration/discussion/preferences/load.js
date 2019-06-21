@@ -39,12 +39,27 @@ export function postLoadFormat(data: Data): DiscussionPreferencesFormValues {
     label: language.label,
     value: language.localeCode
   }));
-  const { withModeration, withTranslation, withSemanticAnalysis, slug } = discussionPreferences;
+  const {
+    withModeration,
+    withTranslation,
+    withSemanticAnalysis,
+    firstColor,
+    firstColorLight,
+    secondColor,
+    opacityColor,
+    minOpacityColor,
+    slug
+  } = discussionPreferences;
   return {
     languages: languages,
     withModeration: withModeration,
     withTranslation: withTranslation,
     withSemanticAnalysis: withSemanticAnalysis,
+    firstColor: firstColor,
+    firstColorLight: firstColorLight,
+    secondColor: secondColor,
+    opacityColor: opacityColor,
+    minOpacityColor: minOpacityColor,
     slug: slug
   };
 }

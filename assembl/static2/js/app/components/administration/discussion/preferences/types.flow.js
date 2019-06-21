@@ -6,5 +6,10 @@ export type DiscussionPreferencesFormValues = {
   withModeration: boolean,
   withTranslation: Boolean,
   withSemanticAnalysis: Boolean,
-  slug: string
+  slug: string,
+  firstColor: string,
+  firstColorLight: string,
+  secondColor: string,
+  opacityColor: string,
+  minOpacityColor: string
 };

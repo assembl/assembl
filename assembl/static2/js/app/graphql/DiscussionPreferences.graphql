@@ -9,5 +9,10 @@ query DiscussionPreferences($inLocale: String!) {
     withTranslation
     withSemanticAnalysis
     slug
+    firstColor
+    firstColorLight
+    opacityColor
+    secondColor
+    minOpacityColor
   }
 }

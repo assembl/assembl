@@ -11,6 +11,11 @@ const getVariables = async (client: ApolloClient, values: DiscussionPreferencesF
   withModeration: values.withModeration,
   withTranslation: values.withTranslation,
   withSemanticAnalysis: values.withSemanticAnalysis,
+  firstColor: values.firstColor,
+  firstColorLight: values.firstColorLight,
+  secondColor: values.secondColor,
+  opacityColor: values.opacityColor,
+  minOpacityColor: values.minOpacityColor,
   slug: values.slug
 });
 
