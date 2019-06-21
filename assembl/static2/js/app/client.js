@@ -56,7 +56,9 @@ networkInterface.use([
             req.options.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf');
           }
         }
+
         next();
+
         Sentry.addBreadcrumb({
           category: 'graphql',
           message: `GraphQL operation: ${req.request.operationName}`,
