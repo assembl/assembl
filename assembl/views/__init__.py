@@ -525,6 +525,7 @@ def get_default_context(request, **kwargs):
     under_test = bool(config.get('under_test') or False)
     use_stargate = config.get('use_stargate')
     use_csrf_protection = config.get('use_csrf_protection')
+    stargate_port = config.get('stargate_port')
     base = dict(
         kwargs,
         request=request,
@@ -560,7 +561,8 @@ def get_default_context(request, **kwargs):
         admin_email=admin_email,
         under_test=under_test,
         use_stargate=use_stargate,
-        use_csrf_protection=use_csrf_protection
+        use_csrf_protection=use_csrf_protection,
+        stargate_port=stargate_port
     )
 
     base.update({
