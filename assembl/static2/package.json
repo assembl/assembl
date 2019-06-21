@@ -140,6 +140,7 @@
     "react-dom": "^16.3.1",
     "react-final-form": "^4.0.2",
     "react-final-form-arrays": "^2.0.1",
+    "react-final-form-listeners": "^1.0.2",
     "react-frame-component": "^3.0.0",
     "react-hot-loader": "^4.3.11",
     "react-intl-po": "^2.0.2",
