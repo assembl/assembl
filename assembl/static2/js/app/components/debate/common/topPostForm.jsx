@@ -175,6 +175,9 @@ export class DumbTopPostForm extends React.Component<Props, State> {
               }
               this.resetForm();
               this.setState(submittingState(false));
+              if (ideaOnColumn) {
+                window.scrollTo({ top: 1300, left: 0, behavior: 'smooth' });
+              }
             })
             .catch((error) => {
               displayAlert('danger', error.message.replace('GraphQL error: ', ''));
