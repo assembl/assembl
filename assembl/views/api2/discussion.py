@@ -654,6 +654,7 @@ def extract_taxonomy_csv(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def multi_module_csv_export(request):
+    as_buffer = asbool(request.GET.get('as_buffer', False))
     results = {sheet_name: None for sheet_name in sheet_names}
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
     fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
@@ -663,7 +664,7 @@ def multi_module_csv_export(request):
     fieldnames['vote_users_data'], results['vote_users_data'] = voters_csv_export(request)
     fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
     fieldnames['export_module_vote'], results['export_module_vote'] = global_votes_csv_export(request)
-    return csv_response_multiple_sheets(results, fieldnames)
+    return csv_response_multiple_sheets(results, fieldnames, as_buffer=as_buffer)
 
 
 def transform_fieldname(fn):
@@ -672,7 +673,7 @@ def transform_fieldname(fn):
     return fn
 
 
-def csv_response(results, format, fieldnames=None, content_disposition=None):
+def csv_response(results, format, fieldnames=None, content_disposition=None, as_buffer=False):
     output = StringIO()
     if format == CSV_MIMETYPE:
         from csv import writer
@@ -704,10 +705,12 @@ def csv_response(results, format, fieldnames=None, content_disposition=None):
         writer.save('')
 
     output.seek(0)
-    return Response(body_file=output, content_type=format, content_disposition=content_disposition)
+    if not as_buffer:
+        return Response(body_file=output, content_type=format, content_disposition=content_disposition)
+    return output
 
 
-def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.xlsx'):
+def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.xlsx', as_buffer=False):
     """
     Return a multiple sheets excel file
     @param: results  A dict of lists. Each list contains dicts.
@@ -717,7 +720,7 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
     from zipfile import ZipFile, ZIP_DEFLATED
     from openpyxl.workbook import Workbook
     workbook = Workbook(True)
-    empty=None
+    empty = None
     archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
     for sheet_name in sheet_names:
         workbook.create_sheet(sheet_name)
@@ -739,7 +742,9 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
     writer.save('')
 
     output.seek(0)
-    return Response(body_file=output, content_type=XSLX_MIMETYPE, content_disposition=content_disposition)
+    if not as_buffer:
+        return Response(body_file=output, content_type=XSLX_MIMETYPE, content_disposition=content_disposition)
+    return output
 
 
 @view_config(context=InstanceContext, name="contribution_count",
