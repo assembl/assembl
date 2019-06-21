@@ -34,11 +34,9 @@ export const xmlHttpRequest = obj =>
 
       // Go and fetch a CSRF token for the POST request if activated
       if (useCSRFProtection === 'true') {
-        const reponseToken = await getCSRFToken();
+        await getCSRFToken();
 
-        if (reponseToken.text === 'ok') {
-          obj.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf'); // eslint-disable-line
-        }
+        obj.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf'); // eslint-disable-line
       }
 
       if (obj.isJson && obj.isJson === true) {

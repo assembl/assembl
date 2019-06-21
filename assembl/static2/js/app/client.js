@@ -51,10 +51,8 @@ networkInterface.use([
       }
       co(async () => {
         if (useCSRFProtection === 'true') {
-          const responseToken = await getCSRFToken();
-          if (responseToken.text === 'ok') {
-            req.options.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf');
-          }
+          await getCSRFToken();
+          req.options.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf');
         }
 
         next();
