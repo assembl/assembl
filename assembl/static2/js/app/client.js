@@ -52,7 +52,6 @@ networkInterface.use([
       co(async () => {
         if (useCSRFProtection === 'true') {
           await getCSRFToken();
-          console.log('here', Cookies.get('_csrf')); // eslint-disable-line
           req.options.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf');
         }
 
