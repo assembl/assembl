@@ -26,7 +26,7 @@ const useCSRFProtection = document.getElementById('useCSRFProtection')
 export const xmlHttpRequest = obj =>
   new Promise(async (resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    const url = urljoin(basePath(), obj.url);
+    const url = urljoin(basePath(obj), obj.url);
     let payload = obj.payload;
     xhr.open(obj.method, url);
     if (obj.method.toLowerCase() === 'post') {
