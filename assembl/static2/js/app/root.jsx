@@ -17,7 +17,7 @@ const theme = {
   firstColor: 'red',
   firstColorLight: 'green',
   secondColor: 'purple',
-  opacityColor: 'yellow',
+  opacityColor: 'pink',
   minOpacityColor: 'orange'
 };
 

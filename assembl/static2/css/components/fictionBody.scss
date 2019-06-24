@@ -24,7 +24,7 @@
 
   .active-extract,
   .selection-highlight {
-    background-color: $opacity-color;
+    background-color: $theme-local-blue-opacity;
   }
 
   @media screen and (min-width: $screen-sm-min) {

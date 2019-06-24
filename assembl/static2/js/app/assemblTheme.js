@@ -465,6 +465,14 @@ export const GlobalStyle = createGlobalStyle`
 
   .header-section {
     background-color: ${firstColor};
+
+    .header-bkg-mask {
+      background-color: ${opacityColor};
+    }
+
+    .statistic {
+      background-color: ${opacityColor};
+    }
   }
 
   .home {
@@ -475,6 +483,10 @@ export const GlobalStyle = createGlobalStyle`
     .themes-section {
       .top-idea {
         .idea-link {
+          &:hover {
+            background-color: ${opacityColor};
+          }
+
           .idea-link-title {
             color: ${firstColor};
           }
@@ -537,6 +549,12 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .idea-preview-selected {
+    .color-box {
+      background-color: ${opacityColor};
+    }
+  }
+
   .idea-synthesis {
     .synthesis-stats {
       .counters {
@@ -562,6 +580,16 @@ export const GlobalStyle = createGlobalStyle`
 
     .idea-link {
       color: ${firstColor};
+    }
+  }
+
+  .illustration-box {
+    .content-box {
+      &:hover {
+        .color-box {
+          background-color: ${opacityColor};
+        }
+      }
     }
   }
 

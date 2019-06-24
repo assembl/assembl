@@ -65,10 +65,6 @@
     z-index: 4;
 
     &:hover {
-      .color-box {
-        background-color: $opacity-color;
-      }
-
       .rotate-hyphen {
         margin: 0 0 0 -10px;
         transform: rotate(90deg);
