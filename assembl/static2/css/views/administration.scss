@@ -520,6 +520,13 @@
   }
 
   .landing-page-admin {
+    .module-header, .module-header {
+      .btn-default {
+        background-color: transparent;
+        color: white;
+      }
+    }
+
     .admin-box {
       .admin-content {
         text-align: left;

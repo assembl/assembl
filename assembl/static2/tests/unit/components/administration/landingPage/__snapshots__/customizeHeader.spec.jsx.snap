@@ -9,6 +9,7 @@ exports[`ManageModules component should render a page to manage the landing page
     title="Header"
   />
   <LoadSaveReinitializeForm
+    afterSave={[Function]}
     createMutationsPromises={[Function]}
     load={[Function]}
     loading={

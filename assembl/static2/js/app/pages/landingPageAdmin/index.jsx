@@ -6,8 +6,6 @@ import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 
 import ManageModules from '../../components/administration/landingPage/manageModules';
-import CustomizeHeader from '../../components/administration/landingPage/header/index';
-import Navbar from '../../components/administration/navbar';
 import { displayAlert } from '../../utils/utilityManager';
 import SaveButton, { getMutationsPromises, runSerial } from '../../components/administration/saveButton';
 import createLandingPageModule from '../../graphql/mutations/createLandingPageModule.graphql';
@@ -92,16 +90,11 @@ class Index extends React.Component<Props, State> {
   dataHaveChanged = (): boolean => this.props.landingPageModulesHasChanged;
 
   render() {
-    const { editLocale, section } = this.props;
     const saveDisabled = !this.dataHaveChanged();
-    // TODO: Remove this crap after migrating all of landing page to react-final-form
-    const showSaveButton = s => s !== '1';
     return (
       <div className="landing-page-admin">
-        {showSaveButton(section) && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
-        {section === '1' && <CustomizeHeader editLocale={editLocale} />}
-        {section === '2' && <ManageModules {...this.props} />}
-        {section && <Navbar currentStep={section} steps={['1', '2']} phaseIdentifier="landingPage" />}
+        <SaveButton disabled={saveDisabled} saveAction={this.saveAction} title="administration.saveOrder" />
+        <ManageModules {...this.props} />
       </div>
     );
   }

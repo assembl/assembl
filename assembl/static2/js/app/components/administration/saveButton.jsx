@@ -10,7 +10,8 @@ import { type MutationsPromises } from '../form/types.flow';
 type Props = {
   disabled?: boolean,
   saveAction: () => void,
-  specificClasses?: ?string
+  specificClasses?: ?string,
+  title?: string
 };
 
 type Item = {
@@ -103,20 +104,21 @@ export const getMutationsPromises = (params: Params) => {
   return promises;
 };
 
-export const DumbSaveButton = ({ disabled, saveAction, specificClasses }: Props) => {
+export const DumbSaveButton = ({ disabled, saveAction, specificClasses, title }: Props) => {
   const isHoverClass = !disabled ? 'button-dark' : '';
   const buttonClasses = specificClasses || classNames('save-button button-submit right', isHoverClass);
 
   return (
     <Button className={buttonClasses} disabled={disabled} onClick={saveAction}>
-      <Translate value="administration.saveThemes" />
+      <Translate value={title} />
     </Button>
   );
 };
 
 DumbSaveButton.defaultProps = {
+  disabled: false,
   specificClasses: null,
-  disabled: false
+  title: 'administration.save'
 };
 
 class SaveButtonInPortal extends React.PureComponent<Props> {

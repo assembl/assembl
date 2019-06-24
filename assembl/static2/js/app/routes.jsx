@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import { Redirect, Route } from 'react-router';
+
 import Root from './root';
 import App from './app';
 import Main from './main';
@@ -44,20 +45,14 @@ import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirro
 import IntSemanticAnalysis from './integration/semanticAnalysis/pages/semanticAnalysis';
 import IntTagOnPost from './integration/tagOnPost/pages/tagOnPost';
 import CreateSynthesisForm from './components/administration/synthesis/index';
+import { MODULES } from './components/administration/landingPage/manageModules';
+import CustomizeHeader from './components/administration/landingPage/header';
 
-const DebateHome = (props) => {
-  switch (props.params.phase) {
-  default:
-    return <DebateThread {...props} />;
-  }
-};
+const DebateHome = props => <DebateThread {...props} />;
 
-const DebateChild = (props) => {
-  switch (props.params.phase) {
-  default:
-    return <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} />;
-  }
-};
+const DebateChild = props => (
+  <Idea id={props.id} identifier={props.identifier} phaseId={props.phaseId} routerParams={props.params} />
+);
 
 const AdminChild = (props: {
   discussionPhaseId: string,
@@ -81,7 +76,9 @@ const AdminChild = (props: {
     return <ResourcesCenterAdmin {...props} />;
   case 'landingPage':
     switch (props.location.query.section) {
-    case 'editTextAndMultimedia':
+    case MODULES.header.editSection:
+      return <CustomizeHeader />;
+    case MODULES.introduction.editSection:
       return <TextAndMultimedia landingPageModuleId={props.location.query.landingPageModuleId} />;
     default:
       return <LandingPageAdmin {...props} section={props.location.query.section} />;

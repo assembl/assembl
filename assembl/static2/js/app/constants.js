@@ -200,21 +200,7 @@ export const ADMIN_MENU = {
   },
   landingPage: {
     title: 'administration.landingpage',
-    sectionId: '1',
-    subMenu: {
-      header: {
-        title: 'administration.landingPage.header.title',
-        sectionId: '1'
-      },
-      textMultimedia: {
-        title: 'administration.landingPage.textMultimedia.title',
-        sectionId: '3'
-      },
-      manageModules: {
-        title: 'administration.landingPage.manageModules.title',
-        sectionId: '2'
-      }
-    }
+    sectionId: ''
   },
   resourcesCenter: {
     title: 'administration.resourcesCenter.menuTitle',

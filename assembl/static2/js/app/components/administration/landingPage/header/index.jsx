@@ -2,14 +2,14 @@
 import React from 'react';
 import isEqualWith from 'lodash/isEqualWith';
 import { connect } from 'react-redux';
-import { type ApolloClient, graphql, compose, withApollo } from 'react-apollo';
+import { type ApolloClient, compose, graphql, withApollo } from 'react-apollo';
 import { I18n } from 'react-redux-i18n';
 import { Field } from 'react-final-form';
 import setFieldTouched from 'final-form-set-field-touched';
 import SectionTitle from '../../../administration/sectionTitle';
 import Helper from '../../../common/helper';
 import { load, postLoadFormat } from './load';
-import { save, createMutationsPromises } from './save';
+import { createMutationsPromises, save } from './save';
 import LoadSaveReinitializeForm from '../../../form/LoadSaveReinitializeForm';
 import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
 import DatePickerFieldAdapter from '../../../form/datePickerFieldAdapter';
@@ -18,10 +18,11 @@ import MultilingualRichTextFieldAdapter from '../../../form/multilingualRichText
 import { compareEditorState } from '../../../form/utils';
 import AdminForm from '../../../form/adminForm';
 import Loader from '../../../common/loader';
-import { validStartDate, validEndDate, validateDatePicker } from './validate';
+import { validateDatePicker, validEndDate, validStartDate } from './validate';
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
 import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
 import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
+import { goToModulesAdmin } from '../utils';
 
 type Props = {
   client: ApolloClient,
@@ -98,6 +99,7 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
           postLoadFormat={postLoadFormat}
           createMutationsPromises={createMutationsPromises(client)}
           save={save}
+          afterSave={goToModulesAdmin}
           mutators={{ setFieldTouched: setFieldTouched }}
           validate={validateDatePicker}
           render={({ handleSubmit, submitting, initialValues, values, form }) => {
@@ -189,8 +191,9 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ admin: { editLocale } }) => ({
-  editLocale: editLocale
+const mapStateToProps = ({ i18n: { locale }, admin: { editLocale } }) => ({
+  editLocale: editLocale,
+  lang: locale
 });
 
 export default compose(

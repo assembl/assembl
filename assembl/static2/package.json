@@ -7,7 +7,7 @@
     "test": "tests"
   },
   "scripts": {
-    "test": "jest",
+    "test": "jest --maxWorkers=3",
     "test:watch": "npm test -- --watch",
     "build": "webpack --progress --colors",
     "coverage": "jest --coverage",

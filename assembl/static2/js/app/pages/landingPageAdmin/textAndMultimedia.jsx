@@ -5,7 +5,6 @@ import { compose } from 'redux';
 import { graphql, withApollo } from 'react-apollo';
 
 import TextMultimedia from '../../components/administration/landingPage/textMultimedia';
-import Navbar from '../../components/administration/navbar';
 import MultilingualLandingPageModule from '../../graphql/MultilingualLandingPageModuleQuery.graphql';
 import manageErrorAndLoading from '../../components/common/manageErrorAndLoading';
 
@@ -31,7 +30,6 @@ class TextAndMultimediaAdminPage extends React.Component<Props, State> {
     return (
       <div className="landing-page-admin">
         <TextMultimedia editLocale={editLocale} landingPageModule={landingPageModule} />
-        <Navbar currentStep={'2'} steps={['1', '2']} phaseIdentifier="landingPage" />
       </div>
     );
   }

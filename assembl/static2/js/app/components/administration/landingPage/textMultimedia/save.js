@@ -5,7 +5,6 @@ import MultilingualLandingPageModuleQuery from '../../../../graphql/Multilingual
 import LandingPageModulesQuery from '../../../../graphql/LandingPageModulesQuery.graphql';
 import updateLandingPageModule from '../../../../graphql/mutations/updateLandingPageModule.graphql';
 import { convertRichTextToVariables, convertToEntries, createSave } from '../../../form/utils';
-import { goToModulesAdmin } from '../utils';
 import type { TextMultimediaFormValues } from './types.flow';
 
 const getVariables = async (client: ApolloClient, values: TextMultimediaFormValues) => {
@@ -31,29 +30,25 @@ export const createMutationsPromises = (client: ApolloClient, lang: string, land
         }
       }
     ];
-    return vars
-      .then(variables =>
-        client.mutate({
-          mutation: updateLandingPageModule,
-          variables: {
-            id: landingPageModule.id,
-            ...variables
-          },
-          refetchQueries: [
-            ...refetchQueries,
-            {
-              query: MultilingualLandingPageModuleQuery,
-              variables: {
-                id: landingPageModule.id,
-                lang: lang
-              }
+    return vars.then(variables =>
+      client.mutate({
+        mutation: updateLandingPageModule,
+        variables: {
+          id: landingPageModule.id,
+          ...variables
+        },
+        refetchQueries: [
+          ...refetchQueries,
+          {
+            query: MultilingualLandingPageModuleQuery,
+            variables: {
+              id: landingPageModule.id,
+              lang: lang
             }
-          ]
-        })
-      )
-      .then(() => {
-        goToModulesAdmin();
-      });
+          }
+        ]
+      })
+    );
   }
 ];
 

@@ -18,8 +18,8 @@ import MultilingualTextFieldAdapter from '../../../form/multilingualTextFieldAda
 import MultilingualRichTextFieldAdapter from '../../../form/multilingualRichTextFieldAdapter';
 import SectionTitle from '../../../administration/sectionTitle';
 import { compareEditorState } from '../../../form/utils';
-import SubmitButton from '../../../form/submitButton';
 import LanguageMenu from '../../languageMenu';
+import { goToModulesAdmin } from '../utils';
 
 type Props = {
   client: ApolloClient,
@@ -40,6 +40,7 @@ class TextMultimedia extends React.Component<Props> {
         postLoadFormat={postLoadFormat}
         createMutationsPromises={createMutationsPromises(client, lang, landingPageModule)}
         save={save}
+        afterSave={goToModulesAdmin}
         validate={validate}
         mutators={{
           ...arrayMutators
@@ -72,9 +73,6 @@ class TextMultimedia extends React.Component<Props> {
                         withAttachmentButton
                         withCharacterCounter={10000}
                       />
-                    </div>
-                    <div className="button-container">
-                      <SubmitButton name="save" label="administration.save" disabled={pristine || submitting} />
                     </div>
                   </Col>
                   <Col md={1}>

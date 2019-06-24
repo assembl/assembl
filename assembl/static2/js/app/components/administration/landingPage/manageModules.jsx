@@ -35,19 +35,31 @@ type Props = {
   toggleModule: Function
 };
 
-const MODULES_IDENTIFIERS = {
-  header: 'HEADER',
-  timeline: 'TIMELINE',
-  chatbot: 'CHATBOT',
-  topThematics: 'TOP_THEMATICS',
-  tweets: 'TWEETS',
-  contact: 'CONTACT',
-  data: 'DATA',
-  news: 'NEWS',
-  partners: 'PARTNERS',
-  introduction: 'INTRODUCTION',
-  footer: 'FOOTER'
+type ModuleInfo = {
+  identifier: string,
+  editSection?: string
 };
+
+export const MODULES: Map<string, ModuleInfo> = {
+  header: { identifier: 'HEADER', editSection: 'editHeader' },
+  timeline: { identifier: 'TIMELINE' },
+  chatbot: { identifier: 'CHATBOT' },
+  topThematics: { identifier: 'TOP_THEMATICS' },
+  tweets: { identifier: 'TWEETS' },
+  contact: { identifier: 'CONTACT' },
+  data: { identifier: 'DATA' },
+  news: { identifier: 'NEWS' },
+  partners: { identifier: 'PARTNERS' },
+  introduction: { identifier: 'INTRODUCTION', editSection: 'editTextAndMultimedia' },
+  footer: { identifier: 'FOOTER' }
+};
+
+function getEditSection(module: Map): string | null {
+  const moduleType = module.getIn(['moduleType', 'identifier']);
+  const moduleInfos: Array<any> = Object.values(MODULES); // can't type as ModuleInfo cf https://github.com/facebook/flow/issues/2221
+  const moduleInfo: any | null = moduleInfos.find((m: any) => (!!m && m.identifier === moduleType) || null);
+  return !!moduleInfo && !!moduleInfo.editSection ? moduleInfo.editSection : null;
+}
 
 export const sortByTitle = (modules: Array<LandingPageModuleType>): Array<LandingPageModuleType> => {
   const sortedModules = [...modules];
@@ -75,12 +87,9 @@ export const sortByTitle = (modules: Array<LandingPageModuleType>): Array<Landin
 };
 
 const navigateToModuleEdit = (module: Map): void => {
-  const moduleType = module.getIn(['moduleType', 'identifier']);
+  const editSection = getEditSection(module);
   const moduleId = module.get('id');
-  let query;
-  if (moduleType === MODULES_IDENTIFIERS.introduction) {
-    query = { section: 'editTextAndMultimedia', landingPageModuleId: moduleId };
-  }
+  const query = { section: editSection, landingPageModuleId: moduleId };
   const url = get('administration', { slug: getDiscussionSlug() || '', id: 'landingPage' }, query);
   browserHistory.push(url);
 };
@@ -90,18 +99,18 @@ export class DumbManageModules extends React.Component<Props> {
     const { client, enabledModules, lang, moduleTypes, modulesById, moveModuleDown, moveModuleUp, toggleModule } = this.props;
 
     const numberOfTextAndMultimediaModules = moduleTypes.filter(
-      moduleType => moduleType.identifier === MODULES_IDENTIFIERS.introduction
+      moduleType => moduleType.identifier === MODULES.introduction.identifier
     ).length;
 
     const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
-      module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
+      module => module.getIn(['moduleType', 'identifier']) === MODULES.introduction.identifier
     ).size;
     const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === numberOfTextAndMultimediaModules;
 
     const updatedModuleTypes = sortByTitle(moduleTypes);
 
     const editModule = (module: Map): (() => void) | void => {
-      if (module.getIn(['moduleType', 'identifier']) === 'INTRODUCTION') {
+      if (getEditSection(module)) {
         return () => navigateToModuleEdit(module);
       }
       return undefined;
@@ -117,7 +126,7 @@ export class DumbManageModules extends React.Component<Props> {
     ];
 
     const removeModule = (module: Map): (() => void) | void => {
-      if (module.getIn(['moduleType', 'identifier']) === 'INTRODUCTION') {
+      if (module.getIn(['moduleType', 'identifier']) === MODULES.introduction.identifier) {
         return () => {
           const title = <Translate value="debate.confirmDeletionTitle" />;
           const body = <Translate value="debate.synthesis.confirmDeletionBody" />;
@@ -151,7 +160,7 @@ export class DumbManageModules extends React.Component<Props> {
       const nextOrder = Math.max(...enabledModules.map(module => module.get('order'))) + 1;
       client.mutate({
         mutation: createLandingPageModule,
-        variables: { typeIdentifier: MODULES_IDENTIFIERS.introduction, order: nextOrder, enabled: true },
+        variables: { typeIdentifier: MODULES.introduction.identifier, order: nextOrder, enabled: true },
         refetchQueries: refetchQueries
       });
     };
