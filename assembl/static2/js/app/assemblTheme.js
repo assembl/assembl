@@ -22,10 +22,6 @@ const secondColor = props => (props.secondColor ? props.secondColor : defaultCol
   */
 const opacityColor = props => (props.opacityColor ? props.opacityColor : defaultColors.opacityColor);
 
-// const minOpacityColor = props => (
-//   props.minOpacityColor ? props.minOpacityColor : defaultColors.minOpacityColor
-// );
-
 const size = {
   small: '768px',
   medium: '992px'
