@@ -3,7 +3,6 @@
 
   &.tooltip {
     .text {
-      fill: $first-color;
       font-family: $font-family3;
       font-size: 11px;
       font-weight: 700;
@@ -11,7 +10,6 @@
     }
 
     .circle {
-      stroke: $first-color;
       stroke-width: 1.665;
     }
   }

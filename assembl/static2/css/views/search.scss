@@ -1,3 +1,35 @@
+/*
+TODO:
+$ rg "sk-active-bg-color" assembl/static2/node_modules/searchkit/theming/components
+assembl/static2/node_modules/searchkit/theming/components/_tabs.scss
+29:      border-color:$sk-active-bg-color;
+
+assembl/static2/node_modules/searchkit/theming/components/_reset-filters.scss
+8:  color: $sk-active-bg-color;
+
+$ rg "sk-action-text-color" assembl/static2/node_modules/searchkit/theming/components
+assembl/static2/node_modules/searchkit/theming/components/_actions.scss
+5:  color:$sk-action-text-color;
+
+assembl/static2/node_modules/searchkit/theming/components/_selected-filters.scss
+25:      color:$sk-action-text-color;
+34:      color:$sk-action-text-color;
+
+assembl/static2/node_modules/searchkit/theming/components/_tabs.scss
+19:    color: $sk-action-text-color;
+
+assembl/static2/node_modules/searchkit/theming/components/_refinement-list-filter.scss
+18:    color:$sk-action-text-color;
+
+assembl/static2/node_modules/searchkit/theming/components/_filter-group.scss
+53:    color: $sk-action-text-color;
+
+$ rg "sk-selector-active-background" assembl/static2/node_modules/searchkit/theming/components
+assembl/static2/node_modules/searchkit/theming/components/_toggle.scss
+37:      background-color:$sk-selector-active-background;
+39:      border-color:$sk-selector-active-background;
+*/
+
 @import '../../node_modules/searchkit/theming/vars.scss';
 
 // The class names starting with sk- comes mainly from the searchkit library.
@@ -8,7 +40,6 @@
 $sk-active-bg-color: $first-color;
 $sk-action-text-color: $first-color;
 $sk-selector-active-background: $first-color;
-$highlightColor: $first-color-light;
 
 @import '../../node_modules/searchkit/theming/components/arrows.scss';
 @import '../../node_modules/searchkit/theming/components/actions.scss';
@@ -55,7 +86,7 @@ $highlightColor: $first-color-light;
   display: inline-block;
 
   &.is-active {
-    background-color: $highlightColor;
+    background-color: $first-color-light;
     font-weight: bold;
   }
 
@@ -309,7 +340,7 @@ $highlightColor: $first-color-light;
   margin: 0 15px 20px;
 
   em {
-    background: $highlightColor;
+    background: $first-color-light;
   }
 
   a {

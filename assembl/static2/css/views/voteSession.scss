@@ -208,7 +208,6 @@
   }
 
   .participants-count__text {
-    color: $first-color;
     padding: 0 10px 20px 10px;
   }
 
@@ -306,10 +305,6 @@
 
   .gauge-box__instructions {
     font-size: $font-size-s;
-  }
-
-  .gauge-box__estimate {
-    color: $first-color;
   }
 
   .separator {

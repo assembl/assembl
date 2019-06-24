@@ -1,14 +1,4 @@
-// @font-face {
-//   font-family: 'LatoMedium';
-//   src: url('/static2/fonts/Lato-Medium.eot');
-//   src:
-//     local('☺'),
-//     url('/static2/fonts/Lato-Medium.woff') format('woff'),
-//     url('/static2/fonts/Lato-Medium.ttf') format('truetype');
-// }
-
 .error-page {
-  background-color: $first-color-light;
   margin: 0;
   overflow-x: hidden;
 
@@ -57,7 +47,6 @@
     font-family: $font-family3;
     font-size: 120px;
     text-align: center;
-    color: $first-color;
     margin: 0;
     margin-top: -55px;
   }
@@ -66,7 +55,6 @@
     font-family: $font-family3;
     font-size: 44px;
     text-align: center;
-    color: $first-color;
     margin-block-end: 0;
     margin-block-start: 0;
     margin-bottom: 25px;
@@ -97,7 +85,8 @@
     text-align: center;
     text-transform: uppercase;
     line-height: 1.42857143;
-    border: 2px solid $first-color;
+    border-style: solid;
+    border-width: 2px;
     background-color: transparent;
     padding: 10px 24px;
     min-width: 210px;
@@ -118,7 +107,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: $first-color;
     -webkit-transform: scaleX(0);
     transform: scaleX(0);
     -webkit-transform-origin: 0 50%;

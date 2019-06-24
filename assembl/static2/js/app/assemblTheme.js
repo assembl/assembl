@@ -20,6 +20,7 @@ const firstColorLight = props => (props.firstColorLight ? props.firstColorLight 
    * .overflow-menu .overflow-menu-action
    * .proposals .overflow-action
    * .posts .overflow-action
+   * .idea .subject-prefix
   */
 const opacityColor = props => (props.opacityColor ? props.opacityColor : defaultColors.opacityColor);
 
@@ -28,17 +29,27 @@ const opacityColor = props => (props.opacityColor ? props.opacityColor : default
 // );
 
 const size = {
-  small: '768px'
+  small: '768px',
+  medium: '992px'
 };
 
 const screen = {
-  small: `(min-width: ${size.small})`
+  small: `(min-width: ${size.small})`,
+  maxMedium: `(max-width: ${size.medium})`
 };
 
 // Define what props.theme will look like
 export const GlobalStyle = createGlobalStyle`
   #first-color-hidden {
     color: ${firstColor};
+  }
+
+  #thread-view {
+    .level {
+      .box {
+        border-color: ${firstColor};
+      }
+    }
   }
 
   .administration {
@@ -206,6 +217,18 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${firstColorLight};
   }
 
+  .cross-icon {
+    .cross-icon-path {
+      fill: ${firstColor};
+    }
+  }
+
+  .custom-loader {
+    .path {
+      stroke: ${firstColor};
+    }
+  }
+
   .debate {
     .questions {
       .questions-section {
@@ -259,6 +282,12 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .description {
+    .words-watson {
+      color: ${firstColor};
+    }
+  }
+
   .dropdown-xl {
     .dropdown-toggle {
       color: ${firstColor};
@@ -306,6 +335,26 @@ export const GlobalStyle = createGlobalStyle`
       .caret {
         color: ${firstColor};
       }
+    }
+  }
+
+  .error-page {
+    background-color: ${firstColorLight};
+
+    .title-error-code {
+      color: ${firstColor};
+    }
+
+    .title-error {
+      color: ${firstColor};
+    }
+
+    button {
+      border-color: ${firstColor};
+    }
+
+    button:before {
+      background: ${firstColor};
     }
   }
 
@@ -387,6 +436,72 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${firstColor};
   }
 
+  .home {
+    .header-section {
+      background-color: ${firstColor};
+    }
+
+    .themes-section {
+      .top-idea {
+        .idea-link {
+          .idea-link-title {
+            color: ${firstColor};
+          }
+        }
+      }
+    }
+  }
+
+  .icon {
+    &.tooltip {
+      .text {
+        fill: ${firstColor};
+      }
+
+      .circle {
+        stroke: ${firstColor};
+      }
+    }
+  }
+
+  .idea {
+    .subject-prefix {
+      color: ${opacityColor};
+    }
+
+    .child-level {
+      .box {
+        border-color: ${firstColorLight};
+      }
+    }
+
+    .level-1,
+    .level-2,
+    .level-3,
+    .level-4 {
+      border-top-color: ${firstColorLight};
+      border-left-color: ${firstColorLight};
+    }
+
+    .expand-indented {
+      border-left-color: ${firstColorLight};
+      color: ${firstColor};
+    }
+
+    .expand {
+      border-left-color: ${firstColorLight};
+      color: ${firstColor};
+    }
+
+    .post-folded {
+      color: ${firstColor};
+    }
+
+    .infinite-separator {
+      border-bottom-color: ${firstColor};
+    }
+  }
+
   .idea-synthesis {
     .synthesis-stats {
       .counters {
@@ -412,6 +527,18 @@ export const GlobalStyle = createGlobalStyle`
 
     .idea-link {
       color: ${firstColor};
+    }
+  }
+
+  .keyword-info {
+    h3 {
+      color: ${firstColor};
+    }
+  }
+
+  .mailIcon {
+    g {
+      fill: ${firstColor};
     }
   }
 
@@ -600,6 +727,38 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .ReactTags__tags {
+    color: ${firstColor};
+
+    .ReactTags__selected {
+      .ReactTags__tag {
+        background-color: ${firstColorLight};
+      }
+    }
+
+    &.react-tags-wrapper-admin {
+      .ReactTags__selected {
+        .ReactTags__tagInput {
+          background-color: ${firstColor};
+        }
+      }
+
+      .ReactTags__tagInput:focus-within {
+        background-color: ${firstColorLight};
+      }
+
+      .ReactTags__suggestions {
+        background-color: ${firstColorLight};
+
+        li {
+          mark {
+            color: ${firstColor};
+          }
+        }
+      }
+    }
+  }
+
   .rich-text-editor {
     .insertion-box {
       input {
@@ -656,6 +815,30 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .synthesis-page {
+    .synthesis-side-menu {
+      .assembl-icon-down-open {
+        color: ${firstColor};
+      }
+
+      .active {
+        background: ${firstColor};
+      }
+
+      .side-menu-link-1 {
+        color: ${firstColor};
+      }
+
+      .side-menu-link-2 {
+        color: ${firstColor};
+      }
+
+      .side-menu-link-3 {
+        color: ${firstColor};
+      }
+    }
+  }
+
   .tab-selector > .tab-selector-buttons {
     .button-container {
       button {
@@ -678,10 +861,28 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .votesession-page {
+    .participants-count__text {
+      color: ${firstColor};
+    }
+
+    .gauge-box__estimate {
+      color: ${firstColor};
+    }
+  }
+
   @media screen and ${screen.small} {
     .proposals {
       .statistic {
         background-color: ${firstColorLight};
+      }
+    }
+  }
+
+  @media screen and ${screen.maxMedium} {
+    #thread-view {
+      .level {
+        border-top-color: ${firstColorLight};
       }
     }
   }
