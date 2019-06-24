@@ -232,19 +232,6 @@
       }
     }
 
-    .two-columns-admin {
-      display: flex;
-      margin: 40px 0 0;
-
-      .column-left {
-        flex: 1;
-      }
-
-      .column-right {
-        flex: 1;
-      }
-    }
-
     .annotation {
       font-family: $font-family7;
 
@@ -553,7 +540,7 @@
 
       .inner {
         margin: auto;
-        width: 75%;
+        width: 100%;
         min-height: 330px;
         display: flex;
         flex-direction: column;
@@ -574,19 +561,25 @@
           text-align: center;
         }
 
-        .other-modules {
+        &:first-child {
           flex: 1;
           justify-content: flex-start;
+
+          .module-block {
+            display: flex;
+            justify-content: space-between;
+            margin: 7px;
+            padding: 10px 5px 10px 11px;
+          }
+        }
+
+        .other-modules {
           background-color: $white;
 
           .module-block {
-            margin: 7px;
-            padding: 10px 5px 10px 11px;
             border: 0.8px solid $first-color;
             color: $first-color;
             background-color: $white;
-            display: flex;
-            justify-content: space-between;
 
             .admin-icons {
               color: $first-color;

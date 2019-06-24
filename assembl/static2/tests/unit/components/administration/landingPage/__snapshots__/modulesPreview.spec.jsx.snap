@@ -29,7 +29,7 @@ exports[`ModulesPreview component should render a preview of the enabled modules
           
         </span>
         <span>
-          <div>
+          <span>
             <button
               className="admin-icons btn btn-default"
               disabled={false}
@@ -58,7 +58,7 @@ exports[`ModulesPreview component should render a preview of the enabled modules
                 className="assembl-icon-up-small"
               />
             </button>
-          </div>
+          </span>
         </span>
       </div>
     </div>

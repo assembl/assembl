@@ -23,166 +23,61 @@ exports[`ManageModules component should render a form to manage the landing page
         value="administration.landingPage.manageModules.helper"
       />
     </p>
-    <div
-      className="two-columns-admin"
-    >
-      <div
-        className="column-left"
-      >
-        <DumbSelectModulesForm
-          moduleTypes={
-            Array [
-              Object {
-                "defaultOrder": 1,
-                "editableOrder": false,
-                "id": "1",
-                "identifier": "HEADER",
+    <div>
+      <ModulesPreview
+        editModule={[Function]}
+        modules={
+          Immutable.List [
+            Immutable.Map {
+              "enabled": true,
+              "id": "abc123",
+              "moduleType": Immutable.Map {
                 "moduleId": "abc123",
+                "editableOrder": false,
+                "identifier": "HEADER",
                 "required": true,
                 "title": "Header",
               },
-              Object {
-                "defaultOrder": 2,
-                "editableOrder": true,
-                "id": "2",
-                "identifier": "INTRODUCTION",
-                "moduleId": "def456",
-                "required": false,
-                "title": "Introduction",
-              },
-              Object {
-                "defaultOrder": 3,
-                "editableOrder": true,
-                "id": "3",
-                "identifier": "VIDEO",
+              "order": 1,
+            },
+            Immutable.Map {
+              "enabled": true,
+              "id": "ghi789",
+              "moduleType": Immutable.Map {
                 "moduleId": "ghi789",
-                "required": false,
+                "editableOrder": true,
+                "identifier": "VIDEO",
                 "title": "Video",
               },
-              Object {
-                "defaultOrder": 9,
-                "editableOrder": false,
-                "id": "4",
-                "identifier": "FOOTER",
+              "order": 5,
+            },
+            Immutable.Map {
+              "enabled": true,
+              "id": "jkl865",
+              "moduleType": Immutable.Map {
                 "moduleId": "jkl865",
+                "editableOrder": false,
+                "identifier": "FOOTER",
                 "required": true,
                 "title": "Footer",
               },
-            ]
-          }
-          modulesById={
-            Immutable.Map {
-              "abc123": Immutable.Map {
-                "enabled": true,
-                "id": "abc123",
-                "moduleType": Immutable.Map {
-                  "moduleId": "abc123",
-                  "editableOrder": false,
-                  "identifier": "HEADER",
-                  "required": true,
-                  "title": "Header",
-                },
-                "order": 1,
-              },
-              "def456": Immutable.Map {
-                "enabled": false,
-                "id": "def456",
-                "moduleType": Immutable.Map {
-                  "moduleId": "def456",
-                  "editableOrder": true,
-                  "identifier": "INTRODUCTION",
-                  "title": "Introduction",
-                },
-                "order": 2,
-              },
-              "ghi789": Immutable.Map {
-                "enabled": true,
-                "id": "ghi789",
-                "moduleType": Immutable.Map {
-                  "moduleId": "ghi789",
-                  "editableOrder": true,
-                  "identifier": "VIDEO",
-                  "title": "Video",
-                },
-                "order": 5,
-              },
-              "jkl865": Immutable.Map {
-                "enabled": true,
-                "id": "jkl865",
-                "moduleType": Immutable.Map {
-                  "moduleId": "jkl865",
-                  "editableOrder": false,
-                  "identifier": "FOOTER",
-                  "required": true,
-                  "title": "Footer",
-                },
-                "order": 99,
-              },
-            }
-          }
-          toggleModule={[MockFunction]}
-        />
-        <div
-          className="margin-xl"
-        >
-          <AddModuleButton
-            allDuplicatesAreChecked={false}
-            buttonTitleTranslationKey="textAndMultimediaBtn"
-            createModule={[Function]}
-            numberOfDuplicatesModules={1}
-            numberOfEnabledModules={3}
-          />
-        </div>
-      </div>
-      <div
-        className="column-right"
-      >
-        <ModulesPreview
-          editModule={[Function]}
-          modules={
-            Immutable.List [
-              Immutable.Map {
-                "enabled": true,
-                "id": "abc123",
-                "moduleType": Immutable.Map {
-                  "moduleId": "abc123",
-                  "editableOrder": false,
-                  "identifier": "HEADER",
-                  "required": true,
-                  "title": "Header",
-                },
-                "order": 1,
-              },
-              Immutable.Map {
-                "enabled": true,
-                "id": "ghi789",
-                "moduleType": Immutable.Map {
-                  "moduleId": "ghi789",
-                  "editableOrder": true,
-                  "identifier": "VIDEO",
-                  "title": "Video",
-                },
-                "order": 5,
-              },
-              Immutable.Map {
-                "enabled": true,
-                "id": "jkl865",
-                "moduleType": Immutable.Map {
-                  "moduleId": "jkl865",
-                  "editableOrder": false,
-                  "identifier": "FOOTER",
-                  "required": true,
-                  "title": "Footer",
-                },
-                "order": 99,
-              },
-            ]
-          }
-          moveModuleDown={[MockFunction]}
-          moveModuleUp={[MockFunction]}
-          removeModule={[Function]}
-        />
-      </div>
+              "order": 99,
+            },
+          ]
+        }
+        moveModuleDown={[MockFunction]}
+        moveModuleUp={[MockFunction]}
+        removeModule={[Function]}
+      />
+    </div>
+    <div>
+      <AddModuleButton
+        allDuplicatesAreChecked={false}
+        buttonTitleTranslationKey="textAndMultimediaBtn"
+        createModule={[Function]}
+        numberOfDuplicatesModules={1}
+        numberOfEnabledModules={3}
+      />
     </div>
   </div>
 </div>

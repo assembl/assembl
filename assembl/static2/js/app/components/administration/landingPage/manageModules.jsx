@@ -9,12 +9,7 @@ import { compose, withApollo } from 'react-apollo';
 
 import ModulesPreview from './modulesPreview';
 import SectionTitle from '../../administration/sectionTitle';
-import SelectModulesForm from './selectModulesForm';
-import {
-  moveLandingPageModuleDown,
-  moveLandingPageModuleUp,
-  toggleLandingPageModule
-} from '../../../actions/adminActions/landingPage';
+import { moveLandingPageModuleDown, moveLandingPageModuleUp } from '../../../actions/adminActions/landingPage';
 import { browserHistory } from '../../../router';
 import deleteLandingPageModule from '../../../graphql/mutations/deleteLandingPageModule.graphql';
 import createLandingPageModule from '../../../graphql/mutations/createLandingPageModule.graphql';
@@ -29,10 +24,8 @@ type Props = {
   enabledModules: List<Map>,
   lang: string,
   moduleTypes: Array<LandingPageModuleType>,
-  modulesById: Map<string, Map>,
   moveModuleDown: Function,
-  moveModuleUp: Function,
-  toggleModule: Function
+  moveModuleUp: Function
 };
 
 type ModuleInfo = {
@@ -96,7 +89,7 @@ const navigateToModuleEdit = (module: Map): void => {
 
 export class DumbManageModules extends React.Component<Props> {
   render() {
-    const { client, enabledModules, lang, moduleTypes, modulesById, moveModuleDown, moveModuleUp, toggleModule } = this.props;
+    const { client, enabledModules, lang, moduleTypes, moveModuleDown, moveModuleUp } = this.props;
 
     const numberOfTextAndMultimediaModules = moduleTypes.filter(
       moduleType => moduleType.identifier === MODULES.introduction.identifier
@@ -106,8 +99,6 @@ export class DumbManageModules extends React.Component<Props> {
       module => module.getIn(['moduleType', 'identifier']) === MODULES.introduction.identifier
     ).size;
     const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === numberOfTextAndMultimediaModules;
-
-    const updatedModuleTypes = sortByTitle(moduleTypes);
 
     const editModule = (module: Map): (() => void) | void => {
       if (getEditSection(module)) {
@@ -175,33 +166,23 @@ export class DumbManageModules extends React.Component<Props> {
           <p className="admin-paragraph">
             <Translate value="administration.landingPage.manageModules.helper" />
           </p>
-          <div className="two-columns-admin">
-            <div className="column-left">
-              <SelectModulesForm
-                lang={lang}
-                moduleTypes={updatedModuleTypes}
-                modulesById={modulesById}
-                toggleModule={toggleModule}
-              />
-              <div className="margin-xl">
-                <AddModuleButton
-                  numberOfDuplicatesModules={numberOfTextAndMultimediaModules}
-                  numberOfEnabledModules={enabledModules.size}
-                  createModule={createTextAndMultimediaModule}
-                  allDuplicatesAreChecked={allTextAndMultimediaAreChecked}
-                  buttonTitleTranslationKey="textAndMultimediaBtn"
-                />
-              </div>
-            </div>
-            <div className="column-right">
-              <ModulesPreview
-                modules={enabledModules}
-                moveModuleDown={moveModuleDown}
-                moveModuleUp={moveModuleUp}
-                editModule={editModule}
-                removeModule={removeModule}
-              />
-            </div>
+          <div>
+            <ModulesPreview
+              modules={enabledModules}
+              moveModuleDown={moveModuleDown}
+              moveModuleUp={moveModuleUp}
+              editModule={editModule}
+              removeModule={removeModule}
+            />
+          </div>
+          <div>
+            <AddModuleButton
+              numberOfDuplicatesModules={numberOfTextAndMultimediaModules}
+              numberOfEnabledModules={enabledModules.size}
+              createModule={createTextAndMultimediaModule}
+              allDuplicatesAreChecked={allTextAndMultimediaAreChecked}
+              buttonTitleTranslationKey="textAndMultimediaBtn"
+            />
           </div>
         </div>
       </div>
@@ -227,8 +208,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = dispatch => ({
   moveModuleDown: id => dispatch(moveLandingPageModuleDown(id)),
-  moveModuleUp: id => dispatch(moveLandingPageModuleUp(id)),
-  toggleModule: id => dispatch(toggleLandingPageModule(id))
+  moveModuleUp: id => dispatch(moveLandingPageModuleUp(id))
 });
 
 export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(DumbManageModules);

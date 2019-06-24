@@ -24,7 +24,7 @@ const ModuleBlock = ({ edit, moveDown, moveUp, remove, required, title, type, wi
     </span>
     <span>
       {withArrows && (
-        <div>
+        <span>
           <OverlayTrigger placement="top" overlay={downTooltip}>
             <Button onClick={moveDown} className="admin-icons">
               <span className="assembl-icon-down-small" />
@@ -35,7 +35,7 @@ const ModuleBlock = ({ edit, moveDown, moveUp, remove, required, title, type, wi
               <span className="assembl-icon-up-small" />
             </Button>
           </OverlayTrigger>
-        </div>
+        </span>
       )}
       {!!edit && (
         <OverlayTrigger placement="top" overlay={editModuleTooltip}>

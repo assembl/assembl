@@ -1,12 +1,6 @@
 // @flow
 import * as actionTypes from '../actionTypes';
 
-type toggleLandingPageModuleAction = string => actionTypes.toggleLandingPageModule;
-export const toggleLandingPageModule: toggleLandingPageModuleAction = id => ({
-  id: id,
-  type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
-});
-
 type updateLandingPageModulesAction = actionTypes.LandingPageModules => actionTypes.UpdateLandingPageModules;
 export const updateLandingPageModules: updateLandingPageModulesAction = modules => ({
   modules: modules,

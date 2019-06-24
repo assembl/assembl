@@ -2,18 +2,6 @@ import * as actions from '../../../../js/app/actions/adminActions/landingPage';
 import * as actionTypes from '../../../../js/app/actions/actionTypes';
 
 describe('Landing page administration actions', () => {
-  describe('toggleLandingPageModule action', () => {
-    const { toggleLandingPageModule } = actions;
-    it('should return a TOGGLE_LANDING_PAGE_MODULE action type', () => {
-      const expected = {
-        id: 'abc123',
-        type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
-      };
-      const actual = toggleLandingPageModule('abc123');
-      expect(actual).toEqual(expected);
-    });
-  });
-
   describe('updateLandingPageModules action', () => {
     const { updateLandingPageModules } = actions;
     it('should return a UPDATE_LANDING_PAGE_MODULES action type', () => {

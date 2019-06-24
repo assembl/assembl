@@ -272,11 +272,6 @@ export type MoveProposalDown = {
   type: typeof MOVE_PROPOSAL_DOWN
 };
 
-export type toggleLandingPageModule = {
-  id: string,
-  type: typeof TOGGLE_LANDING_PAGE_MODULE
-};
-
 type LandingPageModuleInfo = {
   id: string
 };

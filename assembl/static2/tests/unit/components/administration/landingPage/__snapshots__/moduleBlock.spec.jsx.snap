@@ -75,7 +75,7 @@ exports[`ModuleBlock component should render a block that represents the module 
     
   </span>
   <span>
-    <div>
+    <span>
       <button
         className="admin-icons btn btn-default"
         disabled={false}
@@ -104,7 +104,7 @@ exports[`ModuleBlock component should render a block that represents the module 
           className="assembl-icon-up-small"
         />
       </button>
-    </div>
+    </span>
   </span>
 </div>
 `;
