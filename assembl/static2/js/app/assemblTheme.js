@@ -12,9 +12,7 @@ const firstColor = props => (props.firstColor ? props.firstColor : defaultColors
 
 const firstColorLight = props => (props.firstColorLight ? props.firstColorLight : defaultColors.firstColorLight);
 
-// const secondColor = props => (
-//   props.secondColor ? props.secondColor : defaultColors.secondColor
-// );
+const secondColor = props => (props.secondColor ? props.secondColor : defaultColors.secondColor);
 
 /* Potential regressions when replacing $first-color-opacity-70 with opacityColor for :
    * .overflow-menu .overflow-menu-action
@@ -42,6 +40,10 @@ const screen = {
 export const GlobalStyle = createGlobalStyle`
   #first-color-hidden {
     color: ${firstColor};
+  }
+
+  #second-color-hidden {
+    color: ${secondColor};
   }
 
   #thread-view {
@@ -182,6 +184,10 @@ export const GlobalStyle = createGlobalStyle`
     color: ${firstColor};
   }
 
+  .color2 {
+    color: ${secondColor};
+  }
+
   .comment-container {
     .content {
       .toolbar {
@@ -227,6 +233,10 @@ export const GlobalStyle = createGlobalStyle`
     .path {
       stroke: ${firstColor};
     }
+  }
+
+  .date {
+    color: ${secondColor};
   }
 
   .debate {
@@ -350,6 +360,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     button {
+      color: ${secondColor};
       border-color: ${firstColor};
     }
 
@@ -414,6 +425,26 @@ export const GlobalStyle = createGlobalStyle`
         }
       }
     }
+
+    .button-bar {
+      .btn.active {
+        border-color: ${secondColor};
+
+        span {
+          color: ${secondColor};
+        }
+      }
+
+      .btn-default {
+        &:hover {
+          border-color: ${secondColor};
+
+          span {
+            color: ${secondColor};
+          }
+        }
+      }
+    }
   }
 
   .harvesting-menu {
@@ -461,6 +492,10 @@ export const GlobalStyle = createGlobalStyle`
       .circle {
         stroke: ${firstColor};
       }
+    }
+
+    &.no-data {
+      fill: ${secondColor};
     }
   }
 
@@ -542,6 +577,12 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .login-view {
+    .terms-link {
+      color: ${secondColor};
+    }
+  }
+
   .media-section {
     .container-fluid {
       .media-description {
@@ -615,12 +656,21 @@ export const GlobalStyle = createGlobalStyle`
         color: ${firstColor};
       }
     }
+
+    .navbar-icons {
+      .is-harvesting-button {
+        &.active {
+          color: ${secondColor};
+        }
+      }
+    }
   }
 
   .nav-tabs {
     &.nav-justified {
       & > li > a {
         color: ${firstColor};
+        border-color: ${secondColor};
 
         &:hover {
           color: ${firstColor};
@@ -632,6 +682,7 @@ export const GlobalStyle = createGlobalStyle`
         & > a:hover,
         & > a:focus {
           color: ${firstColor};
+          border-bottom-color: ${secondColor};
         }
       }
     }
@@ -681,6 +732,14 @@ export const GlobalStyle = createGlobalStyle`
             color: ${firstColor};
           }
         }
+      }
+    }
+  }
+
+  .profile {
+    .form-control {
+      &:focus {
+        border-color: ${secondColor};
       }
     }
   }
@@ -815,6 +874,12 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .scroll-one-page {
+    span {
+      background-color: ${secondColor};
+    }
+  }
+
   .synthesis-page {
     .synthesis-side-menu {
       .assembl-icon-down-open {
@@ -836,6 +901,12 @@ export const GlobalStyle = createGlobalStyle`
       .side-menu-link-3 {
         color: ${firstColor};
       }
+    }
+  }
+
+  .synthesis-preview {
+    .light-title-4 {
+      color: ${secondColor};
     }
   }
 

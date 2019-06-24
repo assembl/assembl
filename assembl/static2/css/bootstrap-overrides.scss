@@ -82,7 +82,8 @@
 
   &.nav-justified {
     & > li > a {
-      border-bottom: 2px solid $second-color;
+      border-style: solid;
+      border-width: 2px;
       opacity: 0.35;
       outline: none;
 
@@ -96,7 +97,8 @@
       & > a:hover,
       & > a:focus {
         border: none;
-        border-bottom: 2px solid $second-color;
+        border-bottom-style: solid;
+        border-bottom-width: 2px;
         border-radius: 0;
         opacity: 1;
       }
