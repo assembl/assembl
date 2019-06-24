@@ -89,6 +89,7 @@ type RichTextLangstringEntry = {
   localeCode: string,
   value: EditorState
 };
+
 type RichTextLangstringEntries = Array<RichTextLangstringEntry>;
 
 type TitleEntries = {
@@ -216,11 +217,7 @@ type Discussion = {
   // The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase.
   startDate: ?any,
   // The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase.
-  endDate: ?any,
-  // Title of multimedia text on landing page
-  textMultimediaTitle: ?string,
-  // Body of multimedia text on landing page
-  textMultimediaBody: ?string
+  endDate: ?any
 };
 
 type ErrorDef = {
@@ -300,4 +297,41 @@ type Language = {
   locale: string,
   name: string,
   nativeName: string
+};
+
+type LandingPageModuleType = {
+  defaultOrder: number,
+  editableOrder: boolean,
+  id: string,
+  identifier: string,
+  moduleId: string,
+  required: boolean,
+  title: string
+};
+
+type LandingPageModule = {
+  body: ?string,
+  configuration: Object,
+  enabled: boolean,
+  existsInDatabase: true,
+  id: string,
+  moduleType: LandingPageModuleType,
+  order: number,
+  subtitle: ?string,
+  title: ?string
+};
+
+type MultilingualLandingPageModule = {
+  body: ?string,
+  bodyEntries?: RichTextLangstringEntries,
+  configuration: Object,
+  enabled: boolean,
+  existsInDatabase: true,
+  id: string,
+  moduleType: LandingPageModuleType,
+  order: number,
+  subtitle: ?string,
+  subtitleEntries: LangstringEntries,
+  title: ?string,
+  titleEntries: LangstringEntries
 };

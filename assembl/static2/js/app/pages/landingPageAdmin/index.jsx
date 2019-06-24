@@ -5,14 +5,13 @@ import { connect } from 'react-redux';
 import { type Route, type Router } from 'react-router';
 import { I18n } from 'react-redux-i18n';
 
-import ManageModules from '../components/administration/landingPage/manageModules';
-import CustomizeHeader from '../components/administration/landingPage/header/index';
-import TextMultimedia from '../components/administration/landingPage/textMultimedia';
-import Navbar from '../components/administration/navbar';
-import { displayAlert } from '../utils/utilityManager';
-import SaveButton, { getMutationsPromises, runSerial } from '../components/administration/saveButton';
-import createLandingPageModule from '../graphql/mutations/createLandingPageModule.graphql';
-import updateLandingPageModule from '../graphql/mutations/updateLandingPageModule.graphql';
+import ManageModules from '../../components/administration/landingPage/manageModules';
+import CustomizeHeader from '../../components/administration/landingPage/header/index';
+import Navbar from '../../components/administration/navbar';
+import { displayAlert } from '../../utils/utilityManager';
+import SaveButton, { getMutationsPromises, runSerial } from '../../components/administration/saveButton';
+import createLandingPageModule from '../../graphql/mutations/createLandingPageModule.graphql';
+import updateLandingPageModule from '../../graphql/mutations/updateLandingPageModule.graphql';
 
 type Props = {
   createLandingPageModule: Function,
@@ -35,7 +34,7 @@ type State = {
   refetching: boolean
 };
 
-class LandingPageAdmin extends React.Component<Props, State> {
+class Index extends React.Component<Props, State> {
   constructor() {
     super();
     this.state = {
@@ -102,7 +101,6 @@ class LandingPageAdmin extends React.Component<Props, State> {
         {showSaveButton(section) && <SaveButton disabled={saveDisabled} saveAction={this.saveAction} />}
         {section === '1' && <CustomizeHeader editLocale={editLocale} />}
         {section === '2' && <ManageModules {...this.props} />}
-        {section === '3' && <TextMultimedia editLocale={editLocale} />}
         {section && <Navbar currentStep={section} steps={['1', '2']} phaseIdentifier="landingPage" />}
       </div>
     );
@@ -133,4 +131,4 @@ export default compose(
   graphql(updateLandingPageModule, {
     name: 'updateLandingPageModule'
   })
-)(LandingPageAdmin);
+)(Index);

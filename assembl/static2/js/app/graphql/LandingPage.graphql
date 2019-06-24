@@ -3,18 +3,10 @@
 query LandingPage($lang: String!) {
   discussion {
     id
-    titleEntries {
-      ...langStringEntry
-    }
-    title(lang: $lang)
-    subtitleEntries {
-      ...langStringEntry
-    }
-    subtitle(lang: $lang)
+    buttonLabel(lang: $lang)
     buttonLabelEntries {
       ...langStringEntry
     }
-    buttonLabel(lang: $lang)
     headerImage {
       externalUrl
       mimeType
@@ -24,6 +16,14 @@ query LandingPage($lang: String!) {
       externalUrl
       mimeType
       title
+    }
+    subtitle(lang: $lang)
+    subtitleEntries {
+      ...langStringEntry
+    }
+    title(lang: $lang)
+    titleEntries {
+      ...langStringEntry
     }
   }
 }

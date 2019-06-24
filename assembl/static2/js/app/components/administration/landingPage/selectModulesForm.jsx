@@ -4,7 +4,6 @@ import { Checkbox, FormGroup } from 'react-bootstrap';
 import type { Map } from 'immutable';
 import { I18n } from 'react-redux-i18n';
 import Helper from '../../common/helper';
-import type { LandingPageModuleType } from './manageModules';
 
 type Props = {
   modulesById: Map<Object>,
@@ -15,7 +14,7 @@ type Props = {
 export const DumbSelectModulesForm = ({ modulesById, moduleTypes, toggleModule }: Props) => (
   <div className="select-modules-form">
     <FormGroup>
-      {moduleTypes.map((moduleType) => {
+      {moduleTypes.map((moduleType: LandingPageModuleType) => {
         const module = modulesById.get(moduleType.moduleId);
         const helperLabel = moduleType.title || I18n.t('administration.landingPage.manageModules.textAndMultimedia');
         const identifierLowerCase = moduleType.identifier.toLowerCase();

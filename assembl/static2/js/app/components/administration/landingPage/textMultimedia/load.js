@@ -1,30 +1,14 @@
 // @flow
-import type { ApolloClient } from 'react-apollo';
-import type { MultilingualTextMultimedia, TextMultimediaValues } from './types.flow';
 import { convertEntriesToI18nRichText, convertEntriesToI18nValue } from '../../../form/utils';
-import MultilingualDiscussionQuery from '../../../../graphql/MultilingualDiscussionQuery.graphql';
+import type { TextMultimediaFormValues } from './types.flow';
 
-export const load = async (
-  client: ApolloClient,
-  fetchPolicy: FetchPolicy
-): Promise<{ discussion: MultilingualTextMultimedia | null }> => {
-  const { data } = await client.query({
-    query: MultilingualDiscussionQuery,
-    fetchPolicy: fetchPolicy
+/* fake promises that returns the same */
+export const load = async (landingPageModule: MultilingualLandingPageModule) =>
+  new Promise((res) => {
+    res(landingPageModule);
   });
-  return data;
-};
 
-export const postLoadFormat = ({ discussion }: { discussion: MultilingualTextMultimedia | null }): TextMultimediaValues => {
-  if (!discussion) {
-    return { textMultimediaBody: {}, textMultimediaTitle: {} };
-  }
-  return {
-    textMultimediaBody: discussion.textMultimediaBodyEntries
-      ? convertEntriesToI18nRichText(discussion.textMultimediaBodyEntries)
-      : {},
-    textMultimediaTitle: discussion.textMultimediaTitleEntries
-      ? convertEntriesToI18nValue(discussion.textMultimediaTitleEntries)
-      : {}
-  };
-};
+export const postLoadFormat = (landingPageModule: MultilingualLandingPageModule): TextMultimediaFormValues => ({
+  body: landingPageModule.bodyEntries ? convertEntriesToI18nRichText(landingPageModule.bodyEntries) : {},
+  title: landingPageModule && landingPageModule.titleEntries ? convertEntriesToI18nValue(landingPageModule.titleEntries) : {}
+});

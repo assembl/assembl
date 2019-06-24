@@ -2,18 +2,19 @@
 
 exports[`ModuleBlock component should render a block that represents the module 1`] = `
 <div
-  className="module-block"
+  className="module-block module-header"
 >
   <span>
     Header
     *
   </span>
+  <span />
 </div>
 `;
 
-exports[`ModuleBlock component should render a block that represents the module with move up/down arrows 1`] = `
+exports[`ModuleBlock component should render a block that represents the module with delete icon 1`] = `
 <div
-  className="module-block"
+  className="module-block module-introduction"
 >
   <span>
     Introduction
@@ -24,30 +25,86 @@ exports[`ModuleBlock component should render a block that represents the module 
       className="admin-icons btn btn-default"
       disabled={false}
       onBlur={[Function]}
-      onClick={[MockFunction]}
+      onClick={[Function]}
       onFocus={[Function]}
       onMouseOut={[Function]}
       onMouseOver={[Function]}
       type="button"
     >
       <span
-        className="assembl-icon-down-small"
+        className="assembl-icon-delete"
       />
     </button>
+  </span>
+</div>
+`;
+
+exports[`ModuleBlock component should render a block that represents the module with edit icon 1`] = `
+<div
+  className="module-block module-introduction"
+>
+  <span>
+    Introduction
+    
+  </span>
+  <span>
     <button
       className="admin-icons btn btn-default"
       disabled={false}
       onBlur={[Function]}
-      onClick={[MockFunction]}
+      onClick={[Function]}
       onFocus={[Function]}
       onMouseOut={[Function]}
       onMouseOver={[Function]}
       type="button"
     >
       <span
-        className="assembl-icon-up-small"
+        className="assembl-icon-edit"
       />
     </button>
+  </span>
+</div>
+`;
+
+exports[`ModuleBlock component should render a block that represents the module with move up/down arrows 1`] = `
+<div
+  className="module-block module-introduction"
+>
+  <span>
+    Introduction
+    
+  </span>
+  <span>
+    <div>
+      <button
+        className="admin-icons btn btn-default"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[MockFunction]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+        type="button"
+      >
+        <span
+          className="assembl-icon-down-small"
+        />
+      </button>
+      <button
+        className="admin-icons btn btn-default"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[MockFunction]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+        type="button"
+      >
+        <span
+          className="assembl-icon-up-small"
+        />
+      </button>
+    </div>
   </span>
 </div>
 `;

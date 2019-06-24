@@ -18,7 +18,7 @@ import LanguageMenu from '../components/administration/languageMenu';
 import SectionsQuery from '../graphql/SectionsQuery.graphql';
 import TextFields from '../graphql/TextFields.graphql';
 import VoteSessionQuery from '../graphql/VoteSession.graphql';
-import LandingPageModules from '../graphql/LandingPageModules.graphql';
+import LandingPageModulesQuery from '../graphql/LandingPageModulesQuery.graphql';
 import { convertEntriesToEditorState } from '../utils/draftjs';
 import { getPhaseId } from '../utils/timeline';
 import { fromGlobalId } from '../utils/globalFunctions';
@@ -143,7 +143,7 @@ class Administration extends React.Component<Props, State> {
 
   putLandingPageModulesInStore = (landingPageModules) => {
     if (landingPageModules) {
-      const filtered = filter(LandingPageModules, { landingPageModules: landingPageModules });
+      const filtered = filter(LandingPageModulesQuery, { landingPageModules: landingPageModules });
       const landingPageModulesWithUpdatedTitles = addEnumSuffixToModuleTitles(filtered.landingPageModules);
       this.props.updateLandingPageModules(landingPageModulesWithUpdatedTitles);
     }
@@ -303,7 +303,7 @@ export default compose(
     },
     skip: isNotInDiscussionAdmin
   }),
-  graphql(LandingPageModules, {
+  graphql(LandingPageModulesQuery, {
     options: ({ locale }) => ({
       variables: { lang: locale }
     }),

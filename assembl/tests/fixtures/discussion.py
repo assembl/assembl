@@ -74,12 +74,6 @@ def discussion(request, test_session, participant2_user, default_preferences):
             purpose=AttachmentPurpose.PRIVACY_POLICY_ATTACHMENT.value,
         )
 
-        d.text_multimedia_title = LangString.create(
-            u"Multimedia title EN", "en")
-
-        d.text_multimedia_body = LangString.create(
-            u"Multimedia body EN", "en")
-
         m_document_1, m_attachment_1 = add_test_attachment(
             session=test_session, discussion=d, creator=participant2_user,
             purpose=AttachmentPurpose.IMAGE.value,

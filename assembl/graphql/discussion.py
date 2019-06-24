@@ -63,14 +63,6 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
     nlp_sentiment = graphene.Field(SentimentAnalysisResult, description=docs.Discussion.nlp_sentiment)
     slug = graphene.String(description=docs.Discussion.slug)
     login_data = graphene.Field(URLMeta, next_view=graphene.String(required=False))
-    text_multimedia_body = graphene.String(
-        lang=graphene.String(description=docs.Discussion.text_multimedia_body),
-        description=docs.Discussion.text_multimedia_body)
-    text_multimedia_body_entries = graphene.List(LangStringEntry, description=docs.Discussion.text_multimedia_title)
-    text_multimedia_title = graphene.String(
-        lang=graphene.String(description=docs.Discussion.text_multimedia_title),
-        description=docs.Discussion.text_multimedia_title)
-    text_multimedia_title_entries = graphene.List(LangStringEntry, description=docs.Discussion.text_multimedia_title)
 
     def resolve_homepage_url(self, args, context, info):
         # TODO: Remove this resolver and add URLString to
@@ -190,18 +182,6 @@ class Discussion(SecureObjectType, SQLAlchemyObjectType):
         if result:
             result = result[0]
             return result
-
-    def resolve_text_multimedia_title(self, args, context, info):
-        return _resolve_langstring_field(args, context, 'text_multimedia_title')
-
-    def resolve_text_multimedia_title_entries(self, args, context, info):
-        return _resolve_langstring_entries_field(context, 'text_multimedia_title')
-
-    def resolve_text_multimedia_body(self, args, context, info):
-        return _resolve_langstring_field(args, context, 'text_multimedia_body')
-
-    def resolve_text_multimedia_body_entries(self, args, context, info):
-        return _resolve_langstring_entries_field(context, 'text_multimedia_body')
 
 
 class UpdateDiscussion(graphene.Mutation):
@@ -697,45 +677,6 @@ class UpdateDiscussionPreferences(graphene.Mutation):
             db.flush()
 
         return UpdateDiscussionPreferences(preferences=discussion.preferences)
-
-
-class UpdateDiscussionTextMultimedia(graphene.Mutation):
-    __doc__ = docs.UpdateDiscussionTextMultimedia.__doc__
-
-    class Input:
-        text_multimedia_body_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussionTextMultimedia.text_multimedia_body_entries)
-        text_multimedia_title_entries = graphene.List(LangStringEntryInput, description=docs.UpdateDiscussionTextMultimedia.text_multimedia_title_entries)
-
-    discussion = graphene.Field(lambda: Discussion)
-
-    @staticmethod
-    @abort_transaction_on_exception
-    def mutate(root, args, context, info):
-        cls = models.Discussion
-        discussion_id = context.matchdict['discussion_id']
-        discussion = models.Discussion.get(discussion_id)
-
-        require_instance_permission(CrudPermissions.UPDATE, discussion, context)
-
-        with cls.default_db.no_autoflush as db:
-            text_multimedia_title_entries = args.get('text_multimedia_title_entries')
-            if text_multimedia_title_entries is not None and len(text_multimedia_title_entries) == 0:
-                raise Exception(
-                    'Text multimedia title entries needs at least one entry')
-
-            update_langstring_from_input_entries(
-                discussion, 'text_multimedia_title', text_multimedia_title_entries)
-
-            text_multimedia_body_entries = args.get('text_multimedia_body_entries')
-            if text_multimedia_body_entries is not None and len(text_multimedia_body_entries) == 0:
-                raise Exception(
-                    'Text multimedia body entries needs at least one entry')
-
-            update_langstring_from_input_entries(
-                discussion, 'text_multimedia_body', text_multimedia_body_entries)
-
-        db.flush()
-        return UpdateDiscussionTextMultimedia(discussion=discussion)
 
 
 def update_legal_contents_attachments(context, discussion, new_attachments, purpose):

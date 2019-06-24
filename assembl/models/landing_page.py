@@ -12,11 +12,30 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, backref
 
 import assembl.graphql.docstrings as docs
-from assembl.lib.sqla import Base
 from assembl.auth import CrudPermissions, P_ADMIN_DISC, P_SYSADMIN, P_READ
+from assembl.lib.sqla import Base
 from . import DiscussionBoundBase
 from .langstrings import LangString
 
+MODULES_IDENTIFIERS = {
+    'header': 'HEADER',
+    'timeline': 'TIMELINE',
+    'chatbot': 'CHATBOT',
+    'topThematics': 'TOP_THEMATICS',
+    'tweets': 'TWEETS',
+    'contact': 'CONTACT',
+    'data': 'DATA',
+    'news': 'NEWS',
+    'partners': 'PARTNERS',
+    'introduction': 'INTRODUCTION',
+    'footer': 'FOOTER'
+}
+
+MODULES_ORDER = {
+    'HEADER': 1,
+    'INTRODUCTION': 2,
+    'FOOTER': 100
+}
 
 module_types = [
     {
@@ -228,12 +247,17 @@ class LandingPageModule(DiscussionBoundBase):
         LangString, lazy="joined", single_parent=True, primaryjoin=subtitle_id == LangString.id,
         backref=backref("module_from_subtitle", lazy="dynamic"), cascade="all, delete-orphan")
 
+    body_id = Column(Integer(), ForeignKey(LangString.id))
+    body = relationship(
+        LangString, lazy="joined", single_parent=True, primaryjoin=body_id == LangString.id,
+        backref=backref("module_from_body", lazy="dynamic"), cascade="all, delete-orphan")
+
     def get_discussion_id(self):
         return self.discussion_id or self.discussion.id
 
     @classmethod
     def get_discussion_conditions(cls, discussion_id, alias_maker=None):
-        return (cls.discussion_id == discussion_id,)
+        return cls.discussion_id == discussion_id,
 
     __mapper_args__ = {
         'polymorphic_identity': 'landing_page_module',
@@ -245,4 +269,4 @@ class LandingPageModule(DiscussionBoundBase):
         P_ADMIN_DISC, P_READ, P_ADMIN_DISC, P_ADMIN_DISC)
 
 
-LangString.setup_ownership_load_event(LandingPageModule, ['title', 'subtitle'])
+LangString.setup_ownership_load_event(LandingPageModule, ['title', 'subtitle', 'body'])

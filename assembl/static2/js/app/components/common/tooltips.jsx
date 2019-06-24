@@ -396,3 +396,15 @@ export const deleteSynthesisTooltip = (
     <Translate value="debate.syntheses.deleteSynthesisTooltip" />
   </Tooltip>
 );
+
+export const editModuleTooltip = (
+  <Tooltip id="editModuleTooltip">
+    <Translate value="administration.modules.edit" />
+  </Tooltip>
+);
+
+export const removeModuleTooltip = (
+  <Tooltip id="removeModuleTooltip">
+    <Translate value="administration.modules.remove" />
+  </Tooltip>
+);

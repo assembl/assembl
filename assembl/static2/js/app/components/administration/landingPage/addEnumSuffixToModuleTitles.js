@@ -2,8 +2,6 @@
 import countBy from 'lodash/countBy';
 import get from 'lodash/get';
 
-import type { LandingPageModule } from '../../administration/landingPage/manageModules';
-
 export const addEnumSuffixToModuleTitles = (modules: Array<LandingPageModule>): Array<LandingPageModule> => {
   // Add a suffix to the title of the module if this module appears more than one time.
   // This suffix is the number of times this module appeared in the array.

@@ -22,12 +22,6 @@ fragment MultilingualDiscussion on Discussion {
     externalUrl
     title
   }
-  textMultimediaBodyEntries {
-    ...langStringEntry
-  }
-  textMultimediaTitleEntries {
-    ...langStringEntry
-  }
   startDate
   subtitleEntries {
     ...langStringEntry

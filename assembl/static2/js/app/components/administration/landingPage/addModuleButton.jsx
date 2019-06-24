@@ -8,7 +8,6 @@ type Props = {
   createModule: Function,
   numberOfDuplicatesModules: number,
   numberOfEnabledModules: number,
-  allDuplicatesAreChecked: boolean,
   buttonTitleTranslationKey: string
 };
 
@@ -16,7 +15,6 @@ const AddModuleButton = ({
   createModule,
   numberOfDuplicatesModules,
   numberOfEnabledModules,
-  allDuplicatesAreChecked,
   buttonTitleTranslationKey
 }: Props) => {
   const displayConfirmationModal = () => {
@@ -41,7 +39,7 @@ const AddModuleButton = ({
     return displayModal(null, body, includeFooter, footer);
   };
   return (
-    <Button className="button-submit button-dark" onClick={displayConfirmationModal} disabled={!allDuplicatesAreChecked}>
+    <Button className="button-submit button-dark" onClick={displayConfirmationModal} disabled={false}>
       <Translate value={`administration.landingPage.manageModules.${buttonTitleTranslationKey}`} />
     </Button>
   );

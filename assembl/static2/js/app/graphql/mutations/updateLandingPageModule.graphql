@@ -2,25 +2,24 @@
 
 mutation updateLandingPageModule(
   $id: ID!
+  $bodyEntries: [LangStringEntryInput!]
+  $configuration: String
   $enabled: Boolean
   $order: Float
-  $configuration: String
-  $titleEntries: [LangStringEntryInput!]
   $subtitleEntries: [LangStringEntryInput!]
+  $titleEntries: [LangStringEntryInput!]
 ) {
   updateLandingPageModule(
     id: $id
+    bodyEntries: $bodyEntries
+    configuration: $configuration
     enabled: $enabled
     order: $order
-    configuration: $configuration
-    titleEntries: $titleEntries
     subtitleEntries: $subtitleEntries
+    titleEntries: $titleEntries
   ) {
     landingPageModule {
-      titleEntries {
-        ...langStringEntry
-      }
-      subtitleEntries {
+      bodyEntries {
         ...langStringEntry
       }
       configuration
@@ -30,6 +29,12 @@ mutation updateLandingPageModule(
         title
       }
       order
+      subtitleEntries {
+        ...langStringEntry
+      }
+      titleEntries {
+        ...langStringEntry
+      }
     }
   }
 }

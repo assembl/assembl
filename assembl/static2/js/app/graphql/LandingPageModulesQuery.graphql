@@ -1,0 +1,33 @@
+#import "./fragments/LangString.graphql"
+
+query LandingPageModulesQuery($lang: String!) {
+  landingPageModules {
+    ... on LandingPageModule {
+      body(lang: $lang)
+      bodyEntries {
+        ...langStringEntry
+      }
+      configuration
+      enabled
+      existsInDatabase
+      id
+      order
+      moduleType {
+        id
+        defaultOrder
+        editableOrder
+        identifier
+        required
+        title(lang: $lang)
+      }
+      subtitle(lang: $lang)
+      subtitleEntries {
+        ...langStringEntry
+      }
+      title(lang: $lang)
+      titleEntries {
+        ...langStringEntry
+      }
+    }
+  }
+}

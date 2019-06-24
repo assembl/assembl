@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import dateutil.parser
 from random import randint
-from operator import attrgetter
 
+import dateutil.parser
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyConnectionField
@@ -13,41 +12,38 @@ from sqlalchemy.orm import subqueryload
 
 import assembl.graphql.docstrings as docs
 from assembl import models
-from assembl.lib import logging
-
+from assembl.auth import CrudPermissions
 from assembl.graphql.discussion import (Discussion, UpdateDiscussion, DiscussionPreferences,
                                         LegalContents,
                                         UpdateLegalContents,
                                         ResourcesCenter,
                                         UpdateDiscussionPreferences,
-                                        UpdateResourcesCenter, VisitsAnalytics, UpdateDiscussionTextMultimedia)
+                                        UpdateResourcesCenter, VisitsAnalytics)
 from assembl.graphql.document import UploadDocument
+from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
 from assembl.graphql.idea import (CreateThematic, DeleteThematic,
                                   IdeaUnion, UpdateThematic, UpdateIdeas)
 from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModule, CreateLandingPageModule,
-                                          UpdateLandingPageModule)
+                                          UpdateLandingPageModule, DeleteLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
-from assembl.graphql.post import (CreatePost, DeletePost,
-                                  ValidatePost,
+from assembl.graphql.permissions_helpers import require_instance_permission
+from assembl.graphql.post import (CreatePost, DeletePost, ValidatePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract, UpdateShareCount)
-from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
-from assembl.graphql.tag import Tag, AddTag, RemoveTag, UpdateTag
+from assembl.graphql.preferences import UpdateHarvestingTranslationPreference
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis, CreateSynthesis, UpdateSynthesis, DeleteSynthesis
-from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
-from .configurable_fields import (
-    ConfigurableFieldUnion, CreateTextField, UpdateTextField,
-    DeleteTextField, ProfileField, UpdateProfileFields)
+from assembl.graphql.tag import Tag, AddTag, RemoveTag, UpdateTag
 from assembl.graphql.timeline import (
     DiscussionPhase, CreateDiscussionPhase,
     UpdateDiscussionPhase, DeleteDiscussionPhase)
-from assembl.graphql.votes import AddTokenVote, AddGaugeVote
+from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
+from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
     CreateGaugeVoteSpecification, UpdateGaugeVoteSpecification,
@@ -55,16 +51,18 @@ from assembl.graphql.vote_session import (
     UpdateTokenVoteSpecification, DeleteVoteSpecification,
     CreateProposal, UpdateProposal, DeleteProposal
 )
-from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
-from assembl.graphql.preferences import UpdateHarvestingTranslationPreference
+from assembl.graphql.votes import AddTokenVote, AddGaugeVote
+from assembl.lib import logging
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
 from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
-from assembl.graphql.permissions_helpers import require_instance_permission
-from assembl.auth import CrudPermissions
 from assembl.utils import get_ideas, get_posts_for_phases
+from .configurable_fields import (
+    ConfigurableFieldUnion, CreateTextField, UpdateTextField,
+    DeleteTextField, ProfileField, UpdateProfileFields)
+
 # from assembl.models.timeline import get_phase_by_identifier, Phases
 
 
@@ -127,6 +125,7 @@ class Query(graphene.ObjectType):
     discussion = graphene.Field(Discussion, description=docs.Schema.discussion)
     landing_page_module_types = graphene.List(LandingPageModuleType, description=docs.Schema.landing_page_module_types)
     landing_page_modules = graphene.List(LandingPageModule, description=docs.Schema.landing_page_modules)
+    landing_page_module = graphene.Field(lambda: LandingPageModule, description=docs.Schema.landing_page_module)
     text_fields = graphene.List(ConfigurableFieldUnion, description=docs.Schema.text_fields)
     profile_fields = graphene.List(ProfileField, description=docs.Schema.profile_fields)
     timeline = graphene.List(DiscussionPhase, description=docs.Schema.timeline)
@@ -360,6 +359,7 @@ class Query(graphene.ObjectType):
         module_types = get_query(models.LandingPageModuleType, context).order_by(models.LandingPageModuleType.default_order).all()
         modules = []
         for module_type in module_types:
+            # FIXME: sub optimized
             module = query.filter(
                 model.discussion_id == discussion_id
             ).join(
@@ -379,12 +379,25 @@ class Query(graphene.ObjectType):
                     module_type=module_type,
                     order=module_type.default_order,
                     title=None,
-                    subtitle=None
+                    subtitle=None,
+                    body=None
                 )
 
                 modules.append(module)
 
-        return sorted(modules, key=attrgetter('order'))
+        def sort_landing_page_modules(module1, module2):
+            def module_type_order(module):
+                return models.landing_page.MODULES_ORDER.get(module.module_type.identifier, 50)
+
+            module_type_cmp = cmp(module_type_order(module1), module_type_order(module2))
+
+            if module_type_cmp != 0:
+                return module_type_cmp
+            else:
+                return cmp(module1.order, module2.order)
+
+        sorted_modules = sorted(modules, cmp=sort_landing_page_modules)
+        return sorted_modules
 
     def resolve_text_fields(self, args, context, info):
         model = models.AbstractConfigurableField
@@ -482,8 +495,6 @@ class Mutations(graphene.ObjectType):
     delete_sentiment = DeleteSentiment.Field(description=docs.DeleteSentiment.__doc__)
     upload_document = UploadDocument.Field(description=docs.UploadDocument.__doc__)
     update_discussion_preferences = UpdateDiscussionPreferences.Field(description=docs.UpdateDiscussionPreferences.__doc__)
-    update_discussion_text_multimedia = UpdateDiscussionTextMultimedia.Field(
-        description=docs.UpdateDiscussionTextMultimedia.__doc__)
     create_resource = CreateResource.Field(description=docs.CreateResource.__doc__)
     delete_resource = DeleteResource.Field(description=docs.DeleteResource.__doc__)
     update_resource = UpdateResource.Field(description=docs.UpdateResource.__doc__)
@@ -508,6 +519,7 @@ class Mutations(graphene.ObjectType):
     delete_vote_specification = DeleteVoteSpecification.Field(description=docs.DeleteVoteSpecification.__doc__)
     create_landing_page_module = CreateLandingPageModule.Field(description=docs.CreateLandingPageModule.__doc__)
     update_landing_page_module = UpdateLandingPageModule.Field(description=docs.UpdateLandingPageModule.__doc__)
+    delete_landing_page_module = DeleteLandingPageModule.Field(description=docs.DeleteLandingPageModule.__doc__)
     create_proposal = CreateProposal.Field(description=docs.CreateProposal.__doc__)
     update_proposal = UpdateProposal.Field(description=docs.UpdateProposal.__doc__)
     delete_proposal = DeleteProposal.Field(description=docs.DeleteProposal.__doc__)

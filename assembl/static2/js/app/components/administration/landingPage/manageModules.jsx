@@ -3,50 +3,36 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { I18n, Translate } from 'react-redux-i18n';
 import type { List, Map } from 'immutable';
+import { Button } from 'react-bootstrap';
+import type { ApolloClient } from 'react-apollo';
+import { compose, withApollo } from 'react-apollo';
+
 import ModulesPreview from './modulesPreview';
 import SectionTitle from '../../administration/sectionTitle';
 import SelectModulesForm from './selectModulesForm';
 import {
-  toggleLandingPageModule,
   moveLandingPageModuleDown,
   moveLandingPageModuleUp,
-  createLandingPageModule
+  toggleLandingPageModule
 } from '../../../actions/adminActions/landingPage';
-import { createRandomId } from '../../../utils/globalFunctions';
+import { browserHistory } from '../../../router';
+import deleteLandingPageModule from '../../../graphql/mutations/deleteLandingPageModule.graphql';
+import createLandingPageModule from '../../../graphql/mutations/createLandingPageModule.graphql';
+import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import AddModuleButton from './addModuleButton';
-
-export type LandingPageModuleType = {
-  defaultOrder: number,
-  editableOrder: boolean,
-  id: string,
-  identifier: string,
-  moduleId: string,
-  required: boolean,
-  title: string
-};
-
-export type LandingPageModule = {
-  configuration: Object,
-  enabled: boolean,
-  existsInDatabase: true,
-  id: string,
-  moduleType: LandingPageModule,
-  order: number,
-  subtitle: ?string,
-  subtitleEntries: Array<LangstringEntries>,
-  title: ?string,
-  titleEntries: Array<LangstringEntries>
-};
+import { get } from '../../../utils/routeMap';
+import { closeModal, displayModal } from '../../../utils/utilityManager';
+import LandingPageModulesQuery from '../../../graphql/LandingPageModulesQuery.graphql';
 
 type Props = {
+  client: ApolloClient,
   enabledModules: List<Map>,
+  lang: string,
   moduleTypes: Array<LandingPageModuleType>,
-  locale: string,
   modulesById: Map<string, Map>,
   moveModuleDown: Function,
   moveModuleUp: Function,
-  toggleModule: Function,
-  createModule: Function
+  toggleModule: Function
 };
 
 const MODULES_IDENTIFIERS = {
@@ -88,67 +74,137 @@ export const sortByTitle = (modules: Array<LandingPageModuleType>): Array<Landin
   return sortedModules;
 };
 
-export const DumbManageModules = ({
-  enabledModules,
-  moduleTypes,
-  locale,
-  modulesById,
-  moveModuleDown,
-  moveModuleUp,
-  toggleModule,
-  createModule
-}: Props) => {
-  const numberOfTextAndMultimediaModules = moduleTypes.filter(
-    moduleType => moduleType.identifier === MODULES_IDENTIFIERS.introduction
-  ).length;
+const navigateToModuleEdit = (module: Map): void => {
+  const moduleType = module.getIn(['moduleType', 'identifier']);
+  const moduleId = module.get('id');
+  let query;
+  if (moduleType === MODULES_IDENTIFIERS.introduction) {
+    query = { section: 'editTextAndMultimedia', landingPageModuleId: moduleId };
+  }
+  const url = get('administration', { slug: getDiscussionSlug() || '', id: 'landingPage' }, query);
+  browserHistory.push(url);
+};
 
-  const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
-    module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
-  ).size;
-  const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === numberOfTextAndMultimediaModules;
+export class DumbManageModules extends React.Component<Props> {
+  render() {
+    const { client, enabledModules, lang, moduleTypes, modulesById, moveModuleDown, moveModuleUp, toggleModule } = this.props;
 
-  const updatedModuleTypes = sortByTitle(moduleTypes);
+    const numberOfTextAndMultimediaModules = moduleTypes.filter(
+      moduleType => moduleType.identifier === MODULES_IDENTIFIERS.introduction
+    ).length;
 
-  return (
-    <div className="admin-box">
-      <SectionTitle
-        title={I18n.t('administration.landingPage.manageModules.title')}
-        annotation={I18n.t('administration.annotation')}
-      />
-      <div className="admin-content form-container" style={{ maxWidth: '700px' }}>
-        <p className="admin-paragraph">
-          <Translate value="administration.landingPage.manageModules.helper" />
-        </p>
-        <div className="two-columns-admin">
-          <div className="column-left">
-            <SelectModulesForm
-              lang={locale}
-              moduleTypes={updatedModuleTypes}
-              modulesById={modulesById}
-              toggleModule={toggleModule}
-            />
-            <div className="margin-xl">
-              <AddModuleButton
-                numberOfDuplicatesModules={numberOfTextAndMultimediaModules}
-                numberOfEnabledModules={enabledModules.size}
-                createModule={createModule}
-                allDuplicatesAreChecked={allTextAndMultimediaAreChecked}
-                buttonTitleTranslationKey="textAndMultimediaBtn"
+    const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
+      module => module.getIn(['moduleType', 'identifier']) === MODULES_IDENTIFIERS.introduction
+    ).size;
+    const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === numberOfTextAndMultimediaModules;
+
+    const updatedModuleTypes = sortByTitle(moduleTypes);
+
+    const editModule = (module: Map): (() => void) | void => {
+      if (module.getIn(['moduleType', 'identifier']) === 'INTRODUCTION') {
+        return () => navigateToModuleEdit(module);
+      }
+      return undefined;
+    };
+
+    const refetchQueries = [
+      {
+        query: LandingPageModulesQuery,
+        variables: {
+          lang: lang
+        }
+      }
+    ];
+
+    const removeModule = (module: Map): (() => void) | void => {
+      if (module.getIn(['moduleType', 'identifier']) === 'INTRODUCTION') {
+        return () => {
+          const title = <Translate value="debate.confirmDeletionTitle" />;
+          const body = <Translate value="debate.synthesis.confirmDeletionBody" />;
+          const onClick = () => {
+            client.mutate({
+              mutation: deleteLandingPageModule,
+              variables: { id: module.get('id') },
+              refetchQueries: refetchQueries
+            });
+            closeModal();
+            // if (onDeleteCallback) {
+            //   onDeleteCallback();
+            // }
+          };
+          const footer = [
+            <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
+              <Translate value="debate.confirmDeletionButtonCancel" />
+            </Button>,
+            <Button key="delete" onClick={onClick} className="button-submit button-dark">
+              <Translate value="debate.confirmDeletionButtonDelete" />
+            </Button>
+          ];
+          const includeFooter = true;
+          displayModal(title, body, includeFooter, footer);
+        };
+      }
+      return undefined;
+    };
+
+    const createTextAndMultimediaModule = (): void => {
+      const nextOrder = Math.max(...enabledModules.map(module => module.get('order'))) + 1;
+      client.mutate({
+        mutation: createLandingPageModule,
+        variables: { typeIdentifier: MODULES_IDENTIFIERS.introduction, order: nextOrder, enabled: true },
+        refetchQueries: refetchQueries
+      });
+    };
+
+    return (
+      <div className="admin-box">
+        <SectionTitle
+          title={I18n.t('administration.landingPage.manageModules.title')}
+          annotation={I18n.t('administration.annotation')}
+        />
+        <div className="admin-content form-container" style={{ maxWidth: '700px' }}>
+          <p className="admin-paragraph">
+            <Translate value="administration.landingPage.manageModules.helper" />
+          </p>
+          <div className="two-columns-admin">
+            <div className="column-left">
+              <SelectModulesForm
+                lang={lang}
+                moduleTypes={updatedModuleTypes}
+                modulesById={modulesById}
+                toggleModule={toggleModule}
+              />
+              <div className="margin-xl">
+                <AddModuleButton
+                  numberOfDuplicatesModules={numberOfTextAndMultimediaModules}
+                  numberOfEnabledModules={enabledModules.size}
+                  createModule={createTextAndMultimediaModule}
+                  allDuplicatesAreChecked={allTextAndMultimediaAreChecked}
+                  buttonTitleTranslationKey="textAndMultimediaBtn"
+                />
+              </div>
+            </div>
+            <div className="column-right">
+              <ModulesPreview
+                modules={enabledModules}
+                moveModuleDown={moveModuleDown}
+                moveModuleUp={moveModuleUp}
+                editModule={editModule}
+                removeModule={removeModule}
               />
             </div>
           </div>
-          <div className="column-right">
-            <ModulesPreview modules={enabledModules} moveModuleDown={moveModuleDown} moveModuleUp={moveModuleUp} />
-          </div>
         </div>
       </div>
-    </div>
-  );
-};
+    );
+  }
+}
+
 const mapStateToProps = (state) => {
-  const { enabledModulesInOrder, modulesById, modulesInOrder } = state.admin.landingPage;
+  const { i18n: { locale }, admin: { landingPage: { enabledModulesInOrder, modulesById, modulesInOrder } } } = state;
   return {
     enabledModules: enabledModulesInOrder.map(id => modulesById.get(id)),
+    lang: locale,
     modulesById: modulesById,
     moduleTypes: modulesInOrder
       .map((id) => {
@@ -159,21 +215,11 @@ const mapStateToProps = (state) => {
       .toJS()
   };
 };
+
 const mapDispatchToProps = dispatch => ({
   moveModuleDown: id => dispatch(moveLandingPageModuleDown(id)),
   moveModuleUp: id => dispatch(moveLandingPageModuleUp(id)),
-  toggleModule: id => dispatch(toggleLandingPageModule(id)),
-  createModule: (nextOrder, numberOfDuplicatesModules, identifier = MODULES_IDENTIFIERS.introduction) => {
-    const newId = createRandomId();
-    return dispatch(
-      createLandingPageModule(
-        newId,
-        identifier,
-        numberOfDuplicatesModules,
-        I18n.t('administration.landingPage.manageModules.textAndMultimedia'),
-        nextOrder
-      )
-    );
-  }
+  toggleModule: id => dispatch(toggleLandingPageModule(id))
 });
-export default connect(mapStateToProps, mapDispatchToProps)(DumbManageModules);
+
+export default compose(connect(mapStateToProps, mapDispatchToProps), withApollo)(DumbManageModules);

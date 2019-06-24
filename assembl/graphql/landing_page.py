@@ -6,6 +6,7 @@ from graphene_sqlalchemy import SQLAlchemyObjectType
 import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import CrudPermissions
+from assembl.graphql.utils import get_primary_id
 
 from .langstring import (
     LangStringEntry, LangStringEntryInput, resolve_langstring,
@@ -47,6 +48,8 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
     title_entries = graphene.List(LangStringEntry)
     subtitle = graphene.String(lang=graphene.String())
     subtitle_entries = graphene.List(LangStringEntry)
+    body = graphene.String(lang=graphene.String())
+    body_entries = graphene.List(LangStringEntry)
 
     def resolve_exists_in_database(self, args, context, info):
         return self.id > 0
@@ -84,6 +87,16 @@ class LandingPageModule(SecureObjectType, SQLAlchemyObjectType):
 
         return []
 
+    def resolve_body(self, args, context, info):
+        """Subtitle value in given locale."""
+        return resolve_langstring(self.body, args.get('lang'))
+
+    def resolve_body_entries(self, args, context, info):
+        if self.body:
+            return resolve_langstring_entries(self, 'body')
+
+        return []
+
 
 class CreateLandingPageModule(graphene.Mutation):
     __doc__ = docs.CreateLandingPageModule.__doc__
@@ -95,6 +108,7 @@ class CreateLandingPageModule(graphene.Mutation):
         configuration = graphene.String(description=docs.CreateLandingPageModule.configuration)
         title_entries = graphene.List(LangStringEntryInput)
         subtitle_entries = graphene.List(LangStringEntryInput)
+        body_entries = graphene.List(LangStringEntryInput)
 
     landing_page_module = graphene.Field(lambda: LandingPageModule, description=docs.CreateLandingPageModule.landing_page_module)
 
@@ -125,6 +139,11 @@ class CreateLandingPageModule(graphene.Mutation):
             subtitle_entries = args.get('subtitle_entries')
             update_langstring_from_input_entries(
                 saobj, 'subtitle', subtitle_entries)
+
+            body_entries = args.get('body_entries')
+            update_langstring_from_input_entries(
+                saobj, 'body', body_entries)
+
             db.add(saobj)
             db.flush()
 
@@ -141,6 +160,7 @@ class UpdateLandingPageModule(graphene.Mutation):
         configuration = graphene.String(description=docs.UpdateLandingPageModule.configuration)
         title_entries = graphene.List(LangStringEntryInput)
         subtitle_entries = graphene.List(LangStringEntryInput)
+        body_entries = graphene.List(LangStringEntryInput)
 
     landing_page_module = graphene.Field(lambda: LandingPageModule, description=docs.UpdateLandingPageModule.landing_page_module)
 
@@ -148,18 +168,25 @@ class UpdateLandingPageModule(graphene.Mutation):
     @abort_transaction_on_exception
     def mutate(root, args, context, info):
         cls = models.LandingPageModule
-        configuration = args.get('configuration')
-        order = args.get('order')
-        enabled = args.get('enabled')
-        module_id = args.get('id')
-        module_id = int(Node.from_global_id(module_id)[1])
+        module_id = get_primary_id(args.get(('id')))
         require_instance_permission(CrudPermissions.UPDATE, cls.get(module_id), context)
+
         with cls.default_db.no_autoflush as db:
             module = db.query(models.LandingPageModule).filter(
                 models.LandingPageModule.id == module_id).one()
-            module.enabled = enabled
-            module.order = order
-            module.configuration = configuration
+
+            enabled = args.get('enabled')
+            if enabled is not None:
+                module.enabled = enabled
+
+            order = args.get('order')
+            if order is not None:
+                module.order = order
+
+            configuration = args.get('configuration')
+            if configuration is not None:
+                module.configuration = configuration
+
             title_entries = args.get('title_entries')
             update_langstring_from_input_entries(
                 module, 'title', title_entries)
@@ -167,6 +194,33 @@ class UpdateLandingPageModule(graphene.Mutation):
             subtitle_entries = args.get('subtitle_entries')
             update_langstring_from_input_entries(
                 module, 'subtitle', subtitle_entries)
+
+            body_entries = args.get('body_entries')
+            update_langstring_from_input_entries(
+                module, 'body', body_entries)
+
             db.flush()
 
         return UpdateLandingPageModule(landing_page_module=module)
+
+
+class DeleteLandingPageModule(graphene.Mutation):
+    __doc__ = docs.DeleteLandingPageModule.__doc__
+
+    class Input:
+        id = graphene.ID(required=True)
+
+    success = graphene.Boolean()
+
+    @staticmethod
+    @abort_transaction_on_exception
+    def mutate(root, args, context, info):
+        landing_page_module_id = get_primary_id(args.get('id'))
+        landing_page_module = models.LandingPageModule.get(landing_page_module_id)
+
+        require_instance_permission(CrudPermissions.DELETE, landing_page_module, context)
+
+        landing_page_module.db.delete(landing_page_module)
+        landing_page_module.db.flush()
+
+        return DeleteLandingPageModule(success=True)

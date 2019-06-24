@@ -30,28 +30,39 @@ exports[`ManageModules component should render a form to manage the landing page
         className="column-left"
       >
         <DumbSelectModulesForm
-          lang="fr"
           moduleTypes={
             Array [
               Object {
+                "defaultOrder": 1,
+                "editableOrder": false,
+                "id": "1",
                 "identifier": "HEADER",
                 "moduleId": "abc123",
                 "required": true,
                 "title": "Header",
               },
               Object {
+                "defaultOrder": 2,
+                "editableOrder": true,
+                "id": "2",
                 "identifier": "INTRODUCTION",
                 "moduleId": "def456",
                 "required": false,
                 "title": "Introduction",
               },
               Object {
+                "defaultOrder": 3,
+                "editableOrder": true,
+                "id": "3",
                 "identifier": "VIDEO",
                 "moduleId": "ghi789",
                 "required": false,
                 "title": "Video",
               },
               Object {
+                "defaultOrder": 9,
+                "editableOrder": false,
+                "id": "4",
                 "identifier": "FOOTER",
                 "moduleId": "jkl865",
                 "required": true,
@@ -117,7 +128,7 @@ exports[`ManageModules component should render a form to manage the landing page
           <AddModuleButton
             allDuplicatesAreChecked={false}
             buttonTitleTranslationKey="textAndMultimediaBtn"
-            createModule={[MockFunction]}
+            createModule={[Function]}
             numberOfDuplicatesModules={1}
             numberOfEnabledModules={3}
           />
@@ -127,6 +138,7 @@ exports[`ManageModules component should render a form to manage the landing page
         className="column-right"
       >
         <ModulesPreview
+          editModule={[Function]}
           modules={
             Immutable.List [
               Immutable.Map {
@@ -168,6 +180,7 @@ exports[`ManageModules component should render a form to manage the landing page
           }
           moveModuleDown={[MockFunction]}
           moveModuleUp={[MockFunction]}
+          removeModule={[Function]}
         />
       </div>
     </div>

@@ -51,6 +51,7 @@ class Schema:
     discussion = """The discussion object metadata."""
     landing_page_module_types = """The metadata object for LandingPageModule object."""
     landing_page_modules = """A list of LandingPageModules."""
+    landing_page_module = """A LandingPageModule."""
     text_fields = """A list of ConfigurableField union, where each text field represents a field on a bound entity."""
     profile_fields = """A list of ConfigurableField union, where each text field represents a field on a profile only."""
     timeline = """A list of DiscussionPhase objects, descriping the timeline objects on the debate."""
@@ -84,8 +85,6 @@ class Discussion:
     nlp_sentiment = "The aggregated sentiment analysis on the posts"
     start_date = "The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase."
     end_date = "The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase."
-    text_multimedia_title = "Title of multimedia text on landing page"
-    text_multimedia_body = "Body of multimedia text on landing page"
 
 
 class UpdateDiscussion:
@@ -97,8 +96,6 @@ class UpdateDiscussion:
     subtitle_entries = """The subtitle contents shown on the landing page of a discussion, just above the \"follow\" button, under the title content. """
     start_date = "The start date of a discussion, optionally set. If not set, will be calculated from the first phase"
     end_date = "The end date of a discussion, optionally set. If not set, will be calculated from the end of last phase"
-    text_multimedia_title_entries = Discussion.text_multimedia_title
-    text_multimedia_body_entries = Discussion.text_multimedia_body
 
 
 class LangString:
@@ -186,14 +183,6 @@ class DiscussionTextMultimedia:
     with_semantic_analysis = "A Boolean flag indicating wheter the semantic analysis is activated or not."
     slug = Discussion.slug
     old_slugs = """List of previous used slugs for this discussion"""
-
-
-class UpdateDiscussionTextMultimedia:
-    __doc__ = """A way to save Discussion text multimedia preferences on a debate."""
-    text_multimedia_title = Default.string_entry % ("Text multimedia title",)
-    text_multimedia_title_entries = Default.langstring_entries % ("Text multimedia title",)
-    text_multimedia_body = Default.string_entry % ("Text multimedia body",)
-    text_multimedia_body_entries = Default.langstring_entries % ("Text multimedia body",)
 
 
 class UpdateLegalContents:
@@ -575,6 +564,10 @@ class UpdateLandingPageModule:
     order = LandingPageModule.order
     configuration = LandingPageModule.configuration
     landing_page_module = CreateLandingPageModule.landing_page_module
+
+
+class DeleteLandingPageModule:
+    __doc__ = """A mutation that deletes an existing LandingPageModule."""
 
 
 class Attachment:

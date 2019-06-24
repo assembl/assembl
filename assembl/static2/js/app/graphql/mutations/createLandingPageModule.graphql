@@ -17,10 +17,7 @@ mutation createLandingPageModule(
     subtitleEntries: $subtitleEntries
   ) {
     landingPageModule {
-      titleEntries {
-        ...langStringEntry
-      }
-      subtitleEntries {
+      bodyEntries {
         ...langStringEntry
       }
       configuration
@@ -30,6 +27,12 @@ mutation createLandingPageModule(
         title
       }
       order
+      subtitleEntries {
+        ...langStringEntry
+      }
+      titleEntries {
+        ...langStringEntry
+      }
     }
   }
 }

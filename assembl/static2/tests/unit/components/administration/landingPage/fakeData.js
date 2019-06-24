@@ -1,3 +1,4 @@
+// @flow
 import { List, Map } from 'immutable';
 
 const abc123 = Map({
@@ -57,26 +58,38 @@ export const modulesById = Map({
   jkl865: jkl865
 });
 
-export const moduleTypes = [
+export const moduleTypes: Array<LandingPageModuleType> = [
   {
+    id: '1',
+    defaultOrder: 1,
+    editableOrder: false,
     moduleId: 'abc123',
     identifier: 'HEADER',
     title: 'Header',
     required: true
   },
   {
+    id: '2',
+    defaultOrder: 2,
+    editableOrder: true,
     moduleId: 'def456',
     identifier: 'INTRODUCTION',
     title: 'Introduction',
     required: false
   },
   {
+    id: '3',
+    defaultOrder: 3,
+    editableOrder: true,
     moduleId: 'ghi789',
     identifier: 'VIDEO',
     title: 'Video',
     required: false
   },
   {
+    id: '4',
+    defaultOrder: 9,
+    editableOrder: false,
     moduleId: 'jkl865',
     identifier: 'FOOTER',
     title: 'Footer',

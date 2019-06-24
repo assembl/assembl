@@ -16,21 +16,21 @@ from sqlalchemy.orm import (backref, join, relationship, subqueryload,
                             with_polymorphic)
 from sqlalchemy.sql.expression import distinct, literal
 
-from assembl.lib.config import get
 from assembl.lib import logging
+from assembl.lib.caching import create_analytics_region
+from assembl.lib.config import get
 from assembl.lib.utils import full_class_name, get_global_base_url, slugify
-
 from . import DiscussionBoundBase, NamedClassMixin
+from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
+                   UserRole, UserTemplate)
+from .langstrings import LangString
+from .preferences import Preferences
 from ..auth import (P_ADMIN_DISC, P_READ, P_SYSADMIN, R_PARTICIPANT,
                     R_SYSADMIN, Authenticated, CrudPermissions, Everyone)
 from ..lib.discussion_creation import IDiscussionCreationCallback
 from ..lib.locale import strip_country
 from ..lib.sqla_types import CoerceUnicode, URLString
-from .auth import (DiscussionPermission, LocalUserRole, Permission, Role, User,
-                   UserRole, UserTemplate)
-from .langstrings import LangString
-from .preferences import Preferences
-from assembl.lib.caching import create_analytics_region
+
 resolver = DottedNameResolver(__package__)
 log = logging.getLogger()
 visit_analytics_region = create_analytics_region()
@@ -150,17 +150,6 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
     user_guidelines = relationship(
         LangString, lazy="select", single_parent=True, primaryjoin=user_guidelines_id == LangString.id,
         backref=backref("discussion_from_user_guidelines", lazy="dynamic"), cascade="all, delete-orphan")
-
-    text_multimedia_title_id = Column(Integer(), ForeignKey(LangString.id))
-    text_multimedia_title = relationship(
-        LangString, lazy="select", single_parent=True, primaryjoin=text_multimedia_title_id == LangString.id,
-        backref=backref("discussion_from_text_multimedia_title", lazy="dynamic"), cascade="all, delete-orphan")
-
-    text_multimedia_body_id = Column(Integer(), ForeignKey(LangString.id))
-    text_multimedia_body = relationship(
-        LangString, lazy="select", single_parent=True, primaryjoin=text_multimedia_body_id == LangString.id,
-        backref=backref("discussion_from_text_multimedia_body", lazy="dynamic"), cascade="all, delete-orphan")
-
 
     @classmethod
     def get_naming_column_name(cls):
@@ -617,7 +606,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
     def check_authorized_email(self, user):
         # Check if the user has a verified email from a required domain
-        from .social_auth import SocialAuthAccount
+        from assembl.models import SocialAuthAccount
         require_email_domain = self.preferences['require_email_domain']
         autologin_backend = self.preferences['authorization_server_backend']
         if not (require_email_domain or autologin_backend):
@@ -634,6 +623,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                 continue
             else:
                 return True
+            # fixme: unreachable code
             if autologin_backend:
                 if isinstance(account, SocialAuthAccount):
                     if account.provider_with_idp == autologin_backend:

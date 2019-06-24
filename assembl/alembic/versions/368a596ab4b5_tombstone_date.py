@@ -91,7 +91,7 @@ def reconstruct_idea_history(db):
             live_id = live_id[0] if live_id else l[-1]
             non_synth = [id for id in l if id not in synthesis_dates]
             if not non_synth[-1] == live_id:
-                import pdb; pdb.set_trace()
+                raise
         else:
             live_id = l[-1]
         live_ids.update({id:live_id for id in l})

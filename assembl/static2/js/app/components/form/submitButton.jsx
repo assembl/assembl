@@ -8,7 +8,7 @@ type Props = {
   disabled?: boolean,
   label: string,
   name?: string,
-  onClick: () => void
+  onClick?: () => void
 };
 
 const SubmitButton = ({ disabled, label, name, onClick }: Props) => {
@@ -25,7 +25,8 @@ const SubmitButton = ({ disabled, label, name, onClick }: Props) => {
 
 SubmitButton.defaultProps = {
   disabled: false,
-  name: 'save'
+  name: 'save',
+  onClick: () => undefined
 };
 
 export default SubmitButton;

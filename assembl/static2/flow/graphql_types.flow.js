@@ -645,11 +645,7 @@ export type DiscussionDataQuery = {|
     // The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase.
     startDate: ?any,
     // The end date of a discussion. A datetime that is either set in a mutation, or calculated from the end of last phase.
-    endDate: ?any,
-    // Title of multimedia text on landing page
-    textMultimediaTitle: ?string,
-    // Body of multimedia text on landing page
-    textMultimediaBody: ?string
+    endDate: ?any
   |}
 |};
 
@@ -933,24 +929,8 @@ export type LandingPageQuery = {|
   discussion: ?{|
     // The ID of the object.
     id: string,
-    // A list of possible languages of the entity as LangStringEntry objects. %s
-    titleEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
-    // The title of the discussion, in the language specified by the input
-    title: ?string,
-    // A list of possible languages of the entity as LangStringEntry objects. %s
-    subtitleEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
-    // The subtitle of the discussion, in the language specified by the input
-    subtitle: ?string,
+    // The value inside of the participation button in the landing page.
+    buttonLabel: ?string,
     // A list of possible languages of the entity as LangStringEntry objects. %s
     buttonLabelEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
@@ -958,8 +938,6 @@ export type LandingPageQuery = {|
       // The unicode encoded string representation of the content.
       value: ?string
     |}>,
-    // The value inside of the participation button in the landing page.
-    buttonLabel: ?string,
     // The file representing the header of the landing page. A file metadata object, described by the Document object.
     headerImage: ?{|
       // A url to an image or a document to be attached.
@@ -977,7 +955,25 @@ export type LandingPageQuery = {|
       mimeType: ?string,
       // The filename title.
       title: ?string
-    |}
+    |},
+    // The subtitle of the discussion, in the language specified by the input
+    subtitle: ?string,
+    // A list of possible languages of the entity as LangStringEntry objects. %s
+    subtitleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    // The title of the discussion, in the language specified by the input
+    title: ?string,
+    // A list of possible languages of the entity as LangStringEntry objects. %s
+    titleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>
   |}
 |};
 
@@ -992,6 +988,8 @@ export type LandingPageModuleTypesQuery = {|
     id: string,
     // The default order of this LandingPageModuleType in the context of the landing page.
     defaultOrder: number,
+    // A boolean flag indicating whether the LandingPageModuleType's order can be editeded or not.
+    editableOrder: ?boolean,
     // The unique ID of the module type. These can be one of:
     //
     //
@@ -1040,20 +1038,13 @@ export type LandingPageModulesQueryVariables = {|
 export type LandingPageModulesQuery = {|
   // A list of LandingPageModules.
   landingPageModules: ?Array<?{|
-    titleEntries: ?Array<?{|
+    body: ?string,
+    bodyEntries: ?Array<?{|
       // The ISO 639-1 locale code of the language the content represents.
       localeCode: string,
       // The unicode encoded string representation of the content.
       value: ?string
     |}>,
-    title: ?string,
-    subtitleEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
-    subtitle: ?string,
     // The JSON-based configuration of the LandingPageModule in the debate.
     configuration: ?string,
     // Whether the Module is activated or not.
@@ -1103,7 +1094,21 @@ export type LandingPageModulesQuery = {|
       required: ?boolean,
       // The title of the section.
       title: ?string
-    |}
+    |},
+    subtitle: ?string,
+    subtitleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>,
+    title: ?string,
+    titleEntries: ?Array<?{|
+      // The ISO 639-1 locale code of the language the content represents.
+      localeCode: string,
+      // The unicode encoded string representation of the content.
+      value: ?string
+    |}>
   |}>
 |};
 
@@ -1220,20 +1225,6 @@ export type MultilingualDiscussionDataQuery = {|
       // The filename title.
       title: ?string
     |},
-    // Title of multimedia text on landing page
-    textMultimediaBodyEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
-    // Title of multimedia text on landing page
-    textMultimediaTitleEntries: ?Array<?{|
-      // The ISO 639-1 locale code of the language the content represents.
-      localeCode: string,
-      // The unicode encoded string representation of the content.
-      value: ?string
-    |}>,
     // The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase.
     startDate: ?any,
     // A list of possible languages of the entity as LangStringEntry objects. %s
@@ -1251,6 +1242,115 @@ export type MultilingualDiscussionDataQuery = {|
       value: ?string
     |}>
   |}
+|};
+
+export type MultilingualLandingPageModuleQueryVariables = {|
+  id: string,
+  lang: string
+|};
+
+export type MultilingualLandingPageModuleQuery = {|
+  // The ID of the object
+  landingPageModule: ?(
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {}
+    | {
+        bodyEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        // The JSON-based configuration of the LandingPageModule in the debate.
+        configuration: ?string,
+        // Whether the Module is activated or not.
+        enabled: ?boolean,
+        // A flag describign whether the module already exists in the database or not.
+        existsInDatabase: ?boolean,
+        // The ID of the object.
+        id: string,
+        // The order of the Module in the entire LandingPage.
+        order: number,
+        // The LandingPageModuleType describing the Module.
+        moduleType: ?{|
+          // The ID of the object.
+          id: string,
+          // The default order of this LandingPageModuleType in the context of the landing page.
+          defaultOrder: number,
+          // A boolean flag indicating whether the LandingPageModuleType's order can be editeded or not.
+          editableOrder: ?boolean,
+          // The unique ID of the module type. These can be one of:
+          //
+          //
+          // HEADER: The header section of the landing page.
+          //
+          // INTRODUCTION: The introduction section.
+          //
+          // TIMELINE: The list of timelines present in the debate.
+          //
+          // FOOTER: The footer in the landing page, including information such as privacy policies, etc..
+          //
+          // TOP_THEMATICS: The section hosting the top active thematics.
+          //
+          // TWEETS: The tweets section, displaying top tweets in the landing page.
+          //
+          // CHATBOT: The chatbot section, according to the configured chatbot.
+          //
+          // CONTACT: The contacts section.
+          //
+          // NEWS: The latest news section, as configured.
+          //
+          // DATA: The data sections.
+          //
+          // PARTNERS: The partners section, highlighting the contributing partners' logos.
+          //
+          //
+          identifier: string,
+          // A Boolean flag defining if the section is required for the landing page or not.
+          required: ?boolean,
+          // The title of the section.
+          title: ?string
+        |},
+        subtitleEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        titleEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>
+      }
+    | {}
+    | {}
+    | {}
+    | {}
+    | {})
 |};
 
 export type MultilingualSynthesisQueryQueryVariables = {|
@@ -3591,13 +3691,7 @@ export type createLandingPageModuleMutation = {|
   createLandingPageModule: ?{|
     // A LandingPageModules that is associated to the debate.
     landingPageModule: ?{|
-      titleEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      subtitleEntries: ?Array<?{|
+      bodyEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
@@ -3640,7 +3734,19 @@ export type createLandingPageModuleMutation = {|
         title: ?string
       |},
       // The order of the Module in the entire LandingPage.
-      order: number
+      order: number,
+      subtitleEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      titleEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>
     |}
   |}
 |};
@@ -4371,6 +4477,17 @@ export type deleteExtractMutation = {|
   |}
 |};
 
+export type deleteLandingPageModuleMutationVariables = {|
+  id: string
+|};
+
+export type deleteLandingPageModuleMutation = {|
+  // A mutation that deletes an existing LandingPageModule.
+  deleteLandingPageModule: ?{|
+    success: ?boolean
+  |}
+|};
+
 export type deletePostMutationVariables = {|
   postId: string
 |};
@@ -4703,35 +4820,6 @@ export type updateDiscussionPreferenceMutation = {|
       withModeration: ?boolean,
       // A string used to form the URL of the discussion.
       slug: string
-    |}
-  |}
-|};
-
-export type UpdateDiscussionTextMultimediaMutationVariables = {|
-  textMultimediaTitleEntries?: ?Array<LangStringEntryInput>,
-  textMultimediaBodyEntries?: ?Array<LangStringEntryInput>
-|};
-
-export type UpdateDiscussionTextMultimediaMutation = {|
-  // A way to save Discussion text multimedia preferences on a debate.
-  updateDiscussionTextMultimedia: ?{|
-    discussion: ?{|
-      // The ID of the object.
-      id: string,
-      // Title of multimedia text on landing page
-      textMultimediaBodyEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      // Title of multimedia text on landing page
-      textMultimediaTitleEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>
     |}
   |}
 |};
@@ -5086,11 +5174,12 @@ export type updateIdeasMutation = {|
 
 export type updateLandingPageModuleMutationVariables = {|
   id: string,
+  bodyEntries?: ?Array<LangStringEntryInput>,
+  configuration?: ?string,
   enabled?: ?boolean,
   order?: ?number,
-  configuration?: ?string,
-  titleEntries?: ?Array<LangStringEntryInput>,
-  subtitleEntries?: ?Array<LangStringEntryInput>
+  subtitleEntries?: ?Array<LangStringEntryInput>,
+  titleEntries?: ?Array<LangStringEntryInput>
 |};
 
 export type updateLandingPageModuleMutation = {|
@@ -5098,13 +5187,7 @@ export type updateLandingPageModuleMutation = {|
   updateLandingPageModule: ?{|
     // A LandingPageModules that is associated to the debate.
     landingPageModule: ?{|
-      titleEntries: ?Array<?{|
-        // The ISO 639-1 locale code of the language the content represents.
-        localeCode: string,
-        // The unicode encoded string representation of the content.
-        value: ?string
-      |}>,
-      subtitleEntries: ?Array<?{|
+      bodyEntries: ?Array<?{|
         // The ISO 639-1 locale code of the language the content represents.
         localeCode: string,
         // The unicode encoded string representation of the content.
@@ -5147,7 +5230,19 @@ export type updateLandingPageModuleMutation = {|
         title: ?string
       |},
       // The order of the Module in the entire LandingPage.
-      order: number
+      order: number,
+      subtitleEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>,
+      titleEntries: ?Array<?{|
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string,
+        // The unicode encoded string representation of the content.
+        value: ?string
+      |}>
     |}
   |}
 |};
@@ -7505,20 +7600,6 @@ export type MultilingualDiscussionFragment = {|
     // The filename title.
     title: ?string
   |},
-  // Title of multimedia text on landing page
-  textMultimediaBodyEntries: ?Array<?{|
-    // The ISO 639-1 locale code of the language the content represents.
-    localeCode: string,
-    // The unicode encoded string representation of the content.
-    value: ?string
-  |}>,
-  // Title of multimedia text on landing page
-  textMultimediaTitleEntries: ?Array<?{|
-    // The ISO 639-1 locale code of the language the content represents.
-    localeCode: string,
-    // The unicode encoded string representation of the content.
-    value: ?string
-  |}>,
   // The start date of a discussion. A datetime that is either set in mutation, or calculated from the start of the first phase.
   startDate: ?any,
   // A list of possible languages of the entity as LangStringEntry objects. %s
@@ -7529,6 +7610,77 @@ export type MultilingualDiscussionFragment = {|
     value: ?string
   |}>,
   // A list of possible languages of the entity as LangStringEntry objects. %s
+  titleEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>
+|};
+
+export type MultilingualLandingPageModuleFragment = {|
+  bodyEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
+  // The JSON-based configuration of the LandingPageModule in the debate.
+  configuration: ?string,
+  // Whether the Module is activated or not.
+  enabled: ?boolean,
+  // A flag describign whether the module already exists in the database or not.
+  existsInDatabase: ?boolean,
+  // The ID of the object.
+  id: string,
+  // The order of the Module in the entire LandingPage.
+  order: number,
+  // The LandingPageModuleType describing the Module.
+  moduleType: ?{|
+    // The ID of the object.
+    id: string,
+    // The default order of this LandingPageModuleType in the context of the landing page.
+    defaultOrder: number,
+    // A boolean flag indicating whether the LandingPageModuleType's order can be editeded or not.
+    editableOrder: ?boolean,
+    // The unique ID of the module type. These can be one of:
+    //
+    //
+    // HEADER: The header section of the landing page.
+    //
+    // INTRODUCTION: The introduction section.
+    //
+    // TIMELINE: The list of timelines present in the debate.
+    //
+    // FOOTER: The footer in the landing page, including information such as privacy policies, etc..
+    //
+    // TOP_THEMATICS: The section hosting the top active thematics.
+    //
+    // TWEETS: The tweets section, displaying top tweets in the landing page.
+    //
+    // CHATBOT: The chatbot section, according to the configured chatbot.
+    //
+    // CONTACT: The contacts section.
+    //
+    // NEWS: The latest news section, as configured.
+    //
+    // DATA: The data sections.
+    //
+    // PARTNERS: The partners section, highlighting the contributing partners' logos.
+    //
+    //
+    identifier: string,
+    // A Boolean flag defining if the section is required for the landing page or not.
+    required: ?boolean,
+    // The title of the section.
+    title: ?string
+  |},
+  subtitleEntries: ?Array<?{|
+    // The ISO 639-1 locale code of the language the content represents.
+    localeCode: string,
+    // The unicode encoded string representation of the content.
+    value: ?string
+  |}>,
   titleEntries: ?Array<?{|
     // The ISO 639-1 locale code of the language the content represents.
     localeCode: string,

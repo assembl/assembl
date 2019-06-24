@@ -39,6 +39,7 @@
   "administrationRoot": "${slug}/administration",
   "administration": "${slug}/administration/${id}",
   "unauthorizedAdministration": "${slug}/unauthorizedAdministration",
+  "editTextAndMultimedia": "editTextAndMultimedia/${landingPageModuleId}",
   "adminPhase": "${phase}",
   "idea": "${slug}/debate/${phase}/theme/${themeId}",
   "post": "${slug}/debate/${phase}/theme/${themeId}/#${postId}",

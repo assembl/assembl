@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { Route, Redirect } from 'react-router';
+import { Redirect, Route } from 'react-router';
 import Root from './root';
 import App from './app';
 import Main from './main';
@@ -25,18 +25,17 @@ import PrivacyPolicy from './pages/privacyPolicy';
 import CookiesPolicy from './pages/cookiesPolicy';
 import UserGuidelines from './pages/userGuidelines';
 import Administration from './pages/administration';
+import TextAndMultimedia from './pages/landingPageAdmin/textAndMultimedia';
 import UnauthorizedAdministration from './pages/unauthorizedAdministration';
 import ResourcesCenterAdmin from './pages/resourcesCenterAdmin';
 import SurveyAdmin from './pages/surveyAdmin';
 import DiscussionAdmin from './pages/discussionAdmin';
 import VoteSessionAdmin from './pages/voteSessionAdmin';
-import ResourcesCenter from './pages/resourcesCenter';
 import SemanticAnalysisForDiscussion from './pages/semanticAnalysis/semanticAnalysisForDiscussion/semanticAnalysisForDiscussion';
-import LandingPageAdmin from './pages/landingPageAdmin';
+import LandingPageAdmin from './pages/landingPageAdmin/index';
 import BrightMirrorFiction from './pages/brightMirrorFiction'; // eslint-disable-line import/no-named-as-default
 import ExportData from './pages/exportData';
 import { routeForRouter } from './utils/routeMap';
-
 // Page that is only used to display converted mockups to static pages
 import IntMainPage from './integration/index';
 import Int101Page from './integration/101/index';
@@ -62,8 +61,8 @@ const DebateChild = (props) => {
 
 const AdminChild = (props: {
   discussionPhaseId: string,
-  location: { query: { section?: string, thematicId?: string, goBackPhaseIdentifier?: string } },
-  params: { phase: string }
+  location: { query: { section?: string, thematicId?: string, goBackPhaseIdentifier?: string, landingPageModuleId?: string } },
+  params: { phase: string, landingPageModuleId?: string }
 }) => {
   switch (props.params.phase) {
   case 'discussion':
@@ -81,7 +80,12 @@ const AdminChild = (props: {
   case 'resourcesCenter':
     return <ResourcesCenterAdmin {...props} />;
   case 'landingPage':
-    return <LandingPageAdmin {...props} section={props.location.query.section} />;
+    switch (props.location.query.section) {
+    case 'editTextAndMultimedia':
+      return <TextAndMultimedia landingPageModuleId={props.location.query.landingPageModuleId} />;
+    default:
+      return <LandingPageAdmin {...props} section={props.location.query.section} />;
+    }
 
   case 'exportDebateData':
     return <ExportData {...props} section={props.location.query.section} />;
@@ -134,7 +138,6 @@ export default [
         <Route path={routeForRouter('createSynthesis')} components={CreateSynthesisForm} />
         <Route path={routeForRouter('editSynthesis', false, { synthesisId: ':synthesisId' })} components={CreateSynthesisForm} />
         <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
-        <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
         <Route path={routeForRouter('semanticAnalysis')} component={SemanticAnalysisForDiscussion} />
         <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
         <Route path={routeForRouter('privacyPolicy')} component={PrivacyPolicy} />
@@ -142,6 +145,7 @@ export default [
         <Route path={routeForRouter('userGuidelines')} component={UserGuidelines} />
         <Route path={routeForRouter('terms')} component={TermsAndConditions} />
         <Route path={routeForRouter('community')} component={Community} />
+        <Route path={routeForRouter('rootDebate')} />
         <Route path={routeForRouter('rootDebate')} />
         <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
           <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />

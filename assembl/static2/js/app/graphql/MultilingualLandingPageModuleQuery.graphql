@@ -1,0 +1,7 @@
+#import "./fragments/MultilingualLandingPageModule.graphql"
+
+query MultilingualLandingPageModule($id: ID!, $lang: String!) {
+  landingPageModule: node(id: $id) {
+    ...MultilingualLandingPageModule
+  }
+}

@@ -1,41 +1,63 @@
 // @flow
 import * as React from 'react';
-import { OverlayTrigger, Button } from 'react-bootstrap';
+import { Button, OverlayTrigger } from 'react-bootstrap';
+import classNames from 'classnames';
 
-import { upTooltip, downTooltip } from '../../common/tooltips';
+import { downTooltip, editModuleTooltip, removeModuleTooltip, upTooltip } from '../../common/tooltips';
 
 type Props = {
+  edit?: (() => void) | null,
   moveUp: Function,
   moveDown: Function,
   required: boolean,
+  remove?: (() => void) | null,
   title: string,
+  type: string,
   withArrows: boolean
 };
 
-const ModuleBlock = ({ moveDown, moveUp, required, title, withArrows }: Props) => (
-  <div className="module-block">
+const ModuleBlock = ({ edit, moveDown, moveUp, remove, required, title, type, withArrows }: Props) => (
+  <div className={classNames(['module-block', `module-${type.toLowerCase()}`])}>
     <span>
       {title}
       {required ? '*' : ''}
     </span>
-    {withArrows ? (
-      <span>
-        <OverlayTrigger placement="top" overlay={downTooltip}>
-          <Button onClick={moveDown} className="admin-icons">
-            <span className="assembl-icon-down-small" />
+    <span>
+      {withArrows && (
+        <div>
+          <OverlayTrigger placement="top" overlay={downTooltip}>
+            <Button onClick={moveDown} className="admin-icons">
+              <span className="assembl-icon-down-small" />
+            </Button>
+          </OverlayTrigger>
+          <OverlayTrigger placement="top" overlay={upTooltip}>
+            <Button onClick={moveUp} className="admin-icons">
+              <span className="assembl-icon-up-small" />
+            </Button>
+          </OverlayTrigger>
+        </div>
+      )}
+      {!!edit && (
+        <OverlayTrigger placement="top" overlay={editModuleTooltip}>
+          <Button onClick={edit} className="admin-icons">
+            <span className="assembl-icon-edit" />
           </Button>
         </OverlayTrigger>
-        <OverlayTrigger placement="top" overlay={upTooltip}>
-          <Button onClick={moveUp} className="admin-icons">
-            <span className="assembl-icon-up-small" />
+      )}
+      {!!remove && (
+        <OverlayTrigger placement="top" overlay={removeModuleTooltip}>
+          <Button onClick={remove} className="admin-icons">
+            <span className="assembl-icon-delete" />
           </Button>
         </OverlayTrigger>
-      </span>
-    ) : null}
+      )}
+    </span>
   </div>
 );
 
 ModuleBlock.defaultProps = {
+  edit: null,
+  remove: null,
   withArrows: false
 };
 

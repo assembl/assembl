@@ -4,6 +4,9 @@ export type RouterParams = {
   /** Fiction identifier */
   fictionId?: string,
 
+  /** Landing page module identifier */
+  landingPageModuleId?: string,
+
   /** Fiction phase identifier */
   phase: string,
 

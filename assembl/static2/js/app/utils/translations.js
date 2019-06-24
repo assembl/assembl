@@ -709,6 +709,7 @@ const Translations = {
       previousStep: "Étape précédente",
       informationOfTheDebate: "Informations de la discussion",
       discussionSlug: "Slug de la discussion",
+      save: "Sauvegarder",
       slugWarning:
         "Cette modification entraine un changement de l'adresse de la consultation. Intégrez ce changement dans vos prochaines communications. Pour assurer la continuité du service, la précédente adresse sera toujours opérationnelle.",
       invalidSlug: "Les caractères spéciaux ne sont pas autorisés",
@@ -745,12 +746,14 @@ const Translations = {
         warningLabel: "La période de cette phase chevauche la période de la phase précédente ou de la phase suivante."
       },
       modules: {
+        brightMirror: "Module Bright Mirror",
+        edit: "Configurer le module",
         noModule: "Aucun module",
+        messageColumns: "Module Multi-colonnes",
+        remove: "Retier le module",
         survey: "Module Questions",
         thread: "Module Threads",
-        messageColumns: "Module Multi-colonnes",
-        voteSession: "Module de vote",
-        brightMirror: "Module Bright Mirror"
+        voteSession: "Module de vote"
       },
       noTimeline: "Aucune timeline n'a été configurée pour ce débat.",
       survey: {
@@ -1784,6 +1787,7 @@ const Translations = {
       deleteThematicImage: "Delete the image associated to this thematic",
       edition: "Edit the discussion",
       landingpage: "Landing page",
+      save: "Save",
       textMultimediaSection: "Text and multimedia",
       textMultimediaTitle: "Text and multimedia module title",
       textMultimediaLayout: "Texte-image-media layout",
@@ -1830,12 +1834,14 @@ const Translations = {
         warningLabel: "The dates you have set for this phase are overlapping the previous phase or the next phase"
       },
       modules: {
+        brightMirror: "Bright Mirror module",
+        edit: "Configure the module",
+        messageColumns: "Multi-columns module",
         noModule: "No module",
+        remove: "Remove the module",
         survey: "Survey module",
         thread: "Thread module",
-        messageColumns: "Multi-columns module",
-        voteSession: "Vote module",
-        brightMirror: "Bright Mirror module"
+        voteSession: "Vote module"
       },
       noTimeline: "No timeline has been configured yet",
       survey: {

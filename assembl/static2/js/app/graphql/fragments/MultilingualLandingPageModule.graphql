@@ -1,0 +1,27 @@
+#import "./LangString.graphql"
+# Synthesis query for administration form
+fragment MultilingualLandingPageModule on LandingPageModule {
+  bodyEntries {
+    ...langStringEntry
+  }
+  configuration
+  enabled
+  existsInDatabase
+  id
+  order
+  moduleType {
+    id
+    defaultOrder
+    editableOrder
+    identifier
+    required
+    title(lang: $lang)
+  }
+  subtitleEntries {
+    ...langStringEntry
+  }
+  title(lang: $lang)
+  titleEntries {
+    ...langStringEntry
+  }
+}

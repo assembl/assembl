@@ -7,3 +7,4 @@ yarn add apollo-codegen@0.19.1 -W
 git checkout package.json yarn.lock
 rm -rf node_modules/
 yarn
+supervisorctl restart dev:webpack

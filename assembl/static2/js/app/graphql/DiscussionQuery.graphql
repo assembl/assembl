@@ -35,7 +35,5 @@ query DiscussionData($nextView: String, $lang: String) {
     }
     startDate
     endDate
-    textMultimediaTitle(lang: $lang)
-    textMultimediaBody(lang: $lang)
   }
 }

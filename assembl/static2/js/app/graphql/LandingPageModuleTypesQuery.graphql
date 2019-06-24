@@ -2,6 +2,7 @@ query LandingPageModuleTypes($lang: String) {
   landingPageModuleTypes {
     id
     defaultOrder
+    editableOrder
     identifier
     required
     title(lang: $lang)

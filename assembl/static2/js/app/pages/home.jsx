@@ -15,13 +15,13 @@ import Partners from '../components/home/partners';
 import ScrollOnePageButton from '../components/common/scrollOnePageButton';
 import MessagePage from '../components/common/messagePage';
 import Section from '../components/common/section';
-import DiscussionQuery from '../graphql/DiscussionQuery.graphql';
+import LandingPageModulesQuery from '../graphql/LandingPageModulesQuery.graphql';
 import { renderRichtext } from '../utils/linkify';
 
 type Props = {
   timeline: Timeline,
   debate: DebateData,
-  discussion: Discussion,
+  landingPageModules: Array<LandingPageModule>,
   locale: string
 };
 
@@ -52,7 +52,7 @@ class Home extends React.Component<Props, State> {
 
   render() {
     const { objectives, video, twitter, chatbot, partners } = this.props.debate.debateData;
-    const { locale, timeline, discussion } = this.props;
+    const { landingPageModules, locale, timeline } = this.props;
     if (!timeline) {
       // timeline is still loading
       return null;
@@ -60,15 +60,22 @@ class Home extends React.Component<Props, State> {
     if (timeline.length === 0) {
       return <MessagePage title={I18n.t('home.assemblNotConfigured')} text={I18n.t('administration.noTimeline')} />;
     }
-    const textMultimediaSection = !!discussion &&
-      (!!discussion.textMultimediaTitle || !!discussion.textMultimediaBody) && (
-        <Section title={discussion.textMultimediaTitle || ''}>{renderRichtext(discussion.textMultimediaBody || '')}</Section>
-      );
-
+    const textMultimediaSections =
+      !!landingPageModules &&
+      landingPageModules.map((landingPageModule: LandingPageModule) => {
+        if (!landingPageModule.enabled || (!landingPageModule.body && !landingPageModule.title)) {
+          return null;
+        }
+        return (
+          <Section key={landingPageModule.id} title={landingPageModule.title || ''}>
+            {renderRichtext(landingPageModule.body || '')}
+          </Section>
+        );
+      });
     return (
       <div className="home">
         <Header />
-        {textMultimediaSection}
+        {textMultimediaSections}
         <ScrollOnePageButton hidden={this.state.scrollOnePageButtonHidden} />
         {objectives && <Objectives />}
         {timeline.length > 1 && <Phases />}
@@ -89,9 +96,9 @@ const mapStateToProps = state => ({
 
 export default compose(
   connect(mapStateToProps),
-  graphql(DiscussionQuery, {
+  graphql(LandingPageModulesQuery, {
     options: props => ({
-      variables: { lang: props.lang }
+      variables: { lang: props.locale }
     }),
     props: ({ data }) => {
       if (data.error || data.loading) {
@@ -103,7 +110,7 @@ export default compose(
       return {
         error: data.error,
         loading: data.loading,
-        discussion: data.discussion
+        landingPageModules: data.landingPageModules
       };
     }
   })
