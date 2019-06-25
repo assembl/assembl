@@ -116,23 +116,30 @@ export const DumbSaveButton = ({ disabled, saveAction, specificClasses, title }:
 };
 
 DumbSaveButton.defaultProps = {
+  btnId: 'save-button',
   disabled: false,
   specificClasses: null,
   title: 'administration.save'
 };
 
-class SaveButtonInPortal extends React.PureComponent<Props> {
+type SaveButtonInPortalProps = {
+  btnId?: string
+} & Props;
+
+class SaveButtonInPortal extends React.PureComponent<SaveButtonInPortalProps> {
   static defaultProps = {
     specificClasses: null
   };
 
   componentDidMount() {
-    const saveButton = document.getElementById('save-button');
+    const { btnId } = this.props;
+    const saveButton = document.getElementById(btnId || DumbSaveButton.defaultProps.btnId);
     if (saveButton) saveButton.appendChild(this.el);
   }
 
   componentWillUnmount() {
-    const saveButton = document.getElementById('save-button');
+    const { btnId } = this.props;
+    const saveButton = document.getElementById(btnId || DumbSaveButton.defaultProps.btnId);
     if (saveButton) saveButton.removeChild(this.el);
   }
 

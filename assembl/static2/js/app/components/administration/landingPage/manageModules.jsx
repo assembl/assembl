@@ -18,6 +18,7 @@ import AddModuleButton from './addModuleButton';
 import { get } from '../../../utils/routeMap';
 import { closeModal, displayModal } from '../../../utils/utilityManager';
 import LandingPageModulesQuery from '../../../graphql/LandingPageModulesQuery.graphql';
+import SaveButton from '../saveButton';
 
 type Props = {
   client: ApolloClient,
@@ -25,7 +26,9 @@ type Props = {
   lang: string,
   moduleTypes: Array<LandingPageModuleType>,
   moveModuleDown: Function,
-  moveModuleUp: Function
+  moveModuleUp: Function,
+  save: () => void,
+  saveDisabled: boolean
 };
 
 type ModuleInfo = {
@@ -49,7 +52,8 @@ export const MODULES: Map<string, ModuleInfo> = {
 
 function getEditSection(module: Map): string | null {
   const moduleType = module.getIn(['moduleType', 'identifier']);
-  const moduleInfos: Array<any> = Object.values(MODULES); // can't type as ModuleInfo cf https://github.com/facebook/flow/issues/2221
+  // can't type moduleInfos as Array<ModuleInfo> cf https://github.com/facebook/flow/issues/2221
+  const moduleInfos: Array<any> = Object.values(MODULES);
   const moduleInfo: any | null = moduleInfos.find((m: any) => (!!m && m.identifier === moduleType) || null);
   return !!moduleInfo && !!moduleInfo.editSection ? moduleInfo.editSection : null;
 }
@@ -89,7 +93,7 @@ const navigateToModuleEdit = (module: Map): void => {
 
 export class DumbManageModules extends React.Component<Props> {
   render() {
-    const { client, enabledModules, lang, moduleTypes, moveModuleDown, moveModuleUp } = this.props;
+    const { client, enabledModules, lang, moduleTypes, moveModuleDown, moveModuleUp, save, saveDisabled } = this.props;
 
     const numberOfTextAndMultimediaModules = moduleTypes.filter(
       moduleType => moduleType.identifier === MODULES.introduction.identifier
@@ -176,6 +180,8 @@ export class DumbManageModules extends React.Component<Props> {
             />
           </div>
           <div>
+            <SaveButton btnId="save-order-button" disabled={saveDisabled} saveAction={save} title="administration.saveOrder" />
+            <div id="save-order-button" />
             <AddModuleButton
               numberOfDuplicatesModules={numberOfTextAndMultimediaModules}
               numberOfEnabledModules={enabledModules.size}

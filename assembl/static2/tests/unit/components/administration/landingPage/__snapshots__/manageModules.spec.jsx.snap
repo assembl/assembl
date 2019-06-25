@@ -71,6 +71,14 @@ exports[`ManageModules component should render a form to manage the landing page
       />
     </div>
     <div>
+      <SaveButtonInPortal
+        btnId="save-order-button"
+        specificClasses={null}
+        title="administration.saveOrder"
+      />
+      <div
+        id="save-order-button"
+      />
       <AddModuleButton
         allDuplicatesAreChecked={false}
         buttonTitleTranslationKey="textAndMultimediaBtn"

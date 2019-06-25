@@ -7,7 +7,7 @@ import { I18n } from 'react-redux-i18n';
 
 import ManageModules from '../../components/administration/landingPage/manageModules';
 import { displayAlert } from '../../utils/utilityManager';
-import SaveButton, { getMutationsPromises, runSerial } from '../../components/administration/saveButton';
+import { getMutationsPromises, runSerial } from '../../components/administration/saveButton';
 import createLandingPageModule from '../../graphql/mutations/createLandingPageModule.graphql';
 import updateLandingPageModule from '../../graphql/mutations/updateLandingPageModule.graphql';
 
@@ -93,8 +93,7 @@ class Index extends React.Component<Props, State> {
     const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="landing-page-admin">
-        <SaveButton disabled={saveDisabled} saveAction={this.saveAction} title="administration.saveOrder" />
-        <ManageModules {...this.props} />
+        <ManageModules {...this.props} save={this.saveAction} saveDisabled={saveDisabled} />
       </div>
     );
   }

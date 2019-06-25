@@ -20,47 +20,46 @@ exports[`ModulesPreview component should render a preview of the enabled modules
     </div>
     <div
       className="other-modules"
+    />
+    <div
+      className="module-block module-video"
     >
-      <div
-        className="module-block module-video"
-      >
+      <span>
+        Video
+        
+      </span>
+      <span>
         <span>
-          Video
-          
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-down-small"
+            />
+          </button>
+          <button
+            className="admin-icons btn btn-default"
+            disabled={false}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onMouseOut={[Function]}
+            onMouseOver={[Function]}
+            type="button"
+          >
+            <span
+              className="assembl-icon-up-small"
+            />
+          </button>
         </span>
-        <span>
-          <span>
-            <button
-              className="admin-icons btn btn-default"
-              disabled={false}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onMouseOut={[Function]}
-              onMouseOver={[Function]}
-              type="button"
-            >
-              <span
-                className="assembl-icon-down-small"
-              />
-            </button>
-            <button
-              className="admin-icons btn btn-default"
-              disabled={false}
-              onBlur={[Function]}
-              onClick={[Function]}
-              onFocus={[Function]}
-              onMouseOut={[Function]}
-              onMouseOver={[Function]}
-              type="button"
-            >
-              <span
-                className="assembl-icon-up-small"
-              />
-            </button>
-          </span>
-        </span>
-      </div>
+      </span>
     </div>
     <div
       className="module-block module-footer"
