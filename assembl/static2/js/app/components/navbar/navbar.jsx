@@ -20,7 +20,6 @@ import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants'
 import { snakeToCamel } from '../../utils/globalFunctions';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import mergeLoadingAndError from '../common/mergeLoadingAndError';
-import DebateLink from '../debate/navigation/debateLink';
 import Logo from './Logo';
 import UserMenu from './UserMenu';
 import { addProtocol } from '../../utils/linkify';
@@ -80,11 +79,7 @@ const SectionLink = ({ section, options }) => {
     .includes(sectionName);
   const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
 
-  return sectionType === 'DEBATE' ? (
-    <DebateLink identifier={options.phase} className={linkClassNames} dataText={title} screenTooSmall={options.screenTooSmall}>
-      {title}
-    </DebateLink>
-  ) : (
+  return sectionType === 'DEBATE' ? null : (
     <Link to={sectionURL(section, options)} className={linkClassNames} data-text={title}>
       {title}
     </Link>
