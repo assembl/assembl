@@ -25,10 +25,10 @@ const useCSRFProtection = document.getElementById('useCSRFProtection')
 
 export const xmlHttpRequest = obj =>
   new Promise(async (resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    const url = urljoin(basePath(obj), obj.url);
     let payload = obj.payload;
-    xhr.open(obj.method, url);
+
+    const xhr = new XMLHttpRequest();
+
     if (obj.method.toLowerCase() === 'post') {
       obj.headers = obj.headers || {}; // eslint-disable-line
 
@@ -37,15 +37,18 @@ export const xmlHttpRequest = obj =>
         await getCSRFToken();
         obj.headers['X-XSRF-TOKEN'] = Cookies.get('_csrf'); // eslint-disable-line
       }
-
-      if (obj.isJson && obj.isJson === true) {
-        obj.headers['Content-Type'] = 'application/json'; // eslint-disable-line
-        payload = JSON.stringify(obj.payload);
-      } else {
-        obj.headers['Content-Type'] = 'application/x-www-form-urlencoded'; // eslint-disable-line
-        payload = convertToURLEncodedString(payload);
-      }
     }
+
+    if (obj.isJson && obj.isJson === true) {
+      obj.headers['Content-Type'] = 'application/json'; // eslint-disable-line
+      payload = JSON.stringify(obj.payload);
+    } else {
+      obj.headers['Content-Type'] = 'application/x-www-form-urlencoded'; // eslint-disable-line
+      payload = convertToURLEncodedString(payload);
+    }
+
+    const url = urljoin(basePath(obj), obj.url);
+    xhr.open(obj.method, url);
     if (obj.headers) {
       Object.keys(obj.headers).forEach((key) => {
         xhr.setRequestHeader(key, obj.headers[key]);
