@@ -21,6 +21,7 @@ def test_mutation_add_extract(graphql_request, tags, top_post_in_thread_phase):
   offsetEnd = 44
   important = False
   tags = ['tag1']
+  isExtract = True
 
   variable_values = {
     "contentLocale": contentLocale,
@@ -31,7 +32,8 @@ def test_mutation_add_extract(graphql_request, tags, top_post_in_thread_phase):
     "xpathEnd": xpathEnd,
     "offsetStart": offsetStart,
     "offsetEnd": offsetEnd,
-    "tags": tags
+    "tags": tags,
+    "isExtract": isExtract
   }
 
   mutation = u"""
@@ -45,6 +47,7 @@ mutation addPostExtract(
   $offsetStart: Int!
   $offsetEnd: Int!
   $tags: [String]
+  $isExtract: Boolean!
 ) {
   addPostExtract(
     postId: $postId
@@ -56,6 +59,7 @@ mutation addPostExtract(
     offsetEnd: $offsetEnd
     lang: $contentLocale
     tags: $tags
+    isExtract: $isExtract
   ) {
     post {
       id
@@ -80,6 +84,7 @@ mutation addPostExtract(
           }
           creator { name }
           tags { value }
+          isExtract
         }
       }
     }
@@ -108,7 +113,8 @@ mutation addPostExtract(
             u'extractAction': None, 
             u'extractNature': None, 
             u'important': important,
-            u'tags': [{u'value': u'tag1'}]
+            u'tags': [{u'value': u'tag1'}],
+            u'isExtract': isExtract
           }
         ], 
         u'publicationState': 

@@ -10,6 +10,7 @@ mutation addPostExtract(
   $offsetStart: Int!
   $offsetEnd: Int!
   $tags: [String]
+  $isExtract: Boolean!
 ) {
   addPostExtract(
     postId: $postId
@@ -21,6 +22,7 @@ mutation addPostExtract(
     offsetStart: $offsetStart
     offsetEnd: $offsetEnd
     tags: $tags
+    isExtract: $isExtract
   ) {
     extract {
       ...Extract

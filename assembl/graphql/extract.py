@@ -59,6 +59,7 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
     lang = graphene.String(description=docs.ExtractInterface.lang)
     comments = graphene.List("assembl.graphql.post.Post", description=docs.ExtractInterface.comments)
     tags = graphene.List(Tag, description=docs.ExtractInterface.tags)
+    is_extract = graphene.Boolean(description=docs.AddPostExtract.is_extract)
 
     def resolve_creator(self, args, context, info):
         if self.creator_id is not None:
@@ -67,6 +68,9 @@ class Extract(SecureObjectType, SQLAlchemyObjectType):
     def resolve_comments(self, args, context, info):
         return models.ExtractComment.query.filter(
             models.ExtractComment.parent_extract_id == self.id).all()
+
+    def resolve_is_extract(self, args, context, info):
+        return True
 
 
 class UpdateExtract(graphene.Mutation):

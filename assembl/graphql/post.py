@@ -683,6 +683,7 @@ class AddPostExtract(graphene.Mutation):
         offset_start = graphene.Int(required=True, description=docs.AddPostExtract.offset_start)
         offset_end = graphene.Int(required=True, description=docs.AddPostExtract.offset_end)
         tags = graphene.List(graphene.String, description=docs.AddPostExtract.tags)
+        is_extract = graphene.Boolean(graphene.Boolean, description=docs.AddPostExtract.is_extract)
 
     post = graphene.Field(lambda: Post)
     extract = graphene.Field(lambda: Extract)
@@ -692,8 +693,10 @@ class AddPostExtract(graphene.Mutation):
     def mutate(root, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         user_id = context.authenticated_userid or Everyone
+        is_extract = args.get('is_extract')
 
-        require_specific_permission(P_ADD_SIDE_COMMENT, context) or require_cls_permission(CrudPermissions.CREATE, models.Extract, context)
+        if is_extract:
+            require_specific_permission(P_ADD_SIDE_COMMENT, context)
 
         post_id = args.get('post_id')
         post_id = int(Node.from_global_id(post_id)[1])

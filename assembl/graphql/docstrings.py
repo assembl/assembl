@@ -703,6 +703,7 @@ class AddPostExtract:
     offset_start = TextFragmentIdentifier.offset_start
     offset_end = TextFragmentIdentifier.offset_end
     tags = UpdateExtractTags.tags
+    is_extract = """States if the API call is used for adding extract"""
 
 
 class Document:
