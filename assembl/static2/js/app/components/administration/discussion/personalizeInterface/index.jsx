@@ -14,6 +14,7 @@ import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../../common/loader';
 import { DEFAULT_FAVICON, IMG_FAVICON_TITLE } from '../../../../constants';
+import ColorPickerFieldAdapter from '../../../form/colorPickerFieldAdapter';
 
 type Props = {
   client: ApolloClient
@@ -78,6 +79,12 @@ const PersonalizeInterface = ({ client }: Props) => (
                 label={I18n.t('administration.discussionPreferences.debateLogoLabel')}
               />
               <p className="label-indication">{I18n.t('administration.personalizeInterface.logoInstruction')}</p>
+              <div className="separator" />
+              <div className="title">
+                <Translate value="administration.theme.themeColorsTitle" />
+              </div>
+              <Field component={ColorPickerFieldAdapter} name="firstColor" label={I18n.t('administration.theme.firstColor')} />
+              <Field component={ColorPickerFieldAdapter} name="secondColor" label={I18n.t('administration.theme.secondColor')} />
             </form>
           </React.Fragment>
         )}

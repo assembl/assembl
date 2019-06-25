@@ -8,10 +8,7 @@ mutation updateDiscussionPreference(
   $slug: String
   $logo: String
   $firstColor: String
-  $firstColorLight: String
-  $opacityColor: String
   $secondColor: String
-  $minOpacityColor: String
 ) {
   updateDiscussionPreferences(
     languages: $languages
@@ -23,10 +20,7 @@ mutation updateDiscussionPreference(
     slug: $slug
     logo: $logo
     firstColor: $firstColor
-    firstColorLight: $firstColorLight
-    opacityColor: $opacityColor
     secondColor: $secondColor
-    minOpacityColor: $minOpacityColor
   ) {
     preferences {
       languages {

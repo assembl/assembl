@@ -14,9 +14,12 @@ export const load = async (client: ApolloClient, fetchPolicy: FetchPolicy) => {
 
 export function postLoadFormat(data: DiscussionPreferencesQueryQuery): PersonalizeInterfaceValues {
   const { discussionPreferences } = data;
+
   return {
     title: discussionPreferences && discussionPreferences.tabTitle,
     favicon: (discussionPreferences && discussionPreferences.favicon) || null,
-    logo: (discussionPreferences && discussionPreferences.logo) || null
+    logo: (discussionPreferences && discussionPreferences.logo) || null,
+    firstColor: (discussionPreferences && discussionPreferences.firstColor) || '',
+    secondColor: (discussionPreferences && discussionPreferences.secondColor) || ''
   };
 }

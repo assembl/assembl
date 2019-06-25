@@ -15,9 +15,6 @@ query DiscussionPreferencesQuery {
     withTranslation
     withSemanticAnalysis
     firstColor
-    firstColorLight
-    opacityColor
     secondColor
-    minOpacityColor
   }
 }

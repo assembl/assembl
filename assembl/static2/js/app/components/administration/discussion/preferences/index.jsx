@@ -143,35 +143,6 @@ class DiscussionPreferencesForm extends React.Component<Props, State> {
                     label={I18n.t('administration.semanticAnalysis.activate')}
                     type="checkbox"
                   />
-                  <div className="separator" />
-                  <div className="title">
-                    <Translate value="administration.theme.themeColorsTitle" />
-                  </div>
-                  <Field
-                    component={ColorPickerFieldAdapter}
-                    name="firstColor"
-                    label={I18n.t('administration.theme.firstColor')}
-                  />
-                  <Field
-                    component={ColorPickerFieldAdapter}
-                    name="firstColorLight"
-                    label={I18n.t('administration.theme.firstColorLight')}
-                  />
-                  <Field
-                    component={ColorPickerFieldAdapter}
-                    name="secondColor"
-                    label={I18n.t('administration.theme.secondColor')}
-                  />
-                  <Field
-                    component={ColorPickerFieldAdapter}
-                    name="opacityColor"
-                    label={I18n.t('administration.theme.opacityColor')}
-                  />
-                  <Field
-                    component={ColorPickerFieldAdapter}
-                    name="minOpacityColor"
-                    label={I18n.t('administration.theme.minOpacityColor')}
-                  />
                 </div>
               </AdminForm>
             </div>

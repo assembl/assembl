@@ -735,10 +735,7 @@ const Translations = {
       theme: {
         themeColorsTitle: "Couleurs du thème",
         firstColor: "Couleur principale",
-        firstColorLight: "Couleur claire principale",
-        secondColor: "Seconde couleur",
-        opacityColor: "Couleur d'opacité",
-        minOpacityColor: "Couleur d'opacité minimale"
+        secondColor: "Seconde couleur"
       },
       menu: {
         phase: "Phase %{count} - %{description}",
@@ -1844,10 +1841,7 @@ const Translations = {
       theme: {
         themeColorsTitle: "Theme colors",
         firstColor: "Primary color",
-        firstColorLight: "Primary light color",
-        secondColor: "Second color",
-        opacityColor: "Opacity color",
-        minOpacityColor: "Minimum opacity color"
+        secondColor: "Second color"
       },
       menu: {
         phase: "Phase %{count} - %{description}",

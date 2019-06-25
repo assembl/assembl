@@ -609,24 +609,6 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "default": "#192882"  # for development
         },
         {
-            "id": "first_color_light",
-            "name": _("Select first light color"),
-            "value_type": "string",
-            "description": _("First light color of theme"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": "#0af"  # for development
-        },
-        {
-            "id": "opacity_color",
-            "name": _("Select opacity color"),
-            "value_type": "string",
-            "description": _("Opacity color of theme"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": "rgba(25, 40, 130, 0.6)"  # for development
-        },
-        {
             "id": "second_color",
             "name": _("Select second color"),
             "value_type": "string",
@@ -634,15 +616,6 @@ class Preferences(MutableMapping, Base, NamedClassMixin):
             "allow_user_override": None,
             "modification_permission": P_ADMIN_DISC,
             "default": "#dbdeef"  # for development
-        },
-        {
-            "id": "min_opacity_color",
-            "name": _("Select minimum opacity color"),
-            "value_type": "string",
-            "description": _("Minimum opacity color of theme"),
-            "allow_user_override": None,
-            "modification_permission": P_ADMIN_DISC,
-            "default": "rgba(25, 40, 130, 0.1)"  # for development
         },
         {
             "id": "authorization_server_backend",
