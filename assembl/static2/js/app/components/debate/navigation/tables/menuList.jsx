@@ -1,7 +1,6 @@
 // @noflow
 import * as React from 'react';
 import classNames from 'classnames';
-import { Scrollbars } from 'react-custom-scrollbars';
 
 import MenuItem from '../menuItem';
 
@@ -25,10 +24,6 @@ type MenuListProps = {
 type MenuListState = {
   selected: string
 };
-
-const menuItemHeight = 20;
-
-const menuItemMargin = 10;
 
 class MenuList extends React.Component<MenuListProps, MenuListState> {
   props: MenuListProps;
@@ -63,18 +58,13 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
     // filter out item not having id (currently in table of thematics administration, but not saved yet)
     const rootItems = this.getItemChildren(rootItem).filter(item => item.id);
     if (rootItems.length === 0) return null;
-    const estimatedMenuHeight = rootItems.length * menuItemHeight + menuItemMargin;
     return (
       <React.Fragment>
         {subMenu ? <div className="sub-menu-separator" /> : null}
         <div className={classNames('menu-table-col', className, { 'sub-menu': subMenu })} onMouseLeave={this.onMenuleave}>
-          <div className="menu-table" style={{ height: `${estimatedMenuHeight}px` }}>
-            <Scrollbars
-              // we hide the scrollbar
-              renderTrackVertical={props => <div {...props} className="hidden" />}
-              renderThumbVertical={props => <div {...props} className="hidden" />}
-            >
-              {rootItems.map(item => (
+          <div className="menu-table">
+            {rootItems.map(item => (
+              <div>
                 <MenuItem
                   key={item.id}
                   hasSubItems={items.some(listItem => listItem.parentId === item.id)}
@@ -85,19 +75,19 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
                   phaseId={phaseId}
                   item={item}
                 />
-              ))}
-            </Scrollbars>
+                {item.id === selected ? (
+                  <MenuList
+                    subMenu
+                    onMenuItemClick={onMenuItemClick}
+                    items={items}
+                    rootItem={selected}
+                    identifier={identifier}
+                    phaseId={phaseId}
+                  />
+                ) : null}
+              </div>
+            ))}
           </div>
-          {selected ? (
-            <MenuList
-              subMenu
-              onMenuItemClick={onMenuItemClick}
-              items={items}
-              rootItem={selected}
-              identifier={identifier}
-              phaseId={phaseId}
-            />
-          ) : null}
         </div>
       </React.Fragment>
     );

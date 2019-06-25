@@ -122,11 +122,17 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
         className={classNames('minimized-timeline', {
           active: active
         })}
-        // onMouseOver={!this.isTouchScreenDevice ? this.select : null}
+        onMouseOver={!this.isTouchScreenDevice ? this.select : showSegmentMenu(index)}
       >
         <div onClick={() => showSegmentMenu(index)} className={timelineClass}>
           <div className="timeline-link">{title}</div>
         </div>
+        <span
+          className={classNames({
+            'assembl-icon-angle-down': showSegmentMenu(index),
+            'assembl-icon-angle-right': !showSegmentMenu(index)
+          })}
+        />
       </div>
     );
   }

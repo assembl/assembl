@@ -1,7 +1,6 @@
 // @flow
 
 import * as React from 'react';
-import { connect } from 'react-redux';
 import classNames from 'classnames';
 
 import TimelineCpt from '../debate/navigation/timeline';
@@ -91,9 +90,8 @@ class BurgerNavbar extends React.PureComponent<Props, State> {
             />
           </div>
         )}
-        <div className="nav-burger-with-text">
+        <div onClick={this.toggleMenu} className="nav-burger-with-text">
           <span
-            onClick={this.toggleMenu}
             className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
           />
           <span className="menu-text">menu</span>
@@ -102,3 +100,5 @@ class BurgerNavbar extends React.PureComponent<Props, State> {
     );
   }
 }
+
+export default BurgerNavbar;

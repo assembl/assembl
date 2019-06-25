@@ -33,6 +33,14 @@ class URLPreview extends React.Component<Props> {
     // If we have an integration HTML code, we need to include it into an iframe (the Frame component)
     // if (html) return <Frame id={id} html={html} afterLoad={afterLoad} />;
     const { authorName, authorAvatar, url, title, description, thumbnailUrl, providerName, faviconUrl } = this.props;
+    console.log('authorName', authorName);
+    console.log('authorAvatar', authorAvatar);
+    console.log('url', url);
+    console.log('title', title);
+    console.log('description', description);
+    console.log('thumbnailUrl', thumbnailUrl);
+    console.log('providerName', providerName);
+    console.log('faviconUrl', faviconUrl);
     // isContribution like a twitter post
     const isContribution = authorName || authorAvatar;
     return (

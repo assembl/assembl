@@ -61,8 +61,6 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
     return (
       <div
         className={classNames('menu-item-container', {
-          active: selected,
-          empty: selected && !displayArrow
         })}
         onMouseOver={!isTouchScreenDevice && this.showMenu}
         onMouseLeave={!isTouchScreenDevice && this.hideMenu}

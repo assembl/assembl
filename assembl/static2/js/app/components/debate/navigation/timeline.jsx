@@ -40,6 +40,7 @@ export function DumbTimeline({
               startDate={phase.start}
               endDate={phase.end}
               isStepCompleted={isStepCompleted(phase)}
+              onSelect={onItemSelect}
               onDeselect={onItemDeselect}
               onMenuItemClick={hideMenu}
               showSegmentMenu={showSegmentMenu}
