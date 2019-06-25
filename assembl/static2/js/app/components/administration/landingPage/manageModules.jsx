@@ -178,6 +178,7 @@ export class DumbManageModules extends React.Component<Props> {
               editModule={editModule}
               removeModule={removeModule}
             />
+            {/* <Layouts /> */}
           </div>
           <div>
             <SaveButton btnId="save-order-button" disabled={saveDisabled} saveAction={save} title="administration.saveOrder" />
