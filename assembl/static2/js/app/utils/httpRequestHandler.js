@@ -26,12 +26,11 @@ const useCSRFProtection = document.getElementById('useCSRFProtection')
 export const xmlHttpRequest = obj =>
   new Promise(async (resolve, reject) => {
     let payload = obj.payload;
+    obj.headers = obj.headers || {}; // eslint-disable-line
 
     const xhr = new XMLHttpRequest();
 
     if (obj.method.toLowerCase() === 'post') {
-      obj.headers = obj.headers || {}; // eslint-disable-line
-
       // Go and fetch a CSRF token for the POST request if activated
       if (useCSRFProtection === 'true') {
         await getCSRFToken();
