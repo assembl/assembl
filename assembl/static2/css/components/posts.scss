@@ -69,7 +69,8 @@
 
   .box {
     border-bottom: $navbar-border;
-    border-left: $border-theme;
+    border-left-style: solid;
+    border-left-width: 4px;
     border-right: $navbar-border;
     border-top: $navbar-border;
     margin: 0 auto 40px;

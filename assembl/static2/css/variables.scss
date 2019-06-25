@@ -42,10 +42,7 @@ $sentiment-level-1: $orange4;
 $sentiment-level-2: $light-green;
 $sentiment-level-3: $green2;
 
-$first-color: $cyan;
 $first-color-light: $cyan-light;
-$second-color: $yellow;
-$third-color: $cyan;
 $opacity-color: $opacity-cyan;
 $warning-alert: $orange;
 $warning-alert-text: $orange2;
@@ -74,37 +71,25 @@ $fonts-dir: 'https://bluenove-assembl-fonts.s3-eu-west-1.amazonaws.com' !default
 @font-face {
   font-family: 'latoRegular';
   src: url('#{$fonts-dir}/Lato-Regular.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Regular.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Regular.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Regular.woff') format('woff'), url('#{$fonts-dir}/Lato-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoMedium';
   src: url('#{$fonts-dir}/Lato-Medium.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Medium.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Medium.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Medium.woff') format('woff'), url('#{$fonts-dir}/Lato-Medium.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoBold';
   src: url('#{$fonts-dir}/Lato-Bold.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Bold.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Bold.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Bold.woff') format('woff'), url('#{$fonts-dir}/Lato-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoLight';
   src: url('#{$fonts-dir}/Lato-Light.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Light.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Light.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Light.woff') format('woff'), url('#{$fonts-dir}/Lato-Light.ttf') format('truetype');
 }
 
 @font-face {
@@ -119,10 +104,7 @@ $fonts-dir: 'https://bluenove-assembl-fonts.s3-eu-west-1.amazonaws.com' !default
 @font-face {
   font-family: 'LatoItalic';
   src: url('#{$fonts-dir}/Lato-Italic.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Italic.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Italic.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Italic.woff') format('woff'), url('#{$fonts-dir}/Lato-Italic.ttf') format('truetype');
 }
 
 @font-face {

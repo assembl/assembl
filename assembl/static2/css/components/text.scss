@@ -9,7 +9,9 @@
 }
 
 .title-hyphen {
-  border-top: $border-title;
+  border-top-color: $second-color;
+  border-top-style: solid;
+  border-top-width: 3px;
   display: inline-block;
   height: 5px;
   vertical-align: top;
@@ -22,7 +24,6 @@
 }
 
 .dark-title-1 {
-  color: $title1-dark-color;
   display: inline-block;
   font-family: $font-family4;
   font-size: $title1-size;
@@ -42,14 +43,12 @@
 }
 
 .dark-title-3 {
-  color: $title3-dark-color;
   font-family: $font-family4;
   font-size: $title3-size;
   letter-spacing: $title-letter-spacing;
 }
 
 .dark-title-4 {
-  color: $title4-dark-color;
   font-family: $font-family;
   font-size: $title4-size;
   letter-spacing: $title-letter-spacing;
@@ -71,7 +70,6 @@
 }
 
 .dark-title-7 {
-  color: $title1-dark-color;
   font-family: $font-family4;
   font-size: $title6-size;
   letter-spacing: $title-letter-spacing;

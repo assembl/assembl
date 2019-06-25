@@ -6,12 +6,6 @@
 
 $first-color-opacity-70: rgba($first-color, 0.7) !default;
 
-$btn-light-border-color: $second-color !default;
-$btn-dark-border-color: $first-color !default;
-
-$border-title: 3px solid $second-color !default;
-$border-active: 4px solid $second-color !default;
-$border-theme: 4px solid $first-color !default;
 $border-not-active: 4px solid $grey !default;
 
 $page-bkg-light: $white !default;
@@ -19,7 +13,6 @@ $page-bkg-grey: $light-grey !default;
 $page-bkg-dark-grey: $light-grey !default;
 $page-bkg-dark: $black !default;
 
-$link-color: $first-color !default;
 $link-hover-color: $black !default;
 
 $btn-light-txt: $white !default;
@@ -27,10 +20,6 @@ $btn-dark-txt: $black !default;
 $btn-light-bkg: none !default;
 $btn-dark-bkg: none !default;
 
-$title1-dark-color: $first-color !default;
-$title2-dark-color: $first-color !default;
-$title3-dark-color: $first-color !default;
-$title4-dark-color: $first-color !default;
 $title5-dark-color: $black !default;
 $title1-light-color: $white !default;
 $title2-light-color: $white !default;
@@ -46,8 +35,6 @@ $title6-size: $font-size-xxl !default;
 
 $navbar-bkg: $white !default;
 $navbar-border: 1px solid $light-grey !default;
-$navbar-text-color: $first-color !default;
-$navbar-active-text-color: $first-color !default;
 
 $box-shadow: none !default;
 $box-bkg: $white !default;

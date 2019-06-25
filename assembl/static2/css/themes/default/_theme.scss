@@ -8,22 +8,6 @@
 
 @import '../../variables.scss';
 
-/*
-  Local theme variables
-  Ranked from light to dark
-
-  You can define here any variable that you want. This can be useful if you want several theme variables to have the same value.
-  Example:
-  In this Local theme variables section, you would add:
-  $th_local_brand_logo_red: $FF0000;
-  And in the Global theme variables section, you would redefine:
-  $first-color: $th_local_brand_logo_red;
-  $title1-dark-color: $th_local_brand_logo_red;
-
-  Variables in this section should only be used within this current theme file.
-  NEVER refer to these color variables in other SCSS files.
-*/
-
 $theme-local-blue: #192882; // Only use for Bright Mirror
 // $theme-local-cyan: #0af;
 // $theme-local-blue-light: #dbdeef;
@@ -37,8 +21,7 @@ $theme-local-blue-opacity: rgba(25, 40, 130, 0.6); // Only use for Bright Mirror
   which is defined in css/themes/default/_theme.scss and in css/variables.scss.
 */
 
-// $first-color: $theme-local-blue;
+$first-color: red; // TO_DELETE
 // $first-color-light: $theme-local-blue-light;
-// $second-color: $theme-local-cyan;
+$second-color: purple;
 // $opacity-color: $theme-local-blue-opacity;
-// $min-opacity-color: $theme-local-blue-opacity-min;

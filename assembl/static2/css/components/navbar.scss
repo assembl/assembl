@@ -123,7 +123,6 @@
   }
 
   .navbar-menu-item {
-    color: $navbar-text-color;
     font-family: $font-family2;
     font-size: $font-size-xs;
     letter-spacing: 0.8px;
@@ -133,13 +132,11 @@
     white-space: nowrap;
 
     &:hover {
-      color: $navbar-active-text-color;
       font-family: $font-family3;
       text-decoration: none;
     }
 
     &:after {
-      color: $navbar-active-text-color;
       font-family: $font-family3;
       text-decoration: none;
       content: attr(data-text);
@@ -265,14 +262,17 @@
       justify-content: center;
 
       &.active {
-        border-bottom: $border-active;
+        border-bottom-color: $second-color;
+        border-bottom-style: solid;
+        border-bottom-width: 4px;
         padding-top: 4px;
-        color: $navbar-active-text-color;
       }
     }
 
     .logo-active {
-      border-bottom: $border-active;
+      border-bottom-color: $second-color;
+      border-bottom-style: solid;
+      border-bottom-width: 4px;
       padding-top: 4px;
       display: inline-flex;
       align-items: center;

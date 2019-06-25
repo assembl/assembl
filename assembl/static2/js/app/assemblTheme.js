@@ -50,6 +50,10 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  a {
+    color: ${firstColor};
+  }
+
   .administration {
     input[type='text'],
     input[type='textarea'],
@@ -133,6 +137,14 @@ export const GlobalStyle = createGlobalStyle`
         color: ${firstColor};
       }
     }
+
+    .flag-container.active {
+      border-color: ${firstColor};
+    }
+
+    .separator {
+      border-bottom-color: ${firstColor};
+    }
   }
 
   .annotation {
@@ -159,6 +171,10 @@ export const GlobalStyle = createGlobalStyle`
     .connection {
       color: ${firstColor};
     }
+
+    .username {
+      color: ${firstColor};
+    }
   }
 
   .back-btn-container {
@@ -169,6 +185,42 @@ export const GlobalStyle = createGlobalStyle`
 
   .background-color {
     background-color: ${firstColorLight};
+  }
+
+  .button-dark {
+    border-color: ${firstColor};
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:focus:active,
+    &:active:hover,
+    &[disabled]:hover {
+      border-color: ${firstColor};
+    }
+
+    &:before {
+      background: ${firstColor};
+    }
+  }
+
+  .button-diamond-dark {
+    color: ${firstColor};
+
+    .button-diamond-dark-back {
+      border-color: ${firstColor};
+    }
+  }
+
+  .button-diamond-dark:hover {
+    .button-diamond-dark-back {
+      background-color: ${firstColor};
+      border-color: ${firstColor};
+
+      &:before {
+        background: ${firstColor};
+      }
+    }
   }
 
   .collapsed-title {
@@ -229,6 +281,22 @@ export const GlobalStyle = createGlobalStyle`
     .path {
       stroke: ${firstColor};
     }
+  }
+
+  .dark-title-1 {
+    color: ${firstColor};
+  }
+
+  .dark-title-3 {
+    color: ${firstColor};
+  }
+
+  .dark-title-4 {
+    color: ${firstColor};
+  }
+
+  .dark-title-7 {
+    color: ${firstColor};
   }
 
   .date {
@@ -376,6 +444,10 @@ export const GlobalStyle = createGlobalStyle`
       border-color: ${firstColorLight};
       color: ${firstColorLight};
     }
+  }
+
+  .form-title {
+    color: ${firstColor};
   }
 
   .gauge-vote-for-proposal,
@@ -688,6 +760,26 @@ export const GlobalStyle = createGlobalStyle`
         }
       }
     }
+
+    .navbar-menu-item {
+      color: ${firstColor};
+
+      &:hover {
+        color: ${firstColor};
+      }
+
+      &:after {
+        color: ${firstColor};
+      }
+    }
+
+    .flat-navbar {
+      .navbar-menu-item {
+        &.active {
+          color: ${firstColor};
+        }
+      }
+    }
   }
 
   .nav-tabs {
@@ -761,6 +853,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .profile {
+    .dark-title-2 {
+      color: ${firstColor};
+    }
+
     .form-control {
       &:focus {
         border-color: ${secondColor};
@@ -769,6 +865,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .proposals {
+    .box {
+      border-left-color: ${firstColor};
+    }
+
     .user {
       .username {
         color: ${firstColor};
@@ -852,6 +952,23 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .scroll-one-page {
+    span {
+      background-color: ${secondColor};
+    }
+  }
+
+  .sentiments-count {
+    .txt {
+      color: ${firstColor};
+    }
+  }
+
+  .sentiments-popover {
+    background-color: ${firstColorLight};
+  }
+
+
   .share-button {
     background-color: ${firstColor};
   }
@@ -868,16 +985,6 @@ export const GlobalStyle = createGlobalStyle`
         color: ${firstColor};
       }
     }
-  }
-
-  .sentiments-count {
-    .txt {
-      color: ${firstColor};
-    }
-  }
-
-  .sentiments-popover {
-    background-color: ${firstColorLight};
   }
 
   .side-comment-anchor {
@@ -898,9 +1005,84 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  .scroll-one-page {
-    span {
-      background-color: ${secondColor};
+  .sk-action-bar {
+    .sk-filter-groups {
+      color: ${firstColor};
+    }
+  }
+
+  .sk-action-button {
+    color: ${firstColor};
+  }
+
+  .sk-hits-grid-hit {
+    a {
+      color: ${firstColor};
+    }
+  }
+
+  .sk-hits-list {
+    a {
+      color: ${firstColor};
+    }
+  }
+
+  .sk-hits-list-hit {
+    border-bottom-color: ${firstColor};
+
+    &__imgtype {
+      &:before {
+        color: ${firstColor};
+      }
+    }
+
+    &__tags {
+      .sk-tag-filter {
+        &:hover {
+          color: ${firstColor};
+        }
+      }
+    }
+  }
+
+  .sk-selected-filters {
+    &-option {
+      &__name {
+        color: ${firstColor};
+      }
+
+      &__remove-action {
+        color: ${firstColor};
+      }
+    }
+  }
+
+  .sk-refinement-list {
+    &__view-more-action {
+      color: ${firstColor};
+    }
+  }
+
+  .sk-reset-filters {
+    color: ${firstColor};
+  }
+
+  .sk-tabs {
+    &-option {
+      color: ${firstColor};
+
+      &.is-active {
+        border-color: ${firstColor};
+      }
+    }
+  }
+
+  .sk-toggle {
+    &-option {
+      &.is-active {
+        background-color: ${firstColor};
+        border-color: ${firstColor};
+      }
     }
   }
 
@@ -942,6 +1124,10 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .theme-box {
+    border-left-color: ${firstColor};
+  }
+
   .timeline {
     .bar {
       background-color: ${firstColor};
@@ -957,6 +1143,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .votesession-page {
+    .link-button {
+      color: ${firstColor};
+    }
+
     .participants-count__text {
       color: ${firstColor};
     }
