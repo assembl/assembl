@@ -965,7 +965,6 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${firstColorWithOpacity};
   }
 
-
   .share-button {
     background-color: ${firstColor};
   }
@@ -1022,6 +1021,10 @@ export const GlobalStyle = createGlobalStyle`
     a {
       color: ${firstColor};
     }
+
+    em {
+      background: ${firstColorWithOpacity};
+    }
   }
 
   .sk-hits-list-hit {
@@ -1071,6 +1074,14 @@ export const GlobalStyle = createGlobalStyle`
       &.is-active {
         border-color: ${firstColor};
       }
+    }
+  }
+
+  .sk-tag-filter {
+    display: inline-block;
+
+    &.is-active {
+      background-color: ${firstColorWithOpacity};
     }
   }
 

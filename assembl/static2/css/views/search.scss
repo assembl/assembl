@@ -51,7 +51,6 @@
   display: inline-block;
 
   &.is-active {
-    background-color: $first-color-light;
     font-weight: bold;
   }
 
@@ -303,10 +302,6 @@
   max-height: 500px;
   overflow-y: scroll;
   margin: 0 15px 20px;
-
-  em {
-    background: $first-color-light;
-  }
 
   a {
     text-decoration: none;

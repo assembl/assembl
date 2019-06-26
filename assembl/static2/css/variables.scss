@@ -18,9 +18,8 @@ $blue: #7490ca;
 $purple: #5404d7;
 $purple-light: #e7e6f5;
 $yellow: #f0ab2b;
-$cyan: green; // TO_DELETE or temporary replace it with 'green'
-$cyan-transparent: #0094b291;
-$cyan-light: #3aaece;
+$cyan: green; // TO_DELETE and temporary replace it with 'green'
+$cyan-transparent: #0094b291; // TO_DELETE ?
 $opacity-blue: rgba(53, 66, 105, 0.5);
 $min-opacity-blue: rgba(53, 66, 105, 0.1);
 $like-color: #46d38d;
@@ -42,7 +41,6 @@ $sentiment-level-1: $orange4;
 $sentiment-level-2: $light-green;
 $sentiment-level-3: $green2;
 
-$first-color-light: $cyan-light;
 $opacity-color: $opacity-cyan;
 $warning-alert: $orange;
 $warning-alert-text: $orange2;

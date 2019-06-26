@@ -4,8 +4,6 @@
   re-defined in a theme, cascade variables would have to use changed values. For this, we use the "!default" keyword of SCSS.
 */
 
-$first-color-opacity-70: rgba($first-color, 0.7) !default;
-
 $border-not-active: 4px solid $grey !default;
 
 $page-bkg-light: $white !default;
