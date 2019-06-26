@@ -12,6 +12,7 @@ export const basePath = (obj) => {
   let path = `${window.location.protocol}//${window.location.host}`;
 
   // Only pass json requests
+  console.log('obj', obj); // eslint-disable-line
   if (obj && obj.headers['Content-Type'] !== 'application/x-www-form-urlencoded') {
     if (useStargate === 'true') {
       path = `${window.location.protocol}//${window.location.hostname}:${stargatePort}`;
