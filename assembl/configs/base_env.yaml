@@ -179,6 +179,13 @@ maxretry: 10
 # IF URL, there should be no query strings
 theme_base: ""
 
+# Feature flags to control behaviour
+# 1. Use stargate the proxy ms ?
+# 2. Enable CSRF protection - this HAS to have stargate activate as well
+use_stargate: false
+use_csrf_protection: false
+stargate_port: 3000
+
 # The mime types that are allowed for uploaded files
 # on thread module
 # To be completed if needed
