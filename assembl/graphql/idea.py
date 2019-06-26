@@ -823,6 +823,14 @@ def tombstone_posts_related_to_idea(idea):
     for post in posts:
         post.is_tombstone = True
         post.publication_state = models.PublicationStates.DELETED_BY_ADMIN
+
+        # Remove extracts associated to this post
+        extracts_to_remove = post.db.query(models.Extract).filter(
+            models.Extract.content_id == post.id).all()
+        for extract in extracts_to_remove:
+            extract.tags = []
+            extract.delete()
+
         idea.db.flush()
 
 
