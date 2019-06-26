@@ -184,6 +184,10 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${firstColorWithOpacity};
   }
 
+  .box-hyphen {
+    border-top-color: ${secondColor};
+  }
+
   .button-dark {
     border-color: ${firstColor};
 
@@ -217,6 +221,40 @@ export const GlobalStyle = createGlobalStyle`
       &:before {
         background: ${firstColor};
       }
+    }
+  }
+
+  .button-light {
+    border-color: ${secondColor};
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:focus:active,
+    &:active:hover,
+    &[disabled]:hover {
+      border-color: ${secondColor};
+    }
+
+    &:before {
+      background: ${secondColor};
+    }
+  }
+
+  .button-link {
+    border-color: ${secondColor};
+
+    &:hover,
+    &:focus,
+    &:active,
+    &:focus:active,
+    &:active:hover,
+    &[disabled]:hover {
+      border-color: ${secondColor};
+    }
+
+    &:before {
+      background: ${secondColor};
     }
   }
 
@@ -773,8 +811,13 @@ export const GlobalStyle = createGlobalStyle`
     .flat-navbar {
       .navbar-menu-item {
         &.active {
+          border-bottom-color: ${secondColor};
           color: ${firstColor};
         }
+      }
+
+      .logo-active {
+        border-bottom-color: ${secondColor};
       }
     }
   }
@@ -1148,6 +1191,10 @@ export const GlobalStyle = createGlobalStyle`
     .timeline-date {
       color: ${firstColor};
     }
+  }
+
+  .title-hyphen {
+    border-top-color: ${secondColor};
   }
 
   .votesession-page {

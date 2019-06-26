@@ -44,7 +44,7 @@
 /* End Code specific to the button hover animation (horizontal fill of background and inversion of text color) */
 
 .button-link {
-  @include button-with-hover-animation($btn-light-txt, $second-color);
+  @include button-with-hover-animation($btn-light-txt);
 
   @extend .button-generic;
 
@@ -86,7 +86,7 @@
 }
 
 .button-light {
-  @include button-with-hover-animation($btn-light-txt, $second-color);
+  @include button-with-hover-animation($btn-light-txt);
 
   background: $btn-light-bkg;
   border-width: $btn-light-border-width;

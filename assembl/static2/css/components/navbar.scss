@@ -262,7 +262,6 @@
       justify-content: center;
 
       &.active {
-        border-bottom-color: $second-color;
         border-bottom-style: solid;
         border-bottom-width: 4px;
         padding-top: 4px;
@@ -270,7 +269,6 @@
     }
 
     .logo-active {
-      border-bottom-color: $second-color;
       border-bottom-style: solid;
       border-bottom-width: 4px;
       padding-top: 4px;
