@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import co from 'co';
 
 import { getDiscussionSlug } from './utils/globalFunctions';
-import { getFullPath } from './utils/routeMap';
+import { getFullPathV2 } from './utils/routeMap';
 import fetch from 'isomorphic-fetch'; // eslint-disable-line
 import { getCSRFToken } from './utils/csrf';
 
@@ -36,7 +36,7 @@ const useCSRFProtection = document.getElementById('useCSRFProtection')
   : 'false';
 
 const networkInterface = createNetworkInterface({
-  uri: getFullPath('graphql', { slug: getDiscussionSlug() }),
+  uri: getFullPathV2('graphql', { slug: getDiscussionSlug() }),
   opts: {
     credentials: 'same-origin'
   }
