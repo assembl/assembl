@@ -14,11 +14,8 @@ type Props = {
 };
 
 const theme = {
-  firstColor: 'red',
-  firstColorLight: 'green',
-  secondColor: 'purple',
-  opacityColor: 'pink',
-  minOpacityColor: 'orange'
+  firstColor: '#ff0000',
+  secondColor: '#800080'
 };
 
 /*

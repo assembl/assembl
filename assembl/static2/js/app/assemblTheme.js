@@ -2,25 +2,22 @@ import { createGlobalStyle } from 'styled-components';
 
 const defaultColors = {
   firstColor: '#192882',
-  firstColorLight: '#0af',
-  secondColor: '#dbdeef',
-  opacityColor: 'rgba(25, 40, 130, 0.6)',
-  minOpacityColor: 'rgba(25, 40, 130, 0.1)'
+  secondColor: '#dbdeef'
+  // firstColorWithOpacity: '#0af',
+  // secondColorWithOpacity: 'rgba(25, 40, 130, 0.6)'
+};
+
+const hexToRgb = (hex) => {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : null;
 };
 
 const firstColor = props => (props.firstColor ? props.firstColor : defaultColors.firstColor);
-
-const firstColorLight = props => (props.firstColorLight ? props.firstColorLight : defaultColors.firstColorLight);
-
+const firstColorWithOpacity = props =>
+  (props.firstColor ? `rgba(${hexToRgb(props.firstColor)}, .7)` : `rgba(${hexToRgb(defaultColors.firstColor)}, .7)`);
 const secondColor = props => (props.secondColor ? props.secondColor : defaultColors.secondColor);
-
-/* Potential regressions when replacing $first-color-opacity-70 with opacityColor for :
-   * .overflow-menu .overflow-menu-action
-   * .proposals .overflow-action
-   * .posts .overflow-action
-   * .idea .subject-prefix
-  */
-const opacityColor = props => (props.opacityColor ? props.opacityColor : defaultColors.opacityColor);
+const secondColorWithOpacity = props =>
+  (props.secondColor ? `rgba(${hexToRgb(props.secondColor)}, .7)` : `rgba(${hexToRgb(defaultColors.secondColor)}, .7)`);
 
 const size = {
   small: '768px',
@@ -85,7 +82,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .admin-navbar {
-      background-color: ${firstColorLight};
+      background-color: ${firstColorWithOpacity};
 
       .step-numbers {
         .txt {
@@ -184,7 +181,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .background-color {
-    background-color: ${firstColorLight};
+    background-color: ${firstColorWithOpacity};
   }
 
   .button-dark {
@@ -224,7 +221,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .collapsed-title {
-    background-color: ${firstColorLight};
+    background-color: ${firstColorWithOpacity};
     color: ${firstColor};
   }
 
@@ -268,7 +265,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .cookies-bar {
-    background-color: ${firstColorLight};
+    background-color: ${firstColorWithOpacity};
   }
 
   .cross-icon {
@@ -338,7 +335,7 @@ export const GlobalStyle = createGlobalStyle`
           }
 
           &.active {
-            background-color: ${firstColorLight};
+            background-color: ${firstColorWithOpacity};
             color: ${firstColor};
 
             .thumb-img {
@@ -413,7 +410,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .error-page {
-    background-color: ${firstColorLight};
+    background-color: ${firstColorWithOpacity};
 
     .title-error-code {
       color: ${firstColor};
@@ -435,14 +432,14 @@ export const GlobalStyle = createGlobalStyle`
 
   .fiction-edit-modal {
     .modal-content {
-      background-color: ${firstColorLight};
+      background-color: ${firstColorWithOpacity};
     }
   }
 
   .fiction-preview {
     .draft-label {
-      border-color: ${firstColorLight};
-      color: ${firstColorLight};
+      border-color: ${firstColorWithOpacity};
+      color: ${firstColorWithOpacity};
     }
   }
 
@@ -477,7 +474,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     a {
-      background-color: ${firstColorLight};
+      background-color: ${firstColorWithOpacity};
     }
   }
 
@@ -522,12 +519,12 @@ export const GlobalStyle = createGlobalStyle`
 
     .taxonomy-label {
       &:hover {
-        background-color: ${firstColorLight};
+        background-color: ${firstColorWithOpacity};
       }
     }
 
     .taxonomy-label.active {
-      background-color: ${firstColorLight};
+      background-color: ${firstColorWithOpacity};
     }
   }
 
@@ -535,11 +532,11 @@ export const GlobalStyle = createGlobalStyle`
     background-color: ${firstColor};
 
     .header-bkg-mask {
-      background-color: ${opacityColor};
+      background-color: ${secondColorWithOpacity};
     }
 
     .statistic {
-      background-color: ${opacityColor};
+      background-color: ${secondColorWithOpacity};
     }
   }
 
@@ -552,7 +549,7 @@ export const GlobalStyle = createGlobalStyle`
       .top-idea {
         .idea-link {
           &:hover {
-            background-color: ${opacityColor};
+            background-color: ${secondColorWithOpacity};
           }
 
           .idea-link-title {
@@ -581,12 +578,12 @@ export const GlobalStyle = createGlobalStyle`
 
   .idea {
     .subject-prefix {
-      color: ${opacityColor};
+      color: ${firstColorWithOpacity};
     }
 
     .child-level {
       .box {
-        border-color: ${firstColorLight};
+        border-color: ${firstColorWithOpacity};
       }
     }
 
@@ -594,17 +591,17 @@ export const GlobalStyle = createGlobalStyle`
     .level-2,
     .level-3,
     .level-4 {
-      border-top-color: ${firstColorLight};
-      border-left-color: ${firstColorLight};
+      border-top-color: ${firstColorWithOpacity};
+      border-left-color: ${firstColorWithOpacity};
     }
 
     .expand-indented {
-      border-left-color: ${firstColorLight};
+      border-left-color: ${firstColorWithOpacity};
       color: ${firstColor};
     }
 
     .expand {
-      border-left-color: ${firstColorLight};
+      border-left-color: ${firstColorWithOpacity};
       color: ${firstColor};
     }
 
@@ -619,7 +616,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .idea-preview-selected {
     .color-box {
-      background-color: ${opacityColor};
+      background-color: ${secondColorWithOpacity};
     }
   }
 
@@ -655,7 +652,7 @@ export const GlobalStyle = createGlobalStyle`
     .content-box {
       &:hover {
         .color-box {
-          background-color: ${opacityColor};
+          background-color: ${secondColorWithOpacity};
         }
       }
     }
@@ -748,7 +745,7 @@ export const GlobalStyle = createGlobalStyle`
       }
 
       .active {
-        background-color: ${firstColorLight};
+        background-color: ${firstColorWithOpacity};
         color: ${firstColor};
       }
     }
@@ -806,7 +803,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .overflow-menu {
     .overflow-menu-action {
-      color: ${opacityColor};
+      color: ${firstColorWithOpacity};
 
       &:hover,
       &:active,
@@ -818,7 +815,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .posts {
     .overflow-action {
-      color: ${opacityColor};
+      color: ${firstColorWithOpacity};
 
       &:hover {
         color: ${firstColor};
@@ -826,8 +823,8 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .answer-form {
-      border-color: ${firstColorLight};
-      color: ${firstColorLight};
+      border-color: ${firstColorWithOpacity};
+      color: ${firstColorWithOpacity};
 
       .DraftEditor-root {
         border-color: ${firstColor};
@@ -877,12 +874,12 @@ export const GlobalStyle = createGlobalStyle`
 
     .post-footer {
       .answer-form-inner .form-group {
-        border-color: ${firstColorLight};
+        border-color: ${firstColorWithOpacity};
       }
     }
 
     .overflow-action {
-      color: ${opacityColor};
+      color: ${firstColorWithOpacity};
 
       .deletePostIcon {
         .group {
@@ -915,7 +912,7 @@ export const GlobalStyle = createGlobalStyle`
 
     .ReactTags__selected {
       .ReactTags__tag {
-        background-color: ${firstColorLight};
+        background-color: ${firstColorWithOpacity};
       }
     }
 
@@ -927,11 +924,11 @@ export const GlobalStyle = createGlobalStyle`
       }
 
       .ReactTags__tagInput:focus-within {
-        background-color: ${firstColorLight};
+        background-color: ${firstColorWithOpacity};
       }
 
       .ReactTags__suggestions {
-        background-color: ${firstColorLight};
+        background-color: ${firstColorWithOpacity};
 
         li {
           mark {
@@ -965,7 +962,7 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .sentiments-popover {
-    background-color: ${firstColorLight};
+    background-color: ${firstColorWithOpacity};
   }
 
 
@@ -1159,7 +1156,7 @@ export const GlobalStyle = createGlobalStyle`
   @media screen and ${screen.small} {
     .proposals {
       .statistic {
-        background-color: ${firstColorLight};
+        background-color: ${firstColorWithOpacity};
       }
     }
   }
@@ -1167,7 +1164,7 @@ export const GlobalStyle = createGlobalStyle`
   @media screen and ${screen.maxMedium} {
     #thread-view {
       .level {
-        border-top-color: ${firstColorLight};
+        border-top-color: ${firstColorWithOpacity};
       }
     }
   }
