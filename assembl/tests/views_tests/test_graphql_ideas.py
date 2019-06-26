@@ -321,7 +321,7 @@ def test_graphql_discussion_counters_thread_phase_deleted_thematic(graphql_reque
             }
         """, context_value=graphql_request, variable_values={'discussionPhaseId': phases['thread'].id})
     assert res.data['rootIdea']['id']
-    assert res.data['rootIdea']['numTotalPosts'] == 15  # all posts
+    assert res.data['rootIdea']['numTotalPosts'] == 0  # all posts should be deleted
     # But the posts are not bound anymore
     assert res.data['rootIdea']['numPosts'] == 0
     assert res.data['numParticipants'] == 2
