@@ -43,7 +43,9 @@ export const xmlHttpRequest = obj =>
       payload = JSON.stringify(obj.payload);
     } else {
       obj.headers['Content-Type'] = 'application/x-www-form-urlencoded'; // eslint-disable-line
-      payload = convertToURLEncodedString(payload);
+      if (payload) {
+        payload = convertToURLEncodedString(payload);
+      }
     }
 
     const url = urljoin(basePath(obj), obj.url);
