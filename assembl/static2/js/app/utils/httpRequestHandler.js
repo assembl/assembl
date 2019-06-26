@@ -2,7 +2,7 @@ import urljoin from 'url-join';
 import Cookies from 'js-cookie';
 
 import { getCSRFToken } from './csrf';
-import { basePath } from './server';
+import { basePathV2 } from './server';
 
 const convertToURLEncodedString = obj =>
   Object.keys(obj)
@@ -48,7 +48,7 @@ export const xmlHttpRequest = obj =>
       }
     }
 
-    const url = urljoin(basePath(obj), obj.url);
+    const url = urljoin(basePathV2(obj), obj.url);
     xhr.open(obj.method, url);
     if (obj.headers) {
       Object.keys(obj.headers).forEach((key) => {

@@ -5,14 +5,15 @@
  *
  * @return String path - the path to use for the API call
  */
-export const basePath = (obj) => {
+export const basePath = () => `${window.location.protocol}//${window.location.host}`;
+
+export const basePathV2 = (obj) => {
   const useStargate = document.getElementById('useStargate') ? document.getElementById('useStargate').value : 'false';
   const stargatePort = document.getElementById('stargatePort') ? document.getElementById('stargatePort').value : '3000';
 
   let path = `${window.location.protocol}//${window.location.host}`;
 
   // Only pass json requests
-  console.log('obj', obj); // eslint-disable-line
   if (obj && obj.headers['Content-Type'] !== 'application/x-www-form-urlencoded') {
     if (useStargate === 'true') {
       path = `${window.location.protocol}//${window.location.hostname}:${stargatePort}`;
