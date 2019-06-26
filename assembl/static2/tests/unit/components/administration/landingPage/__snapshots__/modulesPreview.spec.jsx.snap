@@ -2,7 +2,7 @@
 
 exports[`ModulesPreview component should display nothing if modules are empty 1`] = `null`;
 
-exports[`ModulesPreview component should render a preview of the enabled modules 1`] = `
+exports[`ModulesPreview component should render a preview of all the modules 1`] = `
 <div
   className="box modules-preview"
 >
@@ -10,7 +10,7 @@ exports[`ModulesPreview component should render a preview of the enabled modules
     className="inner"
   >
     <div
-      className="module-block module-header"
+      className="module-block module-header module-enabled"
     >
       <span>
         Header
@@ -20,49 +20,122 @@ exports[`ModulesPreview component should render a preview of the enabled modules
     </div>
     <div
       className="other-modules"
-    />
-    <div
-      className="module-block module-video"
     >
-      <span>
-        Video
-        
-      </span>
-      <span>
+      <div
+        className="module-block module-introduction module-disabled"
+      >
         <span>
-          <button
-            className="admin-icons btn btn-default"
-            disabled={false}
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onMouseOut={[Function]}
-            onMouseOver={[Function]}
-            type="button"
-          >
-            <span
-              className="assembl-icon-down-small"
-            />
-          </button>
-          <button
-            className="admin-icons btn btn-default"
-            disabled={false}
-            onBlur={[Function]}
-            onClick={[Function]}
-            onFocus={[Function]}
-            onMouseOut={[Function]}
-            onMouseOver={[Function]}
-            type="button"
-          >
-            <span
-              className="assembl-icon-up-small"
-            />
-          </button>
+          Introduction
+          
         </span>
-      </span>
+        <span>
+          <span>
+            <button
+              className="admin-icons btn btn-default"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+              type="button"
+            >
+              <span
+                className="assembl-icon-down-small"
+              />
+            </button>
+            <button
+              className="admin-icons btn btn-default"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+              type="button"
+            >
+              <span
+                className="assembl-icon-up-small"
+              />
+            </button>
+          </span>
+          <span>
+            <button
+              className="admin-icons btn btn-default"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={null}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+              type="button"
+            >
+              <span
+                className="assembl-icon-delete"
+              />
+            </button>
+          </span>
+        </span>
+      </div>
+      <div
+        className="module-block module-video module-enabled"
+      >
+        <span>
+          Video
+          
+        </span>
+        <span>
+          <span>
+            <button
+              className="admin-icons btn btn-default"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+              type="button"
+            >
+              <span
+                className="assembl-icon-down-small"
+              />
+            </button>
+            <button
+              className="admin-icons btn btn-default"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={[Function]}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+              type="button"
+            >
+              <span
+                className="assembl-icon-up-small"
+              />
+            </button>
+          </span>
+          <span>
+            <button
+              className="admin-icons btn btn-default"
+              disabled={false}
+              onBlur={[Function]}
+              onClick={null}
+              onFocus={[Function]}
+              onMouseOut={[Function]}
+              onMouseOver={[Function]}
+              type="button"
+            >
+              <span
+                className="assembl-icon-delete"
+              />
+            </button>
+          </span>
+        </span>
+      </div>
     </div>
     <div
-      className="module-block module-footer"
+      className="module-block module-footer module-enabled"
     >
       <span>
         Footer

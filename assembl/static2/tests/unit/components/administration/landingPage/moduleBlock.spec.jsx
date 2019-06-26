@@ -1,14 +1,21 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { Map } from 'immutable';
 
 import ModuleBlock from '../../../../../js/app/components/administration/landingPage/moduleBlock';
 
 describe('ModuleBlock component', () => {
   it('should render a block that represents the module', () => {
     const props = {
-      type: 'HEADER',
-      required: true,
-      title: 'Header'
+      module: new Map({
+        enabled: true,
+        moduleType: new Map({
+          identifier: 'HEADER',
+          title: 'Header',
+          required: true,
+          editableOrder: false
+        })
+      })
     };
     const component = renderer.create(<ModuleBlock {...props} />);
     const tree = component.toJSON();
@@ -19,11 +26,17 @@ describe('ModuleBlock component', () => {
     const moveDownSpy = jest.fn(() => {});
     const moveUpSpy = jest.fn(() => {});
     const props = {
-      type: 'INTRODUCTION',
       moveDown: moveDownSpy,
       moveUp: moveUpSpy,
-      title: 'Introduction',
-      withArrows: true
+      module: new Map({
+        enabled: true,
+        moduleType: new Map({
+          identifier: 'INTRODUCTION',
+          title: 'Introduction',
+          required: true,
+          editableOrder: true
+        })
+      })
     };
     const component = renderer.create(<ModuleBlock {...props} />);
     const tree = component.toJSON();
@@ -32,10 +45,16 @@ describe('ModuleBlock component', () => {
 
   it('should render a block that represents the module with delete icon', () => {
     const props = {
-      type: 'INTRODUCTION',
-      title: 'Introduction',
-      withArrows: false,
-      remove: () => 1 + 1
+      remove: () => 1 + 1,
+      module: new Map({
+        enabled: true,
+        moduleType: new Map({
+          identifier: 'INTRODUCTION',
+          title: 'Introduction',
+          required: false,
+          editableOrder: false
+        })
+      })
     };
     const component = renderer.create(<ModuleBlock {...props} />);
     const tree = component.toJSON();
@@ -44,10 +63,16 @@ describe('ModuleBlock component', () => {
 
   it('should render a block that represents the module with edit icon', () => {
     const props = {
-      type: 'INTRODUCTION',
-      title: 'Introduction',
-      withArrows: false,
-      edit: () => 1 + 1
+      edit: () => 1 + 1,
+      module: new Map({
+        enabled: true,
+        moduleType: new Map({
+          identifier: 'INTRODUCTION',
+          title: 'Introduction',
+          required: true,
+          editableOrder: false
+        })
+      })
     };
     const component = renderer.create(<ModuleBlock {...props} />);
     const tree = component.toJSON();

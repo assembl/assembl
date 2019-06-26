@@ -1,7 +1,7 @@
 // @flow
 import { fromJS, List, Map } from 'immutable';
-import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
+import { combineReducers } from 'redux';
 import {
   type Action,
   CREATE_LANDING_PAGE_MODULE,
@@ -10,6 +10,7 @@ import {
   TOGGLE_LANDING_PAGE_MODULE,
   UPDATE_LANDING_PAGE_MODULES
 } from '../../actions/actionTypes';
+import { getModuleTypeInfo } from '../../components/administration/landingPage/manageModules';
 
 type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
 export const modulesHasChanged: ModulesHasChangedReducer = (state = false, action) => {
@@ -31,19 +32,14 @@ type ModulesInOrderReducer = (ModulesInOrderState, ReduxAction<Action>) => Modul
 export const modulesInOrder: ModulesInOrderReducer = (state = List(), action) => {
   switch (action.type) {
   case UPDATE_LANDING_PAGE_MODULES:
-    return List(action.modules.map(module => module.id));
-  case CREATE_LANDING_PAGE_MODULE:
-    // insert at the end (just before FOOTER module)
-    return state.insert(state.size - 1, action.id);
-  default:
-    return state;
-  }
-};
-
-type EnabledModulesInOrderState = List<string>;
-type EnabledModulesInOrderReducer = (EnabledModulesInOrderState, ReduxAction<Action>) => EnabledModulesInOrderState;
-export const enabledModulesInOrder: EnabledModulesInOrderReducer = (state = List(), action) => {
-  switch (action.type) {
+    return List(
+      action.modules
+        .filter((module) => {
+          const moduleInfo = getModuleTypeInfo(module.moduleType.identifier);
+          return moduleInfo && moduleInfo.implemented;
+        })
+        .map(module => module.id)
+    );
   case CREATE_LANDING_PAGE_MODULE:
     // insert at the end (just before FOOTER module)
     return state.insert(state.size - 1, action.id);
@@ -62,18 +58,6 @@ export const enabledModulesInOrder: EnabledModulesInOrderReducer = (state = List
 
     return state.delete(idx).insert(idx + 1, action.id);
   }
-  case TOGGLE_LANDING_PAGE_MODULE: {
-    const id = action.id;
-    const idx = state.indexOf(id);
-    if (idx !== -1) {
-      return state.delete(idx);
-    }
-
-    // insert at the end (just before FOOTER module)
-    return state.insert(state.size - 1, id);
-  }
-  case UPDATE_LANDING_PAGE_MODULES:
-    return List(action.modules.filter(module => module.enabled).map(module => module.id));
   default:
     return state;
   }
@@ -137,15 +121,8 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
   }
 };
 
-export type LandingPageState = {
-  enabledModulesInOrder: EnabledModulesInOrderState,
-  modulesById: Map<string>,
-  modulesHasChanged: boolean
-};
-
 const reducers = {
   modulesInOrder: modulesInOrder,
-  enabledModulesInOrder: enabledModulesInOrder,
   modulesHasChanged: modulesHasChanged,
   modulesById: modulesById
 };

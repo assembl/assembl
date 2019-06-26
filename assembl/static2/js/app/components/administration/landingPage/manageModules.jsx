@@ -11,50 +11,60 @@ import ModulesPreview from './modulesPreview';
 import SectionTitle from '../../administration/sectionTitle';
 import { moveLandingPageModuleDown, moveLandingPageModuleUp } from '../../../actions/adminActions/landingPage';
 import { browserHistory } from '../../../router';
+import LandingPageModulesQuery from '../../../graphql/LandingPageModulesQuery.graphql';
+import updateLandingPageModule from '../../../graphql/mutations/updateLandingPageModule.graphql';
 import deleteLandingPageModule from '../../../graphql/mutations/deleteLandingPageModule.graphql';
 import createLandingPageModule from '../../../graphql/mutations/createLandingPageModule.graphql';
 import { getDiscussionSlug } from '../../../utils/globalFunctions';
 import AddModuleButton from './addModuleButton';
 import { get } from '../../../utils/routeMap';
 import { closeModal, displayModal } from '../../../utils/utilityManager';
-import LandingPageModulesQuery from '../../../graphql/LandingPageModulesQuery.graphql';
 import SaveButton from '../saveButton';
 
 type Props = {
   client: ApolloClient,
-  enabledModules: List<Map>,
   lang: string,
-  moduleTypes: Array<LandingPageModuleType>,
+  modules: List<Map>,
   moveModuleDown: Function,
   moveModuleUp: Function,
-  save: () => void,
-  saveDisabled: boolean
+  saveOrder: () => void,
+  disableSave: boolean
 };
 
 type ModuleInfo = {
   identifier: string,
+  implemented: boolean, // if false, this type of module has not been implemented yet
   editSection?: string
 };
 
-export const MODULES: Map<string, ModuleInfo> = {
-  header: { identifier: 'HEADER', editSection: 'editHeader' },
-  timeline: { identifier: 'TIMELINE' },
+export const MODULE_TYPES: Map<string, ModuleInfo> = {
+  header: { editSection: 'editHeader', identifier: 'HEADER', implemented: true },
+  timeline: { identifier: 'TIMELINE', implemented: false },
   chatbot: { identifier: 'CHATBOT' },
-  topThematics: { identifier: 'TOP_THEMATICS' },
-  tweets: { identifier: 'TWEETS' },
-  contact: { identifier: 'CONTACT' },
-  data: { identifier: 'DATA' },
-  news: { identifier: 'NEWS' },
-  partners: { identifier: 'PARTNERS' },
-  introduction: { identifier: 'INTRODUCTION', editSection: 'editTextAndMultimedia' },
-  footer: { identifier: 'FOOTER' }
+  topThematics: { identifier: 'TOP_THEMATICS', implemented: false },
+  tweets: { identifier: 'TWEETS', implemented: false },
+  contact: { identifier: 'CONTACT', implemented: false },
+  data: { identifier: 'DATA', implemented: false },
+  news: { identifier: 'NEWS', implemented: false },
+  partners: { haveOrder: true, identifier: 'PARTNERS', implemented: false },
+  textAndMultimedia: {
+    editSection: 'editTextAndMultimedia',
+    identifier: 'INTRODUCTION',
+    implemented: true
+  },
+  footer: { identifier: 'FOOTER', implemented: true }
 };
+
+export function getModuleTypeInfo(identifier: string): ModuleInfo | null {
+  // can't type moduleInfos as Array<ModuleInfo> cf https://github.com/facebook/flow/issues/2221
+  const moduleInfos: Array<any> = Object.values(MODULE_TYPES);
+  const moduleInfo: any | null = moduleInfos.find((m: any) => (!!m && m.identifier === identifier) || null);
+  return moduleInfo;
+}
 
 function getEditSection(module: Map): string | null {
   const moduleType = module.getIn(['moduleType', 'identifier']);
-  // can't type moduleInfos as Array<ModuleInfo> cf https://github.com/facebook/flow/issues/2221
-  const moduleInfos: Array<any> = Object.values(MODULES);
-  const moduleInfo: any | null = moduleInfos.find((m: any) => (!!m && m.identifier === moduleType) || null);
+  const moduleInfo = getModuleTypeInfo(moduleType);
   return !!moduleInfo && !!moduleInfo.editSection ? moduleInfo.editSection : null;
 }
 
@@ -93,16 +103,7 @@ const navigateToModuleEdit = (module: Map): void => {
 
 export class DumbManageModules extends React.Component<Props> {
   render() {
-    const { client, enabledModules, lang, moduleTypes, moveModuleDown, moveModuleUp, save, saveDisabled } = this.props;
-
-    const numberOfTextAndMultimediaModules = moduleTypes.filter(
-      moduleType => moduleType.identifier === MODULES.introduction.identifier
-    ).length;
-
-    const numberOfEnabledTextAndMultimediaModules = enabledModules.filter(
-      module => module.getIn(['moduleType', 'identifier']) === MODULES.introduction.identifier
-    ).size;
-    const allTextAndMultimediaAreChecked = numberOfEnabledTextAndMultimediaModules === numberOfTextAndMultimediaModules;
+    const { client, modules, lang, moveModuleDown, moveModuleUp, saveOrder, disableSave } = this.props;
 
     const editModule = (module: Map): (() => void) | void => {
       if (getEditSection(module)) {
@@ -120,8 +121,21 @@ export class DumbManageModules extends React.Component<Props> {
       }
     ];
 
+    const updateModuleEnabled = (module: Map): ((enabled: boolean) => void) | void => {
+      if (!module.getIn(['moduleType', 'required'])) {
+        return (enabled: boolean) => {
+          client.mutate({
+            mutation: updateLandingPageModule,
+            variables: { id: module.get('id'), enabled: enabled },
+            refetchQueries: refetchQueries
+          });
+        };
+      }
+      return undefined;
+    };
+
     const removeModule = (module: Map): (() => void) | void => {
-      if (module.getIn(['moduleType', 'identifier']) === MODULES.introduction.identifier) {
+      if (module.getIn(['moduleType', 'identifier']) === MODULE_TYPES.textAndMultimedia.identifier) {
         return () => {
           const title = <Translate value="debate.confirmDeletionTitle" />;
           const body = <Translate value="debate.synthesis.confirmDeletionBody" />;
@@ -151,15 +165,14 @@ export class DumbManageModules extends React.Component<Props> {
       return undefined;
     };
 
-    const createTextAndMultimediaModule = (): void => {
-      const nextOrder = Math.max(...enabledModules.map(module => module.get('order'))) + 1;
-      client.mutate({
+    const createTextAndMultimediaModule = (): Promise<any> => {
+      const nextOrder = Math.max(...modules.map(module => module.get('order'))) + 1;
+      return client.mutate({
         mutation: createLandingPageModule,
-        variables: { typeIdentifier: MODULES.introduction.identifier, order: nextOrder, enabled: true },
+        variables: { typeIdentifier: MODULE_TYPES.introduction.identifier, order: nextOrder, enabled: true },
         refetchQueries: refetchQueries
       });
     };
-
     return (
       <div className="admin-box">
         <SectionTitle
@@ -172,24 +185,24 @@ export class DumbManageModules extends React.Component<Props> {
           </p>
           <div>
             <ModulesPreview
-              modules={enabledModules}
+              modules={modules}
               moveModuleDown={moveModuleDown}
               moveModuleUp={moveModuleUp}
               editModule={editModule}
+              updateModuleEnabled={updateModuleEnabled}
               removeModule={removeModule}
             />
             {/* <Layouts /> */}
           </div>
           <div>
-            <SaveButton btnId="save-order-button" disabled={saveDisabled} saveAction={save} title="administration.saveOrder" />
-            <div id="save-order-button" />
-            <AddModuleButton
-              numberOfDuplicatesModules={numberOfTextAndMultimediaModules}
-              numberOfEnabledModules={enabledModules.size}
-              createModule={createTextAndMultimediaModule}
-              allDuplicatesAreChecked={allTextAndMultimediaAreChecked}
-              buttonTitleTranslationKey="textAndMultimediaBtn"
+            <SaveButton
+              btnId="save-order-button"
+              disabled={disableSave}
+              saveAction={saveOrder}
+              title="administration.saveOrder"
             />
+            <div id="save-order-button" />
+            <AddModuleButton createModule={createTextAndMultimediaModule} buttonTitleTranslationKey="textAndMultimediaBtn" />
           </div>
         </div>
       </div>
@@ -198,9 +211,9 @@ export class DumbManageModules extends React.Component<Props> {
 }
 
 const mapStateToProps = (state) => {
-  const { i18n: { locale }, admin: { landingPage: { enabledModulesInOrder, modulesById, modulesInOrder } } } = state;
+  const { i18n: { locale }, admin: { landingPage: { modulesInOrder, modulesById } } } = state;
   return {
-    enabledModules: enabledModulesInOrder.map(id => modulesById.get(id)),
+    modules: modulesInOrder.map(id => modulesById.get(id)),
     lang: locale,
     modulesById: modulesById,
     moduleTypes: modulesInOrder

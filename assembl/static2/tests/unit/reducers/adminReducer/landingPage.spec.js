@@ -4,8 +4,8 @@ import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import * as reducers from '../../../../js/app/reducers/adminReducer/landingPage';
 import { modulesById } from '../../components/administration/landingPage/fakeData';
 
-describe('Landing page enabledModulesInOrder reducer', () => {
-  const reducer = reducers.enabledModulesInOrder;
+describe('Landing page modulesInOrder reducer', () => {
+  const reducer = reducers.modulesInOrder;
   it('it should return the initial state', () => {
     const action = {};
     const expected = List();
@@ -18,27 +18,18 @@ describe('Landing page enabledModulesInOrder reducer', () => {
     expect(reducer(oldState, action)).toEqual(oldState);
   });
 
-  it('should handle TOGGLE_LANDING_PAGE_MODULE action type', () => {
-    const action = {
-      id: 'abc123',
-      type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
-    };
-    const oldState = List.of('def456', 'abc123', 'ghi789', 'jkl135');
-    const expected = List.of('def456', 'ghi789', 'jkl135');
-    const actual = reducer(oldState, action);
-    expect(actual).toEqual(expected);
-    const twice = reducer(actual, action);
-    const twiceExpected = List.of('def456', 'ghi789', 'abc123', 'jkl135');
-    expect(twice).toEqual(twiceExpected);
-  });
-
   it('should handle UPDATE_LANDING_PAGE_MODULES action type', () => {
     const action = {
       modules: modulesById.map(v => v.toJS()).toArray(),
       type: actionTypes.UPDATE_LANDING_PAGE_MODULES
     };
     const oldState = List();
-    const expected = List.of('abc123', 'ghi789', 'jkl865');
+    const expected = List.of(
+      'abc123',
+      'def456',
+      // 'ghi789', FIXME: only introduction type is handled for now
+      'jkl865'
+    );
     const actual = reducer(oldState, action);
     expect(actual).toEqual(expected);
   });

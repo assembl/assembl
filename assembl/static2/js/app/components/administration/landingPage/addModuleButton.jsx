@@ -6,17 +6,10 @@ import { displayModal, closeModal } from '../../../utils/utilityManager';
 
 type Props = {
   createModule: Function,
-  numberOfDuplicatesModules: number,
-  numberOfEnabledModules: number,
   buttonTitleTranslationKey: string
 };
 
-const AddModuleButton = ({
-  createModule,
-  numberOfDuplicatesModules,
-  numberOfEnabledModules,
-  buttonTitleTranslationKey
-}: Props) => {
+const AddModuleButton = ({ createModule, buttonTitleTranslationKey }: Props) => {
   const displayConfirmationModal = () => {
     const body = <Translate value="administration.landingPage.manageModules.confirmationModal" />;
     const footer = [
@@ -27,7 +20,7 @@ const AddModuleButton = ({
         key="add"
         id="confirm-add-tm-button"
         onClick={() => {
-          createModule(numberOfEnabledModules - 2, numberOfDuplicatesModules + 1);
+          createModule();
           closeModal();
         }}
         className="button-submit button-dark"

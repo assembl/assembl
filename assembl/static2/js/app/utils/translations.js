@@ -748,7 +748,9 @@ const Translations = {
       },
       modules: {
         brightMirror: "Module Bright Mirror",
+        disable: "Désactiver le module",
         edit: "Configurer le module",
+        enable: "Activer le module",
         noModule: "Aucun module",
         messageColumns: "Module Multi-colonnes",
         remove: "Retier le module",

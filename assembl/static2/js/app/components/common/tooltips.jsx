@@ -408,3 +408,15 @@ export const removeModuleTooltip = (
     <Translate value="administration.modules.remove" />
   </Tooltip>
 );
+
+export const disableModuleTooltip = (
+  <Tooltip id="disableModuleTooltip">
+    <Translate value="administration.modules.disable" />
+  </Tooltip>
+);
+
+export const enableModuleTooltip = (
+  <Tooltip id="enableModuleTooltip">
+    <Translate value="administration.modules.enable" />
+  </Tooltip>
+);

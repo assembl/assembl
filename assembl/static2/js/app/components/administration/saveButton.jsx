@@ -54,6 +54,7 @@ export const runSerial = (tasks: MutationsPromises) => {
 };
 
 /* Utility that creates create/delete/update mutations for a list of items */
+/* NEVER USE THOSE MUTATIONS FOR BATCH ACTIONS, this would send one action for each item !! */
 export const getMutationsPromises = (params: Params) => {
   const {
     items,

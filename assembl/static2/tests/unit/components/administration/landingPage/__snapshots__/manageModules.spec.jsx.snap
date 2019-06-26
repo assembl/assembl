@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`ManageModules component should render a form to manage the landing page modules 1`] = `
+exports[`ManageModules component should render a preview to manage the landing page modules 1`] = `
 <div
   className="admin-box"
 >
@@ -41,6 +41,17 @@ exports[`ManageModules component should render a form to manage the landing page
               "order": 1,
             },
             Immutable.Map {
+              "enabled": false,
+              "id": "def456",
+              "moduleType": Immutable.Map {
+                "moduleId": "def456",
+                "editableOrder": true,
+                "identifier": "INTRODUCTION",
+                "title": "Introduction",
+              },
+              "order": 2,
+            },
+            Immutable.Map {
               "enabled": true,
               "id": "ghi789",
               "moduleType": Immutable.Map {
@@ -68,6 +79,7 @@ exports[`ManageModules component should render a form to manage the landing page
         moveModuleDown={[MockFunction]}
         moveModuleUp={[MockFunction]}
         removeModule={[Function]}
+        updateModuleEnabled={[Function]}
       />
     </div>
     <div>
@@ -80,11 +92,8 @@ exports[`ManageModules component should render a form to manage the landing page
         id="save-order-button"
       />
       <AddModuleButton
-        allDuplicatesAreChecked={false}
         buttonTitleTranslationKey="textAndMultimediaBtn"
         createModule={[Function]}
-        numberOfDuplicatesModules={1}
-        numberOfEnabledModules={3}
       />
     </div>
   </div>

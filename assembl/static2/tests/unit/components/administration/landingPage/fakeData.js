@@ -97,4 +97,4 @@ export const moduleTypes: Array<LandingPageModuleType> = [
   }
 ];
 
-export const enabledModules = List.of(abc123, ghi789, jkl865);
+export const modules = List.of(abc123, def456, ghi789, jkl865);

@@ -2,63 +2,108 @@
 import * as React from 'react';
 import { Button, OverlayTrigger } from 'react-bootstrap';
 import classNames from 'classnames';
+import { Map } from 'immutable';
+import { I18n } from 'react-redux-i18n';
 
-import { downTooltip, editModuleTooltip, removeModuleTooltip, upTooltip } from '../../common/tooltips';
+import {
+  disableModuleTooltip,
+  downTooltip,
+  editModuleTooltip,
+  enableModuleTooltip,
+  removeModuleTooltip,
+  upTooltip
+} from '../../common/tooltips';
+import { MODULE_TYPES } from './manageModules';
 
 type Props = {
   edit?: (() => void) | null,
+  module: Map<string, any>,
   moveUp: Function,
   moveDown: Function,
-  required: boolean,
   remove?: (() => void) | null,
-  title: string,
-  type: string,
-  withArrows: boolean
+  updateEnabled?: ((enabled: boolean) => void) | null
 };
 
-const ModuleBlock = ({ edit, moveDown, moveUp, remove, required, title, type, withArrows }: Props) => (
-  <div className={classNames(['module-block', `module-${type.toLowerCase()}`])}>
-    <span>
-      {title}
-      {required ? '*' : ''}
-    </span>
-    <span>
-      {withArrows && (
-        <span>
-          <OverlayTrigger placement="top" overlay={downTooltip}>
-            <Button onClick={moveDown} className="admin-icons">
-              <span className="assembl-icon-down-small" />
+export function getModuleTitle(module: Map<string, any>) {
+  const moduleTitle = module.get('title');
+  const moduleTypeTitle = module.getIn(['moduleType', 'title']);
+  return (
+    (moduleTitle ? `${moduleTypeTitle} : ${moduleTitle}` : moduleTypeTitle) ||
+    I18n.t('administration.landingPage.manageModules.textAndMultimedia')
+  );
+}
+
+const ModuleBlock = ({ edit, module, moveDown, moveUp, remove, updateEnabled }: Props) => {
+  const type = module.getIn(['moduleType', 'identifier']);
+  const haveOrder = module.getIn(['moduleType', 'editableOrder']) && type !== MODULE_TYPES.timeline.identifier;
+  const title = getModuleTitle(module);
+  const enabled = module.get('enabled');
+  const required = module.getIn(['moduleType', 'required']);
+  return (
+    <div className={classNames(['module-block', `module-${type.toLowerCase()}`, `module-${enabled ? 'enabled' : 'disabled'}`])}>
+      <span>
+        {title}
+        {required ? '*' : ''}
+      </span>
+      <span>
+        {haveOrder && (
+          <span>
+            <OverlayTrigger placement="top" overlay={downTooltip}>
+              <Button onClick={moveDown} className="admin-icons">
+                <span className="assembl-icon-down-small" />
+              </Button>
+            </OverlayTrigger>
+            <OverlayTrigger placement="top" overlay={upTooltip}>
+              <Button onClick={moveUp} className="admin-icons">
+                <span className="assembl-icon-up-small" />
+              </Button>
+            </OverlayTrigger>
+          </span>
+        )}
+        {!!edit && (
+          <OverlayTrigger placement="top" overlay={editModuleTooltip}>
+            <Button onClick={edit} className="admin-icons">
+              <span className="assembl-icon-edit" />
             </Button>
           </OverlayTrigger>
-          <OverlayTrigger placement="top" overlay={upTooltip}>
-            <Button onClick={moveUp} className="admin-icons">
-              <span className="assembl-icon-up-small" />
-            </Button>
-          </OverlayTrigger>
-        </span>
-      )}
-      {!!edit && (
-        <OverlayTrigger placement="top" overlay={editModuleTooltip}>
-          <Button onClick={edit} className="admin-icons">
-            <span className="assembl-icon-edit" />
-          </Button>
-        </OverlayTrigger>
-      )}
-      {!!remove && (
-        <OverlayTrigger placement="top" overlay={removeModuleTooltip}>
-          <Button onClick={remove} className="admin-icons">
-            <span className="assembl-icon-delete" />
-          </Button>
-        </OverlayTrigger>
-      )}
-    </span>
-  </div>
-);
+        )}
+        {!required &&
+          !!updateEnabled && (
+            <span>
+              {enabled && (
+                <OverlayTrigger placement="top" overlay={disableModuleTooltip}>
+                  <Button onClick={() => updateEnabled(false)} className="admin-icons">
+                    <span className="assembl-icon-hide" />
+                  </Button>
+                </OverlayTrigger>
+              )}
+              {!enabled && (
+                <OverlayTrigger placement="top" overlay={enableModuleTooltip}>
+                  <Button onClick={() => updateEnabled(true)} className="admin-icons">
+                    <span className="assembl-icon-show" />
+                  </Button>
+                </OverlayTrigger>
+              )}
+            </span>
+          )}
+        {!required && (
+          <span>
+            <OverlayTrigger placement="top" overlay={removeModuleTooltip}>
+              <Button onClick={remove} className="admin-icons">
+                <span className="assembl-icon-delete" />
+              </Button>
+            </OverlayTrigger>
+          </span>
+        )}
+      </span>
+    </div>
+  );
+};
 
 ModuleBlock.defaultProps = {
   edit: null,
   remove: null,
-  withArrows: false
+  updateEnabled: null
 };
 
 export default ModuleBlock;

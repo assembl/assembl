@@ -3,14 +3,14 @@ import renderer from 'react-test-renderer';
 import { List } from 'immutable';
 
 import ModulesPreview from '../../../../../js/app/components/administration/landingPage/modulesPreview';
-import { enabledModules } from './fakeData';
+import { modules } from './fakeData';
 
 describe('ModulesPreview component', () => {
-  it('should render a preview of the enabled modules', () => {
+  it('should render a preview of all the modules', () => {
     const moveModuleDownSpy = jest.fn(() => {});
     const moveModuleUpSpy = jest.fn(() => {});
     const props = {
-      modules: enabledModules,
+      modules: modules,
       moveModuleDown: moveModuleDownSpy,
       moveModuleUp: moveModuleUpSpy
     };

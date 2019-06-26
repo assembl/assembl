@@ -45,7 +45,7 @@ import IntBrightMirrorFiction from './integration/brightMirror/pages/brightMirro
 import IntSemanticAnalysis from './integration/semanticAnalysis/pages/semanticAnalysis';
 import IntTagOnPost from './integration/tagOnPost/pages/tagOnPost';
 import CreateSynthesisForm from './components/administration/synthesis/index';
-import { MODULES } from './components/administration/landingPage/manageModules';
+import { MODULE_TYPES } from './components/administration/landingPage/manageModules';
 import CustomizeHeader from './components/administration/landingPage/header';
 
 const DebateHome = props => <DebateThread {...props} />;
@@ -76,9 +76,9 @@ const AdminChild = (props: {
     return <ResourcesCenterAdmin {...props} />;
   case 'landingPage':
     switch (props.location.query.section) {
-    case MODULES.header.editSection:
+    case MODULE_TYPES.header.editSection:
       return <CustomizeHeader />;
-    case MODULES.introduction.editSection:
+    case MODULE_TYPES.textAndMultimedia.editSection:
       return <TextAndMultimedia landingPageModuleId={props.location.query.landingPageModuleId} />;
     default:
       return <LandingPageAdmin {...props} section={props.location.query.section} />;

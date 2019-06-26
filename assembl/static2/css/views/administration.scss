@@ -540,11 +540,15 @@
       .inner {
         margin: auto;
         width: 100%;
-        min-height: 330px;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+
+        .module-disabled {
+          font-style: italic;
+          opacity: 0.6;
+        }
 
         .module-block:first-child {
           padding: 10px 0;
@@ -553,11 +557,9 @@
         .module-block:first-child,
         .module-block:last-child {
           background-color: $first-color;
-          opacity: 0.7;
           color: $white;
           border: 0;
           margin: 0;
-          text-align: center;
         }
 
         &:first-child {
@@ -584,12 +586,6 @@
               color: $first-color;
               padding: 0;
               width: 20px;
-            }
-
-            &:first-child,
-            &:last-child {
-              opacity: 1;
-              text-align: left;
             }
           }
         }

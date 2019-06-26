@@ -65,7 +65,7 @@ class Index extends React.Component<Props, State> {
     subtitleEntries: item.subtitleEntries
   });
 
-  saveAction = () => {
+  saveOrder = () => {
     const { landingPageModulesHasChanged, landingPageModules, refetchLandingPageModules } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`, false, -1);
     if (landingPageModulesHasChanged) {
@@ -90,10 +90,9 @@ class Index extends React.Component<Props, State> {
   dataHaveChanged = (): boolean => this.props.landingPageModulesHasChanged;
 
   render() {
-    const saveDisabled = !this.dataHaveChanged();
     return (
       <div className="landing-page-admin">
-        <ManageModules {...this.props} save={this.saveAction} saveDisabled={saveDisabled} />
+        <ManageModules {...this.props} saveOrder={this.saveOrder} disableSave={!this.dataHaveChanged()} />
       </div>
     );
   }
@@ -104,7 +103,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage } }) => ({
   landingPageModules: landingPage.modulesById
     .map((module) => {
       const id = module.get('id');
-      const idx = landingPage.enabledModulesInOrder.indexOf(id);
+      const idx = landingPage.modulesInOrder.indexOf(id);
       return module
         .set('order', idx + 1)
         .set('_hasChanged', true)

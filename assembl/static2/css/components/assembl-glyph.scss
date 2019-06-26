@@ -114,3 +114,18 @@
 .assembl-icon-google-circle:before { content: '\f310'; } /* '' */
 .assembl-icon-linkedin:before { content: '\f318'; } /* '' */
 .assembl-icon-linkedin-circle:before { content: '\f319'; } /* '' */
+
+.assembl-icon-show, .assembl-icon-hide {
+  height: 20px;
+  width: inherit;
+  display: inline-block;
+  margin: -5px 0;
+
+  &.assembl-icon-show {
+    background-image: url(/static2/img/icons/black/show.svg);
+  }
+
+  &.assembl-icon-hide {
+    background-image: url(/static2/img/icons/black/hide.svg);
+  }
+}

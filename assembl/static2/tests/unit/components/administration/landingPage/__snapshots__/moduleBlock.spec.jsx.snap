@@ -2,7 +2,7 @@
 
 exports[`ModuleBlock component should render a block that represents the module 1`] = `
 <div
-  className="module-block module-header"
+  className="module-block module-header module-enabled"
 >
   <span>
     Header
@@ -14,38 +14,40 @@ exports[`ModuleBlock component should render a block that represents the module 
 
 exports[`ModuleBlock component should render a block that represents the module with delete icon 1`] = `
 <div
-  className="module-block module-introduction"
+  className="module-block module-introduction module-enabled"
 >
   <span>
     Introduction
     
   </span>
   <span>
-    <button
-      className="admin-icons btn btn-default"
-      disabled={false}
-      onBlur={[Function]}
-      onClick={[Function]}
-      onFocus={[Function]}
-      onMouseOut={[Function]}
-      onMouseOver={[Function]}
-      type="button"
-    >
-      <span
-        className="assembl-icon-delete"
-      />
-    </button>
+    <span>
+      <button
+        className="admin-icons btn btn-default"
+        disabled={false}
+        onBlur={[Function]}
+        onClick={[Function]}
+        onFocus={[Function]}
+        onMouseOut={[Function]}
+        onMouseOver={[Function]}
+        type="button"
+      >
+        <span
+          className="assembl-icon-delete"
+        />
+      </button>
+    </span>
   </span>
 </div>
 `;
 
 exports[`ModuleBlock component should render a block that represents the module with edit icon 1`] = `
 <div
-  className="module-block module-introduction"
+  className="module-block module-introduction module-enabled"
 >
   <span>
     Introduction
-    
+    *
   </span>
   <span>
     <button
@@ -68,11 +70,11 @@ exports[`ModuleBlock component should render a block that represents the module 
 
 exports[`ModuleBlock component should render a block that represents the module with move up/down arrows 1`] = `
 <div
-  className="module-block module-introduction"
+  className="module-block module-introduction module-enabled"
 >
   <span>
     Introduction
-    
+    *
   </span>
   <span>
     <span>
