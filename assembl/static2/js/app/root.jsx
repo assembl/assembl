@@ -14,8 +14,8 @@ type Props = {
 };
 
 const theme = {
-  firstColor: '#ff0000',
-  secondColor: '#800080'
+  firstColor: '#ff0000', // Red
+  secondColor: '#800080' // Purple
 };
 
 /*

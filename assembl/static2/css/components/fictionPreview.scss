@@ -2,7 +2,7 @@
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
-  border-bottom: solid 3px $theme-local-blue;
+  border-bottom: solid 3px $bm-local-blue;
   box-shadow: 0 2px 3px 0 $grey;
   width: 149px;
   height: 200px;
@@ -11,7 +11,7 @@
 
   &.draft {
     background-color: $white !important;
-    border-color: $theme-local-blue;
+    border-color: $bm-local-blue;
     border-style: solid;
     border-width: 1px 1px 3px 1px;
 
@@ -178,7 +178,7 @@
   }
 
   @media (min-width: $screen-sm-min) {
-    border-bottom: solid 3px $theme-local-blue;
+    border-bottom: solid 3px $bm-local-blue;
     width: 336px;
     height: 456px;
 
@@ -231,7 +231,7 @@
   @media (min-width: $screen-md-min) {
     width: 368px;
     height: 499px;
-    border-bottom: solid 3px $theme-local-blue;
+    border-bottom: solid 3px $bm-local-blue;
 
     h3 {
       font-size: $font-size-ml;

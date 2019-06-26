@@ -19,7 +19,8 @@ $purple: #5404d7;
 $purple-light: #e7e6f5;
 $yellow: #f0ab2b;
 $cyan: green; // TO_DELETE and temporary replace it with 'green'
-$cyan-transparent: #0094b291; // TO_DELETE ?
+$cyan-transparent: green; // TO_DELETE and temporary replace it with 'green'
+$opacity-cyan: green; // TO_DELETE and temporary replace it with 'green'
 $opacity-blue: rgba(53, 66, 105, 0.5);
 $min-opacity-blue: rgba(53, 66, 105, 0.1);
 $like-color: #46d38d;
@@ -33,15 +34,17 @@ $harvesting-blue: #00b6ff;
 $harvesting-blue-light: rgba(0, 182, 255, 0.4);
 
 $opacity-purple: rgba(84, 4, 215, 0.5);
-$opacity-cyan: rgba(0, 140, 166, 0.5);
 $linear-gradient: linear-gradient(90deg, $light-grey, $white);
+
+// Bright Mirror colors
+$bm-local-blue: #192882;
+$bm-local-blue-opacity: rgba(25, 40, 130, 0.6);
 
 $sentiment-level-0: $red;
 $sentiment-level-1: $orange4;
 $sentiment-level-2: $light-green;
 $sentiment-level-3: $green2;
 
-$opacity-color: $opacity-cyan;
 $warning-alert: $orange;
 $warning-alert-text: $orange2;
 $timeline-box-number-color: $white;
