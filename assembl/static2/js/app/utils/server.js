@@ -12,7 +12,7 @@ export const basePath = (obj) => {
   let path = `${window.location.protocol}//${window.location.host}`;
 
   // Only pass json requests
-  if (!obj || (obj && obj.isJson)) {
+  if (obj.headers['Content-Type'] !== 'application/x-www-form-urlencoded') {
     if (useStargate === 'true') {
       path = `${window.location.protocol}//${window.location.hostname}:${stargatePort}`;
     }
