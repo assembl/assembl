@@ -7,8 +7,8 @@ import {
   CREATE_LANDING_PAGE_MODULE,
   MOVE_LANDING_PAGE_MODULE_DOWN,
   MOVE_LANDING_PAGE_MODULE_UP,
-  TOGGLE_LANDING_PAGE_MODULE,
-  UPDATE_LANDING_PAGE_MODULES
+  UPDATE_LANDING_PAGE_MODULES,
+  RESET_LANDING_PAGE_MODULES
 } from '../../actions/actionTypes';
 import { getModuleTypeInfo } from '../../components/administration/landingPage/manageModules';
 
@@ -18,8 +18,8 @@ export const modulesHasChanged: ModulesHasChangedReducer = (state = false, actio
   case CREATE_LANDING_PAGE_MODULE:
   case MOVE_LANDING_PAGE_MODULE_UP:
   case MOVE_LANDING_PAGE_MODULE_DOWN:
-  case TOGGLE_LANDING_PAGE_MODULE:
     return true;
+  case RESET_LANDING_PAGE_MODULES:
   case UPDATE_LANDING_PAGE_MODULES:
     return false;
   default:
@@ -32,6 +32,7 @@ type ModulesInOrderReducer = (ModulesInOrderState, ReduxAction<Action>) => Modul
 export const modulesInOrder: ModulesInOrderReducer = (state = List(), action) => {
   switch (action.type) {
   case UPDATE_LANDING_PAGE_MODULES:
+  case RESET_LANDING_PAGE_MODULES:
     return List(
       action.modules
         .filter((module) => {
@@ -89,10 +90,6 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
         .set('order', action.order)
         .set('id', action.id)
     );
-  case TOGGLE_LANDING_PAGE_MODULE: {
-    const moduleType = action.id;
-    return state.updateIn([moduleType, 'enabled'], v => !v).setIn([moduleType, '_hasChanged'], true);
-  }
   case MOVE_LANDING_PAGE_MODULE_UP: {
     let newState = Map();
     state.forEach((module) => {
@@ -116,6 +113,7 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
     });
     return newState;
   }
+  case RESET_LANDING_PAGE_MODULES:
   default:
     return state;
   }

@@ -28,6 +28,7 @@ type Props = {
   moveModuleDown: Function,
   moveModuleUp: Function,
   saveOrder: () => void,
+  resetOrder: () => void,
   disableSave: boolean
 };
 
@@ -103,7 +104,7 @@ const navigateToModuleEdit = (module: Map): void => {
 
 export class DumbManageModules extends React.Component<Props> {
   render() {
-    const { client, modules, lang, moveModuleDown, moveModuleUp, saveOrder, disableSave } = this.props;
+    const { client, disableSave, lang, modules, moveModuleDown, moveModuleUp, resetOrder, saveOrder } = this.props;
 
     const editModule = (module: Map): (() => void) | void => {
       if (getEditSection(module)) {
@@ -173,6 +174,7 @@ export class DumbManageModules extends React.Component<Props> {
         refetchQueries: refetchQueries
       });
     };
+
     return (
       <div className="admin-box">
         <SectionTitle
@@ -196,12 +198,21 @@ export class DumbManageModules extends React.Component<Props> {
           </div>
           <div>
             <SaveButton
+              btnId="reset-order-button"
+              specificClasses="btn-danger"
+              disabled={disableSave}
+              saveAction={resetOrder}
+              title="cancel"
+            />
+            <SaveButton
               btnId="save-order-button"
               disabled={disableSave}
               saveAction={saveOrder}
               title="administration.saveOrder"
             />
             <div id="save-order-button" />
+            <div id="reset-order-button" />
+            <hr />
             <AddModuleButton createModule={createTextAndMultimediaModule} buttonTitleTranslationKey="textAndMultimediaBtn" />
           </div>
         </div>

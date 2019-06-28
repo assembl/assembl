@@ -10,6 +10,7 @@ import { displayAlert } from '../../utils/utilityManager';
 import { getMutationsPromises, runSerial } from '../../components/administration/saveButton';
 import createLandingPageModule from '../../graphql/mutations/createLandingPageModule.graphql';
 import updateLandingPageModule from '../../graphql/mutations/updateLandingPageModule.graphql';
+import { resetLandingPageModules } from '../../actions/adminActions/landingPage';
 
 type Props = {
   createLandingPageModule: Function,
@@ -17,6 +18,7 @@ type Props = {
   landingPageModules: Array<Object>,
   landingPageModulesHasChanged: boolean,
   refetchLandingPageModules: Function,
+  resetLandingPageModulesAction: Function,
   route: Route,
   router: Router,
   section: string,
@@ -87,16 +89,35 @@ class Index extends React.Component<Props, State> {
     }
   };
 
+  resetModules = () => {
+    const { landingPageModulesHasChanged, refetchLandingPageModules, resetLandingPageModulesAction } = this.props;
+    if (landingPageModulesHasChanged) {
+      refetchLandingPageModules().then((obj) => {
+        resetLandingPageModulesAction(obj.data.landingPageModules);
+        this.setState({ refetching: false });
+      });
+    }
+  };
+
   dataHaveChanged = (): boolean => this.props.landingPageModulesHasChanged;
 
   render() {
     return (
       <div className="landing-page-admin">
-        <ManageModules {...this.props} saveOrder={this.saveOrder} disableSave={!this.dataHaveChanged()} />
+        <ManageModules
+          {...this.props}
+          saveOrder={this.saveOrder}
+          disableSave={!this.dataHaveChanged()}
+          resetOrder={this.resetModules}
+        />
       </div>
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  resetLandingPageModulesAction: modules => dispatch(resetLandingPageModules(modules))
+});
 
 const mapStateToProps = ({ admin: { editLocale, landingPage } }) => ({
   landingPageModulesHasChanged: landingPage.modulesHasChanged,
@@ -115,7 +136,7 @@ const mapStateToProps = ({ admin: { editLocale, landingPage } }) => ({
 });
 
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(createLandingPageModule, {
     name: 'createLandingPageModule'
   }),

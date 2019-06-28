@@ -75,6 +75,18 @@ describe('Landing page modulesInOrder reducer', () => {
     const actual = reducer(oldState, action);
     expect(actual).toEqual(oldState);
   });
+
+  it('should handle RESET_LANDING_PAGE_MODULES action type', () => {
+    const action = {
+      id: 'abc123',
+      modules: modulesById.map(v => v.toJS()).toArray(),
+      type: actionTypes.RESET_LANDING_PAGE_MODULES
+    };
+    const oldState = List.of('def456', 'abc123', 'jkl135', 'ghi789');
+    const expected = List.of('abc123', 'def456', 'jkl865');
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('Landing page modulesById reducer', () => {
@@ -91,23 +103,6 @@ describe('Landing page modulesById reducer', () => {
       abc123: Map({ identifier: 'HEADER', enabled: true, order: 1.0, id: 'abc123' })
     });
     expect(reducer(oldState, action)).toEqual(oldState);
-  });
-
-  it('should handle TOGGLE_LANDING_PAGE_MODULE action type', () => {
-    const action = {
-      id: 'abc123',
-      type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
-    };
-    const oldState = Map({
-      abc123: Map({ identifier: 'HEADER', enabled: true, order: 1.0, id: 'abc123', _hasChanged: true })
-    });
-    const expected = Map({
-      abc123: Map({ identifier: 'HEADER', enabled: false, order: 1.0, id: 'abc123', _hasChanged: true })
-    });
-    const actual = reducer(oldState, action);
-    expect(actual).toEqual(expected);
-    const twice = reducer(actual, action);
-    expect(twice).toEqual(oldState);
   });
 
   it('should handle UPDATE_LANDING_PAGE_MODULES action type', () => {
@@ -151,17 +146,6 @@ describe('Landing page modulesHasChanged reducer', () => {
     const action = {
       id: 'abc123',
       type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
-    };
-    const oldState = false;
-    const expected = true;
-    const actual = reducer(oldState, action);
-    expect(actual).toEqual(expected);
-  });
-
-  it('should handle TOGGLE_LANDING_PAGE_MODULE action type', () => {
-    const action = {
-      id: 'abc123',
-      type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
     };
     const oldState = false;
     const expected = true;

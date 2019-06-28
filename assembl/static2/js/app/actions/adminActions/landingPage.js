@@ -7,6 +7,12 @@ export const updateLandingPageModules: updateLandingPageModulesAction = modules 
   type: actionTypes.UPDATE_LANDING_PAGE_MODULES
 });
 
+type resetLandingPageModulesAction = actionTypes.LandingPageModules => actionTypes.ResetLandingPageModules;
+export const resetLandingPageModules: resetLandingPageModulesAction = modules => ({
+  modules: modules,
+  type: actionTypes.RESET_LANDING_PAGE_MODULES
+});
+
 type moveLandingPageModuleUpAction = string => actionTypes.MoveLandingPageModuleUp;
 export const moveLandingPageModuleUp: moveLandingPageModuleUpAction = id => ({
   id: id,

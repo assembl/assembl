@@ -84,6 +84,11 @@ exports[`ManageModules component should render a preview to manage the landing p
     </div>
     <div>
       <SaveButtonInPortal
+        btnId="reset-order-button"
+        specificClasses="btn-danger"
+        title="cancel"
+      />
+      <SaveButtonInPortal
         btnId="save-order-button"
         specificClasses={null}
         title="administration.saveOrder"
@@ -91,6 +96,10 @@ exports[`ManageModules component should render a preview to manage the landing p
       <div
         id="save-order-button"
       />
+      <div
+        id="reset-order-button"
+      />
+      <hr />
       <AddModuleButton
         buttonTitleTranslationKey="textAndMultimediaBtn"
         createModule={[Function]}
