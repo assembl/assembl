@@ -23,13 +23,13 @@ import SaveButton from '../saveButton';
 
 type Props = {
   client: ApolloClient,
+  isOrdering: boolean,
   lang: string,
   modules: List<Map>,
   moveModuleDown: Function,
   moveModuleUp: Function,
   saveOrder: () => void,
-  resetOrder: () => void,
-  disableSave: boolean
+  resetOrder: () => void
 };
 
 type ModuleInfo = {
@@ -104,7 +104,7 @@ const navigateToModuleEdit = (module: Map): void => {
 
 export class DumbManageModules extends React.Component<Props> {
   render() {
-    const { client, disableSave, lang, modules, moveModuleDown, moveModuleUp, resetOrder, saveOrder } = this.props;
+    const { client, isOrdering, lang, modules, moveModuleDown, moveModuleUp, resetOrder, saveOrder } = this.props;
 
     const editModule = (module: Map): (() => void) | void => {
       if (getEditSection(module)) {
@@ -147,9 +147,6 @@ export class DumbManageModules extends React.Component<Props> {
               refetchQueries: refetchQueries
             });
             closeModal();
-            // if (onDeleteCallback) {
-            //   onDeleteCallback();
-            // }
           };
           const footer = [
             <Button key="cancel" onClick={closeModal} className="button-cancel button-dark">
@@ -170,7 +167,7 @@ export class DumbManageModules extends React.Component<Props> {
       const nextOrder = Math.max(...modules.map(module => module.get('order'))) + 1;
       return client.mutate({
         mutation: createLandingPageModule,
-        variables: { typeIdentifier: MODULE_TYPES.introduction.identifier, order: nextOrder, enabled: true },
+        variables: { typeIdentifier: MODULE_TYPES.textAndMultimedia.identifier, order: nextOrder, enabled: true },
         refetchQueries: refetchQueries
       });
     };
@@ -193,6 +190,7 @@ export class DumbManageModules extends React.Component<Props> {
               editModule={editModule}
               updateModuleEnabled={updateModuleEnabled}
               removeModule={removeModule}
+              isOrdering={isOrdering}
             />
             {/* <Layouts /> */}
           </div>
@@ -200,20 +198,24 @@ export class DumbManageModules extends React.Component<Props> {
             <SaveButton
               btnId="reset-order-button"
               specificClasses="btn-danger"
-              disabled={disableSave}
+              disabled={!isOrdering}
               saveAction={resetOrder}
               title="cancel"
             />
             <SaveButton
               btnId="save-order-button"
-              disabled={disableSave}
+              disabled={!isOrdering}
               saveAction={saveOrder}
               title="administration.saveOrder"
             />
             <div id="save-order-button" />
             <div id="reset-order-button" />
             <hr />
-            <AddModuleButton createModule={createTextAndMultimediaModule} buttonTitleTranslationKey="textAndMultimediaBtn" />
+            <AddModuleButton
+              disabled={isOrdering}
+              createModule={createTextAndMultimediaModule}
+              buttonTitleTranslationKey="textAndMultimediaBtn"
+            />
           </div>
         </div>
       </div>
@@ -222,10 +224,11 @@ export class DumbManageModules extends React.Component<Props> {
 }
 
 const mapStateToProps = (state) => {
-  const { i18n: { locale }, admin: { landingPage: { modulesInOrder, modulesById } } } = state;
+  const { i18n: { locale }, admin: { landingPage: { isOrderingModules, modulesInOrder, modulesById } } } = state;
   return {
-    modules: modulesInOrder.map(id => modulesById.get(id)),
+    isOrdering: isOrderingModules,
     lang: locale,
+    modules: modulesInOrder.map(id => modulesById.get(id)),
     modulesById: modulesById,
     moduleTypes: modulesInOrder
       .map((id) => {

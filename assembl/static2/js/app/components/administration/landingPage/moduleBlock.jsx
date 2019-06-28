@@ -17,6 +17,7 @@ import { MODULE_TYPES } from './manageModules';
 
 type Props = {
   edit?: (() => void) | null,
+  isOrdering: boolean,
   module: Map<string, any>,
   moveUp: Function,
   moveDown: Function,
@@ -33,7 +34,7 @@ export function getModuleTitle(module: Map<string, any>) {
   );
 }
 
-const ModuleBlock = ({ edit, module, moveDown, moveUp, remove, updateEnabled }: Props) => {
+const ModuleBlock = ({ edit, isOrdering, module, moveDown, moveUp, remove, updateEnabled }: Props) => {
   const type = module.getIn(['moduleType', 'identifier']);
   const haveOrder = module.getIn(['moduleType', 'editableOrder']) && type !== MODULE_TYPES.timeline.identifier;
   const title = getModuleTitle(module);
@@ -62,7 +63,7 @@ const ModuleBlock = ({ edit, module, moveDown, moveUp, remove, updateEnabled }: 
         )}
         {!!edit && (
           <OverlayTrigger placement="top" overlay={editModuleTooltip}>
-            <Button onClick={edit} className="admin-icons">
+            <Button onClick={isOrdering ? () => false : edit} className="admin-icons" disabled={isOrdering}>
               <span className="assembl-icon-edit" />
             </Button>
           </OverlayTrigger>
@@ -72,14 +73,22 @@ const ModuleBlock = ({ edit, module, moveDown, moveUp, remove, updateEnabled }: 
             <span>
               {enabled && (
                 <OverlayTrigger placement="top" overlay={disableModuleTooltip}>
-                  <Button onClick={() => updateEnabled(false)} className="admin-icons">
+                  <Button
+                    onClick={isOrdering ? () => false : () => updateEnabled(false)}
+                    className="admin-icons"
+                    disabled={isOrdering}
+                  >
                     <span className="assembl-icon-hide" />
                   </Button>
                 </OverlayTrigger>
               )}
               {!enabled && (
                 <OverlayTrigger placement="top" overlay={enableModuleTooltip}>
-                  <Button onClick={() => updateEnabled(true)} className="admin-icons">
+                  <Button
+                    onClick={isOrdering ? () => false : () => updateEnabled(true)}
+                    className="admin-icons"
+                    disabled={isOrdering}
+                  >
                     <span className="assembl-icon-show" />
                   </Button>
                 </OverlayTrigger>
@@ -89,7 +98,7 @@ const ModuleBlock = ({ edit, module, moveDown, moveUp, remove, updateEnabled }: 
         {!required && (
           <span>
             <OverlayTrigger placement="top" overlay={removeModuleTooltip}>
-              <Button onClick={remove} className="admin-icons">
+              <Button onClick={isOrdering ? () => false : remove} className="admin-icons" disabled={isOrdering}>
                 <span className="assembl-icon-delete" />
               </Button>
             </OverlayTrigger>

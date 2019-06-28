@@ -14,15 +14,22 @@ describe('AddModuleButton component', () => {
   const createModuleSpy = jest.fn(() => {});
   const props = {
     createModule: createModuleSpy,
-    numberOfDuplicatesModules: 3,
-    numberOfEnabledModules: 12,
-    allDuplicatesAreChecked: true,
     buttonTitleTranslationKey: 'textAndMultimediaBtn'
   };
   const wrapper = shallow(<AddModuleButton {...props} />);
 
   it('should render a non disabled button', () => {
     expect(wrapper.find('Button[disabled=false]')).toHaveLength(1);
+  });
+
+  it('should render a disabled button', () => {
+    const disabledProps = {
+      createModule: createModuleSpy,
+      disabled: true,
+      buttonTitleTranslationKey: 'textAndMultimediaBtn'
+    };
+    const wrapperDisabled = shallow(<AddModuleButton {...disabledProps} />);
+    expect(wrapperDisabled.find('Button[disabled=true]')).toHaveLength(1);
   });
 
   it('should render a modal when you click on the button', () => {

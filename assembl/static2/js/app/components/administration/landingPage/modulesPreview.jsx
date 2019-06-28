@@ -5,6 +5,7 @@ import ModuleBlock from './moduleBlock';
 
 type Props = {
   editModule: ((module: LandingPageModule) => any) | void,
+  isOrdering: boolean,
   modules: List<Map>,
   moveModuleDown: Function,
   moveModuleUp: Function,
@@ -12,7 +13,15 @@ type Props = {
   updateModuleEnabled: ((module: LandingPageModule) => any) | void
 };
 
-const ModulesPreview = ({ editModule, modules, moveModuleDown, moveModuleUp, removeModule, updateModuleEnabled }: Props) => {
+const ModulesPreview = ({
+  editModule,
+  isOrdering,
+  modules,
+  moveModuleDown,
+  moveModuleUp,
+  removeModule,
+  updateModuleEnabled
+}: Props) => {
   if (modules.size <= 0) {
     return null;
   }
@@ -28,6 +37,7 @@ const ModulesPreview = ({ editModule, modules, moveModuleDown, moveModuleUp, rem
         moveUp={() => moveModuleUp(id)}
         edit={editModule ? editModule(module) : undefined}
         remove={removeModule ? removeModule(module) : undefined}
+        isOrdering={isOrdering}
       />
     );
   };

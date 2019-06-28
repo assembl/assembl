@@ -15,8 +15,8 @@ import { resetLandingPageModules } from '../../actions/adminActions/landingPage'
 type Props = {
   createLandingPageModule: Function,
   updateLandingPageModule: Function,
+  isOrderingModules: boolean,
   landingPageModules: Array<Object>,
-  landingPageModulesHasChanged: boolean,
   refetchLandingPageModules: Function,
   resetLandingPageModulesAction: Function,
   route: Route,
@@ -51,7 +51,7 @@ class Index extends React.Component<Props, State> {
   }
 
   routerWillLeave = () => {
-    if (this.dataHaveChanged() && !this.state.refetching) {
+    if (this.props.isOrderingModules && !this.state.refetching) {
       return I18n.t('administration.confirmUnsavedChanges');
     }
 
@@ -68,48 +68,37 @@ class Index extends React.Component<Props, State> {
   });
 
   saveOrder = () => {
-    const { landingPageModulesHasChanged, landingPageModules, refetchLandingPageModules } = this.props;
+    const { landingPageModules, refetchLandingPageModules } = this.props;
     displayAlert('success', `${I18n.t('loading.wait')}...`, false, -1);
-    if (landingPageModulesHasChanged) {
-      const mutationsPromises = getMutationsPromises({
-        items: landingPageModules,
-        variablesCreator: this.createVariablesForLandingPageModuleMutation,
-        createMutation: this.props.createLandingPageModule,
-        updateMutation: this.props.updateLandingPageModule
-      });
+    const mutationsPromises = getMutationsPromises({
+      items: landingPageModules,
+      variablesCreator: this.createVariablesForLandingPageModuleMutation,
+      createMutation: this.props.createLandingPageModule,
+      updateMutation: this.props.updateLandingPageModule
+    });
 
-      runSerial(mutationsPromises)
-        .then(() => {
-          refetchLandingPageModules().then(() => this.setState({ refetching: false }));
-          displayAlert('success', I18n.t('administration.landingPage.successSave'));
-        })
-        .catch((error) => {
-          displayAlert('danger', error, false, 30000);
-        });
-    }
+    runSerial(mutationsPromises)
+      .then(() => {
+        refetchLandingPageModules().then(() => this.setState({ refetching: false }));
+        displayAlert('success', I18n.t('administration.landingPage.successSave'));
+      })
+      .catch((error) => {
+        displayAlert('danger', error, false, 30000);
+      });
   };
 
   resetModules = () => {
-    const { landingPageModulesHasChanged, refetchLandingPageModules, resetLandingPageModulesAction } = this.props;
-    if (landingPageModulesHasChanged) {
-      refetchLandingPageModules().then((obj) => {
-        resetLandingPageModulesAction(obj.data.landingPageModules);
-        this.setState({ refetching: false });
-      });
-    }
+    const { refetchLandingPageModules, resetLandingPageModulesAction } = this.props;
+    refetchLandingPageModules().then((obj) => {
+      resetLandingPageModulesAction(obj.data.landingPageModules);
+      this.setState({ refetching: false });
+    });
   };
-
-  dataHaveChanged = (): boolean => this.props.landingPageModulesHasChanged;
 
   render() {
     return (
       <div className="landing-page-admin">
-        <ManageModules
-          {...this.props}
-          saveOrder={this.saveOrder}
-          disableSave={!this.dataHaveChanged()}
-          resetOrder={this.resetModules}
-        />
+        <ManageModules {...this.props} saveOrder={this.saveOrder} resetOrder={this.resetModules} />
       </div>
     );
   }
@@ -120,7 +109,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 const mapStateToProps = ({ admin: { editLocale, landingPage } }) => ({
-  landingPageModulesHasChanged: landingPage.modulesHasChanged,
+  isOrderingModules: landingPage.isOrderingModules,
   landingPageModules: landingPage.modulesById
     .map((module) => {
       const id = module.get('id');

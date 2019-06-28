@@ -12,15 +12,15 @@ import {
 } from '../../actions/actionTypes';
 import { getModuleTypeInfo } from '../../components/administration/landingPage/manageModules';
 
-type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
-export const modulesHasChanged: ModulesHasChangedReducer = (state = false, action) => {
+type IsOrderingModulesReducer = (boolean, ReduxAction<Action>) => boolean;
+export const isOrderingModules: IsOrderingModulesReducer = (state = false, action) => {
   switch (action.type) {
-  case CREATE_LANDING_PAGE_MODULE:
   case MOVE_LANDING_PAGE_MODULE_UP:
   case MOVE_LANDING_PAGE_MODULE_DOWN:
     return true;
   case RESET_LANDING_PAGE_MODULES:
   case UPDATE_LANDING_PAGE_MODULES:
+  case CREATE_LANDING_PAGE_MODULE:
     return false;
   default:
     return state;
@@ -120,8 +120,8 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
 };
 
 const reducers = {
+  isOrderingModules: isOrderingModules,
   modulesInOrder: modulesInOrder,
-  modulesHasChanged: modulesHasChanged,
   modulesById: modulesById
 };
 

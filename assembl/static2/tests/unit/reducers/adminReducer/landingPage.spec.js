@@ -117,8 +117,8 @@ describe('Landing page modulesById reducer', () => {
   });
 });
 
-describe('Landing page modulesHasChanged reducer', () => {
-  const reducer = reducers.modulesHasChanged;
+describe('Landing page isOrderingModules reducer', () => {
+  const reducer = reducers.isOrderingModules;
   it('it should return the initial state', () => {
     const action = {};
     const expected = false;
@@ -157,6 +157,17 @@ describe('Landing page modulesHasChanged reducer', () => {
     const action = {
       modules: modulesById.map(v => v.toJS()).toArray(),
       type: actionTypes.UPDATE_LANDING_PAGE_MODULES
+    };
+    const oldState = true;
+    const expected = false;
+    const actual = reducer(oldState, action);
+    expect(actual).toEqual(expected);
+  });
+
+  it('should handle UPDATE_LANDING_PAGE_MODULES action type', () => {
+    const action = {
+      modules: modulesById.map(v => v.toJS()).toArray(),
+      type: actionTypes.RESET_LANDING_PAGE_MODULES
     };
     const oldState = true;
     const expected = false;
