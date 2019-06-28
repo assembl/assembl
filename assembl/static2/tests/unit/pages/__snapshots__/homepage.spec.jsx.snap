@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Homepage component should render configured modules 1`] = `
+<div
+  className="home"
+>
+  <a
+    className="scroll-one-page "
+    onClick={[Function]}
+    style={
+      Object {
+        "top": NaN,
+      }
+    }
+  >
+    <span>
+      <span
+        className="icon assembl-icon-down-open"
+      >
+         
+      </span>
+    </span>
+  </a>
+</div>
+`;

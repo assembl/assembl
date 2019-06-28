@@ -13,7 +13,6 @@ import {
   removeModuleTooltip,
   upTooltip
 } from '../../common/tooltips';
-import { MODULE_TYPES } from './manageModules';
 
 type Props = {
   edit?: (() => void) | null,
@@ -36,16 +35,13 @@ export function getModuleTitle(module: Map<string, any>) {
 
 const ModuleBlock = ({ edit, isOrdering, module, moveDown, moveUp, remove, updateEnabled }: Props) => {
   const type = module.getIn(['moduleType', 'identifier']);
-  const haveOrder = module.getIn(['moduleType', 'editableOrder']) && type !== MODULE_TYPES.timeline.identifier;
+  const haveOrder = module.getIn(['moduleType', 'editableOrder']);
   const title = getModuleTitle(module);
   const enabled = module.get('enabled');
   const required = module.getIn(['moduleType', 'required']);
   return (
     <div className={classNames(['module-block', `module-${type.toLowerCase()}`, `module-${enabled ? 'enabled' : 'disabled'}`])}>
-      <span>
-        {title}
-        {required ? '*' : ''}
-      </span>
+      <span>{title}</span>
       <span>
         {haveOrder && (
           <span>

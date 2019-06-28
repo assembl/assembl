@@ -386,15 +386,7 @@ class Query(graphene.ObjectType):
                 modules.append(module)
 
         def sort_landing_page_modules(module1, module2):
-            def module_type_order(module):
-                return models.landing_page.MODULES_ORDER.get(module.module_type.identifier, 50)
-
-            module_type_cmp = cmp(module_type_order(module1), module_type_order(module2))
-
-            if module_type_cmp != 0:
-                return module_type_cmp
-            else:
-                return cmp(module1.order, module2.order)
+            return cmp(module1.order, module2.order)
 
         sorted_modules = sorted(modules, cmp=sort_landing_page_modules)
         return sorted_modules

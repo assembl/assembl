@@ -40,7 +40,7 @@ type ModuleInfo = {
 
 export const MODULE_TYPES: Map<string, ModuleInfo> = {
   header: { editSection: 'editHeader', identifier: 'HEADER', implemented: true },
-  timeline: { identifier: 'TIMELINE', implemented: false },
+  timeline: { identifier: 'TIMELINE', implemented: true },
   chatbot: { identifier: 'CHATBOT' },
   topThematics: { identifier: 'TOP_THEMATICS', implemented: false },
   tweets: { identifier: 'TWEETS', implemented: false },
