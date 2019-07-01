@@ -5,3 +5,5 @@ aws_region: eu-west-1
 aws_shared_region: eu-west-1
 attachment_bucket: "assembl-data-%(aws_client)s"
 wheelhouse: s3://bluenove-assembl-wheelhouse
+beaker.session.httponly: true
+beaker.session.secure: true

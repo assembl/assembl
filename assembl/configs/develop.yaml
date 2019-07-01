@@ -76,3 +76,7 @@ supervisor:
   autostart_uwsgi: false
   autostart_source_reader: false
 server:main__port: 6543
+
+# Override production session security for local development
+beaker.session.httponly: true
+beaker.session.secure: true
