@@ -1,5 +1,6 @@
 """Utilities to encrypt hashes, tokens, etc."""
 
+from __future__ import print_function
 from os import urandom
 from binascii import hexlify, unhexlify
 import hashlib
@@ -12,7 +13,6 @@ from urllib import unquote
 from enum import IntEnum
 from assembl.lib import config
 from assembl.models import AbstractAgentAccount, User
-
 
 SALT_SIZE = 8
 
@@ -100,7 +100,7 @@ def password_change_token_legacy(user):
     user.last_login = now
     resolution = 19
     token_str = str(user.id) + now.isoformat()[:resolution]
-    print "hashing " + token_str
+    print("hashing " + token_str)
     return str(user.id) + 'e' + hash_password(token_str, HashEncoding.HEX)
 
 

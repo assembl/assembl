@@ -2,7 +2,7 @@
 import pytest
 
 from graphql_relay.node.node import to_global_id
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def vote_session(request, test_session, discussion, timeline_vote_session,
@@ -18,7 +18,7 @@ def vote_session(request, test_session, discussion, timeline_vote_session,
     test_session.flush()
 
     def fin():
-        print "finalizer vote_session"
+        print("finalizer vote_session")
         test_session.delete(vote_session)
         test_session.flush()
 
@@ -59,7 +59,7 @@ def token_vote_specification(request, test_session, graphql_request, vote_sessio
     vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
-        print "finalizer token_vote_specification"
+        print("finalizer token_vote_specification")
         test_session.delete(vote_spec)
         test_session.flush()
 
@@ -103,7 +103,7 @@ def gauge_vote_specification(request, test_session, graphql_request, vote_sessio
     vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
-        print "finalizer gauge_vote_specification"
+        print("finalizer gauge_vote_specification")
         test_session.delete(vote_spec)
         test_session.flush()
 
@@ -137,7 +137,7 @@ def number_gauge_vote_specification(request, test_session, graphql_request, vote
     vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
-        print "finalizer number_gauge_vote_specification"
+        print("finalizer number_gauge_vote_specification")
         test_session.delete(vote_spec)
         test_session.flush()
 
@@ -165,7 +165,7 @@ def vote_proposal(request, test_session, discussion, graphql_request, vote_sessi
     proposal = vote_session.idea.children[0]
 
     def fin():
-        print "finalizer vote_proposal"
+        print("finalizer vote_proposal")
         test_session.delete(proposal)
         test_session.flush()
 
@@ -219,7 +219,7 @@ def token_vote_specification_associated_to_proposal(request, test_session, discu
     vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
-        print "finalizer token_vote_specification_associated_to_proposal"
+        print("finalizer token_vote_specification_associated_to_proposal")
         test_session.delete(vote_spec)
         test_session.flush()
 
@@ -267,7 +267,7 @@ def gauge_vote_specification_associated_to_proposal(request, test_session, discu
     vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
-        print "finalizer gauge_vote_specification_associated_to_proposal"
+        print("finalizer gauge_vote_specification_associated_to_proposal")
         test_session.delete(vote_spec)
         test_session.flush()
 
@@ -305,7 +305,7 @@ def number_gauge_vote_specification_associated_to_proposal(request, test_session
     vote_spec = vote_session.vote_specifications[-1]
 
     def fin():
-        print "finalizer number_gauge_vote_specification_associated_to_proposal"
+        print("finalizer number_gauge_vote_specification_associated_to_proposal")
         test_session.delete(vote_spec)
         test_session.flush()
 

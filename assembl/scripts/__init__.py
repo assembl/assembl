@@ -10,6 +10,7 @@ from ..lib.model_watcher import configure_model_watcher
 from ..lib.config import set_config
 from ..indexing.changes import configure_indexing
 
+from __future__ import print_function
 
 def get_multimodule_extracts_file(discussion, lang='fr', anon='false', social_columns=True, start=None, end=None, interval=None):
     """
@@ -69,13 +70,13 @@ def get_multimodule_extracts_file(discussion, lang='fr', anon='false', social_co
             s3 = boto3.resource('s3')
             bucket = s3.Bucket('assembl-data-%s' % account_number.strip())
             bucket.put_object(Body=output, ContentType=XSLX_MIMETYPE, Key=name)
-            print "The file was uploaded as %s" % name
+            print("The file was uploaded as %s" % name)
         except Exception:
             write(output)
-            print "Failed to upload, creating file locally with name %s" % name
+            print("Failed to upload, creating file locally with name %s" % name)
     else:
         write(output)
-        print "The account number could not be found. Saving the file to disk as %s" % name
+        print("The account number could not be found. Saving the file to disk as %s" % name)
 
 
 def boostrap_configuration(config, do_bootstrap=True):

@@ -1,6 +1,7 @@
 import pytest
 
 from urllib import quote_plus, unquote
+from __future__ import print_function
 
 backbone_prefix = "/debate/"
 react_prefix = "/"
@@ -250,7 +251,7 @@ def test_route_discussion_post_legacy(discussion, root_post_1, test_app):
     from assembl.lib.frontend_urls import FrontendUrls
     headers = get_response_headers(resp)
     redirect_url = unquote(headers['Location'])
-    print redirect_url
+    print(redirect_url)
     furl = FrontendUrls(discussion)
     post_url = furl.get_relative_post_url(root_post_1)
     assert post_url in redirect_url
@@ -270,7 +271,7 @@ def test_route_discussion_post(discussion, root_post_1, test_app):
     from assembl.lib.frontend_urls import FrontendUrls
     headers = get_response_headers(resp)
     redirect_url = unquote(headers['Location'])
-    print redirect_url
+    print(redirect_url)
     furl = FrontendUrls(discussion)
     post_url = furl.get_relative_post_url(root_post_1)
     assert post_url in redirect_url
@@ -290,7 +291,7 @@ def test_route_discussion_idea_legacy(discussion, root_post_1, subidea_1,
     from assembl.lib.frontend_urls import FrontendUrls
     headers = get_response_headers(resp)
     redirect_url = unquote(headers['Location'])
-    print redirect_url
+    print(redirect_url)
     furl = FrontendUrls(discussion)
     idea_url = furl.get_relative_idea_url(subidea_1)
     assert idea_url in redirect_url
@@ -304,7 +305,7 @@ def test_route_discussion_post_v2(
     slug = discussion_with_2_phase_interface_v2.slug
     route = "/%s/posts/%s" % (
         slug, quote_plus(post_related_to_sub_idea_1.uri()))
-    print route
+    print(route)
     resp = test_app.get(route)
     assert resp.status_int == 303
 
@@ -335,7 +336,7 @@ def test_route_discussion_idea(discussion, root_post_1, subidea_1, test_app):
     from assembl.lib.frontend_urls import FrontendUrls
     headers = get_response_headers(resp)
     redirect_url = headers['Location']
-    print redirect_url
+    print(redirect_url)
     redirect_url = unquote(redirect_url)
     furl = FrontendUrls(discussion)
     idea_url = furl.get_relative_idea_url(subidea_1)
@@ -353,7 +354,7 @@ def test_route_discussion_idea_v2(
     slug = discussion_with_2_phase_interface_v2.slug
     route = "/debate/%s/idea/%s" % (
         slug, quote_plus(subidea_1.uri()))
-    print route
+    print(route)
     resp = test_app.get(route)
     assert resp.status_int == 303
 

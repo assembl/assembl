@@ -16,6 +16,8 @@ from ..lib.model_watcher import configure_model_watcher
 from ..lib.config import set_config
 from ..indexing.changes import configure_indexing
 
+from __future__ import print_function
+
 global all_roles
 
 
@@ -76,16 +78,16 @@ def main():
                 for ui in userinfo:
                     add_user(**ui)
         else:
-            print "Not a valid user file"
+            print("Not a valid user file")
         exit()
     while not args.name:
         args.name = raw_input("Full name:")
     while not args.email or not is_email(args.email):
         args.email = raw_input("Email address:")
     if not args.username:
-        print "You did not set a username. Enter an empty string"\
+        print("You did not set a username. Enter an empty string"\
             " for no username, or simply s for your system username, '%s'"\
-            % (getuser(),)
+            % (getuser(),))
         args.username = raw_input()
     if args.username.lower() == 's':
         args.username = getuser()

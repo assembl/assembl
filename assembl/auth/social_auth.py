@@ -2,6 +2,7 @@
 
 .. _PythonSocialAuth: http://psa.matiasaguirre.net/
 """
+from __future__ import print_function
 import re
 
 from pyramid.events import subscriber, BeforeRender
@@ -180,7 +181,7 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
 
 
 def print_details(backend, details, *args, **kwargs):
-    print details, args, kwargs
+    print(details, args, kwargs)
 
 
 def maybe_social_logout(request):

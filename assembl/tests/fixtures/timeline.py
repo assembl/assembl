@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def timeline_phase2_interface_v1(request, test_app, test_session, discussion, subidea_1, subidea_2):
@@ -33,7 +33,7 @@ def timeline_phase2_interface_v1(request, test_app, test_session, discussion, su
     test_session.flush()
 
     def fin():
-        print "finalizer timeline"
+        print("finalizer timeline")
         phase2.previous_event = None
         phase2.previous_event_id = None
         phase2.delete()
@@ -75,7 +75,7 @@ def timeline_phase2_interface_v2(request, test_app, test_session, discussion, su
     test_session.flush()
 
     def fin():
-        print "finalizer timeline"
+        print("finalizer timeline")
         phase2.previous_event = None
         phase2.previous_event_id = None
         phase2.delete()
@@ -107,7 +107,7 @@ def timeline_vote_session(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "finalizer timeline"
+        print("finalizer timeline")
         test_session.delete(phase)
         test_session.flush()
 

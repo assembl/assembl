@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def root_idea(request, discussion, test_session):
@@ -48,7 +48,7 @@ def idea_with_en_fr(request, discussion, en_locale,
     test_session.flush()
 
     def fin():
-        print "finalizer idea_with_en_fr"
+        print("finalizer idea_with_en_fr")
         test_session.delete(idea)
         test_session.delete(title)
         test_session.delete(synthesis_title)
@@ -60,7 +60,7 @@ def idea_with_en_fr(request, discussion, en_locale,
 
 
 @pytest.fixture(scope="function")
-def annnouncement_for_subidea_1_1(request, discussion, en_locale, 
+def annnouncement_for_subidea_1_1(request, discussion, en_locale,
                         fr_locale, admin_user, subidea_1_1,
                         test_session):
     from assembl.models import LangString, LangStringEntry, IdeaAnnouncement
@@ -94,7 +94,7 @@ def annnouncement_for_subidea_1_1(request, discussion, en_locale,
     test_session.flush()
 
     def fin():
-        print "finalizer announcement_en_fr"
+        print("finalizer announcement_en_fr")
         test_session.delete(title)
         test_session.delete(body)
         test_session.delete(announce)
@@ -146,7 +146,7 @@ def announcement_en_fr(request, discussion, en_locale,
     test_session.flush()
 
     def fin():
-        print "finalizer announcement_en_fr"
+        print("finalizer announcement_en_fr")
         test_session.delete(title)
         test_session.delete(body)
         test_session.delete(summary)
@@ -174,7 +174,7 @@ def subidea_1(request, discussion, root_idea, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1"
+        print("finalizer subidea_1")
         test_session.delete(l_r_1)
         test_session.delete(i)
         test_session.flush()
@@ -192,7 +192,7 @@ def subidea_thread_phase_1(request, subidea_1, thread_phase_root_idea, root_idea
     test_session.add(l_r_1)
     test_session.flush()
     def fin():
-        print "finalizer subidea_thread_phase_1"
+        print("finalizer subidea_thread_phase_1")
         test_session.delete(l_r_1)
         test_session.add(IdeaLink(source=root_idea, target=subidea_1))
         test_session.flush()
@@ -217,7 +217,7 @@ def subidea_2(request, discussion, root_idea, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_2"
+        print("finalizer subidea_2")
         test_session.delete(l_r_2)
         test_session.delete(i)
         test_session.flush()
@@ -244,7 +244,7 @@ def subidea_1_1(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1"
+        print("finalizer subidea_1_1")
         test_session.delete(l_1_11)
         test_session.delete(i)
         test_session.flush()
@@ -265,7 +265,7 @@ def subidea_1_2(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_2"
+        print("finalizer subidea_1_2")
         test_session.delete(l_1_12)
         test_session.delete(i)
         test_session.flush()
@@ -294,7 +294,7 @@ def subidea_1_1_1(request, discussion, subidea_1_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1"
+        print("finalizer subidea_1_1_1")
         test_session.delete(l_11_111)
         test_session.delete(i)
         test_session.flush()
@@ -322,7 +322,7 @@ def subidea_1_1_1_1(request, discussion, subidea_1_1_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1"
+        print("finalizer subidea_1_1_1_1")
         test_session.delete(l_111_1111)
         test_session.delete(i)
         test_session.flush()
@@ -351,7 +351,7 @@ def subidea_1_1_1_1_1(request, discussion, subidea_1_1_1_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1_1_1"
+        print("finalizer subidea_1_1_1_1_1_1")
         test_session.delete(l_1111_11111)
         test_session.delete(i)
         test_session.flush()
@@ -381,7 +381,7 @@ def subidea_1_1_1_1_2(request, discussion, subidea_1_1_1_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1_2"
+        print("finalizer subidea_1_1_1_1_2")
         test_session.delete(l_1111_11112)
         test_session.delete(i)
         test_session.flush()
@@ -412,7 +412,7 @@ def subidea_1_1_1_1_2_1(request, discussion, subidea_1_1_1_1_2, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1_2_1"
+        print("finalizer subidea_1_1_1_1_2_1")
         test_session.delete(l_11112_111121)
         test_session.delete(i)
         test_session.flush()
@@ -444,7 +444,7 @@ def subidea_1_1_1_1_2_2(request, discussion, subidea_1_1_1_1_2, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_1_1_1_2_2"
+        print("finalizer subidea_1_1_1_1_2_2")
         test_session.delete(l_11112_111122)
         test_session.delete(i)
         test_session.flush()
@@ -470,7 +470,7 @@ def subidea_1_2(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_2"
+        print("finalizer subidea_1_2")
         test_session.delete(l_1_12)
         test_session.delete(i)
         test_session.flush()
@@ -497,7 +497,7 @@ def subidea_1_2_1(request, discussion, subidea_1_2, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer subidea_1_2_1"
+        print("finalizer subidea_1_2_1")
         test_session.delete(l_12_121)
         test_session.delete(i)
         test_session.flush()

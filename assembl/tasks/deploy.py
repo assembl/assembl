@@ -6,6 +6,7 @@ from time import sleep
 from ConfigParser import RawConfigParser
 from getpass import getuser
 from invoke.tasks import call
+from __future__ import print_function
 
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
@@ -403,7 +404,7 @@ def get_robot_machine(c):
             'name': robot_data[1].strip(),
             'password': robot_data[2].strip()
         }
-    print "No user machine found!"
+    print("No user machine found!")
     return None
 
 

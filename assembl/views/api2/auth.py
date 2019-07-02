@@ -41,7 +41,7 @@ from ..auth.views import (
     send_change_password_email, from_identifier, send_confirmation_email,
     maybe_auto_subscribe, maybe_contextual_route)
 from assembl.lib import logging
-
+from __future__ import print_function
 
 _ = TranslationStringFactory('assembl')
 generic_error_message = _("The provided input combination is not valid.")
@@ -588,8 +588,8 @@ def assembl_register_user(request):
             if asbool(config.get('pyramid.debug_authorization')):
                 # for debugging purposes
                 from assembl.auth.password import email_token
-                print "email token:", request.route_url(
-                    'user_confirm_email', token=email_token(account))
+                print("email token:", request.route_url(
+                    'user_confirm_email', token=email_token(account)))
             if discussion:
                 check_subscription = discussion.preferences['whitelist_on_register']
                 maybe_auto_subscribe(user, discussion, check_authorization=check_subscription)

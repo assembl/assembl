@@ -17,7 +17,7 @@ import transaction
 
 from assembl.lib import config
 from assembl.lib.clean_input import sanitize_text
-
+from __future__ import print_function
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
@@ -49,7 +49,7 @@ def upgrade(pyramid_env):
                     # Use idea language for priors?
                     lang, data = langid_services[im_column.idea.discussion_id].identify(header)
                 if not lang:
-                    print "***** Could not identify for IdeaMessageColumn %d: %s" % (im_column.id, header)
+                    print("***** Could not identify for IdeaMessageColumn %d: %s" % (im_column.id, header))
                     lang = candidate_langs[0]
 
             if header:

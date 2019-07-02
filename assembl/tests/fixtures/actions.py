@@ -1,5 +1,5 @@
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def simple_action(request, test_session, participant1_user):
@@ -12,7 +12,7 @@ def simple_action(request, test_session, participant1_user):
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple_action fixture"
+        print("Finalizing the simple_action fixture")
         test_session.delete(simple_action)
         test_session.flush()
     request.addfinalizer(fin)
@@ -28,7 +28,7 @@ def simple_ActionOnPost(request, test_session, simple_action, reply_post_3):
     test_session.flush()
 
     def fin():
-        print "Finalizing The simple_ActionOnPost fixture"
+        print("Finalizing The simple_ActionOnPost fixture")
         test_session.delete(simple_ActionOnPost)
         test_session.flush()
     request.addfinalizer(fin)
@@ -44,7 +44,7 @@ def simple_UniqueActionOnPost(request, test_session, simple_ActionOnPost):
     test_session.flush()
 
     def fin():
-        print "Finalizing UniqueActionOnPostFixture"
+        print("Finalizing UniqueActionOnPostFixture")
         test_session.delete(UniqueActionOnPost)
         test_session.flush()
     request.addfinalizer(fin)
@@ -64,7 +64,7 @@ def post_viewed(request, test_session, root_post_1, participant1_user):
     test_session.flush()
 
     def fin():
-        print "post_viewed finalizer is called"
+        print("post_viewed finalizer is called")
         test_session.delete(va)
         test_session.flush()
     request.addfinalizer(fin)
@@ -84,7 +84,7 @@ def post_viewed2(request, test_session, root_post_1, participant2_user):
     test_session.flush()
 
     def fin():
-        print "post_viewed finalizer is called"
+        print("post_viewed finalizer is called")
         test_session.delete(va)
         test_session.flush()
     request.addfinalizer(fin)

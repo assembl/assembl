@@ -3,7 +3,7 @@ import pytest
 from freezegun import freeze_time
 
 from graphql_relay.node.node import from_global_id
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def graphql_request(request, test_adminuser_webrequest, discussion):
@@ -398,7 +398,7 @@ mutation myFirstMutation {
 """ % first_question_id, context_value=graphql_request)
     post_id = res.data['createPost']['post']['id']
     def fin():
-        print "proposition_id"
+        print("proposition_id")
         post = test_session.query(PropositionPost).get(int(from_global_id(post_id)[1]))
         test_session.delete(post)
         test_session.flush()

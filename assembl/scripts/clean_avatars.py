@@ -13,6 +13,7 @@ from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.indexing.changes import configure_indexing
 
+from __future__ import print_function
 
 def clean_avatars(db):
     from assembl.models import SocialAuthAccount
@@ -21,7 +22,7 @@ def clean_avatars(db):
                 SocialAuthAccount.picture_url != None):
             url = idp.picture_url
             if not requests.head(url).ok:
-                print "Not ok", idp.id, url
+                print("Not ok", idp.id, url)
                 idp.picture_url = None
 
 

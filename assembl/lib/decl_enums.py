@@ -4,6 +4,7 @@ Mostly from http://techspot.zzzeek.org/2011/01/14/the-enum-recipe/ """
 from sqlalchemy.types import SchemaType, TypeDecorator, Enum
 from sqlalchemy import __version__
 import re
+from __future__ import print_function
 
 if __version__ < '0.6.5':
     raise NotImplementedError("Version 0.6.5 or higher of SQLAlchemy is required.")
@@ -137,4 +138,4 @@ if __name__ == '__main__':
     ])
     sess.commit()
 
-    print sess.query(Employee).filter_by(type=EmployeeType.contractor).all()
+    print(sess.query(Employee).filter_by(type=EmployeeType.contractor).all())

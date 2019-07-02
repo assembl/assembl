@@ -14,6 +14,7 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 from os import path
+from __future__ import print_function
 
 from assembl.lib import config
 from assembl.lib.sqla import mark_changed
@@ -31,11 +32,11 @@ def upgrade(pyramid_env):
             if not fileHash: continue
             hash = hashfs.get(fileHash)
             if not hash:
-                print "Missing hash:", id, fileHash
+                print("Missing hash:", id, fileHash)
                 continue
             size = path.getsize(hash.abspath.encode('ascii'))
             if not size:
-                print "Missing size:", id, fileHash
+                print("Missing size:", id, fileHash)
                 continue
             db.execute('UPDATE file SET file_size=%d WHERE id=%d' % (size, id))
         mark_changed()

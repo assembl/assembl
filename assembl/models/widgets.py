@@ -3,6 +3,7 @@
 In theory, arbitrary widgets could be added to Assembl.
 In reality, the set of widget behaviours is constrained here.
 """
+from __future__ import print_function
 from datetime import datetime
 
 from sqlalchemy import Column, Integer, ForeignKey, Text, String, Boolean, DateTime
@@ -741,20 +742,20 @@ class VotingWidget(BaseIdeaWidget):
                     criterion_idea = Idea.get_instance(criterion["@id"])
                     self.add_criterion(criterion_idea)
                 except Exception:
-                    print "Missing criterion. Discarded.", criterion
+                    print("Missing criterion. Discarded.", criterion)
         if 'votables' in settings:
             for votable_id in settings['votables']:
                 try:
                     votable_idea = Idea.get_instance(votable_id)
                     self.add_votable(votable_idea)
                 except Exception:
-                    print "Missing votable. Discarded.", votable_id
+                    print("Missing votable. Discarded.", votable_id)
         elif 'votable_root_id' in settings:
             try:
                 votable_root_idea = Idea.get_instance(
                     settings['votable_root_id'])
             except Exception:
-                print "Cannot find votable root.", settings['votable_root_id']
+                print("Cannot find votable root.", settings['votable_root_id'])
                 return
             if len(votable_root_idea.children):
                 for child in votable_root_idea.children:

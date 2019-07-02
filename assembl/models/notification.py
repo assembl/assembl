@@ -1,5 +1,6 @@
 # coding=UTF-8
 """Allow users to be notified of certain events happening in a discussion. Depends on subscribing to those events."""
+from __future__ import print_function
 from datetime import datetime
 from collections import defaultdict
 from abc import abstractmethod
@@ -40,7 +41,6 @@ from .discussion import Discussion
 from .generic import Content
 from .post import Post, SynthesisPost, PublicationStates
 from .auth import UserLanguagePreferenceCollection
-
 
 _ = TranslationStringFactory('assembl')
 
@@ -745,8 +745,8 @@ class ModelEventWatcherNotificationSubscriptionDispatcher(BaseModelEventWatcher)
             for subscription in applicableInstances:
                 applicableInstancesByUser[subscription.user_id].append(subscription)
         num_instances = len([v for v in applicableInstancesByUser.itervalues() if v])
-        print "processEvent: %d notifications created for %s %s %d" % (
-            num_instances, verb, objectClass.__name__, objectId)
+        print("processEvent: %d notifications created for %s %s %d" % (
+            num_instances, verb, objectClass.__name__, objectId))
         for userId, applicableInstances in applicableInstancesByUser.iteritems():
             if(len(applicableInstances) > 0):
                 applicableInstances.sort(cmp=lambda x, y: cmp(x.priority, y.priority))

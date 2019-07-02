@@ -8,6 +8,7 @@ from ..lib.config import get
 from ..lib.migration import bootstrap_db, bootstrap_db_data
 from . import boostrap_configuration
 
+from __future__ import print_function
 
 def main():
     parser = argparse.ArgumentParser()
@@ -35,7 +36,7 @@ def main():
     es_data = es_req.json()
     assert es_data['version']['number'] == elasticsearch_version
     assert es_data['cluster_name'] == elasticsearch_index
-    print "success"
+    print("success")
 
 
 if __name__ == '__main__':

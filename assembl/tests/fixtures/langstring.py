@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def langstring_entry_values():
@@ -209,7 +209,7 @@ def fr_from_en_langstring_entry(request, test_session, fr_from_en_locale,
     test_session.expire(langstring_body, ["entries"])
 
     def fin():
-        print "Destroying fr_from_en_langstring_entry"
+        print("Destroying fr_from_en_langstring_entry")
         test_session.delete(entry)
         test_session.flush()
 

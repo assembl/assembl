@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def tags(request, discussion, test_session):
@@ -20,7 +20,7 @@ def tags(request, discussion, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer extract_post_1_to_subidea_1_1"
+        print("finalizer extract_post_1_to_subidea_1_1")
         test_session.delete(tag1)
         test_session.delete(tag2)
         test_session.flush()

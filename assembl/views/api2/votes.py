@@ -22,7 +22,7 @@ from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 from assembl.utils import format_date
 from assembl.views.api2.discussion import csv_response, CSV_MIMETYPE
-
+from __future__ import print_function
 
 # Votes are private
 @view_config(context=CollectionContext, renderer='json',
@@ -141,9 +141,9 @@ def votes_collection_add(request):
         db = first.db
         for instance in instances:
             db.add(instance)
-        print "before flush"
+        print("before flush")
         db.flush()
-        print "after flush"
+        print("after flush")
         return Response(
             dumps(first.generic_json('default', user_id, permissions)),
             location=first.uri_generic(first.id),

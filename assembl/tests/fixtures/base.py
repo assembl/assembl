@@ -26,7 +26,7 @@ from assembl.processes import configure as configure_tasks
 from assembl.auth import R_SYSADMIN
 from ..utils import PyramidWebTestRequest
 from ..utils import clear_rows, drop_tables
-
+from __future__ import print_function
 
 @pytest.fixture(scope="session")
 def session_factory(request):
@@ -38,7 +38,7 @@ def session_factory(request):
     session_factory = get_session_maker()
 
     def fin():
-        print "finalizer session_factory"
+        print("finalizer session_factory")
         session_factory.remove()
     request.addfinalizer(fin)
     return session_factory
@@ -63,7 +63,7 @@ def db_tables(request, empty_db):
     bootstrap_db(app_settings_file, engine)
 
     def fin():
-        print "finalizer db_tables"
+        print("finalizer db_tables")
         session = empty_db()
         drop_tables(get_config(), session)
         session.commit()
@@ -103,7 +103,7 @@ def test_app_no_perm(request, base_registry, db_tables):
     PyramidWebTestRequest._registry = base_registry
 
     def fin():
-        print "finalizer test_app_no_perm"
+        print("finalizer test_app_no_perm")
         session = db_tables()
         with transaction.manager:
             clear_rows(get_config(), session)
@@ -121,7 +121,7 @@ def test_webrequest(request, test_app_no_perm):
     req = PyramidWebTestRequest.blank('/', method="GET")
 
     def fin():
-        print "finalizer test_webrequest"
+        print("finalizer test_webrequest")
         # The request was not called
         manager.pop()
     request.addfinalizer(fin)
@@ -143,7 +143,7 @@ def test_session(request, test_app_no_perm, db_tables):
     session = db_tables()
 
     def fin():
-        print "finalizer test_session"
+        print("finalizer test_session")
         try:
             session.commit()
             #session.close()
@@ -175,7 +175,7 @@ def admin_user(request, test_session):
     uid = u.id
 
     def fin():
-        print "finalizer admin_user"
+        print("finalizer admin_user")
         # I often get expired objects here, and I need to figure out why
         user = test_session.query(User).get(uid)
         user_role = user.roles[0]

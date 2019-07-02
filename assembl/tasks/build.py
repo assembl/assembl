@@ -17,7 +17,7 @@ from .common import (
 from .sudoer import (
     install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
     install_chrome_dependencies)
-
+from __future__ import print_function
 
 def get_node_base_path(c):
     return normpath(join(
@@ -63,7 +63,7 @@ def bower_cmd(c, cmd, relative_path='.'):
         bower_cmd = normpath(join(get_node_bin_path(c), 'bower'))
         po2json_cmd = normpath(join(get_node_bin_path(c), 'po2json'))
         if not exists(c, bower_cmd) or not exists(c, po2json_cmd):
-            print 'Bower not present, installing ...'
+            print('Bower not present, installing ...')
             install_bower()
         with c.cd(relative_path):
             with venv(c):
@@ -130,7 +130,7 @@ def update_node(c, force_reinstall=False):
 
         update_npm_requirements(force_reinstall=True)
     else:
-        print "Node version OK"
+        print("Node version OK")
 
 
 @task()
@@ -164,7 +164,7 @@ def clone_repository(c, reset=False):
     # Remove dir if necessary
     path = c.config.projectpath
     if exists(c, os.path.join(path, ".git")):
-        print "%s/.git already exists" % path
+        print("%s/.git already exists" % path)
         if reset:
             c.run("rm -rf %s/.git" % path)
         else:
@@ -331,13 +331,13 @@ def check_and_create_database_user(c, user=None, password=None):
     password = password or c.config.DEFAULT.db_password
     checkUser = psql_command(c, "SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user), False)
     if not checkUser:
-        print "User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"
+        print("User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)")
         assert psql_command(c, "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'" % (
             user, password), False
         ) is not False, "Could not create user"
-        print "Created user"
+        print("Created user")
     else:
-        print "User exists and can connect"
+        print("User exists and can connect")
 
 
 def check_if_database_exists(c):
@@ -350,15 +350,15 @@ def database_create(c):
     """Create the database for this assembl instance"""
 
     if not check_if_database_exists(c):
-        print "Cannot connect to database, trying to create"
+        print("Cannot connect to database, trying to create")
         assert psql_command(
             c, "CREATE DATABASE {database} WITH OWNER = {user} TEMPLATE = template0 ENCODING = UNICODE".format(
                 user=c.config.DEFAULT.db_user, password=c.config.DEFAULT.db_password,
                 host=c.config.DEFAULT.db_host, database=c.config.DEFAULT.db_database), True, 'postgres'
             ) is not False, "Could not create database"
-        print "Database created successfully!"
+        print("Database created successfully!")
     else:
-        print "Database exists and user can connect"
+        print("Database exists and user can connect")
 
 
 @task()
@@ -707,7 +707,7 @@ def start_deploy_on_client(c, client_id, region=None):
             deploymentId, status,
             deploymentInfo['errorInformation']['code'],
             deploymentInfo['errorInformation']['message'])
-        print status
+        print(status)
 
 
 @task()

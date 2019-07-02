@@ -3,7 +3,7 @@
 import os
 
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def simple_file(request, discussion, test_session):
@@ -19,7 +19,7 @@ def simple_file(request, discussion, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer simple_file"
+        print("finalizer simple_file")
         f.delete_file()
         test_session.delete(f)
         test_session.flush()
@@ -42,7 +42,7 @@ def simple_file2(request, discussion, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer simple_file"
+        print("finalizer simple_file")
         f.delete_file()
         test_session.delete(f)
         test_session.flush()

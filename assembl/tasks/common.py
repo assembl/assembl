@@ -6,6 +6,7 @@ from os.path import join, normpath
 from contextlib import nested
 import base64
 import json
+from __future__ import print_function
 
 from invoke import Task, task as base_task
 from os.path import dirname, realpath
@@ -210,12 +211,12 @@ def venv(c, cd=False):
     if not venv:
         if exists(c, 'venv'):
             project_prefix = os.getcwd()
-            print "Calculated from current dir: %s" % project_prefix
+            print("Calculated from current dir: %s" % project_prefix)
         else:
             # _project_prefix is defined by Invoke at run-time
             project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
         venv = os.path.join(project_prefix, 'venv')
-    print venv
+    print(venv)
     assert exists(c, venv)
     activate = c.config.get('_internal', {}).get('activate', 'activate')
     if cd:

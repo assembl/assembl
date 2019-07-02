@@ -2,6 +2,7 @@
 codebase with thread-local access code. """
 
 from pyramid.threadlocal import get_current_registry
+from __future__ import print_function
 
 _settings = None
 
@@ -14,7 +15,7 @@ def set_config(settings, reconfig=False):
             _settings = settings
         else:
             _settings.update(settings)
-            print "combined settings:", _settings
+            print("combined settings:", _settings)
     else:
         _settings = settings
     return _settings

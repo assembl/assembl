@@ -18,7 +18,7 @@ from assembl.models.notification import (
 from assembl.auth import R_PARTICIPANT
 from assembl.models.notification import (
     ModelEventWatcherNotificationSubscriptionDispatcher)
-
+from __future__ import print_function
 
 def local_to_absolute(uri):
     if uri.startswith('local:'):
@@ -94,7 +94,7 @@ def test_default_notifications(test_app, test_session, discussion, participant1_
             discussion_id, participant1_user_id))
     assert response.status_code == 200
     user_notif_subsc_3 = response.json
-    print user_notif_subsc_3
+    print(user_notif_subsc_3)
     corresponding = [s for s in user_notif_subsc_3 if s['@type'] == t_unsub['@type']]
     assert len(corresponding) == 1
     assert corresponding[0]['status'] != "ACTIVE"
@@ -278,7 +278,7 @@ def test_notification_is_created_when_synthesis_is_posted_and_participant_had_pr
 
 
     initial_notification_count = test_session.query(Notification).count()
-    
+
     # Simulate publication of a synthesis
     dispatcher = ModelEventWatcherNotificationSubscriptionDispatcher()
     dispatcher.processPostCreated(synthesis_post_1.id)

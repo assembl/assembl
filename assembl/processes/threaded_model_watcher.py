@@ -11,6 +11,8 @@ from zope import interface
 
 from ..lib.model_watcher import IModelEventWatcher
 
+from __future__ import print_function
+
 class ThreadDispatcher(Thread):
     """A thread that will receive CRUD events and hand them to another model watcher."""
     singleton = None
@@ -33,9 +35,9 @@ class ThreadDispatcher(Thread):
 
     def run(self):
         while not self.dying:
-            print "*"*20,
+            print("*"*20)
             event = self.queue.get()
-            print event
+            print(event)
             method_name = event[0]
             method = getattr(self.mw, method_name)
             method(*event[1:])

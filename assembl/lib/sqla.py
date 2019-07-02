@@ -1,6 +1,7 @@
 """Some utilities for working with SQLAlchemy, and the definition of BaseOps."""
 
 from __future__ import absolute_import
+from __future__ import print_function
 
 import re
 import sys
@@ -212,7 +213,7 @@ class TableLockCreationThread(Thread):
                       "a non-unique object despite locking." + str(e))
             self.exception = e
         except Exception as e:
-            print e
+            print(e)
             self.success = False
             self.exception = e
 
@@ -1228,9 +1229,9 @@ class BaseOps(object):
                 # Target_cls?
                 can_be_list = must_be_list = True
             elif not value:
-                print "Ignoring unknown empty value for "\
+                print("Ignoring unknown empty value for "\
                     "attribute %s in json id %s (type %s)" % (
-                        key, json.get('@id', '?'), json.get('@type', '?'))
+                        key, json.get('@id', '?'), json.get('@type', '?')))
                 continue
             else:
                 raise HTTPBadRequest(
@@ -1454,7 +1455,7 @@ class BaseOps(object):
                     if instance is self:
                         continue
                 if instance is not None:
-                    print "extra relation assignment", reln.key, instance
+                    print("extra relation assignment", reln.key, instance)
                     setattr(self, reln.key, instance)
         return self.handle_duplication(
             json, parse_def, aliases, context, permissions, user_id,
@@ -1782,7 +1783,7 @@ def before_commit_listener(session):
         del info['cdict']
         session.cdict2 = changes
     else:
-        print "EMPTY CDICT!"
+        print("EMPTY CDICT!")
 
 
 def after_commit_listener(session):
@@ -1849,7 +1850,7 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
     """Return an SQLAlchemy engine configured as per the provided config."""
     if session_maker is None:
         if session_maker_is_initialized():
-            print "ERROR: Initialized twice."
+            print("ERROR: Initialized twice.")
             session_maker = get_session_maker()
         else:
             session_maker = initialize_session_maker(zope_tr, autoflush)

@@ -9,6 +9,7 @@ and :py:mod:`changes_router`.
 .. _Celery: http://www.celeryproject.org/
 """
 from __future__ import absolute_import
+from __future__ import print_function
 
 from os import getcwd
 from os.path import join, dirname, realpath, exists
@@ -138,7 +139,7 @@ class CeleryWithConfig(Celery):
                 try:
                     val = timedelta(seconds=float(val))
                 except ValueError:
-                    print "Not a valid value for %s: %s" % (name, val)
+                    print("Not a valid value for %s: %s" % (name, val))
                     continue
                 SMTP_DOMAIN_DELAYS[name[len(SETTINGS_SMTP_DELAY):]] = val
         getLogger().info("SMTP_DOMAIN_DELAYS", delays=SMTP_DOMAIN_DELAYS)

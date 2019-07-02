@@ -1,5 +1,6 @@
 # coding=UTF-8
 """:py:class:`assembl.models.post.Post` that came as email, and utility code for handling email."""
+from __future__ import print_function
 import email
 import mailbox
 import re
@@ -213,7 +214,7 @@ class AbstractMailbox(PostSource):
             elif line_state == LineState.AllWhiteSpace:
                 currentWhiteSpace.append(line)
             if debug:
-                print "%-30s %s" % (line_state, line)
+                print("%-30s %s" % (line_state, line))
 
         return '\n'.join(retval)
 
@@ -485,15 +486,15 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
 
         def update_threading(threaded_emails, parent=None, debug=False):
             if debug:
-                print "\n\nEntering update_threading() for %s mails:" % len(threaded_emails)
+                print("\n\nEntering update_threading() for %s mails:" % len(threaded_emails))
             for container in threaded_emails:
                 if debug:
                     # jwzthreading.print_container(container)
                     print("\nProcessing:  " + repr(container.message.subject.first_original().value) + " " +
                           repr(container.message.message_id) + " " + repr(container.message.message.id))
-                    print "container: " + (repr(container))
-                    print "parent: " + repr(container.parent)
-                    print "children: " + repr(container.children)
+                    print("container: " + (repr(container)))
+                    print("parent: " + repr(container.parent))
+                    print("children: " + repr(container.children))
 
                 if(container.message):
                     current_parent = container.message.message.parent
@@ -508,9 +509,9 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
                             algorithm_parent_message_id = unicode("<" + parent.message.message_id + ">")
                         else:
                             if debug:
-                                print "Parent was a dummy container, we may need \
+                                print("Parent was a dummy container, we may need \
                                      to handle this case better, as we just \
-                                     potentially lost sibbling relationships"
+                                     potentially lost sibbling relationships")
                             algorithm_parent_message_id = None
                     else:
                         algorithm_parent_message_id = None
@@ -524,17 +525,17 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
                                 print("UPDATING PARENT for :" + repr(container.message.message.message_id))
                             new_parent = parent.message.message if algorithm_parent_message_id else None
                             if debug:
-                                print repr(new_parent)
+                                print(repr(new_parent))
                             container.message.message.set_parent(new_parent)
                         else:
                             if debug:
-                                print "Skipped reparenting:  the current parent \
+                                print("Skipped reparenting:  the current parent \
                                 isn't an email, the threading algorithm only \
-                                considers mails"
+                                considers mails")
                     update_threading(container.children, container, debug=debug)
                 else:
                     if debug:
-                        print "Current message ID: None, was a dummy container"
+                        print("Current message ID: None, was a dummy container")
                     update_threading(container.children, parent, debug=debug)
 
         update_threading(threaded_emails.values(), debug=False)
@@ -597,7 +598,7 @@ FROM post WHERE post.id IN (SELECT MAX(post.id) as max_post_id FROM imported_pos
 
     def send_post(self, post):
         # TODO benoitg
-        print "TODO: Mail::send_post():  Actually queue message"
+        print("TODO: Mail::send_post():  Actually queue message")
         # make sure you have a request and use the pyramid mailer
 
     def message_ok_to_import(self, message_string):
@@ -718,17 +719,17 @@ class IMAPMailbox(AbstractMailbox):
                 session.add(email_object)
                 translate_content(email_object)  # should delay
             else:
-                print "Skipped message with imap id %s (bounce or vacation message)" % (email_id)
+                print("Skipped message with imap id %s (bounce or vacation message)" % (email_id))
             # print "Setting mailbox_obj.last_imported_email_uid to "+email_id
             mailbox_obj.last_imported_email_uid = email_id
 
         if len(email_ids):
-            print "Processing messages from IMAP: %d " % (len(email_ids))
+            print("Processing messages from IMAP: %d " % (len(email_ids)))
             for email_id in email_ids:
                 with transaction.manager:
                     import_email(mbox, email_id)
         else:
-            print "No IMAP messages to process"
+            print("No IMAP messages to process")
 
         discussion_id = mbox.discussion_id
         mailbox.close()

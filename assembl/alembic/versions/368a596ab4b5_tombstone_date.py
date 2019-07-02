@@ -18,6 +18,7 @@ import sqlalchemy as sa
 import transaction
 import sqlalchemy.sql.functions as sqlfunc
 from sqlalchemy.exc import ProgrammingError, DataError
+from __future__ import print_function
 
 from assembl.lib import config
 from assembl.lib.sqla import mark_changed
@@ -112,10 +113,10 @@ def reconstruct_idea_history(db):
             link.tombstone_date = max_end[link.id]
 
     # for id in link_ids:
-    #     print id, min_creation[id] != max_end[id]
+    #     print(id, min_creation[id] != max_end[id])
 
     # for id,date in max_end.iteritems():
-    #     print id, id in synthesis_dates, date if link_by_id[id].is_tombstone else None
+    #     print(id, id in synthesis_dates, date if link_by_id[id].is_tombstone else None)
 
     dead_ideas=[idea for idea in ideas if idea.is_tombstone]
     for idea in dead_ideas:
@@ -145,7 +146,7 @@ def reconstruct_vote_history(db):
 
 
 def delete_boolean_constraint(db, table, column):
-    # The CHECK constraints are generally unnamed. 
+    # The CHECK constraints are generally unnamed.
     # Dropping the column does not delete the constraint. WHY????
     username = config.get('db_user')
     schema = config.get('db_schema')
@@ -187,7 +188,7 @@ def upgrade(pyramid_env):
         mark_changed()
 
     # Do stuff with the app's models here.
-    
+
     with transaction.manager:
         from assembl.models import get_session_maker
         db = get_session_maker()()
@@ -197,7 +198,7 @@ def upgrade(pyramid_env):
             delete_boolean_constraint(db, tablename, 'is_tombstone')
 
     with context.begin_transaction():
-        # I thought of redirecting foreign keys, but much pain, insignificant gain. Punt it. 
+        # I thought of redirecting foreign keys, but much pain, insignificant gain. Punt it.
         # for source, sid, dest in maybe_intemporal:
         #     op.drop_constraint(source,
         #         '{source}_{dest}_idtable_{sid}_id'.format(source=source, sid=sid, dest=dest))

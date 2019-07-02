@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def fulltext_synthesis_post(request, discussion, moderator_user, test_session):
@@ -19,7 +19,7 @@ def fulltext_synthesis_post(request, discussion, moderator_user, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer synthesis"
+        print("finalizer synthesis")
         test_session.delete(synthesis_post)
         test_session.flush()
 
@@ -57,7 +57,7 @@ def fulltext_synthesis_post_with_image(request, discussion, moderator_user, simp
     test_session.flush()
 
     def fin():
-        print "finalizer synthesis post with image"
+        print("finalizer synthesis post with image")
         test_session.delete(synthesis_image)
         test_session.delete(synthesis_post)
         test_session.flush()

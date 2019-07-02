@@ -3,7 +3,7 @@ import pytest
 from sqlalchemy import inspect
 
 from assembl.auth import P_READ, R_PARTICIPANT
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def discussion(request, test_session, participant2_user, default_preferences):
@@ -77,7 +77,7 @@ def discussion(request, test_session, participant2_user, default_preferences):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion"
+        print("finalizer discussion")
         discussion = d
         if inspect(discussion).detached:
             # How did this happen?
@@ -130,7 +130,7 @@ def discussion2(request, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion2"
+        print("finalizer discussion2")
         test_session.delete(d.table_of_contents)
         test_session.delete(d.root_idea)
         test_session.delete(d.next_synthesis)

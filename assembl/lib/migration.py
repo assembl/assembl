@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """Basic infrastructure for alembic migration"""
-from __future__ import absolute_import
+from __future__ import absolute_import, print_function
 
 import sys
 from contextlib import contextmanager
@@ -116,7 +116,7 @@ def bootstrap_db_data(db, mark=True):
                     try:
                         add_user(name, email, **user)
                     except AssertionError as e:
-                        print e
+                        print(e)
             except ConfigurationError:
                 pass  # no application. It can be done later.
         # if mark:

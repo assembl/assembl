@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def criterion_1(request, discussion, subidea_1, test_session):
@@ -15,7 +15,7 @@ def criterion_1(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer criterion_1"
+        print("finalizer criterion_1")
         test_session.delete(l_1_11)
         test_session.delete(i)
         test_session.flush()
@@ -36,7 +36,7 @@ def criterion_2(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer criterion_2"
+        print("finalizer criterion_2")
         test_session.delete(l_1_11)
         test_session.delete(i)
         test_session.flush()
@@ -57,7 +57,7 @@ def criterion_3(request, discussion, subidea_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer criterion_3"
+        print("finalizer criterion_3")
         test_session.delete(l_1_11)
         test_session.delete(i)
         test_session.flush()
@@ -100,7 +100,7 @@ def synthesis_1(request, discussion, subidea_1, subidea_1_1, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer synthesis_1"
+        print("finalizer synthesis_1")
         test_session.delete(l_1_11_a)
         test_session.delete(i11_a)
         test_session.delete(i1_a)
@@ -139,7 +139,7 @@ def extract_post_1_to_subidea_1_1(
     test_session.flush()
 
     def fin():
-        print "finalizer extract_post_1_to_subidea_1_1"
+        print("finalizer extract_post_1_to_subidea_1_1")
         tags = e.tags
         e.tags = []
         for tag in tags:
@@ -196,7 +196,7 @@ def extract_with_range_in_reply_post_1(
     test_session.flush()
 
     def fin():
-        print "finalizer extract_with_range_in_reply_post_1"
+        print("finalizer extract_with_range_in_reply_post_1")
         test_session.delete(new_range)
         test_session.delete(new_extract)
         test_session.flush()
@@ -251,7 +251,7 @@ def extract_with_range_submitted_in_reply_post_1(
     test_session.flush()
 
     def fin():
-        print "finalizer extract_with_range_submitted_in_reply_post_1"
+        print("finalizer extract_with_range_submitted_in_reply_post_1")
         test_session.delete(new_range)
         test_session.delete(new_extract)
         test_session.flush()
@@ -282,7 +282,7 @@ def extract_submitted_in_post_related_to_sub_idea_1_1_1(
     test_session.flush()
 
     def fin():
-        print "finalizer extract_with_range_submitted_in_reply_post_1"
+        print("finalizer extract_with_range_submitted_in_reply_post_1")
         test_session.delete(new_extract)
         test_session.flush()
     request.addfinalizer(fin)

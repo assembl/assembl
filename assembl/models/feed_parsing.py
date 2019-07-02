@@ -1,4 +1,5 @@
 """Utilities for extracting posts and from a RSS or Atom feed."""
+from __future__ import print_function
 from cStringIO import StringIO
 from importlib import import_module
 from datetime import datetime
@@ -254,7 +255,7 @@ class FeedPostSource(PostSource):
 
     def send_post(self, post):
         # TODO?
-        print "TODO?: FeedPostSource::send_post():  Actually send the post"
+        print("TODO?: FeedPostSource::send_post():  Actually send the post")
 
     def generate_message_id(self, source_post_id):
         # Feed post ids are supposed to be globally unique.
@@ -283,7 +284,7 @@ class LoomioPostSource(FeedPostSource):
 
     def send_post(self, post):
         # TODO?
-        print "TODO?: LoomioPostSource::send_post():  Actually send the post"
+        print("TODO?: LoomioPostSource::send_post():  Actually send the post")
 
 
 class FeedSourceReader(PullSourceReader):

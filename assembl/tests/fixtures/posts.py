@@ -2,7 +2,7 @@
 
 import pytest
 from datetime import datetime
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def root_post_1(request, participant1_user, discussion, test_session):
@@ -20,7 +20,7 @@ def root_post_1(request, participant1_user, discussion, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_1"
+        print("finalizer root_post_1")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -46,7 +46,7 @@ def root_post_1_with_positive_message_classifier(request, participant1_user,
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_1"
+        print("finalizer root_post_1")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -69,7 +69,7 @@ def discussion2_root_post_1(request, participant1_user, discussion2, test_sessio
     test_session.flush()
 
     def fin():
-        print "finalizer discussion2_root_post_1"
+        print("finalizer discussion2_root_post_1")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -99,7 +99,7 @@ def root_post_en_under_positive_column_of_idea(
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_en_under_positive_column_of_idea"
+        print("finalizer root_post_en_under_positive_column_of_idea")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()
@@ -131,7 +131,7 @@ def root_post_en_under_positive_column_of_subidea_1_1(
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_en_under_positive_column_of_subidea_1_1"
+        print("finalizer root_post_en_under_positive_column_of_subidea_1_1")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()
@@ -163,7 +163,7 @@ def root_post_en_under_negative_column_of_subidea_1_1(
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_en_under_negative_column_of_subidea_1_1"
+        print("finalizer root_post_en_under_negative_column_of_subidea_1_1")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()
@@ -193,7 +193,7 @@ def post_related_to_sub_idea_1(
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_en_under_positive_column_of_idea"
+        print("finalizer root_post_en_under_positive_column_of_idea")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()
@@ -224,7 +224,7 @@ def post_related_to_sub_idea_1_1_1(
     test_session.flush()
 
     def fin():
-        print "finalizer post_related_to_sub_idea_1_1_1"
+        print("finalizer post_related_to_sub_idea_1_1_1")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()
@@ -256,7 +256,7 @@ def root_post_en_under_negative_column_of_idea(
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_en_under_positive_column_of_idea"
+        print("finalizer root_post_en_under_positive_column_of_idea")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()
@@ -283,7 +283,7 @@ def synthesis_post_1(request, participant1_user, discussion, test_session,
     test_session.flush()
 
     def fin():
-        print "finalizer synthesis_post_1"
+        print("finalizer synthesis_post_1")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -309,7 +309,7 @@ def reply_post_1(request, participant2_user, discussion,
     test_session.flush()
 
     def fin():
-        print "finalizer reply_post_1"
+        print("finalizer reply_post_1")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -335,7 +335,7 @@ def reply_post_2(request, participant1_user, discussion,
     test_session.flush()
 
     def fin():
-        print "finalizer reply_post_2"
+        print("finalizer reply_post_2")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -360,7 +360,7 @@ def reply_post_3(request, participant2_user, discussion,
     test_session.flush()
 
     def fin():
-        print "finalizer reply_post_3"
+        print("finalizer reply_post_3")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -386,7 +386,7 @@ def reply_deleted_post_4(request, participant2_user, discussion,
     test_session.flush()
 
     def fin():
-        print "finalizer reply_deleted_post_4"
+        print("finalizer reply_deleted_post_4")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -412,7 +412,7 @@ def reply_to_deleted_post_5(
     test_session.flush()
 
     def fin():
-        print "finalizer reply_to_deleted_post_5"
+        print("finalizer reply_to_deleted_post_5")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -432,7 +432,7 @@ def fully_ambiguous_post(
     test_session.flush()
 
     def fin():
-        print "finalizer fully_ambiguous_post"
+        print("finalizer fully_ambiguous_post")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -452,7 +452,7 @@ def post_subject_locale_determined_by_body(
     test_session.flush()
 
     def fin():
-        print "finalizer post_subject_locale_determined_by_body"
+        print("finalizer post_subject_locale_determined_by_body")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -474,7 +474,7 @@ def post_body_locale_determined_by_creator(
     test_session.flush()
 
     def fin():
-        print "finalizer post_subject_locale_determined_by_creator"
+        print("finalizer post_subject_locale_determined_by_creator")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -507,7 +507,7 @@ testa""")
     test_session.flush()
 
     def fin():
-        print "finalizer post_subject_locale_determined_by_creator"
+        print("finalizer post_subject_locale_determined_by_creator")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -530,7 +530,7 @@ def root_post_for_tags(request, participant1_user, discussion, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_for_tags"
+        print("finalizer root_post_for_tags")
         p.tags = []
         test_session.delete(p)
         test_session.flush()
@@ -555,7 +555,7 @@ def root_post_with_tags(request, participant1_user, discussion, test_session, ta
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_with_tags"
+        print("finalizer root_post_with_tags")
         p.tags = []
         test_session.delete(p)
         test_session.flush()
@@ -576,7 +576,7 @@ def extract_comment(request, extract_post_1_to_subidea_1_1, discussion, admin_us
     test_session.flush()
 
     def fin():
-        print "finalizer post_subject_locale_determined_by_creator"
+        print("finalizer post_subject_locale_determined_by_creator")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)
@@ -598,7 +598,7 @@ def extract_comment_reply(request, extract_post_1_to_subidea_1_1, discussion, ex
     test_session.flush()
 
     def fin():
-        print "finalizer post_subject_locale_determined_by_creator"
+        print("finalizer post_subject_locale_determined_by_creator")
         test_session.delete(p)
         test_session.flush()
     request.addfinalizer(fin)

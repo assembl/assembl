@@ -22,7 +22,7 @@ from assembl.auth.util import find_discussion_from_slug
 from assembl.lib.sqla import *
 from assembl.lib.logging import getLogger
 from assembl.lib.decl_enums import DeclEnumType
-
+from __future__ import print_function
 
 class DictContext(object):
     """A Context defined using a simple dictionary"""
@@ -727,7 +727,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
             try:
                 query = query.join(owner_alias)
             except InvalidRequestError:
-                print "Could not join %s to %s" % (owner_alias, query)
+                print("Could not join %s to %s" % (owner_alias, query))
                 # This is very likely to fail downstream
                 return query
         found_key = False

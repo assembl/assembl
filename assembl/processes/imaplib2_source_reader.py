@@ -9,6 +9,7 @@ from .source_reader import (
     ReaderStatus, SourceDispatcher, SourceReader,
     ReaderError, ClientError, IrrecoverableError)
 
+from __future__ import print_function
 
 def is_ok(response):
     return response[0] == 'OK'
@@ -115,7 +116,7 @@ class IMAPReader(SourceReader):
                         raise ReaderError(error)
                     self.source.db.add(email_object)
                 else:
-                    print "Skipped message with imap id %s (bounce or vacation message)" % (email_id)
+                    print("Skipped message with imap id %s (bounce or vacation message)" % (email_id))
                 # print "Setting self.source.last_imported_email_uid to "+email_id
                 self.source.last_imported_email_uid = email_id
                 self.source.db.commit()
@@ -169,13 +170,13 @@ class IMAPReader(SourceReader):
                 email_ids = search_result[0].split()
 
             if len(email_ids):
-                print "Processing messages from IMAP: %d "% (len(email_ids))
+                print("Processing messages from IMAP: %d "% (len(email_ids)))
                 for email_id in email_ids:
                     self.import_email(email_id)
                     if self.status != ReaderStatus.READING:
                         break
             else:
-                print "No IMAP messages to process"
+                print("No IMAP messages to process")
             self.successful_read()
             self.set_status(ReaderStatus.PAUSED)
         except IMAP4.abort as e:

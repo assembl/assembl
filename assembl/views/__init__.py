@@ -36,6 +36,7 @@ from assembl.models.auth import (
     User,
     Locale,
 )
+from __future__ import print_function
 
 
 default_context = {
@@ -843,7 +844,7 @@ def csrf_error_view(exc, request):
                 # So first make sure the new session does not kill the old one
                 def callback(request, response):
                     response._headerlist = [(h, v) for (h, v) in response._headerlist if h != 'Set-Cookie']
-                    print "headerlist:", response._headerlist
+                    print("headerlist:", response._headerlist)
                 request.add_response_callback(callback)
                 # And return a page that will reload the same request, NOT through a 303.
                 # Also add a "reload" parameter to avoid doing it twice if it failed.

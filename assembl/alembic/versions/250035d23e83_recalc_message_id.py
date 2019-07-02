@@ -14,7 +14,7 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 import pyisemail
-
+from __future__ import print_function
 
 from assembl.lib import config
 
@@ -54,7 +54,7 @@ def upgrade(pyramid_env):
             elif isinstance(c, m.AssemblPost):
                 c.message_id = c.generate_message_id()
             else:
-                print "ERROR: Pure post", id
+                print("ERROR: Pure post", id)
 
 
 def downgrade(pyramid_env):

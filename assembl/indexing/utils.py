@@ -8,6 +8,7 @@ from assembl.lib.locale import strip_country
 from assembl.lib.clean_input import unescape
 from assembl.indexing.settings import index_languages, get_index_settings, MAPPINGS
 
+from __future__ import print_function
 
 _es = None
 
@@ -68,7 +69,7 @@ def create_index(index_name):
                 push_analysis_settings(index_name)
                 assert check_analysis_settings(index_name)
             except Exception as e:
-                print e
+                print(e)
                 # cannot push settings on amazon
                 delete_index(index_name)
                 exists = False

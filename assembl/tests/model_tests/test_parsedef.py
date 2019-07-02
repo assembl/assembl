@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 
 from assembl.auth import P_SYSADMIN
-
+from __future__ import print_function
 
 def _test_load_fixture(test_webrequest, discussion, admin, fixture):
     test_webrequest.matchdict = {'discussion_slug': discussion.slug}
     json = fixture.generic_json(permissions=(P_SYSADMIN, ))
-    print fixture.__dict__
+    print(fixture.__dict__)
     fixture.update_from_json(json, admin.id)
-    print fixture.__dict__
+    print(fixture.__dict__)
     assert not discussion.db.is_modified(fixture, True)
 
 

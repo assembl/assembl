@@ -18,6 +18,7 @@ from sqlalchemy.sql import text
 from bs4 import UnicodeDammit
 from assembl.lib.sqla import mark_changed
 
+from __future__ import print_function
 
 from assembl.lib import config
 from assembl.lib.clean_input import sanitize_text
@@ -68,7 +69,7 @@ def upgrade(pyramid_env):
                 if text:
                     lang, data = langid_services[synthesis.discussion_id].identify(text)
                 if not lang:
-                    print "***** Could not identify for synthesis %d: %s" % (synthesis.id, text)
+                    print("***** Could not identify for synthesis %d: %s" % (synthesis.id, text))
                     lang = candidate_langs[0]
 
             def as_lang_string(text):

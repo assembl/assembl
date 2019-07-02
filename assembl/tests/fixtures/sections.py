@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import pytest
-
+from __future__ import print_function
 
 @pytest.fixture(scope="function")
 def sections(request, discussion_with_default_data, test_session):
@@ -28,7 +28,7 @@ def sections(request, discussion_with_default_data, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer sections"
+        print("finalizer sections")
         for section in sections:
             test_session.delete(section)
         test_session.flush()
