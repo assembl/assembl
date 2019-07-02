@@ -654,6 +654,7 @@ def extract_taxonomy_csv(request):
              ctx_instance_class=Discussion, request_method='GET',
              permission=P_DISC_STATS)
 def multi_module_csv_export(request):
+    as_buffer = asbool(request.GET.get('as_buffer', False))
     results = {sheet_name: None for sheet_name in sheet_names}
     fieldnames = {sheet_name: None for sheet_name in sheet_names}
     fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
@@ -663,7 +664,7 @@ def multi_module_csv_export(request):
     fieldnames['vote_users_data'], results['vote_users_data'] = voters_csv_export(request)
     fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
     fieldnames['export_module_vote'], results['export_module_vote'] = global_votes_csv_export(request)
-    return csv_response_multiple_sheets(results, fieldnames)
+    return csv_response_multiple_sheets(results, fieldnames, as_buffer=as_buffer)
 
 
 def transform_fieldname(fn):
@@ -672,7 +673,7 @@ def transform_fieldname(fn):
     return fn
 
 
-def csv_response(results, format, fieldnames=None, content_disposition=None):
+def csv_response(results, format, fieldnames=None, content_disposition=None, as_buffer=False):
     output = StringIO()
     if format == CSV_MIMETYPE:
         from csv import writer
@@ -704,10 +705,12 @@ def csv_response(results, format, fieldnames=None, content_disposition=None):
         writer.save('')
 
     output.seek(0)
-    return Response(body_file=output, content_type=format, content_disposition=content_disposition)
+    if not as_buffer:
+        return Response(body_file=output, content_type=format, content_disposition=content_disposition)
+    return output
 
 
-def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.xlsx'):
+def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.xlsx', as_buffer=False):
     """
     Return a multiple sheets excel file
     @param: results  A dict of lists. Each list contains dicts.
@@ -717,7 +720,7 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
     from zipfile import ZipFile, ZIP_DEFLATED
     from openpyxl.workbook import Workbook
     workbook = Workbook(True)
-    empty=None
+    empty = None
     archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
     for sheet_name in sheet_names:
         workbook.create_sheet(sheet_name)
@@ -739,7 +742,9 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
     writer.save('')
 
     output.seek(0)
-    return Response(body_file=output, content_type=XSLX_MIMETYPE, content_disposition=content_disposition)
+    if not as_buffer:
+        return Response(body_file=output, content_type=XSLX_MIMETYPE, content_disposition=content_disposition)
+    return output
 
 
 @view_config(context=InstanceContext, name="contribution_count",
@@ -1642,6 +1647,8 @@ def phase_csv_export(request):
     MORE_INFO = u"SVP + d'infos"
     THEMATIC_SHARE_COUNT = u"Nombre de share de la thématique"
     MESSAGE_SHARE_COUNT = u"Nombre de share de message"
+    CONTRIBUTIONS_COUNT = u"Nombre de participations"
+    CONTRIBUTORS_COUNT = u"Nombre de participants"
     fieldnames = [
         IDEA_LEVEL_1.encode('utf-8'),
         IDEA_LEVEL_2.encode('utf-8'),
@@ -1658,9 +1665,11 @@ def phase_csv_export(request):
         MORE_INFO.encode('utf-8'),
         THEMATIC_SHARE_COUNT.encode('utf-8'),
         MESSAGE_SHARE_COUNT.encode('utf-8'),
-        WATSON_SENTIMENT.encode('utf-8')  # TODO
+        WATSON_SENTIMENT.encode('utf-8'), # TODO
+        CONTRIBUTIONS_COUNT.encode('utf-8'),
+        CONTRIBUTORS_COUNT.encode('utf-8')
     ]
-    ideas = get_ideas_for_export(discussion)
+    ideas = get_ideas_for_export(discussion, start=start, end=end)
     rows = []
     for idea in ideas:
         row = {}
@@ -1685,10 +1694,20 @@ def phase_csv_export(request):
         else:
             row[TOP_POST_COUNT] = row[POSTED_MESSAGES_COUNT]
             row[NON_TOP_POST_COUNT] = 0
-        row[LIKE] = idea.get_total_sentiments("like")
-        row[DONT_LIKE] = idea.get_total_sentiments("disagree")
-        row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand")
-        row[MORE_INFO] = idea.get_total_sentiments("more_info")
+        row[LIKE] = idea.get_total_sentiments("like", start, end)
+        row[DONT_LIKE] = idea.get_total_sentiments("disagree", start, end)
+        row[DONT_UNDERSTAND] = idea.get_total_sentiments("dont_understand", start, end)
+        row[MORE_INFO] = idea.get_total_sentiments("more_info", start, end)
+        if idea.message_view_override == MessageView.voteSession.value:
+            if not idea.vote_session:
+                row[CONTRIBUTIONS_COUNT] = 0
+                row[CONTRIBUTORS_COUNT] = 0
+            else:
+                row[CONTRIBUTIONS_COUNT] = idea.vote_session.get_num_votes(start, end)
+                row[CONTRIBUTORS_COUNT] = idea.vote_session.get_voter_ids_query(start, end).count()
+        else:
+            row[CONTRIBUTORS_COUNT] = 0
+            row[CONTRIBUTIONS_COUNT] = 0
         # To be implemented
         # row[WATSON_SENTIMENT] = idea.sentiments()
         rows.append(convert_to_utf8(row))
@@ -1751,7 +1770,7 @@ def survey_csv_export(request):
         i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
-    thematics = get_survey_ideas(discussion)
+    thematics = get_survey_ideas(discussion, start, end)
     rows = []
     for thematic in thematics:
         row = {}
@@ -1877,7 +1896,7 @@ def multicolumn_csv_export(request):
         i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
-    ideas = get_multicolumns_ideas(discussion)
+    ideas = get_multicolumns_ideas(discussion, start, end)
     rows = []
     for idea in ideas:
         row = {}
@@ -2089,7 +2108,7 @@ def thread_csv_export(request):
         i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
-    ideas = get_thread_ideas(discussion)
+    ideas = get_thread_ideas(discussion, start, end)
     rows = []
     for idea in ideas:
         row = {}
@@ -2242,7 +2261,7 @@ def bright_mirror_csv_export(request):
         i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
-    ideas = get_bright_mirror_ideas(discussion)
+    ideas = get_bright_mirror_ideas(discussion, start, end)
     rows = []
     for idea in ideas:
         row = {}
@@ -2323,6 +2342,7 @@ def global_votes_csv_export(request):
     """CSV export for export_module_vote sheet."""
     from assembl.views.api2.votes import global_vote_results_csv
     from assembl.models import Locale, Idea
+    start, end, interval = get_time_series_timing(request)
     has_lang = request.GET.get('lang', None)
     if has_lang:
         language = request.GET['lang']
@@ -2346,7 +2366,7 @@ def global_votes_csv_export(request):
         IDEA_LEVEL_3.encode('utf-8'),
         IDEA_LEVEL_4.encode('utf-8')
     ]
-    ideas = get_vote_session_ideas(discussion)
+    ideas = get_vote_session_ideas(discussion, start, end)
     votes_exports = {}
     for idea in ideas:
         if not idea.vote_session:
@@ -2375,6 +2395,7 @@ def voters_csv_export(request):
     """CSV export for vote_users_data sheet."""
     from assembl.views.api2.votes import extract_voters, VOTER_MAIL
     from assembl.models import Locale, Idea
+    start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
     has_lang = request.GET.get('lang', None)
     if has_lang:
@@ -2398,7 +2419,7 @@ def voters_csv_export(request):
         IDEA_LEVEL_3.encode('utf-8'),
         IDEA_LEVEL_4.encode('utf-8')
     ]
-    ideas = get_vote_session_ideas(discussion)
+    ideas = get_vote_session_ideas(discussion, start, end)
     votes_exports = {}
     for idea in ideas:
         if not idea.vote_session:

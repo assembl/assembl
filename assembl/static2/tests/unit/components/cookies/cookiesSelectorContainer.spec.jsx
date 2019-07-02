@@ -1,6 +1,6 @@
 import React from 'react';
 import { mount, configure } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import { DumbCookiesSelectorContainer } from '../../../../js/app/components/cookies/cookiesSelectorContainer';
 import CookiesSelector from '../../../../js/app/components/cookies/cookiesSelector';
 import { COOKIE_TRANSLATION_KEYS, COOKIES_CATEGORIES } from '../../../../js/app/constants';

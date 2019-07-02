@@ -1,6 +1,6 @@
 import React from 'react';
 import { configure, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import { createEditorStateWithText } from 'draft-js-plugins-editor';
 
 import { Question as DumbQuestion } from '../../../../../js/app/components/debate/survey/question';

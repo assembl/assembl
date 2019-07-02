@@ -123,11 +123,12 @@ pystemmer==1.3.0
 python-dateutil==2.5.3
 python-editor==1.0.3      # via alembic
 python-json-logger==0.1.8
+python-magic==0.4.15
 python-openid==2.2.5      # via social-auth-core
 python-saml==2.4.2
 pytz==2016.4
 pyzmq==15.2.0
-redis==2.10.5
+redis==3.2.0
 repoze.lru==0.7           # via pyramid
 repoze.sendmail==4.4.1    # via pyramid-mailer
 requests-oauthlib==0.6.1

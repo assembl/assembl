@@ -4,7 +4,7 @@ import { I18n } from 'react-redux-i18n';
 // import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount, shallow } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 // GraphQL imports
 import CommentQuery from '../../../../../js/app/graphql/BrightMirrorFictionQuery.graphql';
 // Components imports

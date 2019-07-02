@@ -4,6 +4,8 @@ import { stringify } from 'query-string';
 import parse from './literalStringParser';
 import { capitalize } from './globalFunctions';
 import { browserHistory } from '../router';
+import { basePath, basePathV2 } from './server';
+
 /*
   A global map of routes managed by React front-end.
 */
@@ -32,11 +34,16 @@ export const get = (name, args, query) => {
   return a;
 };
 
-const basePath = () => `${window.location.protocol}//${window.location.host}`;
 export const getFullPath = (name, args) => {
   const rel = get(name, { ...args, preSlash: false });
   return urljoin(basePath(), rel);
 };
+
+export const getFullPathV2 = (name, args) => {
+  const rel = get(name, { ...args, preSlash: false });
+  return urljoin(basePathV2(), rel);
+};
+
 export const getContextual = (name, args) => {
   const newArgs = { ...args, ctx: true }; // Do not mutate args!
   return get(name, newArgs);

@@ -11,6 +11,8 @@ from pyramid.security import Everyone, forget
 from pyramid.httpexceptions import (
     HTTPOk, HTTPNotFound, HTTPSeeOther, HTTPMovedPermanently)
 from pyramid.i18n import TranslationStringFactory
+from pyramid.settings import asbool
+
 from sqlalchemy.orm.exc import NoResultFound
 from urllib import quote_plus
 from urlparse import urljoin
@@ -244,6 +246,11 @@ def react_base_view(request, required_permission=P_READ):
     theme_name = get_theme_name(discussion)
     node_env = os.getenv('NODE_ENV', 'production')
     bugherd_url = get('bugherd_url', None)
+    use_stargate = get('use_stargate') or 'false'
+    use_csrf_protection = get('use_csrf_protection') or 'false'
+    stargate_port = get('stargate_port') or '3000'
+    activate_mouseflow = asbool(get('activate_mouseflow', False))
+    mouseflow_website_id = get('mouseflow_website_id', None)
 
     common_context = {
         "theme_name": theme_name,
@@ -254,7 +261,12 @@ def react_base_view(request, required_permission=P_READ):
         "web_analytics": old_context['web_analytics'],
         "under_test": old_context['under_test'],
         "sentry_dsn": get('sentry_dsn', ''),
-        "bugherd_url": bugherd_url
+        "bugherd_url": bugherd_url,
+        "use_stargate": use_stargate,
+        "use_csrf_protection": use_csrf_protection,
+        "stargate_port": stargate_port,
+        "activate_mouseflow":activate_mouseflow,
+        "mouseflow_website_id":mouseflow_website_id
     }
     common_context.update(populate_theme_information(theme_name))
 

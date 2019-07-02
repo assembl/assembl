@@ -5,4 +5,3 @@ pre-commit==1.8.2
 pyramid-debugtoolbar-ajax==0.0.4
 pyramid-debugtoolbar==3.0.1
 pg8000==1.12.4
-python-magic==0.4.15

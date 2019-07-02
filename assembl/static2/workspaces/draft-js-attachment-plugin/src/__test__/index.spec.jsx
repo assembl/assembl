@@ -2,7 +2,7 @@
 import { AtomicBlockUtils, ContentState, EditorState } from 'draft-js';
 import React from 'react';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3'; // eslint-disable-line
+import Adapter from 'enzyme-adapter-react-16'; // eslint-disable-line
 
 import { constants } from 'assembl-editor-utils';
 

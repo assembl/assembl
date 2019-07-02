@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { configure, shallow, mount } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import type { Props as ResourceBlockProps } from '../../../../js/app/components/resourcesCenter/resourceBlock';
 import ResourceBlock from '../../../../js/app/components/resourcesCenter/resourceBlock';

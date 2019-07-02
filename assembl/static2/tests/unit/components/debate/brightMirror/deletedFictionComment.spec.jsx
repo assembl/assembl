@@ -2,7 +2,7 @@
 import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 // Components imports
 import DeletedFictionComment from '../../../../../js/app/components/debate/brightMirror/deletedFictionComment';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';

@@ -22,27 +22,6 @@ const MockedResponses = [
     request: {
       query: UploadDocument,
       variables: {
-        file: docFile
-      }
-    },
-    result: {
-      data: {
-        uploadDocument: {
-          document: {
-            id: btoa('Document:2'),
-            externalUrl: '/data/my-doc.pdf',
-            mimeType: 'application/pdf',
-            title: 'My great document',
-            __typename: 'Document'
-          }
-        }
-      }
-    }
-  },
-  {
-    request: {
-      query: UploadDocument,
-      variables: {
         file: imgFile
       }
     },
@@ -54,6 +33,27 @@ const MockedResponses = [
             externalUrl: '/data/my-img.png',
             mimeType: 'image/png',
             title: 'My great image',
+            __typename: 'Document'
+          }
+        }
+      }
+    }
+  },
+  {
+    request: {
+      query: UploadDocument,
+      variables: {
+        file: docFile
+      }
+    },
+    result: {
+      data: {
+        uploadDocument: {
+          document: {
+            id: btoa('Document:2'),
+            externalUrl: '/data/my-doc.pdf',
+            mimeType: 'application/pdf',
+            title: 'My great document',
             __typename: 'Document'
           }
         }

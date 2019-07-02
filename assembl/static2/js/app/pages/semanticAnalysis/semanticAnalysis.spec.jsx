@@ -2,7 +2,7 @@
 import React from 'react';
 /* eslint-disable import/no-extraneous-dependencies */
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 /* eslint-enable */
 
 import { SemanticAnalysis } from './semanticAnalysis';
@@ -20,7 +20,7 @@ configure({ adapter: new Adapter() });
 
 // Mock browser type
 jest.mock('../../utils/globalFunctions', () => ({
-  isIE: jest.fn(() => false)
+  isMicrosoftBrowser: jest.fn(() => false)
 }));
 
 describe('<SemanticAnalysis /> - with shallow', () => {
@@ -90,7 +90,7 @@ describe('<SemanticAnalysis /> - with shallow', () => {
     expect(wrapper.find(SentimentBar)).toHaveLength(1);
   });
 
-  it('should not render a WordCloudForIE component -  when browser is not IE 6-11', () => {
+  it('should not render a WordCloudForIE component -  when browser is Microsoft', () => {
     expect(wrapper.find(WordCloudForIE)).toHaveLength(0);
   });
 });

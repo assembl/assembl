@@ -3,7 +3,7 @@ import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, mount } from 'enzyme';
 import { MockedProvider } from 'react-apollo/test-utils';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import { Map } from 'immutable';
 import configureStore from 'redux-mock-store';
 
@@ -143,7 +143,7 @@ describe('<BrightMirrorFiction /> - with mount', () => {
   let ideaWithCommentsData: IdeaWithCommentsData;
   let brightMirrorFictionProps: BrightMirrorFictionProps;
 
-  const initialState = { tags: [] };
+  const initialState = { tags: [], i18n: { locale: 'en' } };
   const mockStore = configureStore();
 
   const displayNothing = () => {

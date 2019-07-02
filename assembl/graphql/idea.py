@@ -1022,6 +1022,7 @@ def update_idea(args, phase, context):
 
 def tombstone_idea_recursively(idea):
     idea.is_tombstone = True
+    tombstone_posts_related_to_idea(idea)
     for child in idea.get_children():
         tombstone_idea_recursively(child)
 

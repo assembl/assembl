@@ -18,7 +18,7 @@ import WordCloudForIE from '../../components/common/wordCloud/wordCloudForIE';
 import type { Keyword, SemanticAnalysisData } from '../../pages/semanticAnalysis/dataType';
 
 // Helper imports
-import { isIE } from '../../utils/globalFunctions';
+import { isMicrosoftBrowser } from '../../utils/globalFunctions';
 
 import { firstColor, secondColor } from '../../../../css/themes/default/_theme';
 
@@ -142,7 +142,7 @@ export class SemanticAnalysis extends Component<Props, State> {
       </div>
     );
 
-    const wordCloud = isIE() ? (
+    const wordCloud = isMicrosoftBrowser() ? (
       <WordCloudForIE
         keywords={keywords}
         numberOfKeywordsToDisplay={numberOfKeywordsToDisplay}

@@ -2,7 +2,7 @@
 import React from 'react';
 
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 import initStoryshots from '@storybook/addon-storyshots';
 
 import { DumbSideCommentBox } from '../../../../../../js/app/components/debate/brightMirror/sideComment/sideCommentBox';

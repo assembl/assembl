@@ -46,7 +46,8 @@ export type Props = {
   /** Tag list update callback: is call when a tag is added or deleted */
   onTagListUpdateCallback: (Array<TagProps>) => void,
   /** Use redux action to update autocomplete list in store when adding tag */
-  updateTags: Function
+  updateTags: Function,
+  contentLocale: string
 };
 
 type State = {
@@ -85,11 +86,12 @@ export class DumbTags extends Component<Props, State> {
 
   handleDelete = (i: number) => {
     const { tags } = this.state;
-    const { postId, removeTag, onTagListUpdateCallback } = this.props;
+    const { postId, removeTag, onTagListUpdateCallback, contentLocale } = this.props;
     const selectedTag = tags[i];
     const variables = {
       taggableId: postId,
-      id: selectedTag.id
+      id: selectedTag.id,
+      contentLocale: contentLocale
     };
     removeTag({ variables: variables })
       .then(() => {
@@ -107,10 +109,11 @@ export class DumbTags extends Component<Props, State> {
   };
 
   handleAddition = (tag: TagProps) => {
-    const { postId, addTag, onTagListUpdateCallback, initialExistingTags, existingTags } = this.props;
+    const { postId, addTag, onTagListUpdateCallback, initialExistingTags, existingTags, contentLocale } = this.props;
     const variables = {
       taggableId: postId,
-      value: tag.text
+      value: tag.text,
+      contentLocale: contentLocale
     };
     addTag({ variables: variables })
       .then((result) => {
@@ -165,7 +168,8 @@ export class DumbTags extends Component<Props, State> {
 
 const mapStateToProps = state => ({
   existingTags: formatedTagList(state.tags),
-  initialExistingTags: state.tags
+  initialExistingTags: state.tags,
+  contentLocale: state.i18n.locale
 });
 
 const mapDispatchToProps = dispatch => ({

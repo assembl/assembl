@@ -2,7 +2,7 @@
 import React from 'react';
 import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
-import Adapter from 'enzyme-adapter-react-16.3';
+import Adapter from 'enzyme-adapter-react-16';
 
 import FictionToolbar from '../../../../../js/app/components/debate/brightMirror/fictionToolbar';
 import DeletePostButton from '../../../../../js/app/components/debate/common/deletePostButton';

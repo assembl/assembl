@@ -326,6 +326,8 @@
 img.attachment-image {
   max-width: 100%;
   margin-top: 20px;
+  cursor: pointer;
+  transition: 0.3s;
 }
 
 .atomic-block {
