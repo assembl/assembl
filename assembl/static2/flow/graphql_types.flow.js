@@ -525,7 +525,8 @@ export type BrightMirrorFictionQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type DiscussionPreferencesQueryVariables = {|
@@ -723,7 +724,8 @@ export type IdeaQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type IdeaWithPostsQueryVariables = {|
@@ -927,7 +929,8 @@ export type IdeaWithPostsQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type LandingPageQueryVariables = {|
@@ -1249,7 +1252,8 @@ export type MultilingualSynthesisQueryQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type PostQueryVariables = {|
@@ -1544,7 +1548,8 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type ProfileFieldsQueryVariables = {|
@@ -1689,7 +1694,8 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type QuestionQueryVariables = {|
@@ -1756,7 +1762,8 @@ export type QuestionQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type ResourcesCenterPageQueryVariables = {|
@@ -1998,7 +2005,8 @@ export type SemanticAnalysisForThematicDataQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type SynthesesQueryQueryVariables = {|
@@ -2242,7 +2250,8 @@ export type SynthesisQueryQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type TabsConditionQueryVariables = {|
@@ -2364,7 +2373,8 @@ export type TextFieldsQuery = {|
             value: ?string
           |}>
         |}>
-      })>
+      }
+  )>
 |};
 
 export type ThematicQueryQueryVariables = {|
@@ -2436,7 +2446,8 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type ThematicsDataQueryQueryVariables = {|
@@ -2694,7 +2705,8 @@ export type UserPreferencesQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type VoteSessionQueryVariables = {|
@@ -2805,7 +2817,8 @@ export type VoteSessionQuery = {|
                   proposalId: string,
                   tokenCategoryId: string
                 }
-              | {})>,
+              | {}
+            )>,
             // The total number of Voters for this Vote.
             numVotes: number,
             // The list of information regarding votes (VotesByCategory).
@@ -2865,7 +2878,8 @@ export type VoteSessionQuery = {|
                   // The value entered on the GaugeVote.
                   selectedValue: number,
                   proposalId: string
-                })>,
+                }
+            )>,
             // The total number of Voters for this Vote.
             numVotes: number,
             // A The label of the average value for the Gauge in a given language.
@@ -2923,12 +2937,14 @@ export type VoteSessionQuery = {|
                   // The value entered on the GaugeVote.
                   selectedValue: number,
                   proposalId: string
-                })>,
+                }
+            )>,
             // The total number of Voters for this Vote.
             numVotes: number,
             // The average value of the Votes submitted by all Users.
             averageResult: ?number
-          })>
+          }
+      )>
     |}>,
     // A list of VoteSpecifications.
     modules: Array<?(
@@ -3065,7 +3081,8 @@ export type VoteSessionQuery = {|
           voteSpecTemplateId: ?string,
           // The type of the VoteSpecification.
           voteType: ?string
-        })>
+        }
+    )>
   |}
 |};
 
@@ -3110,7 +3127,8 @@ export type AcceptedCookiesQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type addGaugeVoteMutationVariables = {|
@@ -3134,7 +3152,8 @@ export type addGaugeVoteMutation = {|
                 // The value entered on the GaugeVote.
                 selectedValue: number,
                 proposalId: string
-              })>
+              }
+          )>
         }
       | {
           // The ID of the object.
@@ -3146,8 +3165,10 @@ export type addGaugeVoteMutation = {|
                 // The value entered on the GaugeVote.
                 selectedValue: number,
                 proposalId: string
-              })>
-        })
+              }
+          )>
+        }
+    )
   |}
 |};
 
@@ -3160,7 +3181,8 @@ export type addPostExtractMutationVariables = {|
   xpathEnd: string,
   offsetStart: number,
   offsetEnd: number,
-  tags?: ?Array<?string>
+  tags?: ?Array<?string>,
+  isExtract?: ?boolean
 |};
 
 export type addPostExtractMutation = {|
@@ -3271,7 +3293,8 @@ export type addPostExtractMutation = {|
         id: string,
         // The value of the tag. This is not language dependent, but rather just unicode text.
         value: string
-      |}>
+      |}>,
+      isExtract: ?boolean
     |}
   |}
 |};
@@ -3355,7 +3378,8 @@ export type addTokenVoteMutation = {|
             proposalId: string,
             tokenCategoryId: string
           }
-        | {})>
+        | {}
+      )>
     |}
   |}
 |};
@@ -4123,7 +4147,8 @@ export type createTextFieldMutation = {|
               value: ?string
             |}>
           |}>
-        })
+        }
+    )
   |}
 |};
 
@@ -5809,7 +5834,8 @@ export type updateShareCountMutation = {|
       | {}
       | {}
       | {}
-      | {})
+      | {}
+    )
   |}
 |};
 
@@ -6070,7 +6096,8 @@ export type updateTextFieldMutation = {|
               value: ?string
             |}>
           |}>
-        })
+        }
+    )
   |}
 |};
 
@@ -6340,7 +6367,8 @@ export type UserQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type tokenVoteSpecificationFragment = {|
@@ -6400,7 +6428,8 @@ export type tokenVoteSpecificationResultsFragment = {|
         proposalId: string,
         tokenCategoryId: string
       }
-    | {})>,
+    | {}
+  )>,
   // The total number of Voters for this Vote.
   numVotes: number,
   // The list of information regarding votes (VotesByCategory).
@@ -6465,7 +6494,8 @@ export type numberGaugeVoteSpecificationResultsFragment = {|
         // The value entered on the GaugeVote.
         selectedValue: number,
         proposalId: string
-      })>,
+      }
+  )>,
   // The total number of Voters for this Vote.
   numVotes: number,
   // The average value of the Votes submitted by all Users.
@@ -6524,7 +6554,8 @@ export type gaugeVoteSpecificationResultsFragment = {|
         // The value entered on the GaugeVote.
         selectedValue: number,
         proposalId: string
-      })>,
+      }
+  )>,
   // The total number of Voters for this Vote.
   numVotes: number,
   // A The label of the average value for the Gauge in a given language.
