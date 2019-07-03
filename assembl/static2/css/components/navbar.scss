@@ -6,6 +6,10 @@
       font-weight: 600;
     }
 
+    &:hover {
+      background-color: $light-grey;
+    }
+
     .timeline-title {
       font-size: 16px;
     }
@@ -15,9 +19,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-left: 1px solid $first-color-light;
 
     &.active {
       font-weight: 600;
+    }
+
+    &:hover {
+      background-color: $light-grey;
     }
   }
 
