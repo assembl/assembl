@@ -42,7 +42,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
         logoSrc="http://www.example.com/bar.jpg"
         renderUserMenu={[Function]}
       />
-      <FlatNavbar
+      <DesktopNavbar
         elements={
           Array [
             <SectionLink
@@ -98,7 +98,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
       className="nav-bar max-container"
       id="navbar"
     >
-      <FlatNavbar
+      <DesktopNavbar
         elements={
           Array [
             <SectionLink

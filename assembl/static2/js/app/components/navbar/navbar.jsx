@@ -14,8 +14,8 @@ import Permissions, { connectedUserIsAdmin, connectedUserCan } from '../../utils
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 import DiscussionPreferencesQuery from '../../graphql/DiscussionPreferencesQuery.graphql';
-import FlatNavbar from './FlatNavbar';
-import BurgerNavbar from './BurgerNavbar';
+import DesktopNavbar from './desktopNavbar';
+import MobileNavbar from './mobileNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { snakeToCamel } from '../../utils/globalFunctions';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
@@ -166,8 +166,8 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
               </div>
             )}
           <div className="nav-bar max-container" id="navbar">
-            {screenTooSmall && <BurgerNavbar {...commonProps} />}
-            <FlatNavbar
+            {screenTooSmall && <MobileNavbar {...commonProps} />}
+            <DesktopNavbar
               {...commonProps}
               setWidth={this.setFlatWidth}
               style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}

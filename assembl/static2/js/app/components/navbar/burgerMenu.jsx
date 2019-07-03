@@ -11,7 +11,7 @@ import { getCurrentPhaseData } from '../../utils/timeline';
 
 type Props = {
   children: React.Node,
-  renderUserMenu: number => React.Node,
+  // renderUserMenu: number => React.Node,
   timeline: Object
 };
 
@@ -40,7 +40,7 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
     }));
   };
 
-  showSegmentMenu = (index) => {
+  showSegmentMenu = (index: number) => {
     this.setState((prevState) => {
       const newIndex = prevState.activeSegment !== index ? index : -1;
       return {
@@ -60,7 +60,7 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
     const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
     // const isTouchScreenDevice = isMobile.any();
     return (
-      <div className="burger-menu">
+      <div id="burger-menu">
         {shouldDisplayMenu && (
           <div className="nav-burger-menu shown">
             <TimelineCpt
