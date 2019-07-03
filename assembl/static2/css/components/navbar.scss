@@ -1,3 +1,32 @@
+#burger-menu {
+  .minimized-timeline {
+    cursor: pointer;
+  }
+
+  .menu-item-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .menu-item {
+    cursor: pointer;
+  }
+
+  .sub-menu {
+    padding-left: 20px;
+  }
+
+  .thumb-arrow {
+    cursor: pointer;
+    padding: 20px;
+  }
+
+  .not-started {
+    padding: 10px;
+  }
+}
+
 .nav-bar {
   display: flex;
   align-items: center;
@@ -140,7 +169,7 @@
     }
   }
 
-  .burger-navbar {
+  .mobile-navbar {
     display: flex;
     align-items: center;
     width: 100%;
@@ -176,22 +205,12 @@
       cursor: pointer;
 
       .assembl-icon-menu-on {
-        font-size: 23px;
+        font-size: 25px;
       }
 
       .assembl-icon-cancel {
-        font-size: 23px;
+        font-size: 25px;
       }
-    }
-
-    .nav-burger-menu {
-      background-color: $white;
-      left: 0;
-      position: absolute;
-      top: $navbar-height;
-      width: 100%;
-      height: 100vh;
-      overflow-y: scroll;
     }
 
     .navbar-logo {
@@ -235,6 +254,23 @@
     }
   }
 
+  .nav-burger-with-text {
+    cursor: pointer;
+    display: flex;
+    padding-right: 15px;
+    flex-direction: column;
+  }
+
+  .assembl-icon-menu-on:before {
+    font-size: 25px;
+    padding-left: 3px;
+  }
+
+  .assembl-icon-cancel:before {
+    font-size: 25px;
+    padding-left: 9px;
+  }
+
   .flat-navbar {
     display: inline-flex;
     align-items: center;
@@ -265,12 +301,14 @@
       display: none;
     }
 
-    .burgermenu-icon {
-      display: none;
-    }
-
     .nav-burger-menu {
-      display: none;
+      background-color: $white;
+      left: 0;
+      position: absolute;
+      top: $navbar-height;
+      width: 400px;
+      height: 100vh;
+      overflow-y: scroll;
     }
 
     .navbar-menu-item {
@@ -299,7 +337,7 @@
   }
 
   @media (max-width: $screen-md-min) {
-    .burger-navbar {
+    .mobile-navbar {
       .burgermenu-icon {
         flex-grow: 0.25;
       }
@@ -324,7 +362,7 @@
       flex: 1;
     }
 
-    .burger-navbar {
+    .mobile-navbar {
       .navbar-logo {
         flex: 1;
         margin: auto;
