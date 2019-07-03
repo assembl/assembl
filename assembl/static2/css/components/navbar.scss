@@ -1,20 +1,37 @@
 #burger-menu {
   .minimized-timeline {
     cursor: pointer;
+
+    &.active {
+      font-weight: 600;
+    }
+
+    .timeline-title {
+      font-size: 16px;
+    }
   }
 
   .menu-item-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    &.active {
+      font-weight: 600;
+    }
   }
 
   .menu-item {
+    font-size: 14px;
     cursor: pointer;
   }
 
   .sub-menu {
     padding-left: 20px;
+
+    .menu-item {
+      font-size: 12px;
+    }
   }
 
   .thumb-arrow {

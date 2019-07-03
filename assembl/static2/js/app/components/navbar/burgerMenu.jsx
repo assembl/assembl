@@ -24,15 +24,31 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
   unlisten: () => void;
 
   componentWillMount() {
+    document.removeEventListener('click', this.handleClickOutside);
     this.setState({ shouldDisplayMenu: false });
     this.unlisten = browserHistory.listen(() => {
       this.setState({ shouldDisplayMenu: false });
     });
   }
 
+  componentDidMount() {
+    document.addEventListener('click', this.handleClickOutside);
+  }
+
   componentWillUnmount() {
     this.unlisten();
   }
+
+  burgerMenuNode = null;
+
+  handleClickOutside = (event: MouseEvent) => {
+    // Cannot call `this.debateNode.contains` with `event.target` bound to `other`
+    // because `EventTarget` [1] is incompatible with `Node`
+    // $FlowFixMe
+    if (this.state.shouldDisplayMenu && this.burgerMenuNode && !this.burgerMenuNode.contains(event.target)) {
+      this.hideMenu();
+    }
+  };
 
   toggleMenu = () => {
     this.setState(prevState => ({
@@ -60,7 +76,12 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
     const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
     // const isTouchScreenDevice = isMobile.any();
     return (
-      <div id="burger-menu">
+      <div
+        id="burger-menu"
+        ref={(burgerMenuNode) => {
+          this.burgerMenuNode = burgerMenuNode;
+        }}
+      >
         {shouldDisplayMenu && (
           <div className="nav-burger-menu shown">
             <TimelineCpt
