@@ -369,23 +369,6 @@
   }
 
   @media (max-width: $screen-md-min) {
-    .mobile-navbar {
-      .burgermenu-icon {
-        flex-grow: 0.25;
-      }
-    }
-
-    .navbar-logo {
-      flex-grow: 1.25;
-
-      img {
-        max-width: 90px;
-      }
-    }
-  }
-
-  /* Landscape phones and portrait tablets */
-  @media (max-width: $screen-xs-max) {
     #burger-menu {
       .nav-burger-menu {
         width: 100%;
@@ -413,6 +396,23 @@
       }
     }
 
+    .mobile-navbar {
+      .burgermenu-icon {
+        flex-grow: 0.25;
+      }
+    }
+
+    .navbar-logo {
+      flex-grow: 1.25;
+
+      img {
+        max-width: 90px;
+      }
+    }
+  }
+
+  /* Landscape phones and portrait tablets */
+  @media (max-width: $screen-xs-max) {
     #search {
       display: none;
     }
