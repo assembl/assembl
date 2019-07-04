@@ -10,6 +10,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob');
 var _ = require('lodash');
 
+
 function theme_entries() {
     var entries = {},
         paths = glob.sync('./css/themes/**/*_web.scss'),
@@ -28,11 +29,19 @@ function theme_entries() {
         }
         entries[name] = path;
     }
+//    paths = glob.sync('./css/themes/**/*_notifications.scss');
+//    for (i = 0; i < paths.length; i++) {
+//        path = paths[i];
+//        parts = path.split('/');
+//        name = 'theme_' + parts[parts.length - 2] + '_notifications';
+//        entries[name] = path;
+//    }
     return entries;
 }
 
 var general_entries = {
-    bundle: ['./js/app/index']
+    bundle: ['./js/app/index'],
+    searchv1: ['./js/app/searchv1']
 };
 
 module.exports = {
@@ -46,7 +55,7 @@ module.exports = {
     module: {
         rules: [
         {
-            test: /\.jsx?$/,
+            test: /\.jsx?(\?v=\d)?$/,
             use: {
               loader: 'babel-loader',
               options: {
@@ -65,9 +74,8 @@ module.exports = {
                   ['@babel/plugin-transform-runtime', { helpers: true }]
                 ],
                 presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
-                                    // Exclude transforms that make all code slower
-                                    "exclude": ["transform-typeof-symbol"],
-                                    "debug": false }],
+                                    "debug": false, "useBuiltIns": "entry",
+                                    "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
                           "@babel/preset-react", "@babel/preset-flow"]
               }
             },
@@ -124,9 +132,9 @@ module.exports = {
     },
     mode: 'production',
     optimization: {
-      minimizer: [
-          new UglifyJsPlugin({ sourceMap: true, parallel: true, cache: true })
-      ]
+        minimizer: [
+            new UglifyJsPlugin({ sourceMap: true, parallel: true, cache: true })
+        ]
     },
     plugins: [
         new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),

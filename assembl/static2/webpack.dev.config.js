@@ -30,6 +30,13 @@ function theme_entries() {
         }
         entries[name] = path;
     }
+//    paths = glob.sync('./css/themes/**/*_notifications.scss');
+//    for (i = 0; i < paths.length; i++) {
+//        path = paths[i];
+//        parts = path.split('/');
+//        name = 'theme_' + parts[parts.length - 2] + '_notifications';
+//        entries[name] = path;
+//    }
     return entries;
 }
 
@@ -58,6 +65,9 @@ module.exports = {
     entry: _.extend(theme_entries(), {
         bundle: [
             './js/app/index',
+        ],
+        searchv1: [
+            './js/app/searchv1'
         ]
     }),
     output: {
@@ -68,7 +78,7 @@ module.exports = {
     module: {
         rules: [
         {
-            test: /\.jsx?$/,
+            test: /\.jsx?(\?v=\d)?$/,
             use: {
               loader: 'babel-loader',
               options: {
@@ -81,9 +91,8 @@ module.exports = {
                   'react-hot-loader/babel'
                 ],
                 presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
-                                    // Exclude transforms that make all code slower
-                                    "exclude": ["transform-typeof-symbol"],
-                                    "debug": false }],
+                                    "debug": false, "useBuiltIns": "entry",
+                                    "exclude": ["web.timers", "web.immediate", "web.dom.iterable"] }],
                           "@babel/preset-react", "@babel/preset-flow"]
               }
             },
