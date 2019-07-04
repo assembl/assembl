@@ -658,6 +658,7 @@ class DeletePost(graphene.Mutation):
         extracts_to_remove = post.db.query(models.Extract).filter(
             models.Extract.content_id == post.id).all()
         for extract in extracts_to_remove:
+            extract.tags = []
             extract.delete()
 
         if user_id == post.creator_id and P_DELETE_MY_POST in permissions:
