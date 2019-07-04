@@ -5,6 +5,7 @@ Once you have made changes to this file, you have to run `supervisorctl restart 
 var path = require('path');
 var webpack = require('webpack');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
+var UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob');
 var _ = require('lodash');
@@ -122,6 +123,11 @@ module.exports = {
         },
     },
     mode: 'production',
+    optimization: {
+      minimizer: [
+          new UglifyJsPlugin({ sourceMap: true, parallel: true, cache: true })
+      ]
+    },
     plugins: [
         new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
         new HtmlWebpackPlugin({ title: 'Caching', filename: 'resources.html'}),
