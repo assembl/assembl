@@ -17,7 +17,7 @@ type Props = {
 
 type State = {
   shouldDisplayMenu: boolean,
-  activeSegment: -1
+  activeSegment: number
 };
 
 export class BurgerMenu extends React.PureComponent<Props, State> {

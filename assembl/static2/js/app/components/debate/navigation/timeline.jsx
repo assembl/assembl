@@ -6,10 +6,11 @@ import TimelineSegmentMenu from './timelineSegmentMenu';
 
 type TimelineProps = {
   timeline: Timeline,
+  activeSegmentPhase: Phase,
   showNavigation: boolean,
   activeSegment: number,
-  onItemSelect: Function,
-  onItemDeselect: Function
+  hideMenu: Function,
+  showSegmentMenu: Function
 };
 
 export function DumbTimeline({
@@ -18,9 +19,7 @@ export function DumbTimeline({
   activeSegment,
   activeSegmentPhase,
   showSegmentMenu,
-  showNavigation,
-  onItemSelect,
-  onItemDeselect
+  showNavigation
 }: TimelineProps) {
   return (
     <div className="timeline-container">
@@ -40,8 +39,6 @@ export function DumbTimeline({
               startDate={phase.start}
               endDate={phase.end}
               isStepCompleted={isStepCompleted(phase)}
-              onSelect={onItemSelect}
-              onDeselect={onItemDeselect}
               showSegmentMenu={showSegmentMenu}
             />
             {index === activeSegment ? (

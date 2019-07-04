@@ -23,6 +23,7 @@ export type DebateType = {
 
 type TimelineSegmentProps = {
   timeline: Timeline,
+  showSegmentMenu: Function,
   index: number,
   client: ApolloClient,
   title: string,
@@ -32,9 +33,7 @@ type TimelineSegmentProps = {
   phaseId: string,
   debate: DebateType,
   locale: string,
-  active: boolean,
-  onSelect: Function,
-  onDeselect: Function
+  active: boolean
 };
 
 type TimelineSegmentState = {
@@ -76,11 +75,6 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
 
   segment = null;
 
-  select = () => {
-    const { onSelect, index } = this.props;
-    onSelect(index);
-  };
-
   renderNotStarted = () => {
     const { startDate } = this.props;
     return (
@@ -92,22 +86,19 @@ export class DumbTimelineSegment extends React.Component<TimelineSegmentProps, T
   };
 
   displayPhase = () => {
-    const { phaseIdentifier, onDeselect, timeline } = this.props;
+    const { phaseIdentifier, timeline } = this.props;
     const { debateData } = this.props.debate;
     const params = { slug: debateData.slug, phase: phaseIdentifier };
     const isSeveralPhases = isSeveralIdentifiers(timeline);
     if (isSeveralPhases) {
       if (this.phaseStatus === PHASE_STATUS.notStarted) {
         displayModal(null, this.renderNotStarted(), true, null, null, true);
-        onDeselect();
       }
       if (this.phaseStatus === PHASE_STATUS.inProgress || this.phaseStatus === PHASE_STATUS.completed) {
         goTo(get('debate', params));
-        onDeselect();
       }
     } else {
       goTo(get('debate', params));
-      onDeselect();
     }
   };
 
