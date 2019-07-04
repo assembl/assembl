@@ -195,102 +195,15 @@
     }
   }
 
-  // .mobile-navbar {
-  // .nav-burger-menu {
-  //   background-color: $white;
-  //   left: 0;
-  //   position: absolute;
-  //   top: $navbar-height;
-  //   width: 400px;
-  //   height: 100vh;
-  //   overflow-y: scroll;
-  // }
-
-  //   .burgermenu-language {
-  //     line-height: normal;
-  //     padding-left: 0;
-  //     margin-bottom: 0;
-
-  //     > .dropdown {
-  //       position: static;
-  //       height: auto;
-
-  //       &.open > .dropdown-menu {
-  //         position: static;
-  //         height: auto;
-  //         padding-bottom: 60px;
-  //       }
-
-  //       &.open > .dropdown-toggle {
-  //         color: $first-color;
-  //       }
-
-  //       > .dropdown-toggle {
-  //         line-height: $navbar-line-height;
-  //         font-size: 13px;
-  //         color: inherit;
-  //       }
-  //     }
-  //   }
-
-  //   .burgermenu-icon {
-  //     cursor: pointer;
-
-  //     .assembl-icon-menu-on {
-  //       font-size: 25px;
-  //     }
-
-  //     .assembl-icon-cancel {
-  //       font-size: 25px;
-  //     }
-  //   }
-
-  //   .navbar-logo {
-  //     margin-right: auto;
-  //     margin-left: 15px;
-  //   }
-
-  //   .avatar {
-  //     margin-right: 0;
-  //     text-align: right;
-  //   }
-
-  //   .navbar-language {
-  //     display: none;
-  //   }
-
-  //   .navbar-menu-item {
-  //     display: flex;
-  //     line-height: $navbar-line-height;
-  //     align-items: center;
-  //     flex-direction: column;
-  //     font-size: 13px;
-  //     color: inherit;
-  //   }
-
-  //   .navbar-icons {
-  //     padding: 0 0;
-  //     margin-left: auto;
-  //     justify-content: flex-end;
-  //     z-index: 10;
-  //   }
-
-  //   .dropdown-navbar {
-  //     margin: 0 0 0 4px;
-  //   }
-
-  //   .active {
-  //     font-family: $font-family3;
-  //     background-color: $first-color-light;
-  //     color: $first-color;
-  //   }
-  // }
-
   .nav-burger-with-text {
     cursor: pointer;
     display: flex;
     padding-right: 15px;
     flex-direction: column;
+  }
+
+  .menu-text {
+    margin-top: -5px;
   }
 
   .assembl-icon-menu-on:before {
@@ -419,13 +332,6 @@
 
     .right-part {
       flex: 1;
-    }
-
-    .mobile-navbar {
-      .navbar-logo {
-        flex: 1;
-        margin: auto;
-      }
     }
 
     .burgermenu-icon {
