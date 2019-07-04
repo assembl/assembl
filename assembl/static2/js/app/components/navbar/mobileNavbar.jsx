@@ -2,9 +2,17 @@
 
 import * as React from 'react';
 
+import BurgerMenu from './burgerMenu';
+import NavigationMenu from './navigationMenu';
+import Logo from './Logo';
+import LanguageMenu from './languageMenu';
 import { browserHistory } from '../../router';
 
 type Props = {
+  elements: React.Node,
+  logoLink: string,
+  slug: string,
+  logoSrc: string,
   renderUserMenu: number => React.Node
 };
 
@@ -34,12 +42,17 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { renderUserMenu } = this.props;
-    const { shouldDisplayMenu } = this.state;
+    const { elements, slug, logoLink, logoSrc, renderUserMenu } = this.props;
     return (
-      <div className="mobile-navbar">
-        {shouldDisplayMenu && <div className="nav-burger-menu shown" />}
-        <div className="right-part">{renderUserMenu(0)}</div>
+      <div className="flat-navbar">
+        <div className="left-part">
+          <BurgerMenu>
+            <NavigationMenu elements={elements} />
+            <LanguageMenu size="xs" className="navbar-language" />
+          </BurgerMenu>
+          <Logo slug={slug} src={logoSrc} url={logoLink} />
+        </div>
+        <div className="right-part-mobile">{renderUserMenu(0)}</div>
       </div>
     );
   }

@@ -42,43 +42,6 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
         logoSrc="http://www.example.com/bar.jpg"
         renderUserMenu={[Function]}
       />
-      <DesktopNavbar
-        elements={
-          Array [
-            <SectionLink
-              options={
-                Object {
-                  "phase": "thread",
-                  "phaseContext": "new",
-                  "phaseId": "",
-                  "screenTooSmall": true,
-                  "slug": undefined,
-                }
-              }
-              section={
-                Object {
-                  "id": "mysection",
-                  "sectionType": "CUSTOM",
-                  "title": "My section",
-                  "url": "http://www.gnu.org",
-                }
-              }
-            />,
-          ]
-        }
-        logoLink="http://www.homesweethome.org"
-        logoSrc="http://www.example.com/bar.jpg"
-        maxWidth={-20}
-        renderUserMenu={[Function]}
-        setWidth={[Function]}
-        style={
-          Object {
-            "opacity": 0,
-            "position": "absolute",
-            "top": "-200px",
-          }
-        }
-      />
     </div>
   </Uncontrolled(Navbar)>
 </div>

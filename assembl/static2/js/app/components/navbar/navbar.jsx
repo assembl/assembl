@@ -166,14 +166,11 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
               </div>
             )}
           <div className="nav-bar max-container" id="navbar">
-            {screenTooSmall && <MobileNavbar {...commonProps} />}
-            <DesktopNavbar
-              {...commonProps}
-              setWidth={this.setFlatWidth}
-              style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
-              maxWidth={maxAppWidth}
-              isLargeLogo={isLargeLogo}
-            />
+            {screenTooSmall ? (
+              <MobileNavbar {...commonProps} />
+            ) : (
+              <DesktopNavbar {...commonProps} setWidth={this.setFlatWidth} maxWidth={maxAppWidth} isLargeLogo={isLargeLogo} />
+            )}
           </div>
         </Navbar>
       </div>
