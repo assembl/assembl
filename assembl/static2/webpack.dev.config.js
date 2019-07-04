@@ -77,13 +77,13 @@ module.exports = {
                 plugins: [
                   '@babel/plugin-proposal-object-rest-spread',
                   '@babel/plugin-proposal-class-properties',
-                  ['@babel/plugin-transform-runtime', { helpers: true, corejs: 2 }],
+                  ['@babel/plugin-transform-runtime', { helpers: true }],
                   'react-hot-loader/babel'
                 ],
                 presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
                                     // Exclude transforms that make all code slower
                                     "exclude": ["transform-typeof-symbol"],
-                                    "debug": false, "useBuiltIns": "entry", "corejs": 2 }],
+                                    "debug": false }],
                           "@babel/preset-react", "@babel/preset-flow"]
               }
             },
