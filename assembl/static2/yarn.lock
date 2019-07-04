@@ -929,6 +929,14 @@
     "@babel/helper-plugin-utils" "^7.0.0"
     "@babel/plugin-transform-typescript" "^7.1.0"
 
+"@babel/runtime-corejs2@^7.4.5":
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs2/-/runtime-corejs2-7.4.5.tgz#3d892f0560df21bafb384dd7727e33853e95d3c9"
+  integrity sha512-5yLuwzvIDecKwYMzJtiarky4Fb5643H3Ao5jwX0HrMR5oM5mn2iHH9wSZonxwNK0oAjAFUQAiOd4jT7/9Y2jMQ==
+  dependencies:
+    core-js "^2.6.5"
+    regenerator-runtime "^0.13.2"
+
 "@babel/runtime@7.0.0":
   version "7.0.0"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.0.0.tgz#adeb78fedfc855aa05bc041640f3f6f98e85424c"
@@ -936,7 +944,7 @@
   dependencies:
     regenerator-runtime "^0.12.0"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.0.0-beta.37", "@babel/runtime@^7.1.2", "@babel/runtime@^7.1.5", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.2":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.0.0-beta.37", "@babel/runtime@^7.1.2", "@babel/runtime@^7.1.5", "@babel/runtime@^7.2.0", "@babel/runtime@^7.3.1", "@babel/runtime@^7.3.4", "@babel/runtime@^7.4.2":
   version "7.4.5"
   resolved "https://registry.yarnpkg.com/@babel/runtime/-/runtime-7.4.5.tgz#582bb531f5f9dc67d2fcb682979894f75e253f12"
   integrity sha512-TuI4qpWZP6lGOGIuGWtp9sPluqYICmbk8T/1vpSysqJxRPkudh/ofFWyqdcMsDf2s7KvDL4/YHgKyvcS3g9CJQ==
@@ -4129,7 +4137,7 @@ core-js@^1.0.0:
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-1.2.7.tgz#652294c14651db28fa93bd2d5ff2983a4f08c636"
   integrity sha1-ZSKUwUZR2yj6k70tX/KYOk8IxjY=
 
-core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.7, core-js@^2.6.5:
+core-js@^2.0.0, core-js@^2.4.0, core-js@^2.5.0, core-js@^2.5.7, core-js@^2.6.5:
   version "2.6.9"
   resolved "https://registry.yarnpkg.com/core-js/-/core-js-2.6.9.tgz#6b4b214620c834152e179323727fc19741b084f2"
   integrity sha512-HOpZf6eXmnl7la+cUdMnLvUxKNqLUzJvgIziQ0DiF3JwSImNphIqdGqzj6hIKyX04MmV0poclQ7+wjWvxQyR2A==
@@ -5171,19 +5179,6 @@ envify@^3.4.0:
     jstransform "^11.0.3"
     through "~2.3.4"
 
-enzyme-adapter-react-16.3@^1.4.1:
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16.3/-/enzyme-adapter-react-16.3-1.7.1.tgz#e26765bef3a1695f8a1e25115ec2c4f43b3e3ecf"
-  integrity sha512-BIs6Qz+PLjRsT6ZBq+cBe0ltxXQ2JeJ73Tmefw6waFwYJzDzA7d5O96s8NBqiRd461mRf6hrtg4sfqBIXyF05w==
-  dependencies:
-    enzyme-adapter-utils "^1.12.0"
-    object.assign "^4.1.0"
-    object.values "^1.1.0"
-    prop-types "^15.7.2"
-    react-is "^16.8.6"
-    react-reconciler "^0.7.0"
-    react-test-renderer "~16.3.0-0"
-
 enzyme-adapter-react-16@^1.0.0, enzyme-adapter-react-16@^1.14.0:
   version "1.14.0"
   resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.14.0.tgz#204722b769172bcf096cb250d33e6795c1f1858f"
@@ -5879,7 +5874,7 @@ fb-watchman@^2.0.0:
   dependencies:
     bser "^2.0.0"
 
-fbjs@^0.8.1, fbjs@^0.8.15, fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.9:
+fbjs@^0.8.1, fbjs@^0.8.15, fbjs@^0.8.4, fbjs@^0.8.9:
   version "0.8.17"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.17.tgz#c4d598ead6949112653d6588b01a5cdcd9f90fdd"
   integrity sha1-xNWY6taUkRJlPWWIsBpc3Nn5D90=
@@ -5986,12 +5981,12 @@ final-form-set-field-touched@^1.0.0:
   resolved "https://registry.yarnpkg.com/final-form-set-field-touched/-/final-form-set-field-touched-1.0.1.tgz#cfbfc0c623df157a1dd0f1a120faa4e2274950f2"
   integrity sha512-yvE5AAs9U3OgJQ9YF8NhSF0I0mJEECvOpkaXNqovloxji5Q6gOZ0DCIAyLAKHluGSpsXKUGORyBm8Hq0beZIqQ==
 
-final-form@4.11.0:
-  version "4.11.0"
-  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.11.0.tgz#81750bda11b82c3ddf7b27092f29ebe427f8a560"
-  integrity sha512-uO0VhAEbWvV8LHBpBHoIpbYqonYBXyd8gpTYFEAPCHEy5tcNqdVX4EnWQoxKl//+U9Vk0kTUsnPOWiBP2PiOUg==
+final-form@4.13.0:
+  version "4.13.0"
+  resolved "https://registry.yarnpkg.com/final-form/-/final-form-4.13.0.tgz#ef2b36a850d6287cd968f328180590e5a64a57bb"
+  integrity sha512-JD/MPstXejGtQOryhbLHJoOtsvcCV37baoVuwK/+/mgbNir3QZjedhUJoSqgjwMxk/H1j/usdDwy7xfKMAq/dw==
   dependencies:
-    "@babel/runtime" "^7.1.5"
+    "@babel/runtime" "^7.3.1"
 
 finalhandler@~1.1.2:
   version "1.1.2"
@@ -6015,7 +6010,7 @@ find-cache-dir@^1.0.0:
     make-dir "^1.0.0"
     pkg-dir "^2.0.0"
 
-find-cache-dir@^2.0.0, find-cache-dir@^2.1.0:
+find-cache-dir@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/find-cache-dir/-/find-cache-dir-2.1.0.tgz#8d0f94cd13fe43c6c7c261a0d86115ca918c05f7"
   integrity sha512-Tq6PixE0w/VMFfCgbONnkiQIVol/JJL7nRMi20fqzA4NRs9AfeqMGeRdPi3wIhYkxjeBaWh2rxwapn5Tu3IqOQ==
@@ -11347,16 +11342,6 @@ react-portal@^4.1.5:
   dependencies:
     prop-types "^15.5.8"
 
-react-reconciler@^0.7.0:
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/react-reconciler/-/react-reconciler-0.7.0.tgz#9614894103e5f138deeeb5eabaf3ee80eb1d026d"
-  integrity sha512-50JwZ3yNyMS8fchN+jjWEJOH3Oze7UmhxeoJLn2j6f3NjpfCRbcmih83XTWmzqtar/ivd5f7tvQhvvhism2fgg==
-  dependencies:
-    fbjs "^0.8.16"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.0"
-
 react-redux-i18n@1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/react-redux-i18n/-/react-redux-i18n-1.9.1.tgz#3a0081928eb8ca0668518d37b1c36bd01250a5f9"
@@ -11454,16 +11439,6 @@ react-test-renderer@^16.0.0-0, react-test-renderer@^16.3.1:
     prop-types "^15.6.2"
     react-is "^16.8.6"
     scheduler "^0.13.6"
-
-react-test-renderer@~16.3.0-0:
-  version "16.3.2"
-  resolved "https://registry.yarnpkg.com/react-test-renderer/-/react-test-renderer-16.3.2.tgz#3d1ed74fda8db42521fdf03328e933312214749a"
-  integrity sha512-lL8WHIpCTMdSe+CRkt0rfMxBkJFyhVrpdQ54BaJRIrXf9aVmbeHbRA8GFRpTvohPN5tPzMabmrzW2PUfWCfWwQ==
-  dependencies:
-    fbjs "^0.8.16"
-    object-assign "^4.1.1"
-    prop-types "^15.6.0"
-    react-is "^16.3.2"
 
 react-textarea-autosize@^7.0.4:
   version "7.1.0"
@@ -13284,7 +13259,7 @@ term-size@^1.2.0:
   dependencies:
     execa "^0.7.0"
 
-terser-webpack-plugin@^1.1.0:
+terser-webpack-plugin@^1.1.0, terser-webpack-plugin@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/terser-webpack-plugin/-/terser-webpack-plugin-1.3.0.tgz#69aa22426299f4b5b3775cbed8cb2c5d419aa1d4"
   integrity sha512-W2YWmxPjjkUcOWa4pBEv4OP4er1aeQJlSo2UhtCFQCuRXEHjOFscO8VyWHj9JLlA0RzQb8Y2/Ta78XZvT54uGg==
@@ -13599,28 +13574,13 @@ uglify-js@3.4.x:
     commander "~2.19.0"
     source-map "~0.6.1"
 
-uglify-js@^3.1.4, uglify-js@^3.5.12:
+uglify-js@^3.1.4:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.6.0.tgz#704681345c53a8b2079fb6cec294b05ead242ff5"
   integrity sha512-W+jrUHJr3DXKhrsS7NUVxn3zqMOFn0hL/Ei6v0anCIMoKC93TjcflTagwIHLW7SfMFfiQuktQyFVCFHGUE0+yg==
   dependencies:
     commander "~2.20.0"
     source-map "~0.6.1"
-
-uglifyjs-webpack-plugin@^2.0.1:
-  version "2.1.3"
-  resolved "https://registry.yarnpkg.com/uglifyjs-webpack-plugin/-/uglifyjs-webpack-plugin-2.1.3.tgz#b00a18d1acda271deb755c99ba0d93568156eb76"
-  integrity sha512-/lRkCaFbI6pT3CxsQHDhBcqB6tocOnqba0vJqJ2DzSWFLRgOIiip8q0nVFydyXk+n8UtF7ZuS6hvWopcYH5FuA==
-  dependencies:
-    cacache "^11.3.2"
-    find-cache-dir "^2.1.0"
-    is-wsl "^1.1.0"
-    schema-utils "^1.0.0"
-    serialize-javascript "^1.7.0"
-    source-map "^0.6.1"
-    uglify-js "^3.5.12"
-    webpack-sources "^1.3.0"
-    worker-farm "^1.7.0"
 
 uncontrollable@^4.1.0:
   version "4.1.0"
