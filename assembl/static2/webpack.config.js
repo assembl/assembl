@@ -75,6 +75,7 @@ module.exports = {
               path.join(__dirname, 'css'),
               path.join(__dirname, 'workspaces'),
               path.join(__dirname, 'node_modules/rc-slider')
+              path.join(__dirname, 'node_modules/dnd-core')
             ]
         },
         {
