@@ -10,7 +10,7 @@ from assembl.graphql.utils import get_root_thematic_for_phase
 
 
 def format_date(datetime_to_format):
-    return datetime_to_format.strftime('%d/%m/%Y')
+    return datetime_to_format.strftime('%d/%m/%Y/%H:%M')
 
 
 def get_posts(idea, start=None, end=None, include_deleted=None):
