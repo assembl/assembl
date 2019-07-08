@@ -65,9 +65,8 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
         <div className={classNames('menu-table-col', className, { 'sub-menu': subMenu })}>
           <div className="menu-table">
             {rootItems.map(item => (
-              <div>
+              <div key={item.id}>
                 <MenuItem
-                  key={item.id}
                   hasSubItems={items.some(listItem => listItem.parentId === item.id)}
                   selected={item.id === selected}
                   onClick={onMenuItemClick}
@@ -78,7 +77,6 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
                 />
                 {item.id === selected ? (
                   <MenuList
-                    key={rootItem}
                     subMenu
                     onMenuItemClick={onMenuItemClick}
                     items={items}

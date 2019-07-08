@@ -25,12 +25,11 @@ export function DumbTimeline({
     <div className="timeline-container">
       {timeline &&
         timeline.map((phase, index) => (
-          <React.Fragment>
+          <React.Fragment key={index}>
             <TimelineSegment
               title={phase.title}
               index={index}
               active={index === activeSegment}
-              key={index}
               barPercent={getBarPercent(timeline[index])}
               isCurrentPhase={isCurrentPhase(timeline[index])}
               showNavigation={showNavigation}
