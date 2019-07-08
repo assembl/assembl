@@ -2,13 +2,13 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate, I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
+import type { OperationComponent } from 'react-apollo';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
 import { withRouter } from 'react-router';
 // Type imports
 import type { Map } from 'immutable';
-import type { OperationComponent } from 'react-apollo';
 import type { ContentLocaleMapping, ContentLocaleMappingJS } from '../actions/actionTypes';
 import type { AnnouncementContent } from '../components/debate/common/announcement';
 
@@ -25,7 +25,7 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
-import { DeletedPublicationStates, DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
+import { DELETE_CALLBACK, DeletedPublicationStates, MESSAGE_VIEW } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
@@ -425,7 +425,13 @@ class SwitchView extends React.Component<SwitchViewProps> {
     if (props.messageViewOverride === MESSAGE_VIEW.voteSession) {
       return <VoteSession {...props} />;
     }
-    return <IdeaWithPosts {...props} additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror} />;
+    return (
+      <IdeaWithPosts
+        {...props}
+        postsOrder={'chronological'}
+        additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror}
+      />
+    );
   }
 }
 

@@ -3,36 +3,35 @@ from itertools import takewhile
 from random import sample as random_sample
 from random import shuffle as random_shuffle
 
-from graphql_relay.connection.arrayconnection import offset_to_cursor
 import graphene
+from graphene.pyutils.enum import Enum as PyEnum
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from graphene_sqlalchemy.utils import is_mapped
+from graphql_relay.connection.arrayconnection import offset_to_cursor
 from pyramid.security import Everyone
 from sqlalchemy import desc, func, join, select, or_, and_
 from sqlalchemy.orm import joinedload
 
+import assembl.graphql.docstrings as docs
 from assembl import models
 from assembl.auth import P_MODERATE, CrudPermissions
 from assembl.auth.util import user_has_permission
 from assembl.models.action import SentimentOfPost
-from assembl.models import Phases
 from assembl.models.idea import MessageView
-from .permissions_helpers import require_cls_permission, require_instance_permission
 from .attachment import Attachment
 from .document import Document
 from .langstring import (LangStringEntry, LangStringEntryInput,
                          langstring_from_input_entries, resolve_langstring,
                          resolve_langstring_entries,
                          update_langstring_from_input_entries)
+from .permissions_helpers import require_cls_permission, require_instance_permission
 from .types import SecureObjectType, SQLAlchemyUnion
 from .user import AgentProfile
 from .utils import (
     abort_transaction_on_exception, get_fields, get_root_thematic_for_phase,
     create_root_thematic, create_attachment,
     update_attachment, create_idea_announcement, get_attachments_with_purpose)
-import assembl.graphql.docstrings as docs
-
 
 EMBED_ATTACHMENT = models.AttachmentPurpose.EMBED_ATTACHMENT.value
 MEDIA_ATTACHMENT = models.AttachmentPurpose.MEDIA_ATTACHMENT.value
@@ -317,19 +316,33 @@ class VoteResults(graphene.ObjectType):
         return participants
 
 
+posts_order_types_enum = PyEnum('PostsOrderTypes', (
+    ('chronological', 'chronological'),
+    ('reverse_chronological', 'reverse_chronological'),
+    ('score', 'score'),
+    ('popularity', 'popularity'),
+))
+PostOrderTypes = graphene.Enum.from_enum(posts_order_types_enum)
+
+
 class Idea(SecureObjectType, SQLAlchemyObjectType):
     __doc__ = docs.IdeaInterface.__doc__
 
     class Meta:
         model = models.Idea
         interfaces = (Node, IdeaInterface)
-        only_fields = ('id', )
+        only_fields = ('id',)
 
     # TODO: Look into seperating synthesis_title from 'What you need to know',
     # they mean different things
     # This is the "What you need to know"
     synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
-    posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts)  # use dotted name to avoid circular import  # noqa: E501
+    posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts,
+                                      posts_order=graphene.Argument(
+                                          type=PostOrderTypes,
+                                          required=False,
+                                          description=docs.Idea.posts_order,
+                                      ))  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
@@ -374,6 +387,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
 
     def resolve_posts(self, args, context, info):
+        order = args.get('posts_order')
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         # include_deleted=None means all posts (live and tombstoned)
@@ -393,7 +407,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
 
         Post = models.Post
 
-        if self.message_view_override == Phases.brightMirror.value:
+        if self.message_view_override == models.Phases.brightMirror.value:
             user_id = context.authenticated_userid
             if user_id is not None:
                 query = query.filter(
@@ -412,9 +426,21 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                         Post.publication_state == models.PublicationStates.DELETED_BY_USER
                     )
                 )
-
         if not sentiments_only:
-            query = query.order_by(desc(Post.creation_date), Post.id)
+
+            if order == PostOrderTypes.chronological.value:
+                query = query.order_by(models.Content.creation_date)
+            elif order == PostOrderTypes.reverse_chronological.value:
+                query = query.order_by(models.Content.creation_date.desc())
+            elif order == PostOrderTypes.score.value:
+                query = query.order_by(models.Content.body_text_index.score_name.desc())
+            elif order == PostOrderTypes.popularity.value:
+                # assume reverse chronological otherwise
+                query = query.order_by(models.Content.disagree_count - models.Content.like_count,
+                                       models.Content.creation_date.desc())
+            else:
+                query = query.order_by(desc(Post.creation_date), Post.id)
+
             if len(discussion.discussion_locales) > 1:
                 query = query.options(*models.Content.subqueryload_options())
             else:
