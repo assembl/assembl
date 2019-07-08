@@ -78,6 +78,7 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
                 />
                 {item.id === selected ? (
                   <MenuList
+                    key={rootItem}
                     subMenu
                     onMenuItemClick={onMenuItemClick}
                     items={items}
