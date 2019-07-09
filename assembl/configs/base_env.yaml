@@ -80,7 +80,7 @@ nginx_ipv6: true
 hsts_header: true
 use_letsencrypt: true
 csp_header: |-
-  default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com ; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net
+  default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com *.mouseflow.com; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com *.mouseflow.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com ; font-src 'self' data: fonts.gstatic.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net
 ssl_dhparam: /etc/ssl/certs/dhparam.pem
 
 elasticsearch_version: 5.6.2
@@ -179,14 +179,22 @@ maxretry: 10
 # IF URL, there should be no query strings
 theme_base: ""
 
+# Feature flags to control behaviour
+# 1. Use stargate the proxy ms ?
+# 2. Enable CSRF protection - this HAS to have stargate activate as well
+use_stargate: false
+use_csrf_protection: false
+stargate_port: 3000
+
 # The mime types that are allowed for uploaded files
 # on thread module
 # To be completed if needed
 attachment_allowed_mime_types: "image/\\w+ video/\\w+ application/(pdf|msword) application/vnd\\.(.*ms.*|.*officedocument.*)"
-  - image/*
-  - video/*
-  - application/pdf
 
 # Password requirements
 minimum_password_length: 9
 password_required_classes: '{"[a-z]": {"en": "lower-case letter"}, "[A-Z]": {"en": "upper-case letter"}, "\\d": {"en": "digit"}, "\\W": {"en": "special character"}}'
+
+# mouseflow activation variable and website id
+activate_mouseflow: false
+mouseflow_website_id: ""

@@ -19,6 +19,9 @@
         <input type="hidden" name="elasticsearchLangIndexes" id="elasticsearchLangIndexes" value="{{ elasticsearch_lang_indexes }}" />
         {% if discussion %}
             <input type="hidden" name="assemblVersion" id="assemblVersion" value="{{ assembl_version }}" />
+            <input type="hidden" name="useStargate" id="useStargate" value="{{ use_stargate }}" />
+            <input type="hidden" name="useCSRFProtection" id="useCSRFProtection" value="{{ use_csrf_protection }}" />
+            <input type="hidden" name="stargatePort" id="stargatePort" value="{{ stargate_port }}" />
             <input type="hidden" name="discussion-id" id="discussion-id" value="{{ discussion.id }}" />
             {#TODO: Harmonize code paths. There are two code paths for fetching a slug from front-end. 1) from the DOM, and 2) from API. #}
             <input type="hidden" name="discussion-slug" id="discussion-slug" value="{{ discussion.slug }}" />
@@ -66,5 +69,17 @@
                 <!-- End of Bugherd injection -->
             {% endif %}
         {% endblock %}
+
+        {% if activate_mouseflow %}
+          <script type="text/javascript">
+            window._mfq = window._mfq || [];
+            (function() {
+              var mf = document.createElement("script");
+              mf.type = "text/javascript"; mf.async = true;
+              mf.src = "//cdn.mouseflow.com/projects/{{ mouseflow_website_id }}.js";
+              document.getElementsByTagName("head")[0].appendChild(mf);
+            })();
+          </script>
+        {% endif %}
     </body>
 {% endblock%}

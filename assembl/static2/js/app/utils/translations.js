@@ -1057,7 +1057,7 @@ const Translations = {
       },
       translationService: {
         title: "Service de traduction",
-        description: "Le service de traduction doit être activé lorsque l'analyse sémantique a été activée",
+        description: "Le service de traduction doit être activé pour utiliser l'analyse sémantique",
         activate: "Activer l'option pour permettre à l'utilisateur de traduire les messages"
       }
     },
@@ -2125,7 +2125,7 @@ const Translations = {
       },
       translationService: {
         title: "Translation service",
-        description: "Translation service should be activated when the semantic analysis is activated",
+        description: "Translation service must be activated to use the semantic analysis",
         activate: "Activate this option to allow users to translate messages"
       }
     },

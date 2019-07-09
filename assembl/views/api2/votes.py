@@ -214,6 +214,37 @@ def range_float(minimum, maximum, nb_ticks):
         yield i
 
 
+PROPOSITION = "Proposition"
+PARTICIPANTS_COUNT = "Nombre de participants sur la proposition"
+TOTAL_VOTES = "Total votes"
+
+
+def get_token_category_fieldname(title, token_category, user_prefs):
+    return '{} [{}]'.format(
+        token_category.name.best_lang(user_prefs).value.encode('utf-8'),
+        title.encode('utf-8'))
+
+
+def get_choice_average_fieldname(title):
+    return u'moyenne [{title}]'.format(title=title).encode('utf-8')
+
+
+def get_number_choice_fieldname(choice_value, template_spec, title):
+    return u'{value} {unit} [{title}]'.format(value=choice_value, unit=template_spec.unit, title=title).encode('utf-8')
+
+
+def get_text_choice_fieldname(choice, title, user_prefs):
+    return '{} [{}]'.format(choice.label.best_lang(user_prefs).value.encode('utf-8'), title.encode('utf-8'))
+
+
+def get_total_votes_fieldname(title):
+    return '{} [{}]'.format(TOTAL_VOTES, title.encode('utf-8'))
+
+
+def get_spec_title(spec, user_prefs):
+    return spec.title.best_lang(user_prefs).value if spec.title else unicode(spec.id)
+
+
 def global_vote_results_csv(widget, request):
     from .discussion import get_time_series_timing
     start, end, interval = get_time_series_timing(request)
@@ -234,52 +265,31 @@ def global_vote_results_csv(widget, request):
         specids_by_template_specid[spec.vote_spec_template_id or spec.id].append(spec.id)
         spec_by_idea_id_and_template_specid[(spec.criterion_idea_id, (spec.vote_spec_template_id or spec.id))] = spec
     # then get the vote specs templates only
-    template_specs = [(spec.title.best_lang(user_prefs).value if spec.title else str(spec.id), spec)
-                      for spec in widget.specification_templates]
+    template_specs = [(get_spec_title(spec, user_prefs), spec) for spec in widget.specification_templates]
     template_specs.sort()
-    PROPOSITION = "Proposition"
-    PARTICIPANTS_COUNT = "Nombre de participants sur la proposition"
-    TOTAL_VOTES = "Total votes"
     fieldnames = [PROPOSITION, PARTICIPANTS_COUNT]
 
     # number of participants for a proposal (distinct voter_id from all specs related to the proposal)
     num_participants_by_idea_id = {}
     for idea in ideas:
-        num_participants_by_idea_id[idea.id] = idea.get_voter_ids_query().count()
+        num_participants_by_idea_id[idea.id] = idea.get_voter_ids_query(start, end).count()
 
     # construct a query with each votespec creating columns for:
     # either each token count (for token votes) OR
     # sum of vote values, and count of votes otherwise.
     # Ideas are rows (and Idea.id is column 0)
-    def get_token_category_fieldname(title, token_category):
-        return '{} [{}]'.format(
-            token_category.name.best_lang(user_prefs).value.encode('utf-8'),
-            title.encode('utf-8'))
-
-    def get_choice_average_fieldname(title):
-        return u'moyenne [{title}]'.format(title=title).encode('utf-8')
-
-    def get_number_choice_fieldname(choice_value, template_spec):
-        return u'{value} {unit}'.format(value=choice_value, unit=template_spec.unit).encode('utf-8')
-
-    def get_text_choice_fieldname(choice):
-        return choice.label.best_lang(user_prefs).value.encode('utf-8')
-
-    def get_total_votes_fieldname(title):
-        return '{} [{}]'.format(TOTAL_VOTES, title.encode('utf-8'))
-
     for title, template_spec in template_specs:
         if isinstance(template_spec, TokenVoteSpecification):
             for tokencat in template_spec.token_categories:
-                fieldnames.append(get_token_category_fieldname(title, tokencat))
+                fieldnames.append(get_token_category_fieldname(title, tokencat, user_prefs))
         else:
             fieldnames.append(get_choice_average_fieldname(title))
             if isinstance(template_spec, NumberGaugeVoteSpecification):
                 for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                    fieldnames.append(get_number_choice_fieldname(choice_value, template_spec))
+                    fieldnames.append(get_number_choice_fieldname(choice_value, template_spec, title))
             else:
                 for choice in template_spec.get_choices():
-                    fieldnames.append(get_text_choice_fieldname(choice))
+                    fieldnames.append(get_text_choice_fieldname(choice, title, user_prefs))
         fieldnames.append(get_total_votes_fieldname(title))
 
     rows = []
@@ -292,7 +302,7 @@ def global_vote_results_csv(widget, request):
             spec = spec_by_idea_id_and_template_specid.get((idea_id, template_spec.id), None)
             if isinstance(template_spec, TokenVoteSpecification):
                 for token_category in template_spec.token_categories:
-                    fieldname = get_token_category_fieldname(title, token_category)
+                    fieldname = get_token_category_fieldname(title, token_category, user_prefs)
                     if spec is None:
                         row[fieldname] = '-'
                     else:
@@ -313,11 +323,11 @@ def global_vote_results_csv(widget, request):
                     row[fieldname] = '-'
                     if isinstance(template_spec, NumberGaugeVoteSpecification):
                         for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                            fieldname = get_number_choice_fieldname(choice_value, template_spec)
+                            fieldname = get_number_choice_fieldname(choice_value, template_spec, title)
                             row[fieldname] = '-'
                     else:
                         for choice in template_spec.get_choices():
-                            fieldname = get_text_choice_fieldname(choice)
+                            fieldname = get_text_choice_fieldname(choice, title, user_prefs)
                             row[fieldname] = '-'
                 elif isinstance(template_spec, NumberGaugeVoteSpecification):
                     vote_cls = spec.get_vote_class()
@@ -339,7 +349,7 @@ def global_vote_results_csv(widget, request):
                         ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                     histogram = dict(q_histogram.all())
                     for choice_value in range_float(template_spec.minimum, template_spec.maximum, template_spec.nb_ticks):
-                        fieldname = get_number_choice_fieldname(choice_value, template_spec)
+                        fieldname = get_number_choice_fieldname(choice_value, template_spec, title)
                         row[fieldname] = histogram.get(choice_value, 0)
                 else:
                     vote_cls = spec.get_vote_class()
@@ -358,7 +368,7 @@ def global_vote_results_csv(widget, request):
                         ).filter(vote_cls.vote_date >= start).filter(vote_cls.vote_date <= end)
                     histogram = dict(q_histogram.all())
                     for choice in template_spec.get_choices():
-                        fieldname = get_text_choice_fieldname(choice)
+                        fieldname = get_text_choice_fieldname(choice, title, user_prefs)
                         row[fieldname] = histogram.get(choice.value, 0)
 
             if spec is None:
@@ -446,31 +456,27 @@ def extract_voters(widget, request):  # widget is the vote session
 
         extract_info["Proposition"] = proposition
         vote_value = vote.vote_value
-
-        if votes[count].vote_spec_id != votes[count-1].vote_spec_id and fieldnames[-1] != "  ":
-            fieldnames.append("  ")
-
         extract_info["Date du vote"] = format_date(vote_date)
 
+        spec = vote.vote_spec
+        spec_title = get_spec_title(spec, user_prefs)
         if vote.type == u'token_idea_vote':
-            token_category = vote.token_category.name.best_lang(user_prefs).value or u""
-            token_category_encoded = token_category.encode('utf-8')
-            if token_category_encoded not in fieldnames:
-                fieldnames.append(token_category_encoded)
-            extract_info.update({token_category: str(vote_value)})
+            fieldname = get_token_category_fieldname(spec_title, vote.token_category, user_prefs)
+            if fieldname not in fieldnames:
+                fieldnames.append(fieldname)
+            extract_info.update({fieldname: str(vote_value)})
             extract_votes.append(extract_info)
 
         if vote.type == u'gauge_idea_vote':
-            spec = vote.vote_spec
             if isinstance(spec, NumberGaugeVoteSpecification):
                 for choice_value in range_float(spec.minimum, spec.maximum, spec.nb_ticks):
-                    option = u"{} {}".format(choice_value, spec.unit).encode('utf-8')
+                    option = get_number_choice_fieldname(choice_value, spec, spec_title)
                     if option not in fieldnames:
                         fieldnames.append(option)
                     extract_info.update({option: "1" if vote_value == choice_value else "0"})
             else:
                 for choice in spec.get_choices():
-                    option = choice.label.best_lang(user_prefs).value.encode('utf-8')
+                    option = get_text_choice_fieldname(choice, spec_title, user_prefs)
                     if option not in fieldnames:
                         fieldnames.append(option)
                     extract_info.update({option: "1" if vote_value == choice.value else "0"})

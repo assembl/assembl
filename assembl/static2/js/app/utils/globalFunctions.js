@@ -183,6 +183,7 @@ export const isTabletSizedScreen = (screenWidth: number) => screenWidth >= SM_SC
 // works for SCREAMING_SNAKE_CASE, snake_case or cRazY_SNAKE_case
 export const snakeToCamel = (string: string) => string.toLowerCase().replace(/_[a-z]/g, match => match[1].toUpperCase());
 
+// TODO: Replace with js-cookie
 export const getCookieItem = (sKey: string) => {
   if (!sKey) {
     return null;
@@ -197,6 +198,7 @@ export const getCookieItem = (sKey: string) => {
   );
 };
 
+// TODO: Replace with js-cookie
 const cookie = (key: string, value: string, expires: string, sensitive: boolean = false, path: string = '/'): string => {
   // As a security policy, we want all cookies that are set to be set according to the scheme
   // of the URL
@@ -209,12 +211,14 @@ const cookie = (key: string, value: string, expires: string, sensitive: boolean 
   return template;
 };
 
+// TODO: Replace with js-cookie
 export function setCookieItem(name: string, value: any, sensitive: boolean = false) {
   const date = new Date();
   date.setMonth(date.getMonth() + 13);
   document.cookie = cookie(name, value, date.toString(), sensitive);
 }
 
+// TODO: Replace with js-cookie
 export function deleteCookieItem(name: string, path: string) {
   if (getCookieItem(name)) {
     // Set an expiration date in the past to delete the cookie in the browser
@@ -383,6 +387,12 @@ export const formatedTagList = (tags: Tags): Array<TagProps> =>
     }, [])
     : []);
 
-// Function that checks wheter the browser in IE from v6 to v11
+// Function that checks whether the browser is IE from v6 to v11
 // eslint-disable-next-line
-export const isIE = () => /*@cc_on!@*/ false || !!document.documentMode;
+const isIE = () => /*@cc_on!@*/ false || !!document.documentMode;
+
+// Function that checks whether the browser is Edge
+const isEdge = () => !isIE() && !!window.StyleMedia;
+
+// Function that checks whether the browser is a Microsoft browser
+export const isMicrosoftBrowser = () => isIE() || isEdge();

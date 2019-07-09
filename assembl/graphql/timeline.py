@@ -208,7 +208,33 @@ class DeleteDiscussionPhase(graphene.Mutation):
                 db.delete(attachment.document)
                 db.delete(attachment)
                 phase.attachments.remove(attachment)
+            tombstone_idea_recursively(phase.root_idea)
             db.delete(phase)
             db.flush()
 
         return DeleteDiscussionPhase(success=True)
+
+
+def tombstone_idea_recursively(idea):
+    idea.is_tombstone = True
+    tombstone_posts_related_to_idea(idea)
+    for child in idea.get_children():
+        tombstone_idea_recursively(child)
+
+
+def tombstone_posts_related_to_idea(idea):
+    related = idea.get_related_posts_query(True, include_moderating=False)
+    query = models.Post.query.join(
+        related, models.Post.id == related.c.post_id
+        )
+    posts = query.all()
+    for post in posts:
+        post.is_tombstone = True
+        post.publication_state = models.PublicationStates.DELETED_BY_ADMIN
+
+        # Remove extracts associated to this post
+        extracts_to_remove = post.db.query(models.Extract).filter(
+            models.Extract.content_id == post.id).all()
+        for extract in extracts_to_remove:
+            extract.tags = []
+            extract.delete()

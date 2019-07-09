@@ -7,7 +7,7 @@ Array [
     style={
       Object {
         "cursor": "pointer",
-        "fontSize": "9px",
+        "fontSize": "10px",
       }
     }
   >
@@ -20,7 +20,7 @@ Array [
     style={
       Object {
         "cursor": "pointer",
-        "fontSize": "6px",
+        "fontSize": "10px",
       }
     }
   >
@@ -38,7 +38,7 @@ Array [
     style={
       Object {
         "cursor": "pointer",
-        "fontSize": "9px",
+        "fontSize": "10px",
       }
     }
   >
@@ -51,7 +51,7 @@ Array [
     style={
       Object {
         "cursor": "pointer",
-        "fontSize": "6px",
+        "fontSize": "10px",
       }
     }
   >
