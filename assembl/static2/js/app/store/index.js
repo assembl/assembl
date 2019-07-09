@@ -16,7 +16,6 @@ export default function createAppStore(initialState) {
     });
   }
   const browserLanguage = navigator.language || navigator.userLanguage;
-  console.log('browserLanguage', browserLanguage);
   let storedLocale = getCookieItem('_LOCALE_');
   if (storedLocale === 'zh_CN' || storedLocale === 'zh_Hans') {
     storedLocale = 'zh-CN';
@@ -31,11 +30,8 @@ export default function createAppStore(initialState) {
     storedLocale = 'nb';
   }
   const isLocaleStored = storedLocale !== null;
-  console.log('isLocaleStored', isLocaleStored);
-  if (isLocaleStored) {
-    console.log('storedLocale', storedLocale);
-  }
-  const userLocale = isLocaleStored ? storedLocale : getLocale(browserLanguage);
+  //const userLocale = isLocaleStored ? storedLocale : getLocale(browserLanguage);
+  const userLocale = 'en';
   syncTranslationWithStore(store);
   store.dispatch(loadTranslations(getTranslations()));
   store.dispatch(setLocale(userLocale));
