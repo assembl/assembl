@@ -180,16 +180,16 @@ def ensure_aws_invoke_yaml(c, override=False):
         get_aws_invoke_yaml(c)
 
 
-def is_supervisord_running(c):	
-    with venv(c, True):	
-        result = c.run('supervisorctl pid')	
-    if not result or 'no such file' in result.stdout or 'refused connection' in result.stdout:	
-        return False	
-    try:	
-        pid = int(result.stdout)	
-        if pid:	
-            return True	
-    except ValueError:	
+def is_supervisord_running(c):
+    with venv(c, True):
+        result = c.run('supervisorctl pid')
+    if not result or 'no such file' in result.stdout or 'refused connection' in result.stdout:
+        return False
+    try:
+        pid = int(result.stdout)
+        if pid:
+            return True
+    except ValueError:
         return False
 
 
@@ -222,31 +222,31 @@ def supervisor_restart(c):
             c.run("supervisord")
 
 
-@task()	
-def webservers_stop(c):	
-    """Stop all webservers."""	
-    c.sudo('/etc/init.d/nginx stop')	
+@task()
+def webservers_stop(c):
+    """Stop all webservers."""
+    c.sudo('/etc/init.d/nginx stop')
 
 
-@task()	
-def webservers_start(c):	
-    """Start all webservers."""	
+@task()
+def webservers_start(c):
+    """Start all webservers."""
     c.sudo("/etc/init.d/nginx start")
 
 
-@task()	
-def webservers_reload(c):	
-    """	
-    Reload the webserver stack.	
-    """	
-    # Nginx (sudo is part of command line here because we don't have full	
-    # sudo access	
-    print("Reloading nginx")	
-    if os.path.exists('/etc/init.d/nginx'):	
-        result = c.sudo('/usr/sbin/nginx -t')	
-        if "Command exited with status 0" in str(result):	
-            c.sudo('/etc/init.d/nginx reload')	
-        else:	
+@task()
+def webservers_reload(c):
+    """
+    Reload the webserver stack.
+    """
+    # Nginx (sudo is part of command line here because we don't have full
+    # sudo access
+    print("Reloading nginx")
+    if os.path.exists('/etc/init.d/nginx'):
+        result = c.sudo('/usr/sbin/nginx -t')
+        if "Command exited with status 0" in str(result):
+            c.sudo('/etc/init.d/nginx reload')
+        else:
             print("Your Nginx configuration returned an error, please check your nginx configuration.")
 
 
@@ -309,7 +309,7 @@ def download_rds_pem(c, reset=False):
 
 @task(generate_nginx_conf, generate_supervisor_conf)
 def aws_server_startup_from_local(c):
-    """Update files that depend on local.rc and restart nginx, supervisor"""  
+    """Update files that depend on local.rc and restart nginx, supervisor"""
     if is_supervisord_running(c):
         supervisor_restart(c)
     else:
@@ -551,4 +551,3 @@ def create_clean_cronlist(c):
 
 # avoid it being defined in both modules
 delete_foreign_tasks(locals())
-

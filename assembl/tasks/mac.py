@@ -5,8 +5,7 @@ import re
 from os.path import join, normpath
 from .common import (
     venv, task, exists, delete_foreign_tasks, setup_var_directory, get_upload_dir,
-    chgrp_rec, _processes_to_restart_without_backup, _processes_to_restart_with_backup,
-    filter_autostart_processes, supervisor_process_stop, local_db_path, is_supervisord_running,
+    chgrp_rec, filter_autostart_processes, supervisor_process_stop, local_db_path, is_supervisord_running,
     get_node_base_path, is_supervisor_running, separate_pip_install)
 from ConfigParser import SafeConfigParser
 from contextlib import nested
@@ -26,9 +25,28 @@ core_dependencies = [
     'automake'
 ]
 
+
+_processes_to_restart_without_backup = [
+    "pserve", "celery", "changes_router",
+    "source_reader"]
+
+
+_processes_to_restart_with_backup = _processes_to_restart_without_backup + [
+    "gulp", "webpack", "elasticsearch", "uwsgi"]
+
+
+@task()
+def check_brew(c):
+    if not exists(c, '/usr/local/bin/brew'):
+        c.run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
+    c.run("brew update")
+    c.run("brew upgrade")
+
+
 @task()
 def create_yaml(c):
     c.run("echo '_extends: mac.yaml' > invoke.yaml")
+
 
 @task()
 def install_core_dependencies(c):
@@ -39,22 +57,22 @@ def install_core_dependencies(c):
 
 
 @task()
-def upgrade_yarn_mac(c):
+def upgrade_yarn(c):
     c.run("brew update && brew upgrade yarn")
 
 
 @task()
-def create_venv_python_3(c):
+def install_python_dependencies(c):
     if not exists(c, '/usr/local/bin/python3'):
-        if not exists(c, '/usr/local/bin/brew'):
-            c.run('ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"')
-        c.run("brew update")
-        c.run("brew upgrade")
         c.run("brew install python@2")
         c.run("brew install python")  # This installs python3
         c.run("brew install libmagic")  # needed for python-magic
         c.run('pip2 install virtualenv psycopg2 requests jinja2')
         c.run('python3 -m pip install virtualenv')
+
+
+@task()
+def create_venv_python_3(c):
     venv3 = os.path.join(os.getcwd(), "venvpy3")
     if exists(c, os.path.join(venv3, "bin/activate")):
         print("Found an already existing virtual env with python 3")
@@ -64,7 +82,7 @@ def create_venv_python_3(c):
     c.run('chmod -R o-rwx ' + venv3)
 
 
-def venv_py3_mac(c):
+def venv_py3(c):
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
     return nested(c.cd(project_prefix), c.prefix('source venv/bin/activate'))
 
@@ -185,9 +203,11 @@ def install_single_server(c):
         Follow with bootstrap_from_checkout
     """
     print('Installing Assembl Server')
+    check_brew(c)
     install_java(c)
     install_elasticsearch(c)
     install_database(c)
+    install_python_dependencies(c)
     install_core_dependencies(c)
     install_assembl_server_deps(c)
     install_services(c)
@@ -228,13 +248,13 @@ def update_main_code(c):
 
 
 @task()
-def updateUrlMetaData(c):
+def update_url_metadata(c):
     path = join(c.config.projectpath, '..', 'url_metadata')
     if exists(c, path):
         print('Updating url_metadata Git repository')
         with c.cd(path):
             c.run('git pull')
-        with venv_py3_mac(c):
+        with venv_py3(c):
             c.run('python3 -m pip install -e ../url_metadata')
 
 
@@ -294,14 +314,13 @@ def update_node(c, force_reinstall=False):
     match = node_version_cmd_regex.match(str(node_version_cmd_result))
     if not match or force_reinstall:
         # Stop gulp and webpack because otherwise node may be busy
-        # TODO: Implement supervisor_process_stop
-        # supervisor_process_stop('dev:gulp')
-        # supervisor_process_stop('dev:webpack')
+        supervisor_process_stop('dev:gulp')
+        supervisor_process_stop('dev:webpack')
         with venv(c, True):
             c.run("rm -rf venv/lib/node_modules/")
             c.run("rm -f venv/bin/npm")  # remove the symlink first otherwise next command raises OSError: [Errno 17] File exists
             c.run("nodeenv --node=%s --npm=%s --python-virtualenv assembl/static/js" % (n_version, npm_version))
-        upgrade_yarn_mac(c)
+        upgrade_yarn(c)
         with c.cd(get_node_base_path(c)):
             with venv(c):
                 c.run("npm install reinstall -g")
@@ -379,25 +398,30 @@ def app_compile_noupdate(c):
     app_reload(c)
 
 
+@task()
 def app_reload(c):
     """
     Restart all necessary processes after an update
     """
     if is_supervisor_running(c):
         with venv(c):
-            c.run("supervisorctl stop dev:")
-            c.run("supervisorctl update")
-            c.run("supervisorctl restart dev:")
+            if c.run("supervisorctl stop dev:").ok:
+                c.run("supervisorctl update")
+                c.run("supervisorctl restart dev:")
 
 
 @task()
 def app_db_update(c):
     """
-    Migrates database using south
+    Migrates database using alembic
     """
     print('Migrating database')
     with venv(c):
-        c.run('alembic -c %s upgrade head' % (c.config._internal.ini_file))
+        result = c.run('alembic -c %s heads' % (c.config._internal.ini_file))
+        if result.stdout.count('head') > 1:
+            raise Exception('Multiple heads detected')
+        else:
+            c.run('alembic -c %s upgrade head' % (c.config._internal.ini_file))
 
 
 def ensure_requirements(c):
@@ -470,7 +494,7 @@ def set_file_permissions(c):
             c.run('chmod -R o-rwx ' + code_path)
             c.run('chmod -R g-rw ' + code_path)
             chgrp_rec(c, code_path, webgrp)
-        
+
         c.run('chgrp {webgrp} . {path}/var {path}/var/run {path}/var/share'.format(webgrp=webgrp, path=project_path))
         c.run('chgrp -R {webgrp} {path}/assembl/static {path}/assembl/static2'.format(webgrp=webgrp, path=code_path))
         c.run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))

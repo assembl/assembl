@@ -19,15 +19,6 @@ if _local_file.endswith('.pyc'):
 local_code_root = dirname(dirname(realpath(_local_file)))
 
 
-_processes_to_restart_without_backup = [
-    "pserve", "celery", "changes_router",
-    "source_reader"]
-
-
-_processes_to_restart_with_backup = _processes_to_restart_without_backup + [
-    "gulp", "webpack", "elasticsearch", "uwsgi"]
-
-
 _known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
 
@@ -134,11 +125,14 @@ def get_venv_site_packages(c):
     return os.path.join('venv/lib/python2.7', 'site-packages', 'assembl')
 
 
+def set_prod_env_link(c, project_prefix):
+    # Will fail but continue if link/folder already exists
+    c.run('ln -s {0}/venv/lib/python2.7/site-packages/assembl {0}'.format(project_prefix), warn=True)
+
+
 def get_assembl_code_path(c):
-    if is_cloud_env(c):
-        return get_venv_site_packages(c)
-    else:
-        return ""
+    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
+    return os.path.join(project_prefix, 'assembl')
 
 
 def is_cloud_env(c):
@@ -159,12 +153,9 @@ def is_cloud_env(c):
 def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
-    if is_cloud_env(c):
-        code_root = os.path.join(os.getcwd(), get_assembl_code_path(c))
-        config_prefix = code_root + '/configs/'
-    else:
-        code_root = project_prefix
-        config_prefix = code_root + '/assembl/configs/'
+    set_prod_env_link(c, project_prefix)
+    code_root = get_assembl_code_path(c)
+    config_prefix = os.path.join(code_root, 'configs/')
     current = c.config._project or {}
     current['code_root'] = code_root
     current['projectpath'] = project_prefix
@@ -172,11 +163,11 @@ def setup_ctx(c):
     current['_internal']['mac'] = sys.platform == 'darwin'
     target = c.config.get('_extends', None)
     if not target and exists(c, 'invoke.yaml'):
-        target = 'invoke.yaml'        
+        target = 'invoke.yaml'
     while target:
         if os.path.isabs(target):
             if exists(c, target):
-                data = c.config._load_yaml(config_prefix + target)
+                data = c.config._load_yaml(target)
             else:
                 raise RuntimeError("Cannot find " + target)
         elif exists(c, config_prefix + target):
