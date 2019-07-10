@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { type EditorState } from 'draft-js';
 import Immutable from 'immutable';
+import type { PostsOrderTypes } from './graphql_types.flow';
 
 /* temporary dummy types */
 type RawDraftContentState = {
@@ -59,6 +60,10 @@ type Post = { ...PostFragment } & {
   creationDate: string,
   parentId: number
 };
+
+type PostWithChildren = {
+  children: Array<PostWithChildren>
+} & Post;
 
 type FictionPostPreview = {
   id: string,
@@ -237,4 +242,15 @@ type Language = {
   locale: string,
   name: string,
   nativeName: string
+};
+
+type PostsOrderPolicy = {
+  id: string,
+  postsGroupPolicy: {
+    // if true, posts are grouped, else, they are flattened
+    comparator: (a: PostWithChildren, b: PostWithChildren) => 1 | 0 | -1, // how to compare groups of posts
+    reverse: boolean
+  } | null,
+  graphqlPostsOrder: PostsOrderTypes, // graphql criterion for postsOrder (backend sort)
+  labelMsgId: string
 };

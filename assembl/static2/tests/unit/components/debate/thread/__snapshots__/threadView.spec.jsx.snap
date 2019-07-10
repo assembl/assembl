@@ -35,7 +35,7 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
 
 exports[`ThreadView component should render a TopPostForm 1`] = `
 <div>
-  <TopPostFormContainer
+  <DumbTopPostFormContainer
     draftSuccessMsgId={null}
     draftable={false}
     fullscreen={false}

@@ -8,9 +8,8 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import 'react-dates/initialize'; // required for the react-dates components
 import 'react-dates/lib/css/_datepicker.css'; // required for the react-dates components
-
 import { get } from './utils/routeMap';
-import { getDiscussionId, getConnectedUserName, getConnectedUserId } from './utils/globalFunctions';
+import { getConnectedUserId, getConnectedUserName, getDiscussionId } from './utils/globalFunctions';
 import { getCurrentPhaseData } from './utils/timeline';
 import { fetchDebateData } from './actions/debateActions';
 import { addContext } from './actions/contextActions';
@@ -24,12 +23,12 @@ import DiscussionPreferencesQuery from './graphql/DiscussionPreferencesQuery.gra
 import { MESSAGE_VIEW } from './constants';
 
 type ContextValue = {
-  isHarvesting: boolean,
-  isHarvestable: boolean,
-  modifyContext: (newState: Object) => void,
-  isDebateModerated: boolean,
   connectedUserId: ?string,
-  messageViewOverride: ?string
+  isHarvestable: boolean,
+  isHarvesting: boolean,
+  isDebateModerated: boolean,
+  messageViewOverride: ?string,
+  modifyContext: (newState: Object) => void
 };
 
 const defaultContextValue: ContextValue = {
@@ -86,7 +85,10 @@ type State = {
 };
 
 export class DumbApp extends React.Component<Props, State> {
-  state = { isHarvestable: false, messageViewOverride: MESSAGE_VIEW.noModule };
+  state = {
+    isHarvestable: false,
+    messageViewOverride: MESSAGE_VIEW.noModule
+  };
 
   componentDidMount() {
     const { route } = this.props;

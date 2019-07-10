@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Col, Grid, Row } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
 import debounce from 'lodash/debounce';
@@ -8,20 +8,21 @@ import debounce from 'lodash/debounce';
 import TopPostForm from './topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { MIN_WIDTH_COLUMN, SMALL_SCREEN_HEIGHT } from '../../../constants';
+import PostsFilterMenu from './postsFilterMenu';
 
 type TopPostFormContainerProps = {
-  messageColumns: IdeaMessageColumns,
-  isColumnViewInline: boolean,
-  ideaId: string,
-  refetchIdea: Function,
-  topPostsCount: number,
-  instructionLabelMsgId?: string,
-  fillBodyLabelMsgId?: string,
   bodyPlaceholderMsgId?: string,
-  postSuccessMsgId?: string,
   draftable: boolean,
   draftSuccessMsgId?: ?string,
-  fullscreen: boolean
+  messageColumns: IdeaMessageColumns,
+  fillBodyLabelMsgId?: string,
+  fullscreen: boolean,
+  ideaId: string,
+  isColumnViewInline: boolean,
+  instructionLabelMsgId?: string,
+  postSuccessMsgId?: string,
+  refetchIdea: Function,
+  topPostsCount: number
 };
 
 type TopPostFormContainerState = {
@@ -30,7 +31,7 @@ type TopPostFormContainerState = {
   topPostFormOffset: number
 };
 
-class TopPostFormContainer extends React.Component<TopPostFormContainerProps, TopPostFormContainerState> {
+class DumbTopPostFormContainer extends React.Component<TopPostFormContainerProps, TopPostFormContainerState> {
   topPostFormContainer: ?HTMLDivElement;
 
   static defaultProps = {
@@ -94,23 +95,23 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
 
   render() {
     const {
-      ideaId,
-      refetchIdea,
-      messageColumns,
-      isColumnViewInline,
-      topPostsCount,
-      instructionLabelMsgId,
-      fillBodyLabelMsgId,
       bodyPlaceholderMsgId,
-      postSuccessMsgId,
-      draftSuccessMsgId,
       draftable,
-      fullscreen
+      draftSuccessMsgId,
+      fillBodyLabelMsgId,
+      fullscreen,
+      ideaId,
+      instructionLabelMsgId,
+      isColumnViewInline,
+      messageColumns,
+      postSuccessMsgId,
+      refetchIdea,
+      topPostsCount
     } = this.props;
     const columnsInfos = this.getColumnsInfos();
     const containerClassNames = messageColumns.length <= 1 && topPostsCount >= 1 ? 'top-post-sticky' : '';
     const containerMdOffset = fullscreen ? 1 : 2;
-    const formMdSize = fullscreen ? 8 : 6;
+    const formMdSize = fullscreen ? 7 : 5;
     return (
       <div id="top-post-form" ref={this.setFormContainerRef} className={containerClassNames}>
         <Grid fluid className={messageColumns.length > 1 ? '' : 'background-color'}>
@@ -154,8 +155,8 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                         </Col>
                         <Col
                           xs={12}
-                          sm={messageColumns.length > 1 ? 10 : 7}
-                          md={messageColumns.length > 1 ? 10 : formMdSize}
+                          sm={messageColumns.length > 1 ? 9 : 6}
+                          md={messageColumns.length > 1 ? 9 : formMdSize}
                           mdOffset={messageColumns.length > 1 ? 1 : 0}
                           className="no-padding"
                         >
@@ -174,6 +175,11 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
                             draftSuccessMsgId={draftSuccessMsgId}
                           />
                         </Col>
+                        <Col xs={12} sm={1} md={1} mdOffset={messageColumns.length > 1 ? 1 : 0}>
+                          <div>
+                            <PostsFilterMenu />
+                          </div>
+                        </Col>
                       </Row>
                     </div>
                   </Col>
@@ -187,4 +193,4 @@ class TopPostFormContainer extends React.Component<TopPostFormContainerProps, To
   }
 }
 
-export default TopPostFormContainer;
+export default DumbTopPostFormContainer;

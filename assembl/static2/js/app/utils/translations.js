@@ -452,8 +452,16 @@ const Translations = {
         postSuccess: "Merci pour votre participation. Votre message a bien été envoyé !",
         postToBeValidated:
           "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
-        fillSubject: "Veuillez écrire un titre",
+        postsOrder: {
+          reverseChronologicalTop: "Fils de discussion récemment démarrés",
+          reverseChronologicalLast: "Fils de discussion récemment actifs",
+          reverseChronologicalFlat: "Messages récents en premier",
+          popularityFlat: "Messages les plus populaires en premier",
+          chronologicalTop: "Fils de discussion chronologiques"
+        },
         fillBody: "Veuillez écrire un message",
+        fillSubject: "Veuillez écrire un titre",
+        filterPosts: "Trier / filtrer les posts",
         linkIdea: "Ce post est en lien avec les thématiques suivantes :",
         foldedPostLink: "Voir les %{count} réponses",
         foldedPostLink_1: "Voir la réponse",
@@ -1531,8 +1539,16 @@ const Translations = {
         postSuccess: "Thanks for your participation. Your comment has been sent!",
         postToBeValidated:
           "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.",
-        fillSubject: "Please, write a title",
+        postsOrder: {
+          reverseChronologicalTop: "Recently active threads",
+          reverseChronologicalLast: "Recently started threads",
+          reverseChronologicalFlat: "Newest messages first",
+          popularityFlat: "Most popular messages first",
+          chronologicalTop: "Chronological threads"
+        },
         fillBody: "Please, write a comment",
+        fillSubject: "Please, write a title",
+        filterPosts: "Sort and filter posts",
         linkIdea: "This post is related to the following themes:",
         foldedPostLink: "Show %{count} responses",
         foldedPostLink_1: "Show 1 response",
