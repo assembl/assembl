@@ -92,7 +92,7 @@ def update_pip_requirements_mac(c, force_reinstall=False):
     """
     Update external dependencies on local.
     """
-    separate_pip_install('pip-tools')
+    separate_pip_install(c, 'pip-tools')
     with venv(c):
         # TODO: upgrade local dev pip to latest of py27
         c.run('pip install -U setuptools "pip<10" ')
