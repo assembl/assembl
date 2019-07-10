@@ -59,6 +59,10 @@ textarea.placeholder {
   overflow-x: scroll;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 .pre-wrap {
   white-space: pre-wrap;
 }

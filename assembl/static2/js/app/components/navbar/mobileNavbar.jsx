@@ -13,7 +13,8 @@ type Props = {
   logoLink: string,
   slug: string,
   logoSrc: string,
-  renderUserMenu: number => React.Node
+  renderUserMenu: number => React.Node,
+  screenTooSmall: boolean
 };
 
 type State = {
@@ -42,11 +43,11 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { elements, slug, logoLink, logoSrc, renderUserMenu } = this.props;
+    const { elements, slug, logoLink, logoSrc, renderUserMenu, screenTooSmall } = this.props;
     return (
       <div className="flat-navbar">
         <div className="left-part">
-          <BurgerMenu>
+          <BurgerMenu screenTooSmall={screenTooSmall}>
             <NavigationMenu elements={elements} />
             <LanguageMenu size="xs" className="navbar-language" />
           </BurgerMenu>

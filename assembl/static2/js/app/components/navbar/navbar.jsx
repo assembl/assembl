@@ -153,7 +153,8 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
       slug: slug,
       logoSrc: logoData ? logoData.externalUrl : null,
       logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : '',
-      renderUserMenu: this.renderUserMenu
+      renderUserMenu: this.renderUserMenu,
+      screenTooSmall: screenTooSmall
     };
 
     return (

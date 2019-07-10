@@ -41,6 +41,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
         logoLink="http://www.homesweethome.org"
         logoSrc="http://www.example.com/bar.jpg"
         renderUserMenu={[Function]}
+        screenTooSmall={true}
       />
     </div>
   </Uncontrolled(Navbar)>
@@ -89,6 +90,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
         logoSrc="http://www.example.com/bar.jpg"
         maxWidth={1370}
         renderUserMenu={[Function]}
+        screenTooSmall={false}
         setWidth={[Function]}
         style={Object {}}
       />

@@ -6,13 +6,12 @@ import { connect } from 'react-redux';
 
 import TimelineCpt from '../debate/navigation/timeline';
 import { browserHistory } from '../../router';
-// import { isMobile } from '../../utils/globalFunctions';
 import { getCurrentPhaseData } from '../../utils/timeline';
 
 type Props = {
   children: React.Node,
-  // renderUserMenu: number => React.Node,
-  timeline: Object
+  timeline: Object,
+  screenTooSmall: Boolean
 };
 
 type State = {
@@ -50,10 +49,21 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
     }
   };
 
+  noBodyScrollWhenOpen = () => {
+    const body = document.body;
+    const { shouldDisplayMenu } = this.state;
+    const { screenTooSmall } = this.props;
+    // $FlowFixMe document.body is not null
+    return shouldDisplayMenu && screenTooSmall ? body.classList.add('no-scroll') : body.classList.remove('no-scroll');
+  };
+
   toggleMenu = () => {
-    this.setState(prevState => ({
-      shouldDisplayMenu: !prevState.shouldDisplayMenu
-    }));
+    this.setState(
+      prevState => ({
+        shouldDisplayMenu: !prevState.shouldDisplayMenu
+      }),
+      () => this.noBodyScrollWhenOpen()
+    );
   };
 
   showSegmentMenu = (index: number) => {
