@@ -209,7 +209,6 @@ def install_single_server(c):
     install_database(c)
     install_python_dependencies(c)
     install_core_dependencies(c)
-    install_assembl_server_deps(c)
     install_services(c)
     print('Assembl Server installed')
 
