@@ -1564,7 +1564,7 @@ const Translations = {
           "measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.",
         keywordCloud: "Keyword cloud",
         keywordCloudDefinition:
-          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate. The importance of each keyword is shown with font size.",
+          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" when the text refers to a particular thematic). The importance of each keyword is shown with font size.",
         informationKeyword: "Information on keywords",
         numberKeyword: "Number of keywords",
         noKeywordSelected: "Select your keyword",
