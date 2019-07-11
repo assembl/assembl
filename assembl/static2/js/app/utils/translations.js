@@ -583,6 +583,7 @@ const Translations = {
         voteResultsPlusTitle: "Résultats des votes : %{title}",
         postSuccess:
           "Merci pour votre participation ! Votre vote a bien été pris en compte. Vous pouvez le modifier à tout moment jusqu’à la fermeture de la session de vote.",
+        remainingToken: "%{count} jeton disponible",
         remainingTokens: "%{count} jetons disponibles",
         resetTokens: "Supprimer mon vote",
         submit: "Soumettre le vote",
@@ -1661,6 +1662,7 @@ const Translations = {
         voteResultsPlusTitle: "Vote results: %{title}",
         postSuccess:
           "Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.",
+        remainingToken: "%{count} token remaining",
         remainingTokens: "%{count} tokens remaining",
         resetTokens: "Reset my vote",
         submit: "Submit vote",
