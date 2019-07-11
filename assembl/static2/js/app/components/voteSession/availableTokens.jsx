@@ -76,7 +76,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                             : { minWidth: '160px' }
                         }
                       >
-                        <h2 className="dark-title-3">{title}</h2>
+                        <h2 className="dark-title-6">{title}</h2>
                         <Translate value="debate.voteSession.remainingTokens" count={remaining} />
                       </div>
                       <div
