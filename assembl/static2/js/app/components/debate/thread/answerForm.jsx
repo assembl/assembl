@@ -13,10 +13,11 @@ import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
-import { scrollToPost } from '../../../utils/hashLinkScroll';
 import { getPostPublicationState } from '../../../utils/globalFunctions';
 import { connectedUserIsModerator } from '../../../utils/permissions';
 import { DebateContext } from '../../../app';
+import { browserHistory } from '../../../router';
+import { get } from '../../../utils/routeMap';
 
 type Props = {
   contentLocale: string,
@@ -30,7 +31,8 @@ type Props = {
   timeline: Timeline,
   phaseId: string,
   handleAnswerClick: Function,
-  isDebateModerated: boolean
+  isDebateModerated: boolean,
+  routerParams: RouterParams
 };
 
 type State = {
@@ -80,7 +82,8 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
       refetchIdea,
       hideAnswerForm,
       uploadDocument,
-      isDebateModerated
+      isDebateModerated,
+      routerParams
     } = this.props;
     const { body } = this.state;
     this.setState({ submitting: true });
@@ -107,6 +110,16 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
           createPost({ variables: variables })
             .then((res) => {
               const postId = res.data.createPost.post.id;
+              const redirectToNewPost = () => {
+                browserHistory.push(
+                  get('post', {
+                    slug: routerParams.slug,
+                    phase: routerParams.phase,
+                    themeId: routerParams.themeId,
+                    postId: postId
+                  })
+                );
+              };
               this.setState({ submitting: false, body: EditorState.createEmpty() }, () => {
                 hideAnswerForm();
                 // Execute refetchIdea after the setState otherwise we can get a
@@ -118,7 +131,7 @@ export class DumbAnswerForm extends React.PureComponent<Props, State> {
                   setTimeout(() => {
                     const createdPostElement = document.getElementById(postId);
                     if (createdPostElement) {
-                      scrollToPost(createdPostElement, false);
+                      redirectToNewPost();
                     }
                   });
                 });
