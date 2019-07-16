@@ -1,14 +1,16 @@
 // @flow
 import * as React from 'react';
-import { DropdownButton } from 'react-bootstrap';
-import { connect } from 'react-redux';
+import { DropdownButton, MenuItem } from 'react-bootstrap';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
+import { connect } from 'react-redux';
 
-import { DeletedPublicationStates } from '../../../constants';
-import PostsFilterMenuItem from './postsFilterMenuItem';
-import { setThreadPostsOrder } from '../../../actions/threadFilterActions';
-import { withScreenHeight } from '../../common/screenDimensions';
+import { Translate } from 'react-redux-i18n';
+import { DeletedPublicationStates } from '../../../../constants';
+import PostsFilterMenuItem from './menuItem';
+import PostsFilterButton from './button';
+import { withScreenHeight } from '../../../common/screenDimensions';
+import { resetThreadFilterDefaults, setThreadPostsOrder } from '../../../../actions/threadFilterActions';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -116,8 +118,9 @@ export const defaultOrderPolicy = reverseChronologicalLastPolicy;
 
 type Props = {
   postsOrderPolicy: PostsOrderPolicy,
+  resetFilter: () => void,
   screenHeight: number,
-  setPostsOrderPolicy: Function
+  setPostsOrderPolicy: PostsOrderPolicy => void
 };
 
 type State = {
@@ -146,8 +149,13 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
   }, 100);
 
   render() {
-    const { postsOrderPolicy, setPostsOrderPolicy } = this.props;
+    const { postsOrderPolicy, resetFilter, setPostsOrderPolicy } = this.props;
     const { sticky } = this.state;
+
+    function noop(event) {
+      event.preventDefault();
+      event.stopPropagation();
+    }
     return (
       <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
         <DropdownButton
@@ -155,6 +163,11 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
           title={<img height={24} width={24} src="/static2/img/icons/black/filter.svg" alt="user pic" />}
           id="postsFilter-dropdown"
         >
+          <MenuItem onClick={noop} disabled>
+            <strong>
+              <Translate value="debate.thread.filterPosts" />
+            </strong>
+          </MenuItem>
           {postsOrderPolicies.map(item => (
             <PostsFilterMenuItem
               key={item.id}
@@ -166,6 +179,12 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
               eventKey={item.id}
             />
           ))}
+          <PostsFilterButton
+            className="pull-right"
+            onClick={resetFilter}
+            i18nTitle="debate.thread.postsOrder.cleanFilter"
+            bsStyle="primary"
+          />
         </DropdownButton>
       </div>
     );
@@ -173,6 +192,7 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = dispatch => ({
+  resetFilter: () => dispatch(resetThreadFilterDefaults()),
   setPostsOrderPolicy: (postsOrder: PostsOrderPolicy) => dispatch(setThreadPostsOrder(postsOrder))
 });
 const mapStateToProps = (state) => {

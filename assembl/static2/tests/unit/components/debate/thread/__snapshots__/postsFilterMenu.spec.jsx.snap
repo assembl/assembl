@@ -35,6 +35,24 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       role="menu"
     >
       <li
+        className="disabled"
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <strong>
+            <span>
+              Sort and filter posts
+            </span>
+          </strong>
+        </a>
+      </li>
+      <li
         className=""
         role="presentation"
       >
@@ -172,6 +190,31 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
               Most popular messages first
             </span>
           </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <button
+            className="pull-right btn btn-primary"
+            disabled={false}
+            onClick={[Function]}
+            onKeyDown={[Function]}
+            onSelect={[Function]}
+            type="button"
+          >
+            <span>
+              Clean filters
+            </span>
+          </button>
         </a>
       </li>
     </ul>

@@ -453,11 +453,12 @@ const Translations = {
         postToBeValidated:
           "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
         postsOrder: {
-          reverseChronologicalTop: "Fils de discussion récemment démarrés",
-          reverseChronologicalLast: "Fils de discussion récemment actifs",
-          reverseChronologicalFlat: "Messages récents en premier",
+          cleanFilter: "Effacer les filtres",
+          chronologicalTop: "Fils de discussion chronologiques",
           popularityFlat: "Messages les plus populaires en premier",
-          chronologicalTop: "Fils de discussion chronologiques"
+          reverseChronologicalFlat: "Messages récents en premier",
+          reverseChronologicalLast: "Fils de discussion récemment actifs",
+          reverseChronologicalTop: "Fils de discussion récemment démarrés"
         },
         fillBody: "Veuillez écrire un message",
         fillSubject: "Veuillez écrire un titre",
@@ -1540,11 +1541,12 @@ const Translations = {
         postToBeValidated:
           "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.",
         postsOrder: {
-          reverseChronologicalTop: "Recently active threads",
-          reverseChronologicalLast: "Recently started threads",
-          reverseChronologicalFlat: "Newest messages first",
+          cleanFilter: "Clean filters",
+          chronologicalTop: "Chronological threads",
           popularityFlat: "Most popular messages first",
-          chronologicalTop: "Chronological threads"
+          reverseChronologicalFlat: "Newest messages first",
+          reverseChronologicalLast: "Recently started threads",
+          reverseChronologicalTop: "Recently active threads"
         },
         fillBody: "Please, write a comment",
         fillSubject: "Please, write a title",

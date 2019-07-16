@@ -9,7 +9,7 @@ import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import type { ContentLocaleMapping } from '../../../actions/actionTypes';
-import PostsFilterMenu from '../common/postsFilterMenu';
+import PostsFilterMenu from '../common/postsFilter/menu';
 
 type Props = {
   isUserConnected: boolean,

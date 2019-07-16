@@ -1,6 +1,10 @@
 // @flow
-import { SET_THREAD_POSTS_ORDER, THREAD_POSTS_MUST_BE_REFRESHED } from '../actions/threadFilterActions';
-import { defaultOrderPolicy } from '../components/debate/common/postsFilterMenu';
+import {
+  RESET_THREAD_FILTER_DEFAULTS,
+  SET_THREAD_POSTS_ORDER,
+  THREAD_POSTS_MUST_BE_REFRESHED
+} from '../actions/threadFilterActions';
+import { defaultOrderPolicy } from '../components/debate/common/postsFilter/menu';
 
 type ThreadFilterState = {
   postsOrderPolicy: PostsOrderPolicy,
@@ -14,6 +18,11 @@ const ThreadFilterReducer = (state: ThreadFilterState = {}, action: any) => {
     return {
       postsOrderPolicy: defaultOrderPolicy,
       postsMustBeRefreshed: false
+    };
+  case RESET_THREAD_FILTER_DEFAULTS:
+    return {
+      postsOrderPolicy: defaultOrderPolicy,
+      postsMustBeRefreshed: true
     };
   case SET_THREAD_POSTS_ORDER:
     newState.postsMustBeRefreshed = true;

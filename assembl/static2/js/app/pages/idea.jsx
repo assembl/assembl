@@ -35,7 +35,7 @@ import VoteSession from './voteSession';
 // Utils imports
 import { displayAlert } from '../utils/utilityManager';
 import { DebateContext } from '../app';
-import { defaultOrderPolicy } from '../components/debate/common/postsFilterMenu';
+import { defaultOrderPolicy } from '../components/debate/common/postsFilter/menu';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 

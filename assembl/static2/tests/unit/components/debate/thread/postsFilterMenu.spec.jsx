@@ -3,7 +3,7 @@ import React from 'react';
 import configureStore from 'redux-mock-store';
 import renderer from 'react-test-renderer';
 
-import PostsFilterMenu, { defaultOrderPolicy } from '../../../../../js/app/components/debate/common/postsFilterMenu';
+import PostsFilterMenu, { defaultOrderPolicy } from '../../../../../js/app/components/debate/common/postsFilter/menu';
 
 describe('PostsFilterMenu component', () => {
   const mockStore = configureStore();
