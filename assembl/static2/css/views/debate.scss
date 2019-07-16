@@ -242,7 +242,7 @@
 
   .top-post-sticky {
     position: sticky;
-    top: 60px;
+    top: $top-post-sticky-top;
     width: 100%;
     z-index: 1000;
   }
@@ -493,7 +493,7 @@
     }
 
     .top-post-sticky {
-      top: 60px;
+      top: $top-post-sticky-top;
     }
 
     .timeline-section {

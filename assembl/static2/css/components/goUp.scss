@@ -1,6 +1,5 @@
-.go-up {
-  position: fixed;
-  bottom: 20px;
+
+.go-up, .posts-filter-button {
   right: 20px;
   z-index: 99;
 
@@ -10,22 +9,43 @@
     color: $first-color;
   }
 
-  a {
-    text-align: left;
-    border-radius: 50%;
-    padding: 8px 0 0 8px;
-    width: 35px;
-    height: 35px;
-    background-color: $first-color-light;
-    display: inline-block;
-    cursor: pointer;
+  &.go-up {
+    position: fixed;
+    bottom: 20px;
 
-    &:hover {
-      color: white;
+    a {
+      text-align: left;
+      border-radius: 50%;
+      padding: 8px 0 0 8px;
+      width: 35px;
+      height: 35px;
+      background-color: $first-color-light;
+      display: inline-block;
+      cursor: pointer;
+
+      &:hover {
+        color: white;
+      }
+
+      .assembl-icon-up-open::before {
+        font-size: 9px;
+      }
+    }
+  }
+
+  $post-filter-button-margin-top: 24px;
+
+  &.posts-filter-button {
+    position: absolute;
+    margin-top: $post-filter-button-margin-top;
+
+    &.sticky {
+      top: $top-post-sticky-top + 60px + $post-filter-button-margin-top;
+      position: fixed;
     }
 
-    .assembl-icon-up-open::before {
-      font-size: 9px;
+    ul {
+      width: 372px; // FIXME
     }
   }
 }

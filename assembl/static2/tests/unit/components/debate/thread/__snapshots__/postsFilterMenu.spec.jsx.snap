@@ -1,0 +1,180 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostsFilterMenu component should render a filter with sort by recently started threads selected 1`] = `
+<div
+  className="posts-filter-button"
+>
+  <div
+    className="dropdown btn-group"
+  >
+    <button
+      aria-expanded={false}
+      aria-haspopup={true}
+      className="dropdown-toggle btn btn-default"
+      disabled={false}
+      id="postsFilter-dropdown"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="button"
+      type="button"
+    >
+      <img
+        alt="user pic"
+        height={24}
+        src="/static2/img/icons/black/filter.svg"
+        width={24}
+      />
+       
+      <span
+        className="caret"
+      />
+    </button>
+    <ul
+      aria-labelledby="postsFilter-dropdown"
+      className="dropdown-menu dropdown-menu-right"
+      role="menu"
+    >
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-reverseChronologicalTop"
+            name="postsOrder"
+            readOnly={true}
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-reverseChronologicalTop"
+          >
+            <span>
+              Recently active threads
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={true}
+            id="postsFilterItem-reverseChronologicalLast"
+            name="postsOrder"
+            readOnly={true}
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-reverseChronologicalLast"
+          >
+            <span>
+              Recently started threads
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-chronologicalTop"
+            name="postsOrder"
+            readOnly={true}
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-chronologicalTop"
+          >
+            <span>
+              Chronological threads
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-reverseChronologicalFlat"
+            name="postsOrder"
+            readOnly={true}
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-reverseChronologicalFlat"
+          >
+            <span>
+              Newest messages first
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-popularityFlat"
+            name="postsOrder"
+            readOnly={true}
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-popularityFlat"
+          >
+            <span>
+              Most popular messages first
+            </span>
+          </label>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

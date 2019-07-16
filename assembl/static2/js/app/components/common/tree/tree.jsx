@@ -24,8 +24,6 @@ type Props = {
 };
 
 class Tree extends React.Component<Props> {
-  invalidate: boolean = false;
-
   componentDidMount() {
     // Reset the global prevStopIndex to not overfetch posts when changing idea
     // or to avoid recreating all dom nodes if we go back to the same idea.
@@ -68,6 +66,8 @@ class Tree extends React.Component<Props> {
       this.triggerScrollToRow(initialRowIndex);
     }
   }
+
+  invalidate: boolean = false;
 
   triggerScrollToRow = (rowIndex: ?number) => {
     if (this.listRef && rowIndex !== null) {

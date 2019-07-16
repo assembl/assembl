@@ -8,7 +8,6 @@ import debounce from 'lodash/debounce';
 import TopPostForm from './topPostForm';
 import { hexToRgb } from '../../../utils/globalFunctions';
 import { MIN_WIDTH_COLUMN, SMALL_SCREEN_HEIGHT } from '../../../constants';
-import PostsFilterMenu from './postsFilterMenu';
 
 type TopPostFormContainerProps = {
   bodyPlaceholderMsgId?: string,
@@ -174,11 +173,6 @@ class DumbTopPostFormContainer extends React.Component<TopPostFormContainerProps
                             draftable={draftable}
                             draftSuccessMsgId={draftSuccessMsgId}
                           />
-                        </Col>
-                        <Col xs={12} sm={1} md={1} mdOffset={messageColumns.length > 1 ? 1 : 0}>
-                          <div>
-                            <PostsFilterMenu />
-                          </div>
                         </Col>
                       </Row>
                     </div>

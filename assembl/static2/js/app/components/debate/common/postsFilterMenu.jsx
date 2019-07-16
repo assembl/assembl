@@ -2,9 +2,13 @@
 import * as React from 'react';
 import { DropdownButton } from 'react-bootstrap';
 import { connect } from 'react-redux';
+import debounce from 'lodash/debounce';
+import classNames from 'classnames';
+
 import { DeletedPublicationStates } from '../../../constants';
 import PostsFilterMenuItem from './postsFilterMenuItem';
 import { setThreadPostsOrder } from '../../../actions/threadFilterActions';
+import { withScreenHeight } from '../../common/screenDimensions';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -111,31 +115,59 @@ export const postsOrderPolicies: PostsOrderPolicy[] = [
 export const defaultOrderPolicy = reverseChronologicalLastPolicy;
 
 type Props = {
-  setPostsOrderPolicy: Function,
-  postsOrderPolicy: PostsOrderPolicy
+  postsOrderPolicy: PostsOrderPolicy,
+  screenHeight: number,
+  setPostsOrderPolicy: Function
 };
 
-class DumbPostsFilterMenu extends React.Component<Props> {
+type State = {
+  sticky: boolean
+};
+
+class DumbPostsFilterMenu extends React.Component<Props, State> {
+  state = { sticky: false };
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.setButtonPosition);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.setButtonPosition);
+  }
+
+  setButtonPosition = debounce(() => {
+    const { screenHeight } = this.props;
+    if (window.pageYOffset > screenHeight - 60) {
+      // Show the button when we scrolled minimum the height of the window.
+      this.setState({ sticky: true });
+    } else {
+      this.setState({ sticky: false });
+    }
+  }, 100);
+
   render() {
     const { postsOrderPolicy, setPostsOrderPolicy } = this.props;
+    const { sticky } = this.state;
     return (
-      <DropdownButton
-        drop="up"
-        title={<img height={24} width={24} src="/static2/img/icons/black/filter.svg" alt="user pic" />}
-        id="postsFilter-dropdown"
-      >
-        {postsOrderPolicies.map(item => (
-          <PostsFilterMenuItem
-            key={item.id}
-            item={item}
-            selected={item.id === postsOrderPolicy.id}
-            inputType="radio"
-            inputName="postsOrder"
-            onSelectItem={setPostsOrderPolicy}
-            eventKey={item.id}
-          />
-        ))}
-      </DropdownButton>
+      <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
+        <DropdownButton
+          pullRight
+          title={<img height={24} width={24} src="/static2/img/icons/black/filter.svg" alt="user pic" />}
+          id="postsFilter-dropdown"
+        >
+          {postsOrderPolicies.map(item => (
+            <PostsFilterMenuItem
+              key={item.id}
+              item={item}
+              selected={item.id === postsOrderPolicy.id}
+              inputType="radio"
+              inputName="postsOrder"
+              onSelectItem={setPostsOrderPolicy}
+              eventKey={item.id}
+            />
+          ))}
+        </DropdownButton>
+      </div>
     );
   }
 }
@@ -150,4 +182,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DumbPostsFilterMenu);
+export default withScreenHeight(connect(mapStateToProps, mapDispatchToProps)(DumbPostsFilterMenu));
