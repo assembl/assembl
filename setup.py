@@ -141,7 +141,8 @@ setup(name='assembl',
               "assembl-pserve   = assembl.scripts.pserve:main",
               "assembl-reindex-all-contents  = assembl.scripts.reindex_all_contents:main",
               "assembl-graphql-schema-json = assembl.scripts.export_graphql_schema:main",
-              "assembl-add-semantics-tab = assembl.scripts.add_semantic_analysis_tab:main"
+              "assembl-add-semantics-tab = assembl.scripts.add_semantic_analysis_tab:main",
+              "assembl-semantic-analyze-all-posts = assembl.scripts.semantic_analyze_all_posts:main"
           ],
           "paste.app_factory": [
               "main = assembl:main",

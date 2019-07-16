@@ -164,7 +164,6 @@ def get_or_create_computation_on_post(post, process_name, parameters):
         post=post, process=process, post_id=post.id,
         parameters=parameters)
     post.db.add(computation)
-    return computation
 
 
 def prepare_computation(id):

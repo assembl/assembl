@@ -15,7 +15,7 @@ from assembl.indexing.changes import configure_indexing
 from assembl.lib.migration import add_semantic_analysis_tab_to_all_discussions
 
 
-if __name__ == '__main__':
+def main():
     config_fname = sys.argv[1]
     settings = get_appsettings(config_fname, 'assembl')
     set_config(settings)
@@ -24,3 +24,7 @@ if __name__ == '__main__':
     configure_engine(settings, True)
     session = get_session_maker()()
     add_semantic_analysis_tab_to_all_discussions(session)
+
+
+if __name__ == '__main__':
+    main()
