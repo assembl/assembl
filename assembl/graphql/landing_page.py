@@ -118,7 +118,7 @@ class CreateLandingPageModule(graphene.Mutation):
         cls = models.LandingPageModule
         discussion_id = context.matchdict['discussion_id']
         require_cls_permission(CrudPermissions.CREATE, cls, context)
-        configuration = args.get('configuration')
+        configuration = args.get('configuration') or "{}"
         order = args.get('order')
         enabled = args.get('enabled')
         module_type_identifier = args.get('type_identifier')
