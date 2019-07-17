@@ -56,6 +56,7 @@ from assembl.lib import logging
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
+from assembl.models.landing_page import MANUAL_MODULES, MODULES_ORDER
 from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
 from assembl.utils import get_ideas, get_posts_for_phases
@@ -370,7 +371,7 @@ class Query(graphene.ObjectType):
 
             if module:
                 modules.extend(module)
-            else:
+            elif module_type.identifier not in MANUAL_MODULES:
                 # create the graphene object for this module type
                 module = LandingPageModule(
                     configuration=u'{}',
@@ -386,7 +387,12 @@ class Query(graphene.ObjectType):
                 modules.append(module)
 
         def sort_landing_page_modules(module1, module2):
-            return cmp(module1.order, module2.order)
+            modules_cmp = cmp(MODULES_ORDER.get(module1.module_type.identifier, 0),
+                              MODULES_ORDER.get(module2.module_type.identifier, 0))
+            if modules_cmp == 0:
+                return cmp(module1.order, module2.order)
+            else:
+                return modules_cmp
 
         sorted_modules = sorted(modules, cmp=sort_landing_page_modules)
         return sorted_modules

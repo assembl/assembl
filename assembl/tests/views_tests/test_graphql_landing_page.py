@@ -1,7 +1,7 @@
 from graphql_relay.node.node import to_global_id
 
 from assembl.graphql.schema import Schema as schema
-from assembl.tests.model_tests.test_landing_page import MODULES_COUNT
+from assembl.models.landing_page import MODULES_IDENTIFIERS, MANUAL_MODULES
 
 
 def test_query_landing_page_module_types(graphql_request, graphql_registry):
@@ -10,13 +10,16 @@ def test_query_landing_page_module_types(graphql_request, graphql_registry):
         context_value=graphql_request,
         variable_values={"lang": u"en"})
     assert res.errors is None
-    assert len(res.data['landingPageModuleTypes']) == MODULES_COUNT
+    assert len(res.data['landingPageModuleTypes']) == len(MODULES_IDENTIFIERS)
     for module_type in res.data['landingPageModuleTypes']:
         if module_type['identifier'] == 'INTRODUCTION':
             assert module_type['title'] == u'Text & Multimedia'
             assert module_type['defaultOrder'] == 2.0
             assert module_type['editableOrder'] is True
             assert module_type['required'] is False
+            break
+    else:
+        assert False, "INTRODUCTION module type is missing"
 
 
 def test_query_landing_page_modules(graphql_request, graphql_registry, simple_landing_page_module,
@@ -26,7 +29,7 @@ def test_query_landing_page_modules(graphql_request, graphql_registry, simple_la
         context_value=graphql_request,
         variable_values={"lang": u"en"})
 
-    assert len(res.data[u'landingPageModules']) == MODULES_COUNT
+    assert len(res.data[u'landingPageModules']) == len(MODULES_IDENTIFIERS) - len(MANUAL_MODULES)
     orders = []
     modules = res.data[u'landingPageModules']
     assert modules[0]['moduleType']['identifier'] == 'HEADER'  # header is top

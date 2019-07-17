@@ -31,9 +31,16 @@ MODULES_IDENTIFIERS = {
     'footer': 'FOOTER'
 }
 
+# manual modules are not automatically added
+MANUAL_MODULES = (
+    MODULES_IDENTIFIERS['introduction'],
+)
+
+# use 0 for main block modules that are orderable
 MODULES_ORDER = {
-    'HEADER': 1,
-    'INTRODUCTION': 2,
+    'HEADER': -1,
+    'INTRODUCTION': 0,
+    'TIMELINE': 0,
     'FOOTER': 100
 }
 
