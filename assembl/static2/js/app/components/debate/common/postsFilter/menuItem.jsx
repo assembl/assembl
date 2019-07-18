@@ -7,8 +7,8 @@ import { Translate } from 'react-redux-i18n';
 type PostsFilterMenuItemProps = {
   inputName: string,
   inputType: 'radio' | 'checkbox',
-  item: PostsOrderPolicy,
-  onSelectItem: (item: PostsOrderPolicy, selected: boolean) => void,
+  item: PostsFilterItem, // FIXME: why PostsFilterMenuItem does not work ?
+  onSelectItem: (PostsFilterItem, selected?: boolean) => void,
   selected: boolean
 };
 

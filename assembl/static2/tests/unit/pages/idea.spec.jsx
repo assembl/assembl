@@ -2,7 +2,7 @@ import { getDebateTotalMessages, transformPosts } from '../../../js/app/pages/id
 import {
   reverseChronologicalFlatPolicy,
   reverseChronologicalTopPolicy
-} from '../../../js/app/components/debate/common/postsFilter/menu';
+} from '../../../js/app/components/debate/common/postsFilter/policies';
 
 describe('transformPosts function', () => {
   it('should transform posts', () => {

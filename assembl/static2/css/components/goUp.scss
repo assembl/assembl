@@ -1,55 +1,54 @@
-
 .go-up, .posts-filter-button {
   right: 20px;
-  z-index: 99;
 
   div {
     font-size: 11px;
     text-align: center;
     color: $first-color;
   }
+}
 
-  &.go-up {
-    position: fixed;
-    bottom: 20px;
+.go-up {
+  z-index: 99;
+  position: fixed;
+  bottom: 20px;
 
-    a {
-      text-align: left;
-      border-radius: 50%;
-      padding: 8px 0 0 8px;
-      width: 35px;
-      height: 35px;
-      background-color: $first-color-light;
-      display: inline-block;
-      cursor: pointer;
+  a {
+    text-align: left;
+    border-radius: 50%;
+    padding: 8px 0 0 8px;
+    width: 35px;
+    height: 35px;
+    background-color: $first-color-light;
+    display: inline-block;
+    cursor: pointer;
 
-      &:hover {
-        color: white;
-      }
+    &:hover {
+      color: white;
+    }
 
-      .assembl-icon-up-open::before {
-        font-size: 9px;
-      }
+    .assembl-icon-up-open::before {
+      font-size: 9px;
     }
   }
+}
 
+.posts-filter-button {
   $post-filter-button-margin-top: 44px;
 
-  &.posts-filter-button {
-    z-index: 1;
-    position: -webkit-sticky;
-    position: sticky;
-    text-align: right;
-    margin-top: $post-filter-button-margin-top;
+  z-index: 1;
+  position: -webkit-sticky;
+  position: sticky;
+  float: right;
+  margin-top: $post-filter-button-margin-top;
 
-    &.sticky {
-      top: $top-post-sticky-top + 60px + $post-filter-button-margin-top;
-    }
+  &.sticky {
+    top: $top-post-sticky-top + 60px + $post-filter-button-margin-top;
+  }
 
-    ul {
-      // FIXME: magic numbers
-      width: 372px;
-    }
+  ul {
+    // FIXME: magic numbers
+    width: 372px;
   }
 }
 

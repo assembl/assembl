@@ -1,12 +1,15 @@
 // @flow
 import React from 'react';
-import { configure, shallow, mount } from 'enzyme';
+import { configure, mount, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import renderer from 'react-test-renderer';
+import { MockedProvider } from 'react-apollo/test-utils';
+import configureStore from 'redux-mock-store';
 
+import renderer from 'react-test-renderer';
 import PostBody from '../../../../../js/app/components/debate/common/post/postBody';
-import FictionBody from '../../../../../js/app/components/debate/brightMirror/fictionBody';
 import type { Props as FictionBodyProps } from '../../../../../js/app/components/debate/brightMirror/fictionBody';
+import FictionBody from '../../../../../js/app/components/debate/brightMirror/fictionBody';
+import { defaultDisplayPolicy, defaultOrderPolicy } from '../../../../../js/app/components/debate/common/postsFilter/policies';
 
 configure({ adapter: new Adapter() });
 
@@ -20,6 +23,14 @@ const defaultIsAuthorAccountDeleted: boolean = false;
 const defaultDbId: number = 1;
 const bodyMimeType: string = 'text/html';
 const refetchPost: Function = jest.fn();
+
+const mockStore = configureStore();
+const initialState = {
+  threadFilter: {
+    postsOrderPolicy: defaultOrderPolicy,
+    postsDisplayPolicy: defaultDisplayPolicy
+  }
+};
 
 const defaultFictionBody: FictionBodyProps = {
   ideaId: defaultIdeaId,
@@ -76,16 +87,45 @@ describe('<FictionBody /> - with mount', () => {
     // $FlowFixMe because document.body may be null
     document.body.appendChild(div);
     fictionBody = { ...defaultFictionBody };
-    wrapper = mount(<FictionBody {...fictionBody} />, { attachTo: window.domNode });
+    const store = mockStore(initialState);
+    wrapper = mount(
+      <MockedProvider store={store}>
+        <FictionBody {...fictionBody} />
+      </MockedProvider>,
+      { attachTo: window.domNode }
+    );
   });
 
   it('should display the fiction content', () => {
     const fictionContent: string = wrapper.find('div[className="post-body-content body"]').text();
     expect(fictionContent).toEqual(defaultContent);
   });
+});
+
+describe('<FictionBody /> - with mount', () => {
+  let wrapper;
+  let fictionBody: FictionBodyProps;
+
+  beforeEach(() => {
+    window.getSelection = () => ({
+      removeAllRanges: () => {}
+    });
+    // Create DOM to allow document.getElementById function
+    const div = document.createElement('div');
+    window.domNode = div;
+    // $FlowFixMe because document.body may be null
+    document.body.appendChild(div);
+    fictionBody = { ...defaultFictionBody, content: '' };
+    const store = mockStore(initialState);
+    wrapper = mount(
+      <MockedProvider store={store}>
+        <FictionBody {...fictionBody} />
+      </MockedProvider>,
+      { attachTo: window.domNode }
+    );
+  });
 
   it('should display "no content specified" when content is set to null', () => {
-    wrapper.setProps({ content: '' });
     const fictionContent: string = wrapper.find('div[className="post-body-content body"]').text();
     expect(fictionContent).toEqual('no content specified');
   });
@@ -93,7 +133,12 @@ describe('<FictionBody /> - with mount', () => {
 
 describe('<FictionBody /> - snapshots', () => {
   it('should match snapshot', () => {
-    const component = renderer.create(<FictionBody {...defaultFictionBody} />);
+    const store = mockStore(initialState);
+    const component = renderer.create(
+      <MockedProvider store={store}>
+        <FictionBody {...defaultFictionBody} />
+      </MockedProvider>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
@@ -122,7 +167,12 @@ describe('<FictionBody /> - snapshots', () => {
       isPhaseCompleted: false,
       screenWidth: 100
     };
-    const component = renderer.create(<FictionBody {...props} />);
+    const store = mockStore(initialState);
+    const component = renderer.create(
+      <MockedProvider store={store}>
+        <FictionBody {...props} />
+      </MockedProvider>
+    );
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });

@@ -244,13 +244,24 @@ type Language = {
   nativeName: string
 };
 
-type PostsOrderPolicy = {
-  id: string,
-  postsGroupPolicy: {
-    // if true, posts are grouped, else, they are flattened
-    comparator: (a: PostWithChildren, b: PostWithChildren) => 1 | 0 | -1, // how to compare groups of posts
-    reverse: boolean
-  } | null,
-  graphqlPostsOrder: PostsOrderTypes, // graphql criterion for postsOrder (backend sort)
-  labelMsgId: string
+export type PostsDisplayModes = 'full' | 'summary';
+
+export interface PostsFilterItem {
+  id: string;
+  labelMsgId: string;
+}
+
+type PostsGroupPolicy = {
+  comparator: (a: PostWithChildren, b: PostWithChildren) => 1 | 0 | -1, // how to compare groups of posts
+  reverse: boolean
 };
+
+export interface PostsOrderPolicy extends PostsFilterItem {
+  // if null, posts are flattened
+  postsGroupPolicy: any; // FIXME null | PostsGroupPolicy;
+  graphqlPostsOrder: PostsOrderTypes; // graphql criterion for postsOrder (backend sort)
+}
+
+export interface PostsDisplayPolicy extends PostsFilterItem {
+  displayMode: PostsDisplayModes;
+}

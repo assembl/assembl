@@ -32,10 +32,9 @@ import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextAc
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Survey from './survey';
 import VoteSession from './voteSession';
-// Utils imports
 import { displayAlert } from '../utils/utilityManager';
 import { DebateContext } from '../app';
-import { defaultOrderPolicy } from '../components/debate/common/postsFilter/menu';
+import { defaultOrderPolicy } from '../components/debate/common/postsFilter/policies';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 

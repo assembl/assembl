@@ -1,6 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import ShallowRenderer from 'react-test-renderer/shallow';
+import Adapter from 'enzyme-adapter-react-16/build';
+import { configure, shallow } from 'enzyme';
 
 import {
   DumbPostBody,
@@ -9,6 +11,9 @@ import {
   postBodyReplacementComponents
 } from '../../../../../../js/app/components/debate/common/post/postBody';
 import * as fakeData from '../../../harvesting/fakeData';
+import { summaryDisplayPolicy } from '../../../../../../js/app/components/debate/common/postsFilter/policies';
+
+configure({ adapter: new Adapter() });
 
 describe('PostBody component', () => {
   it('should render a post body', () => {
@@ -17,22 +22,73 @@ describe('PostBody component', () => {
       body: '<p>You can\'t index the port without programming the wireless HTTP program!</p>',
       bodyDivRef: bodyDivRefSpy,
       bodyMimeType: 'text/*',
+      connectedUserId: null,
       contentLocale: 'fr',
+      dbId: 124,
       extracts: [],
       id: 'XYZ333',
       isHarvesting: true,
-      dbId: 124,
       lang: 'fr',
-      subject: <span>open-source Associate</span>,
       originalLocale: 'en',
+      postsDisplayPolicy: summaryDisplayPolicy,
+      subject: <span>open-source Associate</span>,
       translate: true,
-      translationEnabled: true,
-      connectedUserId: null
+      translationEnabled: true
     };
     const shallowRenderer = new ShallowRenderer();
     shallowRenderer.render(<DumbPostBody {...props} />);
     const result = shallowRenderer.getRenderOutput();
     expect(result).toMatchSnapshot();
+  });
+
+  it('should render a post body with summary view', () => {
+    const bodyDivRefSpy = jest.fn();
+    const props = {
+      body: '<p>You can\'t index the port without programming the wireless HTTP program!</p>',
+      bodyDivRef: bodyDivRefSpy,
+      bodyMimeType: 'text/*',
+      connectedUserId: null,
+      contentLocale: 'fr',
+      dbId: 124,
+      extracts: [],
+      id: 'XYZ333',
+      isHarvesting: true,
+      lang: 'fr',
+      originalLocale: 'en',
+      postsDisplayPolicy: summaryDisplayPolicy,
+      subject: <span>open-source Associate</span>,
+      translate: true,
+      translationEnabled: true
+    };
+    const shallowRenderer = new ShallowRenderer();
+    shallowRenderer.render(<DumbPostBody {...props} />);
+    const result = shallowRenderer.getRenderOutput();
+    expect(result).toMatchSnapshot();
+  });
+
+  it('should expand body when click on "Read more"', () => {
+    const bodyDivRefSpy = jest.fn();
+    const props = {
+      body: '<p>You can\'t index the port without programming the wireless HTTP program!</p>',
+      bodyDivRef: bodyDivRefSpy,
+      bodyMimeType: 'text/*',
+      connectedUserId: null,
+      contentLocale: 'fr',
+      dbId: 124,
+      extracts: [],
+      id: 'XYZ333',
+      isHarvesting: true,
+      lang: 'fr',
+      originalLocale: 'en',
+      postsDisplayPolicy: summaryDisplayPolicy,
+      subject: <span>open-source Associate</span>,
+      translate: true,
+      translationEnabled: true
+    };
+    const wrapper = shallow(<DumbPostBody {...props} />);
+    expect(wrapper.find('.truncate')).toHaveLength(1);
+    wrapper.find('.read-more').simulate('click');
+    expect(wrapper.find('.truncate')).toHaveLength(0);
   });
 });
 

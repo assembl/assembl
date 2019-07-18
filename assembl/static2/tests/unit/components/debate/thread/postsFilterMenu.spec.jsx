@@ -3,13 +3,15 @@ import React from 'react';
 import configureStore from 'redux-mock-store';
 import renderer from 'react-test-renderer';
 
-import PostsFilterMenu, { defaultOrderPolicy } from '../../../../../js/app/components/debate/common/postsFilter/menu';
+import PostsFilterMenu from '../../../../../js/app/components/debate/common/postsFilter/menu';
+import { defaultDisplayPolicy, defaultOrderPolicy } from '../../../../../js/app/components/debate/common/postsFilter/policies';
 
 describe('PostsFilterMenu component', () => {
   const mockStore = configureStore();
   const initialState = {
     threadFilter: {
-      postsOrderPolicy: defaultOrderPolicy
+      postsOrderPolicy: defaultOrderPolicy,
+      postsDisplayPolicy: defaultDisplayPolicy
     }
   };
 
