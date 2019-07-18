@@ -3,6 +3,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 
 import MenuItem from '../menuItem';
+import { browserHistory } from '../../../../router';
 
 export const menuScrollEventId = 'menu-scroll';
 
@@ -36,6 +37,25 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
     selected: ''
   };
 
+  componentDidMount() {
+    this.preOpenMenuItems();
+  }
+
+  preOpenMenuItems = () => {
+    const { items, rootItem } = this.props;
+    const pathname = browserHistory.getCurrentLocation().pathname;
+    const thematicIdFromPathname = pathname.split('/')[5];
+    const MenuItemFromThematicId = items.find(element => element.id === thematicIdFromPathname);
+    const rootItems = this.getItemChildren(rootItem).filter(item => item.id);
+    rootItems.forEach((item) => {
+      if (MenuItemFromThematicId && MenuItemFromThematicId.ancestors.includes(item.id)) {
+        this.setState(() => ({
+          selected: item.id
+        })); // filter out item not having id (currently in table of thematics administration, but not saved yet)
+      }
+    });
+  };
+
   toggleMenu = (itemId) => {
     this.setState((prevState) => {
       const newId = prevState.selected !== itemId ? itemId : '';
@@ -56,6 +76,8 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
   render() {
     const { subMenu, items, rootItem, identifier, phaseId, className, onMenuItemClick } = this.props;
     const { selected } = this.state;
+    const pathname = browserHistory.getCurrentLocation().pathname;
+    const pathnameThemeId = pathname.split('/')[5];
     // filter out item not having id (currently in table of thematics administration, but not saved yet)
     const rootItems = this.getItemChildren(rootItem).filter(item => item.id);
     if (rootItems.length === 0) return null;
@@ -68,7 +90,7 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
               <div key={item.id}>
                 <MenuItem
                   hasSubItems={items.some(listItem => listItem.parentId === item.id)}
-                  selected={item.id === selected}
+                  selected={item.id === selected || item.id === pathnameThemeId}
                   onClick={onMenuItemClick}
                   toggleMenu={this.toggleMenu}
                   identifier={identifier}

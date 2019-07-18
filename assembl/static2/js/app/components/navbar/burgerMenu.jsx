@@ -58,9 +58,14 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
   };
 
   toggleMenu = () => {
+    const { timeline } = this.props;
+    const pathname = browserHistory.getCurrentLocation().pathname;
+    const pathnameIdentifier = pathname.split('/')[3];
+    const isTheIdentifier = element => element.identifier === pathnameIdentifier;
     this.setState(
       prevState => ({
-        shouldDisplayMenu: !prevState.shouldDisplayMenu
+        shouldDisplayMenu: !prevState.shouldDisplayMenu,
+        activeSegment: pathnameIdentifier ? timeline.findIndex(isTheIdentifier) : -1
       }),
       () => this.noBodyScrollWhenOpen()
     );
