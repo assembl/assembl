@@ -3,6 +3,7 @@ import * as React from 'react';
 import { DropdownButton } from 'react-bootstrap';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
+import { I18n } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 
 import PostsFilterMenuItem from './menuItem';
@@ -58,7 +59,15 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
       <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
         <DropdownButton
           pullRight
-          title={<img height={24} width={24} src="/static2/img/icons/black/filter.svg" alt="user pic" />}
+          title={
+            <img
+              height={24}
+              width={24}
+              src="/static2/img/icons/black/filter.svg"
+              alt={I18n.t('debate.thread.sortFilterPosts')}
+              title={I18n.t('debate.thread.sortFilterPosts')}
+            />
+          }
           id="postsFilter-dropdown"
         >
           <PostsFilterLabelMenuItem labelMsgId="debate.thread.sortPosts" />

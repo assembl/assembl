@@ -13,23 +13,21 @@ type ThreadFilterState = {
   postsMustBeRefreshed: boolean
 };
 
+const initialState = {
+  postsDisplayPolicy: defaultDisplayPolicy,
+  postsOrderPolicy: defaultOrderPolicy,
+  postsMustBeRefreshed: false
+};
+
 const ThreadFilterReducer = (state: ThreadFilterState = {}, action: any): ThreadFilterState => {
   const newState = { ...state };
   switch (action.type) {
   case '@@redux/INIT':
     // initial state
-    return {
-      postsDisplayPolicy: defaultDisplayPolicy,
-      postsOrderPolicy: defaultOrderPolicy,
-      postsMustBeRefreshed: false
-    };
+    return { ...initialState };
   case RESET_THREAD_FILTER_DEFAULTS:
     // reset default state
-    return {
-      postsDisplayPolicy: defaultDisplayPolicy,
-      postsOrderPolicy: defaultOrderPolicy,
-      postsMustBeRefreshed: true
-    };
+    return { ...initialState, postsMustBeRefreshed: true };
   case SET_THREAD_POSTS_ORDER:
     newState.postsMustBeRefreshed = true;
     newState.postsOrderPolicy = action.postsOrderPolicy;

@@ -19,9 +19,10 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       type="button"
     >
       <img
-        alt="user pic"
+        alt="Sort / Filter"
         height={24}
         src="/static2/img/icons/black/filter.svg"
+        title="Sort / Filter"
         width={24}
       />
        
@@ -131,7 +132,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             htmlFor="postsFilterItem-chronologicalTop"
           >
             <span>
-              Chronological threads
+              Chronological order
             </span>
           </label>
         </a>
