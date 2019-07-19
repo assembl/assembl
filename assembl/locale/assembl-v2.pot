@@ -3139,7 +3139,7 @@ msgstr ""
 #: messages.json
 #. [debate.semanticAnalysis.keywordCloudDefinition]
 #. defaultMessage is:
-#. The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or "in the conversations related to the theme being addressed" pour le texte à mettre en thématique). The importance of each keyword is shown with font size.
+#. The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or "in the conversations related to the theme being addressed" when the analysis is done on a particular thematic). The importance of each keyword is shown with font size.
 msgid "debate.semanticAnalysis.keywordCloudDefinition"
 msgstr ""
 
