@@ -1,10 +1,18 @@
-import { MockedProvider } from 'react-apollo/test-utils';
 import React from 'react';
 import configureStore from 'redux-mock-store';
 import renderer from 'react-test-renderer';
+import { configure, mount } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
 
-import PostsFilterMenu from '../../../../../js/app/components/debate/common/postsFilter/menu';
-import { defaultDisplayPolicy, defaultOrderPolicy } from '../../../../../js/app/components/debate/common/postsFilter/policies';
+import PostsFilterMenu, { DumbPostsFilterMenu } from '../../../../../js/app/components/debate/common/postsFilter/menu';
+import {
+  defaultDisplayPolicy,
+  defaultOrderPolicy,
+  reverseChronologicalTopPolicy,
+  summaryDisplayPolicy
+} from '../../../../../js/app/components/debate/common/postsFilter/policies';
+
+configure({ adapter: new Adapter() });
 
 describe('PostsFilterMenu component', () => {
   const mockStore = configureStore();
@@ -14,16 +22,84 @@ describe('PostsFilterMenu component', () => {
       postsDisplayPolicy: defaultDisplayPolicy
     }
   };
+  const props = {};
+  let store;
+  beforeEach(() => {
+    store = mockStore(initialState);
+  });
 
-  it('should render a filter with sort by recently started threads selected', () => {
-    const props = {};
-    const store = mockStore(initialState);
-    const component = renderer.create(
-      <MockedProvider store={store}>
-        <PostsFilterMenu {...props} />
-      </MockedProvider>
-    );
+  it('should render a filter with sort by recently started threads and full display selected', () => {
+    const component = renderer.create(<PostsFilterMenu store={store} {...props} />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  it('should rollback when reset is clicked', () => {
+    const wrapper = mount(<PostsFilterMenu {...props} store={store} />);
+
+    const defaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalLast');
+    const nonDefaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalTop');
+    const defaultDisplayItem = () => wrapper.find('a#postsFilterItem-full');
+    const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-summary');
+
+    const resetButton = () => wrapper.find('button#postsFilter-button-reset');
+
+    nonDefaultSortItem().simulate('click');
+    nonDefaultDisplayItem().simulate('click');
+    expect(
+      nonDefaultSortItem()
+        .find('input')
+        .props().checked
+    ).toBe(true);
+    expect(
+      nonDefaultDisplayItem()
+        .find('input')
+        .props().checked
+    ).toBe(true);
+
+    resetButton().simulate('click');
+    expect(
+      nonDefaultSortItem()
+        .find('input')
+        .props().checked
+    ).toBe(false);
+    expect(
+      nonDefaultDisplayItem()
+        .find('input')
+        .props().checked
+    ).toBe(false);
+    expect(
+      defaultSortItem()
+        .find('input')
+        .props().checked
+    ).toBe(true);
+    expect(
+      defaultDisplayItem()
+        .find('input')
+        .props().checked
+    ).toBe(true);
+  });
+
+  it('should be saved when saved is clicked', () => {
+    const setPostsFilterPolicies = jest.fn();
+    const component = (
+      <DumbPostsFilterMenu
+        postsDisplayPolicy={defaultDisplayPolicy}
+        postsOrderPolicy={defaultOrderPolicy}
+        setPostsFilterPolicies={setPostsFilterPolicies}
+        {...props}
+      />
+    );
+    const wrapper = mount(component);
+
+    const nonDefaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalTop');
+    const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-summary');
+    const saveButton = () => wrapper.find('button#postsFilter-button-save');
+
+    nonDefaultSortItem().simulate('click');
+    nonDefaultDisplayItem().simulate('click');
+    saveButton().simulate('click');
+    expect(setPostsFilterPolicies).toHaveBeenCalledTimes(1);
+    expect(setPostsFilterPolicies).toHaveBeenCalledWith(summaryDisplayPolicy, reverseChronologicalTopPolicy);
   });
 });

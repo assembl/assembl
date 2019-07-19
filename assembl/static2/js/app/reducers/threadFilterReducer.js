@@ -1,10 +1,5 @@
 // @flow
-import {
-  RESET_THREAD_FILTER_DEFAULTS,
-  SET_THREAD_POSTS_DISPLAY_MODE,
-  SET_THREAD_POSTS_ORDER,
-  THREAD_POSTS_MUST_BE_REFRESHED
-} from '../actions/threadFilterActions';
+import { SET_THREAD_POSTS_POLICIES, THREAD_POSTS_MUST_BE_REFRESHED } from '../actions/threadFilterActions';
 import { defaultDisplayPolicy, defaultOrderPolicy } from '../components/debate/common/postsFilter/policies';
 
 type ThreadFilterState = {
@@ -25,16 +20,10 @@ const ThreadFilterReducer = (state: ThreadFilterState = {}, action: any): Thread
   case '@@redux/INIT':
     // initial state
     return { ...initialState };
-  case RESET_THREAD_FILTER_DEFAULTS:
-    // reset default state
-    return { ...initialState, postsMustBeRefreshed: true };
-  case SET_THREAD_POSTS_ORDER:
-    newState.postsMustBeRefreshed = true;
-    newState.postsOrderPolicy = action.postsOrderPolicy;
-    return newState;
-  case SET_THREAD_POSTS_DISPLAY_MODE:
-    newState.postsMustBeRefreshed = true;
+  case SET_THREAD_POSTS_POLICIES:
     newState.postsDisplayPolicy = action.postsDisplayPolicy;
+    newState.postsOrderPolicy = action.postsOrderPolicy;
+    newState.postsMustBeRefreshed = true;
     return newState;
   case THREAD_POSTS_MUST_BE_REFRESHED:
     newState.postsMustBeRefreshed = !!action.postsMustBeRefreshed;

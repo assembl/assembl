@@ -8,38 +8,42 @@ import { connect } from 'react-redux';
 
 import PostsFilterMenuItem from './menuItem';
 import PostsFilterButton from './button';
+import PostsFilterButtons from './buttons';
 import PostsFilterLabelMenuItem from './label';
 import { withScreenHeight } from '../../../common/screenDimensions';
-import {
-  resetThreadFilterDefaults,
-  setThreadPostsDisplayPolicy,
-  setThreadPostsOrder
-} from '../../../../actions/threadFilterActions';
-import { postsDisplayPolicies, postsOrderPolicies } from './policies';
+import { setThreadPostsFilterPolicies } from '../../../../actions/threadFilterActions';
+import { defaultDisplayPolicy, defaultOrderPolicy, postsDisplayPolicies, postsOrderPolicies } from './policies';
 
 type Props = {
   postsDisplayPolicy: PostsDisplayPolicy,
   postsOrderPolicy: PostsOrderPolicy,
-  resetFilter: () => void,
   screenHeight: number,
-  setPostsDisplayPolicy: any, // FIXME PostsDisplayPolicy => void,
-  setPostsOrderPolicy: any // FIXME PostsOrderPolicy => void
+  setPostsFilterPolicies: (postsDisplay: PostsDisplayPolicy, postsOrder: PostsOrderPolicy) => void
 };
 
 type State = {
+  selectedPostsDisplayPolicy: PostsDisplayPolicy,
+  selectedPostsOrderPolicy: PostsOrderPolicy,
   sticky: boolean
 };
 
-class DumbPostsFilterMenu extends React.Component<Props, State> {
-  state = { sticky: false };
+export class DumbPostsFilterMenu extends React.Component<Props, State> {
+  componentWillMount(): void {
+    const { postsDisplayPolicy, postsOrderPolicy } = this.props;
+    this.setState({
+      sticky: true,
+      selectedPostsDisplayPolicy: postsDisplayPolicy,
+      selectedPostsOrderPolicy: postsOrderPolicy
+    });
+  }
 
   componentDidMount() {
     window.addEventListener('scroll', this.setButtonPosition);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount = () => {
     window.removeEventListener('scroll', this.setButtonPosition);
-  }
+  };
 
   setButtonPosition = debounce(() => {
     const { screenHeight } = this.props;
@@ -51,10 +55,29 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
     }
   }, 100);
 
-  render() {
-    const { postsDisplayPolicy, postsOrderPolicy, resetFilter, setPostsDisplayPolicy, setPostsOrderPolicy } = this.props;
-    const { sticky } = this.state;
+  selectPostsDisplayPolicy = (postsDisplayPolicy: any) => {
+    // FIXME PostsDisplayPolicy
+    this.setState({ selectedPostsDisplayPolicy: postsDisplayPolicy });
+  };
 
+  selectPostsOrderPolicy = (postsOrderPolicy: any) => {
+    // FIXME PostsOrderPolicy
+    this.setState({ selectedPostsOrderPolicy: postsOrderPolicy });
+  };
+
+  resetPolicies = () => {
+    this.selectPostsDisplayPolicy(defaultDisplayPolicy);
+    this.selectPostsOrderPolicy(defaultOrderPolicy);
+    this.props.setPostsFilterPolicies(defaultDisplayPolicy, defaultOrderPolicy);
+  };
+
+  savePolicies = () => {
+    this.props.setPostsFilterPolicies(this.state.selectedPostsDisplayPolicy, this.state.selectedPostsOrderPolicy);
+  };
+
+  render() {
+    const { selectedPostsDisplayPolicy, selectedPostsOrderPolicy } = this.state;
+    const { sticky } = this.state;
     return (
       <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
         <DropdownButton
@@ -76,10 +99,10 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
             <PostsFilterMenuItem
               key={item.id}
               item={item}
-              selected={item.id === postsOrderPolicy.id}
+              selected={item.id === selectedPostsOrderPolicy.id}
               inputType="radio"
               inputName="postsOrder"
-              onSelectItem={setPostsOrderPolicy}
+              onSelectItem={this.selectPostsOrderPolicy}
               eventKey={item.id}
             />
           ))}
@@ -89,20 +112,29 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
             <PostsFilterMenuItem
               key={item.id}
               item={item}
-              selected={item.id === postsDisplayPolicy.id}
+              selected={item.id === selectedPostsDisplayPolicy.id}
               inputType="radio"
               inputName="postsDisplay"
-              onSelectItem={setPostsDisplayPolicy}
+              onSelectItem={this.selectPostsDisplayPolicy}
               eventKey={item.id}
             />
           ))}
 
-          <PostsFilterButton
-            className="pull-right"
-            onClick={resetFilter}
-            i18nTitle="debate.thread.postsOrder.cleanFilter"
-            bsStyle="primary"
-          />
+          <PostsFilterButtons>
+            <PostsFilterButton
+              id="postsFilter-button-reset"
+              onClick={this.resetPolicies}
+              i18nTitle="debate.thread.postsOrder.cleanFilter"
+              bsStyle="default"
+            />
+            <PostsFilterButton
+              id="postsFilter-button-save"
+              style={{ textAlign: 'right', float: 'right' }}
+              onClick={this.savePolicies}
+              i18nTitle="ok"
+              bsStyle="success"
+            />
+          </PostsFilterButtons>
         </DropdownButton>
       </div>
     );
@@ -110,10 +142,10 @@ class DumbPostsFilterMenu extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = dispatch => ({
-  resetFilter: () => dispatch(resetThreadFilterDefaults()),
-  setPostsOrderPolicy: (postsOrder: PostsOrderPolicy) => dispatch(setThreadPostsOrder(postsOrder)),
-  setPostsDisplayPolicy: (postsDisplayPolicy: PostsDisplayPolicy) => dispatch(setThreadPostsDisplayPolicy(postsDisplayPolicy))
+  setPostsFilterPolicies: (postsDisplay: PostsDisplayPolicy, postsOrder: PostsOrderPolicy) =>
+    dispatch(setThreadPostsFilterPolicies(postsDisplay, postsOrder))
 });
+
 const mapStateToProps = (state) => {
   const { postsOrderPolicy, postsDisplayPolicy } = state.threadFilter;
   return {

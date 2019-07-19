@@ -1,8 +1,8 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`PostsFilterMenu component should render a filter with sort by recently started threads selected 1`] = `
+exports[`PostsFilterMenu component should render a filter with sort by recently started threads and full display selected 1`] = `
 <div
-  className="posts-filter-button"
+  className="posts-filter-button sticky"
 >
   <div
     className="dropdown btn-group"
@@ -59,6 +59,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
+          id="postsFilterItem-reverseChronologicalTop"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -66,14 +67,14 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={false}
-            id="postsFilterItem-reverseChronologicalTop"
+            id="postsFilterItem-reverseChronologicalTop-input"
             name="postsOrder"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-reverseChronologicalTop"
+            htmlFor="postsFilterItem-reverseChronologicalTop-input"
           >
             <span>
               Recently active threads
@@ -87,6 +88,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
+          id="postsFilterItem-reverseChronologicalLast"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -94,14 +96,14 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={true}
-            id="postsFilterItem-reverseChronologicalLast"
+            id="postsFilterItem-reverseChronologicalLast-input"
             name="postsOrder"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-reverseChronologicalLast"
+            htmlFor="postsFilterItem-reverseChronologicalLast-input"
           >
             <span>
               Recently started threads
@@ -115,6 +117,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
+          id="postsFilterItem-chronologicalTop"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -122,14 +125,14 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={false}
-            id="postsFilterItem-chronologicalTop"
+            id="postsFilterItem-chronologicalTop-input"
             name="postsOrder"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-chronologicalTop"
+            htmlFor="postsFilterItem-chronologicalTop-input"
           >
             <span>
               Chronological order
@@ -143,6 +146,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
+          id="postsFilterItem-reverseChronologicalFlat"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -150,14 +154,14 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={false}
-            id="postsFilterItem-reverseChronologicalFlat"
+            id="postsFilterItem-reverseChronologicalFlat-input"
             name="postsOrder"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-reverseChronologicalFlat"
+            htmlFor="postsFilterItem-reverseChronologicalFlat-input"
           >
             <span>
               Newest messages first
@@ -171,6 +175,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
+          id="postsFilterItem-popularityFlat"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -178,14 +183,14 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={false}
-            id="postsFilterItem-popularityFlat"
+            id="postsFilterItem-popularityFlat-input"
             name="postsOrder"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-popularityFlat"
+            htmlFor="postsFilterItem-popularityFlat-input"
           >
             <span>
               Most popular messages first
@@ -217,6 +222,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
+          id="postsFilterItem-full"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -224,14 +230,14 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={true}
-            id="postsFilterItem-full"
+            id="postsFilterItem-full-input"
             name="postsDisplay"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-full"
+            htmlFor="postsFilterItem-full-input"
           >
             <span>
               Full messages
@@ -245,6 +251,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
+          id="postsFilterItem-summary"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -252,14 +259,14 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={false}
-            id="postsFilterItem-summary"
+            id="postsFilterItem-summary-input"
             name="postsDisplay"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-summary"
+            htmlFor="postsFilterItem-summary-input"
           >
             <span>
               Message previews
@@ -279,15 +286,31 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
           tabIndex="-1"
         >
           <button
-            className="pull-right btn btn-primary"
+            className="btn btn-default"
             disabled={false}
+            id="postsFilter-button-reset"
             onClick={[Function]}
-            onKeyDown={[Function]}
-            onSelect={[Function]}
             type="button"
           >
             <span>
               Clean filters
+            </span>
+          </button>
+          <button
+            className="btn btn-success"
+            disabled={false}
+            id="postsFilter-button-save"
+            onClick={[Function]}
+            style={
+              Object {
+                "float": "right",
+                "textAlign": "right",
+              }
+            }
+            type="button"
+          >
+            <span>
+              Ok
             </span>
           </button>
         </a>
