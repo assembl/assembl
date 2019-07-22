@@ -59,6 +59,10 @@ textarea.placeholder {
   overflow-x: scroll;
 }
 
+.no-scroll {
+  overflow: hidden;
+}
+
 .pre-wrap {
   white-space: pre-wrap;
 }
@@ -84,7 +88,7 @@ textarea.placeholder {
 }
 
 .app-content {
-  margin: $navbar-height 0 0;
+  margin: 40px 0 0;
 }
 
 .max-container {

@@ -98,7 +98,5 @@ describe('DumbTimeline component', () => {
     const wrapper = mount(<DumbTimelineSegment {...propsNotStarted} />);
     const instance = wrapper.instance();
     expect(instance.phaseStatus).toEqual('notStarted');
-    instance.displayPhase();
-    expect(instance.props.onDeselect).toHaveBeenCalledTimes(1);
   });
 });

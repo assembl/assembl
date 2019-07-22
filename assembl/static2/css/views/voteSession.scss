@@ -22,6 +22,7 @@
 
     .category-available-tokens {
       display: flex;
+      justify-content: space-between;
       padding: 0 0 15px;
       max-width: 780px;
       margin-left: -5px;
@@ -31,7 +32,6 @@
       }
 
       .tokens {
-        padding-left: 100px;
         padding-top: 9px;
       }
 
@@ -53,14 +53,19 @@
     z-index: 100;
     border-top: 1px solid $light-grey;
     box-shadow: 3px 4px 7px $light-grey;
+    padding: 0 20px 15px;
 
     .separator {
       display: none;
     }
 
     .category-available-tokens {
+      display: flex;
+      flex-direction: column;
+      min-width: 100%;
+
       .tokens {
-        padding: 20px 0 0 0;
+        margin-left: -5px;
         display: inline-block;
         vertical-align: top;
         text-align: left;
@@ -341,6 +346,12 @@
   }
 }
 
+@media screen and (max-width: $screen-sm-max) {
+  .available-tokens-sticky {
+    display: none;
+  }
+}
+
 @media screen and (max-width: $screen-xs-max) {
   .votesession-page {
     .votes-in-progress {
@@ -350,10 +361,6 @@
         margin-top: 15px;
         height: 160px;
       }
-    }
-
-    .available-tokens-sticky {
-      display: none;
     }
 
     .container {
@@ -392,7 +399,6 @@
         display: block;
 
         .tokens {
-          padding-left: 10px;
           margin-left: -5px;
         }
       }

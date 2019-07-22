@@ -65,6 +65,7 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
               if (category) {
                 const { color, id, title, totalNumber } = category;
                 const remaining = remainingTokensByCategory.get(category.id);
+                const remainingTokens = remaining > 1 ? 'remainingTokens' : 'remainingToken';
                 return (
                   <Col xs={12} md={sticky ? columnSizes[idx] : 12} key={id} className={sticky && idx % 2 !== 0 ? 'center' : ''}>
                     <div className={sticky ? `category-available-tokens ${columnClass[idx]}` : 'category-available-tokens'}>
@@ -76,8 +77,8 @@ const AvailableTokens = ({ remainingTokensByCategory, sticky, tokenCategories, w
                             : { minWidth: '160px' }
                         }
                       >
-                        <h2 className="dark-title-3">{title}</h2>
-                        <Translate value="debate.voteSession.remainingTokens" count={remaining} />
+                        <h2 className="dark-title-6">{title}</h2>
+                        {<Translate value={`debate.voteSession.${remainingTokens}`} count={remaining} />}
                       </div>
                       <div
                         className="tokens"

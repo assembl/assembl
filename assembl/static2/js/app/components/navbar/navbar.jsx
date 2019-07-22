@@ -14,13 +14,12 @@ import Permissions, { connectedUserIsAdmin, connectedUserCan } from '../../utils
 import SectionsQuery from '../../graphql/SectionsQuery.graphql';
 import DiscussionQuery from '../../graphql/DiscussionQuery.graphql';
 import DiscussionPreferencesQuery from '../../graphql/DiscussionPreferencesQuery.graphql';
-import FlatNavbar from './FlatNavbar';
-import BurgerNavbar from './BurgerNavbar';
+import DesktopNavbar from './desktopNavbar';
+import MobileNavbar from './mobileNavbar';
 import { APP_CONTAINER_MAX_WIDTH, APP_CONTAINER_PADDING } from '../../constants';
 import { snakeToCamel } from '../../utils/globalFunctions';
 import manageErrorAndLoading from '../common/manageErrorAndLoading';
 import mergeLoadingAndError from '../common/mergeLoadingAndError';
-import DebateLink from '../debate/navigation/debateLink';
 import Logo from './Logo';
 import UserMenu from './UserMenu';
 import { addProtocol } from '../../utils/linkify';
@@ -80,11 +79,7 @@ const SectionLink = ({ section, options }) => {
     .includes(sectionName);
   const linkClassNames = isActiveUrl ? 'navbar-menu-item pointer active' : 'navbar-menu-item pointer';
 
-  return sectionType === 'DEBATE' ? (
-    <DebateLink identifier={options.phase} className={linkClassNames} dataText={title} screenTooSmall={options.screenTooSmall}>
-      {title}
-    </DebateLink>
-  ) : (
+  return sectionType === 'DEBATE' ? null : (
     <Link to={sectionURL(section, options)} className={linkClassNames} data-text={title}>
       {title}
     </Link>
@@ -158,7 +153,8 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
       slug: slug,
       logoSrc: logoData ? logoData.externalUrl : null,
       logoLink: sections.length > 0 ? sections.find(section => section && section.sectionType === 'HOMEPAGE').url : '',
-      renderUserMenu: this.renderUserMenu
+      renderUserMenu: this.renderUserMenu,
+      screenTooSmall: screenTooSmall
     };
 
     return (
@@ -171,14 +167,11 @@ export class AssemblNavbar extends React.PureComponent<AssemblNavbarProps, Assem
               </div>
             )}
           <div className="nav-bar max-container" id="navbar">
-            {screenTooSmall && <BurgerNavbar {...commonProps} />}
-            <FlatNavbar
-              {...commonProps}
-              setWidth={this.setFlatWidth}
-              style={screenTooSmall ? { opacity: 0, position: 'absolute', top: '-200px' } : {}}
-              maxWidth={maxAppWidth}
-              isLargeLogo={isLargeLogo}
-            />
+            {screenTooSmall ? (
+              <MobileNavbar {...commonProps} />
+            ) : (
+              <DesktopNavbar {...commonProps} setWidth={this.setFlatWidth} maxWidth={maxAppWidth} isLargeLogo={isLargeLogo} />
+            )}
           </div>
         </Navbar>
       </div>

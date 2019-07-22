@@ -486,7 +486,7 @@ const Translations = {
           "qualifie l'importance du mot clé pour comprendre le sens général du texte analysé. Le score varie de 0 à 1, de faible à fort.",
         keywordCloud: "Nuage de mots-clés",
         keywordCloudDefinition:
-          "Le nuage de mots-clés ci-dessous est une représentation visuelle des mots-clefs les plus utilisés dans le débat (ou \"dans les échanges liés à la thématique en question\" lorsque le texte fait référence à une thématique particulière). Les mots s'affichent dans des tailles de caractères d'autant plus visibles qu'ils sont utilisés ou populaires.",
+          "Le nuage de mots-clés ci-dessous est une représentation visuelle des mots-clefs les plus utilisés dans le débat (ou \"dans les échanges liés à la thématique en question\" lorsque l'analyse est faite sur une thématique particulière). Les mots s'affichent dans des tailles de caractères d'autant plus visibles qu'ils sont utilisés ou populaires.",
         informationKeyword: "Informations mots clés",
         numberKeyword: "Nombre de mots clés",
         noKeywordSelected: "Pas de mot sélectionné",
@@ -583,6 +583,7 @@ const Translations = {
         voteResultsPlusTitle: "Résultats des votes : %{title}",
         postSuccess:
           "Merci pour votre participation ! Votre vote a bien été pris en compte. Vous pouvez le modifier à tout moment jusqu’à la fermeture de la session de vote.",
+        remainingToken: "%{count} jeton disponible",
         remainingTokens: "%{count} jetons disponibles",
         resetTokens: "Supprimer mon vote",
         submit: "Soumettre le vote",
@@ -1564,7 +1565,7 @@ const Translations = {
           "measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.",
         keywordCloud: "Keyword cloud",
         keywordCloudDefinition:
-          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" when the text refers to a particular thematic). The importance of each keyword is shown with font size.",
+          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" when the analysis is done on a particular thematic). The importance of each keyword is shown with font size.",
         informationKeyword: "Information on keywords",
         numberKeyword: "Number of keywords",
         noKeywordSelected: "Select your keyword",
@@ -1661,6 +1662,7 @@ const Translations = {
         voteResultsPlusTitle: "Vote results: %{title}",
         postSuccess:
           "Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.",
+        remainingToken: "%{count} token remaining",
         remainingTokens: "%{count} tokens remaining",
         resetTokens: "Reset my vote",
         submit: "Submit vote",

@@ -469,8 +469,20 @@ def push_wheelhouse(c, house=None):
     A) an S3 bucket
     B) a remote folder via SSH
     C) a local folder
+    Checks for zero bytes files to avoid pushing rubbish to S3 and the creation of a bad index.html
     """
     tmp_wheel_path = house or os.path.join(c.config.code_root, 'wheelhouse')
+
+    # Check assembl wheel is not zero bytes - don't push this!!
+    (version, num, commit_hash, commit_tag, branch) = git_version_data(c)
+    base_name = create_wheel_name(version, num, commit_hash=commit_hash)
+
+    assembl_wheel = os.path.join(tmp_wheel_path, base_name)
+    assembl_wheel_size = os.path.getsize(assembl_wheel)
+
+    if assembl_wheel_size == 0:
+        raise RuntimeError("Created wheel not good. Bad dog. Cannot continue...")
+
     wheel_path = os.getenv('ASSEMBL_WHEELHOUSE', c.config.get(
         'wheelhouse', 's3://bluenove-assembl-wheelhouse'))
     json_filename = 'special-wheels.json'
