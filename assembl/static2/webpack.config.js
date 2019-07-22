@@ -63,9 +63,10 @@ module.exports = {
                   '@babel/plugin-proposal-class-properties',
                   ['@babel/plugin-transform-runtime', { helpers: true, corejs: 2 }]
                 ],
-                presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
+                presets: [["@babel/preset-env", { "modules": false, "targets": { "browsers": ["last 2 versions", "ie >= 11"] },
                                     // Exclude transforms that make all code slower
                                     "exclude": ["transform-typeof-symbol"],
+                                    "useBuiltIns": true,
                                     "debug": false, "useBuiltIns": "entry", "corejs": 2 }],
                           "@babel/preset-react", "@babel/preset-flow"]
               }
