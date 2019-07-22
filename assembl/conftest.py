@@ -25,6 +25,7 @@ from assembl.tests.fixtures.user import *  # noqa: F401
 from assembl.tests.fixtures.user_language_preference import *  # noqa: F401
 from assembl.tests.fixtures.idea_message_columns import *  # noqa: F401
 from assembl.tests.fixtures.sections import *  # noqa: F401
+from assembl.tests.fixtures.sentiments import *  # noqa: F401
 from assembl.tests.fixtures.timeline import *  # noqa: F401
 from assembl.tests.fixtures.vote_session import *  # noqa: F401
 from assembl.tests.fixtures.graphql_registry import *  # noqa: F401

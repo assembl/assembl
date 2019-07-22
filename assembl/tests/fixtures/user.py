@@ -1,4 +1,5 @@
 from __future__ import print_function
+from datetime import datetime, timedelta
 
 import pytest
 from pyramid import testing
@@ -254,3 +255,20 @@ def agent_status_in_discussion_4(request, test_session, discussion, participant2
         test_session.flush()
     request.addfinalizer(fin)
     return asid4
+
+
+@pytest.fixture(scope="function")
+def agent_status_in_discussion_user2_visits(request, test_session, discussion, participant2_user):
+    from assembl.models import AgentStatusInDiscussion
+    accepted_cookies = "ACCEPT_CGU"
+    asid = AgentStatusInDiscussion(discussion=discussion, agent_profile=participant2_user, first_visit=datetime.utcnow() - timedelta(days=1),
+        last_visit=datetime.utcnow() + timedelta(days=1))
+    test_session.add(asid)
+    test_session.flush()
+
+    def fin():
+        print 'Finalizer agent_status_in_discussion for participant2_user'
+        test_session.delete(asid)
+        test_session.flush()
+    request.addfinalizer(fin)
+    return asid

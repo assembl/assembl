@@ -667,6 +667,111 @@ def multi_module_csv_export(request):
     return csv_response_multiple_sheets(results, fieldnames, as_buffer=as_buffer)
 
 
+@view_config(context=InstanceContext, name="users-export",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_DISC_STATS)
+def users_csv_export(request):
+    import assembl.models as m
+    from collections import defaultdict
+
+    ID = "id"
+    NAME = "Nom prénom"
+    EMAIL = "Mail"
+    USERNAME = "Pseudo"
+    CREATION_DATE = "Date de création du compte"
+    FIRST_VISIT = "Date de la première connexion"
+    LAST_VISIT = "Date de la dernière connexion"
+    SESSIONS = "Nombre de session"
+    TOP_POSTS = "Nombre de Top posts"
+    TOP_POST_REPLIES = "Nombre de réponses reçues aux Top posts"
+    POSTS = "Nombre de posts"
+    POSTS_REPLIES = "Nombre de réponses reçues aux posts"
+    TOTAL_POSTS = "Nombre total de posts"
+    AGREE_GIVEN = '''Nombre de mentions "D'accord" donné'''
+    DISAGREE_GIVEN = '''Nombre de mentions "Pas d'accord" donné'''
+    DONT_UNDERSTAND_GIVEN = '''Nombre de mentions "Pas tout compris" donné'''
+    MORE_INFO_GIVEN = '''Nombre de mentions "SVP + d'infos" donné'''
+    AGREE_RECEIVED = '''Nombre de mentions "D'accord" reçu'''
+    DISAGREE_RECEIVED = '''Nombre de mentions "Pas d'accord" reçu'''
+    DONT_UNDERSTAND_RECEIVED = '''Nombre de mentions "Pas tout compris" reçu'''
+    MORE_INFO_RECEIVED = '''Nombre de mentions "SVP + d'infos" reçu'''
+    THEMATICS = "Liste des thématiques dans lesquelles il a contribué"
+    fieldnames = [
+        NAME, EMAIL, USERNAME, CREATION_DATE, FIRST_VISIT, LAST_VISIT, SESSIONS, TOP_POSTS, TOP_POST_REPLIES, POSTS,
+        POSTS_REPLIES, TOTAL_POSTS, AGREE_GIVEN, DISAGREE_GIVEN, DONT_UNDERSTAND_GIVEN, MORE_INFO_GIVEN, AGREE_RECEIVED,
+        DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, THEMATICS
+    ]
+    LIKE_SENTIMENT = 'sentiment:like'
+    DISLIKE_SENTIMENT = 'sentiment:disagree'
+    DONT_UNDERSTAND_SENTIMENT = 'sentiment:dont_understand'
+    MORE_INFO_SENTIMENT = 'sentiment:more_info'
+
+
+    discussion = request.context._instance
+    db = discussion.db
+
+    start, end, interval = get_time_series_timing(request)
+    has_anon = asbool(request.GET.get('anon', False))
+
+    posts = db.query(m.Post
+        ).filter(m.Post.discussion_id == discussion.id
+        ).order_by(m.Post.id).all()
+
+    sentiment_counts = db.query(m.Post.id, m.SentimentOfPost.actor_id, m.SentimentOfPost.type).join(m.SentimentOfPost).filter(
+        m.Post.id.in_([post.id for post in posts]),
+        m.SentimentOfPost.tombstone_condition()
+    ).group_by(m.Post.id, m.SentimentOfPost.actor_id, m.SentimentOfPost.type).all()
+
+    sentiments_given_by_user = defaultdict(lambda: defaultdict(int))
+    sentiments_received_by_post = defaultdict(lambda: defaultdict(int))
+
+    for sentiment in sentiment_counts:
+        sentiments_received_by_post[sentiment[0]][sentiment[2]] += 1
+        sentiments_given_by_user[sentiment[1]][sentiment[2]] += 1
+
+    users = {}
+
+    users_in_discussion = db.query(m.User).join(m.AgentStatusInDiscussion, m.AgentStatusInDiscussion.profile_id == m.User.id).filter(
+        m.AgentStatusInDiscussion.discussion_id == discussion.id).all()
+
+    for user in users_in_discussion:
+        users[user.id] = {
+                NAME: user.name if not has_anon else user.anonymous_name(),
+                EMAIL: user.get_preferred_email(has_anon),
+                USERNAME: user.username_p if not has_anon else user.anonymous_username(),
+                CREATION_DATE: user.creation_date,
+                FIRST_VISIT: user.first_visit,
+                LAST_VISIT: user.last_visit,
+                AGREE_GIVEN: sentiments_given_by_user[user.id][LIKE_SENTIMENT],
+                DISAGREE_GIVEN: sentiments_given_by_user[user.id][DISLIKE_SENTIMENT],
+                DONT_UNDERSTAND_GIVEN: sentiments_given_by_user[user.id][DONT_UNDERSTAND_SENTIMENT],
+                MORE_INFO_GIVEN: sentiments_given_by_user[user.id][MORE_INFO_SENTIMENT],
+                SESSIONS: 0,
+                TOP_POSTS: 0,
+                TOP_POST_REPLIES: 0,
+                POSTS: 0,
+                POSTS_REPLIES: 0,
+                TOTAL_POSTS: 0,
+                THEMATICS: []
+            }
+
+    for post in posts:
+        if post.parent_id is None:
+            users[post.creator.id][TOP_POSTS] += 1
+            users[post.creator.id][TOP_POST_REPLIES] += len(post.get_descendants().all())
+        else:
+            users[post.creator.id][POSTS] += 1
+            users[post.creator.id][POSTS_REPLIES] += len(post.get_descendants().all())
+
+        users[post.creator.id][TOTAL_POSTS] += 1
+        users[post.creator.id][AGREE_RECEIVED] = sentiments_received_by_post[post.id][LIKE_SENTIMENT]
+        users[post.creator.id][DISAGREE_RECEIVED] = sentiments_received_by_post[post.id][DISLIKE_SENTIMENT]
+        users[post.creator.id][DONT_UNDERSTAND_RECEIVED] = sentiments_received_by_post[post.id][DONT_UNDERSTAND_SENTIMENT]
+        users[post.creator.id][MORE_INFO_RECEIVED] = sentiments_received_by_post[post.id][MORE_INFO_SENTIMENT]
+
+    return csv_response(users.values(), CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="users.csv"')
+
+
 def transform_fieldname(fn):
     if '_' in fn:
         return ' '.join(fn.split('_')).title()
@@ -703,7 +808,6 @@ def csv_response(results, format, fieldnames=None, content_disposition=None, as_
         from openpyxl.writer.excel import ExcelWriter
         writer = ExcelWriter(workbook, archive)
         writer.save('')
-
     output.seek(0)
     if not as_buffer:
         return Response(body_file=output, content_type=format, content_disposition=content_disposition)
