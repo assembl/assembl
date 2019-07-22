@@ -3,8 +3,6 @@
 exports[`DumbMenuItem component should match a not selected menu item 1`] = `
 <div
   className="menu-item-container"
-  onMouseLeave={[Function]}
-  onMouseOver={[Function]}
 >
   <div
     className="menu-item"
@@ -43,14 +41,19 @@ exports[`DumbMenuItem component should match a not selected menu item 1`] = `
       />
     </div>
   </div>
+  <div
+    onClick={[Function]}
+  >
+    <span
+      className="thumb-arrow assembl-icon assembl-icon-angle-right"
+    />
+  </div>
 </div>
 `;
 
 exports[`DumbMenuItem component should match a selected menu item 1`] = `
 <div
   className="menu-item-container active"
-  onMouseLeave={[Function]}
-  onMouseOver={[Function]}
 >
   <div
     className="menu-item"
@@ -88,8 +91,12 @@ exports[`DumbMenuItem component should match a selected menu item 1`] = `
         vertical={false}
       />
     </div>
+  </div>
+  <div
+    onClick={[Function]}
+  >
     <span
-      className="thumb-arrow assembl-icon assembl-icon-right-dir"
+      className="thumb-arrow assembl-icon assembl-icon-angle-down"
     />
   </div>
 </div>
@@ -98,8 +105,6 @@ exports[`DumbMenuItem component should match a selected menu item 1`] = `
 exports[`DumbMenuItem component should match a selected menu item of type vote session 1`] = `
 <div
   className="menu-item-container active"
-  onMouseLeave={[Function]}
-  onMouseOver={[Function]}
 >
   <div
     className="menu-item"
@@ -137,8 +142,12 @@ exports[`DumbMenuItem component should match a selected menu item of type vote s
         vertical={false}
       />
     </div>
+  </div>
+  <div
+    onClick={[Function]}
+  >
     <span
-      className="thumb-arrow assembl-icon assembl-icon-right-dir"
+      className="thumb-arrow assembl-icon assembl-icon-angle-down"
     />
   </div>
 </div>

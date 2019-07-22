@@ -3,11 +3,10 @@
 exports[`DumbTimeline component should match an active TimelineSegment 1`] = `
 <div
   className="minimized-timeline active"
-  onMouseOver={[Function]}
+  onClick={[Function]}
 >
   <div
-    className="timeline-title txt-active-light"
-    onClick={[Function]}
+    className="timeline-title"
   >
     <div
       className="timeline-link"
@@ -15,34 +14,8 @@ exports[`DumbTimeline component should match an active TimelineSegment 1`] = `
       Bar
     </div>
   </div>
-  <div
-    className="timeline-graph"
-  >
-    <div
-      className="timeline-bars"
-    >
-      <div
-        className="timeline-bar-filler"
-        style={
-          Object {
-            "width": "20%",
-          }
-        }
-      >
-         
-      </div>
-      <div
-        className="timeline-bar-background-container"
-      >
-         
-        <div
-          className="timeline-bar-background"
-        />
-      </div>
-    </div>
-  </div>
   <span
-    className="timeline-arrow"
+    className="assembl-icon-angle-down"
   />
 </div>
 `;
@@ -50,11 +23,10 @@ exports[`DumbTimeline component should match an active TimelineSegment 1`] = `
 exports[`DumbTimeline component should match the TimelineSegment 1`] = `
 <div
   className="minimized-timeline"
-  onMouseOver={[Function]}
+  onClick={[Function]}
 >
   <div
-    className="timeline-title txt-active-light"
-    onClick={[Function]}
+    className="timeline-title"
   >
     <div
       className="timeline-link"
@@ -62,78 +34,28 @@ exports[`DumbTimeline component should match the TimelineSegment 1`] = `
       Bar
     </div>
   </div>
-  <div
-    className="timeline-graph"
-  >
-    <div
-      className="timeline-bars"
-    >
-      <div
-        className="timeline-bar-filler"
-        style={
-          Object {
-            "width": "20%",
-          }
-        }
-      >
-         
-      </div>
-      <div
-        className="timeline-bar-background-container"
-      >
-         
-        <div
-          className="timeline-bar-background"
-        />
-      </div>
-    </div>
-  </div>
+  <span
+    className="assembl-icon-angle-right"
+  />
 </div>
 `;
 
 exports[`DumbTimeline component should match the TimelineSegment 2`] = `
 <div
   className="minimized-timeline"
-  onMouseOver={[Function]}
+  onClick={[Function]}
 >
   <div
-    className="timeline-title txt-active-light"
-    onClick={[Function]}
+    className="timeline-title"
   >
-    <span
-      className="arrow assembl-icon assembl-icon-right-dir"
-    />
     <div
       className="timeline-link"
     >
       Bar
     </div>
   </div>
-  <div
-    className="timeline-graph"
-  >
-    <div
-      className="timeline-bars"
-    >
-      <div
-        className="timeline-bar-filler"
-        style={
-          Object {
-            "width": "20%",
-          }
-        }
-      >
-         
-      </div>
-      <div
-        className="timeline-bar-background-container"
-      >
-         
-        <div
-          className="timeline-bar-background"
-        />
-      </div>
-    </div>
-  </div>
+  <span
+    className="assembl-icon-angle-right"
+  />
 </div>
 `;

@@ -41,43 +41,7 @@ exports[`AssemblNavbar component should render a BurgerNavbar and a hidden FlatN
         logoLink="http://www.homesweethome.org"
         logoSrc="http://www.example.com/bar.jpg"
         renderUserMenu={[Function]}
-      />
-      <FlatNavbar
-        elements={
-          Array [
-            <SectionLink
-              options={
-                Object {
-                  "phase": "thread",
-                  "phaseContext": "new",
-                  "phaseId": "",
-                  "screenTooSmall": true,
-                  "slug": undefined,
-                }
-              }
-              section={
-                Object {
-                  "id": "mysection",
-                  "sectionType": "CUSTOM",
-                  "title": "My section",
-                  "url": "http://www.gnu.org",
-                }
-              }
-            />,
-          ]
-        }
-        logoLink="http://www.homesweethome.org"
-        logoSrc="http://www.example.com/bar.jpg"
-        maxWidth={-20}
-        renderUserMenu={[Function]}
-        setWidth={[Function]}
-        style={
-          Object {
-            "opacity": 0,
-            "position": "absolute",
-            "top": "-200px",
-          }
-        }
+        screenTooSmall={true}
       />
     </div>
   </Uncontrolled(Navbar)>
@@ -98,7 +62,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
       className="nav-bar max-container"
       id="navbar"
     >
-      <FlatNavbar
+      <DesktopNavbar
         elements={
           Array [
             <SectionLink
@@ -126,6 +90,7 @@ exports[`AssemblNavbar component should render a FlatNavbar with a big screenWid
         logoSrc="http://www.example.com/bar.jpg"
         maxWidth={1370}
         renderUserMenu={[Function]}
+        screenTooSmall={false}
         setWidth={[Function]}
         style={Object {}}
       />
