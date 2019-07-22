@@ -251,7 +251,7 @@ def fill_template(c, template, output=None, extra=None, default_dir=None):
         config.update(extra)
     if not os.path.exists(template):
         if not default_dir:
-            default_dir = os.path.join(config['code_root'], 'assembl', 'templates', 'system')
+            default_dir = os.path.join(config['code_root'], 'templates', 'system')
         template = os.path.join(default_dir, template)
     if not os.path.exists(template):
         raise RuntimeError("Missing template")
