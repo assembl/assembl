@@ -480,7 +480,7 @@ def push_wheelhouse(c, house=None):
     assembl_wheel = os.path.join(tmp_wheel_path, base_name)
     assembl_wheel_size = os.path.getsize(assembl_wheel)
 
-    if not assembl_wheel_size > 0:
+    if assembl_wheel_size == 0:
         raise RuntimeError("Created wheel not good. Bad dog. Cannot continue...")
 
     wheel_path = os.getenv('ASSEMBL_WHEELHOUSE', c.config.get(
