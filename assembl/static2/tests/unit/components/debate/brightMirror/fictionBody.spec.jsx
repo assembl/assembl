@@ -27,8 +27,11 @@ const refetchPost: Function = jest.fn();
 const mockStore = configureStore();
 const initialState = {
   threadFilter: {
-    postsOrderPolicy: defaultOrderPolicy,
-    postsDisplayPolicy: defaultDisplayPolicy
+    postsFilters: {
+      onlyMyPosts: false
+    },
+    postsDisplayPolicy: defaultDisplayPolicy,
+    postsOrderPolicy: defaultOrderPolicy
   }
 };
 

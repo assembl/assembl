@@ -12,26 +12,40 @@ import PostsFilterButtons from './buttons';
 import PostsFilterLabelMenuItem from './label';
 import { withScreenHeight } from '../../../common/screenDimensions';
 import { setThreadPostsFilterPolicies } from '../../../../actions/threadFilterActions';
-import { defaultDisplayPolicy, defaultOrderPolicy, postsDisplayPolicies, postsOrderPolicies } from './policies';
+import {
+  defaultDisplayPolicy,
+  defaultOrderPolicy,
+  defaultPostsFiltersStatus,
+  postsDisplayPolicies,
+  postsFiltersPolicies,
+  postsOrderPolicies
+} from './policies';
 
 type Props = {
   postsDisplayPolicy: PostsDisplayPolicy,
+  postsFiltersStatus: PostsFiltersStatus,
   postsOrderPolicy: PostsOrderPolicy,
   screenHeight: number,
-  setPostsFilterPolicies: (postsDisplay: PostsDisplayPolicy, postsOrder: PostsOrderPolicy) => void
+  setPostsFilterPolicies: (
+    postsDisplay: PostsDisplayPolicy,
+    postsOrder: PostsOrderPolicy,
+    postsFiltersStatus: PostsFiltersStatus
+  ) => void
 };
 
 type State = {
   selectedPostsDisplayPolicy: PostsDisplayPolicy,
+  selectedPostsFiltersStatus: PostsFiltersStatus,
   selectedPostsOrderPolicy: PostsOrderPolicy,
   sticky: boolean
 };
 
 export class DumbPostsFilterMenu extends React.Component<Props, State> {
   componentWillMount(): void {
-    const { postsDisplayPolicy, postsOrderPolicy } = this.props;
+    const { postsDisplayPolicy, postsOrderPolicy, postsFiltersStatus } = this.props;
     this.setState({
       sticky: true,
+      selectedPostsFiltersStatus: { ...postsFiltersStatus },
       selectedPostsDisplayPolicy: postsDisplayPolicy,
       selectedPostsOrderPolicy: postsOrderPolicy
     });
@@ -65,19 +79,30 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
     this.setState({ selectedPostsOrderPolicy: postsOrderPolicy });
   };
 
+  selectPostsFilter = (postsFilterPolicy: any, selected?: boolean) => {
+    // FIXME PostsFilterPolicy
+    const selectedPostsFiltersStatus = { ...this.state.selectedPostsFiltersStatus };
+    selectedPostsFiltersStatus[postsFilterPolicy.filterField] = !!selected;
+    this.setState({ selectedPostsFiltersStatus: selectedPostsFiltersStatus });
+  };
+
   resetPolicies = () => {
     this.selectPostsDisplayPolicy(defaultDisplayPolicy);
     this.selectPostsOrderPolicy(defaultOrderPolicy);
-    this.props.setPostsFilterPolicies(defaultDisplayPolicy, defaultOrderPolicy);
+    this.setState({ selectedPostsFiltersStatus: defaultPostsFiltersStatus });
+    this.props.setPostsFilterPolicies(defaultDisplayPolicy, defaultOrderPolicy, defaultPostsFiltersStatus);
   };
 
   savePolicies = () => {
-    this.props.setPostsFilterPolicies(this.state.selectedPostsDisplayPolicy, this.state.selectedPostsOrderPolicy);
+    this.props.setPostsFilterPolicies(
+      this.state.selectedPostsDisplayPolicy,
+      this.state.selectedPostsOrderPolicy,
+      this.state.selectedPostsFiltersStatus
+    );
   };
 
   render() {
-    const { selectedPostsDisplayPolicy, selectedPostsOrderPolicy } = this.state;
-    const { sticky } = this.state;
+    const { selectedPostsDisplayPolicy, selectedPostsFiltersStatus, selectedPostsOrderPolicy, sticky } = this.state;
     return (
       <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
         <DropdownButton
@@ -120,6 +145,20 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
             />
           ))}
 
+          <PostsFilterLabelMenuItem labelMsgId="debate.thread.filterPosts" />
+
+          {postsFiltersPolicies.map(item => (
+            <PostsFilterMenuItem
+              key={item.id}
+              item={item}
+              selected={selectedPostsFiltersStatus[item.filterField]}
+              inputType="checkbox"
+              inputName={item.filterField}
+              onSelectItem={this.selectPostsFilter}
+              eventKey={item.id}
+            />
+          ))}
+
           <PostsFilterButtons>
             <PostsFilterButton
               id="postsFilter-button-reset"
@@ -142,15 +181,19 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 }
 
 const mapDispatchToProps = dispatch => ({
-  setPostsFilterPolicies: (postsDisplay: PostsDisplayPolicy, postsOrder: PostsOrderPolicy) =>
-    dispatch(setThreadPostsFilterPolicies(postsDisplay, postsOrder))
+  setPostsFilterPolicies: (
+    postsDisplay: PostsDisplayPolicy,
+    postsOrder: PostsOrderPolicy,
+    postsFiltersStatus: PostsFiltersStatus
+  ) => dispatch(setThreadPostsFilterPolicies(postsDisplay, postsOrder, postsFiltersStatus))
 });
 
 const mapStateToProps = (state) => {
-  const { postsOrderPolicy, postsDisplayPolicy } = state.threadFilter;
+  const { postsOrderPolicy, postsDisplayPolicy, postsFiltersStatus } = state.threadFilter;
   return {
     postsOrderPolicy: postsOrderPolicy,
-    postsDisplayPolicy: postsDisplayPolicy
+    postsDisplayPolicy: postsDisplayPolicy,
+    postsFiltersStatus: postsFiltersStatus
   };
 };
 

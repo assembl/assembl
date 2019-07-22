@@ -362,6 +362,7 @@ class Idea extends React.Component<Props> {
 const mapStateToProps = (state) => {
   const props = {
     postsOrderPolicy: state.threadFilter.postsOrderPolicy,
+    postsFiltersStatus: state.threadFilter.postsFiltersStatus,
     postsMustBeRefreshed: state.threadFilter.postsMustBeRefreshed,
     contentLocaleMapping: state.contentLocale,
     timeline: state.timeline,
@@ -386,11 +387,12 @@ const IdeaWithPosts = compose(
 )(Idea);
 
 type SwitchViewProps = {
-  messageViewOverride: string,
   contextMessageViewOverride: string,
-  modifyContext: (newState: Object) => void,
   isHarvestable: boolean,
-  postsOrderPolicy: PostsOrderPolicy
+  messageViewOverride: string,
+  modifyContext: (newState: Object) => void,
+  postsOrderPolicy: PostsOrderPolicy,
+  postsFiltersStatus: PostsFiltersStatus
 };
 
 class SwitchView extends React.Component<SwitchViewProps> {
@@ -422,6 +424,7 @@ class SwitchView extends React.Component<SwitchViewProps> {
       <IdeaWithPosts
         {...props}
         postsOrder={props.postsOrderPolicy.graphqlPostsOrder}
+        onlyMyPosts={props.postsFiltersStatus.onlyMyPosts} // fixme: more generic
         additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror}
       />
     );
@@ -450,7 +453,8 @@ const semanticAnalysisForThematicQuery: OperationComponent<SemanticAnalysisForTh
 
 const mapStateToPropsForIdeaQuery = state => ({
   lang: state.i18n.locale,
-  postsOrderPolicy: state.threadFilter.postsOrderPolicy
+  postsOrderPolicy: state.threadFilter.postsOrderPolicy,
+  postsFiltersStatus: state.threadFilter.postsFiltersStatus
 });
 
 export default compose(

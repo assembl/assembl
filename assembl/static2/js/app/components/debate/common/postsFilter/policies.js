@@ -107,16 +107,28 @@ export const defaultOrderPolicy = reverseChronologicalLastPolicy;
 
 export const fullDisplayPolicy: PostsDisplayPolicy = {
   labelMsgId: 'debate.thread.postsDisplay.full',
-  id: 'full',
+  id: 'display-full',
   displayMode: 'full'
 };
 
 export const summaryDisplayPolicy: PostsDisplayPolicy = {
   labelMsgId: 'debate.thread.postsDisplay.summary',
-  id: 'summary',
+  id: 'display-summary',
   displayMode: 'summary'
 };
 
 export const postsDisplayPolicies: PostsDisplayPolicy[] = [fullDisplayPolicy, summaryDisplayPolicy];
 
 export const defaultDisplayPolicy = fullDisplayPolicy;
+
+export const onlyMyPostFilterPolicy: PostsFilterPolicy = {
+  labelMsgId: 'debate.thread.postsFilters.onlyMyPosts',
+  id: 'filter-onlyMyPosts',
+  filterField: 'onlyMyPosts'
+};
+
+export const postsFiltersPolicies: PostsFilterPolicy[] = [onlyMyPostFilterPolicy];
+
+export const defaultPostsFiltersStatus: PostsFiltersStatus = {
+  onlyMyPosts: false
+};

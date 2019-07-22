@@ -4,12 +4,16 @@ import { defaultDisplayPolicy, defaultOrderPolicy } from '../components/debate/c
 
 type ThreadFilterState = {
   postsDisplayPolicy: PostsDisplayPolicy,
+  postsFiltersStatus: PostsFiltersStatus,
   postsOrderPolicy: PostsOrderPolicy,
   postsMustBeRefreshed: boolean
 };
 
 const initialState = {
   postsDisplayPolicy: defaultDisplayPolicy,
+  postsFiltersStatus: {
+    onlyMyPosts: false
+  },
   postsOrderPolicy: defaultOrderPolicy,
   postsMustBeRefreshed: false
 };
@@ -23,6 +27,7 @@ const ThreadFilterReducer = (state: ThreadFilterState = {}, action: any): Thread
   case SET_THREAD_POSTS_POLICIES:
     newState.postsDisplayPolicy = action.postsDisplayPolicy;
     newState.postsOrderPolicy = action.postsOrderPolicy;
+    newState.postsFiltersStatus = { ...action.postsFiltersStatus };
     newState.postsMustBeRefreshed = true;
     return newState;
   case THREAD_POSTS_MUST_BE_REFRESHED:

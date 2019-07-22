@@ -8,6 +8,7 @@ import PostsFilterMenu, { DumbPostsFilterMenu } from '../../../../../js/app/comp
 import {
   defaultDisplayPolicy,
   defaultOrderPolicy,
+  defaultPostsFiltersStatus,
   reverseChronologicalTopPolicy,
   summaryDisplayPolicy
 } from '../../../../../js/app/components/debate/common/postsFilter/policies';
@@ -19,6 +20,7 @@ describe('PostsFilterMenu component', () => {
   const initialState = {
     threadFilter: {
       postsOrderPolicy: defaultOrderPolicy,
+      postsFiltersStatus: defaultPostsFiltersStatus,
       postsDisplayPolicy: defaultDisplayPolicy
     }
   };
@@ -39,8 +41,9 @@ describe('PostsFilterMenu component', () => {
 
     const defaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalLast');
     const nonDefaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalTop');
-    const defaultDisplayItem = () => wrapper.find('a#postsFilterItem-full');
-    const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-summary');
+    const defaultDisplayItem = () => wrapper.find('a#postsFilterItem-display-full');
+    const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-display-summary');
+    const onlyMyPostsItem = () => wrapper.find('a#postsFilterItem-filter-onlyMyPosts');
 
     const resetButton = () => wrapper.find('button#postsFilter-button-reset');
 
@@ -78,6 +81,11 @@ describe('PostsFilterMenu component', () => {
         .find('input')
         .props().checked
     ).toBe(true);
+    expect(
+      onlyMyPostsItem()
+        .find('input')
+        .props().checked
+    ).toBe(false);
   });
 
   it('should be saved when saved is clicked', () => {
@@ -86,6 +94,7 @@ describe('PostsFilterMenu component', () => {
       <DumbPostsFilterMenu
         postsDisplayPolicy={defaultDisplayPolicy}
         postsOrderPolicy={defaultOrderPolicy}
+        postsFiltersStatus={defaultPostsFiltersStatus}
         setPostsFilterPolicies={setPostsFilterPolicies}
         {...props}
       />
@@ -93,13 +102,17 @@ describe('PostsFilterMenu component', () => {
     const wrapper = mount(component);
 
     const nonDefaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalTop');
-    const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-summary');
+    const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-display-summary');
+    const onlyMyPostsItem = () => wrapper.find('a#postsFilterItem-filter-onlyMyPosts');
     const saveButton = () => wrapper.find('button#postsFilter-button-save');
 
     nonDefaultSortItem().simulate('click');
     nonDefaultDisplayItem().simulate('click');
+    onlyMyPostsItem().simulate('click');
     saveButton().simulate('click');
     expect(setPostsFilterPolicies).toHaveBeenCalledTimes(1);
-    expect(setPostsFilterPolicies).toHaveBeenCalledWith(summaryDisplayPolicy, reverseChronologicalTopPolicy);
+    expect(setPostsFilterPolicies).toHaveBeenCalledWith(summaryDisplayPolicy, reverseChronologicalTopPolicy, {
+      onlyMyPosts: true
+    });
   });
 });

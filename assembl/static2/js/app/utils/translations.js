@@ -459,6 +459,9 @@ const Translations = {
           full: "Messages complets",
           summary: "Aperçu des messages"
         },
+        postsFilters: {
+          onlyMyPosts: "Mes contributions"
+        },
         postsOrder: {
           cleanFilter: "Effacer les filtres",
           chronologicalTop: "Fils de discussion chronologiques",
@@ -468,6 +471,7 @@ const Translations = {
           reverseChronologicalTop: "Fils de discussion récemment démarrés"
         },
         fillBody: "Veuillez écrire un message",
+        filterPosts: "Filtrer",
         fillSubject: "Veuillez écrire un titre",
         sortPosts: "Trier",
         sortFilterPosts: "Trier / Filtrer",
@@ -1556,6 +1560,9 @@ const Translations = {
           full: "Full messages",
           summary: "Message previews"
         },
+        postsFilters: {
+          onlyMyPosts: "Mes contributions"
+        },
         postsOrder: {
           cleanFilter: "Clean filters",
           chronologicalTop: "Chronological order",
@@ -1565,6 +1572,7 @@ const Translations = {
           reverseChronologicalTop: "Recently active threads"
         },
         fillBody: "Please, write a comment",
+        filterPosts: "Filter",
         fillSubject: "Please, write a title",
         sortPosts: "Sort",
         sortFilterPosts: "Sort / Filter",

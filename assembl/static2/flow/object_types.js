@@ -265,3 +265,11 @@ export interface PostsOrderPolicy extends PostsFilterItem {
 export interface PostsDisplayPolicy extends PostsFilterItem {
   displayMode: PostsDisplayModes;
 }
+
+export type PostsFiltersStatus = {
+  onlyMyPosts: boolean
+};
+
+export interface PostsFilterPolicy extends PostsFilterItem {
+  filterField: string;
+}

@@ -180,6 +180,15 @@ def third_post_in_thread_phase(request, test_session, graphql_request, idea_in_t
     return create_post_in_thread(u"Troisième post", request, test_session, graphql_request, idea_in_thread_phase)
 
 
+@freeze_time("2018-3-3")
+@pytest.fixture(scope="function")
+def participant1_post_in_thread_phase(participant1_user, request, test_session, graphql_request, idea_in_thread_phase):
+    prev_auth_id = graphql_request.authenticated_userid
+    graphql_request.authenticated_userid = participant1_user.id
+    post = create_post_in_thread(u"Post de participant1", request, test_session, graphql_request, idea_in_thread_phase)
+    graphql_request.authenticated_userid = prev_auth_id
+    return post
+
 @freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def thematic_and_question(request, test_session, phases, graphql_request):

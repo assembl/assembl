@@ -337,11 +337,17 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
     # they mean different things
     # This is the "What you need to know"
     synthesis_title = graphene.String(lang=graphene.String(), description=docs.Idea.synthesis_title)
-    posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection', description=docs.Idea.posts,
+    posts = SQLAlchemyConnectionField('assembl.graphql.post.PostConnection',
+                                      description=docs.Idea.posts,
                                       posts_order=graphene.Argument(
                                           type=PostOrderTypes,
                                           required=False,
                                           description=docs.Idea.posts_order,
+                                      ),
+                                      only_my_posts=graphene.Argument(
+                                          type=graphene.Boolean,
+                                          required=False,
+                                          description=docs.Idea.only_my_posts,
                                       ))  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
@@ -387,7 +393,9 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         return resolve_langstring(self.synthesis_title, args.get('lang'))
 
     def resolve_posts(self, args, context, info):
+        Post = models.Post
         order = args.get('posts_order')
+        only_my_posts = args.get('only_my_posts', False)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         # include_deleted=None means all posts (live and tombstoned)
@@ -398,17 +406,19 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         no_pagination = args.get('first') is None and args.get('after') is None
         sentiments_only = no_pagination and sorted(fields.get('edges', {}).get('node', {}).keys()) == [u'publicationState', u'sentimentCounts']
 
-        query = models.Post.query.join(
-            related, models.Post.id == related.c.post_id
+        query = Post.query.join(
+            related, Post.id == related.c.post_id
         )
+        user_id = context.authenticated_userid
+        if only_my_posts:
+            query = query.filter(
+                Post.creator_id == user_id
+            )
 
         if 'creator' in fields.get('edges', {}).get('node', {}):
-            query = query.options(joinedload(models.Post.creator))
-
-        Post = models.Post
+            query = query.options(joinedload(Post.creator))
 
         if self.message_view_override == models.Phases.brightMirror.value:
-            user_id = context.authenticated_userid
             if user_id is not None:
                 query = query.filter(
                     or_(

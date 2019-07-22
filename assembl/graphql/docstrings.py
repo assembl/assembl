@@ -420,6 +420,7 @@ class Idea:
     All ideas are currently created under a RootIdea, and Ideas can have subidea trees, Thematics and Questions associated to them."""
     id = Default.object_id % ("Idea",)
     posts_order = "Order of the posts to get"
+    only_my_posts = "Get posts created by authenticated user only"
     synthesis_title = Default.string_entry % ("Synthesis title",)
     children = """A list of all immediate child Ideas on the Idea, exluding any hidden Ideas. The RootIdea will not be shown here, for example.
     The subchildren of each subIdea is not shown here."""

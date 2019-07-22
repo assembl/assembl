@@ -222,7 +222,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
-          id="postsFilterItem-full"
+          id="postsFilterItem-display-full"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -230,14 +230,14 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={true}
-            id="postsFilterItem-full-input"
+            id="postsFilterItem-display-full-input"
             name="postsDisplay"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-full-input"
+            htmlFor="postsFilterItem-display-full-input"
           >
             <span>
               Full messages
@@ -251,7 +251,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       >
         <a
           href="#"
-          id="postsFilterItem-summary"
+          id="postsFilterItem-display-summary"
           onClick={[Function]}
           onKeyDown={[Function]}
           role="menuitem"
@@ -259,17 +259,64 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
         >
           <input
             checked={false}
-            id="postsFilterItem-summary-input"
+            id="postsFilterItem-display-summary-input"
             name="postsDisplay"
             readOnly={true}
             type="radio"
           />
            
           <label
-            htmlFor="postsFilterItem-summary-input"
+            htmlFor="postsFilterItem-display-summary-input"
           >
             <span>
               Message previews
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className="disabled"
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <strong>
+            <span>
+              Filter
+            </span>
+          </strong>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-filter-onlyMyPosts"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-filter-onlyMyPosts-input"
+            name="onlyMyPosts"
+            readOnly={true}
+            type="checkbox"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-filter-onlyMyPosts-input"
+          >
+            <span>
+              Mes contributions
             </span>
           </label>
         </a>

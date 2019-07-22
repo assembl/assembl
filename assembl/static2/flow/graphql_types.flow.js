@@ -724,7 +724,8 @@ export type IdeaWithPostsQueryVariables = {|
   id: string,
   lang?: ?string,
   additionalFields: boolean,
-  postsOrder?: ?PostsOrderTypes
+  postsOrder?: ?PostsOrderTypes,
+  onlyMyPosts?: ?boolean
 |};
 
 export type IdeaWithPostsQuery = {|
