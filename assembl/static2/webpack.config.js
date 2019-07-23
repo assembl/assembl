@@ -58,6 +58,7 @@ module.exports = {
                 // we need plugins and presets here for that.
                 // A dependency is transpiled only if it's in the include below.
                 babelrc: false,
+                sourceType: 'unambiguous',
                 plugins: [
                   '@babel/plugin-proposal-object-rest-spread',
                   '@babel/plugin-proposal-class-properties',
