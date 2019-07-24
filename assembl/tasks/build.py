@@ -593,9 +593,9 @@ def push_built_themes_to_remote_bucket(c):
 
     region = c.config.get('aws_shared_region', 'eu-west-1')
     s3 = boto3.resource('s3', region_name=region)
-    buckets = ((os.path.join(c.config.code_root, 'assembl/static/js/build/'),
+    buckets = ((os.path.join(c.config.code_root, 'static/js/build/'),
                 s3.Bucket('bluenove-deprecated-client-themes')),
-               (os.path.join(c.config.code_root, 'assembl/static2/build/themes'),
+               (os.path.join(c.config.code_root, 'static2/build/themes'),
                 s3.Bucket('bluenove-client-themes')))
 
     def determine_content_type(path):
