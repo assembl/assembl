@@ -19,7 +19,6 @@ import type { Keyword, SemanticAnalysisData } from '../../pages/semanticAnalysis
 
 // Helper imports
 import { isMicrosoftBrowser } from '../../utils/globalFunctions';
-
 import { firstColor, secondColor } from '../../../../css/themes/default/_theme';
 
 export type Props = {

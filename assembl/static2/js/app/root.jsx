@@ -13,11 +13,6 @@ type Props = {
   routes: Array<Route>
 };
 
-const theme = {
-  firstColor: '#ff0000', // Red
-  secondColor: '#800080' // Purple
-};
-
 /*
   Parent class of all of Assembl. All high level components that require
   to exist in every context should be placed here. Eg. Alert, Modal, etc.

@@ -19,7 +19,6 @@ import TextFieldAdapter from '../../../form/textFieldAdapter';
 import { slugAllowedCharacters } from '../../../../constants';
 import OnChangeFieldSetField from './OnChangeFieldSetField';
 import type { DiscussionPreferencesFormValues } from './types.flow';
-import ColorPickerFieldAdapter from '../../../form/colorPickerFieldAdapter';
 
 type Props = {
   client: ApolloClient,

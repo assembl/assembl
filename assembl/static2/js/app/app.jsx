@@ -8,6 +8,8 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import 'react-dates/initialize'; // required for the react-dates components
 import 'react-dates/lib/css/_datepicker.css'; // required for the react-dates components
+import { GlobalStyle } from './assemblTheme';
+
 import { get } from './utils/routeMap';
 import { getConnectedUserId, getConnectedUserName, getDiscussionId } from './utils/globalFunctions';
 import { getCurrentPhaseData } from './utils/timeline';
@@ -30,17 +32,6 @@ type ContextValue = {
   messageViewOverride: ?string,
   modifyContext: (newState: Object) => void
 };
-
-const defaultContextValue: ContextValue = {
-  isDebateModerated: false,
-  isHarvesting: false,
-  isHarvestable: false,
-  modifyContext: () => {},
-  connectedUserId: null,
-  messageViewOverride: MESSAGE_VIEW.noModule
-};
-
-export const DebateContext: React$Context<ContextValue> = React.createContext(defaultContextValue);
 
 type Debate = {
   debateData: DebateData,
@@ -65,24 +56,37 @@ type Params = {
 type Props = {
   addContext: Function,
   children: React.Node,
+  connectedUserId: ?string,
   debate: Debate,
   error?: ?Error,
   fetchDebateData: Function,
+  isHarvesting: boolean,
+  isDebateModerated: boolean,
   location: Location,
   params: Params,
   putTimelineInStore: Function,
   route: Route,
+  themeFirstColor: ?string,
+  themeSecondColor: ?string,
   timeline: Timeline,
-  timelineLoading: boolean,
-  isHarvesting: boolean,
-  isDebateModerated: boolean,
-  connectedUserId: ?string
+  timelineLoading: boolean
 };
 
 type State = {
   isHarvestable: boolean,
   messageViewOverride: string
 };
+
+const defaultContextValue: ContextValue = {
+  isDebateModerated: false,
+  isHarvesting: false,
+  isHarvestable: false,
+  modifyContext: () => {},
+  connectedUserId: null,
+  messageViewOverride: MESSAGE_VIEW.noModule
+};
+
+export const DebateContext: React$Context<ContextValue> = React.createContext(defaultContextValue);
 
 export class DumbApp extends React.Component<Props, State> {
   state = {
@@ -118,7 +122,8 @@ export class DumbApp extends React.Component<Props, State> {
 
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
-    const { isHarvesting, children, isDebateModerated, connectedUserId } = this.props;
+    const { isHarvesting, children, isDebateModerated, connectedUserId, themeFirstColor, themeSecondColor } = this.props;
+
     const contextValue: ContextValue = {
       isHarvesting: isHarvesting,
       isHarvestable: this.state.isHarvestable,
@@ -128,12 +133,19 @@ export class DumbApp extends React.Component<Props, State> {
       messageViewOverride: this.state.messageViewOverride
     };
     const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
+
+    const theme = {
+      firstColor: themeFirstColor, // '#192882'
+      secondColor: themeSecondColor // '#00aaff'
+    };
+
     return (
       <div className={divClassNames}>
         <ChatFrame />
         {debateLoading && <Loader />}
         {debateData && (
           <div className="app-child">
+            <GlobalStyle {...theme} />
             <DebateContext.Provider value={contextValue}>{children}</DebateContext.Provider>
           </div>
         )}
@@ -211,14 +223,18 @@ export default compose(
         return {
           error: data.error,
           loading: data.loading,
-          isDebateModerated: false
+          isDebateModerated: false,
+          themeFirstColor: '',
+          themeSecondColor: ''
         };
       }
 
       return {
         error: data.error,
         loading: data.loading,
-        isDebateModerated: data.discussionPreferences.withModeration
+        isDebateModerated: data.discussionPreferences.withModeration,
+        themeFirstColor: data.discussionPreferences.firstColor,
+        themeSecondColor: data.discussionPreferences.secondColor
       };
     }
   })

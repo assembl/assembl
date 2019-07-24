@@ -1,4 +1,4 @@
 // @flow
 
-export const firstColor = '#192882';
-export const secondColor = '#0af';
+export const firstColor = '#ff0000';
+export const secondColor = '#800080';

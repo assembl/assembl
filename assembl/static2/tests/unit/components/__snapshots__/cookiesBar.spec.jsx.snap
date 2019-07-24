@@ -2,29 +2,18 @@
 
 exports[`CookiesBar component should render a bar with 2 buttons to accept the cookies policy or read them 1`] = `
 <div
-  className="cookies-bar show-cookies-bar"
+  className="cookies-bar-wrapper show-cookies-bar"
 >
-  <span
-    className="cookies-text"
-  >
-    Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
-  </span>
   <div
-    className="cookies-buttons-container"
+    className="cookies-bar"
   >
-    <button
-      className="button-submit button-dark cookies-button btn btn-default"
-      disabled={false}
-      onClick={[Function]}
-      type="button"
+    <span
+      className="cookies-text"
     >
-      <span>
-        I agree
-      </span>
-    </button>
-    <a
-      onClick={[Function]}
-      style={Object {}}
+      Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
+    </span>
+    <div
+      className="cookies-buttons-container"
     >
       <button
         className="button-submit button-dark cookies-button btn btn-default"
@@ -33,39 +22,43 @@ exports[`CookiesBar component should render a bar with 2 buttons to accept the c
         type="button"
       >
         <span>
-          See more
+          I agree
         </span>
       </button>
-    </a>
+      <a
+        onClick={[Function]}
+        style={Object {}}
+      >
+        <button
+          className="button-submit button-dark cookies-button btn btn-default"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          <span>
+            See more
+          </span>
+        </button>
+      </a>
+    </div>
   </div>
 </div>
 `;
 
 exports[`CookiesBar component should render a hidden bar if all or some cookies have been accepted by the user 1`] = `
 <div
-  className="cookies-bar hide-cookies-bar"
+  className="cookies-bar-wrapper hide-cookies-bar"
 >
-  <span
-    className="cookies-text"
-  >
-    Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
-  </span>
   <div
-    className="cookies-buttons-container"
+    className="cookies-bar"
   >
-    <button
-      className="button-submit button-dark cookies-button btn btn-default"
-      disabled={false}
-      onClick={[Function]}
-      type="button"
+    <span
+      className="cookies-text"
     >
-      <span>
-        I agree
-      </span>
-    </button>
-    <a
-      onClick={[Function]}
-      style={Object {}}
+      Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
+    </span>
+    <div
+      className="cookies-buttons-container"
     >
       <button
         className="button-submit button-dark cookies-button btn btn-default"
@@ -74,10 +67,25 @@ exports[`CookiesBar component should render a hidden bar if all or some cookies 
         type="button"
       >
         <span>
-          See more
+          I agree
         </span>
       </button>
-    </a>
+      <a
+        onClick={[Function]}
+        style={Object {}}
+      >
+        <button
+          className="button-submit button-dark cookies-button btn btn-default"
+          disabled={false}
+          onClick={[Function]}
+          type="button"
+        >
+          <span>
+            See more
+          </span>
+        </button>
+      </a>
+    </div>
   </div>
 </div>
 `;

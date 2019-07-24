@@ -48,25 +48,27 @@ export class DumbCookiesBar extends React.Component<Props, State> {
 
   render() {
     const { hide } = this.state;
-    const cookiesBarClassnames = classnames('cookies-bar', { 'show-cookies-bar': !hide, 'hide-cookies-bar': hide });
+    const cookiesBarClassnames = classnames('cookies-bar-wrapper', { 'show-cookies-bar': !hide, 'hide-cookies-bar': hide });
     const slug = getDiscussionSlug();
     return (
       <div className={cookiesBarClassnames}>
-        <Translate value="cookiesBar.cookiesNotice" className="cookies-text" />
-        <div className="cookies-buttons-container">
-          <Button onClick={this.acceptAllCookies} className="button-submit button-dark cookies-button">
-            <Translate value="cookiesBar.accept" />
-          </Button>
-          <Link to={get('cookiesPolicy', { slug: slug })}>
-            <Button
-              className="button-submit button-dark cookies-button"
-              onClick={() => {
-                this.setState({ hide: true });
-              }}
-            >
-              <Translate value="cookiesBar.seeCookiesPolicy" />
+        <div className="cookies-bar">
+          <Translate value="cookiesBar.cookiesNotice" className="cookies-text" />
+          <div className="cookies-buttons-container">
+            <Button onClick={this.acceptAllCookies} className="button-submit button-dark cookies-button">
+              <Translate value="cookiesBar.accept" />
             </Button>
-          </Link>
+            <Link to={get('cookiesPolicy', { slug: slug })}>
+              <Button
+                className="button-submit button-dark cookies-button"
+                onClick={() => {
+                  this.setState({ hide: true });
+                }}
+              >
+                <Translate value="cookiesBar.seeCookiesPolicy" />
+              </Button>
+            </Link>
+          </div>
         </div>
       </div>
     );
