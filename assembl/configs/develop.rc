@@ -76,5 +76,5 @@ visible_errors = true
 theme_base = %(code_root)s/assembl/static2/build/themes/develop
 
 # Override production session security for local development
-beaker.session.httponly = true
-beaker.session.secure = true
+beaker.session.httponly = false
+beaker.session.secure = false
