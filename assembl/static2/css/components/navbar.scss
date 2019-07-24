@@ -6,10 +6,6 @@
       font-weight: 600;
     }
 
-    &:hover {
-      background-color: $first-color-light;
-    }
-
     .timeline-title {
       font-size: $font-size-m;
     }
@@ -19,15 +15,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-left: 1px solid $first-color-light;
+    border-left-style: solid;
+    border-left-width: 1px;
 
     &.active {
       font-weight: 600;
-      background-color: $first-color-light;
-    }
-
-    &:hover {
-      background-color: $first-color-light;
     }
   }
 

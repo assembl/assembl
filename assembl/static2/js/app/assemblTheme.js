@@ -57,6 +57,26 @@ const screen = {
 
 // Define what props.theme will look like
 export const GlobalStyle = createGlobalStyle`
+  #burger-menu {
+    .minimized-timeline {
+      &:hover {
+        background-color: ${firstColorWithDarkOpacity};
+      }
+    }
+
+    .menu-item-container {
+      border-left-color: ${firstColorWithDarkOpacity};
+
+      &.active {
+        background-color: ${firstColorWithDarkOpacity};
+      }
+
+      &:hover {
+        background-color: ${firstColorWithDarkOpacity};
+      }
+    }
+  }
+
   #first-color-hidden {
     color: ${firstColor};
   }
@@ -353,6 +373,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .dark-title-4 {
+    color: ${firstColor};
+  }
+
+  .dark-title-6 {
     color: ${firstColor};
   }
 
@@ -760,24 +784,14 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .menu-container {
+    .menu-item {
+      color: ${firstColor};
+    }
+  }
+
   .minimized-timeline {
-    .active {
-      background-color: ${firstColor};
-    }
-
-    .timeline-graph {
-      .timeline-bars {
-        .timeline-bar-background-container {
-          .timeline-bar-background {
-            background-color: ${firstColor};
-          }
-        }
-      }
-    }
-
-    .timeline-arrow {
-      background-color: ${firstColor};
-    }
+    border-bottom-color: ${firstColorWithDarkOpacity};
 
     &.active {
       .txt-not-active {
@@ -795,6 +809,32 @@ export const GlobalStyle = createGlobalStyle`
           color: ${firstColor};
         }
       }
+    }
+
+    &:last-child {
+      border-top-color: ${firstColorWithDarkOpacity};
+    }
+
+    .active {
+      background-color: ${firstColor};
+    }
+
+    .timeline-arrow {
+      background-color: ${firstColor};
+    }
+
+    .timeline-graph {
+      .timeline-bars {
+        .timeline-bar-background-container {
+          .timeline-bar-background {
+            background-color: ${firstColor};
+          }
+        }
+      }
+    }
+
+    .timeline-link {
+      color: ${firstColor};
     }
   }
 

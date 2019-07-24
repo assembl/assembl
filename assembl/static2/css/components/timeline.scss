@@ -36,13 +36,13 @@
 }
 
 .timeline-container:last-child {
-  border-top: 1px solid $first-color-light;
+  border-top-style: solid;
+  border-top-width: 1px;
 }
 
 .menu-container {
   .menu-item {
     font-size: $font-size-xs;
-    color: $first-color;
     padding: 5px 20px;
   }
 }
@@ -55,7 +55,8 @@
   flex-basis: 0;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid $first-color-light;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
 
   .not-active {
     background-color: $light-grey;
@@ -148,7 +149,6 @@
     }
 
     .timeline-link {
-      color: $first-color;
       height: 100%;
       padding-right: 10px;
     }
