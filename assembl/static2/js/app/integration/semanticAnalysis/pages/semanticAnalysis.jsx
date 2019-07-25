@@ -16,7 +16,7 @@ import Title from '../../../components/common/title/title';
 // Type imports
 import type { Keyword } from '../dataType';
 
-import { firstColor, secondColor } from '../../../../../css/themes/default/_theme';
+import { defaultColors } from '../../../assemblTheme';
 import fakeData from '../data.json';
 
 export type Props = {};
@@ -79,6 +79,10 @@ export class SemanticAnalysis extends Component<Props, State> {
 
   render() {
     const { keywordData, numberOfKeywordsToDisplay } = this.state;
+
+    // Set theme color
+    const firstColor = defaultColors.firstColor;
+    const secondColor = defaultColors.secondColor;
 
     // Semantic analysis
     const { nlpSentiment, topKeywords } = fakeData;

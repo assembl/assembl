@@ -19,7 +19,7 @@ import type { Keyword, SemanticAnalysisData } from '../../pages/semanticAnalysis
 
 // Helper imports
 import { isMicrosoftBrowser } from '../../utils/globalFunctions';
-import { firstColor, secondColor } from '../../../../css/themes/default/_theme';
+import { defaultColors } from '../../assemblTheme';
 
 export type Props = {
   /** Semantic analysis data */
@@ -85,6 +85,10 @@ export class SemanticAnalysis extends Component<Props, State> {
   render() {
     const { keywordData, numberOfKeywordsToDisplay } = this.state;
     const { semanticAnalysisData } = this.props;
+
+    // Set theme color
+    const firstColor = defaultColors.firstColor;
+    const secondColor = defaultColors.secondColor;
 
     // Semantic analysis
     const { nlpSentiment, topKeywords } = semanticAnalysisData;

@@ -1,6 +1,6 @@
 import { createGlobalStyle } from 'styled-components';
 
-const defaultColors = {
+export const defaultColors = {
   firstColor: '#192882',
   secondColor: '#dbdeef'
   // firstColorWithDarkOpacity: '#0af',
@@ -287,7 +287,7 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
-  .button-link {
+  .button-link.button-link {
     border-color: ${secondColor};
 
     &:hover,

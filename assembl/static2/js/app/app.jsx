@@ -8,7 +8,6 @@ import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
 import 'react-dates/initialize'; // required for the react-dates components
 import 'react-dates/lib/css/_datepicker.css'; // required for the react-dates components
-import { GlobalStyle } from './assemblTheme';
 
 import { get } from './utils/routeMap';
 import { getConnectedUserId, getConnectedUserName, getDiscussionId } from './utils/globalFunctions';
@@ -66,8 +65,6 @@ type Props = {
   params: Params,
   putTimelineInStore: Function,
   route: Route,
-  themeFirstColor: ?string,
-  themeSecondColor: ?string,
   timeline: Timeline,
   timelineLoading: boolean
 };
@@ -122,7 +119,7 @@ export class DumbApp extends React.Component<Props, State> {
 
   render() {
     const { debateData, debateLoading, debateError } = this.props.debate;
-    const { isHarvesting, children, isDebateModerated, connectedUserId, themeFirstColor, themeSecondColor } = this.props;
+    const { isHarvesting, children, isDebateModerated, connectedUserId } = this.props;
 
     const contextValue: ContextValue = {
       isHarvesting: isHarvesting,
@@ -134,18 +131,12 @@ export class DumbApp extends React.Component<Props, State> {
     };
     const divClassNames = classNames('app', { 'harvesting-mode-on': isHarvesting });
 
-    const theme = {
-      firstColor: themeFirstColor, // '#192882'
-      secondColor: themeSecondColor // '#00aaff'
-    };
-
     return (
       <div className={divClassNames}>
         <ChatFrame />
         {debateLoading && <Loader />}
         {debateData && (
           <div className="app-child">
-            <GlobalStyle {...theme} />
             <DebateContext.Provider value={contextValue}>{children}</DebateContext.Provider>
           </div>
         )}
@@ -223,18 +214,14 @@ export default compose(
         return {
           error: data.error,
           loading: data.loading,
-          isDebateModerated: false,
-          themeFirstColor: '',
-          themeSecondColor: ''
+          isDebateModerated: false
         };
       }
 
       return {
         error: data.error,
         loading: data.loading,
-        isDebateModerated: data.discussionPreferences.withModeration,
-        themeFirstColor: data.discussionPreferences.firstColor,
-        themeSecondColor: data.discussionPreferences.secondColor
+        isDebateModerated: data.discussionPreferences.withModeration
       };
     }
   })
