@@ -84,13 +84,18 @@ class MenuList extends React.Component<MenuListProps, MenuListState> {
     return (
       <React.Fragment>
         {subMenu ? <div className="sub-menu-separator" /> : null}
-        <div className={classNames('menu-table-col', className, { 'sub-menu': subMenu })}>
+        <div
+          className={classNames('menu-table-col', className, {
+            'sub-menu': subMenu
+          })}
+        >
           <div className="menu-table">
             {rootItems.map(item => (
               <div key={item.id}>
                 <MenuItem
                   hasSubItems={items.some(listItem => listItem.parentId === item.id)}
-                  selected={item.id === selected || item.id === pathnameThemeId}
+                  selected={item.id === selected}
+                  preSelect={item.id === pathnameThemeId}
                   onClick={onMenuItemClick}
                   toggleMenu={this.toggleMenu}
                   identifier={identifier}

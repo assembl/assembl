@@ -25,6 +25,7 @@ type MenuItemProps = {
   identifier: string,
   phaseId: string,
   selected: boolean,
+  preSelect: boolean,
   hasSubItems: boolean,
   slug: string,
   onClick: Function,
@@ -35,18 +36,25 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
   onLinkClick = () => {
     const { identifier, phaseId, item, slug, onClick } = this.props;
     if (onClick) onClick();
-    goTo(get('idea', { slug: slug, phase: identifier, phaseId: phaseId, themeId: item.id }));
+    goTo(
+      get('idea', {
+        slug: slug,
+        phase: identifier,
+        phaseId: phaseId,
+        themeId: item.id
+      })
+    );
   };
 
   render() {
-    const { item, selected, hasSubItems, toggleMenu } = this.props;
+    const { item, selected, hasSubItems, toggleMenu, preSelect } = this.props;
     const { title, img, messageViewOverride, numContributors, numPosts, numVotes } = item;
     // The first touch show the menu and the second activate the link
     const onLinkClick = this.onLinkClick;
     return (
       <div
         className={classNames('menu-item-container', {
-          active: selected
+          active: preSelect
         })}
       >
         <div
