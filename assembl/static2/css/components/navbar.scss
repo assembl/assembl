@@ -282,12 +282,10 @@
     }
   }
 
-  @media (max-width: $screen-md-min) {
-    #burger-menu {
-      .nav-burger-menu {
-        width: 100%;
-        padding-bottom: 100px;
-      }
+  #burger-menu {
+    #screen-too-small {
+      width: 100%;
+      padding-bottom: 100px;
 
       .nav-menu {
         display: flex;

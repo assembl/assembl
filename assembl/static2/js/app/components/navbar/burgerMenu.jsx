@@ -85,7 +85,7 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { children, timeline } = this.props;
+    const { children, timeline, screenTooSmall } = this.props;
     const { shouldDisplayMenu, activeSegment } = this.state;
     const activeSegmentPhase = timeline ? timeline[activeSegment] : undefined;
     const { currentPhaseIdentifier } = getCurrentPhaseData(timeline);
@@ -98,7 +98,7 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
         }}
       >
         {shouldDisplayMenu && (
-          <div className="nav-burger-menu shown">
+          <div id={screenTooSmall ? 'screen-too-small' : ''} className="nav-burger-menu shown">
             <TimelineCpt
               identifier={currentPhaseIdentifier}
               timeline={timeline}
