@@ -326,6 +326,7 @@ class PostView extends React.PureComponent<Props, State> {
                 hideAnswerForm={this.hideAnswerForm}
                 handleAnswerClick={this.handleAnswerClick}
                 phaseId={phaseId}
+                routerParams={routerParams}
               />
             </div>
           ) : null}

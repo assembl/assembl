@@ -220,6 +220,13 @@ exports[`PostView component should render a post in view mode 1`] = `
         parentId="XYZ333"
         phaseId="DEF345"
         refetchIdea={[MockFunction]}
+        routerParams={
+          Object {
+            "phase": "thread",
+            "slug": "/debate/thread/XYZ333",
+            "themeId": "VVV999",
+          }
+        }
         textareaRef={[Function]}
       />
     </div>
