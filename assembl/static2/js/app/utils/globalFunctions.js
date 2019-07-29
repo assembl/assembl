@@ -329,6 +329,8 @@ export function compareByTextPosition(extractA: ?FictionExtractFragment, extract
 
 export const convertISO8601StringToDate = (s: string): Moment => moment(s).utc();
 
+export const convertToISO639String = (s: string): string => (s.match(/-|_/) ? s.split(/-|_/)[0] : s);
+
 export const getPostPublicationState = (isDebateModerated: boolean, connectedUserIsModerator: boolean): string => {
   if (!isDebateModerated || connectedUserIsModerator) {
     return PublicationStates.PUBLISHED;
