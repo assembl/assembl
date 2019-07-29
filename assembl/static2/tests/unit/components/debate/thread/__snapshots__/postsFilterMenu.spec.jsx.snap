@@ -316,7 +316,36 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             htmlFor="postsFilterItem-filter-onlyMyPosts-input"
           >
             <span>
-              Mes contributions
+              My posts
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-filter-myPostsAndAnswers"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-filter-myPostsAndAnswers-input"
+            name="myPostsAndAnswers"
+            readOnly={true}
+            type="checkbox"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-filter-myPostsAndAnswers-input"
+          >
+            <span>
+              Answers to my posts
             </span>
           </label>
         </a>

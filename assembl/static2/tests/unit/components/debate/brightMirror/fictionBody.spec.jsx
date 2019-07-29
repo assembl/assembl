@@ -28,7 +28,8 @@ const mockStore = configureStore();
 const initialState = {
   threadFilter: {
     postsFilters: {
-      onlyMyPosts: false
+      onlyMyPosts: false,
+      myPostsAndAnswers: false
     },
     postsDisplayPolicy: defaultDisplayPolicy,
     postsOrderPolicy: defaultOrderPolicy

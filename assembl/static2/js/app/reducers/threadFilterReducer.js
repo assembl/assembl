@@ -9,9 +9,10 @@ type ThreadFilterState = {
   postsMustBeRefreshed: boolean
 };
 
-const initialState = {
+const initialState: ThreadFilterState = {
   postsDisplayPolicy: defaultDisplayPolicy,
   postsFiltersStatus: {
+    myPostsAndAnswers: false,
     onlyMyPosts: false
   },
   postsOrderPolicy: defaultOrderPolicy,

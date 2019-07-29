@@ -103,6 +103,8 @@ export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>
   messageColumns.forEach((col) => {
     columns[col.messageClassifier] = { colColor: col.color, colName: col.name };
   });
+  const postIds = edges.map((edge: Node) => edge.node.id);
+
   edges.forEach((e) => {
     const postInfo = { ...e.node, ...additionalPostProps, ...columns[e.node.messageClassifier] };
     const parentId = !orderPolicy.postsGroupPolicy || !postInfo.parentId ? 'root' : postInfo.parentId;
@@ -124,7 +126,14 @@ export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>
 
   // postsByParent.root is the list of top posts
   // filter out deleted top post without answers
-  let topPosts: PostWithChildren[] = (postsByParent.root || [])
+  let postWithoutParents = [];
+  Object.keys(postsByParent).forEach((key) => {
+    if (key === 'root' || postIds.indexOf(key) === -1) {
+      postWithoutParents = [...postsByParent[key], ...postWithoutParents];
+    }
+  });
+
+  let topPosts: PostWithChildren[] = postWithoutParents
     .map((p) => {
       const newPost = p;
       newPost.children = getChildren(p.id);
@@ -425,6 +434,7 @@ class SwitchView extends React.Component<SwitchViewProps> {
         {...props}
         postsOrder={props.postsOrderPolicy.graphqlPostsOrder}
         onlyMyPosts={props.postsFiltersStatus.onlyMyPosts} // fixme: more generic
+        myPostsAndAnswers={props.postsFiltersStatus.myPostsAndAnswers} // fixme: more generic
         additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror}
       />
     );

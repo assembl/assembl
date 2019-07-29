@@ -1,7 +1,14 @@
 #import "./fragments/IdeaMessageColumn.graphql"
 #import "./fragments/AgentProfileInfo.graphql"
 
-query IdeaWithPosts($id: ID!, $lang: String, $additionalFields: Boolean!, $postsOrder: PostsOrderTypes, $onlyMyPosts: Boolean) {
+query IdeaWithPosts(
+  $id: ID!
+  $lang: String
+  $additionalFields: Boolean!
+  $postsOrder: PostsOrderTypes
+  $onlyMyPosts: Boolean
+  $myPostsAndAnswers: Boolean
+) {
   idea: node(id: $id) {
     ... on Idea {
       id
@@ -11,7 +18,7 @@ query IdeaWithPosts($id: ID!, $lang: String, $additionalFields: Boolean!, $posts
         ...IdeaMessageColumn
       }
       messageViewOverride
-      posts(postsOrder: $postsOrder, onlyMyPosts: $onlyMyPosts) {
+      posts(postsOrder: $postsOrder, onlyMyPosts: $onlyMyPosts, myPostsAndAnswers: $myPostsAndAnswers) {
         edges {
           node {
             ... on Post {

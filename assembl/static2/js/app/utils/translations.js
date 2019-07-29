@@ -460,6 +460,7 @@ const Translations = {
           summary: "Aperçu des messages"
         },
         postsFilters: {
+          myPostsAndAnswers: "Messages en réponse à mes contributions",
           onlyMyPosts: "Mes contributions"
         },
         postsOrder: {
@@ -1561,7 +1562,8 @@ const Translations = {
           summary: "Message previews"
         },
         postsFilters: {
-          onlyMyPosts: "Mes contributions"
+          myPostsAndAnswers: "Answers to my posts",
+          onlyMyPosts: "My posts"
         },
         postsOrder: {
           cleanFilter: "Clean filters",

@@ -11,6 +11,7 @@ from graphene_sqlalchemy.utils import is_mapped
 from graphql_relay.connection.arrayconnection import offset_to_cursor
 from pyramid.security import Everyone
 from sqlalchemy import desc, func, join, select, or_, and_
+from sqlalchemy import literal_column
 from sqlalchemy.orm import joinedload
 
 import assembl.graphql.docstrings as docs
@@ -348,6 +349,12 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                                           type=graphene.Boolean,
                                           required=False,
                                           description=docs.Idea.only_my_posts,
+                                      ),
+                                      my_posts_and_answers=graphene.Argument(
+                                          type=graphene.Boolean,
+                                          required=False,
+                                          description=docs.Idea.my_posts_and_answers,
+
                                       ))  # use dotted name to avoid circular import  # noqa: E501
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
@@ -396,11 +403,11 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         Post = models.Post
         order = args.get('posts_order')
         only_my_posts = args.get('only_my_posts', False)
+        my_posts_and_answers = args.get('my_posts_and_answers', False)
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         # include_deleted=None means all posts (live and tombstoned)
-        related = self.get_related_posts_query(
-            partial=True, include_deleted=None)
+        related = self.get_related_posts_query(partial=True, include_deleted=None)
         # The related query returns a list of (<PropositionPost id=2 >, None) instead of <PropositionPost id=2 > when authenticated, this is why we do another query here:  # noqa: E501
         fields = get_fields(info)
         no_pagination = args.get('first') is None and args.get('after') is None
@@ -410,10 +417,37 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             related, Post.id == related.c.post_id
         )
         user_id = context.authenticated_userid
-        if only_my_posts:
+        if my_posts_and_answers:
+            session = Post.default_db
+            # recursive cte that gets array of ancestor for each post
+            posts_hierarchy_parent = session.query(
+                Post.id,
+                literal_column("ARRAY[]::INTEGER[]").label("ancestors")
+            ).filter(Post.parent_id == None, Post.discussion_id == discussion_id  # noqa: E711
+            ).cte(name='posts_hierarchy', recursive=True)
+            posts_hierarchy_child = session.query(
+                Post.id,
+                func.array_append(posts_hierarchy_parent.c.ancestors, Post.parent_id)
+            ).filter(Post.parent_id == posts_hierarchy_parent.c.id)
+            posts_hierarchy = posts_hierarchy_parent.union_all(posts_hierarchy_child)
+
+            # get a mapping of posts with parent posts which are posts created by current user
+            # NOTE : we can't use select([func.unnest(...) as a subrequest  # FIXME retry with sqlalchemy > 1.1
+            ancestors_by_creator = session.query(
+                posts_hierarchy.c.id,
+                func.array(literal_column(
+                    'SELECT UNNEST(ancestors) INTERSECT SELECT id FROM post WHERE creator_id = %s' % str(int(user_id)))
+                ).label('ancestors_by_creator')).subquery()
+
+            # filter on posts which have at least one of these posts among their parents
+            creator_post_ancestors_ids = session.query(
+                ancestors_by_creator.c.id
+            ).filter(func.array_length(ancestors_by_creator.c.ancestors_by_creator, 1) > 0)
             query = query.filter(
-                Post.creator_id == user_id
-            )
+                or_(Post.creator_id == user_id,
+                    Post.id.in_(creator_post_ancestors_ids)))
+        elif only_my_posts:
+            query = query.filter(Post.creator_id == user_id)
 
         if 'creator' in fields.get('edges', {}).get('node', {}):
             query = query.options(joinedload(Post.creator))

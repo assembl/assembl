@@ -267,9 +267,11 @@ export interface PostsDisplayPolicy extends PostsFilterItem {
 }
 
 export type PostsFiltersStatus = {
-  onlyMyPosts: boolean
+  onlyMyPosts: boolean,
+  myPostsAndAnswers: boolean
 };
 
 export interface PostsFilterPolicy extends PostsFilterItem {
+  excludedPolicies: string[]; // list of policies that are exclusives of this policy.
   filterField: string;
 }

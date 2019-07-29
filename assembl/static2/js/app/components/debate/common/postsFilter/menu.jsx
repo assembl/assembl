@@ -10,6 +10,7 @@ import PostsFilterMenuItem from './menuItem';
 import PostsFilterButton from './button';
 import PostsFilterButtons from './buttons';
 import PostsFilterLabelMenuItem from './label';
+import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { withScreenHeight } from '../../../common/screenDimensions';
 import { setThreadPostsFilterPolicies } from '../../../../actions/threadFilterActions';
 import {
@@ -83,6 +84,12 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
     // FIXME PostsFilterPolicy
     const selectedPostsFiltersStatus = { ...this.state.selectedPostsFiltersStatus };
     selectedPostsFiltersStatus[postsFilterPolicy.filterField] = !!selected;
+    if (selected) {
+      // unselect excluded policies
+      postsFilterPolicy.excludedPolicies.forEach((policyId: string) => {
+        selectedPostsFiltersStatus[policyId] = false;
+      });
+    }
     this.setState({ selectedPostsFiltersStatus: selectedPostsFiltersStatus });
   };
 
@@ -103,6 +110,7 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 
   render() {
     const { selectedPostsDisplayPolicy, selectedPostsFiltersStatus, selectedPostsOrderPolicy, sticky } = this.state;
+    const userIsConnected: boolean = !!getConnectedUserId();
     return (
       <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
         <DropdownButton
@@ -145,20 +153,22 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
             />
           ))}
 
-          <PostsFilterLabelMenuItem labelMsgId="debate.thread.filterPosts" />
-
-          {postsFiltersPolicies.map(item => (
-            <PostsFilterMenuItem
-              key={item.id}
-              item={item}
-              selected={selectedPostsFiltersStatus[item.filterField]}
-              inputType="checkbox"
-              inputName={item.filterField}
-              onSelectItem={this.selectPostsFilter}
-              eventKey={item.id}
-            />
-          ))}
-
+          {userIsConnected && (
+            <React.Fragment>
+              <PostsFilterLabelMenuItem labelMsgId="debate.thread.filterPosts" />
+              {postsFiltersPolicies.map(item => (
+                <PostsFilterMenuItem
+                  key={item.id}
+                  item={item}
+                  selected={selectedPostsFiltersStatus[item.filterField]}
+                  inputType="checkbox"
+                  inputName={item.filterField}
+                  onSelectItem={this.selectPostsFilter}
+                  eventKey={item.id}
+                />
+              ))}
+            </React.Fragment>
+          )}
           <PostsFilterButtons>
             <PostsFilterButton
               id="postsFilter-button-reset"

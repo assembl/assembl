@@ -15,6 +15,10 @@ import {
 
 configure({ adapter: new Adapter() });
 
+jest.mock('../../../../../js/app/utils/globalFunctions', () => ({
+  getConnectedUserId: jest.fn(() => '1234567890')
+}));
+
 describe('PostsFilterMenu component', () => {
   const mockStore = configureStore();
   const initialState = {
@@ -112,6 +116,7 @@ describe('PostsFilterMenu component', () => {
     saveButton().simulate('click');
     expect(setPostsFilterPolicies).toHaveBeenCalledTimes(1);
     expect(setPostsFilterPolicies).toHaveBeenCalledWith(summaryDisplayPolicy, reverseChronologicalTopPolicy, {
+      myPostsAndAnswers: false,
       onlyMyPosts: true
     });
   });

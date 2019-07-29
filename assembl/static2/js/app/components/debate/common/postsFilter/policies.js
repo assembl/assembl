@@ -122,13 +122,22 @@ export const postsDisplayPolicies: PostsDisplayPolicy[] = [fullDisplayPolicy, su
 export const defaultDisplayPolicy = fullDisplayPolicy;
 
 export const onlyMyPostFilterPolicy: PostsFilterPolicy = {
-  labelMsgId: 'debate.thread.postsFilters.onlyMyPosts',
+  excludedPolicies: ['myPostsAndAnswers'],
+  filterField: 'onlyMyPosts',
   id: 'filter-onlyMyPosts',
-  filterField: 'onlyMyPosts'
+  labelMsgId: 'debate.thread.postsFilters.onlyMyPosts'
 };
 
-export const postsFiltersPolicies: PostsFilterPolicy[] = [onlyMyPostFilterPolicy];
+export const myPostsAndAnswersFilterPolicy: PostsFilterPolicy = {
+  excludedPolicies: ['onlyMyPosts'],
+  filterField: 'myPostsAndAnswers',
+  labelMsgId: 'debate.thread.postsFilters.myPostsAndAnswers',
+  id: 'filter-myPostsAndAnswers'
+};
+
+export const postsFiltersPolicies: PostsFilterPolicy[] = [onlyMyPostFilterPolicy, myPostsAndAnswersFilterPolicy];
 
 export const defaultPostsFiltersStatus: PostsFiltersStatus = {
+  myPostsAndAnswers: false,
   onlyMyPosts: false
 };
