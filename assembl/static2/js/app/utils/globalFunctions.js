@@ -188,7 +188,7 @@ export const getCookieItem = (sKey: string) => Cookies.get(sKey);
 
 export function setCookieItem(name: string, value: any, sensitive: boolean = false) {
   const date = new Date();
-  let v = null;
+  let finalValue = null;
 
   date.setMonth(date.getMonth() + 13);
   const extras: Object = { path: '/', expires: date };
@@ -196,11 +196,11 @@ export function setCookieItem(name: string, value: any, sensitive: boolean = fal
     extras.secure = true;
   }
   if (Array.isArray(value)) {
-    v = value.join(',');
+    finalValue = value.join(',');
   } else {
-    v = value;
+    finalValue = value;
   }
-  Cookies.set(name, v, extras);
+  Cookies.set(name, finalValue, extras);
 }
 
 export function deleteCookieItem(name: string, path: string = '/') {

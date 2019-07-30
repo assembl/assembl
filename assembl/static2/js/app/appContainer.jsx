@@ -31,7 +31,7 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
   }
 };
 
-// APPLICATION-LEVLE DEFAULT CONFIGURATIONS ARE MADE HERE
+// APPLICATION-LEVEL DEFAULT CONFIGURATIONS ARE MADE HERE
 const DumbApplicationContainer = (props: Props) => {
   const { children, discussionPreferences, setDefaultLocale } = props;
   const { languages } = discussionPreferences;
