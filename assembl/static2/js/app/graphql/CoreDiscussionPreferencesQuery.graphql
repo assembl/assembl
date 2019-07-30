@@ -1,0 +1,8 @@
+query DiscussionPreferences {
+  discussionPreferences {
+    languages {
+      locale
+      nativeName
+    }
+  }
+}

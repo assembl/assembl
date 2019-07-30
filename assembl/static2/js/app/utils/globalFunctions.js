@@ -1,5 +1,6 @@
 // @flow
 import moment from 'moment';
+import Cookies from 'js-cookie';
 import type Moment from 'moment';
 import { type Map } from 'immutable';
 import type { SuggestedTags, Tags } from '../pages/semanticAnalysis/dataType';
@@ -183,48 +184,27 @@ export const isTabletSizedScreen = (screenWidth: number) => screenWidth >= SM_SC
 // works for SCREAMING_SNAKE_CASE, snake_case or cRazY_SNAKE_case
 export const snakeToCamel = (string: string) => string.toLowerCase().replace(/_[a-z]/g, match => match[1].toUpperCase());
 
-// TODO: Replace with js-cookie
-export const getCookieItem = (sKey: string) => {
-  if (!sKey) {
-    return null;
-  }
-  return (
-    decodeURIComponent(
-      document.cookie.replace(
-        new RegExp(`(?:(?:^|.*;)\\s*${encodeURIComponent(sKey).replace(/[-.+*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
-        '$1'
-      )
-    ) || null
-  );
-};
+export const getCookieItem = (sKey: string) => Cookies.get(sKey);
 
-// TODO: Replace with js-cookie
-const cookie = (key: string, value: string, expires: string, sensitive: boolean = false, path: string = '/'): string => {
-  // As a security policy, we want all cookies that are set to be set according to the scheme
-  // of the URL
-  // In order to test sensitivity, utilize the debateData's requireSecureConnection and what type of
-  // data is being put as a cookie
-  let template = `${key}=${value};path=${path};expires=${expires}`;
-  if (sensitive) {
-    template += ';secure;HttpOnly;';
-  }
-  return template;
-};
-
-// TODO: Replace with js-cookie
 export function setCookieItem(name: string, value: any, sensitive: boolean = false) {
   const date = new Date();
+  let finalValue = null;
+
   date.setMonth(date.getMonth() + 13);
-  document.cookie = cookie(name, value, date.toString(), sensitive);
+  const extras: Object = { path: '/', expires: date };
+  if (sensitive) {
+    extras.secure = true;
+  }
+  if (Array.isArray(value)) {
+    finalValue = value.join(',');
+  } else {
+    finalValue = value;
+  }
+  Cookies.set(name, finalValue, extras);
 }
 
-// TODO: Replace with js-cookie
-export function deleteCookieItem(name: string, path: string) {
-  if (getCookieItem(name)) {
-    // Set an expiration date in the past to delete the cookie in the browser
-    const expiryDate = 'Thu, 28 Aug 1993 00:00:01 GTM';
-    document.cookie = cookie(name, '', expiryDate, false, path);
-  }
+export function deleteCookieItem(name: string, path: string = '/') {
+  Cookies.removeCookie(name, { path: path });
 }
 
 export const createRandomId = (): string => Math.round(Math.random() * -1000000).toString();
@@ -348,6 +328,8 @@ export function compareByTextPosition(extractA: ?FictionExtractFragment, extract
 }
 
 export const convertISO8601StringToDate = (s: string): Moment => moment(s).utc();
+
+export const convertToISO639String = (s: string): string => (s.match(/-|_/) ? s.split(/-|_/)[0] : s);
 
 export const getPostPublicationState = (isDebateModerated: boolean, connectedUserIsModerator: boolean): string => {
   if (!isDebateModerated || connectedUserIsModerator) {
