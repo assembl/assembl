@@ -7,10 +7,14 @@ import Modal from './components/common/modal';
 import Alert from './components/common/alert';
 import DebateCustomHTMLCode from './debateCustomHTMLCode';
 
+// Global theme
+import { GlobalStyle } from './globalTheme';
+
 type Props = {
   children: React.Node,
   debateData: DebateData,
-  routes: Array<Route>
+  routes: Array<Route>,
+  theme: Theme
 };
 
 /*
@@ -18,7 +22,7 @@ type Props = {
   to exist in every context should be placed here. Eg. Alert, Modal, etc.
 */
 const Root = (props: Props) => {
-  const { children, debateData, routes } = props;
+  const { children, debateData, routes, theme } = props;
 
   return (
     <React.Fragment>
@@ -40,7 +44,8 @@ const Root = (props: Props) => {
 };
 
 const mapStateToProps = state => ({
-  debateData: state.debate.debateData
+  debateData: state.debate.debateData,
+  theme: state.theme
 });
 
 export default connect(mapStateToProps)(Root);

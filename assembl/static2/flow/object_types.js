@@ -275,3 +275,8 @@ export interface PostsFilterPolicy extends PostsFilterItem {
   excludedPolicies: string[]; // list of policies that are exclusives of this policy.
   filterField: string;
 }
+
+type Theme = {
+  firstColor: string,
+  secondColor: string
+};

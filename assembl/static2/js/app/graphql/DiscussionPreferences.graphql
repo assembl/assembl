@@ -9,7 +9,5 @@ query DiscussionPreferences($inLocale: String!) {
     withTranslation
     withSemanticAnalysis
     slug
-    firstColor
-    secondColor
   }
 }

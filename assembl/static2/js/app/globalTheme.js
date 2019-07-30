@@ -30,10 +30,6 @@ const secondColorWithDarkOpacity = props =>
   (props.secondColor
     ? `rgba(${hexToRgb(props.secondColor)}, ${darkOpacity})`
     : `rgba(${hexToRgb(defaultColors.secondColor)}, ${darkOpacity})`);
-// const secondColorWithLightOpacity = props =>
-//   (props.secondColor ?
-//     `rgba(${hexToRgb(props.secondColor)}, ${lightOpacity})` :
-//     `rgba(${hexToRgb(defaultColors.secondColor)}, ${lightOpacity})`);
 
 const size = {
   small: '768px',
@@ -44,16 +40,6 @@ const screen = {
   small: `(min-width: ${size.small})`,
   maxMedium: `(max-width: ${size.medium})`
 };
-
-// Define Assembl theme colors that can be used as component props (e.g Semantic Analysis component)
-// export const assemblColors = {
-//   firstColor: firstColor,
-//   firstColorWithDarkOpacity: firstColorWithDarkOpacity,
-//   firstColorWithLightOpacity: firstColorWithLightOpacity,
-//   secondColor: secondColor,
-//   secondColorWithDarkOpacity: secondColorWithDarkOpacity,
-//   secondColorWithLightOpacity: secondColorWithLightOpacity
-// };
 
 // Define what props.theme will look like
 export const GlobalStyle = createGlobalStyle`

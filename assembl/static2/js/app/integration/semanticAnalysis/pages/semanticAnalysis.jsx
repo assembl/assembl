@@ -16,7 +16,7 @@ import Title from '../../../components/common/title/title';
 // Type imports
 import type { Keyword } from '../dataType';
 
-import { defaultColors } from '../../../assemblTheme';
+import { defaultColors } from '../../../globalTheme';
 import fakeData from '../data.json';
 
 export type Props = {};

@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
+import { connect } from 'react-redux';
 
 // Component imports
 import ToolbarSlider from '../../components/common/toolbarSlider/toolbarSlider';
@@ -19,11 +20,13 @@ import type { Keyword, SemanticAnalysisData } from '../../pages/semanticAnalysis
 
 // Helper imports
 import { isMicrosoftBrowser } from '../../utils/globalFunctions';
-import { defaultColors } from '../../assemblTheme';
+import { defaultColors } from '../../globalTheme';
 
 export type Props = {
   /** Semantic analysis data */
   semanticAnalysisData: SemanticAnalysisData
+  /** Theme fetched from redux */
+  // theme: Theme
 };
 
 export type State = {
@@ -214,4 +217,8 @@ export class SemanticAnalysis extends Component<Props, State> {
   }
 }
 
-export default SemanticAnalysis;
+const mapStateToProps = state => ({
+  theme: state.theme
+});
+
+export default connect(mapStateToProps)(SemanticAnalysis);
