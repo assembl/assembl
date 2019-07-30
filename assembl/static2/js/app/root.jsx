@@ -26,6 +26,7 @@ const Root = (props: Props) => {
 
   return (
     <React.Fragment>
+      <GlobalStyle {...theme} />
       <DebateCustomHTMLCode currentRoute={routes[routes.length - 1].path} debateData={debateData} />
       <Modal
         ref={(modalComponent) => {
