@@ -49,6 +49,10 @@ describe('<SemanticAnalysis /> - with shallow', () => {
             value: 'quam viverra aliquam elementum'
           }
         ]
+      },
+      theme: {
+        firstColor: '#FF0000',
+        secondColor: '#0000FF'
       }
     };
     wrapper = shallow(<SemanticAnalysis {...semanticAnalysisProps} />);

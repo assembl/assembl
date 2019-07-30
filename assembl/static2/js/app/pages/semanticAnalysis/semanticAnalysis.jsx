@@ -20,13 +20,15 @@ import type { Keyword, SemanticAnalysisData } from '../../pages/semanticAnalysis
 
 // Helper imports
 import { isMicrosoftBrowser } from '../../utils/globalFunctions';
-import { defaultColors } from '../../globalTheme';
 
 export type Props = {
   /** Semantic analysis data */
   semanticAnalysisData: SemanticAnalysisData
+};
+
+type ReduxProps = {
   /** Theme fetched from redux */
-  // theme: Theme
+  theme: Theme
 };
 
 export type State = {
@@ -37,7 +39,7 @@ export type State = {
 
 const noKeywordSelectedKey = 'debate.semanticAnalysis.noKeywordSelected';
 
-export class SemanticAnalysis extends Component<Props, State> {
+export class SemanticAnalysis extends Component<Props & ReduxProps, State> {
   state = {
     keywordSelected: false,
     keywordData: {
@@ -87,11 +89,12 @@ export class SemanticAnalysis extends Component<Props, State> {
 
   render() {
     const { keywordData, numberOfKeywordsToDisplay } = this.state;
-    const { semanticAnalysisData } = this.props;
+    const { semanticAnalysisData, theme } = this.props;
 
     // Set theme color
-    const firstColor = defaultColors.firstColor;
-    const secondColor = defaultColors.secondColor;
+    const fallbackColor = '#FFFF00'; // Yellow color
+    const firstColor = theme ? theme.firstColor : fallbackColor;
+    const secondColor = theme ? theme.secondColor : fallbackColor;
 
     // Semantic analysis
     const { nlpSentiment, topKeywords } = semanticAnalysisData;
@@ -221,4 +224,4 @@ const mapStateToProps = state => ({
   theme: state.theme
 });
 
-export default connect(mapStateToProps)(SemanticAnalysis);
+export const SmartSemanticAnalysis = connect(mapStateToProps)(SemanticAnalysis);
