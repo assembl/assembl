@@ -165,7 +165,8 @@ def create_post_in_thread(title, request, test_session, graphql_request, idea_id
 @freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
 def top_post_in_thread_phase(request, test_session, graphql_request, idea_in_thread_phase):
-    return create_post_in_thread(u"Manger des choux à la crème", request, test_session, graphql_request, idea_in_thread_phase)
+    return create_post_in_thread(u"Manger des choux à la crème",
+                                 request, test_session, graphql_request, idea_in_thread_phase)
 
 
 @freeze_time("2018-3-2")
@@ -182,7 +183,8 @@ def third_post_in_thread_phase(request, test_session, graphql_request, idea_in_t
 
 @freeze_time("2018-3-3")
 @pytest.fixture(scope="function")
-def participant1_post_in_thread_phase(participant1_user, request, test_session, graphql_request, idea_in_thread_phase):
+def participant1_post_in_thread_phase(participant1_user, request, test_session,
+                                      discussion_with_permissions, graphql_request, idea_in_thread_phase):
     prev_auth_id = graphql_request.authenticated_userid
     graphql_request.authenticated_userid = participant1_user.id
     post = create_post_in_thread(u"Post de participant1", request, test_session, graphql_request, idea_in_thread_phase)
