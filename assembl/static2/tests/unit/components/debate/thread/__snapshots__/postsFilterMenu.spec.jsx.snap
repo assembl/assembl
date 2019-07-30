@@ -362,7 +362,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
           tabIndex="-1"
         >
           <button
-            className="btn btn-default"
+            className="button-cancel button-dark btn btn-default"
             disabled={false}
             id="postsFilter-button-reset"
             onClick={[Function]}
@@ -373,7 +373,7 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             </span>
           </button>
           <button
-            className="btn btn-success"
+            className="button-submit button-dark btn btn-success"
             disabled={false}
             id="postsFilter-button-save"
             onClick={[Function]}

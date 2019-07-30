@@ -173,12 +173,14 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
             <PostsFilterButton
               id="postsFilter-button-reset"
               onClick={this.resetPolicies}
+              className="button-cancel button-dark"
               i18nTitle="debate.thread.postsOrder.cleanFilter"
               bsStyle="default"
             />
             <PostsFilterButton
               id="postsFilter-button-save"
               style={{ textAlign: 'right', float: 'right' }}
+              className="button-submit button-dark"
               onClick={this.savePolicies}
               i18nTitle="ok"
               bsStyle="success"
