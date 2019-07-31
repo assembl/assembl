@@ -5,14 +5,14 @@ Once you have made changes to this file, you have to run `supervisorctl restart 
 var path = require('path');
 var webpack = require('webpack');
 var MiniCssExtractPlugin = require("mini-css-extract-plugin");
-var HtmlWebpackPlugin = require('html-webpack-plugin');
 var glob = require('glob');
 var _ = require('lodash');
 
 // style.[contenthash].css is the file that should be imported in the production based project
 var general_entries = {
     bundle: './js/app/index',
-    mainStyle: './css/themes/default/assembl_web.scss'
+    mainStyle: './css/themes/default/assembl_web.scss' // Not needed for production builds, but needed as an entry point
+    // There is a rf -f build/mainStyle* in the build scripts in package.json to compensate
 };
 
 module.exports = {
@@ -119,7 +119,6 @@ module.exports = {
     },
     mode: 'production',
     plugins: [
-        new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" }),
-        new HtmlWebpackPlugin({ title: 'Caching', filename: 'resources.html'}),
+        new MiniCssExtractPlugin({ filename: "[name].[contenthash].css" })
     ]
 };

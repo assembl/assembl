@@ -9,7 +9,9 @@
   "scripts": {
     "test": "jest --maxWorkers=2",
     "test:watch": "npm test -- --watch",
-    "build": "webpack --progress --colors",
+    "build:raw": "webpack --progress --colors",
+    "build:cleanup": "find ./build | egrep \"(mainStyle|glyphicons).*\" | xargs rm",
+    "build": "yarn build:raw && yarn build:cleanup",
     "coverage": "jest --coverage",
     "dev": "webpack -d --watch",
     "eslint": "eslint js/app tests workspaces --ext .js --ext .jsx --cache",
