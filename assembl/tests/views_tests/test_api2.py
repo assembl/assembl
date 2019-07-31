@@ -1130,7 +1130,6 @@ class TestUserExport(AbstractExport):
     CREATION_DATE = "Date de création du compte"
     FIRST_VISIT = "Date de la première connexion"
     LAST_VISIT = "Date de la dernière connexion"
-    SESSIONS = "Nombre de session"
     TOP_POSTS = "Nombre de Top posts"
     TOP_POST_REPLIES = "Nombre de réponses reçues aux Top posts"
     POSTS = "Nombre de posts"
@@ -1145,21 +1144,26 @@ class TestUserExport(AbstractExport):
     DONT_UNDERSTAND_RECEIVED = '''Nombre de mentions "Pas tout compris" reçu'''
     MORE_INFO_RECEIVED = '''Nombre de mentions "SVP + d'infos" reçu'''
     THEMATICS = "Liste des thématiques dans lesquelles il a contribué"
+    DEPARTMENT = "department"
+    GRANTED_SCOPES = "Granted Scopes"
+
     header_titles = [
-        NAME, EMAIL, USERNAME, CREATION_DATE, FIRST_VISIT, LAST_VISIT, SESSIONS, TOP_POSTS, TOP_POST_REPLIES, POSTS,
+        NAME, EMAIL, USERNAME, CREATION_DATE, FIRST_VISIT, LAST_VISIT, TOP_POSTS, TOP_POST_REPLIES, POSTS,
         POSTS_REPLIES, TOTAL_POSTS, AGREE_GIVEN, DISAGREE_GIVEN, DONT_UNDERSTAND_GIVEN, MORE_INFO_GIVEN, AGREE_RECEIVED,
-        DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, THEMATICS
+        DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, THEMATICS, DEPARTMENT, GRANTED_SCOPES
     ]
 
     participant1_data = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', datetime.utcnow().strftime('%Y-%m-%d %H:%M'), '', '',
-                        '0', '1', '1', '1', '0', '2', '0', '1', '1', '0', '1', '0', '1', '1', '[]']
+                        '1', '1', '1', '0', '2', '0', '1', '1', '0', '1', '0', '1', '1', '[]', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
 
     participant2_data = ['James T. Expert', '', '', datetime.utcnow().strftime('%Y-%m-%d %H:%M'), (datetime.utcnow() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M'),
-        (datetime.utcnow() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M'), '0', '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "[u'Favor economic growth']"]
+        (datetime.utcnow() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M'), '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "[u'Favor economic growth']",
+        '', '']
 
 
     def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_username, reply_post_2,
-                reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2):
+                reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2,
+                participant1_social_account_w_extra, participant1_social_account_w_extra2):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         first_row = result[1]

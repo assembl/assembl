@@ -681,7 +681,6 @@ def users_csv_export(request):
     CREATION_DATE = "Date de création du compte"
     FIRST_VISIT = "Date de la première connexion"
     LAST_VISIT = "Date de la dernière connexion"
-    SESSIONS = "Nombre de session"
     TOP_POSTS = "Nombre de Top posts"
     TOP_POST_REPLIES = "Nombre de réponses reçues aux Top posts"
     POSTS = "Nombre de posts"
@@ -697,7 +696,7 @@ def users_csv_export(request):
     MORE_INFO_RECEIVED = '''Nombre de mentions "SVP + d'infos" reçu'''
     THEMATICS = "Liste des thématiques dans lesquelles il a contribué"
     fieldnames = [
-        NAME, EMAIL, USERNAME, CREATION_DATE, FIRST_VISIT, LAST_VISIT, SESSIONS, TOP_POSTS, TOP_POST_REPLIES, POSTS,
+        NAME, EMAIL, USERNAME, CREATION_DATE, FIRST_VISIT, LAST_VISIT, TOP_POSTS, TOP_POST_REPLIES, POSTS,
         POSTS_REPLIES, TOTAL_POSTS, AGREE_GIVEN, DISAGREE_GIVEN, DONT_UNDERSTAND_GIVEN, MORE_INFO_GIVEN, AGREE_RECEIVED,
         DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, THEMATICS
     ]
@@ -705,7 +704,6 @@ def users_csv_export(request):
     DISLIKE_SENTIMENT = 'sentiment:disagree'
     DONT_UNDERSTAND_SENTIMENT = 'sentiment:dont_understand'
     MORE_INFO_SENTIMENT = 'sentiment:more_info'
-
 
     discussion = request.context._instance
     db = discussion.db
@@ -752,7 +750,6 @@ def users_csv_export(request):
                 DISAGREE_RECEIVED: 0,
                 DONT_UNDERSTAND_RECEIVED: 0,
                 MORE_INFO_RECEIVED: 0,
-                SESSIONS: 0,
                 TOP_POSTS: 0,
                 TOP_POST_REPLIES: 0,
                 POSTS: 0,
@@ -760,6 +757,16 @@ def users_csv_export(request):
                 TOTAL_POSTS: 0,
                 THEMATICS: []
             }
+
+        #Get SSO extra information
+        for account in user.social_accounts:
+            for key, value in account.extra_data.iteritems():
+                if key not in fieldnames:
+                    fieldnames.append(key)
+                if key not in users[user.id].keys():
+                    users[user.id][key] = value
+                else:
+                    users[user.id][key] += ', ' + value
 
     for post in posts:
         if post.parent_id is None:
