@@ -709,6 +709,7 @@ def users_csv_export(request):
 
     discussion = request.context._instance
     db = discussion.db
+    user_prefs = LanguagePreferenceCollection.getCurrent()
 
     start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
@@ -722,6 +723,7 @@ def users_csv_export(request):
         m.SentimentOfPost.tombstone_condition()
     ).group_by(m.Post.id, m.SentimentOfPost.actor_id, m.SentimentOfPost.type).all()
 
+    # Sort sentiments for better access depending of post/user
     sentiments_given_by_user = defaultdict(lambda: defaultdict(int))
     sentiments_received_by_post = defaultdict(lambda: defaultdict(int))
 
@@ -732,20 +734,24 @@ def users_csv_export(request):
     users = {}
 
     users_in_discussion = db.query(m.User).join(m.AgentStatusInDiscussion, m.AgentStatusInDiscussion.profile_id == m.User.id).filter(
-        m.AgentStatusInDiscussion.discussion_id == discussion.id).all()
+        m.AgentStatusInDiscussion.discussion_id == discussion.id).order_by(m.User.id).all()
 
     for user in users_in_discussion:
         users[user.id] = {
                 NAME: user.name if not has_anon else user.anonymous_name(),
                 EMAIL: user.get_preferred_email(has_anon),
                 USERNAME: user.username_p if not has_anon else user.anonymous_username(),
-                CREATION_DATE: user.creation_date,
-                FIRST_VISIT: user.first_visit,
-                LAST_VISIT: user.last_visit,
+                CREATION_DATE: user.creation_date.strftime('%Y-%m-%d %H:%M:%S') if user.creation_date else '',
+                FIRST_VISIT: user.first_visit.strftime('%Y-%m-%d %H:%M:%S') if user.first_visit else '',
+                LAST_VISIT: user.last_visit.strftime('%Y-%m-%d %H:%M:%S') if user.last_visit else '',
                 AGREE_GIVEN: sentiments_given_by_user[user.id][LIKE_SENTIMENT],
                 DISAGREE_GIVEN: sentiments_given_by_user[user.id][DISLIKE_SENTIMENT],
                 DONT_UNDERSTAND_GIVEN: sentiments_given_by_user[user.id][DONT_UNDERSTAND_SENTIMENT],
                 MORE_INFO_GIVEN: sentiments_given_by_user[user.id][MORE_INFO_SENTIMENT],
+                AGREE_RECEIVED: 0,
+                DISAGREE_RECEIVED: 0,
+                DONT_UNDERSTAND_RECEIVED: 0,
+                MORE_INFO_RECEIVED: 0,
                 SESSIONS: 0,
                 TOP_POSTS: 0,
                 TOP_POST_REPLIES: 0,
@@ -764,10 +770,14 @@ def users_csv_export(request):
             users[post.creator.id][POSTS_REPLIES] += len(post.get_descendants().all())
 
         users[post.creator.id][TOTAL_POSTS] += 1
-        users[post.creator.id][AGREE_RECEIVED] = sentiments_received_by_post[post.id][LIKE_SENTIMENT]
-        users[post.creator.id][DISAGREE_RECEIVED] = sentiments_received_by_post[post.id][DISLIKE_SENTIMENT]
-        users[post.creator.id][DONT_UNDERSTAND_RECEIVED] = sentiments_received_by_post[post.id][DONT_UNDERSTAND_SENTIMENT]
-        users[post.creator.id][MORE_INFO_RECEIVED] = sentiments_received_by_post[post.id][MORE_INFO_SENTIMENT]
+        users[post.creator.id][AGREE_RECEIVED] += sentiments_received_by_post[post.id][LIKE_SENTIMENT]
+        users[post.creator.id][DISAGREE_RECEIVED] += sentiments_received_by_post[post.id][DISLIKE_SENTIMENT]
+        users[post.creator.id][DONT_UNDERSTAND_RECEIVED] += sentiments_received_by_post[post.id][DONT_UNDERSTAND_SENTIMENT]
+        users[post.creator.id][MORE_INFO_RECEIVED] += sentiments_received_by_post[post.id][MORE_INFO_SENTIMENT]
+
+        for idea in post.get_ideas():
+            if idea.safe_title(user_prefs) not in users[post.creator.id][THEMATICS]:
+                users[post.creator.id][THEMATICS].append(idea.safe_title(user_prefs))
 
     return csv_response(users.values(), CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="users.csv"')
 

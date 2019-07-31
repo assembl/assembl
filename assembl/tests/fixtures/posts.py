@@ -369,6 +369,36 @@ def reply_post_3(request, participant2_user, discussion,
 
 
 @pytest.fixture(scope="function")
+def post_related_to_sub_idea_1_participant2(
+        request, test_session, discussion, participant2_user, subidea_1):
+    from assembl.models import Post, LangString, IdeaRelatedPostLink
+    idea = subidea_1
+    p = Post(
+        discussion=discussion, creator=participant2_user,
+        subject=LangString.create(u"A post related to sub_idea_1 "),
+        body=LangString.create(u"A post related to sub_idea_1"),
+        type='post', message_id="msg3@example3.com")
+
+    idc = IdeaRelatedPostLink(
+        idea=idea,
+        creator=participant2_user,
+        content=p)
+
+    test_session.add(p)
+    test_session.add(idc)
+    test_session.flush()
+
+    def fin():
+        print "finalizer root_post_en_under_positive_column_of_idea"
+        test_session.delete(p)
+        test_session.delete(idc)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+    return p
+
+
+@pytest.fixture(scope="function")
 def reply_deleted_post_4(request, participant2_user, discussion,
                          reply_post_1, test_session):
     """

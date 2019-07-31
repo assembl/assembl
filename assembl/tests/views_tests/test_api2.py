@@ -1151,15 +1151,15 @@ class TestUserExport(AbstractExport):
         DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, THEMATICS
     ]
 
-    participant1_data = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', '', datetime.utcnow(), datetime.utcnow() - timedelta(days=2), datetime.utcnow() + timedelta(days=2),
-                        1, 1, 1, 1, 0, 2, 0, 1, 1, 0, 1, 0, 2, 1, '']
+    participant1_data = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', datetime.utcnow().strftime('%Y-%m-%d %H:%M'), '', '',
+                        '0', '1', '1', '1', '0', '2', '0', '1', '1', '0', '1', '0', '1', '1', '[]']
 
-    participant2_data = ['James T. Expert', '', '', '', datetime.utcnow(), datetime.utcnow() - timedelta(days=1), datetime.utcnow() - timedelta(days=1),
-                        1, 0, 0, 1, 1, 2, 1, 0, 2, 1, 1, 1, 0, 1, '']
+    participant2_data = ['James T. Expert', '', '', datetime.utcnow().strftime('%Y-%m-%d %H:%M'), (datetime.utcnow() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M'),
+        (datetime.utcnow() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M'), '0', '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "[u'Favor economic growth']"]
 
 
     def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_username, reply_post_2,
-                root_post_1_sentiments, reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits):
+                reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         first_row = result[1]
@@ -1169,14 +1169,22 @@ class TestUserExport(AbstractExport):
         for idx, title in enumerate(self.header_titles):
             assert header[idx] == title
 
-        for idx, value in enumerate(self.participant1_data):
-            assert first_row[idx] == value
-
         for idx, value in enumerate(self.participant2_data):
-            assert last_row[idx] == value
+            # If date, remove the seconds to compare
+            if idx in [3, 4, 5]:
+                assert first_row[idx][:-3] == value
+            else:
+                assert first_row[idx] == value
+
+        for idx, value in enumerate(self.participant1_data):
+            # If date, remove the seconds to compare
+            if idx in [3, 4, 5]:
+                assert last_row[idx][:-3] == value
+            else:
+                assert last_row[idx] == value
 
 
-    def test_anon(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, reply_post_2):
+    def test_anon(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username):
         result = self.get_result(test_app, discussion.id, view_name=self.view_name, anon=True)
         first_row = result[1]
         assert first_row[0] == participant1_user.anonymous_name()
