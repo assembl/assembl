@@ -53,7 +53,7 @@ exports[`DumbMenuItem component should match a not selected menu item 1`] = `
 
 exports[`DumbMenuItem component should match a selected menu item 1`] = `
 <div
-  className="menu-item-container active"
+  className="menu-item-container"
 >
   <div
     className="menu-item"
@@ -104,7 +104,7 @@ exports[`DumbMenuItem component should match a selected menu item 1`] = `
 
 exports[`DumbMenuItem component should match a selected menu item of type vote session 1`] = `
 <div
-  className="menu-item-container active"
+  className="menu-item-container"
 >
   <div
     className="menu-item"
