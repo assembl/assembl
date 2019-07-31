@@ -4,7 +4,6 @@ import { Translate } from 'react-redux-i18n';
 import moment from 'moment';
 import classnames from 'classnames';
 
-import '../../../../css/components/profileLine.scss';
 import AvatarImage from './avatarImage';
 
 type Props = {
