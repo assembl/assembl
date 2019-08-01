@@ -6,8 +6,11 @@ const Translations = {
     here: "ici",
     yes: "oui",
     no: "non",
+    ok: "Ok",
     and: " et ",
     accept: "Accepter",
+    readMoreEllipsis: "Lire plus...",
+    readLessEllipsis: "Lire moins...",
     refuse: "Refuser",
     cancel: "Annuler",
     validate: "Valider",
@@ -452,8 +455,28 @@ const Translations = {
         postSuccess: "Merci pour votre participation. Votre message a bien été envoyé !",
         postToBeValidated:
           "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
-        fillSubject: "Veuillez écrire un titre",
+        postsDisplay: {
+          full: "Messages complets",
+          summary: "Aperçu des messages"
+        },
+        postsFilters: {
+          myPostsAndAnswers: "Messages en réponse à mes contributions",
+          onlyMyPosts: "Mes contributions"
+        },
+        postsOrder: {
+          cleanFilter: "Effacer les filtres",
+          chronologicalTop: "Fils de discussion chronologiques",
+          popularityFlat: "Messages les plus populaires en premier",
+          reverseChronologicalFlat: "Messages récents en premier",
+          reverseChronologicalLast: "Fils de discussion récemment actifs",
+          reverseChronologicalTop: "Fils de discussion récemment démarrés"
+        },
         fillBody: "Veuillez écrire un message",
+        filterPosts: "Filtrer",
+        fillSubject: "Veuillez écrire un titre",
+        sortPosts: "Trier",
+        sortFilterPosts: "Trier / Filtrer",
+        overviewPosts: "Aperçu",
         linkIdea: "Ce post est en lien avec les thématiques suivantes :",
         foldedPostLink: "Voir les %{count} réponses",
         foldedPostLink_1: "Voir la réponse",
@@ -1088,9 +1111,12 @@ const Translations = {
     here: "here",
     yes: "yes",
     no: "no",
+    ok: "Ok",
     and: " and ",
     cancel: "Cancel",
     accept: "Accept",
+    readMoreEllipsis: "Read more...",
+    readLessEllipsis: "Read less...",
     refuse: "Refuse",
     validate: "Validate",
     introduction: "Introduction",
@@ -1531,8 +1557,28 @@ const Translations = {
         postSuccess: "Thanks for your participation. Your comment has been sent!",
         postToBeValidated:
           "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.",
-        fillSubject: "Please, write a title",
+        postsDisplay: {
+          full: "Full messages",
+          summary: "Message previews"
+        },
+        postsFilters: {
+          myPostsAndAnswers: "Answers to my posts",
+          onlyMyPosts: "My posts"
+        },
+        postsOrder: {
+          cleanFilter: "Clean filters",
+          chronologicalTop: "Chronological order",
+          popularityFlat: "Most popular messages first",
+          reverseChronologicalFlat: "Newest messages first",
+          reverseChronologicalLast: "Recently started threads",
+          reverseChronologicalTop: "Recently active threads"
+        },
         fillBody: "Please, write a comment",
+        filterPosts: "Filter",
+        fillSubject: "Please, write a title",
+        sortPosts: "Sort",
+        sortFilterPosts: "Sort / Filter",
+        overviewPosts: "Overview",
         linkIdea: "This post is related to the following themes:",
         foldedPostLink: "Show %{count} responses",
         foldedPostLink_1: "Show 1 response",

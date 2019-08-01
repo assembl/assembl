@@ -2,6 +2,7 @@
 /* eslint-disable */
 import { type EditorState } from 'draft-js';
 import Immutable from 'immutable';
+import type { PostsOrderTypes } from './graphql_types.flow';
 
 /* temporary dummy types */
 type RawDraftContentState = {
@@ -59,6 +60,10 @@ type Post = { ...PostFragment } & {
   creationDate: string,
   parentId: number
 };
+
+type PostWithChildren = {
+  children: Array<PostWithChildren>
+} & Post;
 
 type FictionPostPreview = {
   id: string,
@@ -238,3 +243,35 @@ type Language = {
   name: string,
   nativeName: string
 };
+
+export type PostsDisplayModes = 'full' | 'summary';
+
+export interface PostsFilterItem {
+  id: string;
+  labelMsgId: string;
+}
+
+type PostsGroupPolicy = {
+  comparator: (a: PostWithChildren, b: PostWithChildren) => 1 | 0 | -1, // how to compare groups of posts
+  reverse: boolean
+};
+
+export interface PostsOrderPolicy extends PostsFilterItem {
+  // if null, posts are flattened
+  postsGroupPolicy: any; // FIXME null | PostsGroupPolicy;
+  graphqlPostsOrder: PostsOrderTypes; // graphql criterion for postsOrder (backend sort)
+}
+
+export interface PostsDisplayPolicy extends PostsFilterItem {
+  displayMode: PostsDisplayModes;
+}
+
+export type PostsFiltersStatus = {
+  onlyMyPosts: boolean,
+  myPostsAndAnswers: boolean
+};
+
+export interface PostsFilterPolicy extends PostsFilterItem {
+  excludedPolicies: string[]; // list of policies that are exclusives of this policy.
+  filterField: string;
+}

@@ -45,7 +45,7 @@ exports[`Bright Mirror page should match BrightMirror instruction snapshot 1`] =
     title="Instruction"
   />
   <div>
-    <TopPostFormContainer
+    <DumbTopPostFormContainer
       bodyMaxLength={0}
       bodyPlaceholderMsgId="debate.brightMirror.fillBodyLabel"
       draftSuccessMsgId="debate.brightMirror.draftSuccessMsg"

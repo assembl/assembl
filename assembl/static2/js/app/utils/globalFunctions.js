@@ -339,7 +339,8 @@ export const getPostPublicationState = (isDebateModerated: boolean, connectedUse
   return PublicationStates.SUBMITTED_AWAITING_MODERATION;
 };
 
-// Lift flow error: Convert `SuggestedTags` to Array<string>, filter null values and filter score greater than KEYWORD_SCORE_THRESHOLD
+// Lift flow error: Convert `SuggestedTags` to Array<string>,
+// filter null values and filter score greater than KEYWORD_SCORE_THRESHOLD
 export const formatedSuggestedTagList = (suggestedTags: SuggestedTags): Array<string> =>
   (suggestedTags
     ? suggestedTags.reduce((result, keyword) => {

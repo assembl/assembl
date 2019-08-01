@@ -200,7 +200,7 @@ def test_add_tag_on_post_new(graphql_request, tags, root_post_for_tags):
 
 
 def test_add_tag_on_post_existing(graphql_request, tags, root_post_for_tags):
-    post_id = to_global_id('Post',root_post_for_tags.id)
+    post_id = to_global_id('Post', root_post_for_tags.id)
     variable_values = {
         "taggableId" : post_id,
         "value": "tag1"

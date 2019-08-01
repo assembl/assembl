@@ -10,20 +10,22 @@ import Timeline from './timelineReducers';
 import Admin from './adminReducer';
 import Tags from './tagReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
+import ThreadFilter from './threadFilterReducer';
 import * as screenDimensions from './screenDimensionsReducers';
 
 const reducers = {
-  i18n: i18nReducer,
+  admin: Admin,
+  auth: Auth,
   contentLocale: contentLocale,
-  defaultContentLocaleMapping: defaultContentLocaleMapping,
   context: Context,
   debate: Debate,
+  defaultContentLocaleMapping: defaultContentLocaleMapping,
+  i18n: i18nReducer,
   partners: Partners,
   synthesis: Synthesis,
-  auth: Auth,
-  timeline: Timeline,
-  admin: Admin,
   tags: Tags,
+  timeline: Timeline,
+  threadFilter: ThreadFilter,
   ...screenDimensions
 };
 

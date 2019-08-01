@@ -2,13 +2,13 @@
 /* eslint-disable react/no-multi-comp */
 import React from 'react';
 import { connect } from 'react-redux';
-import { Translate, I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
+import type { OperationComponent } from 'react-apollo';
 import { compose, graphql } from 'react-apollo';
 import { Grid } from 'react-bootstrap';
 import { withRouter } from 'react-router';
-// Type imports
 import type { Map } from 'immutable';
-import type { OperationComponent } from 'react-apollo';
+
 import type { ContentLocaleMapping, ContentLocaleMappingJS } from '../actions/actionTypes';
 import type { AnnouncementContent } from '../components/debate/common/announcement';
 
@@ -25,50 +25,45 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
-import { DeletedPublicationStates, DELETE_CALLBACK, MESSAGE_VIEW } from '../constants';
+import { DELETE_CALLBACK, DeletedPublicationStates, MESSAGE_VIEW } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Survey from './survey';
 import VoteSession from './voteSession';
-// Utils imports
 import { displayAlert } from '../utils/utilityManager';
 import { DebateContext } from '../app';
+import { defaultOrderPolicy } from '../components/debate/common/postsFilter/policies';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
 type Props = {
-  contentLocaleMapping: ContentLocaleMapping,
-  defaultContentLocaleMapping: Map<string, string>,
-  updateContentLocaleMapping: ContentLocaleMappingJS => void,
-  timeline: Timeline,
-  debateData: DebateData,
-  lang: string,
-  ideaWithPostsData: IdeaWithPostsQuery,
-  messageViewOverride: string,
-  identifier: string,
-  phaseId: string,
-  routerParams: RouterParams,
-  location: {
-    state: { callback: string }
-  },
-  announcement: AnnouncementContent,
   id: string,
-  headerImgUrl: string,
-  title: string,
+  announcement: AnnouncementContent,
+  contentLocaleMapping: ContentLocaleMapping,
   description: string,
-  toggleHarvesting: Function,
+  debateData: DebateData,
+  defaultContentLocaleMapping: Map<string, string>,
+  headerImgUrl: string,
+  ideaWithPostsData: IdeaWithPostsQuery,
+  identifier: string,
   isHarvesting: boolean,
+  lang: string,
+  location: { state: { callback: string } },
+  phaseId: string,
+  postsMustBeRefetched: boolean,
+  /** Function to call action to store tags on store */
+  putTagsInStore: Function,
+  messageViewOverride: string,
+  routerParams: RouterParams,
   /** Tags information fetched from GraphQL */
   tags: Array<Tag>,
-  /** Function to call action to store tags on store */
-  putTagsInStore: Function
+  timeline: Timeline,
+  title: string,
+  toggleHarvesting: Function,
+  updateContentLocaleMapping: ContentLocaleMappingJS => void
 } & SemanticAnalysisForThematicQuery;
-
-type PostWithChildren = {
-  children: Array<PostWithChildren>
-} & Post;
 
 type Column = {
   messageClassifier: string,
@@ -90,49 +85,32 @@ const creationDateDescComparator = (a: Post, b: Post) => {
   return 1;
 };
 
-/*
- * From a post, get the latest creationDate of live descendants and self
- */
-const getLatest = (post: PostWithChildren) => {
-  let maxDate = post.creationDate;
-  if (post.children.length === 0) {
-    if (deletedPublicationStates.indexOf(post.publicationState) > -1) {
-      return null;
-    }
-    return maxDate;
-  }
-  post.children.forEach((p) => {
-    const date = getLatest(p);
-    if (date && date > maxDate) {
-      maxDate = date;
-    }
-  });
-  return maxDate;
+type AdditionalProps = {
+  debateData?: any,
+  ideaId?: any,
+  postsOrderPolicy?: PostsOrderPolicy | null,
+  refetchIdea?: Function,
+  routerParams?: any,
+  timeline?: any
 };
 
-const creationDateLastDescendantComparator = (a: PostWithChildren, b: PostWithChildren) => {
-  const firstDate = getLatest(a) || '';
-  const secondDate = getLatest(b) || '';
-  if (firstDate > secondDate) {
-    return -1;
-  }
-  if (firstDate === secondDate) {
-    return 0;
-  }
-  return 1;
-};
+export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>, additionalProps: AdditionalProps = {}) => {
+  const postsByParent = { root: [] };
+  const { postsOrderPolicy, ...additionalPostProps } = additionalProps;
+  const orderPolicy: PostsOrderPolicy = postsOrderPolicy || defaultOrderPolicy;
 
-export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>, additionnalProps: { [string]: any } = {}) => {
-  const postsByParent = {};
   const columns = { null: { colColor: null, colName: null } };
   messageColumns.forEach((col) => {
     columns[col.messageClassifier] = { colColor: col.color, colName: col.name };
   });
+  const postIds = edges.map((edge: Node) => edge.node.id);
+
   edges.forEach((e) => {
-    const p = { ...e.node, ...additionnalProps, ...columns[e.node.messageClassifier] };
-    const items = postsByParent[p.parentId] || [];
-    postsByParent[p.parentId] = items;
-    items.push(p);
+    const postInfo = { ...e.node, ...additionalPostProps, ...columns[e.node.messageClassifier] };
+    const parentId = !orderPolicy.postsGroupPolicy || !postInfo.parentId ? 'root' : postInfo.parentId;
+    const items = postsByParent[parentId] ? postsByParent[parentId].slice() : [];
+    items.push(postInfo);
+    postsByParent[parentId] = items;
   });
 
   const getChildren = id =>
@@ -146,16 +124,30 @@ export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>
       })
       .sort(creationDateDescComparator);
 
-  // postsByParent.null is the list of top posts
+  // postsByParent.root is the list of top posts
   // filter out deleted top post without answers
-  return (postsByParent.null || [])
+  let postWithoutParents = [];
+  Object.keys(postsByParent).forEach((key) => {
+    if (key === 'root' || postIds.indexOf(key) === -1) {
+      postWithoutParents = [...postsByParent[key], ...postWithoutParents];
+    }
+  });
+
+  let topPosts: PostWithChildren[] = postWithoutParents
     .map((p) => {
       const newPost = p;
       newPost.children = getChildren(p.id);
       return newPost;
     })
-    .filter(topPost => !(deletedPublicationStates.indexOf(topPost.publicationState) > -1 && topPost.children.length === 0))
-    .sort(creationDateLastDescendantComparator);
+    .filter(topPost => !(deletedPublicationStates.indexOf(topPost.publicationState) > -1 && topPost.children.length === 0));
+
+  if (orderPolicy.postsGroupPolicy && orderPolicy.postsGroupPolicy.comparator) {
+    topPosts = topPosts.sort(orderPolicy.postsGroupPolicy.comparator);
+  }
+  if (orderPolicy.postsGroupPolicy && orderPolicy.postsGroupPolicy.reverse) {
+    topPosts = topPosts.reverse();
+  }
+  return topPosts;
 };
 
 // Function that counts the total number of posts in a Bright Mirror debate section
@@ -182,12 +174,15 @@ class Idea extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { toggleHarvesting, isHarvesting } = this.props;
+    const { ideaWithPostsData, isHarvesting, postsMustBeRefreshed, toggleHarvesting } = this.props;
     this.displayBrightMirrorDeleteFictionMessage();
     const { hash } = window.location;
     const extractId = hash && hash !== '' && hash.split('#')[2];
     if (extractId && !isHarvesting) {
       toggleHarvesting();
+    }
+    if (postsMustBeRefreshed) {
+      ideaWithPostsData.refetch();
     }
   }
 
@@ -243,14 +238,15 @@ class Idea extends React.Component<Props> {
   };
 
   getTopPosts = () => {
-    const { ideaWithPostsData, routerParams, timeline, debateData } = this.props;
+    const { debateData, ideaWithPostsData, postsOrderPolicy, routerParams, timeline } = this.props;
     if (!ideaWithPostsData.idea) return [];
     const topPosts = transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
-      refetchIdea: ideaWithPostsData.refetch,
+      debateData: debateData,
       ideaId: ideaWithPostsData.idea.id,
+      postsOrderPolicy: postsOrderPolicy,
+      refetchIdea: ideaWithPostsData.refetch,
       routerParams: routerParams,
-      timeline: timeline,
-      debateData: debateData
+      timeline: timeline
     });
     return topPosts;
   };
@@ -297,38 +293,38 @@ class Idea extends React.Component<Props> {
       });
     const topPosts = this.getTopPosts();
     const childProps = {
-      messageViewOverride: messageViewOverride,
-      identifier: identifier,
-      phaseId: phaseId,
-      timeline: timeline,
+      contentLocaleMapping: contentLocaleMapping,
       debateData: debateData,
       ideaId: id,
       ideaWithPostsData: ideaWithPostsData,
-      isUserConnected: !!getConnectedUserId(),
-      contentLocaleMapping: contentLocaleMapping,
-      refetchIdea: refetchIdea,
-      lang: lang,
-      noRowsRenderer: noRowsRenderer,
-      messageColumns: messageColumns,
-      posts: topPosts,
+      identifier: identifier,
       initialRowIndex: ideaWithPostsData.loading
         ? undefined
-        : this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges)
+        : this.getInitialRowIndex(topPosts, ideaWithPostsData.idea.posts.edges),
+      isUserConnected: !!getConnectedUserId(),
+      lang: lang,
+      messageColumns: messageColumns,
+      messageViewOverride: messageViewOverride,
+      noRowsRenderer: noRowsRenderer,
+      phaseId: phaseId,
+      refetchIdea: refetchIdea,
+      timeline: timeline
     };
 
     let view;
     if (isMultiColumns) {
-      view = <ColumnsView {...childProps} routerParams={routerParams} />;
+      view = <ColumnsView {...childProps} posts={topPosts} routerParams={routerParams} />;
     } else if (isBrightMirror) {
       view = (
         <InstructionView
           {...childProps}
+          posts={((topPosts: any): FictionPostPreview[])}
           announcementContent={announcement}
           semanticAnalysisForThematicData={semanticAnalysisForThematicData}
         />
       );
     } else {
-      view = <ThreadView {...childProps} />;
+      view = <ThreadView posts={topPosts} {...childProps} />;
     }
 
     let statElements = [];
@@ -372,14 +368,20 @@ class Idea extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = state => ({
-  contentLocaleMapping: state.contentLocale,
-  timeline: state.timeline,
-  defaultContentLocaleMapping: state.defaultContentLocaleMapping,
-  lang: state.i18n.locale,
-  debateData: state.debate.debateData,
-  isHarvesting: state.context.isHarvesting
-});
+const mapStateToProps = (state) => {
+  const props = {
+    postsOrderPolicy: state.threadFilter.postsOrderPolicy,
+    postsFiltersStatus: state.threadFilter.postsFiltersStatus,
+    postsMustBeRefreshed: state.threadFilter.postsMustBeRefreshed,
+    contentLocaleMapping: state.contentLocale,
+    timeline: state.timeline,
+    defaultContentLocaleMapping: state.defaultContentLocaleMapping,
+    lang: state.i18n.locale,
+    debateData: state.debate.debateData,
+    isHarvesting: state.context.isHarvesting
+  };
+  return props;
+};
 
 const mapDispatchToProps = dispatch => ({
   updateContentLocaleMapping: info => dispatch(updateContentLocale(info)),
@@ -394,10 +396,12 @@ const IdeaWithPosts = compose(
 )(Idea);
 
 type SwitchViewProps = {
-  messageViewOverride: string,
   contextMessageViewOverride: string,
+  isHarvestable: boolean,
+  messageViewOverride: string,
   modifyContext: (newState: Object) => void,
-  isHarvestable: boolean
+  postsOrderPolicy: PostsOrderPolicy,
+  postsFiltersStatus: PostsFiltersStatus
 };
 
 class SwitchView extends React.Component<SwitchViewProps> {
@@ -425,7 +429,15 @@ class SwitchView extends React.Component<SwitchViewProps> {
     if (props.messageViewOverride === MESSAGE_VIEW.voteSession) {
       return <VoteSession {...props} />;
     }
-    return <IdeaWithPosts {...props} additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror} />;
+    return (
+      <IdeaWithPosts
+        {...props}
+        postsOrder={props.postsOrderPolicy.graphqlPostsOrder}
+        onlyMyPosts={props.postsFiltersStatus.onlyMyPosts} // fixme: more generic
+        myPostsAndAnswers={props.postsFiltersStatus.myPostsAndAnswers} // fixme: more generic
+        additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror}
+      />
+    );
   }
 }
 
@@ -450,7 +462,9 @@ const semanticAnalysisForThematicQuery: OperationComponent<SemanticAnalysisForTh
 );
 
 const mapStateToPropsForIdeaQuery = state => ({
-  lang: state.i18n.locale
+  lang: state.i18n.locale,
+  postsOrderPolicy: state.threadFilter.postsOrderPolicy,
+  postsFiltersStatus: state.threadFilter.postsFiltersStatus
 });
 
 export default compose(

@@ -1,14 +1,17 @@
-.go-up {
-  position: fixed;
-  bottom: 20px;
+.go-up, .posts-filter-button {
   right: 20px;
-  z-index: 99;
 
   div {
     font-size: 11px;
     text-align: center;
     color: $first-color;
   }
+}
+
+.go-up {
+  z-index: 99;
+  position: fixed;
+  bottom: 20px;
 
   a {
     text-align: left;
@@ -27,6 +30,25 @@
     .assembl-icon-up-open::before {
       font-size: 9px;
     }
+  }
+}
+
+.posts-filter-button {
+  $post-filter-button-margin-top: 44px;
+
+  z-index: 1;
+  position: -webkit-sticky;
+  position: sticky;
+  float: right;
+  margin-top: $post-filter-button-margin-top;
+
+  &.sticky {
+    top: $top-post-sticky-top + 60px + $post-filter-button-margin-top;
+  }
+
+  ul {
+    // FIXME: magic numbers
+    width: 372px;
   }
 }
 
