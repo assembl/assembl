@@ -34,7 +34,7 @@
 }
 
 .posts-filter-button {
-  $post-filter-button-margin-top: 44px;
+  $post-filter-button-margin-top: 80px;
 
   z-index: 1;
   position: -webkit-sticky;
@@ -48,7 +48,7 @@
 
   ul {
     // FIXME: magic numbers
-    width: 372px;
+    width: 400px;
   }
 }
 

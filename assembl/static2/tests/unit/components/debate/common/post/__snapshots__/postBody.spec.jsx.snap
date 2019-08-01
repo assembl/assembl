@@ -223,7 +223,7 @@ exports[`PostBody component should render a post body 1`] = `
       />
     </div>
     <div
-      className="dark-title-3 read-more"
+      className="read-more"
       onClick={[Function]}
     >
       <Translate
@@ -275,7 +275,7 @@ exports[`PostBody component should render a post body with summary view 1`] = `
       />
     </div>
     <div
-      className="dark-title-3 read-more"
+      className="read-more"
       onClick={[Function]}
     >
       <Translate

@@ -69,7 +69,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={false}
             id="postsFilterItem-reverseChronologicalTop-input"
             name="postsOrder"
-            readOnly={true}
             type="radio"
           />
            
@@ -98,7 +97,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={true}
             id="postsFilterItem-reverseChronologicalLast-input"
             name="postsOrder"
-            readOnly={true}
             type="radio"
           />
            
@@ -127,7 +125,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={false}
             id="postsFilterItem-chronologicalTop-input"
             name="postsOrder"
-            readOnly={true}
             type="radio"
           />
            
@@ -156,7 +153,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={false}
             id="postsFilterItem-reverseChronologicalFlat-input"
             name="postsOrder"
-            readOnly={true}
             type="radio"
           />
            
@@ -185,7 +181,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={false}
             id="postsFilterItem-popularityFlat-input"
             name="postsOrder"
-            readOnly={true}
             type="radio"
           />
            
@@ -232,7 +227,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={true}
             id="postsFilterItem-display-full-input"
             name="postsDisplay"
-            readOnly={true}
             type="radio"
           />
            
@@ -261,7 +255,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={false}
             id="postsFilterItem-display-summary-input"
             name="postsDisplay"
-            readOnly={true}
             type="radio"
           />
            
@@ -308,7 +301,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={false}
             id="postsFilterItem-filter-onlyMyPosts-input"
             name="onlyMyPosts"
-            readOnly={true}
             type="checkbox"
           />
            
@@ -337,7 +329,6 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
             checked={false}
             id="postsFilterItem-filter-myPostsAndAnswers-input"
             name="myPostsAndAnswers"
-            readOnly={true}
             type="checkbox"
           />
            
