@@ -80,7 +80,7 @@ module.exports = {
             {
               loader: "file-loader",
               options: {
-                name: "style.[contenthash].css"
+                name: "style.css"
               }
             },
             "extract-loader",
