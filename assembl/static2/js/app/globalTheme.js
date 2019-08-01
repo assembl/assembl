@@ -218,6 +218,13 @@ export const GlobalStyle = createGlobalStyle`
     border-top-color: ${secondColor};
   }
 
+  .bright-mirror-fiction {
+    .active-extract,
+    .selection-highlight {
+      background-color: ${firstColorWithLightOpacity};
+    }
+  }
+
   .button-dark.button-dark {
     border-color: ${firstColor};
 
@@ -552,9 +559,23 @@ export const GlobalStyle = createGlobalStyle`
   }
 
   .fiction-preview {
+    border-bottom-color: ${firstColor};
+
+    &.draft {
+      border-color: ${firstColor};
+    }
+
     .draft-label {
       border-color: ${firstColorWithDarkOpacity};
       color: ${firstColorWithDarkOpacity};
+    }
+
+    @media screen and ${screen.small} {
+      border-bottom-color: ${firstColor};
+    }
+
+    @media screen and ${screen.small} {
+      border-bottom-color: ${firstColor};
     }
   }
 
