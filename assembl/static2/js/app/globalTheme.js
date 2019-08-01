@@ -3,8 +3,6 @@ import { createGlobalStyle } from 'styled-components';
 export const defaultColors = {
   firstColor: '#192882',
   secondColor: '#dbdeef'
-  // firstColorWithDarkOpacity: '#0af',
-  // secondColorWithDarkOpacity: 'rgba(25, 40, 130, 0.6)'
 };
 
 const hexToRgb = (hex) => {
@@ -372,6 +370,49 @@ export const GlobalStyle = createGlobalStyle`
 
   .date {
     color: ${secondColor};
+  }
+
+  .date-range-picker {
+    .dropdown {
+      #presets-dropdown {
+        border-top-color: ${firstColor};
+      }
+
+      .dropdown-menu {
+        border-color: ${firstColor};
+      }
+    }
+
+    .DateRangePickerInput__withBorder {
+      border-color: ${firstColor};
+    }
+
+    .CalendarDay__selected,
+    .CalendarDay__selected:active,
+    .CalendarDay__selected:hover {
+      background: ${firstColor};
+    }
+
+    .CalendarDay__selected_span,
+    .CalendarDay__hovered_span {
+      background: ${firstColorWithDarkOpacity};
+    }
+
+    .CalendarDay__selected_span:active,
+    .CalendarDay__selected_span:hover,
+    .CalendarDay__hovered_span:active,
+    .CalendarDay__hovered_span:hover {
+      background: ${secondColorWithDarkOpacity};
+      border-color: ${secondColor};
+    }
+
+    .DateRangePicker_picker {
+      border-color: ${firstColor};
+    }
+
+    .DateInput_input__focused {
+      border-bottom-color: ${firstColor};
+    }
   }
 
   .debate {

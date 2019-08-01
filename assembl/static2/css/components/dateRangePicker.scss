@@ -27,35 +27,37 @@
       align-items: center;
       justify-content: space-between;
       font-size: $font-size-sm;
-      border-top: 2px solid $cyan;
+      border-top-style: solid;
+      border-top-width: 2px;
     }
 
     .dropdown-menu {
       width: 100%;
-      border: 1px solid $cyan;
+      border-style: solid;
+      border-width: 1px;
       border-top: none;
       border-radius: 0;
     }
   }
 
   .DateRangePickerInput__withBorder {
-    border: 2px solid $cyan;
+    border-style: solid;
+    border-width: 2px;
   }
 
   .CalendarDay__selected {
-    background: $cyan;
     border: none;
   }
 
   .CalendarDay__selected_span,
   .CalendarDay__hovered_span {
-    background: $cyan-transparent;
     border: none;
     color: $white;
   }
 
   .DateRangePicker_picker {
-    border: 2px double $cyan;
+    border-style: double;
+    border-width: 2px;
   }
 
   .DateInput_fang {
