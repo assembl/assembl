@@ -174,11 +174,6 @@ findtime: 60
 # Number of matches of a filter in the findtime window
 maxretry: 10
 
-# The bucket path where all themes for the server are stored
-# Can be either a URL or a local filesystem path
-# IF URL, there should be no query strings
-theme_base: ""
-
 # Feature flags to control behaviour
 # 1. Use stargate the proxy ms ?
 # 2. Enable CSRF protection - this HAS to have stargate activate as well
