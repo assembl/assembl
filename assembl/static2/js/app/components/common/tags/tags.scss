@@ -83,10 +83,10 @@
         }
       }
 
-      .ReactTags__tagInput:has(> .ReactTags__suggestions) {
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
+      // .ReactTags__tagInput:has(> .ReactTags__suggestions) {
+      //   border-bottom-left-radius: 0;
+      //   border-bottom-right-radius: 0;
+      // }
     }
 
     .ReactTags__tagInput:focus-within {
