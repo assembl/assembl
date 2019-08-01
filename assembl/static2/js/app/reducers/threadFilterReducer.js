@@ -19,21 +19,21 @@ const initialState: ThreadFilterState = {
   postsMustBeRefreshed: false
 };
 
-const ThreadFilterReducer = (state: ThreadFilterState = {}, action: any): ThreadFilterState => {
-  const newState = { ...state };
+const ThreadFilterReducer = (state: ThreadFilterState = initialState, action: any): ThreadFilterState => {
   switch (action.type) {
-  case '@@redux/INIT':
-    // initial state
-    return { ...initialState };
   case SET_THREAD_POSTS_POLICIES:
-    newState.postsDisplayPolicy = action.postsDisplayPolicy;
-    newState.postsOrderPolicy = action.postsOrderPolicy;
-    newState.postsFiltersStatus = { ...action.postsFiltersStatus };
-    newState.postsMustBeRefreshed = true;
-    return newState;
+    return {
+      ...state,
+      postsDisplayPolicy: action.postsDisplayPolicy,
+      postsOrderPolicy: action.postsOrderPolicy,
+      postsFiltersStatus: { ...action.postsFiltersStatus },
+      postsMustBeRefreshed: true
+    };
   case THREAD_POSTS_MUST_BE_REFRESHED:
-    newState.postsMustBeRefreshed = !!action.postsMustBeRefreshed;
-    return newState;
+    return {
+      ...state,
+      postsMustBeRefreshed: !!action.postsMustBeRefreshed
+    };
   default:
     return state;
   }
