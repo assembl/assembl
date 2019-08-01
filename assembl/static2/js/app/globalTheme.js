@@ -112,7 +112,7 @@ export const GlobalStyle = createGlobalStyle`
     }
 
     .admin-navbar {
-      background-color: ${firstColorWithDarkOpacity};
+      background-color: ${firstColorWithLightOpacity};
 
       .step-numbers {
         .txt {
