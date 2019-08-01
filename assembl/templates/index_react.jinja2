@@ -5,7 +5,6 @@
   {# Override the main CSS. #}
   {% if NODE_ENV != 'development' %}
   <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/{{css_style}}" />
-  {# <link type="text/css" rel="stylesheet" href="{{ full_theme_url }}" /> #}
   {% endif %}
 {% endblock %}
 
