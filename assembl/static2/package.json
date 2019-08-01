@@ -146,7 +146,7 @@
     "react-apollo": "^1.4.12",
     "react-autosize-textarea": "^4.0.0",
     "react-bootstrap": "^0.31.2",
-    "react-color": "^2.13.8",
+    "react-color": "^2.17.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-datepicker": "1.5.0",

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { BlockPicker as ColorPicker } from 'react-color';
+import { ChromePicker as ColorPicker } from 'react-color';
 import { FormGroup } from 'react-bootstrap';
 
 import { type FieldRenderProps } from 'react-final-form';
