@@ -1,8 +1,8 @@
-import pytest
 import uuid
 
 from assembl.views import find_theme, populate_theme_information, extract_resources_hash
 from assembl.tests.fixtures.base import get_resources_html
+from assembl.tests.utils import update_configuration
 
 
 def test_find_themes():
@@ -42,7 +42,7 @@ class TestResources(object):
 
 def test_populate_theme_v1():
     expected = 'default'
-    result = populate_theme_information('some-theme', 1)
+    result = populate_theme_information(1)
     assertion = True
     for v in result.values():
         if v != expected:
@@ -50,7 +50,11 @@ def test_populate_theme_v1():
     assert assertion
 
 
-def test_populate_theme_v2_resource_exists_no_config(static_asset_resources_html):
-    data = populate_theme_information()
-    non_build_css_path = data.get('theme_css_file', "").replace("/build", "")
-    assert non_build_css_path in data.get('full_theme_url')
+def test_populate_theme_v2_production_mode(base_registry, static_build):
+    with update_configuration(base_registry.settings, under_test=False, use_webpack_server=False):
+        data = populate_theme_information()
+        css_filename = data.get('css_style', "")
+        bundle_filename = data.get('js_bundle', "")
+
+    assert css_filename == 'style.12345abc.css'
+    assert bundle_filename == 'bundle.12345abc.js'

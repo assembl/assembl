@@ -224,49 +224,65 @@ def get_resources_html(uuid, theme_name="default"):
 
 
 @pytest.fixture(scope="function")
-def static_asset_resources_html(request):
+def static_build(request):
     import os
+    import re
     import shutil
-    import uuid
     build_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
         'static2/build'
     )
-    resources_html_path = os.path.join(build_path, 'resources.html')
-    resources_html_tmp = os.path.join(build_path, 'resources.html.tmp')
-    resources_file_created = False
-    build_folder_created = False
-    resource_file_moved = False
 
-    def write_resouces_to_disk():
-        Uuid = uuid.uuid4().hex
-        resources_html = get_resources_html(Uuid)
-        with open(resources_html_path, 'w') as f:
-            f.seek(0)
-            f.write(resources_html)
+    bundle_exp = '(bundle)\.\w+\.js$'
+    style_exp = '(style)\.\w+\.css$'
+    names = {'bundle': None, 'style': None}
+    files_exp = [bundle_exp, style_exp]
+    build_folder_created = False
+    moved_files = False
+
+    def build_file(f):
+        return os.path.join(build_path, f)
 
     if not os.path.exists(build_path):
         os.mkdir(build_path)
         build_folder_created = True
-    if not os.path.exists(resources_html_path):
-        write_resouces_to_disk()
-        resources_file_created = True
-    else:
-        # resouce html exists, change file name temporarily for the test
-        # This happens when testing on local machine where a static2 build folder has already been done
-        shutil.move(resources_html_path, resources_html_tmp)
-        write_resouces_to_disk()
-        resource_file_moved = True
+
+    build_dir_files = os.listdir(build_path)
+    filtered_files = []
+    if not build_folder_created:
+        for f_exp in files_exp:
+            for f in build_dir_files:
+                if re.match(f_exp, f):
+                    filtered_files.append(f)
+
+    if filtered_files:
+        moved_files = True
+        for f in filtered_files:
+            # Temporarily move it
+            if 'bundle' in f:
+                f_type = 'bundle'
+            else:
+                f_type = 'style'
+            names[f_type] = f
+            shutil.move(build_file(f), build_file('%s.bak' % f))
+
+    # Doesn't exist, create it temporarily
+    if build_folder_created or moved_files:
+        with open(build_file('bundle.12345abc.js'), 'w') as fstream:
+            fstream.write("This is a bundle.js file")
+        with open(build_file('style.12345abc.css'), 'w') as fstream:
+            fstream.write("This is a css file")
 
     def fin():
         # Clean up the file creations after assertions
         if build_folder_created:
             shutil.rmtree(build_path)
-        elif resources_file_created:
-            os.unlink(resources_html_path)
-        elif resource_file_moved:
-            os.unlink(resources_html_path)
-            shutil.move(resources_html_tmp, resources_html_path)
+        else:
+            os.unlink(build_file('bundle.12345abc.js'))
+            os.unlink(build_file('style.12345abc.css'))
+            for n in names.values():
+                if n is not None:
+                    shutil.move(build_file('%s.bak' % n), build_file(n))
 
     request.addfinalizer(fin)
 
@@ -285,6 +301,7 @@ def test_app(request, static_asset_resources_html, admin_user, test_app_no_perm)
     config.set_authorization_policy(dummy_policy)
     config.set_authentication_policy(dummy_policy)
     return test_app_no_perm
+
 
 @pytest.fixture(scope="function")
 def test_app_complex_password(request, test_app):
