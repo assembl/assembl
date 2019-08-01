@@ -9,7 +9,7 @@ import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import type { ContentLocaleMapping } from '../../../actions/actionTypes';
-import PostsFilterMenu from '../common/postsFilter/menu';
+import ThreadPostsFilterMenu from '../common/postsFilter/thread/menu';
 
 type Props = {
   isUserConnected: boolean,
@@ -50,7 +50,7 @@ class ThreadView extends React.Component<Props> {
         ) : null}
         <Grid fluid className="background-grey">
           <div id="thread-view" className="max-container background-grey">
-            <PostsFilterMenu />
+            <ThreadPostsFilterMenu />
             <div className="content-section">
               <Tree
                 contentLocaleMapping={contentLocaleMapping}

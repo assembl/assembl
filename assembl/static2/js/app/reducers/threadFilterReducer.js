@@ -2,14 +2,7 @@
 import { SET_THREAD_POSTS_POLICIES, THREAD_POSTS_MUST_BE_REFRESHED } from '../actions/threadFilterActions';
 import { defaultDisplayPolicy, defaultOrderPolicy } from '../components/debate/common/postsFilter/policies';
 
-type ThreadFilterState = {
-  postsDisplayPolicy: PostsDisplayPolicy,
-  postsFiltersStatus: PostsFiltersStatus,
-  postsOrderPolicy: PostsOrderPolicy,
-  postsMustBeRefreshed: boolean
-};
-
-const initialState: ThreadFilterState = {
+const initialState: PostsFilterState = {
   postsDisplayPolicy: defaultDisplayPolicy,
   postsFiltersStatus: {
     myPostsAndAnswers: false,
@@ -19,7 +12,7 @@ const initialState: ThreadFilterState = {
   postsMustBeRefreshed: false
 };
 
-const ThreadFilterReducer = (state: ThreadFilterState = initialState, action: any): ThreadFilterState => {
+const ThreadFilterReducer = (state: PostsFilterState = initialState, action: any): PostsFilterState => {
   switch (action.type) {
   case SET_THREAD_POSTS_POLICIES:
     return {
