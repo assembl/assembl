@@ -35,6 +35,7 @@ type Props = {
 };
 
 type State = {
+  open: boolean,
   selectedPostsDisplayPolicy: PostsDisplayPolicy,
   selectedPostsFiltersStatus: PostsFiltersStatus,
   selectedPostsOrderPolicy: PostsOrderPolicy,
@@ -45,6 +46,7 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   componentWillMount(): void {
     const { postsDisplayPolicy, postsOrderPolicy, postsFiltersStatus } = this.props;
     this.setState({
+      open: false,
       sticky: true,
       selectedPostsFiltersStatus: { ...postsFiltersStatus },
       selectedPostsDisplayPolicy: postsDisplayPolicy,
@@ -58,6 +60,11 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 
   componentWillUnmount = () => {
     window.removeEventListener('scroll', this.setButtonPosition);
+  };
+
+  onToggle = () => {
+    const { open } = this.state;
+    this.setState({ open: !open });
   };
 
   setButtonPosition = debounce(() => {
@@ -98,6 +105,7 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
     this.selectPostsOrderPolicy(defaultOrderPolicy);
     this.setState({ selectedPostsFiltersStatus: defaultPostsFiltersStatus });
     this.props.setPostsFilterPolicies(defaultDisplayPolicy, defaultOrderPolicy, defaultPostsFiltersStatus);
+    this.setState({ open: false });
   };
 
   savePolicies = () => {
@@ -106,6 +114,7 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
       this.state.selectedPostsOrderPolicy,
       this.state.selectedPostsFiltersStatus
     );
+    this.setState({ open: false });
   };
 
   render() {
@@ -115,6 +124,8 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
       <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
         <DropdownButton
           pullRight
+          open={this.state.open}
+          onToggle={this.onToggle}
           title={
             <img
               height={24}
