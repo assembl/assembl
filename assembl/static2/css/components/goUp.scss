@@ -42,6 +42,10 @@
   float: right;
   margin-top: $post-filter-button-margin-top;
 
+  .dropdown {
+    z-index: 9;
+  }
+
   &.sticky {
     top: $top-post-sticky-top + 60px + $post-filter-button-margin-top;
   }
