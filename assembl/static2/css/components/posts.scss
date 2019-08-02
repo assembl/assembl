@@ -33,6 +33,11 @@
       position: relative;
       height: 4.5em; // two lines
       overflow: hidden;
+
+      p {
+        margin-block-end: 0; // to ensure line height, prevent space between blocks when truncated
+        margin-block-start: 0;
+      }
     }
 
     &.truncate:after {
