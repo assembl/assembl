@@ -1,0 +1,388 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PostsFilterMenu component should render a filter with sort by recently started threads and full display selected 1`] = `
+<div
+  className="posts-filter-button sticky"
+>
+  <div
+    className="dropdown btn-group"
+  >
+    <button
+      aria-expanded={false}
+      aria-haspopup={true}
+      className="dropdown-toggle btn btn-default"
+      disabled={false}
+      id="postsFilter-dropdown"
+      onClick={[Function]}
+      onKeyDown={[Function]}
+      role="button"
+      type="button"
+    >
+      <img
+        alt="Sort / Filter"
+        height={24}
+        src="/static2/img/icons/black/filter.svg"
+        title="Sort / Filter"
+        width={24}
+      />
+       
+      <span
+        className="caret"
+      />
+    </button>
+    <ul
+      aria-labelledby="postsFilter-dropdown"
+      className="dropdown-menu dropdown-menu-right"
+      role="menu"
+    >
+      <li
+        className="disabled"
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <strong>
+            <span>
+              Sort
+            </span>
+          </strong>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-reverseChronologicalTop"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-reverseChronologicalTop-input"
+            name="postsOrder"
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-reverseChronologicalTop-input"
+          >
+            <span>
+              Recently active threads
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-reverseChronologicalLast"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={true}
+            id="postsFilterItem-reverseChronologicalLast-input"
+            name="postsOrder"
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-reverseChronologicalLast-input"
+          >
+            <span>
+              Recently started threads
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-chronologicalTop"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-chronologicalTop-input"
+            name="postsOrder"
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-chronologicalTop-input"
+          >
+            <span>
+              Chronological order
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-reverseChronologicalFlat"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-reverseChronologicalFlat-input"
+            name="postsOrder"
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-reverseChronologicalFlat-input"
+          >
+            <span>
+              Newest messages first
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-popularityFlat"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-popularityFlat-input"
+            name="postsOrder"
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-popularityFlat-input"
+          >
+            <span>
+              Most popular messages first
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className="disabled"
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <strong>
+            <span>
+              Overview
+            </span>
+          </strong>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-display-full"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={true}
+            id="postsFilterItem-display-full-input"
+            name="postsDisplay"
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-display-full-input"
+          >
+            <span>
+              Full messages
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-display-summary"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-display-summary-input"
+            name="postsDisplay"
+            type="radio"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-display-summary-input"
+          >
+            <span>
+              Message previews
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className="disabled"
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <strong>
+            <span>
+              Filter
+            </span>
+          </strong>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-filter-onlyMyPosts"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-filter-onlyMyPosts-input"
+            name="onlyMyPosts"
+            type="checkbox"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-filter-onlyMyPosts-input"
+          >
+            <span>
+              My posts
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          id="postsFilterItem-filter-myPostsAndAnswers"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <input
+            checked={false}
+            id="postsFilterItem-filter-myPostsAndAnswers-input"
+            name="myPostsAndAnswers"
+            type="checkbox"
+          />
+           
+          <label
+            htmlFor="postsFilterItem-filter-myPostsAndAnswers-input"
+          >
+            <span>
+              Answers to my posts
+            </span>
+          </label>
+        </a>
+      </li>
+      <li
+        className=""
+        role="presentation"
+      >
+        <a
+          href="#"
+          onClick={[Function]}
+          onKeyDown={[Function]}
+          role="menuitem"
+          tabIndex="-1"
+        >
+          <button
+            className="button-cancel button-dark btn btn-default"
+            disabled={false}
+            id="postsFilter-button-reset"
+            onClick={[Function]}
+            type="button"
+          >
+            <span>
+              Clean filters
+            </span>
+          </button>
+          <button
+            className="button-submit button-dark btn btn-success"
+            disabled={false}
+            id="postsFilter-button-save"
+            onClick={[Function]}
+            style={
+              Object {
+                "float": "right",
+                "textAlign": "right",
+              }
+            }
+            type="button"
+          >
+            <span>
+              Ok
+            </span>
+          </button>
+        </a>
+      </li>
+    </ul>
+  </div>
+</div>
+`;

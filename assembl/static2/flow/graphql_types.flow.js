@@ -2,6 +2,8 @@
 /* eslint-disable */
 //  This file was automatically generated and should not be edited.
 
+export type PostsOrderTypes = 'chronological' | 'popularity' | 'reverse_chronological' | 'score';
+
 export type PublicationStates =
   | 'DELETED_BY_ADMIN'
   | 'DELETED_BY_USER'
@@ -453,17 +455,7 @@ export type BrightMirrorFictionQuery = {|
                 // A url to an image or a document to be attached.
                 externalUrl: ?string,
                 // The MIME-Type of the file uploaded.
-                mimeType: ?string,
-                // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-                //
-                // "unchecked": The AV did not make a check on this file.
-                //
-                // "passed": The AV did a pass on this file, and it passed AV check.
-                //
-                // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-                // accessed by the application.
-                //
-                avChecked: ?string
+                mimeType: ?string
               |}
             |}>,
             // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
@@ -525,7 +517,8 @@ export type BrightMirrorFictionQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type DiscussionPreferencesQueryVariables = {|
@@ -723,13 +716,17 @@ export type IdeaQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type IdeaWithPostsQueryVariables = {|
   id: string,
   lang?: ?string,
-  additionalFields: boolean
+  additionalFields: boolean,
+  postsOrder?: ?PostsOrderTypes,
+  onlyMyPosts?: ?boolean,
+  myPostsAndAnswers?: ?boolean
 |};
 
 export type IdeaWithPostsQuery = {|
@@ -927,7 +924,8 @@ export type IdeaWithPostsQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type LandingPageQueryVariables = {|
@@ -1204,6 +1202,26 @@ export type MultilingualSynthesisQueryQuery = {|
     | {
         // The ID of the object.
         id: string,
+        // A graphene Field containing the state of the publication of a certain post. The options are:
+        // DRAFT,
+        //
+        // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+        //
+        // SUBMITTED_AWAITING_MODERATION,
+        //
+        // PUBLISHED,
+        //
+        // MODERATED_TEXT_ON_DEMAND,
+        //
+        // MODERATED_TEXT_NEVER_AVAILABLE,
+        //
+        // DELETED_BY_USER,
+        //
+        // DELETED_BY_ADMIN,
+        //
+        // WIDGET_SCOPED
+        //
+        publicationState: ?PublicationStates,
         // Graphene Field modeling a relationship to a published synthesis.
         publishesSynthesis: ?{|
           // The ID of the object.
@@ -1226,8 +1244,14 @@ export type MultilingualSynthesisQueryQuery = {|
           |}>,
           // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
           img: ?{|
+            // The ID of the object.
+            id: string,
+            // The filename title.
+            title: ?string,
             // A url to an image or a document to be attached.
-            externalUrl: ?string
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string
           |}
         |}
       }
@@ -1249,7 +1273,8 @@ export type MultilingualSynthesisQueryQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type PostQueryVariables = {|
@@ -1350,6 +1375,11 @@ export type PostQuery = {|
               localeInto: string
             |}
           |}
+        |},
+        // The User or AgentProfile who created the parent post.
+        parentPostCreator: ?{|
+          // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+          displayName: ?string
         |},
         // A boolean flag to say whether the post is modified or not.
         modified: ?boolean,
@@ -1496,17 +1526,7 @@ export type PostQuery = {|
             // A url to an image or a document to be attached.
             externalUrl: ?string,
             // The MIME-Type of the file uploaded.
-            mimeType: ?string,
-            // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-            //
-            // "unchecked": The AV did not make a check on this file.
-            //
-            // "passed": The AV did a pass on this file, and it passed AV check.
-            //
-            // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-            // accessed by the application.
-            //
-            avChecked: ?string
+            mimeType: ?string
           |}
         |}>,
         // Keywords associated with the post, according to NLP engine.
@@ -1544,7 +1564,8 @@ export type PostQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type ProfileFieldsQueryVariables = {|
@@ -1689,7 +1710,8 @@ export type QuestionPostsQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type QuestionQueryVariables = {|
@@ -1756,7 +1778,8 @@ export type QuestionQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type ResourcesCenterPageQueryVariables = {|
@@ -1998,7 +2021,8 @@ export type SemanticAnalysisForThematicDataQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type SynthesesQueryQueryVariables = {|
@@ -2016,8 +2040,14 @@ export type SynthesesQueryQuery = {|
     creationDate: ?any,
     // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
     img: ?{|
+      // The ID of the object.
+      id: string,
+      // The filename title.
+      title: ?string,
       // A url to an image or a document to be attached.
-      externalUrl: ?string
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string
     |},
     // Synthesis post to be created.
     post: ?{|
@@ -2086,8 +2116,14 @@ export type SynthesisQueryQuery = {|
           creationDate: ?any,
           // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
           img: ?{|
+            // The ID of the object.
+            id: string,
+            // The filename title.
+            title: ?string,
             // A url to an image or a document to be attached.
-            externalUrl: ?string
+            externalUrl: ?string,
+            // The MIME-Type of the file uploaded.
+            mimeType: ?string
           |},
           // This is the list of ideas related to the synthesis.
           ideas: ?Array<?{
@@ -2242,7 +2278,8 @@ export type SynthesisQueryQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type TabsConditionQueryVariables = {|
@@ -2364,7 +2401,8 @@ export type TextFieldsQuery = {|
             value: ?string
           |}>
         |}>
-      })>
+      }
+  )>
 |};
 
 export type ThematicQueryQueryVariables = {|
@@ -2436,7 +2474,8 @@ export type ThematicQueryQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type ThematicsDataQueryQueryVariables = {|
@@ -2694,7 +2733,8 @@ export type UserPreferencesQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type VoteSessionQueryVariables = {|
@@ -2805,7 +2845,8 @@ export type VoteSessionQuery = {|
                   proposalId: string,
                   tokenCategoryId: string
                 }
-              | {})>,
+              | {}
+            )>,
             // The total number of Voters for this Vote.
             numVotes: number,
             // The list of information regarding votes (VotesByCategory).
@@ -2865,7 +2906,8 @@ export type VoteSessionQuery = {|
                   // The value entered on the GaugeVote.
                   selectedValue: number,
                   proposalId: string
-                })>,
+                }
+            )>,
             // The total number of Voters for this Vote.
             numVotes: number,
             // A The label of the average value for the Gauge in a given language.
@@ -2923,12 +2965,14 @@ export type VoteSessionQuery = {|
                   // The value entered on the GaugeVote.
                   selectedValue: number,
                   proposalId: string
-                })>,
+                }
+            )>,
             // The total number of Voters for this Vote.
             numVotes: number,
             // The average value of the Votes submitted by all Users.
             averageResult: ?number
-          })>
+          }
+      )>
     |}>,
     // A list of VoteSpecifications.
     modules: Array<?(
@@ -3065,7 +3109,8 @@ export type VoteSessionQuery = {|
           voteSpecTemplateId: ?string,
           // The type of the VoteSpecification.
           voteType: ?string
-        })>
+        }
+    )>
   |}
 |};
 
@@ -3110,7 +3155,8 @@ export type AcceptedCookiesQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type addGaugeVoteMutationVariables = {|
@@ -3134,7 +3180,8 @@ export type addGaugeVoteMutation = {|
                 // The value entered on the GaugeVote.
                 selectedValue: number,
                 proposalId: string
-              })>
+              }
+          )>
         }
       | {
           // The ID of the object.
@@ -3146,8 +3193,10 @@ export type addGaugeVoteMutation = {|
                 // The value entered on the GaugeVote.
                 selectedValue: number,
                 proposalId: string
-              })>
-        })
+              }
+          )>
+        }
+    )
   |}
 |};
 
@@ -3319,7 +3368,8 @@ export type addSentimentMutation = {|
 
 export type addTagMutationVariables = {|
   taggableId: string,
-  value: string
+  value: string,
+  contentLocale: string
 |};
 
 export type addTagMutation = {|
@@ -3330,6 +3380,257 @@ export type addTagMutation = {|
       id: string,
       // The value of the tag. This is not language dependent, but rather just unicode text.
       value: string
+    |},
+    post: ?{|
+      // The ID of the object.
+      id: string,
+      // The internal database ID of the post.
+      // This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts.
+      dbId: ?number,
+      // A list of possible languages of the entity as LangStringEntry objects. The subject of the post in various languages.
+      subjectEntries: ?Array<?{|
+        // The unicode encoded string representation of the content.
+        value: ?string,
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects. The body of the post in various languages.
+      bodyEntries: ?Array<?{|
+        // The unicode encoded string representation of the content.
+        value: ?string,
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string
+      |}>,
+      // A list of SentimentCounts which counts each sentiment expressed. These include:
+      //
+      // Like,
+      //
+      // Agree,
+      //
+      // Disagree,
+      //
+      // Like,
+      //
+      // Don't Understand
+      //
+      // More Info
+      //
+      sentimentCounts: ?{|
+        // The number of Sentiments disagreeing with the post.
+        disagree: ?number,
+        // The number of Sentiments expressing "dont_understand" on the Post.
+        dontUnderstand: ?number,
+        // The number of Sentiments expressed "like" on the post.
+        like: ?number,
+        // The number of Sentiments requesting "more_info" on the post.
+        moreInfo: ?number
+      |},
+      // The SentimentType that the API calling User has on the Post, if any.
+      mySentiment: ?SentimentTypes,
+      // A list of IdeaContentLinks, which describe all of the connections the Post has with various Ideas.
+      indirectIdeaContentLinks: ?Array<?{|
+        // The Idea object associated with an IdeaContentLink.
+        idea: ?{|
+          // The ID of the object.
+          id: string,
+          // The title of the Idea, often shown in the Idea header itself.
+          title: ?string,
+          // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+          messageViewOverride: ?string
+        |}
+      |}>,
+      creator: ?{|
+        // The ID of the object.
+        id: string,
+        // The unique database identifier of the User.
+        userId: number,
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string,
+        // A boolean flag that shows if the User is deleted.
+        // If True, the User information is cleansed from the system, and the User can no longer log in.
+        isDeleted: ?boolean,
+        // A boolean flag describing if the User is a machine user or human user.
+        isMachine: ?boolean,
+        // The preferences of the User.
+        preferences: ?{|
+          // The harvesting Translation preference.
+          harvestingTranslation: ?{|
+            // The source locale of the translation.
+            localeFrom: string,
+            // The target locale of the translation.
+            localeInto: string
+          |}
+        |}
+      |},
+      // The User or AgentProfile who created the parent post.
+      parentPostCreator: ?{|
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string
+      |},
+      // A boolean flag to say whether the post is modified or not.
+      modified: ?boolean,
+      // A ??? in a given language.
+      bodyMimeType: string,
+      // A graphene Field containing the state of the publication of a certain post. The options are:
+      // DRAFT,
+      //
+      // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+      //
+      // SUBMITTED_AWAITING_MODERATION,
+      //
+      // PUBLISHED,
+      //
+      // MODERATED_TEXT_ON_DEMAND,
+      //
+      // MODERATED_TEXT_NEVER_AVAILABLE,
+      //
+      // DELETED_BY_USER,
+      //
+      // DELETED_BY_ADMIN,
+      //
+      // WIDGET_SCOPED
+      //
+      publicationState: ?PublicationStates,
+      // A list of IdeaContentLinks that are in fact Extracts on the Post. Extracts are valuable entities taken from
+      extracts: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The date the Extract was created, in UTC timezone.
+        creationDate: ?any,
+        // A flag for importance of the Extract.
+        important: ?boolean,
+        // The body of text that is extracted from the post. This is not language dependent, but rather just unicode text.
+        body: string,
+        // The lang of the extract.
+        lang: ?string,
+        // The taxonomy (or classification) of the extracted body. The options are one of:
+        //
+        //
+        // issue: The body of text is an issue.
+        //
+        // actionable_solution: The body of text is a potentially actionable solution.
+        //
+        // knowledge: The body of text is in fact knowledge gained by the community.
+        //
+        // example: The body of text is an example in the context that it was derived from.
+        //
+        // concept: The body of text is a high level concept.
+        //
+        // argument: The body of text is an argument for/against in the context that it was extracted from.
+        //
+        // cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.
+        //
+        //
+        extractNature: ?string,
+        // The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:
+        //
+        //
+        // classify: This body of text should be re-classified by an priviledged user.
+        //
+        // make_generic: The body of text is a specific example and not generic.
+        //
+        // argument: A user must give more arguments.
+        //
+        // give_examples: A user must give more examples.
+        //
+        // more_specific: A user must be more specific within the same context.
+        //
+        // mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.
+        //
+        // display_multi_column: A priviledged user should activate the Mutli-Column view.
+        //
+        // display_thread: A priviledged user should activate the Thread view.
+        //
+        // display_tokens: A priviledged user should activate the Token Vote view.
+        //
+        // display_open_questions: A priviledged user should activate the Open Question view.
+        //
+        // display_bright_mirror: A priviledged user should activate the Bright Mirror view.
+        //
+        //
+        extractAction: ?string,
+        // A graphene Field containing the state of the extract. The options are:
+        // SUBMITTED,
+        //
+        // PUBLISHED
+        //
+        extractState: ?ExtractStates,
+        // A list of TextFragmentIdentifiers.
+        textFragmentIdentifiers: ?Array<?{|
+          // The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned.
+          xpathStart: ?string,
+          // The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
+          // Often times the xpathEnd variable is the same as the xpathStart selector.
+          xpathEnd: ?string,
+          // The character offset index where an extract begins, beginning from index 0 in a string of text.
+          offsetStart: ?number,
+          // The character offset index where an extract ends in a string of text.
+          offsetEnd: ?number
+        |}>,
+        // The AgentProfile object description of the creator.
+        creator: ?{|
+          // The ID of the object.
+          id: string,
+          // The unique database identifier of the User.
+          userId: number,
+          // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+          displayName: ?string,
+          // A boolean flag that shows if the User is deleted.
+          // If True, the User information is cleansed from the system, and the User can no longer log in.
+          isDeleted: ?boolean,
+          // A boolean flag describing if the User is a machine user or human user.
+          isMachine: ?boolean,
+          // The preferences of the User.
+          preferences: ?{|
+            // The harvesting Translation preference.
+            harvestingTranslation: ?{|
+              // The source locale of the translation.
+              localeFrom: string,
+              // The target locale of the translation.
+              localeInto: string
+            |}
+          |}
+        |},
+        // The list of tags of the extract.
+        tags: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // The value of the tag. This is not language dependent, but rather just unicode text.
+          value: string
+        |}>
+      |}>,
+      // List of attachements to the post.
+      attachments: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // Any file that can be attached. A file metadata object, described by the Document object.
+        document: ?{|
+          // The ID of the object.
+          id: string,
+          // The filename title.
+          title: ?string,
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string
+        |}
+      |}>,
+      // Keywords associated with the post, according to NLP engine.
+      keywords: ?Array<?{|
+        // The score associated with the tag (0-1, increasing relevance)
+        score: ?number,
+        // The number of times the tag was found
+        count: ?number,
+        // The tag keyword
+        value: ?string
+      |}>,
+      // A list of abstract tags associated to the post.
+      tags: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The value of the tag. This is not language dependent, but rather just unicode text.
+        value: string
+      |}>
     |}
   |}
 |};
@@ -3355,7 +3656,8 @@ export type addTokenVoteMutation = {|
             proposalId: string,
             tokenCategoryId: string
           }
-        | {})>
+        | {}
+      )>
     |}
   |}
 |};
@@ -3703,6 +4005,11 @@ export type createPostMutation = {|
           |}
         |}
       |},
+      // The User or AgentProfile who created the parent post.
+      parentPostCreator: ?{|
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string
+      |},
       // A boolean flag to say whether the post is modified or not.
       modified: ?boolean,
       // A ??? in a given language.
@@ -3848,17 +4155,7 @@ export type createPostMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // Keywords associated with the post, according to NLP engine.
@@ -4019,7 +4316,8 @@ export type createSynthesisMutationVariables = {|
   image?: ?string,
   bodyEntries: Array<?LangStringEntryInput>,
   subjectEntries: Array<?LangStringEntryInput>,
-  synthesisType: SynthesisTypes
+  synthesisType: SynthesisTypes,
+  publicationState: PublicationStates
 |};
 
 export type createSynthesisMutation = {|
@@ -4028,6 +4326,26 @@ export type createSynthesisMutation = {|
     synthesisPost: ?{|
       // The ID of the object.
       id: string,
+      // A graphene Field containing the state of the publication of a certain post. The options are:
+      // DRAFT,
+      //
+      // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+      //
+      // SUBMITTED_AWAITING_MODERATION,
+      //
+      // PUBLISHED,
+      //
+      // MODERATED_TEXT_ON_DEMAND,
+      //
+      // MODERATED_TEXT_NEVER_AVAILABLE,
+      //
+      // DELETED_BY_USER,
+      //
+      // DELETED_BY_ADMIN,
+      //
+      // WIDGET_SCOPED
+      //
+      publicationState: ?PublicationStates,
       // Graphene Field modeling a relationship to a published synthesis.
       publishesSynthesis: ?{|
         // The ID of the object.
@@ -4050,8 +4368,14 @@ export type createSynthesisMutation = {|
         |}>,
         // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
         img: ?{|
+          // The ID of the object.
+          id: string,
+          // The filename title.
+          title: ?string,
           // A url to an image or a document to be attached.
-          externalUrl: ?string
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string
         |}
       |}
     |}
@@ -4123,7 +4447,8 @@ export type createTextFieldMutation = {|
               value: ?string
             |}>
           |}>
-        })
+        }
+    )
   |}
 |};
 
@@ -4425,13 +4750,265 @@ export type deleteVoteSpecificationMutation = {|
 
 export type removeTagMutationVariables = {|
   taggableId: string,
-  id: string
+  id: string,
+  contentLocale: string
 |};
 
 export type removeTagMutation = {|
   // A mutation to create a Tag association to a Post.
   removeTag: ?{|
-    success: ?boolean
+    success: ?boolean,
+    post: ?{|
+      // The ID of the object.
+      id: string,
+      // The internal database ID of the post.
+      // This should never be used in logical computations, however, it exists to give the exact database id for use in sorting or creating classifiers for Posts.
+      dbId: ?number,
+      // A list of possible languages of the entity as LangStringEntry objects. The subject of the post in various languages.
+      subjectEntries: ?Array<?{|
+        // The unicode encoded string representation of the content.
+        value: ?string,
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string
+      |}>,
+      // A list of possible languages of the entity as LangStringEntry objects. The body of the post in various languages.
+      bodyEntries: ?Array<?{|
+        // The unicode encoded string representation of the content.
+        value: ?string,
+        // The ISO 639-1 locale code of the language the content represents.
+        localeCode: string
+      |}>,
+      // A list of SentimentCounts which counts each sentiment expressed. These include:
+      //
+      // Like,
+      //
+      // Agree,
+      //
+      // Disagree,
+      //
+      // Like,
+      //
+      // Don't Understand
+      //
+      // More Info
+      //
+      sentimentCounts: ?{|
+        // The number of Sentiments disagreeing with the post.
+        disagree: ?number,
+        // The number of Sentiments expressing "dont_understand" on the Post.
+        dontUnderstand: ?number,
+        // The number of Sentiments expressed "like" on the post.
+        like: ?number,
+        // The number of Sentiments requesting "more_info" on the post.
+        moreInfo: ?number
+      |},
+      // The SentimentType that the API calling User has on the Post, if any.
+      mySentiment: ?SentimentTypes,
+      // A list of IdeaContentLinks, which describe all of the connections the Post has with various Ideas.
+      indirectIdeaContentLinks: ?Array<?{|
+        // The Idea object associated with an IdeaContentLink.
+        idea: ?{|
+          // The ID of the object.
+          id: string,
+          // The title of the Idea, often shown in the Idea header itself.
+          title: ?string,
+          // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
+          messageViewOverride: ?string
+        |}
+      |}>,
+      creator: ?{|
+        // The ID of the object.
+        id: string,
+        // The unique database identifier of the User.
+        userId: number,
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string,
+        // A boolean flag that shows if the User is deleted.
+        // If True, the User information is cleansed from the system, and the User can no longer log in.
+        isDeleted: ?boolean,
+        // A boolean flag describing if the User is a machine user or human user.
+        isMachine: ?boolean,
+        // The preferences of the User.
+        preferences: ?{|
+          // The harvesting Translation preference.
+          harvestingTranslation: ?{|
+            // The source locale of the translation.
+            localeFrom: string,
+            // The target locale of the translation.
+            localeInto: string
+          |}
+        |}
+      |},
+      // The User or AgentProfile who created the parent post.
+      parentPostCreator: ?{|
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string
+      |},
+      // A boolean flag to say whether the post is modified or not.
+      modified: ?boolean,
+      // A ??? in a given language.
+      bodyMimeType: string,
+      // A graphene Field containing the state of the publication of a certain post. The options are:
+      // DRAFT,
+      //
+      // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+      //
+      // SUBMITTED_AWAITING_MODERATION,
+      //
+      // PUBLISHED,
+      //
+      // MODERATED_TEXT_ON_DEMAND,
+      //
+      // MODERATED_TEXT_NEVER_AVAILABLE,
+      //
+      // DELETED_BY_USER,
+      //
+      // DELETED_BY_ADMIN,
+      //
+      // WIDGET_SCOPED
+      //
+      publicationState: ?PublicationStates,
+      // A list of IdeaContentLinks that are in fact Extracts on the Post. Extracts are valuable entities taken from
+      extracts: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The date the Extract was created, in UTC timezone.
+        creationDate: ?any,
+        // A flag for importance of the Extract.
+        important: ?boolean,
+        // The body of text that is extracted from the post. This is not language dependent, but rather just unicode text.
+        body: string,
+        // The lang of the extract.
+        lang: ?string,
+        // The taxonomy (or classification) of the extracted body. The options are one of:
+        //
+        //
+        // issue: The body of text is an issue.
+        //
+        // actionable_solution: The body of text is a potentially actionable solution.
+        //
+        // knowledge: The body of text is in fact knowledge gained by the community.
+        //
+        // example: The body of text is an example in the context that it was derived from.
+        //
+        // concept: The body of text is a high level concept.
+        //
+        // argument: The body of text is an argument for/against in the context that it was extracted from.
+        //
+        // cognitive_bias: The body of text, in fact, has cognitive bias in the context it was extracted from.
+        //
+        //
+        extractNature: ?string,
+        // The taxonomy (or classification) of the actions that can be taken from the extracted body. The options are one of:
+        //
+        //
+        // classify: This body of text should be re-classified by an priviledged user.
+        //
+        // make_generic: The body of text is a specific example and not generic.
+        //
+        // argument: A user must give more arguments.
+        //
+        // give_examples: A user must give more examples.
+        //
+        // more_specific: A user must be more specific within the same context.
+        //
+        // mix_match: The body of text has relevancy in another section of the deabte. These should be mixed and matched to create greater meaning.
+        //
+        // display_multi_column: A priviledged user should activate the Mutli-Column view.
+        //
+        // display_thread: A priviledged user should activate the Thread view.
+        //
+        // display_tokens: A priviledged user should activate the Token Vote view.
+        //
+        // display_open_questions: A priviledged user should activate the Open Question view.
+        //
+        // display_bright_mirror: A priviledged user should activate the Bright Mirror view.
+        //
+        //
+        extractAction: ?string,
+        // A graphene Field containing the state of the extract. The options are:
+        // SUBMITTED,
+        //
+        // PUBLISHED
+        //
+        extractState: ?ExtractStates,
+        // A list of TextFragmentIdentifiers.
+        textFragmentIdentifiers: ?Array<?{|
+          // The xPath selector starting point in the DOM, representing where the string text that the fragment is held is positioned.
+          xpathStart: ?string,
+          // The xPath selector ending point in the DOM, representing where the string text that the fragment is held is positioned.
+          // Often times the xpathEnd variable is the same as the xpathStart selector.
+          xpathEnd: ?string,
+          // The character offset index where an extract begins, beginning from index 0 in a string of text.
+          offsetStart: ?number,
+          // The character offset index where an extract ends in a string of text.
+          offsetEnd: ?number
+        |}>,
+        // The AgentProfile object description of the creator.
+        creator: ?{|
+          // The ID of the object.
+          id: string,
+          // The unique database identifier of the User.
+          userId: number,
+          // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+          displayName: ?string,
+          // A boolean flag that shows if the User is deleted.
+          // If True, the User information is cleansed from the system, and the User can no longer log in.
+          isDeleted: ?boolean,
+          // A boolean flag describing if the User is a machine user or human user.
+          isMachine: ?boolean,
+          // The preferences of the User.
+          preferences: ?{|
+            // The harvesting Translation preference.
+            harvestingTranslation: ?{|
+              // The source locale of the translation.
+              localeFrom: string,
+              // The target locale of the translation.
+              localeInto: string
+            |}
+          |}
+        |},
+        // The list of tags of the extract.
+        tags: ?Array<?{|
+          // The ID of the object.
+          id: string,
+          // The value of the tag. This is not language dependent, but rather just unicode text.
+          value: string
+        |}>
+      |}>,
+      // List of attachements to the post.
+      attachments: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // Any file that can be attached. A file metadata object, described by the Document object.
+        document: ?{|
+          // The ID of the object.
+          id: string,
+          // The filename title.
+          title: ?string,
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string
+        |}
+      |}>,
+      // Keywords associated with the post, according to NLP engine.
+      keywords: ?Array<?{|
+        // The score associated with the tag (0-1, increasing relevance)
+        score: ?number,
+        // The number of times the tag was found
+        count: ?number,
+        // The tag keyword
+        value: ?string
+      |}>,
+      // A list of abstract tags associated to the post.
+      tags: ?Array<?{|
+        // The ID of the object.
+        id: string,
+        // The value of the tag. This is not language dependent, but rather just unicode text.
+        value: string
+      |}>
+    |}
   |}
 |};
 
@@ -5077,17 +5654,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // A Attachments for terms and conditions. in a given language.
@@ -5103,17 +5670,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // A Attachments for cookies policy. in a given language.
@@ -5129,17 +5686,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // A Attachments for privacy policy. in a given language.
@@ -5155,17 +5702,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // A Attachments for user guidelines. in a given language.
@@ -5181,17 +5718,7 @@ export type UpdateLegalContentsMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>
     |}
@@ -5346,6 +5873,11 @@ export type updatePostMutation = {|
           |}
         |}
       |},
+      // The User or AgentProfile who created the parent post.
+      parentPostCreator: ?{|
+        // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+        displayName: ?string
+      |},
       // A boolean flag to say whether the post is modified or not.
       modified: ?boolean,
       // A ??? in a given language.
@@ -5491,17 +6023,7 @@ export type updatePostMutation = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // Keywords associated with the post, according to NLP engine.
@@ -5809,16 +6331,17 @@ export type updateShareCountMutation = {|
       | {}
       | {}
       | {}
-      | {})
+      | {}
+    )
   |}
 |};
 
 export type updateSynthesisMutationVariables = {|
   id: string,
   image?: ?string,
-  lang: string,
   bodyEntries: Array<?LangStringEntryInput>,
-  subjectEntries: Array<?LangStringEntryInput>
+  subjectEntries: Array<?LangStringEntryInput>,
+  publicationState: PublicationStates
 |};
 
 export type updateSynthesisMutation = {|
@@ -5827,160 +6350,57 @@ export type updateSynthesisMutation = {|
     synthesisPost: ?{|
       // The ID of the object.
       id: string,
+      // A graphene Field containing the state of the publication of a certain post. The options are:
+      // DRAFT,
+      //
+      // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+      //
+      // SUBMITTED_AWAITING_MODERATION,
+      //
+      // PUBLISHED,
+      //
+      // MODERATED_TEXT_ON_DEMAND,
+      //
+      // MODERATED_TEXT_NEVER_AVAILABLE,
+      //
+      // DELETED_BY_USER,
+      //
+      // DELETED_BY_ADMIN,
+      //
+      // WIDGET_SCOPED
+      //
+      publicationState: ?PublicationStates,
       // Graphene Field modeling a relationship to a published synthesis.
       publishesSynthesis: ?{|
         // The ID of the object.
         id: string,
         // The type of Synthesis to be created
         synthesisType: SynthesisTypes,
-        // The subject of the synthesis.
-        subject: ?string,
-        // The introduction of the synthesis.
-        introduction: ?string,
-        // The body of the full text synthesis.
-        body: ?string,
-        // The conclusion of the synthesis.
-        conclusion: ?string,
-        // The creation date of the synthesis.
-        creationDate: ?any,
+        // A list of possible languages of the entity as LangStringEntry objects. The subject in various languages.
+        subjectEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
+        // A list of possible languages of the entity as LangStringEntry objects. The body in various languages.
+        bodyEntries: ?Array<?{|
+          // The ISO 639-1 locale code of the language the content represents.
+          localeCode: string,
+          // The unicode encoded string representation of the content.
+          value: ?string
+        |}>,
         // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
         img: ?{|
-          // A url to an image or a document to be attached.
-          externalUrl: ?string
-        |},
-        // This is the list of ideas related to the synthesis.
-        ideas: ?Array<?{
           // The ID of the object.
           id: string,
-          // A list of Relay.Node ID's representing the parents Ideas of the Idea.
-          ancestors: ?Array<?string>,
-          // The title of the Idea, often shown in the Idea header itself.
+          // The filename title.
           title: ?string,
-          // A Synthesis title in a given language.
-          synthesisTitle: ?string,
-          // The IdeaUnion between an Idea or a Thematic. This can be used to query specific fields unique to the type of Idea.
-          live: ?{
-            // The ID of the object.
-            id: string,
-            // The order of the Idea, Thematic, Question in the idea tree.
-            order: ?number,
-            // The total number of active posts on that idea (excludes deleted posts).
-            numPosts: ?number,
-            // The total number of users who contributed to the Idea/Thematic/Question.
-            //
-            // Contribution is counted as either as a sentiment set, a post created.
-            numContributors: ?number,
-            // A list of IdeaMessageColumn objects, if any set, on an Idea.
-            messageColumns: ?Array<?{|
-              // A CSS color that will be used to theme the column.
-              color: ?string,
-              // A Synthesis done on the column, of type Post.
-              columnSynthesis: ?{|
-                // The ID of the object.
-                id: string,
-                // A Subject of the post in a given language.
-                subject: ?string,
-                // A Body of the post (the main content of the post). in a given language.
-                body: ?string,
-                // The SentimentType that the API calling User has on the Post, if any.
-                mySentiment: ?SentimentTypes,
-                // A list of SentimentCounts which counts each sentiment expressed. These include:
-                //
-                // Like,
-                //
-                // Agree,
-                //
-                // Disagree,
-                //
-                // Like,
-                //
-                // Don't Understand
-                //
-                // More Info
-                //
-                sentimentCounts: ?{|
-                  // The number of Sentiments disagreeing with the post.
-                  disagree: ?number,
-                  // The number of Sentiments expressing "dont_understand" on the Post.
-                  dontUnderstand: ?number,
-                  // The number of Sentiments expressed "like" on the post.
-                  like: ?number,
-                  // The number of Sentiments requesting "more_info" on the post.
-                  moreInfo: ?number
-                |}
-              |},
-              // The order of the message column in the Idea/Thematic.
-              index: ?number,
-              // The unique classification identifier of the MessageColumn. All content who will be put under this column must have this classifer.
-              messageClassifier: string,
-              // A The name of the column in a given language.
-              name: ?string,
-              // The number of posts contributed to only this column.
-              numPosts: ?number,
-              // A The title of the column in a given language.
-              title: ?string
-            |}>,
-            // Type of view for this idea: survey, thread, messageColumns, voteSession, brightMirror.
-            messageViewOverride: ?string,
-            // Header image associated with the idea. A file metadata object, described by the Document object.
-            img: ?{|
-              // A url to an image or a document to be attached.
-              externalUrl: ?string
-            |},
-            // A list of all Posts under the Idea. These include posts of the subIdeas.
-            posts: ?{|
-              edges: Array<?{|
-                // The item at the end of the edge
-                node: ?{|
-                  // A list of SentimentCounts which counts each sentiment expressed. These include:
-                  //
-                  // Like,
-                  //
-                  // Agree,
-                  //
-                  // Disagree,
-                  //
-                  // Like,
-                  //
-                  // Don't Understand
-                  //
-                  // More Info
-                  //
-                  sentimentCounts: ?{|
-                    // The number of Sentiments expressed "like" on the post.
-                    like: ?number,
-                    // The number of Sentiments disagreeing with the post.
-                    disagree: ?number,
-                    // The number of Sentiments expressing "dont_understand" on the Post.
-                    dontUnderstand: ?number,
-                    // The number of Sentiments requesting "more_info" on the post.
-                    moreInfo: ?number
-                  |},
-                  // A graphene Field containing the state of the publication of a certain post. The options are:
-                  // DRAFT,
-                  //
-                  // SUBMITTED_IN_EDIT_GRACE_PERIOD,
-                  //
-                  // SUBMITTED_AWAITING_MODERATION,
-                  //
-                  // PUBLISHED,
-                  //
-                  // MODERATED_TEXT_ON_DEMAND,
-                  //
-                  // MODERATED_TEXT_NEVER_AVAILABLE,
-                  //
-                  // DELETED_BY_USER,
-                  //
-                  // DELETED_BY_ADMIN,
-                  //
-                  // WIDGET_SCOPED
-                  //
-                  publicationState: ?PublicationStates
-                |}
-              |}>
-            |}
-          }
-        }>
+          // A url to an image or a document to be attached.
+          externalUrl: ?string,
+          // The MIME-Type of the file uploaded.
+          mimeType: ?string
+        |}
       |}
     |}
   |}
@@ -6070,7 +6490,8 @@ export type updateTextFieldMutation = {|
               value: ?string
             |}>
           |}>
-        })
+        }
+    )
   |}
 |};
 
@@ -6340,7 +6761,8 @@ export type UserQuery = {|
     | {}
     | {}
     | {}
-    | {})
+    | {}
+  )
 |};
 
 export type tokenVoteSpecificationFragment = {|
@@ -6400,7 +6822,8 @@ export type tokenVoteSpecificationResultsFragment = {|
         proposalId: string,
         tokenCategoryId: string
       }
-    | {})>,
+    | {}
+  )>,
   // The total number of Voters for this Vote.
   numVotes: number,
   // The list of information regarding votes (VotesByCategory).
@@ -6465,7 +6888,8 @@ export type numberGaugeVoteSpecificationResultsFragment = {|
         // The value entered on the GaugeVote.
         selectedValue: number,
         proposalId: string
-      })>,
+      }
+  )>,
   // The total number of Voters for this Vote.
   numVotes: number,
   // The average value of the Votes submitted by all Users.
@@ -6524,7 +6948,8 @@ export type gaugeVoteSpecificationResultsFragment = {|
         // The value entered on the GaugeVote.
         selectedValue: number,
         proposalId: string
-      })>,
+      }
+  )>,
   // The total number of Voters for this Vote.
   numVotes: number,
   // A The label of the average value for the Gauge in a given language.
@@ -6541,17 +6966,7 @@ export type ADocumentFragment = {|
   // A url to an image or a document to be attached.
   externalUrl: ?string,
   // The MIME-Type of the file uploaded.
-  mimeType: ?string,
-  // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-  //
-  // "unchecked": The AV did not make a check on this file.
-  //
-  // "passed": The AV did a pass on this file, and it passed AV check.
-  //
-  // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-  // accessed by the application.
-  //
-  avChecked: ?string
+  mimeType: ?string
 |};
 
 export type AgentProfileInfoFragment = {|
@@ -6590,17 +7005,7 @@ export type AttachmentFragment = {|
     // A url to an image or a document to be attached.
     externalUrl: ?string,
     // The MIME-Type of the file uploaded.
-    mimeType: ?string,
-    // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-    //
-    // "unchecked": The AV did not make a check on this file.
-    //
-    // "passed": The AV did a pass on this file, and it passed AV check.
-    //
-    // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-    // accessed by the application.
-    //
-    avChecked: ?string
+    mimeType: ?string
   |}
 |};
 
@@ -6841,17 +7246,7 @@ export type BrightMirrorFictionFragment = {|
           // A url to an image or a document to be attached.
           externalUrl: ?string,
           // The MIME-Type of the file uploaded.
-          mimeType: ?string,
-          // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-          //
-          // "unchecked": The AV did not make a check on this file.
-          //
-          // "passed": The AV did a pass on this file, and it passed AV check.
-          //
-          // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-          // accessed by the application.
-          //
-          avChecked: ?string
+          mimeType: ?string
         |}
       |}>,
       // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
@@ -7087,17 +7482,7 @@ export type ExtractCommentFragment = {|
       // A url to an image or a document to be attached.
       externalUrl: ?string,
       // The MIME-Type of the file uploaded.
-      mimeType: ?string,
-      // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-      //
-      // "unchecked": The AV did not make a check on this file.
-      //
-      // "passed": The AV did a pass on this file, and it passed AV check.
-      //
-      // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-      // accessed by the application.
-      //
-      avChecked: ?string
+      mimeType: ?string
     |}
   |}>,
   // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
@@ -7267,17 +7652,7 @@ export type FictionExtractFragment = {|
         // A url to an image or a document to be attached.
         externalUrl: ?string,
         // The MIME-Type of the file uploaded.
-        mimeType: ?string,
-        // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-        //
-        // "unchecked": The AV did not make a check on this file.
-        //
-        // "passed": The AV did a pass on this file, and it passed AV check.
-        //
-        // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-        // accessed by the application.
-        //
-        avChecked: ?string
+        mimeType: ?string
       |}
     |}>,
     // The parent of a Post, if the Post is a reply to an existing Post. The Relay.Node ID type of the Post object.
@@ -7542,6 +7917,26 @@ export type langStringEntryFragment = {|
 export type MultilingualSynthesisPostFragment = {|
   // The ID of the object.
   id: string,
+  // A graphene Field containing the state of the publication of a certain post. The options are:
+  // DRAFT,
+  //
+  // SUBMITTED_IN_EDIT_GRACE_PERIOD,
+  //
+  // SUBMITTED_AWAITING_MODERATION,
+  //
+  // PUBLISHED,
+  //
+  // MODERATED_TEXT_ON_DEMAND,
+  //
+  // MODERATED_TEXT_NEVER_AVAILABLE,
+  //
+  // DELETED_BY_USER,
+  //
+  // DELETED_BY_ADMIN,
+  //
+  // WIDGET_SCOPED
+  //
+  publicationState: ?PublicationStates,
   // Graphene Field modeling a relationship to a published synthesis.
   publishesSynthesis: ?{|
     // The ID of the object.
@@ -7564,8 +7959,14 @@ export type MultilingualSynthesisPostFragment = {|
     |}>,
     // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
     img: ?{|
+      // The ID of the object.
+      id: string,
+      // The filename title.
+      title: ?string,
       // A url to an image or a document to be attached.
-      externalUrl: ?string
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string
     |}
   |}
 |};
@@ -7650,6 +8051,11 @@ export type PostFragment = {|
         localeInto: string
       |}
     |}
+  |},
+  // The User or AgentProfile who created the parent post.
+  parentPostCreator: ?{|
+    // How the User is represented throughout the debate. If a user-name exists, this will be chosen. If it does not, the name is determined.
+    displayName: ?string
   |},
   // A boolean flag to say whether the post is modified or not.
   modified: ?boolean,
@@ -7796,17 +8202,7 @@ export type PostFragment = {|
       // A url to an image or a document to be attached.
       externalUrl: ?string,
       // The MIME-Type of the file uploaded.
-      mimeType: ?string,
-      // Antivirus check status of the File, for servers that support Anti-Virus filtering. The possible options are:
-      //
-      // "unchecked": The AV did not make a check on this file.
-      //
-      // "passed": The AV did a pass on this file, and it passed AV check.
-      //
-      // "failed": The AV did a pass on this file, and the file failed the AV check. Under this condition, the file would not be touched or
-      // accessed by the application.
-      //
-      avChecked: ?string
+      mimeType: ?string
     |}
   |}>,
   // Keywords associated with the post, according to NLP engine.
@@ -7940,8 +8336,14 @@ export type SynthesisPostFragment = {|
     creationDate: ?any,
     // This is a header image document object that will be visible on the Synthesis view's header.A file metadata object, described by the Document object.
     img: ?{|
+      // The ID of the object.
+      id: string,
+      // The filename title.
+      title: ?string,
       // A url to an image or a document to be attached.
-      externalUrl: ?string
+      externalUrl: ?string,
+      // The MIME-Type of the file uploaded.
+      mimeType: ?string
     |},
     // This is the list of ideas related to the synthesis.
     ideas: ?Array<?{

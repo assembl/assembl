@@ -4,6 +4,7 @@ import Adapter from 'enzyme-adapter-react-16';
 import { DumbCookiesSelectorContainer } from '../../../../js/app/components/cookies/cookiesSelectorContainer';
 import CookiesSelector from '../../../../js/app/components/cookies/cookiesSelector';
 import { COOKIE_TRANSLATION_KEYS, COOKIES_CATEGORIES } from '../../../../js/app/constants';
+import { getCookieItem } from '../../../../js/app/utils/globalFunctions';
 import { displayAlert } from '../../../../js/app/utils/utilityManager';
 
 configure({ adapter: new Adapter() });
@@ -142,9 +143,9 @@ describe('CookiesSelectorContainer component', () => {
       expect(updateAcceptedCookiesSpy.mock.calls.length).toBe(1);
       const date = new Date();
       date.setMonth(date.getMonth() + 13);
-      expect(document.cookie).toBe(
-        'cookies_configuration=ACCEPT_TRACKING_ON_DISCUSSION,ACCEPT_SESSION_ON_DISCUSSION,ACCEPT_LOCALE,' +
-          `ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_USER_GUIDELINE_ON_DISCUSSION,ACCEPT_CGU;path=/;expires=${date}`
+      expect(getCookieItem('cookies_configuration')).toBe(
+        'ACCEPT_TRACKING_ON_DISCUSSION,ACCEPT_SESSION_ON_DISCUSSION,ACCEPT_LOCALE,' +
+          'ACCEPT_PRIVACY_POLICY_ON_DISCUSSION,ACCEPT_USER_GUIDELINE_ON_DISCUSSION,ACCEPT_CGU'
       );
     });
   });

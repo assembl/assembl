@@ -34,7 +34,18 @@ class Tree extends React.Component<Props> {
 
   componentWillReceiveProps(nextProps: Props) {
     const { data } = this.props;
+    let invalidate = false;
     if (data.length !== nextProps.data.length) {
+      invalidate = true;
+    } else {
+      for (let i = 0; i < data.length; i += 1) {
+        if (data[i].dbId !== nextProps.data[i].dbId) {
+          invalidate = true;
+          break;
+        }
+      }
+    }
+    if (invalidate) {
       this.cache.clearAll();
       // If a new top post has been created, clear the cache
       // and rerender the List by changing its key
@@ -46,6 +57,7 @@ class Tree extends React.Component<Props> {
       // and will be recreated when scrolling, losing the previous expand/collapse local state.
       this.prevStopIndex = 0;
     }
+    this.invalidate = invalidate;
   }
 
   componentDidUpdate(prevProps: Props) {
@@ -54,6 +66,8 @@ class Tree extends React.Component<Props> {
       this.triggerScrollToRow(initialRowIndex);
     }
   }
+
+  invalidate: boolean = false;
 
   triggerScrollToRow = (rowIndex: ?number) => {
     if (this.listRef && rowIndex !== null) {
@@ -150,6 +164,7 @@ class Tree extends React.Component<Props> {
 
   render() {
     const { contentLocaleMapping, data, lang, noRowsRenderer, fictionCommentExtraProps } = this.props;
+    const invalidate = this.invalidate;
     return (
       <WindowScroller>
         {({ height, isScrolling, onChildScroll, scrollTop }) => (
@@ -168,6 +183,11 @@ class Tree extends React.Component<Props> {
               return (
                 <List
                   contentLocaleMapping={contentLocaleMapping}
+                  onRowsRendered={() => {
+                    if (invalidate && this.listRef) {
+                      this.listRef.forceUpdateGrid();
+                    }
+                  }}
                   height={height}
                   // pass lang to the List component to ensure that the rows are rendered again if we change the site language
                   lang={lang}

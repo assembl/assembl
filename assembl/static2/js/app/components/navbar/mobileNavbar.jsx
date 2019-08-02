@@ -1,23 +1,25 @@
 // @flow
 
 import * as React from 'react';
-import classNames from 'classnames';
 
-import Logo from './Logo';
+import BurgerMenu from './burgerMenu';
 import NavigationMenu from './navigationMenu';
+import Logo from './Logo';
 import LanguageMenu from './languageMenu';
 import { browserHistory } from '../../router';
 
 type Props = {
   elements: React.Node,
+  logoLink: string,
   slug: string,
   logoSrc: string,
-  logoLink: string,
-  renderUserMenu: number => React.Node
+  renderUserMenu: number => React.Node,
+  screenTooSmall: boolean
 };
 
 type State = {
-  shouldDisplayMenu: boolean
+  shouldDisplayMenu: boolean,
+  activeSegment: -1
 };
 
 export default class BurgerNavbar extends React.PureComponent<Props, State> {
@@ -41,22 +43,17 @@ export default class BurgerNavbar extends React.PureComponent<Props, State> {
   };
 
   render() {
-    const { elements, slug, logoSrc, logoLink, renderUserMenu } = this.props;
-    const { shouldDisplayMenu } = this.state;
+    const { elements, slug, logoLink, logoSrc, renderUserMenu, screenTooSmall } = this.props;
     return (
-      <div className="burger-navbar">
-        {shouldDisplayMenu && (
-          <div className="nav-burger-menu shown">
+      <div className="flat-navbar">
+        <div className="left-part">
+          <BurgerMenu screenTooSmall={screenTooSmall}>
             <NavigationMenu elements={elements} />
-            <LanguageMenu size="xl" className="burgermenu-language center" />
-          </div>
-        )}
-        <span
-          onClick={this.toggleMenu}
-          className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
-        />
-        <Logo slug={slug} src={logoSrc} url={logoLink} />
-        <div className="right-part">{renderUserMenu(0)}</div>
+            <LanguageMenu size="xs" className="navbar-language" />
+          </BurgerMenu>
+          <Logo slug={slug} src={logoSrc} url={logoLink} />
+        </div>
+        <div className="right-part-mobile">{renderUserMenu(0)}</div>
       </div>
     );
   }

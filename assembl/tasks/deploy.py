@@ -2,7 +2,6 @@ import os
 import os.path
 import re
 from pprint import pprint
-import json
 from time import sleep
 from ConfigParser import RawConfigParser
 from getpass import getuser
@@ -11,55 +10,7 @@ from invoke.tasks import call
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
     create_venv, fill_template, get_s3_file, s3_file_exists, get_aws_account_id, delete_foreign_tasks,
-    get_venv_site_packages, is_cloud_env)
-
-_known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
-
-
-def val_to_ini(val):
-    if val is None:
-        return ''
-    if isinstance(val, bool):
-        return str(val).lower()
-    if isinstance(val, (dict, list)):
-        return json.dumps(val)
-    return val
-
-
-def ensureSection(config, section):
-    """Ensure that config has that section"""
-    if section.lower() != 'default' and not config.has_section(section):
-        config.add_section(section)
-
-
-def yaml_to_ini(yaml_conf, default_section='app:assembl'):
-    """Convert a .yaml file to a ConfigParser (.ini-like object)
-
-    Items are assumed to be in app:assembl section,
-        unless prefixed by "{section}__" .
-    Keys prefixed with an underscore are not passed on.
-    Keys prefixed with a star are put in the global (DEFAULT) section.
-    Value of '__delete_key__' is eliminated if existing.
-    """
-    p = RawConfigParser()
-    ensureSection(p, default_section)
-    for key, val in yaml_conf.iteritems():
-        if key.startswith('_'):
-            continue
-        if isinstance(val, dict):
-            if key in _known_invoke_sections:
-                continue
-            ensureSection(p, key)
-            for subk, subv in val.iteritems():
-                p.set(key, subk, val_to_ini(subv))
-        else:
-            if val == '__delete_key__':
-                # Allow to remove a variable from rc
-                # so we can fall back to underlying ini
-                p.remove_option(default_section, key)
-            else:
-                p.set(default_section, key, val_to_ini(val))
-    return p
+    get_assembl_code_path, is_cloud_env, yaml_to_ini, is_supervisord_running)
 
 
 @task()
@@ -297,8 +248,6 @@ def webservers_reload(c):
             c.sudo('/etc/init.d/nginx reload')
         else:
             print("Your Nginx configuration returned an error, please check your nginx configuration.")
-    elif c.config.get(c.config.mac, False):
-        c.sudo('killall -HUP nginx')
 
 
 @task(call(ensure_aws_invoke_yaml, override=True))
@@ -340,7 +289,7 @@ def create_local_ini(c):
 def generate_nginx_conf(c):
     """Hard assumption that this is only used under the cloud condition"""
     if is_cloud_env(c):
-        path = os.path.join(get_venv_site_packages(c), 'templates/system/')
+        path = os.path.join(get_assembl_code_path(c), 'templates/system/')
         fill_template(c, 'nginx_default.jinja2', 'var/share/assembl.nginx',
                       default_dir=path, extra={'is_cloud': True})
 
@@ -409,7 +358,7 @@ def aws_instance_config_update_and_restart(c, nginx=False, celery=False):
 @task(install_wheel)
 def assembl_dir_permissions(c):
     with venv(c):
-        code_path = get_venv_site_packages(c)
+        code_path = get_assembl_code_path(c)
     c.run('chgrp -R www-data {path}/assembl/static {path}/assembl/static2'.format(path=code_path))
     c.run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
     c.run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
@@ -535,7 +484,7 @@ def code_root(c, alt_env=None):
         return local_code_root
     else:
         if (as_bool(get_prefixed('package_install', alt_env, False))):
-            return get_venv_site_packages(alt_env)
+            return get_assembl_code_path(alt_env)
         else:
             return get_prefixed('projectpath', alt_env, os.getcwd())
 
@@ -602,4 +551,3 @@ def create_clean_cronlist(c):
 
 # avoid it being defined in both modules
 delete_foreign_tasks(locals())
-

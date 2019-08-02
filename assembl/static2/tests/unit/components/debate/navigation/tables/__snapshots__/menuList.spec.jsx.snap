@@ -4,33 +4,11 @@ exports[`MenuList component should match the MenuList 1`] = `
 <React.Fragment>
   <div
     className="menu-table-col debate-class"
-    onMouseLeave={[Function]}
   >
     <div
       className="menu-table"
-      style={
-        Object {
-          "height": "114px",
-        }
-      }
     >
-      <Scrollbars
-        autoHeight={false}
-        autoHeightMax={200}
-        autoHeightMin={0}
-        autoHide={false}
-        autoHideDuration={200}
-        autoHideTimeout={1000}
-        hideTracksWhenNotNeeded={false}
-        renderThumbHorizontal={[Function]}
-        renderThumbVertical={[Function]}
-        renderTrackHorizontal={[Function]}
-        renderTrackVertical={[Function]}
-        renderView={[Function]}
-        tagName="div"
-        thumbMinSize={30}
-        universal={false}
-      >
+      <div>
         <Connect(DumbMenuItem)
           hasSubItems={false}
           identifier="survey"
@@ -40,10 +18,13 @@ exports[`MenuList component should match the MenuList 1`] = `
               "parentId": "root",
             }
           }
-          onMouseOver={[Function]}
           phaseId="phaseFoo"
+          preSelect={false}
           selected={false}
+          toggleMenu={[Function]}
         />
+      </div>
+      <div>
         <Connect(DumbMenuItem)
           hasSubItems={false}
           identifier="survey"
@@ -53,11 +34,12 @@ exports[`MenuList component should match the MenuList 1`] = `
               "parentId": "root",
             }
           }
-          onMouseOver={[Function]}
           phaseId="phaseFoo"
+          preSelect={false}
           selected={false}
+          toggleMenu={[Function]}
         />
-      </Scrollbars>
+      </div>
     </div>
   </div>
 </React.Fragment>
@@ -70,33 +52,11 @@ exports[`MenuList component should match the sub-MenuList 1`] = `
   />
   <div
     className="menu-table-col debate-class sub-menu"
-    onMouseLeave={[Function]}
   >
     <div
       className="menu-table"
-      style={
-        Object {
-          "height": "114px",
-        }
-      }
     >
-      <Scrollbars
-        autoHeight={false}
-        autoHeightMax={200}
-        autoHeightMin={0}
-        autoHide={false}
-        autoHideDuration={200}
-        autoHideTimeout={1000}
-        hideTracksWhenNotNeeded={false}
-        renderThumbHorizontal={[Function]}
-        renderThumbVertical={[Function]}
-        renderTrackHorizontal={[Function]}
-        renderTrackVertical={[Function]}
-        renderView={[Function]}
-        tagName="div"
-        thumbMinSize={30}
-        universal={false}
-      >
+      <div>
         <Connect(DumbMenuItem)
           hasSubItems={false}
           identifier="survey"
@@ -106,10 +66,13 @@ exports[`MenuList component should match the sub-MenuList 1`] = `
               "parentId": "root",
             }
           }
-          onMouseOver={[Function]}
           phaseId="phaseFoo"
+          preSelect={false}
           selected={false}
+          toggleMenu={[Function]}
         />
+      </div>
+      <div>
         <Connect(DumbMenuItem)
           hasSubItems={false}
           identifier="survey"
@@ -119,11 +82,12 @@ exports[`MenuList component should match the sub-MenuList 1`] = `
               "parentId": "root",
             }
           }
-          onMouseOver={[Function]}
           phaseId="phaseFoo"
+          preSelect={false}
           selected={false}
+          toggleMenu={[Function]}
         />
-      </Scrollbars>
+      </div>
     </div>
   </div>
 </React.Fragment>

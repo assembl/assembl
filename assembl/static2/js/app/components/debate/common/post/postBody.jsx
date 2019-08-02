@@ -6,6 +6,8 @@ import classNames from 'classnames';
 import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { withRouter } from 'react-router';
+import { Translate } from 'react-redux-i18n';
+import { connect } from 'react-redux';
 
 import { EMPTY_STRING } from '../../../../constants';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
@@ -15,26 +17,32 @@ import UpdateHarvestingTranslationPreference from '../../../../graphql/mutations
 import PostTranslate from '../../common/translations/postTranslate';
 import Embed from '../../../common/urlPreview/embed';
 import URLMetadataLoader from '../../../common/urlPreview/urlMetadataLoader';
-import { getExtractTagId, getExtractColor } from '../../../../utils/extract';
+import { getExtractColor, getExtractTagId } from '../../../../utils/extract';
 import ModalImage from '../modalImage';
+import { defaultDisplayPolicy } from '../postsFilter/policies';
+
+type State = {
+  readMoreExpanded: boolean
+};
 
 type Props = {
   body: ?string,
-  dbId: ?number,
-  extracts: ?Array<?ExtractFragment>,
   bodyDivRef?: Function, // eslint-disable-line react/require-default-props
   bodyMimeType: string,
   contentLocale: string,
+  dbId: ?number,
+  extracts: ?Array<?ExtractFragment>,
+  handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
   id: string,
+  isHarvestable?: boolean,
+  isHarvesting: boolean,
   lang: string,
-  subject?: React.Node, // eslint-disable-line react/require-default-props
+  measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
   originalLocale: string,
+  postsDisplayPolicy: PostsDisplayPolicy,
+  subject?: React.Node, // eslint-disable-line react/require-default-props
   translate: boolean,
   translationEnabled: boolean,
-  isHarvesting: boolean,
-  isHarvestable?: boolean,
-  handleMouseUpWhileHarvesting?: Function, // eslint-disable-line react/require-default-props
-  measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
   updateHarvestingTranslation: Function
 };
 
@@ -190,84 +198,121 @@ Html.defaultProps = {
 
 Html.displayName = 'Html';
 
-export const DumbPostBody = ({
-  body,
-  extracts,
-  bodyDivRef,
-  bodyMimeType,
-  contentLocale,
-  id,
-  dbId,
-  lang,
-  subject,
-  originalLocale,
-  translate,
-  translationEnabled,
-  handleMouseUpWhileHarvesting,
-  measureTreeHeight,
-  updateHarvestingTranslation,
-  isHarvesting,
-  isHarvestable
-}: Props) => {
-  const divClassNames = 'post-body post-body--is-harvestable';
-  const htmlClassNames = classNames('post-body-content', 'body', {
-    'pre-wrap': bodyMimeType === 'text/plain'
-  });
-  // Only non-special URLs (like Youtube or SketchFab) will be transformed
-  // We need to add the URLs previews to the end of each post (See URLMetadataLoader)
-  const afterLoad = () => {
-    if (measureTreeHeight) measureTreeHeight(400);
+export class DumbPostBody extends React.Component<Props, State> {
+  static defaultProps = {
+    isHarvestable: false
   };
-  return (
-    <div className={divClassNames}>
-      {translationEnabled ? (
-        <PostTranslate
-          contentLocale={contentLocale}
-          id={id}
-          lang={lang}
-          originalLocale={originalLocale}
-          translate={translate}
-          afterLoad={afterLoad}
-          onTranslate={(from, into) => {
-            const connectedUserIdBase64 = getConnectedUserId(true);
-            if (connectedUserIdBase64 && isHarvesting && isHarvestable) {
-              updateHarvestingTranslation({
-                variables: {
-                  id: connectedUserIdBase64,
-                  translation: {
-                    localeFrom: from,
-                    localeInto: into
-                  }
-                }
-              });
-            }
-          }}
-        />
-      ) : null}
-      {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
-      {body && (
-        <div className={htmlClassNames}>
-          <Html
-            onMouseUp={handleMouseUpWhileHarvesting}
-            rawHtml={transformLinksInHtml(body)}
-            divRef={bodyDivRef}
-            extracts={extracts}
-            dbId={dbId}
-            replacementComponents={postBodyReplacementComponents(afterLoad, isHarvesting)}
-            contentLocale={contentLocale}
-          />
-        </div>
-      )}
-    </div>
-  );
-};
 
-DumbPostBody.defaultProps = {
-  isHarvestable: false
+  state = { readMoreExpanded: false };
+
+  expandReadMore = () => {
+    this.setState({ readMoreExpanded: true });
+  };
+
+  collapseReadMore = () => {
+    this.setState({ readMoreExpanded: false });
+  };
+
+  render() {
+    const {
+      bodyDivRef,
+      body,
+      bodyMimeType,
+      contentLocale,
+      dbId,
+      extracts,
+      handleMouseUpWhileHarvesting,
+      id,
+      isHarvestable,
+      isHarvesting,
+      lang,
+      measureTreeHeight,
+      originalLocale,
+      postsDisplayPolicy,
+      subject,
+      translate,
+      translationEnabled,
+      updateHarvestingTranslation
+    } = this.props;
+    const { readMoreExpanded } = this.state;
+    const divClassNames = 'post-body post-body--is-harvestable';
+    const displayMode = (postsDisplayPolicy && postsDisplayPolicy.displayMode) || defaultDisplayPolicy.displayMode;
+    const isSummaryDisplayMode = displayMode === 'summary' && !!body && body.length > 60;
+    const htmlClassNames = classNames('post-body-content', isSummaryDisplayMode && !readMoreExpanded && 'truncate', 'body', {
+      'pre-wrap': bodyMimeType === 'text/plain'
+    });
+
+    // Only non-special URLs (like Youtube or SketchFab) will be transformed
+    // We need to add the URLs previews to the end of each post (See URLMetadataLoader)
+    const afterLoad = () => {
+      if (measureTreeHeight) measureTreeHeight(400);
+    };
+    return (
+      <div className={divClassNames}>
+        {translationEnabled ? (
+          <PostTranslate
+            contentLocale={contentLocale}
+            id={id}
+            lang={lang}
+            originalLocale={originalLocale}
+            translate={translate}
+            afterLoad={afterLoad}
+            onTranslate={(from, into) => {
+              const connectedUserIdBase64 = getConnectedUserId(true);
+              if (connectedUserIdBase64 && isHarvesting && isHarvestable) {
+                updateHarvestingTranslation({
+                  variables: {
+                    id: connectedUserIdBase64,
+                    translation: {
+                      localeFrom: from,
+                      localeInto: into
+                    }
+                  }
+                });
+              }
+            }}
+          />
+        ) : null}
+        {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
+        {body && (
+          <React.Fragment>
+            <div className={htmlClassNames}>
+              <Html
+                onMouseUp={handleMouseUpWhileHarvesting}
+                rawHtml={transformLinksInHtml(body)}
+                divRef={bodyDivRef}
+                extracts={extracts}
+                dbId={dbId}
+                replacementComponents={postBodyReplacementComponents(afterLoad, isHarvesting)}
+                contentLocale={contentLocale}
+              />
+            </div>
+            {isSummaryDisplayMode &&
+              (readMoreExpanded ? (
+                <div className="read-more" onClick={this.collapseReadMore}>
+                  <Translate value="readLessEllipsis" />
+                </div>
+              ) : (
+                <div className="read-more" onClick={this.expandReadMore}>
+                  <Translate value="readMoreEllipsis" />
+                </div>
+              ))}
+          </React.Fragment>
+        )}
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  const postsDisplayPolicy = (state.threadFilter && state.threadFilter.postsDisplayPolicy) || defaultDisplayPolicy;
+  return {
+    postsDisplayPolicy: postsDisplayPolicy
+  };
 };
 
 export default withRouter(
   graphql(UpdateHarvestingTranslationPreference, {
     name: 'updateHarvestingTranslation'
-  })(DumbPostBody)
+  })(connect(mapStateToProps)(DumbPostBody))
 );

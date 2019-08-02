@@ -655,7 +655,7 @@ export class SearchComponent extends React.Component {
           <TopBar>
             <SearchBox
               autofocus={false}
-              searchOnChange
+              searchOnChange={false}
               searchThrottleTime={500}
               queryFields={queryFields}
               ref={(el) => {

@@ -6,8 +6,11 @@ const Translations = {
     here: "ici",
     yes: "oui",
     no: "non",
+    ok: "Ok",
     and: " et ",
     accept: "Accepter",
+    readMoreEllipsis: "Lire plus...",
+    readLessEllipsis: "Lire moins...",
     refuse: "Refuser",
     cancel: "Annuler",
     validate: "Valider",
@@ -452,8 +455,28 @@ const Translations = {
         postSuccess: "Merci pour votre participation. Votre message a bien été envoyé !",
         postToBeValidated:
           "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
-        fillSubject: "Veuillez écrire un titre",
+        postsDisplay: {
+          full: "Messages complets",
+          summary: "Aperçu des messages"
+        },
+        postsFilters: {
+          myPostsAndAnswers: "Messages en réponse à mes contributions",
+          onlyMyPosts: "Mes contributions"
+        },
+        postsOrder: {
+          cleanFilter: "Effacer les filtres",
+          chronologicalTop: "Fils de discussion chronologiques",
+          popularityFlat: "Messages les plus populaires en premier",
+          reverseChronologicalFlat: "Messages récents en premier",
+          reverseChronologicalLast: "Fils de discussion récemment actifs",
+          reverseChronologicalTop: "Fils de discussion récemment démarrés"
+        },
         fillBody: "Veuillez écrire un message",
+        filterPosts: "Filtrer",
+        fillSubject: "Veuillez écrire un titre",
+        sortPosts: "Trier",
+        sortFilterPosts: "Trier / Filtrer",
+        overviewPosts: "Aperçu",
         linkIdea: "Ce post est en lien avec les thématiques suivantes :",
         foldedPostLink: "Voir les %{count} réponses",
         foldedPostLink_1: "Voir la réponse",
@@ -486,7 +509,7 @@ const Translations = {
           "qualifie l'importance du mot clé pour comprendre le sens général du texte analysé. Le score varie de 0 à 1, de faible à fort.",
         keywordCloud: "Nuage de mots-clés",
         keywordCloudDefinition:
-          "Le nuage de mots-clés ci-dessous est une représentation visuelle des mots-clefs les plus utilisés dans le débat (ou \"dans les échanges liés à la thématique en question\" lorsque le texte fait référence à une thématique particulière). Les mots s'affichent dans des tailles de caractères d'autant plus visibles qu'ils sont utilisés ou populaires.",
+          "Le nuage de mots-clés ci-dessous est une représentation visuelle des mots-clefs les plus utilisés dans le débat (ou \"dans les échanges liés à la thématique en question\" lorsque l'analyse est faite sur une thématique particulière). Les mots s'affichent dans des tailles de caractères d'autant plus visibles qu'ils sont utilisés ou populaires.",
         informationKeyword: "Informations mots clés",
         numberKeyword: "Nombre de mots clés",
         noKeywordSelected: "Pas de mot sélectionné",
@@ -583,6 +606,7 @@ const Translations = {
         voteResultsPlusTitle: "Résultats des votes : %{title}",
         postSuccess:
           "Merci pour votre participation ! Votre vote a bien été pris en compte. Vous pouvez le modifier à tout moment jusqu’à la fermeture de la session de vote.",
+        remainingToken: "%{count} jeton disponible",
         remainingTokens: "%{count} jetons disponibles",
         resetTokens: "Supprimer mon vote",
         submit: "Soumettre le vote",
@@ -1087,9 +1111,12 @@ const Translations = {
     here: "here",
     yes: "yes",
     no: "no",
+    ok: "Ok",
     and: " and ",
     cancel: "Cancel",
     accept: "Accept",
+    readMoreEllipsis: "Read more...",
+    readLessEllipsis: "Read less...",
     refuse: "Refuse",
     validate: "Validate",
     introduction: "Introduction",
@@ -1530,8 +1557,28 @@ const Translations = {
         postSuccess: "Thanks for your participation. Your comment has been sent!",
         postToBeValidated:
           "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.",
-        fillSubject: "Please, write a title",
+        postsDisplay: {
+          full: "Full messages",
+          summary: "Message previews"
+        },
+        postsFilters: {
+          myPostsAndAnswers: "Answers to my posts",
+          onlyMyPosts: "My posts"
+        },
+        postsOrder: {
+          cleanFilter: "Clean filters",
+          chronologicalTop: "Chronological order",
+          popularityFlat: "Most popular messages first",
+          reverseChronologicalFlat: "Newest messages first",
+          reverseChronologicalLast: "Recently started threads",
+          reverseChronologicalTop: "Recently active threads"
+        },
         fillBody: "Please, write a comment",
+        filterPosts: "Filter",
+        fillSubject: "Please, write a title",
+        sortPosts: "Sort",
+        sortFilterPosts: "Sort / Filter",
+        overviewPosts: "Overview",
         linkIdea: "This post is related to the following themes:",
         foldedPostLink: "Show %{count} responses",
         foldedPostLink_1: "Show 1 response",
@@ -1564,7 +1611,7 @@ const Translations = {
           "measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.",
         keywordCloud: "Keyword cloud",
         keywordCloudDefinition:
-          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" pour le texte à mettre en thématique). The importance of each keyword is shown with font size.",
+          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" when the analysis is done on a particular thematic). The importance of each keyword is shown with font size.",
         informationKeyword: "Information on keywords",
         numberKeyword: "Number of keywords",
         noKeywordSelected: "Select your keyword",
@@ -1661,6 +1708,7 @@ const Translations = {
         voteResultsPlusTitle: "Vote results: %{title}",
         postSuccess:
           "Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.",
+        remainingToken: "%{count} token remaining",
         remainingTokens: "%{count} tokens remaining",
         resetTokens: "Reset my vote",
         submit: "Submit vote",

@@ -3,7 +3,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 
-import { isMobile } from '../../../utils/globalFunctions';
 import { get, goTo } from '../../../utils/routeMap';
 import { MESSAGE_VIEW } from '../../../constants';
 
@@ -26,46 +25,37 @@ type MenuItemProps = {
   identifier: string,
   phaseId: string,
   selected: boolean,
+  preSelect: boolean,
   hasSubItems: boolean,
   slug: string,
   onClick: Function,
-  onMouseOver: Function,
-  onMouseLeave: Function
+  toggleMenu: Function
 };
 
 export class DumbMenuItem extends React.Component<MenuItemProps> {
-  showMenu = () => {
-    const { onMouseOver, item } = this.props;
-    if (onMouseOver) onMouseOver(item.id);
-  };
-
-  hideMenu = () => {
-    const { onMouseLeave, item } = this.props;
-    if (onMouseLeave) onMouseLeave(item.id);
-  };
-
   onLinkClick = () => {
     const { identifier, phaseId, item, slug, onClick } = this.props;
     if (onClick) onClick();
-    goTo(get('idea', { slug: slug, phase: identifier, phaseId: phaseId, themeId: item.id }));
+    goTo(
+      get('idea', {
+        slug: slug,
+        phase: identifier,
+        phaseId: phaseId,
+        themeId: item.id
+      })
+    );
   };
 
   render() {
-    const { item, selected, hasSubItems } = this.props;
+    const { item, selected, hasSubItems, toggleMenu, preSelect } = this.props;
     const { title, img, messageViewOverride, numContributors, numPosts, numVotes } = item;
     // The first touch show the menu and the second activate the link
-    const isTouchScreenDevice = isMobile.any();
-    const displayArrow = selected && hasSubItems;
-    const touchActive = isTouchScreenDevice && hasSubItems && !selected;
-    const onLinkClick = touchActive ? this.showMenu : this.onLinkClick;
+    const onLinkClick = this.onLinkClick;
     return (
       <div
         className={classNames('menu-item-container', {
-          active: selected,
-          empty: selected && !displayArrow
+          active: preSelect
         })}
-        onMouseOver={!isTouchScreenDevice && this.showMenu}
-        onMouseLeave={!isTouchScreenDevice && this.hideMenu}
       >
         <div
           onClick={messageViewOverride !== MESSAGE_VIEW.noModule ? onLinkClick : null}
@@ -90,7 +80,16 @@ export class DumbMenuItem extends React.Component<MenuItemProps> {
               />
             ) : null}
           </div>
-          {displayArrow && <span className="thumb-arrow assembl-icon assembl-icon-right-dir" />}
+        </div>
+        <div onClick={() => toggleMenu(item.id)}>
+          {hasSubItems && (
+            <span
+              className={classNames('thumb-arrow assembl-icon', {
+                'assembl-icon-angle-down': selected,
+                'assembl-icon-angle-right': !selected
+              })}
+            />
+          )}
         </div>
       </div>
     );

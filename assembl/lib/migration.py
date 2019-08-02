@@ -355,4 +355,18 @@ def add_semantic_analysis_tab_to_all_discussions(db):
                 )
                 db.add(semantic_analysis_section)
                 db.flush()
-    
+
+
+def semantic_analyze_all_posts(db, discussion_id=None):
+    """Analyze semantically all posts of discussions"""
+    from assembl import models as m
+    from assembl.processes.watson import process_post_watson
+    if discussion_id:
+        discussions = [m.Discussion.get([discussion_id])]
+    else:
+        discussions = db.query(m.Discussion).all()
+    for discussion in discussions:
+        posts = discussion.db.query(m.Post).filter(m.Post.discussion_id == discussion.id).all()
+        for p in posts:
+            with transaction.manager:
+                process_post_watson(p.id, True)

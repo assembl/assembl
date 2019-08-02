@@ -12,6 +12,7 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
       className="max-container background-grey"
       id="thread-view"
     >
+      <Connect(Connect(DumbPostsFilterMenu)) />
       <div
         className="content-section"
       >
@@ -35,7 +36,7 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
 
 exports[`ThreadView component should render a TopPostForm 1`] = `
 <div>
-  <TopPostFormContainer
+  <DumbTopPostFormContainer
     draftSuccessMsgId={null}
     draftable={false}
     fullscreen={false}
@@ -55,6 +56,7 @@ exports[`ThreadView component should render a TopPostForm 1`] = `
       className="max-container background-grey"
       id="thread-view"
     >
+      <Connect(Connect(DumbPostsFilterMenu)) />
       <div
         className="content-section"
       >

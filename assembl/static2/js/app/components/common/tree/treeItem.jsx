@@ -35,7 +35,8 @@ type BaseProps = {
       measureTreeHeight: (delay?: number) => void
     }
   ) => React.Node,
-  fictionCommentExtraProps?: FictionCommentExtraProps
+  fictionCommentExtraProps?: FictionCommentExtraProps,
+  expandParent?: Function
 };
 
 type Props = {
@@ -55,7 +56,7 @@ class Child extends React.PureComponent<Props, State> {
   };
 
   state = {
-    expanded: true,
+    expanded: false,
     visible: false
   };
 
@@ -63,6 +64,13 @@ class Child extends React.PureComponent<Props, State> {
     this.onScroll();
     window.addEventListener('scroll', this.onScroll);
     window.addEventListener('resize', this.onScroll);
+  }
+
+  componentDidUpdate() {
+    const { id } = this.props;
+    if (this.getPostId() === id) {
+      this.expandParent();
+    }
   }
 
   componentWillUnmount() {
@@ -93,6 +101,22 @@ class Child extends React.PureComponent<Props, State> {
     window.removeEventListener('scroll', this.onScroll);
     window.removeEventListener('resize', this.onScroll);
   }
+
+  expandParent = () => {
+    const { expandParent } = this.props;
+    setTimeout(() => {
+      this.setState({ expanded: true });
+      if (expandParent) expandParent();
+    }, 300);
+  };
+
+  getPostId = () => {
+    const { hash } = window.location;
+    if (hash !== '') {
+      return hash.split('#')[1].split('?')[0];
+    }
+    return null;
+  };
 
   resizeTreeHeight = (delay: number = 0) => {
     // This function will be called by each post rendered, so we delay the
@@ -266,6 +290,7 @@ class Child extends React.PureComponent<Props, State> {
                   listRef={listRef}
                   cache={cache}
                   fictionCommentExtraProps={fictionCommentExtraProps}
+                  expandParent={this.expandParent}
                 />
               );
             })}

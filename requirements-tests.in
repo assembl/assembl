@@ -8,3 +8,5 @@ pytest==2.9.2
 WebTest==2.0.21
 freezegun==0.3.11
 python-magic==0.4.15
+pyramid-debugtoolbar-ajax==0.0.4
+pyramid-debugtoolbar==3.0.1

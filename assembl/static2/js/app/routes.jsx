@@ -2,6 +2,7 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router';
 import Root from './root';
+import ApplicationContainer from './appContainer';
 import App from './app';
 import Main from './main';
 import Login from './pages/login';
@@ -100,73 +101,81 @@ const AdminChild = (props: {
 const BuildBrightMirrorFiction = props => <BrightMirrorFiction {...props.params} phaseId={props.phaseId} />;
 
 export default [
-  <Route path="/" component={Root}>
-    {/* 'integration' route is only used for HTML/CSS integration purpose */}
-    <Route path={routeForRouter('integrationPage', false, { preSlash: true })} component={IntMainPage} />
-    <Route path={routeForRouter('integration101Page', false, { preSlash: true })} component={Int101Page} />
-    <Route path={routeForRouter('integration101FormBuilderPage', false, { preSlash: true })} component={Int101FormBuilderPage} />
-    <Route
-      path={routeForRouter('integrationBrightMirrorFiction', false, { preSlash: true })}
-      component={IntBrightMirrorFiction}
-    />
-    <Route path={routeForRouter('integrationSemanticAnalysis', false, { preSlash: true })} component={IntSemanticAnalysis} />
-    <Route path={routeForRouter('integrationTagOnPost', false, { preSlash: true })} component={IntTagOnPost} />
-    {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}
-    <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
-    {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
-    <Route path={routeForRouter('login', false, { preSlash: true })} component={Login} />
-    <Route path={routeForRouter('signup', false, { preSlash: true })} component={Signup} />
-    <Route path={routeForRouter('changePassword', false, { preSlash: true })} component={ChangePassword} />
-    <Route path={routeForRouter('requestPasswordChange')} component={RequestPasswordChange} />
-    {/* These are contextual routes for the ones above */}
-    <Route path={routeForRouter('login', true)} component={Login} />
-    <Route path={routeForRouter('signup', true)} component={Signup} />
-    <Route path={routeForRouter('changePassword', true)} component={ChangePassword} />
-    <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
-    {/* TODO: eventually refactor Main into App */}
-    <Route component={App}>
-      <Route component={Main}>
-        <Redirect from={routeForRouter('homeBare')} to={routeForRouter('home')} />
-        <Route path={routeForRouter('home')} component={Home} />
-        <Route path={routeForRouter('homeBare')} component={Home} />
-        <Route path={routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
-        <Route path={routeForRouter('syntheses')} component={Syntheses} />
-        <Route path={routeForRouter('createSynthesis')} components={CreateSynthesisForm} />
-        <Route path={routeForRouter('editSynthesis', false, { synthesisId: ':synthesisId' })} components={CreateSynthesisForm} />
-        <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
-        <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
-        <Route path={routeForRouter('semanticAnalysis')} component={SemanticAnalysisForDiscussion} />
-        <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
-        <Route path={routeForRouter('privacyPolicy')} component={PrivacyPolicy} />
-        <Route path={routeForRouter('cookiesPolicy')} component={CookiesPolicy} />
-        <Route path={routeForRouter('userGuidelines')} component={UserGuidelines} />
-        <Route path={routeForRouter('terms')} component={TermsAndConditions} />
-        <Route path={routeForRouter('community')} component={Community} />
-        <Route path={routeForRouter('rootDebate')} />
-        <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
-          <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
+  <Route path="/" component={ApplicationContainer}>
+    <Route component={Root}>
+      {/* 'integration' route is only used for HTML/CSS integration purpose */}
+      <Route path={routeForRouter('integrationPage', false, { preSlash: true })} component={IntMainPage} />
+      <Route path={routeForRouter('integration101Page', false, { preSlash: true })} component={Int101Page} />
+      <Route
+        path={routeForRouter('integration101FormBuilderPage', false, { preSlash: true })}
+        component={Int101FormBuilderPage}
+      />
+      <Route
+        path={routeForRouter('integrationBrightMirrorFiction', false, { preSlash: true })}
+        component={IntBrightMirrorFiction}
+      />
+      <Route path={routeForRouter('integrationSemanticAnalysis', false, { preSlash: true })} component={IntSemanticAnalysis} />
+      <Route path={routeForRouter('integrationTagOnPost', false, { preSlash: true })} component={IntTagOnPost} />
+      {/* once the integration workflow is mature, Styleguide component will be replaced by Storybook and thus can be removed */}
+      <Route path={routeForRouter('styleguide', false, { preSlash: true })} component={Styleguide} />
+      {/* Those login routes should be kept in synchrony with assembl.views.auth.__init__.py */}
+      <Route path={routeForRouter('login', false, { preSlash: true })} component={Login} />
+      <Route path={routeForRouter('signup', false, { preSlash: true })} component={Signup} />
+      <Route path={routeForRouter('changePassword', false, { preSlash: true })} component={ChangePassword} />
+      <Route path={routeForRouter('requestPasswordChange')} component={RequestPasswordChange} />
+      {/* These are contextual routes for the ones above */}
+      <Route path={routeForRouter('login', true)} component={Login} />
+      <Route path={routeForRouter('signup', true)} component={Signup} />
+      <Route path={routeForRouter('changePassword', true)} component={ChangePassword} />
+      <Route path={routeForRouter('requestPasswordChange', true)} component={RequestPasswordChange} />
+      {/* TODO: eventually refactor Main into App */}
+      <Route component={App}>
+        <Route component={Main}>
+          <Redirect from={routeForRouter('homeBare')} to={routeForRouter('home')} />
+          <Route path={routeForRouter('home')} component={Home} />
+          <Route path={routeForRouter('homeBare')} component={Home} />
+          <Route path={routeForRouter('profile', false, { userId: ':userId' })} component={Profile} />
+          <Route path={routeForRouter('syntheses')} component={Syntheses} />
+          <Route path={routeForRouter('createSynthesis')} components={CreateSynthesisForm} />
           <Route
-            path={routeForRouter('question', false, {
-              questionId: ':questionId',
-              questionIndex: ':questionIndex'
-            })}
-            component={Question}
+            path={routeForRouter('editSynthesis', false, { synthesisId: ':synthesisId' })}
+            components={CreateSynthesisForm}
           />
+          <Route path={routeForRouter('synthesis', false, { synthesisId: ':synthesisId' })} component={Synthesis} />
+          <Route path={routeForRouter('resourcesCenter')} component={ResourcesCenter} />
+          <Route path={routeForRouter('semanticAnalysis')} component={SemanticAnalysisForDiscussion} />
+          <Route path={routeForRouter('legalNotice')} component={LegalNotice} />
+          <Route path={routeForRouter('privacyPolicy')} component={PrivacyPolicy} />
+          <Route path={routeForRouter('cookiesPolicy')} component={CookiesPolicy} />
+          <Route path={routeForRouter('userGuidelines')} component={UserGuidelines} />
+          <Route path={routeForRouter('terms')} component={TermsAndConditions} />
+          <Route path={routeForRouter('community')} component={Community} />
+          <Route path={routeForRouter('rootDebate')} />
+          <Route path={routeForRouter('debate', false, { phase: ':phase' })} component={DebateHome}>
+            <Route path={routeForRouter('theme', false, { themeId: ':themeId' })} component={DebateChild} />
+            <Route
+              path={routeForRouter('question', false, {
+                questionId: ':questionId',
+                questionIndex: ':questionIndex'
+              })}
+              component={Question}
+            />
+            <Route
+              path={routeForRouter('questionModeratePosts', false, {
+                questionId: ':questionId',
+                questionIndex: ':questionIndex'
+              })}
+              component={QuestionModeratePosts}
+            />
+          </Route>
           <Route
-            path={routeForRouter('questionModeratePosts', false, {
-              questionId: ':questionId',
-              questionIndex: ':questionIndex'
-            })}
-            component={QuestionModeratePosts}
+            path={routeForRouter('brightMirrorFiction', false, { phase: ':phase', themeId: ':themeId', fictionId: ':fictionId' })}
+            component={BuildBrightMirrorFiction}
           />
-        </Route>
-        <Route
-          path={routeForRouter('brightMirrorFiction', false, { phase: ':phase', themeId: ':themeId', fictionId: ':fictionId' })}
-          component={BuildBrightMirrorFiction}
-        />
-        <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
-        <Route path={routeForRouter('administrationRoot')} component={Administration}>
-          <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />
+          <Route path={routeForRouter('unauthorizedAdministration')} component={UnauthorizedAdministration} />
+          <Route path={routeForRouter('administrationRoot')} component={Administration}>
+            <Route path={routeForRouter('adminPhase', false, { phase: ':phase' })} component={AdminChild} />
+          </Route>
         </Route>
       </Route>
     </Route>

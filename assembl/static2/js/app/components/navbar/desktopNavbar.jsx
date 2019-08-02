@@ -2,18 +2,18 @@
 import * as React from 'react';
 import debounce from 'lodash/debounce';
 
-import Logo from './Logo';
+import BurgerMenu from './burgerMenu';
 import NavigationMenu from './navigationMenu';
 import LanguageMenu, { refWidthUpdate } from './languageMenu';
+import Logo from './Logo';
 
 type Props = {
   elements: React.Node,
+  logoLink: string,
   slug: string,
   logoSrc: string,
   style: Object,
-  logoLink: string,
   maxWidth: number,
-  isLargeLogo: boolean,
   setWidth: number => void,
   renderUserMenu: number => React.Node
 };
@@ -24,7 +24,7 @@ type State = {
   languageMenuWidth: number
 };
 
-export default class FlatNavbar extends React.PureComponent<Props, State> {
+export default class DesktopNavbar extends React.PureComponent<Props, State> {
   static defaultProps = {
     style: {}
   };
@@ -48,7 +48,7 @@ export default class FlatNavbar extends React.PureComponent<Props, State> {
   setLanguageMenuWidth = (width: number) => this.setState(() => ({ languageMenuWidth: width }));
 
   render = () => {
-    const { elements, slug, logoSrc, style, logoLink, maxWidth, isLargeLogo, renderUserMenu } = this.props;
+    const { elements, slug, logoLink, logoSrc, style, maxWidth, renderUserMenu } = this.props;
     const remainingWidth = maxWidth - this.state.leftWidth + this.state.languageMenuWidth;
     return (
       <div className="flat-navbar" style={style}>
@@ -56,7 +56,8 @@ export default class FlatNavbar extends React.PureComponent<Props, State> {
           className="left-part"
           ref={refWidthUpdate(newWidth => this.setState(() => ({ leftWidth: newWidth }), this.updateWidth))}
         >
-          {!isLargeLogo && <Logo slug={slug} src={logoSrc} url={logoLink} />}
+          <BurgerMenu />
+          <Logo slug={slug} src={logoSrc} url={logoLink} />
           <NavigationMenu elements={elements} />
         </div>
         <div

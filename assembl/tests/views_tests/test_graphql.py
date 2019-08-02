@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 import json
-import pytest
+
 import mock
-from graphql_relay.node.node import to_global_id
+import pytest
+from freezegun import freeze_time
 from graphql_relay.connection.arrayconnection import offset_to_cursor
+from graphql_relay.node.node import from_global_id, to_global_id
 
 from assembl import models
 from assembl.graphql.schema import Schema as schema
 from assembl.graphql.utils import create_root_thematic
-from assembl import models
-from graphql_relay.node.node import from_global_id, to_global_id
-from freezegun import freeze_time
+
 
 def test_graphene_id():
     assert models.RootIdea.graphene_type() == 'Idea'
@@ -847,29 +847,15 @@ mutation myFirstMutation {
             }}}
 
 
-def test_mutation_delete_post(graphql_request, top_post_in_thread_phase):
-    res = schema.execute(u"""
-mutation myMutation($postId: ID!) {
-    deletePost(postId: $postId) {
-        post {
-            ... on Post {
-                subject
-                body
-                parentId
-                creator { name }
-                publicationState
-            }
-        }
-    }
-}
-""", context_value=graphql_request, variable_values={"postId": top_post_in_thread_phase})
+def test_mutation_delete_post(graphql_request, graphql_registry, top_post_in_thread_phase):
+    res = schema.execute(graphql_registry['deletePost'],
+                         context_value=graphql_request,
+                         variable_values={"postId": top_post_in_thread_phase})
+    assert res.errors is None
     assert json.loads(json.dumps(res.data)) == {
         u'deletePost': {
             u'post': {
-                u'subject': u'Manger des choux à la crème',
-                u'body': None,
-                u'parentId': None,
-                u'creator': {u'name': u'Mr. Administrator'},
+                u'id': top_post_in_thread_phase,
                 u'publicationState': 'DELETED_BY_USER'
             }}}
 
@@ -1616,7 +1602,6 @@ mutation myMutation($postId: ID!, $subject: String, $body: String!) {
 
 
 def test_mutation_upload_document_generic_mimetypes(graphql_request, idea_in_thread_phase):
-    import os
     from io import BytesIO
 
     class FieldStorage(object):
@@ -1649,7 +1634,6 @@ mutation uploadDocument($file: String!) {
         '/data')
 
 def test_mutation_upload_document_specific_mimetypes(graphql_request, idea_in_thread_phase):
-    import os
     from io import BytesIO
 
     class FieldStorage(object):
@@ -1682,7 +1666,6 @@ mutation uploadDocument($file: String!) {
         '/data')
 
 def test_mutation_upload_document_extension_forbidden_generic(graphql_request, idea_in_thread_phase):
-    import os
     from io import BytesIO
 
     class FieldStorage(object):
@@ -1715,7 +1698,6 @@ mutation uploadDocument($file: String!) {
 
 
 def test_mutation_upload_document_extension_forbidden_specific(graphql_request, idea_in_thread_phase):
-    import os
     from io import BytesIO
 
     class FieldStorage(object):
@@ -1750,7 +1732,6 @@ mutation uploadDocument($file: String!) {
 
 
 def test_mutation_upload_document_windows_path(graphql_request, idea_in_thread_phase):
-    import os
     from io import BytesIO
 
     class FieldStorage(object):

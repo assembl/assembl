@@ -21,13 +21,40 @@
   }
 }
 
-.proposals .post-body .body,
-.posts .post-body .body {
-  font-family: $font-family4;
-  color: $post-text-color;
-  line-height: 1.6em;
-  word-wrap: break-word;
-  text-align: left;
+.proposals, .posts {
+  .post-body .body {
+    font-family: $font-family4;
+    color: $post-text-color;
+    line-height: 1.6em;
+    word-wrap: break-word;
+    text-align: left;
+
+    &.truncate {
+      position: relative;
+      height: 4.5em; // two lines
+      overflow: hidden;
+    }
+
+    &.truncate:after {
+      content: '';
+      text-align: right;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 70%;
+      height: 1.2em;
+      background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+    }
+  }
+
+  .read-more {
+    color: $title3-dark-color;
+    font-family: $font-family4;
+    font-weight: bold;
+    margin-bottom: 24px;
+    cursor: pointer;
+    text-align: right;
+  }
 }
 
 .proposals {

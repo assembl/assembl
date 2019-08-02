@@ -1,17 +1,25 @@
 import sys
 import os
 import os.path
+import re
+from os.path import join, normpath
 from contextlib import nested
 import base64
 import json
 
 from invoke import Task, task as base_task
 from os.path import dirname, realpath
+from time import sleep
+from ConfigParser import RawConfigParser
+
 DEFAULT_SECTION = "DEFAULT"
 _local_file = __file__
 if _local_file.endswith('.pyc'):
     _local_file = _local_file[:-1]
 local_code_root = dirname(dirname(realpath(_local_file)))
+
+
+_known_invoke_sections = {'run', 'runners', 'sudo', 'tasks'}
 
 
 def task(*args, **kwargs):
@@ -117,6 +125,16 @@ def get_venv_site_packages(c):
     return os.path.join('venv/lib/python2.7', 'site-packages', 'assembl')
 
 
+def set_prod_env_link(c, project_prefix):
+    # Will fail but continue if link/folder already exists
+    c.run('ln -s {0}/venv/lib/python2.7/site-packages/assembl {0}'.format(project_prefix), warn=True)
+
+
+def get_assembl_code_path(c):
+    project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
+    return os.path.join(project_prefix, 'assembl')
+
+
 def is_cloud_env(c):
     # Attempts to find the key from the configurations. However, due to the recursive nature
     # of configuration files, if it is not yet in the config, makes a calculated guess of cloud vs non-cloud
@@ -135,12 +153,9 @@ def is_cloud_env(c):
 def setup_ctx(c):
     """Surgically alter the context's config with config inheritance."""
     project_prefix = c.config.get('_project_home', c.config._project_prefix[:-1])
-    if is_cloud_env(c):
-        code_root = os.path.join(os.getcwd(), get_venv_site_packages(c))
-        config_prefix = code_root + '/configs/'
-    else:
-        code_root = project_prefix
-        config_prefix = code_root + '/assembl/configs/'
+    set_prod_env_link(c, project_prefix)
+    code_root = get_assembl_code_path(c)
+    config_prefix = os.path.join(code_root, 'configs/')
     current = c.config._project or {}
     current['code_root'] = code_root
     current['projectpath'] = project_prefix
@@ -152,7 +167,7 @@ def setup_ctx(c):
     while target:
         if os.path.isabs(target):
             if exists(c, target):
-                data = c.config._load_yaml(config_prefix + target)
+                data = c.config._load_yaml(target)
             else:
                 raise RuntimeError("Cannot find " + target)
         elif exists(c, config_prefix + target):
@@ -236,7 +251,7 @@ def fill_template(c, template, output=None, extra=None, default_dir=None):
         config.update(extra)
     if not os.path.exists(template):
         if not default_dir:
-            default_dir = os.path.join(config['code_root'], 'assembl', 'templates', 'system')
+            default_dir = os.path.join(config['code_root'], 'templates', 'system')
         template = os.path.join(default_dir, template)
     if not os.path.exists(template):
         raise RuntimeError("Missing template")
@@ -311,23 +326,10 @@ def create_venv(c, path=None):
 def configure_github_user(c):
     c.run('git config --global user.email "%s"' % c.config._internal.github.user)
     c.run('git config --global user.name "%s"' % c.config._internal.github.email)
+
+    # update origin from Gitlab to Github
+    c.run('git remote rm origin')
     c.run('git remote add origin %s' % c.config._internal.github.repo)
-
-
-@task()
-def add_github_bot_ssh_keys(c, private_key):
-    """
-    Adds the SSH private key of the bluenove-bot.
-    In the CI environment, comes as ENV variable. Can be overriden by passing location of private key as an arg.
-    """
-    if private_key:
-        if exists(private_key):
-            c.run("ssh-add %s" % private_key)
-        else:
-            print("The provided key was not found!")
-    else:
-        c.run('echo "$GITHUB_BOT_SSH_KEY" | tr -d \'\r\' | ssh-add - > /dev/null')
-
 
 
 def delete_foreign_tasks(locals):
@@ -335,3 +337,276 @@ def delete_foreign_tasks(locals):
     for (name, func) in locals.items():
         if isinstance(func, Task) and func.__module__ != here and 'tasks.' in func.__module__:
             locals.pop(name)
+
+
+def setup_var_directory(c):
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'log')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'run')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'db')))
+    c.run('mkdir -p %s' % normpath(join(c.config.projectpath, 'var', 'share')))
+    c.run('mkdir -p %s' % get_upload_dir(c))
+
+
+def get_upload_dir(c, path=None):
+    path = path or c.config.get('upload_root', 'var/uploads')
+    if path != '/':
+        path = join(c.config.projectpath, path)
+    return path
+
+
+def chgrp_rec(c, path, group, upto=None):
+    parts = path.split("/")
+    success = False
+    for i in range(len(parts), 1, -1):
+        path = "/".join(parts[:i])
+        if path == upto:
+            break
+        if not c.run('chgrp {group} {path}'.format(group=group, path=path), warn=True).ok:
+            break
+        if not c.run('chmod g+x {path}'.format(path=path), warn=True).ok:
+            break
+        success = True
+    assert success  # At least the full path
+
+
+def filter_autostart_processes(c, processes):
+    return [p for p in processes
+            if c.config.supervisor.get('autostart_' + p, False)]
+
+
+def get_db_dump_name():
+    return 'assembl-backup.pgdump'
+
+
+def local_db_path(c):
+    return join(c.config.projectpath, get_db_dump_name())
+
+
+def supervisor_process_stop(c, process_name):
+    """
+    Assuming the supervisord process is running, stop one of its processes
+    """
+    print('Asking supervisor to stop %s' % process_name)
+    supervisor_pid_regex = re.compile(r'^\d+')
+    status_regex = re.compile(r'^%s\s*(\S*)' % process_name)
+    with venv(c):
+        supervisord_cmd_result = c.run("supervisorctl pid", warn=True, hide='out')
+    match = supervisor_pid_regex.match(supervisord_cmd_result)
+    if not match:
+        print('Supervisord doesn\'t seem to be running, nothing to stop')
+        return
+    for try_num in range(20):
+        with venv(c):
+            c.run("supervisorctl stop %s" % process_name)
+            status_cmd_result = c.run("supervisorctl status %s" % process_name, hide='out')
+
+        match = status_regex.match(status_cmd_result)
+        if match:
+            status = match.group(1)
+            if(status == 'STOPPED'):
+                print("%s is stopped" % process_name)
+                break
+            if(status == 'FATAL'):
+                print("%s had a fatal error" % process_name)
+                break
+            elif(status == 'RUNNING'):
+                with venv(c):
+                    c.run("supervisorctl stop %s" % process_name)
+            elif(status == 'STOPPING'):
+                print(status)
+            else:
+                print("unexpected status: %s" % status)
+            sleep(1)
+        else:
+            print('Unable to parse status (bad regex?)')
+            print(status_cmd_result)
+            exit()
+
+
+def is_supervisord_running(c):
+    with venv(c, True):
+        result = c.run('supervisorctl pid')
+    if not result or 'no such file' in result.stdout or 'refused connection' in result.stdout:
+        return False
+    try:
+        pid = int(result.stdout)
+        if pid:
+            return True
+    except ValueError:
+        return False
+
+
+def is_supervisor_running(c):
+    with venv(c):
+        supervisord_cmd_result = c.run("supervisorctl avail", hide='both', warn=True)
+        if supervisord_cmd_result.failed:
+            return False
+        else:
+            return True
+
+
+def restart_bluenove_actionable(c):
+    """
+    Restart the bluenove_actionable app. Stop then start the app.
+    """
+    stop_bluenove_actionable(c)
+    start_bluenove_actionable(c)
+
+
+def stop_bluenove_actionable(c):
+    """
+    Stop the bluenove_actionable app.
+    """
+    path = join(c.config.projectpath, '..', 'bluenove-actionable')
+    if exists(c, path):
+        print('Stop bluenove-actionable')
+        with c.cd(path):
+            c.run('docker-compose down', warn=True)
+
+
+def start_bluenove_actionable(c):
+    """
+    Start the bluenove_actionable app.
+    To start the application we need three environment variables:
+    - URL_INSTANCE: The URL of the Assembl Instance.
+    - ROBOT_IDENTIFIER: The identifier of the Robot user (a machine).
+    - ROBOT_PASSWORD: The password of the Robot user.
+    If the Robot user is not configured, we can't start the bluenove_actionable app.
+    For more information, see the docker-compose.yml file in the bluenove_actionable project.
+    """
+    path = join(c.config.projectpath, '..', 'bluenove-actionable')
+    robot = get_robot_machine()
+    if exists(path) and robot:
+        print('run bluenove-actionable')
+        url_instance = c.config.public_hostname
+        if url_instance == 'localhost':
+            ip = c.run("/sbin/ip -o -4 addr list eth0 | awk '{print $4}' | cut -d/ -f1")
+            url_instance = 'http://{}:{}'.format(ip, c.config.public_port)
+        """TODO: fix with shell_env
+        with c.cd(path):
+            with shell_env(
+                URL_INSTANCE=url_instance,
+                ROBOT_IDENTIFIER=robot.get('identifier'),
+                ROBOT_PASSWORD=robot.get('password')
+            ):
+                c.run('docker-compose up -d', warn=True)"""
+
+
+def get_robot_machine(c):
+    """
+    Return the configured robot machine: (the first configured machine)
+    """
+    # Retrieve the list of registered machines
+    # Machines format: machine_id,machine_name,machine_password/...others
+    machines = c.config.get('machines', '')
+    if machines:
+        # Get the first machine
+        robot = machines.split('/')[0]
+        # Retrieve the machine data
+        robot_data = robot.split(',')
+        # We must find three data (identifier, name and password)
+        if len(robot_data) != 3:
+            print("The data of the user machine are wrong! %s" % robot)
+            return None
+
+        return {
+            'identifier': robot_data[0].strip(),
+            'name': robot_data[1].strip(),
+            'password': robot_data[2].strip()
+        }
+
+    print("No user machine found!")
+    return None
+
+
+def val_to_ini(val):
+    if val is None:
+        return ''
+    if isinstance(val, bool):
+        return str(val).lower()
+    if isinstance(val, (dict, list)):
+        return json.dumps(val)
+    return val
+
+
+def ensureSection(config, section):
+    """Ensure that config has that section"""
+    if section.lower() != 'default' and not config.has_section(section):
+        config.add_section(section)
+
+
+def yaml_to_ini(yaml_conf, default_section='app:assembl'):
+    """Convert a .yaml file to a ConfigParser (.ini-like object)
+
+    Items are assumed to be in app:assembl section,
+        unless prefixed by "{section}__" .
+    Keys prefixed with an underscore are not passed on.
+    Keys prefixed with a star are put in the global (DEFAULT) section.
+    Value of '__delete_key__' is eliminated if existing.
+    """
+    p = RawConfigParser()
+    ensureSection(p, default_section)
+    for key, val in yaml_conf.iteritems():
+        if key.startswith('_'):
+            continue
+        if isinstance(val, dict):
+            if key in _known_invoke_sections:
+                continue
+            ensureSection(p, key)
+            for subk, subv in val.iteritems():
+                p.set(key, subk, val_to_ini(subv))
+        else:
+            if val == '__delete_key__':
+                # Allow to remove a variable from rc
+                # so we can fall back to underlying ini
+                p.remove_option(default_section, key)
+            else:
+                p.set(default_section, key, val_to_ini(val))
+    return p
+
+
+@task()
+def create_local_ini(c):
+    """Compose local.ini from the given .yaml file"""
+    from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
+    assert running_locally(c)
+    c.config.DEFAULT = c.config.get('DEFAULT', {})
+    c.config.DEFAULT['code_root'] = c.config.code_root  # Is this used?
+    # Special case: uwsgi does not do internal computations.
+    if 'uwsgi' not in c.config:
+        c.config.uwsgi = {}
+    c.config.uwsgi.virtualenv = c.config.projectpath + '/venv'
+    ini_sequence = c.config.get('ini_files', None)
+    assert ini_sequence, "Define ini_files"
+    ini_sequence = ini_sequence.split()
+    base = RawConfigParser()
+    random_file = c.config.get('random_file', None)
+    for overlay in ini_sequence:
+        if overlay == 'RC_DATA':
+            overlay = yaml_to_ini(c.config)
+        elif overlay.startswith('RANDOM'):
+            templates = overlay.split(':')[1:]
+            overlay = populate_random(
+                random_file, templates, extract_saml_info(c.config))
+        else:
+            overlay = find_ini_file(overlay, os.path.join(c.config.code_root, 'assembl', 'configs'))
+            assert overlay, "Cannot find " + overlay
+        combine_ini(base, overlay)
+    ini_file_name = c.config.get('_internal', {}).get('ini_file', 'local.ini')
+    local_ini_path = os.path.join(c.config.projectpath, ini_file_name)
+    if exists(c, local_ini_path):
+        c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
+    with open(local_ini_path, 'w') as f:
+        base.write(f)
+
+
+def separate_pip_install(c, package, wrapper=None):
+    cmd = 'pip install'
+    if wrapper:
+        cmd = wrapper % (cmd,)
+    context_dict = dict(c.config)
+    cmd = cmd % context_dict
+    cmd = "egrep '^%(package)s' %(projectpath)s/requirements-prod.frozen.txt | sed -e 's/#.*//' | xargs %(cmd)s" % dict(
+        cmd=cmd, package=package, **context_dict)
+    with venv(c):
+        c.run(cmd)

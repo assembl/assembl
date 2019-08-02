@@ -13,7 +13,7 @@ from semantic_version import Version
 
 from .common import (
     venv, task, exists, is_integration_env, fill_template, configure_github_user,
-    add_github_bot_ssh_keys, get_s3_file, delete_foreign_tasks)
+    get_s3_file, delete_foreign_tasks)
 from .sudoer import (
     install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
     install_chrome_dependencies)
@@ -469,8 +469,20 @@ def push_wheelhouse(c, house=None):
     A) an S3 bucket
     B) a remote folder via SSH
     C) a local folder
+    Checks for zero bytes files to avoid pushing rubbish to S3 and the creation of a bad index.html
     """
     tmp_wheel_path = house or os.path.join(c.config.code_root, 'wheelhouse')
+
+    # Check assembl wheel is not zero bytes - don't push this!!
+    (version, num, commit_hash, commit_tag, branch) = git_version_data(c)
+    base_name = create_wheel_name(version, num, commit_hash=commit_hash)
+
+    assembl_wheel = os.path.join(tmp_wheel_path, base_name)
+    assembl_wheel_size = os.path.getsize(assembl_wheel)
+
+    if assembl_wheel_size == 0:
+        raise RuntimeError("Created wheel not good. Bad dog. Cannot continue...")
+
     wheel_path = os.getenv('ASSEMBL_WHEELHOUSE', c.config.get(
         'wheelhouse', 's3://bluenove-assembl-wheelhouse'))
     json_filename = 'special-wheels.json'
@@ -578,11 +590,12 @@ def push_built_themes_to_remote_bucket(c):
         - a compressed and uncompressed versions of js + css files locally and on S3 bucket
     """
     import boto3
+
     region = c.config.get('aws_shared_region', 'eu-west-1')
     s3 = boto3.resource('s3', region_name=region)
-    buckets = ((os.path.join(c.config.code_root, 'assembl/static/js/build/'),
+    buckets = ((os.path.join(c.config.code_root, 'static/js/build/'),
                 s3.Bucket('bluenove-deprecated-client-themes')),
-               (os.path.join(c.config.code_root, 'assembl/static2/build/themes'),
+               (os.path.join(c.config.code_root, 'static2/build/themes'),
                 s3.Bucket('bluenove-client-themes')))
 
     def determine_content_type(path):
@@ -625,13 +638,16 @@ def push_built_themes_to_remote_bucket(c):
     install_build_dependencies,
     install_node_and_yarn,
     configure_github_user,
-    add_github_bot_ssh_keys,
     clear_aptitude_cache)
 def prepare_cicd_build(c):
     """
     There is full assumption of being in CI/CD environment when calling this function
     """
-    project_path = os.gettenv('CI_PROJECT_DIR', c.config.code_root)
+    project_path = os.getenv('CI_PROJECT_DIR', c.config.code_root)
+    # add github.com as known host
+    c.run('ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts')
+    c.run('ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts')
+
     with c.cd(os.path.join(project_path, 'assembl/static/css/themes/vendor')):
         c.run('git clone git@github.com:bluenove/assembl-client-themes.git')
 
@@ -700,7 +716,7 @@ def get_deployment_clients(c):
     Fetches the list of accounts available to deploy to from a remote bucket
     Assume CI/CD Environment at all times
     """
-    get_s3_file('bluenove-assembl-deployments', 'clients.json', 'clients.json', c.config.aws_shared_region)
+    get_s3_file('bluenove-assembl-deployments', 'clients.json', 'clients.json')
 
 
 @task(get_deployment_clients)

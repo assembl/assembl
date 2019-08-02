@@ -28,7 +28,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               }
             >
               <h2
-                className="dark-title-3"
+                className="dark-title-6"
               >
                 One
               </h2>
@@ -64,7 +64,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               }
             >
               <h2
-                className="dark-title-3"
+                className="dark-title-6"
               >
                 Two
               </h2>
@@ -100,7 +100,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               }
             >
               <h2
-                className="dark-title-3"
+                className="dark-title-6"
               >
                 Three
               </h2>
@@ -136,7 +136,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               }
             >
               <h2
-                className="dark-title-3"
+                className="dark-title-6"
               >
                 Four
               </h2>
@@ -188,7 +188,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               }
             >
               <h2
-                className="dark-title-3"
+                className="dark-title-6"
               >
                 Positive
               </h2>
@@ -465,7 +465,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (non st
               }
             >
               <h2
-                className="dark-title-3"
+                className="dark-title-6"
               >
                 Negative
               </h2>
@@ -718,7 +718,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               }
             >
               <h2
-                className="dark-title-3"
+                className="dark-title-6"
               >
                 Positive
               </h2>
@@ -995,7 +995,7 @@ exports[`AvailableTokens component should match AvailableTokens snapshot (sticky
               }
             >
               <h2
-                className="dark-title-3"
+                className="dark-title-6"
               >
                 Negative
               </h2>
