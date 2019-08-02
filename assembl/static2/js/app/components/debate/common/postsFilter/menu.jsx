@@ -28,6 +28,8 @@ type Props = {
   postsDisplayPolicy: PostsDisplayPolicy,
   postsFiltersStatus: PostsFiltersStatus,
   postsOrderPolicy: PostsOrderPolicy,
+  stickyOffset: number,
+  stickyTopPosition: number,
   screenHeight: number,
   setPostsFilterPolicies: (
     postsDisplay: PostsDisplayPolicy,
@@ -79,8 +81,8 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   };
 
   setButtonPosition = debounce(() => {
-    const { screenHeight } = this.props;
-    if (window.pageYOffset > screenHeight - 60) {
+    const { screenHeight, stickyOffset } = this.props;
+    if (window.pageYOffset > screenHeight - stickyOffset) {
       // Show the button when we scrolled minimum the height of the window.
       this.setState({ sticky: true });
     } else {
@@ -134,10 +136,13 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 
   render() {
     const { selectedPostsDisplayPolicy, selectedPostsFiltersStatus, selectedPostsOrderPolicy, sticky } = this.state;
-    const { postsDisplayPolicies, postsOrderPolicies, postsFiltersPolicies } = this.props;
+    const { postsDisplayPolicies, postsOrderPolicies, postsFiltersPolicies, stickyTopPosition } = this.props;
     const userIsConnected: boolean = !!getConnectedUserId();
     return (
-      <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
+      <div
+        className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}
+        style={{ top: sticky ? stickyTopPosition : null }}
+      >
         <DropdownButton
           pullRight
           open={this.state.open}

@@ -13,6 +13,7 @@ import Question from '../graphql/QuestionQuery.graphql';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import { getIsPhaseCompletedById } from '../utils/timeline';
+import QuestionPostsFilterMenu from '../components/debate/common/postsFilter/question/menu';
 
 type NavigationParams = {
   questionIndex: string,
@@ -22,95 +23,101 @@ type NavigationParams = {
 };
 
 export type Props = {
+  imgUrl: string,
   isModerating: boolean,
-  phaseId: string,
-  timeline: Timeline,
-  title: string,
   numContributors: number,
   numPosts: number,
   params: NavigationParams,
-  thematicTitle: string,
+  phaseId: string,
+  questionFilter: PostsFilterState,
   thematicId: string,
-  imgUrl: string,
+  thematicTitle: string,
+  title: string,
+  timeline: Timeline,
   totalSentiments: number
 };
 
-export function DumbQuestion(props: Props) {
-  const {
-    isModerating,
-    phaseId,
-    imgUrl,
-    timeline,
-    title,
-    numContributors,
-    numPosts,
-    thematicTitle,
-    thematicId,
-    params,
-    params: { phase, slug },
-    totalSentiments
-  } = props;
-  const link = `${getRoute('idea', { slug: slug, phase: phase, phaseId: phaseId, themeId: thematicId })}`;
-  let statElements = [];
-  const numContributions = numPosts + totalSentiments;
-  statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
-  const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
-  return (
-    <div className="question">
-      <div className="relative">
-        <Header title={thematicTitle} imgUrl={imgUrl} phaseId={phaseId}>
-          <HeaderStatistics statElements={statElements} />
-        </Header>
-        <div className="background-light proposals">
-          <Grid fluid className="background-light">
-            <div className="max-container">
-              <div className="margin-xl">&nbsp;</div>
-              <Link to={link} className="button-diamond-dark button-submit button-dark">
-                <Translate value="debate.question.backToQuestions" />
-                <span className="button-diamond-dark-back" />
-              </Link>
-              <div className="question-title">
-                <div className="title-hyphen">&nbsp;</div>
-                <h1 className="dark-title-1">
-                  {isModerating ? (
-                    <Translate value="debate.survey.moderateProposalsTitle" />
-                  ) : (
-                    <Translate value="debate.survey.proposalsTitle" />
-                  )}
-                </h1>
-              </div>
-              <div className="center">
-                <h3 className="collapsed-title">
-                  <span>{`${params.questionIndex}/ ${title}`}</span>
-                </h3>
-                <Posts
-                  isModerating={isModerating}
-                  questionId={params.questionId}
-                  themeId={thematicId}
-                  isPhaseCompleted={isPhaseCompleted}
-                />
-                <div className="back-btn-container">
-                  <Link to={link} className="button-submit button-dark">
-                    <Translate value="debate.question.backToQuestions" />
-                  </Link>
+export class DumbQuestion extends React.Component<Props> {
+  static defaultProps = {
+    isModerating: false
+  };
+
+  render() {
+    const {
+      isModerating,
+      phaseId,
+      imgUrl,
+      timeline,
+      title,
+      numContributors,
+      numPosts,
+      thematicTitle,
+      thematicId,
+      params,
+      params: { phase, slug },
+      totalSentiments
+    } = this.props;
+    const link = `${getRoute('idea', { slug: slug, phase: phase, phaseId: phaseId, themeId: thematicId })}`;
+    const numContributions = numPosts + totalSentiments;
+    const statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
+    const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
+    return (
+      <div className="question">
+        <div className="relative">
+          <Header title={thematicTitle} imgUrl={imgUrl} phaseId={phaseId}>
+            <HeaderStatistics statElements={statElements} />
+          </Header>
+          <QuestionPostsFilterMenu stickyOffset={600} stickyTopPosition={100} />
+          <div className="background-light proposals">
+            <Grid fluid className="background-light">
+              <div className="max-container">
+                <div className="margin-xl">&nbsp;</div>
+                <Link to={link} className="button-diamond-dark button-submit button-dark">
+                  <Translate value="debate.question.backToQuestions" />
+                  <span className="button-diamond-dark-back" />
+                </Link>
+                <div className="question-title">
+                  <div className="title-hyphen">&nbsp;</div>
+                  <h1 className="dark-title-1">
+                    {isModerating ? (
+                      <Translate value="debate.survey.moderateProposalsTitle" />
+                    ) : (
+                      <Translate value="debate.survey.proposalsTitle" />
+                    )}
+                  </h1>
                 </div>
+                <div className="center">
+                  <h3 className="collapsed-title">
+                    <span>{`${params.questionIndex}/ ${title}`}</span>
+                  </h3>
+                  <Posts
+                    isModerating={isModerating}
+                    questionId={params.questionId}
+                    themeId={thematicId}
+                    isPhaseCompleted={isPhaseCompleted}
+                    onlyMyPosts={this.props.questionFilter.postsFiltersStatus.onlyMyPosts}
+                    postsOrder={this.props.questionFilter.postsOrderPolicy.graphqlPostsOrder}
+                  />
+                  <div className="back-btn-container">
+                    <Link to={link} className="button-submit button-dark">
+                      <Translate value="debate.question.backToQuestions" />
+                    </Link>
+                  </div>
+                </div>
+                <div className="margin-xl">&nbsp;</div>
               </div>
-              <div className="margin-xl">&nbsp;</div>
-            </div>
-          </Grid>
+            </Grid>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
-
-DumbQuestion.defaultProps = {
-  isModerating: false
-};
 
 const mapStateToProps = state => ({
   lang: state.i18n.locale,
-  timeline: state.timeline
+  timeline: state.timeline,
+  questionFilter: state.questionFilter
 });
 
 export default compose(
@@ -124,17 +131,18 @@ export default compose(
         };
       }
 
-      const { question: { numContributors, numPosts, totalSentiments, parent: { img, title, id } } } = data;
+      const { question: { numContributors, numPosts, totalSentiments, parent: { img, title, id } }, refetch } = data;
 
       return {
         error: data.error,
-        loading: data.loading,
-        title: data.question.title,
         imgUrl: img ? img.externalUrl : '',
+        loading: data.loading,
         numContributors: numContributors,
         numPosts: numPosts,
-        thematicTitle: title,
+        refetchQuestion: refetch,
         thematicId: id,
+        thematicTitle: title,
+        title: data.question.title,
         totalSentiments: totalSentiments
       };
     }

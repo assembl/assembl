@@ -1,6 +1,6 @@
 // @flow
 import {
-  chronologicalLastPolicy,
+  chronologicalTopPolicy,
   fullDisplayPolicy,
   myPostsAndAnswersFilterPolicy,
   onlyMyPostFilterPolicy,
@@ -14,7 +14,7 @@ import {
 export const postsOrderPolicies: PostsOrderPolicy[] = [
   reverseChronologicalTopPolicy,
   reverseChronologicalLastPolicy,
-  chronologicalLastPolicy,
+  chronologicalTopPolicy,
   reverseChronologicalFlatPolicy,
   popularityPolicy
 ];

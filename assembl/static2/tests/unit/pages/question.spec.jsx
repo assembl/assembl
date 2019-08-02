@@ -28,7 +28,15 @@ describe('Question page', () => {
       phase: 'survey',
       slug: 'FooSlug'
     },
-    phaseId: 'phaseFoo'
+    phaseId: 'phaseFoo',
+    questionFilter: {
+      postsFiltersStatus: {
+        onlyMyPosts: false
+      },
+      postsOrderPolicy: {
+        graphqlPostsOrder: 'chronological'
+      }
+    }
   };
 
   it('should display a question', () => {

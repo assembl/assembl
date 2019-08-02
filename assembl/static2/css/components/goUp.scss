@@ -44,10 +44,6 @@
     z-index: 9;
   }
 
-  &.sticky {
-    top: $top-post-sticky-top + 60px + $post-filter-button-margin-top;
-  }
-
   ul {
     // FIXME: magic numbers
     width: 400px;

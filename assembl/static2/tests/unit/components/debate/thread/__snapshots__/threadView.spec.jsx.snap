@@ -12,7 +12,10 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
       className="max-container background-grey"
       id="thread-view"
     >
-      <Connect(DumbThreadPostsFilterMenu) />
+      <Connect(DumbThreadPostsFilterMenu)
+        stickyOffset={60}
+        stickyTopPosition={200}
+      />
       <div
         className="content-section"
       >
@@ -27,6 +30,15 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
           lang="fr"
           noRowsRenderer={null}
           phaseId="FooID"
+          sharedProps={
+            Object {
+              "postsDisplayPolicy": Object {
+                "displayMode": "full",
+                "id": "display-full",
+                "labelMsgId": "debate.thread.postsDisplay.full",
+              },
+            }
+          }
         />
       </div>
     </div>
@@ -56,7 +68,10 @@ exports[`ThreadView component should render a TopPostForm 1`] = `
       className="max-container background-grey"
       id="thread-view"
     >
-      <Connect(DumbThreadPostsFilterMenu) />
+      <Connect(DumbThreadPostsFilterMenu)
+        stickyOffset={60}
+        stickyTopPosition={200}
+      />
       <div
         className="content-section"
       >
@@ -71,6 +86,15 @@ exports[`ThreadView component should render a TopPostForm 1`] = `
           lang="fr"
           noRowsRenderer={null}
           phaseId="FooID"
+          sharedProps={
+            Object {
+              "postsDisplayPolicy": Object {
+                "displayMode": "full",
+                "id": "display-full",
+                "labelMsgId": "debate.thread.postsDisplay.full",
+              },
+            }
+          }
         />
       </div>
     </div>

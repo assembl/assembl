@@ -373,16 +373,15 @@ class Idea extends React.Component<Props> {
 }
 
 const mapStateToProps = state => ({
-  contentLocaleMapping: state.contentLocale,
-  debateData: state.debate.debateData,
-  defaultContentLocaleMapping: state.defaultContentLocaleMapping,
-  isHarvesting: state.context.isHarvesting,
-  lang: state.i18n.locale,
-  postsDisplayPolicy: state.threadFilter.postsDisplayPolicy,
+  postsOrderPolicy: state.threadFilter.postsOrderPolicy,
   postsFiltersStatus: state.threadFilter.postsFiltersStatus,
   postsMustBeRefreshed: state.threadFilter.postsMustBeRefreshed,
-  postsOrderPolicy: state.threadFilter.postsOrderPolicy,
-  timeline: state.timeline
+  contentLocaleMapping: state.contentLocale,
+  timeline: state.timeline,
+  defaultContentLocaleMapping: state.defaultContentLocaleMapping,
+  lang: state.i18n.locale,
+  debateData: state.debate.debateData,
+  isHarvesting: state.context.isHarvesting
 });
 
 const mapDispatchToProps = dispatch => ({

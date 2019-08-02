@@ -436,7 +436,12 @@ const Translations = {
         postSuccess: "Merci pour votre participation. Votre proposition a bien été envoyée !",
         postToBeValidated:
           "Votre contribution a bien été prise en compte. Pour assurer la qualité des échanges, elle sera visible par l'ensemble des participants dès qu'elle aura été revue par l'équipe en charge de l'animation.",
-        endPhase: "La phase \"%{closedPhaseName}\" est terminée."
+        endPhase: "La phase \"%{closedPhaseName}\" est terminée.",
+        postsOrder: {
+          chronologicalTop: "Propositions chronologiques",
+          popularityFlat: "Propositions les plus populaires en premier",
+          reverseChronologicalLast: "Propositions récentes en premier"
+        }
       },
       question: {
         backToQuestions: "Retour aux questions"
@@ -1547,7 +1552,12 @@ const Translations = {
         postSuccess: "Thanks for your participation. Your proposal has been sent!",
         postToBeValidated:
           "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.",
-        endPhase: "The \"%{closedPhaseName}\" phase is closed."
+        endPhase: "The \"%{closedPhaseName}\" phase is closed.",
+        postsOrder: {
+          chronologicalTop: "Chronological points of view",
+          popularityFlat: "Most popular points of view first",
+          reverseChronologicalLast: "Newest points of view first"
+        }
       },
       question: {
         backToQuestions: "Back to questions"

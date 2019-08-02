@@ -34,6 +34,10 @@ exports[`Question page should display a question 1`] = `
         }
       />
     </Connect(Header)>
+    <Connect(DumbThreadPostsFilterMenu)
+      stickyOffset={600}
+      stickyTopPosition={100}
+    />
     <div
       className="background-light proposals"
     >
@@ -93,6 +97,8 @@ exports[`Question page should display a question 1`] = `
             <Connect(withRouter(Apollo(Component)))
               isModerating={false}
               isPhaseCompleted={false}
+              onlyMyPosts={false}
+              postsOrder="chronological"
               questionId="FooInd"
               themeId="ThematicId"
             />
@@ -157,6 +163,10 @@ exports[`Question page should display a question in moderation context 1`] = `
         }
       />
     </Connect(Header)>
+    <Connect(DumbThreadPostsFilterMenu)
+      stickyOffset={600}
+      stickyTopPosition={100}
+    />
     <div
       className="background-light proposals"
     >
@@ -216,6 +226,8 @@ exports[`Question page should display a question in moderation context 1`] = `
             <Connect(withRouter(Apollo(Component)))
               isModerating={true}
               isPhaseCompleted={false}
+              onlyMyPosts={false}
+              postsOrder="chronological"
               questionId="FooInd"
               themeId="ThematicId"
             />

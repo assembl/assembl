@@ -279,8 +279,7 @@ export interface PostsFilterPolicy extends PostsFilterItem {
 export type PostsFilterState = {
   postsDisplayPolicy: PostsDisplayPolicy,
   postsFiltersStatus: PostsFiltersStatus,
-  postsOrderPolicy: PostsOrderPolicy,
-  postsMustBeRefreshed: boolean
+  postsOrderPolicy: PostsOrderPolicy
 };
 
 type Theme = {

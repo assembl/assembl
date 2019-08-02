@@ -12,6 +12,7 @@ import Tags from './tagReducer';
 import Theme from './themeReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
 import ThreadFilter from './threadFilterReducer';
+import QuestionFilter from './questionFilterReducer';
 import * as screenDimensions from './screenDimensionsReducers';
 
 const reducers = {
@@ -23,6 +24,7 @@ const reducers = {
   defaultContentLocaleMapping: defaultContentLocaleMapping,
   i18n: i18nReducer,
   partners: Partners,
+  questionFilter: QuestionFilter,
   synthesis: Synthesis,
   tags: Tags,
   timeline: Timeline,

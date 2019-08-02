@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { postsDisplayPolicies, postsFiltersPolicies, postsOrderPolicies } from './policies';
 
 import PostsFilterMenu from '../menu';
-import { setThreadPostsFilterPolicies } from '../../../../../actions/threadFilterActions';
+import { setQuestionPostsFilterPolicies } from '../../../../../actions/questionFilterActions';
 
 type Props = {
   postsDisplayPolicy: PostsDisplayPolicy,
@@ -44,11 +44,11 @@ const mapDispatchToProps = dispatch => ({
     postsDisplay: PostsDisplayPolicy,
     postsOrder: PostsOrderPolicy,
     postsFiltersStatus: PostsFiltersStatus
-  ) => dispatch(setThreadPostsFilterPolicies(postsDisplay, postsOrder, postsFiltersStatus))
+  ) => dispatch(setQuestionPostsFilterPolicies(postsDisplay, postsOrder, postsFiltersStatus))
 });
 
 const mapStateToProps = (state) => {
-  const { postsOrderPolicy, postsDisplayPolicy, postsFiltersStatus } = state.threadFilter;
+  const { postsOrderPolicy, postsDisplayPolicy, postsFiltersStatus } = state.questionFilter;
   return {
     postsOrderPolicy: postsOrderPolicy,
     postsDisplayPolicy: postsDisplayPolicy,

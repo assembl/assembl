@@ -471,20 +471,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                     )
                 )
         if not sentiments_only:
-
-            if order == PostOrderTypes.chronological.value:
-                query = query.order_by(models.Content.creation_date)
-            elif order == PostOrderTypes.reverse_chronological.value:
-                query = query.order_by(models.Content.creation_date.desc())
-            elif order == PostOrderTypes.score.value:
-                query = query.order_by(models.Content.body_text_index.score_name.desc())
-            elif order == PostOrderTypes.popularity.value:
-                # assume reverse chronological otherwise
-                query = query.order_by(models.Content.disagree_count - models.Content.like_count,
-                                       models.Content.creation_date.desc())
-            else:
-                query = query.order_by(desc(Post.creation_date), Post.id)
-
+            query = order_posts_query(query, order)
             if len(discussion.discussion_locales) > 1:
                 query = query.options(*models.Content.subqueryload_options())
             else:
@@ -550,7 +537,18 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         random=graphene.Boolean(),
         from_node=graphene.ID(),
         isModerating=graphene.Boolean(),
-        description=docs.Question.posts)
+        description=docs.Question.posts,
+        posts_order=graphene.Argument(
+            type=PostOrderTypes,
+            required=False,
+            description=docs.Question.posts_order,
+        ),
+        only_my_posts=graphene.Argument(
+            type=graphene.Boolean,
+            required=False,
+            description=docs.Question.only_my_posts,
+        ),
+    )
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
     parent = graphene.Field(lambda: IdeaUnion, description=docs.Idea.parent)
     has_pending_posts = graphene.Boolean(description=docs.Question.has_pending_posts)
@@ -565,6 +563,8 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
     def resolve_posts(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
+        only_my_posts = args.get('only_my_posts', False)
+        order = args.get('posts_order')
         random = args.get('random', False)
         is_moderating = args.get('isModerating', False)
         user_id = context.authenticated_userid
@@ -598,6 +598,10 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
             query = Post.default_db.query(Post.id).join(
                 related, Post.id == related.c.post_id).filter(state_condition)
+
+            if only_my_posts:
+                query = query.filter(Post.creator_id == user_id)
+
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
             limit = args.get('first', 10)
@@ -633,19 +637,19 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             # (<PropositionPost id=2 >, None)
             # instead of <PropositionPost id=2 > when authenticated,
             # this is why we do another query here:
-            query = Post.query.join(
-                related, Post.id == related.c.post_id
-            ).filter(
-                state_condition
-            ).order_by(
-                desc(Post.creation_date), Post.id
-            ).options(joinedload(Post.creator))
+            query = Post.query.join(related, Post.id == related.c.post_id)\
+                .filter(state_condition)
+            query = order_posts_query(query, order)\
+                .options(joinedload(Post.creator))
             if len(discussion.discussion_locales) > 1:
                 query = query.options(
                     models.LangString.subqueryload_option(Post.body))
             else:
                 query = query.options(
                     models.LangString.joinedload_option(Post.body))
+
+            if only_my_posts:
+                query = query.filter(Post.creator_id == user_id)
 
         from_node = args.get('from_node')
         after = args.get('after')
@@ -1276,3 +1280,24 @@ class UpdateIdeas(graphene.Mutation):
         phase.db.flush()
         from assembl.graphql.schema import Query
         return UpdateIdeas(query=Query)
+
+
+def order_posts_query(query, order):
+    """
+    :param query: sqlalchemy query
+    :param order: PostsOrderTypes enum
+    :return:
+    """
+    if order == PostOrderTypes.chronological.value:
+        query = query.order_by(models.Content.creation_date)
+    elif order == PostOrderTypes.reverse_chronological.value:
+        query = query.order_by(models.Content.creation_date.desc())
+    elif order == PostOrderTypes.score.value:
+        query = query.order_by(models.Content.body_text_index.score_name.desc())
+    elif order == PostOrderTypes.popularity.value:
+        # assume reverse chronological otherwise
+        query = query.order_by(models.Content.disagree_count - models.Content.like_count,
+                               models.Content.creation_date.desc())
+    else:
+        query = query.order_by(desc(models.Post.creation_date), models.Post.id)
+    return query

@@ -84,7 +84,7 @@ export const reverseChronologicalLastPolicy: PostsOrderPolicy = {
   labelMsgId: 'debate.thread.postsOrder.reverseChronologicalLast'
 };
 
-export const chronologicalLastPolicy: PostsOrderPolicy = {
+export const chronologicalTopPolicy: PostsOrderPolicy = {
   // Chronological threads
   id: 'chronologicalTop',
   postsGroupPolicy: {

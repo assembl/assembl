@@ -39,6 +39,7 @@ import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
 // Import types
 import type { Props as TagOnPostProps } from '../../../components/tagOnPost/tagOnPost';
 import SharePostButton from '../common/sharePostButton';
+import { defaultDisplayPolicy } from '../common/postsFilter/policies';
 
 type Props = {
   isPhaseCompleted: boolean,
@@ -53,6 +54,7 @@ type Props = {
   lang: string,
   originalLocale: string,
   phaseId: string,
+  postsDisplayPolicy: PostsDisplayPolicy,
   questionId: string,
   questionIndex: string,
   screenWidth: number,
@@ -362,6 +364,7 @@ class Post extends React.Component<Props> {
             body={body}
             bodyMimeType={post.bodyMimeType}
             isHarvesting={isHarvesting}
+            postsDisplayPolicy={this.props.postsDisplayPolicy}
           />
           <TagOnPost {...tagOnPostProps} />
           <div className={classnames('post-footer', { pending: isPending })}>
@@ -436,7 +439,8 @@ const mapStateToProps = (state, { id }) => ({
   debate: state.debate,
   contentLocale: state.contentLocale.getIn([id, 'contentLocale']),
   lang: state.i18n.locale,
-  isHarvesting: state.context.isHarvesting
+  isHarvesting: state.context.isHarvesting,
+  postsDisplayPolicy: (state.questionFilter && state.questionFilter.postsDisplayPolicy) || defaultDisplayPolicy
 });
 
 export default compose(
