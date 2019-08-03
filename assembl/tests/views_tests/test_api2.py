@@ -1012,7 +1012,7 @@ class AbstractExport(object):
         if start:
             req += 'start=%s&' % start
         if end:
-            req += 'end=%s&'
+            req += 'end=%s' % end
         return app.get(req)
 
     def get_result(self, *args, **kwargs):
@@ -1153,17 +1153,22 @@ class TestUserExport(AbstractExport):
         DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, THEMATICS, DEPARTMENT, GRANTED_SCOPES
     ]
 
-    participant1_data = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', datetime.utcnow().strftime('%Y-%m-%d %H:%M'), '', '',
+    participant1_data = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', '2000-01-02 00:00', '2000-01-02 00:00', '2000-01-15 00:00',
                         '1', '1', '1', '0', '2', '0', '1', '1', '0', '1', '0', '1', '1', '[]', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
 
-    participant2_data = ['James T. Expert', '', '', datetime.utcnow().strftime('%Y-%m-%d %H:%M'), (datetime.utcnow() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M'),
-        (datetime.utcnow() - timedelta(days=1)).strftime('%Y-%m-%d %H:%M'), '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "[u'Favor economic growth']",
-        '', '']
+    participant2_data = ['James T. Expert', '', '', '2000-01-10 00:00', '2000-01-10 00:00', '2000-01-30 00:00',
+                        '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "[u'Favor economic growth']", '', '']
+
+    participant1_data_missing_one_post = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', '2000-01-02 00:00', '2000-01-02 00:00', '2000-01-15 00:00',
+                        '0', '0', '1', '0', '1', '0', '0', '0', '0', '1', '0', '1', '1', '[]', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
 
 
-    def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_username, reply_post_2,
+    def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, reply_post_2,
                 reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2,
-                participant1_social_account_w_extra, participant1_social_account_w_extra2):
+                participant1_social_account_w_extra, participant1_social_account_w_extra2, agent_status_in_discussion_user1_visits):
+        discussion.creation_date = datetime(year=1999, month=12, day=1)
+        discussion.db.flush()
+
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
         first_row = result[1]
@@ -1188,17 +1193,59 @@ class TestUserExport(AbstractExport):
                 assert last_row[idx] == value
 
 
-    def test_anon(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username):
+    def test_anon(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, agent_status_in_discussion_user1_visits):
+        discussion.creation_date = datetime(year=1999, month=12, day=1)
+        discussion.db.flush()
+
         result = self.get_result(test_app, discussion.id, view_name=self.view_name, anon=True)
         first_row = result[1]
+
         assert first_row[0] == participant1_user.anonymous_name()
         assert first_row[1] == participant1_user.get_preferred_email(anonymous=True)
         assert first_row[2] == participant1_user.anonymous_username()
 
 
-    '''def test_dates(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_username, reply_post_2):
-        result = self.get_result(test_app, discussion.id, view_name=self.view_name, start=datetime(year=2000, month=1, day=1).strftime("%Y-%m-%dT%H:%M:%S"), end=datetime(year=2000, month=1, day=2).strftime("%Y-%m-%dT%H:%M:%S"))
-        assert len(result) == 2'''
+    def test_dates_user2_connected_after_period(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, reply_post_2,
+                reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2, agent_status_in_discussion_user1_visits):
+        result = self.get_result(test_app, discussion.id, view_name=self.view_name, start=datetime(year=2000, month=1, day=5).strftime("%Y-%m-%dT%H:%M:%S"),
+                                end=datetime(year=2000, month=1, day=8).strftime("%Y-%m-%dT%H:%M:%S"))
+
+        assert len(result) == 2
+
+
+    def test_dates_user1_connected_before_period(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, reply_post_2,
+                reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2, agent_status_in_discussion_user1_visits):
+        result = self.get_result(test_app, discussion.id, view_name=self.view_name, start=datetime(year=2000, month=1, day=20).strftime("%Y-%m-%dT%H:%M:%S"),
+                                end=datetime(year=2000, month=1, day=30).strftime("%Y-%m-%dT%H:%M:%S"))
+
+        assert len(result) == 2
+
+
+    def test_dates_user1_created_after_period(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, reply_post_2,
+                reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2, agent_status_in_discussion_user1_visits):
+        participant1_user.creation_date = datetime(year=2020, month=1, day=1)
+        participant1_user.db.flush()
+
+        result = self.get_result(test_app, discussion.id, view_name=self.view_name, start=datetime(year=2000, month=1, day=1).strftime("%Y-%m-%dT%H:%M:%S"),
+                                end=datetime(year=2000, month=1, day=30).strftime("%Y-%m-%dT%H:%M:%S"))
+
+        assert len(result) == 2
+
+
+    def test_dates_user_missing_post_in_period_end(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, reply_post_2,
+                reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2, agent_status_in_discussion_user1_visits,
+                participant1_social_account_w_extra, participant1_social_account_w_extra2):
+        result = self.get_result(test_app, discussion.id, view_name=self.view_name, start=datetime(year=2000, month=1, day=4).strftime("%Y-%m-%dT%H:%M:%S"),
+                                end=datetime(year=2000, month=1, day=30).strftime("%Y-%m-%dT%H:%M:%S"))
+        first_row = result[1]
+
+        assert len(result) == 3
+        for idx, value in enumerate(self.participant1_data_missing_one_post):
+            # If date, remove the seconds to compare
+            if idx in [3, 4, 5]:
+                assert first_row[idx][:-3] == value
+            else:
+                assert first_row[idx] == value
 
 
 """

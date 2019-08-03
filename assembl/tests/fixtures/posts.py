@@ -377,6 +377,7 @@ def post_related_to_sub_idea_1_participant2(
         discussion=discussion, creator=participant2_user,
         subject=LangString.create(u"A post related to sub_idea_1 "),
         body=LangString.create(u"A post related to sub_idea_1"),
+        creation_date=datetime(year=2000, month=1, day=6),
         type='post', message_id="msg3@example3.com")
 
     idc = IdeaRelatedPostLink(

@@ -714,6 +714,8 @@ def users_csv_export(request):
 
     posts = db.query(m.Post
         ).filter(m.Post.discussion_id == discussion.id
+        ).filter(m.Post.creation_date > start
+        ).filter(m.Post.creation_date < end
         ).order_by(m.Post.id).all()
 
     sentiment_counts = db.query(m.Post.id, m.SentimentOfPost.actor_id, m.SentimentOfPost.type).join(m.SentimentOfPost).filter(
@@ -735,6 +737,10 @@ def users_csv_export(request):
         m.AgentStatusInDiscussion.discussion_id == discussion.id).order_by(m.User.id).all()
 
     for user in users_in_discussion:
+        # Sort out ppl who couldn't have connected during the required period
+        if (user.first_visit and (user.creation_date > end or user.first_visit > end)) or (user.last_visit and user.last_visit < start):
+            continue
+
         users[user.id] = {
                 NAME: user.name if not has_anon else user.anonymous_name(),
                 EMAIL: user.get_preferred_email(has_anon),
@@ -769,6 +775,9 @@ def users_csv_export(request):
                     users[user.id][key] += ', ' + value
 
     for post in posts:
+        if post.creator.id not in users.keys():
+            continue
+
         if post.parent_id is None:
             users[post.creator.id][TOP_POSTS] += 1
             users[post.creator.id][TOP_POST_REPLIES] += len(post.get_descendants().all())

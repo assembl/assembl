@@ -258,11 +258,20 @@ def agent_status_in_discussion_4(request, test_session, discussion, participant2
 
 
 @pytest.fixture(scope="function")
+def agent_status_in_discussion_user1_visits(request, test_session, discussion, participant1_user):
+    from assembl.models import AgentStatusInDiscussion
+    participant1_user.creation_date = datetime(year=2000, month=1, day=2)
+    participant1_user.get_agent_status(discussion.id).first_visit = datetime(year=2000, month=1, day=2)
+    participant1_user.get_agent_status(discussion.id).last_visit = datetime(year=2000, month=1, day=15)
+    test_session.flush()
+
+
+@pytest.fixture(scope="function")
 def agent_status_in_discussion_user2_visits(request, test_session, discussion, participant2_user):
     from assembl.models import AgentStatusInDiscussion
-    accepted_cookies = "ACCEPT_CGU"
-    asid = AgentStatusInDiscussion(discussion=discussion, agent_profile=participant2_user, first_visit=datetime.utcnow() - timedelta(days=1),
-        last_visit=datetime.utcnow() + timedelta(days=1))
+    participant2_user.creation_date = datetime(year=2000, month=1, day=10)
+    asid = AgentStatusInDiscussion(discussion=discussion, agent_profile=participant2_user, first_visit=datetime(year=2000, month=1, day=10),
+        last_visit=datetime(year=2000, month=1, day=30))
     test_session.add(asid)
     test_session.flush()
 
