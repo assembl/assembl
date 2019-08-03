@@ -741,10 +741,12 @@ def users_csv_export(request):
         if (user.first_visit and (user.creation_date > end or user.first_visit > end)) or (user.last_visit and user.last_visit < start):
             continue
 
+        username = user.username_p.encode('utf-8') if user.username_p else ''
+
         users[user.id] = {
-                NAME: user.name if not has_anon else user.anonymous_name(),
-                EMAIL: user.get_preferred_email(has_anon),
-                USERNAME: user.username_p if not has_anon else user.anonymous_username(),
+                NAME: user.name.encode('utf-8') if not has_anon else user.anonymous_name(),
+                EMAIL: user.get_preferred_email(has_anon).encode('utf-8'),
+                USERNAME: username if not has_anon else user.anonymous_username(),
                 CREATION_DATE: user.creation_date.strftime('%Y-%m-%d %H:%M:%S') if user.creation_date else '',
                 FIRST_VISIT: user.first_visit.strftime('%Y-%m-%d %H:%M:%S') if user.first_visit else '',
                 LAST_VISIT: user.last_visit.strftime('%Y-%m-%d %H:%M:%S') if user.last_visit else '',
@@ -792,8 +794,12 @@ def users_csv_export(request):
         users[post.creator.id][MORE_INFO_RECEIVED] += sentiments_received_by_post[post.id][MORE_INFO_SENTIMENT]
 
         for idea in post.get_ideas():
-            if idea.safe_title(user_prefs) not in users[post.creator.id][THEMATICS]:
-                users[post.creator.id][THEMATICS].append(idea.safe_title(user_prefs))
+            idea_title = idea.safe_title(user_prefs).encode('utf-8')
+            if idea_title not in users[post.creator.id][THEMATICS]:
+                if len(users[post.creator.id][THEMATICS]) == 0:
+                    users[post.creator.id][THEMATICS] = idea_title
+                else:
+                    users[post.creator.id][THEMATICS] += ', ' + idea_title
 
     return csv_response(users.values(), CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="users.csv"')
 
