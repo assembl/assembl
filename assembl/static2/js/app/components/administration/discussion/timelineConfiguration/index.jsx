@@ -23,7 +23,7 @@ import FileUploaderFieldAdapter from '../../../form/fileUploaderFieldAdapter';
 import { deletePhaseTooltip, addPhaseTooltip } from '../../../common/tooltips';
 import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
 import { compareEditorState } from '../../../form/utils';
-
+import { IMG_TIMELINE_PHASE } from '../../../../constants';
 import Helper from '../../../common/helper';
 
 const loading = <Loader />;
@@ -155,7 +155,7 @@ class TimelineFields extends React.Component<Props> {
                             )}
                             <Helper
                               label={I18n.t('administration.timelineAdmin.instruction4')}
-                              helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
+                              helperUrl={IMG_TIMELINE_PHASE}
                               helperText={I18n.t('administration.helpers.timelinePhases')}
                               classname="title"
                             />
@@ -167,7 +167,7 @@ class TimelineFields extends React.Component<Props> {
                             />
                             <Helper
                               label={I18n.t('administration.timelineAdmin.instruction5')}
-                              helperUrl="/static2/img/helpers/landing_page_admin/timeline_phase.png"
+                              helperUrl={IMG_TIMELINE_PHASE}
                               helperText={I18n.t('administration.helpers.timelinePhases')}
                               classname="title"
                             />

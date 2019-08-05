@@ -7,7 +7,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
   <form>
     <FormControlWithLabel
       helperText="Depending on the objective of the token module, incite the participants to take action."
-      helperUrl="/static2/img/helpers/helper5.png"
+      helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper5.png"
       label="Instructions for the token vote"
       labelAlwaysVisible={false}
       onChange={[MockFunction]}
@@ -25,7 +25,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
     >
       <Connect(Helper)
         helperText="Select the number of different token types for this vote"
-        helperUrl="/static2/img/helpers/helper2.jpg"
+        helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper2.jpg"
       />
     </div>
     <div>
@@ -212,7 +212,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
   <form>
     <FormControlWithLabel
       helperText="Depending on the objective of the token module, incite the participants to take action."
-      helperUrl="/static2/img/helpers/helper5.png"
+      helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper5.png"
       label="Instructions for the token vote"
       labelAlwaysVisible={false}
       onChange={[MockFunction]}
@@ -230,7 +230,7 @@ exports[`tokensForm component should render a form to configure a token vote wit
     >
       <Connect(Helper)
         helperText="Select the number of different token types for this vote"
-        helperUrl="/static2/img/helpers/helper2.jpg"
+        helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper2.jpg"
       />
     </div>
     <div>

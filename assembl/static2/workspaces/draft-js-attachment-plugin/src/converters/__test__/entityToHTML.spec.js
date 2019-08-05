@@ -2,6 +2,7 @@
 import TestEditorUtils from 'assembl-test-editor-utils';
 
 import entityToHTML from '../entityToHTML';
+import { ICO_PDF } from '../../../../../js/app/constants';
 
 describe('entityToHTML function', () => {
   it('should return an img tag for images', () => {
@@ -26,8 +27,11 @@ describe('entityToHTML function', () => {
       title: 'foobar.pdf'
     });
     const expected =
+      // eslint-disable-next-line prefer-template
       '<a href="http://www.example.com/document/1122/data" title="foobar.pdf">' +
-      '<img class="attachment-icon" alt="pdf" src="/static2/img/icons/black/pdf.svg" data-id="foobar" ' +
+      '<img class="attachment-icon" alt="pdf" src="' +
+      ICO_PDF +
+      '" data-id="foobar" ' +
       'data-mimetype="application/pdf" data-title="foobar.pdf" ' +
       'data-externalurl="http://www.example.com/document/1122/data" /></a>';
     const actual = entityToHTML(entity);

@@ -29,7 +29,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
           <Connect(Helper)
             classname="inline checkbox-title"
             helperText="The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions"
-            helperUrl="/static2/img/helpers/helper4.png"
+            helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper4.png"
             label="Tokens vote"
           />
         </Checkbox>
@@ -49,7 +49,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
           <Connect(Helper)
             classname="inline checkbox-title"
             helperText="You can choose to have one or several gages"
-            helperUrl="/static2/img/helpers/helper3.png"
+            helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper3.png"
             label="Gauge(s) vote"
           />
         </Checkbox>
@@ -68,7 +68,7 @@ exports[`ModulesSection component should render a ModuleSection component with t
             </label>
             <Connect(Helper)
               helperText="Define gauges number"
-              helperUrl="/static2/img/helpers/helper2.jpg"
+              helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper2.jpg"
             />
           </div>
           <SplitButton
@@ -259,7 +259,7 @@ exports[`ModulesSection component should render a ModulesSection component witho
           <Connect(Helper)
             classname="inline checkbox-title"
             helperText="The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions"
-            helperUrl="/static2/img/helpers/helper4.png"
+            helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper4.png"
             label="Tokens vote"
           />
         </Checkbox>
@@ -276,7 +276,7 @@ exports[`ModulesSection component should render a ModulesSection component witho
           <Connect(Helper)
             classname="inline checkbox-title"
             helperText="You can choose to have one or several gages"
-            helperUrl="/static2/img/helpers/helper3.png"
+            helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper3.png"
             label="Gauge(s) vote"
           />
         </Checkbox>

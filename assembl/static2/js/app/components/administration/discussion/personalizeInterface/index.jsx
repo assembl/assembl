@@ -13,7 +13,7 @@ import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../../common/loader';
-import { DEFAULT_FAVICON } from '../../../../constants';
+import { DEFAULT_FAVICON, IMG_FAVICON_TITLE } from '../../../../constants';
 
 type Props = {
   client: ApolloClient
@@ -54,11 +54,7 @@ const PersonalizeInterface = ({ client }: Props) => (
               <Translate value="administration.personalizeInterface.titleFormTitle" />
             </div>
             <div className="img-helper-container">
-              <img
-                className="img-helper"
-                src={'/static2/img/helpers/discussion_admin/favicon_title.png'}
-                alt="personalize-interface-helper"
-              />
+              <img className="img-helper" src={IMG_FAVICON_TITLE} alt="personalize-interface-helper" />
             </div>
             <form className="language-list" onSubmit={handleSubmit}>
               <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />

@@ -10,6 +10,7 @@ import { createEditorStateFromText } from '../../../helpers/draftjs';
 import { client, docFile, imgFile } from '../../../helpers/graphql';
 import * as utils from '../../../../js/app/components/form/utils';
 import { displayAlert } from '../../../../js/app/utils/utilityManager';
+import { ICO_DOC } from '../../../../js/app/constants';
 
 jest.mock('../../../../js/app/utils/utilityManager');
 
@@ -173,12 +174,14 @@ describe('convertRichTextToVariables function', () => {
       fr: createEditorStateFromText('Mon texte en français')
     };
     const expectedEn =
+      // eslint-disable-next-line prefer-template
       '<p></p><div class="atomic-block" data-blocktype="atomic">' +
       '<img class="attachment-image" src="/data/my-img.png" alt="" title="My great image" ' +
       'data-id="1" data-mimetype="image/png" /></div><p></p><div class="atomic-block" ' +
       'data-blocktype="atomic"><a href="/data/my-doc.pdf" title="My great document"><img ' +
-      'class="attachment-icon" alt="unknown" src="/static2/img/icons/black/doc.svg" ' +
-      'data-id="2" data-mimetype="application/pdf" ' +
+      'class="attachment-icon" alt="unknown" src="' +
+      ICO_DOC +
+      '" data-id="2" data-mimetype="application/pdf" ' +
       'data-title="My great document" data-externalurl="/data/my-doc.pdf" /></a></div><p>My text in english</p>';
     const expectedFr = '<p>Mon texte en français</p>';
 

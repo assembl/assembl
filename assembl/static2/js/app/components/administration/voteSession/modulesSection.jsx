@@ -19,6 +19,7 @@ import {
   updateVoteSessionPageSeeCurrentVotes
 } from '../../../actions/adminActions/voteSession';
 import { createRandomId } from '../../../utils/globalFunctions';
+import { IMG_HELPER2, IMG_HELPER3, IMG_HELPER4 } from '../../../constants';
 
 type ModulesSectionProps = {
   tokenModules: Object,
@@ -61,7 +62,7 @@ const DumbModulesSection = ({
             >
               <Helper
                 label={I18n.t('administration.voteWithTokens')}
-                helperUrl="/static2/img/helpers/helper4.png"
+                helperUrl={IMG_HELPER4}
                 helperText={I18n.t('administration.tokenVoteCheckbox')}
                 classname="inline checkbox-title"
               />
@@ -77,7 +78,7 @@ const DumbModulesSection = ({
             >
               <Helper
                 label={I18n.t('administration.voteWithGauges')}
-                helperUrl="/static2/img/helpers/helper3.png"
+                helperUrl={IMG_HELPER3}
                 helperText={I18n.t('administration.gaugeVoteCheckbox')}
                 classname="inline checkbox-title"
               />
@@ -88,7 +89,7 @@ const DumbModulesSection = ({
                   <label htmlFor="input-dropdown-addon">
                     <Translate value="administration.gaugeNumber" />
                   </label>
-                  <Helper helperUrl="/static2/img/helpers/helper2.jpg" helperText={I18n.t('administration.defineGaugeNumer')} />
+                  <Helper helperUrl={IMG_HELPER2} helperText={I18n.t('administration.defineGaugeNumer')} />
                 </div>
                 <SplitButton
                   className="admin-dropdown"

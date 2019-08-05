@@ -4,9 +4,9 @@ import initStoryshots from '@storybook/addon-storyshots';
 import { configure, shallow } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
+import { IMG_AVATAR } from '../../../../../js/app/constants';
 import CircleAvatar from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
 import type { CircleAvatarProps } from '../../../../../js/app/components/debate/brightMirror/circleAvatar';
-import { getIconPath } from '../../../../../js/app/utils/globalFunctions';
 
 // Separate the snapshots in directories next to each component
 // Name should match with the story name
@@ -16,7 +16,7 @@ initStoryshots({
 
 configure({ adapter: new Adapter() });
 
-const avatarIcon = getIconPath('avatar.png');
+const avatarIcon = IMG_AVATAR;
 
 const defaultCircleAvatar: CircleAvatarProps = {
   username: 'taryn-treutel',

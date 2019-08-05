@@ -8,6 +8,7 @@ import FormControlWithLabel from '../../common/formControlWithLabel';
 import Helper from '../../common/helper';
 import { getEntryValueForLocale } from '../../../utils/i18n';
 import { updateVoteSessionPagePropositionsTitle } from '../../../actions/adminActions/voteSession';
+import { IMG_HELPER3 } from '../../../constants';
 
 type Props = {
   propositionSectionTitle: string,
@@ -25,7 +26,7 @@ const DumbPageForm = ({ propositionSectionTitle, editLocale, handlePropositionSe
         <div className="form-container">
           <Helper
             label={I18n.t('administration.proposalSectionTitle')}
-            helperUrl="/static2/img/helpers/helper3.png"
+            helperUrl={IMG_HELPER3}
             helperText={I18n.t('administration.helpers.voteSessionProposalSection')}
             classname="title"
           />

@@ -22,6 +22,7 @@ import { validStartDate, validEndDate, validateDatePicker } from './validate';
 import DiscussionQuery from '../../../../graphql/DiscussionQuery.graphql';
 import { convertISO8601StringToDate } from '../../../../utils/globalFunctions';
 import manageErrorAndLoading from '../../../common/manageErrorAndLoading';
+import { IMG_HEADER } from '../../../../constants';
 
 type Props = {
   client: ApolloClient,
@@ -114,7 +115,7 @@ export class DumbCustomizeHeader extends React.Component<Props, State> {
                     <Helper
                       classname="admin-paragraph"
                       label={I18n.t('administration.landingPage.header.helper')}
-                      helperUrl={'/static2/img/helpers/landing_page_admin/header.png'}
+                      helperUrl={IMG_HEADER}
                       helperText={I18n.t('administration.helpers.landingPage.header')}
                     />
                     <Field

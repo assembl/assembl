@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 
-import { getIconPath } from '../../../utils/globalFunctions';
+import { IMG_AVATAR } from '../../../constants';
 
 export type CircleAvatarProps = {
   /** Username related to the avatar */
@@ -11,7 +11,7 @@ export type CircleAvatarProps = {
 };
 
 const noUsernameAlt: string = 'no-username';
-const noUsernameAvatarSrc: string = getIconPath('avatar.png');
+const noUsernameAvatarSrc: string = IMG_AVATAR;
 
 const CircleAvatar = ({ username, src }: CircleAvatarProps) => (
   <img
