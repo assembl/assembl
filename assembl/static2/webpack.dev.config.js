@@ -99,10 +99,7 @@ module.exports = {
             use: [
               { loader: "style-loader" },
               { loader: "css-loader", options: { sourceMap: true } },
-              { loader: "sass-loader",
-                options: {
-                  sourceMap: true,
-                  data: "$fonts-dir: '/static2/fonts';" } }
+              { loader: "sass-loader", options: { sourceMap: true } }
             ]
         },
         {
