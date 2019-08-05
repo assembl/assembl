@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import pytest
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def langstring_entry_values():

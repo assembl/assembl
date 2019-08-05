@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 import pytest
 from datetime import datetime
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def root_post_1(request, participant1_user, discussion, test_session):

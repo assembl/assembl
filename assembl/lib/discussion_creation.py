@@ -1,11 +1,11 @@
 """
 A plugin api for processes that will be run when a discussion is created
 """
+from __future__ import print_function
 
 from zope import interface
 from pyramid.path import DottedNameResolver
 from pyramid.config import aslist
-from __future__ import print_function
 
 resolver = DottedNameResolver(__package__)
 

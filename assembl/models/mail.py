@@ -1,6 +1,7 @@
 # coding=UTF-8
 """:py:class:`assembl.models.post.Post` that came as email, and utility code for handling email."""
 from __future__ import print_function
+
 import email
 import mailbox
 import re

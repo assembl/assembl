@@ -1,6 +1,6 @@
 """Utilities to encrypt hashes, tokens, etc."""
-
 from __future__ import print_function
+
 from os import urandom
 from binascii import hexlify, unhexlify
 import hashlib

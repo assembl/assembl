@@ -3,12 +3,12 @@
 .. _PythonSocialAuth: http://psa.matiasaguirre.net/
 """
 from __future__ import print_function
-import re
 
+import re
+import simplejson as json
 from pyramid.events import subscriber, BeforeRender
 from pyramid.security import remember, forget
 from pyramid.config import aslist
-import simplejson as json
 
 from social_pyramid.utils import backends
 from social_pyramid.strategy import PyramidStrategy

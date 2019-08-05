@@ -7,6 +7,8 @@ Create Date: 2015-05-30 15:20:37.165788
 """
 
 # revision identifiers, used by Alembic.
+from __future__ import print_function
+
 revision = '368a596ab4b5'
 down_revision = '92cf7ae9633'
 
@@ -18,7 +20,6 @@ import sqlalchemy as sa
 import transaction
 import sqlalchemy.sql.functions as sqlfunc
 from sqlalchemy.exc import ProgrammingError, DataError
-from __future__ import print_function
 
 from assembl.lib import config
 from assembl.lib.sqla import mark_changed

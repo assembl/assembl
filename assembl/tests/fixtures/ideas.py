@@ -1,16 +1,20 @@
 # -*- coding: utf-8 -*-
-import pytest
 from __future__ import print_function
+
+import pytest
+
 
 @pytest.fixture(scope="function")
 def root_idea(request, discussion, test_session):
     """A root Idea fixture"""
     return discussion.root_idea
 
+
 @pytest.fixture(scope="function")
 def thread_phase_root_idea(root_idea, phases):
     from assembl.graphql.utils import create_root_thematic
     return create_root_thematic(phases['thread'])
+
 
 @pytest.fixture(scope="function")
 def idea_with_en_fr(request, discussion, en_locale,

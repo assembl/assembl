@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 from datetime import datetime
 import pytest
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def timeline_phase2_interface_v1(request, test_app, test_session, discussion, subidea_1, subidea_2):

@@ -2,10 +2,7 @@
 
 Pyramid allows to use model objects as Context objects, but in our cases they're surrogates for model objects.
 """
-
 from traceback import print_exc
-
-from sqlalchemy import select
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.sql.expression import and_
@@ -22,7 +19,7 @@ from assembl.auth.util import find_discussion_from_slug
 from assembl.lib.sqla import *
 from assembl.lib.logging import getLogger
 from assembl.lib.decl_enums import DeclEnumType
-from __future__ import print_function
+
 
 class DictContext(object):
     """A Context defined using a simple dictionary"""

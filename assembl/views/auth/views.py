@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from datetime import datetime
 import simplejson as json
 from smtplib import SMTPRecipientsRefused
@@ -46,8 +48,6 @@ from assembl.lib.utils import normalize_email_name, get_global_base_url
 from .. import (
     get_default_context, JSONError, get_provider_data,
     HTTPTemporaryRedirect, create_get_route, sanitize_next_view)
-from pyramid.httpexceptions import HTTPOk
-from __future__ import print_function
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger()

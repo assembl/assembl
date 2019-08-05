@@ -4,6 +4,7 @@ Note that Assembl is a `hybrid app`_, and combines routes and :py:mod:`traversal
 
 .. _`hybrid app`: http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/hybrid.html
 """
+from __future__ import print_function
 
 import os
 import io
@@ -36,8 +37,6 @@ from assembl.models.auth import (
     User,
     Locale,
 )
-from __future__ import print_function
-
 
 default_context = {
     'STATIC_URL': '/static',

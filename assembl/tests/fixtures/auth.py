@@ -1,5 +1,6 @@
-import pytest
 from __future__ import print_function
+import pytest
+
 
 @pytest.fixture(scope="function")
 def google_identity_provider(request, test_session):

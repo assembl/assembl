@@ -3,6 +3,7 @@
 
 # Put something like this in the crontab:
 # 10 3 * * * cd /var/www/assembl ; ./venv/bin/python assembl/scripts/clone_discussion.py -n assembldemosandbox -d -p system.Authenticated+admin_discussion -p system.Authenticated+add_post -p system.Authenticated+add_extract -p system.Authenticated+edit_extract -p system.Authenticated+add_idea -p system.Authenticated+edit_idea -p system.Authenticated+edit_synthesis -p system.Authenticated+vote -p system.Authenticated+read local.ini assembldemo
+from __future__ import print_function
 
 import itertools
 from collections import defaultdict
@@ -32,7 +33,6 @@ from assembl.indexing.changes import configure_indexing
 from assembl.lib.model_watcher import configure_model_watcher
 from assembl.lib.sentry import capture_exception
 
-from __future__ import print_function
 
 def find_or_create_object_by_keys(db, keys, obj, columns):
     args = {key: getattr(obj, key) for key in keys}

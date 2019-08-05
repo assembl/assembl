@@ -1,13 +1,15 @@
 """Enumerations that can be stored in the database.
 
 Mostly from http://techspot.zzzeek.org/2011/01/14/the-enum-recipe/ """
+from __future__ import print_function
+
 from sqlalchemy.types import SchemaType, TypeDecorator, Enum
 from sqlalchemy import __version__
 import re
-from __future__ import print_function
 
 if __version__ < '0.6.5':
     raise NotImplementedError("Version 0.6.5 or higher of SQLAlchemy is required.")
+
 
 class EnumSymbol(object):
     """Define a fixed symbol tied to a parent class."""
@@ -29,6 +31,7 @@ class EnumSymbol(object):
     def __repr__(self):
         return "<%s>" % self.name
 
+
 class EnumMeta(type):
     """Generate new DeclEnum classes."""
 
@@ -42,6 +45,7 @@ class EnumMeta(type):
 
     def __iter__(self):
         return iter(self._reg.values())
+
 
 class DeclEnum(object):
     """Declarative enumeration."""
@@ -101,6 +105,7 @@ class DeclEnumType(SchemaType, TypeDecorator):
         if value is None:
             return None
         return self.enum.from_string(value.strip())
+
 
 if __name__ == '__main__':
     from sqlalchemy.ext.declarative import declarative_base

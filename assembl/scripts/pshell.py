@@ -1,10 +1,10 @@
-import sys
+from __future__ import print_function
 
+import sys
 from pyramid.util import DottedNameResolver
 from pyramid.settings import aslist
 from pyramid.scripts.pshell import PShellCommand
 
-from __future__ import print_function
 
 def main(argv=sys.argv, quiet=False):
     command = PShellCommandA(argv, quiet)

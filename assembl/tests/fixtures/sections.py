@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-import pytest
 from __future__ import print_function
+import pytest
+
 
 @pytest.fixture(scope="function")
 def sections(request, discussion_with_default_data, test_session):

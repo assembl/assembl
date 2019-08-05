@@ -1,5 +1,7 @@
-import pytest
 from __future__ import print_function
+
+import pytest
+
 
 @pytest.fixture(scope="function")
 def simple_action(request, test_session, participant1_user):

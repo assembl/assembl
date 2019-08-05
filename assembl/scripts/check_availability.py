@@ -1,6 +1,7 @@
 #!env python
-import argparse
+from __future__ import print_function
 
+import argparse
 import requests
 from sqlalchemy.exc import ProgrammingError
 
@@ -8,7 +9,6 @@ from ..lib.config import get
 from ..lib.migration import bootstrap_db, bootstrap_db_data
 from . import boostrap_configuration
 
-from __future__ import print_function
 
 def main():
     parser = argparse.ArgumentParser()

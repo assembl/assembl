@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import pytest
 from __future__ import print_function
+
+import pytest
+
 
 @pytest.fixture(scope="function")
 def fulltext_synthesis_post(request, discussion, moderator_user, test_session):

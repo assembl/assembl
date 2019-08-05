@@ -7,26 +7,27 @@ The core fixtures that will:
     5) create a pyramid test application
     6) create a databse session
 """
+from __future__ import print_function
 
-from datetime import datetime
 
 import pytest
+import traceback
 import transaction
+from datetime import datetime
 from webtest import TestApp
 from pkg_resources import get_distribution
 from pyramid.threadlocal import manager
 from pyramid import testing
-import traceback
 
 import assembl
 from assembl.lib.config import get_config
-from assembl.lib.migration import bootstrap_db, bootstrap_db_data
+from assembl.lib.migration import bootstrap_db
 from assembl.lib.sqla import get_session_maker
 from assembl.processes import configure as configure_tasks
 from assembl.auth import R_SYSADMIN
 from ..utils import PyramidWebTestRequest
 from ..utils import clear_rows, drop_tables
-from __future__ import print_function
+
 
 @pytest.fixture(scope="session")
 def session_factory(request):

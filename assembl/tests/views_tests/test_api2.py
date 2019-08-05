@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import csv
-import pytest
 from datetime import datetime, timedelta
 import simplejson as json
 from io import BytesIO
-from __future__ import print_function
 
 from assembl.models import (
     AbstractIdeaVote,

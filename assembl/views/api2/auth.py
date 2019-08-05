@@ -1,9 +1,9 @@
-from simplejson import dumps, loads
-from string import Template
+from __future__ import print_function
+
+from simplejson import loads
 from datetime import datetime
 from sqlalchemy import func
 
-from pyramid.response import Response
 from pyramid.view import view_config
 from pyramid.settings import asbool
 from pyramid.security import (
@@ -12,7 +12,7 @@ from pyramid.i18n import TranslationStringFactory
 from pyramid.httpexceptions import (
     HTTPNotFound, HTTPUnauthorized, HTTPBadRequest, HTTPClientError,
     HTTPOk, HTTPNoContent, HTTPForbidden, HTTPNotImplemented,
-    HTTPPreconditionFailed, HTTPConflict, HTTPInternalServerError)
+    HTTPConflict)
 from pyisemail import is_email
 
 from graphql_relay.node.node import from_global_id
@@ -25,7 +25,7 @@ from assembl.auth import (
 from assembl.auth.social_auth import maybe_social_logout
 from assembl.models import (
     User, Discussion, LocalUserRole, AbstractAgentAccount, AgentProfile,
-    UserLanguagePreference, EmailAccount, AgentStatusInDiscussion, Username,
+    UserLanguagePreference, AgentStatusInDiscussion, Username,
     AbstractConfigurableField, ProfileField)
 from assembl.auth.password import (
     verify_password_change_token, get_data_token_time, Validity)
@@ -41,10 +41,10 @@ from ..auth.views import (
     send_change_password_email, from_identifier, send_confirmation_email,
     maybe_auto_subscribe, maybe_contextual_route)
 from assembl.lib import logging
-from __future__ import print_function
 
 _ = TranslationStringFactory('assembl')
 generic_error_message = _("The provided input combination is not valid.")
+
 
 @view_config(
     context=ClassContext, request_method="PATCH",

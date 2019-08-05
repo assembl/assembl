@@ -1,5 +1,6 @@
-import pytest
 from __future__ import print_function
+import pytest
+
 
 @pytest.fixture(scope="function")
 def text_field(request, test_session, discussion):

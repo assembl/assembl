@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import pytest
 from datetime import datetime, timedelta
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def bright_mirror(phases, graphql_request, graphql_registry, test_session):
@@ -82,6 +84,7 @@ def post_published_for_bright_mirror(
     request.addfinalizer(fin)
     return p
 
+
 @pytest.fixture(scope="function")
 def post_published_for_bright_mirror_participant(
         request, test_session, discussion, admin_user, participant1_user,
@@ -136,7 +139,7 @@ def participant_published_post_with_parent_post_for_bright_mirror(
         message_id="msgpublisheparticipant2@example2.com",
         creation_date=datetime.utcnow(),
         parent_id=parent_post_id
-        )
+    )
 
     idc = IdeaRelatedPostLink(
         idea=idea,

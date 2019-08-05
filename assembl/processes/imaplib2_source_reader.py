@@ -1,18 +1,17 @@
-import sys
+from __future__ import print_function
 
 from imaplib2 import IMAP4_SSL, IMAP4
-import transaction
 
 from assembl.models import ContentSource
 
 from .source_reader import (
-    ReaderStatus, SourceDispatcher, SourceReader,
+    ReaderStatus, SourceReader,
     ReaderError, ClientError, IrrecoverableError)
 
-from __future__ import print_function
 
 def is_ok(response):
     return response[0] == 'OK'
+
 
 class IMAPReader(SourceReader):
     """A :py:class:`assembl.processes.source_reader.SourceReader` subclass for reading IMAP messages with imaplib2. Can wait for push."""
@@ -50,7 +49,6 @@ class IMAPReader(SourceReader):
             raise IrrecoverableError(e)
         except IMAP4.error as e:
             raise ClientError(e)
-
 
     def wait_for_push(self):
         assert self.can_push

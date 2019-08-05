@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import os.path
 import re
@@ -6,7 +8,6 @@ from time import sleep
 from ConfigParser import RawConfigParser
 from getpass import getuser
 from invoke.tasks import call
-from __future__ import print_function
 
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,

@@ -1,7 +1,6 @@
 """Some utilities for working with SQLAlchemy, and the definition of BaseOps."""
 
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import re
 import sys
@@ -20,9 +19,8 @@ from enum import Enum
 from anyjson import dumps, loads
 from colanderalchemy import SQLAlchemySchemaNode
 from sqlalchemy import (
-    DateTime, MetaData, engine_from_config, event, Column, Integer,
-    inspect)
-from sqlalchemy.exc import NoInspectionAvailable, OperationalError
+    DateTime, MetaData, engine_from_config, event, Column, inspect)
+from sqlalchemy.exc import NoInspectionAvailable
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.ext.associationproxy import AssociationProxy
 from sqlalchemy.orm import mapper, scoped_session, sessionmaker
@@ -36,7 +34,6 @@ from sqlalchemy.engine.url import URL
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
-import transaction
 from graphene.relay import Node
 
 from .parsedatetime import parse_datetime
@@ -44,7 +41,6 @@ from ..view_def import get_view_def
 from .zmqlib import get_pub_socket, send_changes
 from ..auth import *
 from .decl_enums import EnumSymbol, DeclEnumType
-from .utils import get_global_base_url
 from .config import get_config
 from ..indexing.reindex import reindex_content
 from . import logging

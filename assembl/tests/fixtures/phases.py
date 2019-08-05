@@ -1,6 +1,8 @@
+from __future__ import print_function
+
 from datetime import datetime
 import pytest
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def phases(request, test_session, discussion):

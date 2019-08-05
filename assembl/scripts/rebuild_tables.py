@@ -1,5 +1,6 @@
 """Rebuild all tables from scratch, because we have had so many cases of corrupt data."""
-from itertools import chain
+from __future__ import print_function
+
 import logging.config
 import argparse
 from collections import defaultdict
@@ -18,7 +19,7 @@ from assembl.lib.sqla import (
 from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.indexing.changes import configure_indexing
-from __future__ import print_function
+
 
 def rebuild_all_tables_fkeys(session, rebuild_tables=None, delete_missing=False):
     import assembl.models

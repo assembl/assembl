@@ -1,9 +1,12 @@
+from __future__ import print_function
+
+
 import os
 import pytest
 from sqlalchemy import inspect
 
 from assembl.auth import P_READ, R_PARTICIPANT
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def discussion(request, test_session, participant2_user, default_preferences):
@@ -203,6 +206,7 @@ def discussion_with_2_phase_interface_v2(
 
     return discussion_with_permissions
 
+
 @pytest.fixture(scope="function")
 def discussion_with_moderation(discussion, test_session):
     """An empty Discussion fixture with default permissions"""
@@ -210,11 +214,13 @@ def discussion_with_moderation(discussion, test_session):
     test_session.commit()
     return discussion
 
+
 @pytest.fixture(scope="function")
 def discussion_with_semantic_analysis(discussion, test_session):
     discussion.preferences['with_semantic_analysis'] = True
     test_session.commit()
     return discussion
+
 
 @pytest.fixture(scope="function")
 def discussion_with_translation(discussion, test_session):

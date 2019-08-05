@@ -1,6 +1,8 @@
 #!/usr/bin/python
 """A long-running process that receives requests to read data from various ContentSources,
 and reads at reasonable intervals. It can also handle sources that can push changes. """
+from __future__ import print_function
+
 import sys
 import signal
 from random import uniform
@@ -26,7 +28,6 @@ from ..lib.enum import OrderedEnum
 from ..lib.sqla import configure_engine
 from . import configure
 
-from __future__ import print_function
 
 log = logging.getLogger()
 pool_counter = 0

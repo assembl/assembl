@@ -1,5 +1,7 @@
-import pytest
 from __future__ import print_function
+
+import pytest
+
 
 @pytest.fixture(scope="function")
 def participant1_user_language_preference_en_cookie(request, test_session, en_locale,

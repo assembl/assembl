@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import pytest
 from freezegun import freeze_time
-
 from graphql_relay.node.node import from_global_id
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def graphql_request(request, test_adminuser_webrequest, discussion):

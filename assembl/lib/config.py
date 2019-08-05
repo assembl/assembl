@@ -1,8 +1,8 @@
 """ Indirection layer to enable getting at the config while not littering the
 codebase with thread-local access code. """
+from __future__ import print_function
 
 from pyramid.threadlocal import get_current_registry
-from __future__ import print_function
 
 _settings = None
 

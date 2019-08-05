@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import sys
 import re
@@ -17,7 +19,7 @@ from .common import (
 from .sudoer import (
     install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
     install_chrome_dependencies)
-from __future__ import print_function
+
 
 def get_node_base_path(c):
     return normpath(join(

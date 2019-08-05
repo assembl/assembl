@@ -1,5 +1,6 @@
-import pytest
 from __future__ import print_function
+import pytest
+
 
 @pytest.fixture(scope="function")
 def header_landing_page_module_type(request, test_session, discussion):

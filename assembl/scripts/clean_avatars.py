@@ -1,4 +1,5 @@
 """Reset obsolete avatar values obtained from social accounts."""
+from __future__ import print_function
 
 import sys
 import logging.config
@@ -13,7 +14,6 @@ from assembl.lib.zmqlib import configure_zmq
 from assembl.lib.config import set_config
 from assembl.indexing.changes import configure_indexing
 
-from __future__ import print_function
 
 def clean_avatars(db):
     from assembl.models import SocialAuthAccount

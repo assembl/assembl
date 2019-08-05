@@ -1,11 +1,12 @@
 #!/usr/bin/env python
 "Emulate psql in Python, because psql does not like running from within fab."
+from __future__ import print_function
 
 import argparse
 import getpass
 import psycopg2
 from psycopg2.extensions import ISOLATION_LEVEL_AUTOCOMMIT
-from __future__ import print_function
+
 
 def main():
     parser = argparse.ArgumentParser(description='Call postgresql.')

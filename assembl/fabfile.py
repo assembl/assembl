@@ -12,8 +12,7 @@ file can also work well if invoked through a symbolic link.
 .. _Fabric: http://www.fabfile.org/installing-1.x.html
 """
 
-from __future__ import with_statement
-from __future__ import print_function
+from __future__ import with_statement, print_function
 
 from os import getenv
 import sys

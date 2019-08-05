@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-import pytest
 from __future__ import print_function
+
+import pytest
+
 
 @pytest.fixture(scope="function")
 def criterion_1(request, discussion, subidea_1, test_session):

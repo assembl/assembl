@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import sys
 import os
 import os.path
@@ -6,7 +8,6 @@ from os.path import join, normpath
 from contextlib import nested
 import base64
 import json
-from __future__ import print_function
 
 from invoke import Task, task as base_task
 from os.path import dirname, realpath

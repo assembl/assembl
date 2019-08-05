@@ -1,13 +1,15 @@
-from datetime import datetime
+from __future__ import print_function
 
 import pytest
 from pyramid import testing
 from pyramid.threadlocal import manager
+from datetime import datetime
+
 
 from assembl.auth import R_MODERATOR, R_PARTICIPANT
 from assembl.lib.config import get_config
 from ..utils import PyramidWebTestRequest
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def participant1_user(request, test_session, discussion):
@@ -159,7 +161,7 @@ def discussion_sysadmin_user(request, test_app, test_session, discussion):
     from datetime import datetime
     from assembl.auth import R_SYSADMIN
     from assembl.models import User
-    from assembl.models.auth import Role, LocalUserRole, UserRole
+    from assembl.models.auth import Role, UserRole
 
     u = User(name=u"Maximilien de Robespierre 3", type="user",
              last_assembl_login=datetime.utcnow())

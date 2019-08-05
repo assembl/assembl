@@ -1,7 +1,7 @@
-import pytest
-
-from urllib import quote_plus, unquote
 from __future__ import print_function
+
+import pytest
+from urllib import quote_plus, unquote
 
 backbone_prefix = "/debate/"
 react_prefix = "/"

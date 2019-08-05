@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """ Generate various secondary INI files from the main INI file. """
+from __future__ import print_function
 
 import sys
 import os
@@ -10,8 +11,6 @@ from argparse import ArgumentParser, FileType
 import logging
 
 from ..fabfile import combine_rc, code_root, venv_path, filter_global_names, fill_template
-
-from __future__ import print_function
 
 # global umask so ini files are unreadable by others
 os.umask(0o027)

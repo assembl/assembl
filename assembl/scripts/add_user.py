@@ -1,14 +1,14 @@
 """Add a user to the Assembl instance.
 
 Useful to populate the first sysadmin from the command line."""
+from __future__ import print_function
+
 import argparse
+import transaction
 from getpass import getpass, getuser
 from json import load
 from pyisemail import is_email
-
-
 from pyramid.paster import get_appsettings, bootstrap
-import transaction
 
 from ..lib.sqla import configure_engine
 from ..lib.zmqlib import configure_zmq
@@ -16,7 +16,6 @@ from ..lib.model_watcher import configure_model_watcher
 from ..lib.config import set_config
 from ..indexing.changes import configure_indexing
 
-from __future__ import print_function
 
 global all_roles
 

@@ -1,7 +1,7 @@
 """ZMQ setup for the changes socket"""
+from __future__ import print_function
 import atexit
 from itertools import count
-from __future__ import print_function
 
 import zmq
 import zmq.devices

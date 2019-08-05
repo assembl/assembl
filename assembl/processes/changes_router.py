@@ -1,6 +1,8 @@
 """This process obtains JSON representations of modified, created or deleted
 database objects through ZeroMQ, and feeds them to browser clients
 through a websocket."""
+from __future__ import print_function
+
 import signal
 import time
 import sys
@@ -22,8 +24,6 @@ from tornado.httpserver import HTTPServer
 from assembl.lib.zmqlib import INTERNAL_SOCKET
 from assembl.lib.sentry import capture_exception
 from assembl.lib.web_token import decode_token, TokenInvalid
-
-from __future__ import print_function
 
 # Inspired by socksproxy.
 

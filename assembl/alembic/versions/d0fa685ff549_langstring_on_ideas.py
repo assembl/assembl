@@ -7,6 +7,8 @@ Create Date: 2017-09-25 13:10:05.337618
 """
 
 # revision identifiers, used by Alembic.
+from __future__ import print_function
+
 revision = 'd0fa685ff549'
 down_revision = '5dc0a7b57c0f'
 
@@ -18,7 +20,6 @@ from itertools import chain
 
 from assembl.lib import config
 from assembl.lib.clean_input import sanitize_text
-from __future__ import print_function
 
 def upgrade(pyramid_env):
     with context.begin_transaction():

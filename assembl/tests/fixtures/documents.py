@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 """File/document related fixtures."""
-import os
-
-import pytest
 from __future__ import print_function
+
+import os
+import pytest
+
 
 @pytest.fixture(scope="function")
 def simple_file(request, discussion, test_session):

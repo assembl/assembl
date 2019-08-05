@@ -1,7 +1,9 @@
+from __future__ import print_function
+
 import json
 import pytest
 from datetime import datetime, timedelta
-from __future__ import print_function
+
 
 @pytest.fixture(scope="function")
 def creativity_session_widget(

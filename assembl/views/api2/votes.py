@@ -1,5 +1,6 @@
+from __future__ import print_function
+
 from cStringIO import StringIO
-import csv
 from collections import defaultdict
 import operator
 
@@ -22,7 +23,7 @@ from assembl.lib.sqla import get_named_class
 from . import (FORM_HEADER, JSON_HEADER, check_permissions)
 from assembl.utils import format_date
 from assembl.views.api2.discussion import csv_response, CSV_MIMETYPE
-from __future__ import print_function
+
 
 # Votes are private
 @view_config(context=CollectionContext, renderer='json',

@@ -1,6 +1,6 @@
-from collections import defaultdict
+from __future__ import print_function
 
-import simplejson as json
+from collections import defaultdict
 from elasticsearch.client import Elasticsearch, TransportError
 
 from assembl.lib import config
@@ -8,7 +8,6 @@ from assembl.lib.locale import strip_country
 from assembl.lib.clean_input import unescape
 from assembl.indexing.settings import index_languages, get_index_settings, MAPPINGS
 
-from __future__ import print_function
 
 _es = None
 

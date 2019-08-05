@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 
 from assembl.auth import P_SYSADMIN
-from __future__ import print_function
+
 
 def _test_load_fixture(test_webrequest, discussion, admin, fixture):
     test_webrequest.matchdict = {'discussion_slug': discussion.slug}

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-import pytest
-
-from graphql_relay.node.node import to_global_id
 from __future__ import print_function
+
+import pytest
+from graphql_relay.node.node import to_global_id
+
 
 @pytest.fixture(scope="function")
 def vote_session(request, test_session, discussion, timeline_vote_session,

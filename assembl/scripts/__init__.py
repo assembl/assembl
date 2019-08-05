@@ -1,7 +1,7 @@
 """Scripts that can be run from the CLI"""
+from __future__ import print_function
 
 import logging.config
-
 from pyramid.paster import get_appsettings, bootstrap
 
 from ..lib.sqla import configure_engine, get_session_maker
@@ -10,7 +10,6 @@ from ..lib.model_watcher import configure_model_watcher
 from ..lib.config import set_config
 from ..indexing.changes import configure_indexing
 
-from __future__ import print_function
 
 def get_multimodule_extracts_file(discussion, lang='fr', anon='false', social_columns=True, start=None, end=None, interval=None):
     """

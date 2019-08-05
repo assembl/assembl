@@ -1,7 +1,8 @@
-import pytest
-
-from assembl.auth import P_SYSADMIN
 from __future__ import print_function
+
+import pytest
+from assembl.auth import P_SYSADMIN
+
 
 @pytest.fixture(scope="function")
 def default_preferences(request, test_session, base_registry):
