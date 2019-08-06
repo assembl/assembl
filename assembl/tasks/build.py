@@ -582,7 +582,7 @@ def push_wheelhouse(c, house=None):
 
 @task()
 def push_built_themes_to_remote_bucket(c):
-    print "Pushing themes to remote buckets has now been deprecated. Remove this from CI/CD scripts"
+    c.run('echo "Pushing themes to remote buckets has now been deprecated. Remove this from CI/CD scripts"')
 
 
 @task(
