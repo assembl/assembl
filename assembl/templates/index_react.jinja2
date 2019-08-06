@@ -3,9 +3,13 @@
 
 {% block main_css %}
     {# Override the main CSS. #}
-    {% if NODE_ENV != 'development' %}
-    <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/{{css_style}}" />
+    {% if NODE_ENV == 'development' %}
+    <link rel="stylesheet" href="{{REACT_URL}}/node_modules/bootstrap/dist/css/bootstrap.css">
+    {% else %}
+    <!-- WHEN UPGRADING BOOTSTRAP IN PACKAGE.JSON, UPDATE THE VERSION OF PRODUCTION HERE AS WELL -->
+    <link rel="stylesheet" href="//stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     {% endif %}
+    <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/{{css_style}}" />
 {% endblock %}
 
 {% block body %}
@@ -42,12 +46,7 @@
         <div id='root' data-sentry-dsn="{{sentry_dsn}}"></div>
         {% block main_js %}
             {% include 'analytics_common.jinja2' %}
-            {% if NODE_ENV == 'development' %}
-                <script src='{{REACT_URL}}/build/{{js_bundle}}'></script>
-                <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/{{css_style}}" />
-            {% else %}
-                <script src='{{REACT_URL}}/build/{{js_bundle}}'></script>
-            {% endif %}
+            <script src='{{REACT_URL}}/build/{{js_bundle}}'></script>
         {% endblock %}
 
         {% block for_testing %}
