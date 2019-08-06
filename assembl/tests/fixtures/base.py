@@ -288,7 +288,7 @@ def static_build(request):
 
 
 @pytest.fixture(scope="function")
-def test_app(request, static_asset_resources_html, admin_user, test_app_no_perm):
+def test_app(request, admin_user, test_app_no_perm):
     """A configured Assembl fixture with permissions
     and an admin user logged in"""
 
