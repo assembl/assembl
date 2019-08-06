@@ -7,6 +7,8 @@ mutation updateDiscussionPreference(
   $favicon: String
   $slug: String
   $logo: String
+  $firstColor: String
+  $secondColor: String
 ) {
   updateDiscussionPreferences(
     languages: $languages
@@ -17,6 +19,8 @@ mutation updateDiscussionPreference(
     favicon: $favicon
     slug: $slug
     logo: $logo
+    firstColor: $firstColor
+    secondColor: $secondColor
   ) {
     preferences {
       languages {

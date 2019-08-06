@@ -84,25 +84,6 @@
       .action-edit {
         margin-left: 15px;
         margin-right: 15px;
-
-        .editPostIcon {
-          path {
-            fill: $first-color;
-            stroke: $first-color;
-          }
-        }
-      }
-
-      .action-delete {
-        .deletePostIcon {
-          .group {
-            fill: $first-color;
-
-            .path {
-              stroke: $first-color;
-            }
-          }
-        }
       }
 
       .assembl-icon-up-open,
@@ -180,6 +161,8 @@
 
 @media screen and (min-width: $screen-sm-min) {
   .comment-container {
+    padding-left: 40px;
+
     .circle-avatar {
       margin-top: 0;
     }
@@ -196,10 +179,6 @@
         }
       }
     }
-  }
-
-  .comment-container {
-    padding-left: 40px;
   }
 }
 

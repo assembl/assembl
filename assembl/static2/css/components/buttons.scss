@@ -1,7 +1,7 @@
 /* Begin Code specific to the button hover animation (horizontal fill of background and inversion of text color) */
 
 @mixin button-with-hover-animation(
-  $text-color, $border-color, $hover-background-color: $border-color, $background-color: initial) {
+  $text-color, $border-color: yellow, $hover-background-color: $border-color, $background-color: initial) {
   position: relative; /* so that on hover, background animation can fill the button instead of its parent */
   background-color: $background-color;
   border-color: $border-color;
@@ -44,7 +44,7 @@
 /* End Code specific to the button hover animation (horizontal fill of background and inversion of text color) */
 
 .button-link {
-  @include button-with-hover-animation($btn-light-txt, $btn-light-border-color);
+  @include button-with-hover-animation($btn-light-txt);
 
   @extend .button-generic;
 
@@ -86,7 +86,7 @@
 }
 
 .button-light {
-  @include button-with-hover-animation($btn-light-txt, $btn-light-border-color);
+  @include button-with-hover-animation($btn-light-txt);
 
   background: $btn-light-bkg;
   border-width: $btn-light-border-width;
@@ -94,7 +94,7 @@
 }
 
 .button-dark {
-  @include button-with-hover-animation($btn-dark-txt, $btn-dark-border-color);
+  @include button-with-hover-animation($btn-dark-txt);
 
   background: $btn-dark-bkg;
   border-width: $btn-dark-border-width;
@@ -141,7 +141,6 @@
 .button-diamond-dark {
   border-left: none;
   transition: none;
-  color: $btn-dark-border-color;
   margin-left: 18px;
   display: inline-block;
   height: 40px;
@@ -156,7 +155,8 @@
     left: -14px;
     height: 28px;
     width: 28px;
-    border: $btn-dark-border-style $btn-dark-border-width $btn-dark-border-color;
+    border-style: $btn-dark-border-style;
+    border-width: $btn-dark-border-width;
     transform: rotate(45deg);
     top: 4px;
     border-top: none;
@@ -168,13 +168,9 @@
   background-color: initial;
 
   .button-diamond-dark-back {
-    background-color: $btn-dark-border-color;
-    border-color: $btn-dark-border-color;
-
     &:before {
       content: '';
       position: absolute;
-      background: $btn-dark-border-color;
       bottom: 0;
       left: 0;
       top: 0;
@@ -224,8 +220,6 @@
 }
 
 .share-button {
-  background-color: $first-color;
-
   .share-icon-container {
     display: inline-block;
     width: 30px;
@@ -291,7 +285,6 @@
 // Icon default style
 @import '../../js/app/components/common/icons/deletePostIcon/deletePostIcon.scss';
 @import '../../js/app/components/common/icons/editPostIcon/editPostIcon.scss';
-@import '../../js/app/components/common/icons/mailIcon/mailIcon.scss';
 
 // The partial used below is only used as an example for instruction purpose
 @import '../../js/app/integration/101/components/button101/button101';

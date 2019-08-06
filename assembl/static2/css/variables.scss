@@ -18,9 +18,6 @@ $blue: #7490ca;
 $purple: #5404d7;
 $purple-light: #e7e6f5;
 $yellow: #f0ab2b;
-$cyan: #0095b2;
-$cyan-transparent: #0094b291;
-$cyan-light: #3aaece;
 $opacity-blue: rgba(53, 66, 105, 0.5);
 $min-opacity-blue: rgba(53, 66, 105, 0.1);
 $like-color: #46d38d;
@@ -34,8 +31,6 @@ $harvesting-blue: #00b6ff;
 $harvesting-blue-light: rgba(0, 182, 255, 0.4);
 
 $opacity-purple: rgba(84, 4, 215, 0.5);
-$opacity-cyan: rgba(0, 140, 166, 0.5);
-$min-opacity-cyan: rgba(0, 140, 166, 0.1);
 $linear-gradient: linear-gradient(90deg, $light-grey, $white);
 
 $sentiment-level-0: $red;
@@ -43,12 +38,6 @@ $sentiment-level-1: $orange4;
 $sentiment-level-2: $light-green;
 $sentiment-level-3: $green2;
 
-$first-color: $cyan;
-$first-color-light: $cyan-light;
-$second-color: $yellow;
-$third-color: $cyan;
-$opacity-color: $opacity-cyan;
-$min-opacity-color: $min-opacity-cyan;
 $warning-alert: $orange;
 $warning-alert-text: $orange2;
 $timeline-box-number-color: $white;
@@ -76,37 +65,25 @@ $fonts-dir: 'https://bluenove-assembl-fonts.s3-eu-west-1.amazonaws.com' !default
 @font-face {
   font-family: 'latoRegular';
   src: url('#{$fonts-dir}/Lato-Regular.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Regular.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Regular.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Regular.woff') format('woff'), url('#{$fonts-dir}/Lato-Regular.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoMedium';
   src: url('#{$fonts-dir}/Lato-Medium.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Medium.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Medium.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Medium.woff') format('woff'), url('#{$fonts-dir}/Lato-Medium.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoBold';
   src: url('#{$fonts-dir}/Lato-Bold.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Bold.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Bold.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Bold.woff') format('woff'), url('#{$fonts-dir}/Lato-Bold.ttf') format('truetype');
 }
 
 @font-face {
   font-family: 'LatoLight';
   src: url('#{$fonts-dir}/Lato-Light.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Light.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Light.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Light.woff') format('woff'), url('#{$fonts-dir}/Lato-Light.ttf') format('truetype');
 }
 
 @font-face {
@@ -121,10 +98,7 @@ $fonts-dir: 'https://bluenove-assembl-fonts.s3-eu-west-1.amazonaws.com' !default
 @font-face {
   font-family: 'LatoItalic';
   src: url('#{$fonts-dir}/Lato-Italic.eot');
-  src:
-    local('☺'),
-    url('#{$fonts-dir}/Lato-Italic.woff') format('woff'),
-    url('#{$fonts-dir}/Lato-Italic.ttf') format('truetype');
+  src: local('☺'), url('#{$fonts-dir}/Lato-Italic.woff') format('woff'), url('#{$fonts-dir}/Lato-Italic.ttf') format('truetype');
 }
 
 @font-face {
@@ -145,13 +119,17 @@ $fonts-dir: 'https://bluenove-assembl-fonts.s3-eu-west-1.amazonaws.com' !default
     url('#{$fonts-dir}/Lato-Hairline.ttf') format('truetype');
 }
 
-$font-family: 'latoRegular';
-$font-family2: 'LatoMedium';
-$font-family3: 'LatoBold';
-$font-family4: 'LatoLight';
-$font-family5: 'LatoSemiBold';
-$font-family6: 'LatoItalic';
-$font-family7: 'LatoLightItalic';
+// font fold back
+$fold-back-font-sans-serif: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+  sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji' !default;
+
+$font-family: 'latoRegular', $fold-back-font-sans-serif;
+$font-family2: 'LatoMedium', $fold-back-font-sans-serif;
+$font-family3: 'LatoBold', $fold-back-font-sans-serif;
+$font-family4: 'LatoLight', $fold-back-font-sans-serif;
+$font-family5: 'LatoSemiBold', $fold-back-font-sans-serif;
+$font-family6: 'LatoItalic', $fold-back-font-sans-serif;
+$font-family7: 'LatoLightItalic', $fold-back-font-sans-serif;
 
 $font-size-xxxs: 8px;
 $font-size-xxs: 10px;

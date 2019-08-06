@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Col } from 'react-bootstrap';
 import { I18n } from 'react-redux-i18n';
+import { connect } from 'react-redux';
 
 // Component imports
 import ToolbarSlider from '../../components/common/toolbarSlider/toolbarSlider';
@@ -20,11 +21,14 @@ import type { Keyword, SemanticAnalysisData } from '../../pages/semanticAnalysis
 // Helper imports
 import { isMicrosoftBrowser } from '../../utils/globalFunctions';
 
-import { firstColor, secondColor } from '../../../../css/themes/default/_theme';
-
 export type Props = {
   /** Semantic analysis data */
   semanticAnalysisData: SemanticAnalysisData
+};
+
+type ReduxProps = {
+  /** Theme fetched from redux */
+  theme: Theme
 };
 
 export type State = {
@@ -35,7 +39,7 @@ export type State = {
 
 const noKeywordSelectedKey = 'debate.semanticAnalysis.noKeywordSelected';
 
-export class SemanticAnalysis extends Component<Props, State> {
+export class SemanticAnalysis extends Component<Props & ReduxProps, State> {
   state = {
     keywordSelected: false,
     keywordData: {
@@ -85,7 +89,12 @@ export class SemanticAnalysis extends Component<Props, State> {
 
   render() {
     const { keywordData, numberOfKeywordsToDisplay } = this.state;
-    const { semanticAnalysisData } = this.props;
+    const { semanticAnalysisData, theme } = this.props;
+
+    // Set theme color
+    const fallbackColor = '#FFFF00'; // Yellow color
+    const firstColor = theme ? theme.firstColor : fallbackColor;
+    const secondColor = theme ? theme.secondColor : fallbackColor;
 
     // Semantic analysis
     const { nlpSentiment, topKeywords } = semanticAnalysisData;
@@ -211,4 +220,8 @@ export class SemanticAnalysis extends Component<Props, State> {
   }
 }
 
-export default SemanticAnalysis;
+const mapStateToProps = state => ({
+  theme: state.theme
+});
+
+export const SmartSemanticAnalysis = connect(mapStateToProps)(SemanticAnalysis);

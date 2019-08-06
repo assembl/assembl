@@ -45,7 +45,6 @@ $animation-speed: 1.4s;
 
   .path {
     animation: dash infinite $animation-speed ease-in-out;
-    stroke: $first-color;
     stroke-dasharray: 190;
     transform-origin: center;
   }
@@ -87,4 +86,3 @@ $animation-speed: 1.4s;
 }
 
 @import '../icons/errorIcon/errorIcon.scss';
-@import '../icons/noDataIcon/noDataIcon.scss';

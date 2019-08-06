@@ -5,10 +5,6 @@
 // search-box component and layout.
 
 // @import "../../node_modules/searchkit/theming/components.scss";
-$sk-active-bg-color: $first-color;
-$sk-action-text-color: $first-color;
-$sk-selector-active-background: $first-color;
-$highlightColor: $first-color-light;
 
 @import '../../node_modules/searchkit/theming/components/arrows.scss';
 @import '../../node_modules/searchkit/theming/components/actions.scss';
@@ -55,7 +51,6 @@ $highlightColor: $first-color-light;
   display: inline-block;
 
   &.is-active {
-    background-color: $highlightColor;
     font-weight: bold;
   }
 
@@ -124,6 +119,9 @@ $highlightColor: $first-color-light;
     width: 250px;
     float: left;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08);
+    max-height: 600px;
+    overflow-x: hidden;
+    overflow-y: scroll;
 
     .sk-panel {
       margin: 16px 0 0 0;
@@ -148,6 +146,10 @@ $highlightColor: $first-color-light;
     .sk-range-input {
       margin-top: 10px;
     }
+
+    .sk-select select {
+      width: 100%;
+    }
   }
 
   &__results {
@@ -171,6 +173,11 @@ $highlightColor: $first-color-light;
 
   .sk-hits-stats {
     line-height: 30px;
+  }
+
+  .sk-select,
+  .sk-toggle {
+    margin-left: 15px;
   }
 }
 
@@ -204,6 +211,8 @@ $highlightColor: $first-color-light;
 }
 
 .sk-search-box {
+  margin-right: 10px;
+
   form {
     position: relative;
   }
@@ -257,10 +266,6 @@ $highlightColor: $first-color-light;
   display: inline-block;
 }
 
-.sk-search-box {
-  margin-right: 10px;
-}
-
 .sk-range-filter {
   .rc-slider-handle {
     border-color: $sk-primary-theme-color;
@@ -298,13 +303,8 @@ $highlightColor: $first-color-light;
   overflow-y: scroll;
   margin: 0 15px 20px;
 
-  em {
-    background: $highlightColor;
-  }
-
   a {
     text-decoration: none;
-    color: $sk-action-text-color;
   }
 
   &__no-results {
@@ -323,7 +323,8 @@ $marginLeft: 80px;
 
 .sk-hits-list-hit {
   padding-bottom: 1em;
-  border-bottom: 1px solid $first-color;
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
   clear: both;
   min-height: 9em;
   position: relative;
@@ -361,27 +362,9 @@ $marginLeft: 80px;
     float: left;
 
     &:before {
-      color: $first-color;
       font-size: $imgtypeWidth;
       margin: 0;
     }
-  }
-}
-
-.sk-action-bar {
-  .sk-select,
-  .sk-toggle {
-    margin-left: 15px;
-  }
-}
-
-.sk-layout__filters {
-  max-height: 600px;
-  overflow-x: hidden;
-  overflow-y: scroll;
-
-  .sk-select select {
-    width: 100%;
   }
 }
 

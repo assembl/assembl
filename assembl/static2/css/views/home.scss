@@ -58,7 +58,6 @@ $illustration-box-margin-right: 2px;
   }
 
   .header-section {
-    background-color: $first-color;
     min-height: 380px;
     height: auto; // override the 500px from common header component
     overflow: hidden;
@@ -163,7 +162,6 @@ $illustration-box-margin-right: 2px;
         padding: 25px 40px;
 
         .idea-link-title {
-          color: $first-color;
           display: block;
           text-align: center;
         }
@@ -182,8 +180,6 @@ $illustration-box-margin-right: 2px;
         }
 
         &:hover {
-          background-color: $opacity-color;
-
           .idea-link-title {
             color: $white;
           }

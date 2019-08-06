@@ -11,7 +11,9 @@ function getVariables(values, initialValues) {
   return {
     tabTitle: values.title,
     favicon: getFileVariable(values.favicon, initialFavicon),
-    logo: getFileVariable(values.logo, initialLogo)
+    logo: getFileVariable(values.logo, initialLogo),
+    firstColor: values.firstColor,
+    secondColor: values.secondColor
   };
 }
 

@@ -2,7 +2,6 @@
   height: $navbar-height;
 
   .bar {
-    background-color: $first-color;
     bottom: 0;
     height: 10px;
     position: absolute;
@@ -18,7 +17,6 @@
   }
 
   .pointer {
-    fill: $first-color;
     position: absolute;
     z-index: 10;
     cursor: auto;
@@ -29,7 +27,6 @@
   }
 
   .timeline-date {
-    color: $first-color;
     font-size: $font-size-m;
     letter-spacing: $text-letter-spacing;
     margin-top: -30px;
@@ -39,13 +36,13 @@
 }
 
 .timeline-container:last-child {
-  border-top: 1px solid $first-color-light;
+  border-top-style: solid;
+  border-top-width: 1px;
 }
 
 .menu-container {
   .menu-item {
     font-size: $font-size-xs;
-    color: $first-color;
     padding: 5px 20px;
   }
 }
@@ -58,11 +55,8 @@
   flex-basis: 0;
   display: flex;
   justify-content: space-between;
-  border-bottom: 1px solid $first-color-light;
-
-  .active {
-    background-color: $first-color;
-  }
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
 
   .not-active {
     background-color: $light-grey;
@@ -112,7 +106,6 @@
           top: 0;
           bottom: 0;
           width: 100%;
-          background-color: $first-color;
           opacity: 0.7;
         }
       }
@@ -133,7 +126,6 @@
     left: calc(50% - 9px);
     height: 22px;
     width: 22px;
-    background-color: $first-color;
     transform: rotate(45deg);
     bottom: -5px;
     display: none;
@@ -157,7 +149,6 @@
     }
 
     .timeline-link {
-      color: $first-color;
       height: 100%;
       padding-right: 10px;
     }
@@ -186,19 +177,9 @@
       display: block;
     }
 
-    .txt-not-active {
-      ~ .timeline-graph {
-        .timeline-number {
-          background-color: $first-color;
-        }
-
-        .timeline-bar-background-container {
-          background-color: $first-color;
-        }
-      }
-
+    .txt-active-light {
       .timeline-link {
-        color: $first-color;
+        font-family: $font-family3;
       }
     }
   }

@@ -21,7 +21,8 @@
   }
 }
 
-.proposals, .posts {
+.proposals,
+.posts {
   .post-body .body {
     font-family: $font-family4;
     color: $post-text-color;
@@ -53,7 +54,6 @@
   }
 
   .read-more {
-    color: $title3-dark-color;
     font-family: $font-family4;
     font-weight: bold;
     margin-bottom: 24px;
@@ -69,7 +69,8 @@
 
   .box {
     border-bottom: $navbar-border;
-    border-left: $border-theme;
+    border-left-style: solid;
+    border-left-width: 4px;
     border-right: $navbar-border;
     border-top: $navbar-border;
     margin: 0 auto 40px;
@@ -92,10 +93,6 @@
 
     &.pending {
       color: $orange3;
-    }
-
-    .username {
-      color: $first-color;
     }
   }
 
@@ -130,30 +127,16 @@
 
     .answer-form-inner .form-group {
       margin: 13px 0 0;
-      border: 1px solid $first-color-light;
+      border-style: solid;
+      border-width: 1px;
     }
   }
 
   .overflow-action {
     cursor: pointer;
     margin: 20px 3px 0;
-    color: $first-color-opacity-70;
     border: none;
     background-color: transparent;
-
-    .deletePostIcon {
-      .group {
-        fill: $first-color;
-
-        .path {
-          stroke: $first-color;
-        }
-      }
-    }
-
-    &:hover {
-      color: $first-color;
-    }
   }
 
   .stat-sentiment {
@@ -200,7 +183,6 @@
 
   .sentiment-label {
     font-weight: bold;
-    color: $theme-local-blue;
   }
 
   .question-footer {
@@ -315,9 +297,7 @@ $deleted-post-border: 1px solid $light-grey !default;
     .post-actions {
       width: 100%;
     }
-  }
 
-  .post-right {
     &.pending {
       background-color: $orange;
     }
@@ -368,11 +348,6 @@ $deleted-post-border: 1px solid $light-grey !default;
   .overflow-action {
     cursor: pointer;
     margin: 20px 0 0;
-    color: $first-color-opacity-70;
-
-    &:hover {
-      color: $first-color;
-    }
 
     .assembl-icon-ellipsis-vert {
       &:before {
@@ -398,18 +373,22 @@ $deleted-post-border: 1px solid $light-grey !default;
     margin: auto;
     background-color: $white;
     border-top: 2px solid $white;
-    border: 1px solid $first-color-light;
-    box-shadow: 3px 4px 4px 0 $first-color-light;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 3px 4px 4px 0;
     padding: 30px;
 
     .assembl-icon-back-arrow {
+      padding-left: 10px;
+
       &:before {
         font-size: $font-size-s;
       }
     }
 
     .DraftEditor-root {
-      border: solid 2px $first-color;
+      border-style: solid;
+      border-width: 2px;
     }
 
     .answer-form-inner {
@@ -420,10 +399,6 @@ $deleted-post-border: 1px solid $light-grey !default;
 
     .button-container {
       margin: 25px 0 0;
-    }
-
-    .assembl-icon-back-arrow {
-      padding-left: 10px;
     }
 
     .btn {
@@ -451,8 +426,9 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .form-group {
-      border: $first-color solid 1px;
-      box-shadow: 1px 1px $first-color;
+      border-style: solid;
+      border-width: 1px;
+      box-shadow: 1px 1px;
     }
 
     .public-DraftEditor-content {
@@ -495,7 +471,6 @@ $deleted-post-border: 1px solid $light-grey !default;
       .nugget {
         .nugget-txt {
           font-family: $font-family6;
-          color: $first-color;
           margin-bottom: 25px;
         }
 
@@ -568,7 +543,6 @@ $deleted-post-border: 1px solid $light-grey !default;
     }
 
     .statistic {
-      background-color: $first-color-light;
       float: left;
       height: 100%;
       min-width: 150px;
@@ -649,12 +623,18 @@ $deleted-post-border: 1px solid $light-grey !default;
 @media screen and (max-width: $screen-xs-max) {
   .proposals {
     .content {
+      text-align: left;
+
       .post-footer {
         margin: 5px 20px 0 25px;
 
         div {
           display: none;
         }
+      }
+
+      .user {
+        padding: 30px 20px 0;
       }
     }
 
@@ -725,14 +705,6 @@ $deleted-post-border: 1px solid $light-grey !default;
         display: flex;
         flex-direction: column;
         justify-content: center;
-      }
-    }
-
-    .content {
-      text-align: left;
-
-      .user {
-        padding: 30px 20px 0;
       }
     }
 

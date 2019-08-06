@@ -14,5 +14,7 @@ query DiscussionPreferencesQuery {
     withModeration
     withTranslation
     withSemanticAnalysis
+    firstColor
+    secondColor
   }
 }

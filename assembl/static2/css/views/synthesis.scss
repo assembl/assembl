@@ -42,7 +42,6 @@
 
     .assembl-icon-down-open {
       font-size: $font-size-xxs;
-      color: $first-color;
       margin: 0 10px 1px 0;
     }
 
@@ -53,8 +52,6 @@
     }
 
     .active {
-      background: rgba($first-color, 0.15);
-
       a {
         pointer-events: none;
       }
@@ -63,7 +60,6 @@
     .side-menu-link-1 {
       overflow: auto;
       font-size: $font-size-s;
-      color: $first-color;
       line-height: 22px;
       font-family: $font-family3;
       letter-spacing: 2px;
@@ -74,7 +70,6 @@
       overflow: auto;
       margin-left: 20px;
       font-size: $font-size-xs;
-      color: $first-color;
       line-height: 20px;
       font-family: $font-family3;
     }
@@ -83,7 +78,6 @@
       overflow: auto;
       margin-left: 40px;
       font-size: $font-size-xs;
-      color: $first-color;
       line-height: 20px;
       font-family: $font-family3;
     }

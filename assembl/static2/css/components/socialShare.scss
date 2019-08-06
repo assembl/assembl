@@ -4,6 +4,11 @@
   .social-share-buttons-container {
     margin-top: 8px;
     margin-bottom: 8px;
+
+    .social-share-button {
+      display: inline-block;
+      padding: 0 10px;
+    }
   }
 
   .btn-share {
@@ -17,8 +22,8 @@
     }
 
     &.btn-copy {
-      border: solid 1px $first-color;
-      background-color: $first-color;
+      border-style: solid;
+      border-width: 1px;
       color: $white;
 
       &:focus {
@@ -44,8 +49,8 @@
 
     &.btn-mail {
       background-color: $white;
-      border: solid 1px $first-color;
-      color: $first-color;
+      border-style: solid;
+      border-width: 1px;
       margin-top: 8px;
 
       &:focus {
@@ -69,13 +74,6 @@
   @media screen and (max-width: 700px) {
     .btn-share {
       width: 100%;
-    }
-  }
-
-  .social-share-buttons-container {
-    .social-share-button {
-      display: inline-block;
-      padding: 0 10px;
     }
   }
 }

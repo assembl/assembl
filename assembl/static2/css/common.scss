@@ -13,7 +13,6 @@ body {
 }
 
 a {
-  color: $link-color;
   text-decoration: none;
 
   &:hover {
@@ -79,14 +78,6 @@ textarea.placeholder {
   color: $black;
 }
 
-.color {
-  color: $first-color;
-}
-
-.color2 {
-  color: $second-color;
-}
-
 .app-content {
   margin: 40px 0 0;
 }
@@ -110,10 +101,6 @@ textarea.placeholder {
 
 .background-dark {
   background-color: $page-bkg-dark;
-}
-
-.background-color {
-  background-color: $first-color-light;
 }
 
 .background-img {

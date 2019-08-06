@@ -6,7 +6,7 @@ import Adapter from 'enzyme-adapter-react-16';
 
 /* eslint-enable */
 
-import { SemanticAnalysis } from '../semanticAnalysis';
+import { SmartSemanticAnalysis as SemanticAnalysis } from '../semanticAnalysis';
 import { SemanticAnalysisForDiscussion } from './semanticAnalysisForDiscussion';
 import type { Props as SemanticAnalysisForDiscussionProps } from './semanticAnalysisForDiscussion';
 

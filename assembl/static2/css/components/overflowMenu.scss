@@ -6,12 +6,12 @@
   }
 
   .overflow-menu-action {
-    color: $first-color-opacity-70;
     border: none;
     padding: 0;
 
-    &:hover, &:active, &:focus {
-      color: $first-color;
+    &:hover,
+    &:active,
+    &:focus {
       background: none;
       outline: none;
     }

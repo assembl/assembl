@@ -253,7 +253,7 @@ def get_resources_hash(theme_name, bucket_name='default'):
     return result
 
 
-def populate_theme_information(theme_name='default', version=2):
+def populate_theme_information(version=2):
     if version == 1:
         # Lock V1 into default theme only. When view is deprecated, this code can be removed.
         return {
@@ -264,39 +264,19 @@ def populate_theme_information(theme_name='default', version=2):
         if asbool(config.get('under_test')) or asbool(config.get('use_webpack_server')):
             # Local development mode, use default always (for now)
             data = {
-                # Used in dev
-                'theme_js_file': '/build/themes/default/theme_default_web.js',
-                # Used in testing
-                'full_theme_url': 'http://localhost/static2/build/themes/default/theme_default_web.css'
+                'css_style': 'style.css',
+                'js_bundle': 'bundle.js'
             }
         else:
-            # Production environment, currently handling only usecase of pulling from the s3 bucket
-            from urlparse import urljoin
-            theme_base, bucket_name = get_theme_base(config)
-            data = get_resources_hash(theme_name, bucket_name)
-            if not data.get('bundle_hash', None):
-                raise Exception("Cannot continue without more information regarding the bundle and themes")
-            if data.get('theme_css_file', None) is None:
-                data = get_resources_hash('default')
-            if not theme_base:
-                # If a configuration is not given, use the default theme that is put in the wheel
-                theme_path = data.get('theme_css_file', "") or ""
-                if theme_path.startswith('/'):
-                    default_path = os.path.join('static2', theme_path[1:])
-                else:
-                    default_path = os.path.join('static2', theme_path)
-                application_url = get_global_base_url()
-                full_path = urljoin(application_url, default_path)
-                data.update({'full_theme_url': full_path})
-                return data
-            data_css_file = data.get('theme_css_file')
-            if is_url(theme_base):
-                full_bucket_path = config.get('theme_base')
-                _css_parsed = data_css_file.split("/")
-                _i = _css_parsed.index(bucket_name)
-                path = "/".join(_css_parsed[_i + 1:])
-                full_url = urljoin(full_bucket_path, path)
-                data.update({'full_theme_url': full_url})
+            here = os.path.dirname(__file__)
+            directory = os.listdir(os.path.join(here, '../static2/build'))
+            exp = "(bundle)\.\w+\.js$|(style)\.\w+\.css$"
+            files = [f for f in directory if re.match(exp, f)]
+            files = {re.search(exp, f).group(0).split('.')[0]: f for i, f in enumerate(files)}
+            data = {
+                'css_style': files['style'],
+                'js_bundle': files['bundle']
+            }
         return data
 
 
