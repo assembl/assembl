@@ -21,6 +21,7 @@ import {
   postsFiltersPolicies,
   postsOrderPolicies
 } from './policies';
+import { ICO_FILTER } from '../../../../constants';
 
 type Props = {
   postsDisplayPolicy: PostsDisplayPolicy,
@@ -130,7 +131,7 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
             <img
               height={24}
               width={24}
-              src="/static2/img/icons/black/filter.svg"
+              src={ICO_FILTER}
               alt={I18n.t('debate.thread.sortFilterPosts')}
               title={I18n.t('debate.thread.sortFilterPosts')}
             />

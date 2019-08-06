@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 
-// Helpers imports
-import { getIconPath } from '../../../utils/globalFunctions';
+// Constant imports
+import { ICO_SLIDER_CURSOR } from '../../../constants';
 
 export type Props = {
   /** Optional classname for label style */
@@ -14,7 +14,7 @@ export type Props = {
 const ToolbarSliderIcon = ({ textClassName, value }: Props) => (
   <div className="sliderIcon">
     <p className={textClassName}>{value}</p>
-    <img alt="Slider thumb icon" src={getIconPath('icon-cursor-slider.svg')} />
+    <img alt="Slider thumb icon" src={ICO_SLIDER_CURSOR} />
   </div>
 );
 

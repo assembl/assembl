@@ -2,8 +2,8 @@
 import moment from 'moment';
 import ThematicsMenu from './components/administration/thematicsMenu';
 
-export const DEFAULT_FAVICON = '/static/img/icon/infinite-1.png';
-export const ICONS_PATH = '/static2/img/icons';
+export const DEFAULT_FAVICON = '/static/img/icon/infinite-1.png'; // Might get 4xx errors
+export const ICONS_PATH = '/static2/img/icons'; // Might get 4xx errors
 export const EXTRA_SMALL_SCREEN_WIDTH = 600;
 export const SMALL_SCREEN_WIDTH = 768;
 export const SMALL_SCREEN_HEIGHT = 812;
@@ -30,10 +30,32 @@ export const DELETE_CALLBACK = 'DELETE_CALLBACK';
 export const EMPTY_STRING = '';
 export const USER_ID_NOT_FOUND = -9999;
 export const PICTURES_LENGTH = 40; // Number of pictures available on S3
-export const PICTURE_BASE_URL = 'https://s3-eu-west-1.amazonaws.com';
-export const BM_PICTURE_BASE_URL = `${PICTURE_BASE_URL}/bluenove-assembl-images/bm/preview-`;
-export const SEMANTIC_ANALYSIS_PICTURE_BANNER_URL = `${PICTURE_BASE_URL}/bluenove-assembl-images/banner-semantic.png`;
+export const PICTURE_BASE_URL = 'https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images';
+export const BM_PICTURE_BASE_URL = `${PICTURE_BASE_URL}/bm/preview-`;
+export const SEMANTIC_ANALYSIS_PICTURE_BANNER_URL = `${PICTURE_BASE_URL}/banner-semantic.png`;
 export const PICTURE_EXTENSION = '.jpg';
+
+// Static assets
+export const ICO_DOC = `${PICTURE_BASE_URL}/doc.svg`;
+export const ICO_FILTER = `${PICTURE_BASE_URL}/filter.svg`;
+export const ICO_PDF = `${PICTURE_BASE_URL}/pdf.svg`;
+export const ICO_SLIDER_CURSOR = `${PICTURE_BASE_URL}/icon-cursor-slider.svg`;
+export const ICO_XLS = `${PICTURE_BASE_URL}/xls.svg`;
+export const IMG_AVATAR = `${PICTURE_BASE_URL}/avatar.png`;
+export const IMG_FAVICON_TITLE = `${PICTURE_BASE_URL}/favicon_title.png`;
+export const IMG_HEADER = `${PICTURE_BASE_URL}/header.png`;
+export const IMG_HELPER1 = `${PICTURE_BASE_URL}/helper1.png`;
+export const IMG_HELPER2 = `${PICTURE_BASE_URL}/helper2.jpg`;
+export const IMG_HELPER3 = `${PICTURE_BASE_URL}/helper3.png`;
+export const IMG_HELPER4 = `${PICTURE_BASE_URL}/helper4.png`;
+export const IMG_HELPER5 = `${PICTURE_BASE_URL}/helper5.png`;
+export const IMG_HELPER6 = `${PICTURE_BASE_URL}/helper6.png`;
+export const IMG_HELPER_BM = `${PICTURE_BASE_URL}/helper_BM_1.png`;
+export const IMG_HELPER_MULTICOL = `${PICTURE_BASE_URL}/helper_multicol.png`;
+export const IMG_HELPER_SURVEY = `${PICTURE_BASE_URL}/helper_survey_question.png`;
+export const IMG_MECHANISM = `${PICTURE_BASE_URL}/illustration-mechanisme.png`;
+export const IMG_TIMELINE_PHASE = `${PICTURE_BASE_URL}/timeline_phase.png`;
+export const GIF_HELPER = `${PICTURE_BASE_URL}/comment-helper.gif`;
 
 // Minimum length for survey answers
 export const MINIMUM_BODY_LENGTH = 10;

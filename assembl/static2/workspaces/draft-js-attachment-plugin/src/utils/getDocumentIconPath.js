@@ -1,7 +1,8 @@
 // @flow
 import get from 'lodash/get';
+import { PICTURE_BASE_URL } from '../../../../js/app/constants';
 
-const iconsPath = '/static2/img/icons/black/';
+const iconsPath = PICTURE_BASE_URL;
 
 const defaultIcon = 'doc.svg';
 
@@ -18,5 +19,5 @@ const mapping = {
 
 export default function (extension: string): string {
   const icon = get(mapping, extension, defaultIcon);
-  return `${iconsPath}${icon}`;
+  return `${iconsPath}/${icon}`;
 }

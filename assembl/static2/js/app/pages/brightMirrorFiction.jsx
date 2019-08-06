@@ -37,7 +37,7 @@ import { getConnectedUserId, compareByTextPosition, formatedSuggestedTagList, fo
 import Permissions, { connectedUserCan, connectedUserIsAdmin } from '../utils/permissions';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 // Constant imports
-import { DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND } from '../constants';
+import { DELETE_CALLBACK, EMPTY_STRING, PublicationStates, USER_ID_NOT_FOUND, IMG_MECHANISM } from '../constants';
 // Type imports
 import type { ContentLocaleMapping } from '../actions/actionTypes';
 import type { CircleAvatarProps } from '../components/debate/brightMirror/circleAvatar';
@@ -354,7 +354,7 @@ export class BrightMirrorFiction extends Component<LocalBrightMirrorFictionProps
     const fictionCommentHeaderProps: FictionCommentHeaderProps = {
       strongTitle: I18n.t('debate.brightMirror.commentFiction.strongTitle'),
       title: I18n.t('debate.brightMirror.commentFiction.title'),
-      imgSrc: '/static2/img/illustration-mechanisme.png',
+      imgSrc: IMG_MECHANISM,
       imgAlt: I18n.t('debate.brightMirror.commentFiction.imageAlt'),
       commentsCount: commentsInfo.commentsCount
     };

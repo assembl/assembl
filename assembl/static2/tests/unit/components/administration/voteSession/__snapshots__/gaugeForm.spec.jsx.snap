@@ -14,7 +14,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a number
   >
     <FormControlWithLabel
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
-      helperUrl="/static2/img/helpers/helper6.png"
+      helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper6.png"
       id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
@@ -189,7 +189,7 @@ exports[`GaugeForm component should render a form to set up a gauge and a textGa
   >
     <FormControlWithLabel
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
-      helperUrl="/static2/img/helpers/helper6.png"
+      helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper6.png"
       id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}
@@ -371,7 +371,7 @@ exports[`GaugeForm component should render a gauge form with no radio if canChan
   >
     <FormControlWithLabel
       helperText="Depending on the objective of the gauge module, incite the participants to take action."
-      helperUrl="/static2/img/helpers/helper6.png"
+      helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper6.png"
       id="gauge-vote-instructions-2"
       label="Instructions for the gauge vote"
       labelAlwaysVisible={false}

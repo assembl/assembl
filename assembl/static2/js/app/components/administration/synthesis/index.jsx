@@ -25,7 +25,7 @@ import { displayLanguageMenu } from '../../../actions/adminActions';
 import LanguageMenu from '../languageMenu';
 import { browserHistory } from '../../../router';
 import { get as getLink } from '../../../utils/routeMap';
-import { PublicationStates } from '../../../constants';
+import { IMG_HELPER1, PublicationStates } from '../../../constants';
 import { editorStateIsEmpty } from '../../../utils/draftjs';
 
 type Props = {
@@ -86,11 +86,7 @@ class CreateSynthesisForm extends React.Component<Props> {
                         />
                         <div className="flex">
                           <Field name="image" component={FileUploaderFieldAdapter} label={I18n.t('debate.syntheses.picture')} />
-                          <Helper
-                            helperUrl="/static2/img/helpers/helper1.png"
-                            helperText={I18n.t('debate.syntheses.pictureHelper')}
-                            popOverClass=""
-                          />
+                          <Helper helperUrl={IMG_HELPER1} helperText={I18n.t('debate.syntheses.pictureHelper')} popOverClass="" />
                         </div>
                         <div className="richtext-large">
                           <Field

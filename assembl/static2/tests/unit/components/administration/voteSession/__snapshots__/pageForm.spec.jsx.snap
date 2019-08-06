@@ -17,7 +17,7 @@ exports[`Vote Session DumbPageForm component should render a form to update the 
       <Connect(Helper)
         classname="title"
         helperText="The proposals section is introduced by a title. You define the title based on the proposal content."
-        helperUrl="/static2/img/helpers/helper3.png"
+        helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/helper3.png"
         label="Proposal section title configuration"
       />
       <FormControlWithLabel

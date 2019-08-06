@@ -5,6 +5,7 @@ import { storiesOf } from '@storybook/react';
 import { withKnobs, text, select } from '@storybook/addon-knobs';
 /* eslint-enable */
 
+import { IMG_AVATAR } from '../../../../constants';
 import CircleAvatar from '../../../../components/debate/brightMirror/circleAvatar';
 import type { CircleAvatarProps } from '../../../../components/debate/brightMirror/circleAvatar';
 
@@ -21,7 +22,7 @@ export const customCircleAvatar: CircleAvatarProps = {
 
 const playground = {
   username: 'taryn-treutel',
-  src: ['https://loremflickr.com/300/300', '/static2/img/icons/avatar.png']
+  src: ['https://loremflickr.com/300/300', IMG_AVATAR]
 };
 
 storiesOf('CircleAvatar', module)

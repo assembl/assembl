@@ -129,7 +129,7 @@ exports[`PostView component should render a post in view mode 1`] = `
         >
           <CircleAvatar
             size="34"
-            src="/static2/img/icons/avatar.png"
+            src="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/avatar.png"
             username="no-username"
           />
           <displayResponseAuthor

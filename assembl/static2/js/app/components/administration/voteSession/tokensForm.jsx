@@ -16,6 +16,7 @@ import {
   markAllDependenciesAsChanged
 } from '../../../actions/adminActions/voteSession';
 import { createRandomId } from '../../../utils/globalFunctions';
+import { IMG_HELPER2, IMG_HELPER5 } from '../../../constants';
 
 type TokensFormProps = {
   id: string,
@@ -48,12 +49,12 @@ const DumbTokensForm = ({
         type="text"
         onChange={handleInstructionsChange}
         value={instructions}
-        helperUrl="/static2/img/helpers/helper5.png"
+        helperUrl={IMG_HELPER5}
         helperText={I18n.t('administration.helpers.tokenVoteInstructions')}
       />
       <label htmlFor="input-dropdown-addon">{I18n.t('administration.tokenCategoryNumber')}</label>
       <div className="inline">
-        <Helper helperUrl="/static2/img/helpers/helper2.jpg" helperText={I18n.t('administration.helpers.tokenCategoryNumber')} />
+        <Helper helperUrl={IMG_HELPER2} helperText={I18n.t('administration.helpers.tokenCategoryNumber')} />
       </div>
       <div>
         <SplitButton

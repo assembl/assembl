@@ -5,6 +5,7 @@ import type { Map } from 'immutable';
 import { I18n } from 'react-redux-i18n';
 import Helper from '../../common/helper';
 import type { LandingPageModuleType } from './manageModules';
+import { PICTURE_BASE_URL } from '../../../constants';
 
 type Props = {
   modulesById: Map<Object>,
@@ -28,7 +29,7 @@ export const DumbSelectModulesForm = ({ modulesById, moduleTypes, toggleModule }
             <Helper
               classname="margin-left-20"
               label={helperLabel}
-              helperUrl={`/static2/img/helpers/landing_page_admin/${identifierLowerCase}.png`}
+              helperUrl={`${PICTURE_BASE_URL}/${identifierLowerCase}.png`}
               helperText={I18n.t(`administration.helpers.landingPage.${identifierLowerCase}`)}
             />
           </Checkbox>
