@@ -227,3 +227,11 @@ def discussion_with_translation(discussion, test_session):
     discussion.preferences['translation_service'] = 'assembl.nlp.translation_service.GoogleTranslationService'
     test_session.commit()
     return discussion
+
+@pytest.fixture(scope="function")
+def discussion_with_theme_color(discussion, test_session):
+    """An empty Discussion fixture with theme colors preferences"""
+    discussion.preferences['first_color'] = "blue"
+    discussion.preferences['second_color'] = "turquoise"
+    test_session.commit()
+    return discussion
