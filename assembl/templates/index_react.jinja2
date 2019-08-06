@@ -2,18 +2,18 @@
 {% block page_title%}{{discussion_title}}{% endblock%}
 
 {% block main_css %}
-  {# Override the main CSS. #}
-  {% if NODE_ENV != 'development' %}
-  <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/{{css_style}}" />
-  {% endif %}
+    {# Override the main CSS. #}
+    {% if NODE_ENV != 'development' %}
+    <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/{{css_style}}" />
+    {% endif %}
 {% endblock %}
 
 {% block body %}
     <body>
         {% if user %}
-          {% set userId = user.id %}
+            {% set userId = user.id %}
         {% else %}
-          {% set userId = 'system.Everyone' %}
+            {% set userId = 'system.Everyone' %}
         {% endif %}
         <input type="hidden" name="elasticsearchLangIndexes" id="elasticsearchLangIndexes" value="{{ elasticsearch_lang_indexes }}" />
         {% if discussion %}
@@ -44,7 +44,7 @@
             {% include 'analytics_common.jinja2' %}
             {% if NODE_ENV == 'development' %}
                 <script src='{{REACT_URL}}/build/{{js_bundle}}'></script>
-                <script src="{{REACT_URL}}/build/{{css_style}}"></script>
+                <link type="text/css" rel="stylesheet" href="{{REACT_URL}}/build/{{css_style}}" />
             {% else %}
                 <script src='{{REACT_URL}}/build/{{js_bundle}}'></script>
             {% endif %}
@@ -70,15 +70,15 @@
         {% endblock %}
 
         {% if activate_mouseflow %}
-          <script type="text/javascript">
-            window._mfq = window._mfq || [];
-            (function() {
-              var mf = document.createElement("script");
-              mf.type = "text/javascript"; mf.async = true;
-              mf.src = "//cdn.mouseflow.com/projects/{{ mouseflow_website_id }}.js";
-              document.getElementsByTagName("head")[0].appendChild(mf);
+            <script type="text/javascript">
+                window._mfq = window._mfq || [];
+                (function() {
+                    var mf = document.createElement("script");
+                    mf.type = "text/javascript"; mf.async = true;
+                    mf.src = "//cdn.mouseflow.com/projects/{{ mouseflow_website_id }}.js";
+                    document.getElementsByTagName("head")[0].appendChild(mf);
             })();
-          </script>
+            </script>
         {% endif %}
     </body>
 {% endblock%}
