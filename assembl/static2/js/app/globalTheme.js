@@ -1058,6 +1058,13 @@ export const GlobalStyle = createGlobalStyle`
     }
   }
 
+  .proposals,
+  .posts {
+    .read-more {
+      color: ${firstColor};
+    }
+  }
+
   .question-footer {
     .button-light {
       color: ${firstColor};
