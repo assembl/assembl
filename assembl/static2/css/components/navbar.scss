@@ -237,7 +237,7 @@
     }
 
     .nav-burger-menu {
-      background-color: $white;
+      -ms-overflow-style: none; // hide scrollbar on IE11
       left: 0;
       position: absolute;
       top: $navbar-height;
