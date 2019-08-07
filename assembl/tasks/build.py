@@ -367,7 +367,7 @@ def database_create(c):
 def create_wheelhouse(c, dependency_links=None):
     if not dependency_links:
         dependency_links = c.run('grep "git+http" %(here)s/requirements-dev.frozen.txt > %(here)s/deps.txt' % {
-                                 'here': c.config.code_root})
+                                 'here': c.config.projectpath})
         dependency_links = 'deps.txt'
     tmp_wheel_path = os.path.join(c.config.code_root, 'wheelhouse')
     cmd = 'pip wheel --wheel-dir=%s --process-dependency-links -r %s' % (tmp_wheel_path, dependency_links)
