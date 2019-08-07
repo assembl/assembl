@@ -237,13 +237,14 @@
     }
 
     .nav-burger-menu {
-      -ms-overflow-style: none; // hide scrollbar on IE11
+      background-color: $white;
       left: 0;
       position: absolute;
       top: $navbar-height;
       width: 400px;
       height: 100vh;
       overflow-y: scroll;
+      -ms-overflow-style: none;
     }
 
     .navbar-menu-item {
