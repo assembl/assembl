@@ -28,6 +28,8 @@ import { ExtractStates } from '../../constants';
 import Tags, { type TagsData } from './tags';
 import TagsForm from './tagsForm';
 
+import { addTaxonomy } from '../../actions/taxonomyActions';
+
 type Props = {
   extracts?: Array<Extract>,
   postId: string,
@@ -48,7 +50,8 @@ type Props = {
   deleteExtract: Function,
   refetchPost: Function,
   toggleExtractsBox?: Function,
-  updateTags: Function
+  updateTags: Function,
+  onAddTaxonomy: Function
 };
 
 type State = {
@@ -80,6 +83,10 @@ const ACTIONS = {
   create: 'create', // create a new extract
   edit: 'edit', // edit an extract
   confirm: 'confirm' // confirm a submitted extract
+};
+
+const heyStargate = (taxonomy: string, onAddTaxonomy: Function) => {
+  onAddTaxonomy(taxonomy);
 };
 
 function updateTagsMutation({ mutate }) {
@@ -214,7 +221,7 @@ class DumbHarvestingBox extends React.Component<Props, State> {
   qualifyExtract = (taxonomies: Taxonomies): void => {
     this.setState({ menuTarget: null });
     const { nature, action } = taxonomies;
-    const { updateExtract, refetchPost } = this.props;
+    const { updateExtract, refetchPost, onAddTaxonomy } = this.props;
     const { isNugget, currentExtractIndex } = this.state;
     const extract = this.getCurrentExtractByIndex(currentExtractIndex);
     const variables = {
@@ -229,6 +236,9 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         this.setState({ extractNature: nature, extractAction: action });
         displayAlert('success', I18n.t('harvesting.harvestingSuccess'));
         refetchPost();
+
+        const taxonomy = `extractNature: ${nature || 'EMPTY_NATURE'}, extractAction: ${action || 'EMPTY_ACTION'}`;
+        heyStargate(taxonomy, onAddTaxonomy);
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -713,8 +723,12 @@ const mapStateToProps = state => ({
   contentLocale: state.i18n.locale
 });
 
+const mapDispatchToProps = dispatch => ({
+  onAddTaxonomy: taxonomy => dispatch(addTaxonomy(taxonomy))
+});
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(addPostExtractMutation, {
     name: 'addPostExtract'
   }),

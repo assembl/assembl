@@ -10,6 +10,7 @@ import Timeline from './timelineReducers';
 import Admin from './adminReducer';
 import Tags from './tagReducer';
 import Theme from './themeReducer';
+import Taxonomy from './taxonomyReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
 import ThreadFilter from './threadFilterReducer';
 import * as screenDimensions from './screenDimensionsReducers';
@@ -28,6 +29,7 @@ const reducers = {
   timeline: Timeline,
   threadFilter: ThreadFilter,
   theme: Theme,
+  taxonomy: Taxonomy,
   ...screenDimensions
 };
 
