@@ -1,3 +1,4 @@
+from __future__ import print_function
 import pytest
 
 
@@ -23,7 +24,7 @@ def admin_social_account(request, admin_user, google_identity_provider, test_ses
     test_session.expire(admin_user, ['accounts', 'social_accounts'])
 
     def fin():
-        print "finalizer admin_social_account"
+        print("finalizer admin_social_account")
         test_session.delete(sap)
         test_session.flush()
     request.addfinalizer(fin)
@@ -43,7 +44,7 @@ def participant1_social_account(request, participant1_user, google_identity_prov
     test_session.expire(participant1_user, ['accounts', 'social_accounts'])
 
     def fin():
-        print "finalizer participant1_social_account"
+        print("finalizer participant1_social_account")
         test_session.delete(sap)
         test_session.flush()
     request.addfinalizer(fin)
@@ -59,7 +60,7 @@ def simple_role(request, test_session):
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple_role fixture"
+        print("Finalizing the simple_role fixture")
         test_session.delete(role)
         test_session.flush()
 
@@ -77,7 +78,7 @@ def simple_role2(request, test_session):
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple_role 2 fixture"
+        print("Finalizing the simple_role 2 fixture")
         test_session.delete(role)
         test_session.flush()
 
@@ -113,7 +114,7 @@ def simple_permission(request, test_session):
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple_permission fixture"
+        print("Finalizing the simple_permission fixture")
         test_session.delete(simple_permission)
         test_session.flush()
     request.addfinalizer(fin)
@@ -134,7 +135,7 @@ def simple_discussion_permission(request, test_session, simple_role,
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple_discussion_permission fixture"
+        print("Finalizing the simple_discussion_permission fixture")
         test_session.delete(simple_discussion_permission)
         test_session.flush()
 
@@ -151,7 +152,7 @@ def simple_agent_profile(request, test_session):
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple_agent_profile fixture"
+        print("Finalizing the simple_agent_profile fixture")
         test_session.delete(simple_agent_profile)
         test_session.flush()
 
@@ -168,7 +169,7 @@ def simple_abstract_agent_account(request, test_session, simple_agent_profile):
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple abstract agent account"
+        print("Finalizing the simple abstract agent account")
         test_session.delete(simple_abstract_agent_account)
         test_session.flush()
     request.addfinalizer(fin)
@@ -185,7 +186,7 @@ def simple_partner_organization(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple abstract agent account"
+        print("Finalizing the simple abstract agent account")
         test_session.delete(simple_partner_organization)
         test_session.flush()
     request.addfinalizer(fin)
@@ -205,7 +206,7 @@ def admin_social_account(request, admin_user, google_identity_provider, test_ses
     test_session.expire(admin_user, ['accounts', 'social_accounts'])
 
     def fin():
-        print "finalizer admin_social_account"
+        print("finalizer admin_social_account")
         test_session.delete(sap)
         test_session.flush()
     request.addfinalizer(fin)
@@ -225,7 +226,7 @@ def participant1_social_account(request, participant1_user, google_identity_prov
     test_session.expire(participant1_user, ['accounts', 'social_accounts'])
 
     def fin():
-        print "finalizer participant1_social_account"
+        print("finalizer participant1_social_account")
         test_session.delete(sap)
         test_session.flush()
     request.addfinalizer(fin)

@@ -26,6 +26,9 @@ import {
   markAllDependenciesAsChanged
 } from '../../../actions/adminActions/voteSession';
 
+// Constant imports
+import { IMG_HELPER6 } from '../../../constants';
+
 export type VoteChoice = {|
   id: string,
   title: string
@@ -156,7 +159,7 @@ const DumbGaugeForm = ({
         required
         type="text"
         onChange={handleInstructionsChange}
-        helperUrl="/static2/img/helpers/helper6.png"
+        helperUrl={IMG_HELPER6}
         helperText={I18n.t('administration.helpers.gaugeVoteInstructions')}
       />
     </div>

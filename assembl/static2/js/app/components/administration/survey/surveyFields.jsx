@@ -8,6 +8,7 @@ import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapte
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import { addQuestionTooltip, deleteQuestionTooltip } from '../../common/tooltips';
 import Helper from '../../common/helper';
+import { IMG_HELPER_SURVEY } from '../../../constants';
 
 type Props = {
   editLocale: string,
@@ -28,7 +29,7 @@ const SurveyFields = ({ editLocale, fieldPrefix }: Props) => {
       />
       <Helper
         label={I18n.t('administration.tableOfThematics.questionsHeader')}
-        helperUrl="/static2/img/helpers/helper_survey_question.png"
+        helperUrl={IMG_HELPER_SURVEY}
         helperText={I18n.t('administration.helpers.surveyQuestion')}
         classname="title"
       />

@@ -46,7 +46,6 @@
     }
 
     .announcement-numbers {
-      color: $first-color;
       text-align: center;
 
       span::before {
@@ -98,6 +97,7 @@
 
       & > a {
         border-radius: 0;
+        border-width: 0 0 2px 0;
         padding-top: 10px;
         padding-left: 0;
         padding-right: 0;
@@ -109,9 +109,7 @@
     margin-top: 30px;
     overflow: hidden;
   }
-}
 
-.announcement-menu {
   &.single-tab {
     .nav-tabs.nav-justified {
       & > li {

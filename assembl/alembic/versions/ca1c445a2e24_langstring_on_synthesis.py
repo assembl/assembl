@@ -7,6 +7,8 @@ Create Date: 2017-11-06 09:23:09.384341
 """
 
 # revision identifiers, used by Alembic.
+from __future__ import print_function
+
 revision = 'ca1c445a2e24'
 down_revision = 'e49dbe903bcd'
 
@@ -68,7 +70,7 @@ def upgrade(pyramid_env):
                 if text:
                     lang, data = langid_services[synthesis.discussion_id].identify(text)
                 if not lang:
-                    print "***** Could not identify for synthesis %d: %s" % (synthesis.id, text)
+                    print("***** Could not identify for synthesis %d: %s" % (synthesis.id, text))
                     lang = candidate_langs[0]
 
             def as_lang_string(text):

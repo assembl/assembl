@@ -2,12 +2,13 @@
 
 .. _PythonSocialAuth: http://psa.matiasaguirre.net/
 """
-import re
+from __future__ import print_function
 
+import re
+import simplejson as json
 from pyramid.events import subscriber, BeforeRender
 from pyramid.security import remember, forget
 from pyramid.config import aslist
-import simplejson as json
 
 from social_pyramid.utils import backends
 from social_pyramid.strategy import PyramidStrategy
@@ -180,7 +181,7 @@ def auto_subscribe(backend, social, user, *args, **kwargs):
 
 
 def print_details(backend, details, *args, **kwargs):
-    print details, args, kwargs
+    print(details, args, kwargs)
 
 
 def maybe_social_logout(request):

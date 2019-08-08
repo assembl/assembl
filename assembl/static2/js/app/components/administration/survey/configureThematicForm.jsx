@@ -14,7 +14,7 @@ import SelectFieldAdapter from '../../form/selectFieldAdapter';
 import { deleteThematicImageTooltip } from '../../common/tooltips';
 import Helper from '../../common/helper';
 import type { ThemesAdminValues, ThemeValue, ThemesValue } from './types.flow';
-import { MESSAGE_VIEW, modulesTranslationKeys } from '../../../constants';
+import { IMG_HELPER_BM, IMG_HELPER1, MESSAGE_VIEW, modulesTranslationKeys } from '../../../constants';
 import SurveyFields from './surveyFields';
 import MultiColumnsFields from './multiColumnsFields';
 
@@ -107,7 +107,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
       <div className="form-container" key={name}>
         <Helper
           label={I18n.t('administration.headerTitle')}
-          helperUrl="/static2/img/helpers/helper1.png"
+          helperUrl={IMG_HELPER1}
           helperText={I18n.t('administration.tableOfThematics.bannerHeader')}
           classname="title"
         />
@@ -153,7 +153,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
             <div className="margin-l" />
             <Helper
               label={I18n.t('administration.instructions')}
-              helperUrl="/static2/img/helpers/helper_BM_1.png"
+              helperUrl={IMG_HELPER_BM}
               helperText={I18n.t('administration.tableOfThematics.instructionHeader')}
               classname="title"
             />
@@ -178,7 +178,7 @@ class ConfigureThematicForm extends React.PureComponent<Props> {
                 <div className="margin-l" />
                 <Helper
                   label={I18n.t('administration.summary')}
-                  helperUrl="/static2/img/helpers/helper_BM_1.png"
+                  helperUrl={IMG_HELPER_BM}
                   helperText={I18n.t('administration.tableOfThematics.summaryHeader')}
                   classname="title"
                 />

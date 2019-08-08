@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 "Emulate psql in Python, because psql does not like running from within fab."
+from __future__ import print_function
 
 import argparse
 import getpass
@@ -39,7 +40,7 @@ def main():
     if args.print_one and cur.rowcount > 0:
         result = cur.fetchone()
         assert result
-        print result
+        print(result)
 
 
 if __name__ == '__main__':

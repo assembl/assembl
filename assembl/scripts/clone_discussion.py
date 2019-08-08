@@ -3,6 +3,7 @@
 
 # Put something like this in the crontab:
 # 10 3 * * * cd /var/www/assembl ; ./venv/bin/python assembl/scripts/clone_discussion.py -n assembldemosandbox -d -p system.Authenticated+admin_discussion -p system.Authenticated+add_post -p system.Authenticated+add_extract -p system.Authenticated+edit_extract -p system.Authenticated+add_idea -p system.Authenticated+edit_idea -p system.Authenticated+edit_synthesis -p system.Authenticated+vote -p system.Authenticated+read local.ini assembldemo
+from __future__ import print_function
 
 import itertools
 from collections import defaultdict
@@ -155,7 +156,7 @@ def find_or_create_user_template(db, template):
     pass
 
 def print_path(path):
-    print [(x, y.__class__.__name__, y.id) for (x, y) in path]
+    print([(x, y.__class__.__name__, y.id) for (x, y) in path])
 
 
 def prefetch(session, discussion_id):
@@ -360,7 +361,7 @@ def delete_discussion(session, discussion_id):
         cls = classes_by_table[table]
         if cls not in concrete_classes:
             continue
-        print 'deleting', cls.__name__
+        print('deleting', cls.__name__)
         query = session.query(cls.id)
         if hasattr(cls, "get_discussion_conditions"):
             conds = cls.get_discussion_conditions(discussion_id)
@@ -372,7 +373,7 @@ def delete_discussion(session, discussion_id):
         v.traverse(cond)
         query = v.final_query().filter(cond)
         if query.count():
-            print "*" * 20, "Not all deleted!"
+            print("*" * 20, "Not all deleted!")
             ids = query.all()
             for subcls in cls.mro():
                 if getattr(subcls, '__tablename__', None):
@@ -404,7 +405,7 @@ def clone_discussion(
     def resolve_promises(ob, copy):
         if ob in promises:
             for (o, reln) in promises[ob]:
-                print 'fullfilling', o.__class__, o.id
+                print('fullfilling', o.__class__, o.id)
                 assign_ob(o, reln, copy)
             del promises[ob]
 
@@ -414,7 +415,7 @@ def clone_discussion(
         if ob in copies:
             return ob
         if ob in in_process:
-            print "in process", ob.__class__, ob.id
+            print("in process", ob.__class__, ob.id)
             return None
         if is_special_class(ob):
             if from_session == to_session:
@@ -427,7 +428,7 @@ def clone_discussion(
             return copy
         if isinstance(ob, DiscussionBoundBase):
             assert discussion_id == ob.get_discussion_id()
-        print "recursive_clone",
+        print("recursive_clone"),
         print_path(path)
 
         mapper = class_mapper(ob.__class__)
@@ -435,7 +436,7 @@ def clone_discussion(
          ) = get_mapper_info(mapper)
         values = {r.key: getattr(ob, r.key, None) for r in copy_col_props}
 
-        print "->", ob.__class__, ob.id
+        print("->", ob.__class__, ob.id)
         in_process.add(ob)
         for r in non_nullable_reln:
             subob = getattr(ob, r.key, None)
@@ -452,11 +453,11 @@ def clone_discussion(
                         subob = from_session.query(Idea).get(subob_id)
             assert subob is not None
             assert subob not in in_process
-            print 'recurse ^0', r.key, subob.id
+            print('recurse ^0', r.key, subob.id)
             result = recursive_clone(subob, path + [(r.key, subob)])
             assert result is not None
             assert result.id
-            print 'result', result.__class__, result.id
+            print('result', result.__class__, result.id)
             assign_dict(values, r, result)
         local_promises = {}
         for r in nullable_relns:
@@ -515,7 +516,7 @@ def clone_discussion(
         # Now add the object
         to_session.add(copy)
         to_session.flush()
-        print "<-", ob.__class__, ob.id, copy.id
+        print("<-", ob.__class__, ob.id, copy.id)
         copies_of[ob] = copy
         copies.add(copy)
         in_process.remove(ob)
@@ -523,24 +524,24 @@ def clone_discussion(
         for reln, subob in local_promises.items():
             if isinstance(subob, list):
                 for subobel in subob:
-                    print 'recurse 0', reln.key, subobel.id
+                    print('recurse 0', reln.key, subobel.id)
                     result = recursive_clone(subobel, path + [(reln.key, subobel)])
                     if result is None:  # in process
-                        print "promising", subobel.__class__, subobel.id, reln.key
+                        print("promising", subobel.__class__, subobel.id, reln.key)
                         promises[subobel].append((copy, reln))
                     else:
-                        print "resolving promise", reln.key, result.__class__, result.id
+                        print("resolving promise", reln.key, result.__class__, result.id)
                         assign_ob(copy, reln, result)
             elif subob in in_process:
                 promises[subob].append((copy, reln))
             else:
-                print 'recurse 0', reln.key, subob.id
+                print('recurse 0', reln.key, subob.id)
                 result = recursive_clone(subob, path + [(reln.key, subob)])
                 if result is None:  # in process
-                    print "promising", subob.__class__, subob.id, reln.key
+                    print("promising", subob.__class__, subob.id, reln.key)
                     promises[subob].append((copy, reln))
                 else:
-                    print "resolving promise", reln.key, result.__class__, result.id
+                    print("resolving promise", reln.key, result.__class__, result.id)
                     assign_ob(copy, reln, result)
         to_session.flush()
         return copy
@@ -559,7 +560,7 @@ def clone_discussion(
             assert copy is not None
             copies_of[ob] = copy
             return copy
-        print "stage_2_rec_clone",
+        print("stage_2_rec_clone"),
         if isinstance(ob, DiscussionBoundBase):
             assert discussion_id == ob.get_discussion_id()
         print_path(path)
@@ -657,12 +658,12 @@ def copy_discussion(source_config, dest_config, source_slug, dest_slug,
         existing = dest_session.query(Discussion).filter_by(slug=dest_slug).first()
         if existing:
             if delete:
-                print "deleting", dest_slug
+                print("deleting", dest_slug)
                 with transaction.manager:
                     delete_discussion(dest_session, existing.id)
             else:
-                print "Discussion", dest_slug,
-                print "already exists! Add -d to delete it."
+                print("Discussion", dest_slug),
+                print("already exists! Add -d to delete it.")
                 exit(0)
         from assembl.models import Role, Permission, DiscussionPermission
         with dest_session.no_autoflush:

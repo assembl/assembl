@@ -212,6 +212,18 @@ def give_user_role(user, discussion, role=R_PARTICIPANT, session=None):
     _delete_all_local_roles_for_user(user, discussion, session=session)
 
 
+@contextmanager
+def update_configuration(settings, **kwargs):
+    import copy
+    from assembl.lib.config import set_config
+    old_settings = settings
+    new_settings = copy.deepcopy(settings)
+    new_settings.update(kwargs)
+    set_config(new_settings)
+    yield new_settings
+    set_config(old_settings)
+
+
 class FakeUploadedFile(object):
     file = BytesIO(os.urandom(16))
 

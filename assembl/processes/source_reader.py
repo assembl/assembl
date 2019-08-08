@@ -1,6 +1,8 @@
 #!/usr/bin/python
 """A long-running process that receives requests to read data from various ContentSources,
 and reads at reasonable intervals. It can also handle sources that can push changes. """
+from __future__ import print_function
+
 import sys
 import signal
 from random import uniform
@@ -25,6 +27,7 @@ from ..lib.config import set_config
 from ..lib.enum import OrderedEnum
 from ..lib.sqla import configure_engine
 from . import configure
+
 
 log = logging.getLogger()
 pool_counter = 0
@@ -255,7 +258,7 @@ class SourceReader(Thread):
         translate_content(content)  # should delay
 
     def wake(self):
-        print "SourceReader.wake"
+        print("SourceReader.wake")
         if self.status in (ReaderStatus.PAUSED, ReaderStatus.CLOSED) and (
                 datetime.utcnow() - max(self.last_prod, self.last_read) >
                 self.min_time_between_reads):
@@ -569,7 +572,7 @@ def includeme(config):
 
 if __name__ == '__main__':
     if len(sys.argv) != 2:
-        print "usage: python source_reader.py configuration.ini"
+        print("usage: python source_reader.py configuration.ini")
     config_file_name = sys.argv[-1]
     settings = get_appsettings(config_file_name, 'assembl')
     registry = getGlobalSiteManager()
@@ -583,14 +586,14 @@ if __name__ == '__main__':
     def show_checkin(*args):
         global pool_counter
         pool_counter -= 1
-        print "checkin pool: %d in %s" % (pool_counter, currentThread())
+        print("checkin pool: %d in %s" % (pool_counter, currentThread()))
         print_stack()
 
     # @event.listens_for(engine, "checkout")
     def show_checkout(*args):
         global pool_counter
         pool_counter += 1
-        print "checkout pool: %d in %s" % (pool_counter, currentThread())
+        print("checkout pool: %d in %s" % (pool_counter, currentThread()))
         print_stack()
 
     configure(registry, 'source_reader')

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import sys
 import re
@@ -63,7 +65,7 @@ def bower_cmd(c, cmd, relative_path='.'):
         bower_cmd = normpath(join(get_node_bin_path(c), 'bower'))
         po2json_cmd = normpath(join(get_node_bin_path(c), 'po2json'))
         if not exists(c, bower_cmd) or not exists(c, po2json_cmd):
-            print 'Bower not present, installing ...'
+            print('Bower not present, installing ...')
             install_bower()
         with c.cd(relative_path):
             with venv(c):
@@ -130,7 +132,7 @@ def update_node(c, force_reinstall=False):
 
         update_npm_requirements(force_reinstall=True)
     else:
-        print "Node version OK"
+        print("Node version OK")
 
 
 @task()
@@ -164,7 +166,7 @@ def clone_repository(c, reset=False):
     # Remove dir if necessary
     path = c.config.projectpath
     if exists(c, os.path.join(path, ".git")):
-        print "%s/.git already exists" % path
+        print("%s/.git already exists" % path)
         if reset:
             c.run("rm -rf %s/.git" % path)
         else:
@@ -331,13 +333,13 @@ def check_and_create_database_user(c, user=None, password=None):
     password = password or c.config.DEFAULT.db_password
     checkUser = psql_command(c, "SELECT 1 FROM pg_roles WHERE rolname='%s'" % (user), False)
     if not checkUser:
-        print "User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)"
+        print("User does not exist, let's try to create it. (The error above is not problematic if the next command which is going to be run now will be successful. This next command tries to create the missing Postgres user.)")
         assert psql_command(c, "CREATE USER %s WITH CREATEDB ENCRYPTED PASSWORD '%s'" % (
             user, password), False
         ) is not False, "Could not create user"
-        print "Created user"
+        print("Created user")
     else:
-        print "User exists and can connect"
+        print("User exists and can connect")
 
 
 def check_if_database_exists(c):
@@ -350,22 +352,22 @@ def database_create(c):
     """Create the database for this assembl instance"""
 
     if not check_if_database_exists(c):
-        print "Cannot connect to database, trying to create"
+        print("Cannot connect to database, trying to create")
         assert psql_command(
             c, "CREATE DATABASE {database} WITH OWNER = {user} TEMPLATE = template0 ENCODING = UNICODE".format(
                 user=c.config.DEFAULT.db_user, password=c.config.DEFAULT.db_password,
                 host=c.config.DEFAULT.db_host, database=c.config.DEFAULT.db_database), True, 'postgres'
             ) is not False, "Could not create database"
-        print "Database created successfully!"
+        print("Database created successfully!")
     else:
-        print "Database exists and user can connect"
+        print("Database exists and user can connect")
 
 
 @task()
 def create_wheelhouse(c, dependency_links=None):
     if not dependency_links:
         dependency_links = c.run('grep "git+http" %(here)s/requirements-dev.frozen.txt > %(here)s/deps.txt' % {
-                                 'here': c.config.code_root})
+                                 'here': c.config.projectpath})
         dependency_links = 'deps.txt'
     tmp_wheel_path = os.path.join(c.config.code_root, 'wheelhouse')
     cmd = 'pip wheel --wheel-dir=%s --process-dependency-links -r %s' % (tmp_wheel_path, dependency_links)
@@ -580,58 +582,7 @@ def push_wheelhouse(c, house=None):
 
 @task()
 def push_built_themes_to_remote_bucket(c):
-    """
-    Push webpack built themes CSS + JS files of themes into respective S3 bucket.
-    Expects boto3, zip, to be pre-installed.
-
-
-    Output:
-        - Two S3 buckets with a folder structure matching the build folder of both gulp and webpack, respectively
-        - a compressed and uncompressed versions of js + css files locally and on S3 bucket
-    """
-    import boto3
-
-    region = c.config.get('aws_shared_region', 'eu-west-1')
-    s3 = boto3.resource('s3', region_name=region)
-    buckets = ((os.path.join(c.config.code_root, 'static/js/build/'),
-                s3.Bucket('bluenove-deprecated-client-themes')),
-               (os.path.join(c.config.code_root, 'static2/build/themes'),
-                s3.Bucket('bluenove-client-themes')))
-
-    def determine_content_type(path):
-        if path.endswith('.js'):
-            return 'text/javascript'
-        if path.endswith('.css'):
-            return 'text/css'
-        return 'application/octet-stream'
-
-    for theme_path, bucket in buckets:
-        # Push all content to S3, even if the files exist on S3, reupload them
-        for root, dirs, files in os.walk(theme_path):
-            for filename in files:
-                local_path = os.path.join(root, filename)
-                s3_path = os.path.relpath(local_path, theme_path)
-                content_type = determine_content_type(local_path)
-                # print local_path, s3_path, content_type, determine_content_encoding(local_path)
-                with open(local_path, 'rb') as fp:
-                    if content_type == 'application/octet-stream':
-                        use_fp = fp
-                        extra_args = {}
-                        buffer = None
-                    else:
-                        buffer = StringIO()
-                        with GzipFile(s3_path, 'wb', 9, buffer) as gfp:
-                            copyfileobj(fp, gfp)
-                        buffer.seek(0)
-                        use_fp = buffer
-                        extra_args = {'ContentEncoding': 'gzip'}
-                    bucket.put_object(
-                        Body=use_fp, Key=s3_path, CacheControl='max-age=3600',
-                        ContentType=content_type,
-                        ACL='public-read',
-                        **extra_args)
-                    if buffer:
-                        buffer.close()
+    c.run('echo "Pushing themes to remote buckets has now been deprecated. Remove this from CI/CD scripts"')
 
 
 @task(
@@ -707,7 +658,7 @@ def start_deploy_on_client(c, client_id, region=None):
             deploymentId, status,
             deploymentInfo['errorInformation']['code'],
             deploymentInfo['errorInformation']['message'])
-        print status
+        print(status)
 
 
 @task()

@@ -1,4 +1,5 @@
 """Reset obsolete avatar values obtained from social accounts."""
+from __future__ import print_function
 
 import sys
 import logging.config
@@ -21,7 +22,7 @@ def clean_avatars(db):
                 SocialAuthAccount.picture_url != None):
             url = idp.picture_url
             if not requests.head(url).ok:
-                print "Not ok", idp.id, url
+                print("Not ok", idp.id, url)
                 idp.picture_url = None
 
 

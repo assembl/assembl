@@ -1,3 +1,4 @@
+from __future__ import print_function
 import pytest
 
 
@@ -14,7 +15,7 @@ def text_field(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "Finalizer text_field"
+        print("Finalizer text_field")
         test_session.delete(saobj)
         test_session.flush()
 
@@ -37,7 +38,7 @@ def text_field2(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "Finalizer text_field2"
+        print("Finalizer text_field2")
         test_session.delete(saobj)
         test_session.flush()
 
@@ -61,7 +62,7 @@ def fullname_text_field(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "Finalizer fullname_text_field"
+        print("Finalizer fullname_text_field")
         test_session.delete(saobj)
         test_session.flush()
 
@@ -83,7 +84,7 @@ def select_field(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "Finalizer select_field"
+        print("Finalizer select_field")
         test_session.delete(saobj)
         test_session.flush()
 
@@ -106,7 +107,7 @@ def profile_field(request, test_session, admin_user, text_field, discussion):
     test_session.flush()
 
     def fin():
-        print "Finalizer profile_field"
+        print("Finalizer profile_field")
         test_session.delete(saobj)
         test_session.flush()
 
@@ -125,7 +126,7 @@ def profile_field_for_participant_user(request, test_session, participant1_user,
     test_session.flush()
 
     def fin():
-        print "Finalizer profile fields for participant1_user"
+        print("Finalizer profile fields for participant1_user")
         test_session.delete(saobj)
         test_session.flush()
 

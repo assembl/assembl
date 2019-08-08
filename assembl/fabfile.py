@@ -12,7 +12,7 @@ file can also work well if invoked through a symbolic link.
 .. _Fabric: http://www.fabfile.org/installing-1.x.html
 """
 
-from __future__ import with_statement
+from __future__ import with_statement, print_function
 
 from os import getenv
 import sys
@@ -836,11 +836,11 @@ def install_url_metadata_source():
     "Install url_metadata in venv3 as source, for development"
     execute(build_virtualenv_python3)
     if not exists("%(projectpath)s/../url_metadata" % env):
-        print cyan("Cloning git repository")
+        print(cyan("Cloning git repository"))
         with cd("%(projectpath)s/.." % env):
             run('git clone git://github.com/assembl/url_metadata.git')
     else:
-        print cyan("Url Metadata service being updated...")
+        print(cyan("Url Metadata service being updated..."))
         with cd("%(projectpath)s/.." % env):
             run('git pull')
     venvcmd_py3('pip install -e ../url_metadata')
@@ -1321,7 +1321,7 @@ def get_robot_machine():
         robot_data = robot.split(',')
         # We must find three data (identifier, name and password)
         if len(robot_data) != 3:
-            print red("The data of the user machine are wrong! %s" % robot)
+            print(red("The data of the user machine are wrong! %s" % robot))
             return None
 
         return {
@@ -1330,7 +1330,7 @@ def get_robot_machine():
             'password': robot_data[2].strip()
         }
 
-    print red("No user machine found!")
+    print(red("No user machine found!"))
     return None
 
 
@@ -1347,7 +1347,7 @@ def install_bluenove_actionable():
     Install the bluenove_actionable app.
     """
     if not exists("%(projectpath)s/../bluenove-actionable/" % env):
-        print cyan("Cloning git bluenove-actionable repository")
+        print(cyan("Cloning git bluenove-actionable repository"))
         with cd("%(projectpath)s/.." % env):
             # We need an ssh access
             run('git clone git@github.com:bluenove/bluenove-actionable.git')
@@ -1770,7 +1770,7 @@ def bower_cmd(cmd, relative_path='.'):
         bower_cmd = normpath(join(get_node_bin_path(), 'bower'))
         po2json_cmd = normpath(join(get_node_bin_path(), 'po2json'))
         if not exists(bower_cmd) or not exists(po2json_cmd):
-            print "Bower not present, installing..."
+            print("Bower not present, installing...")
             execute(install_bower)
         with cd(relative_path):
             print("Running a bower command in path %s" % relative_path)
@@ -1966,7 +1966,7 @@ def install_basetools():
 
 def install_builddeps():
     print(cyan('Installing compilers and required libraries'))
-    print "env.hosts" + repr(env.hosts)
+    print("env.hosts" + repr(env.hosts))
     if env.mac:
         run('brew install libevent')
         # may require a sudo
@@ -3120,30 +3120,30 @@ def update_vendor_themes(frontend_version=1):
             urls = urls_string.split(',')
         vendor_themes_path = normpath(join(
             env.projectpath, base_path))
-        print vendor_themes_path
+        print(vendor_themes_path)
         with settings(warn_only=True), cd(env.projectpath):
             # We do not use env.gitbranch, because in env_deb it may not match the real current branch
             current_assembl_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
         for git_url in urls:
-            print green("Updating %s" % git_url)
+            print(green("Updating %s" % git_url))
             matchobj = re.match(r'.*/(.*)\.git', git_url)
             git_dir_name = matchobj.group(1)
             git_dir_path = normpath(join(vendor_themes_path, git_dir_name))
             if is_dir(git_dir_path) is False:
-                print cyan("Cloning git repository")
+                print(cyan("Cloning git repository"))
                 with cd(vendor_themes_path):
                     run('git clone %s' % git_url)
 
             with cd(git_dir_path):
                 current_vendor_themes_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
                 if current_vendor_themes_branch_name != current_assembl_branch_name:
-                    print yellow("Vendor theme branch %s does not match current assembl branch %s" % (current_vendor_themes_branch_name, current_assembl_branch_name))
+                    print(yellow("Vendor theme branch %s does not match current assembl branch %s" % (current_vendor_themes_branch_name, current_assembl_branch_name)))
                     if current_assembl_branch_name in ('develop', 'master'):
                         run('git fetch --all')
-                        print yellow("Changing branch to %s" % current_assembl_branch_name)
+                        print(yellow("Changing branch to %s" % current_assembl_branch_name))
                         run('git checkout %s' % current_assembl_branch_name)
                     else:
-                        print red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (current_assembl_branch_name, current_vendor_themes_branch_name))
+                        print(red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (current_assembl_branch_name, current_vendor_themes_branch_name)))
                 run('git pull --ff-only')
 
 
@@ -3427,9 +3427,9 @@ def update_wheels_json_data(json_data):
             # The commit does not have a tag associated
             tag = None
     # Debugging purposes for Gitlab
-    print "CI_COMMIT_REF_NAME: %s" % ref
-    print "CI_COMMIT_TAG: %s" % tag
-    print "CI_COMMIT_REF_NAME: %s" % commit_hash
+    print("CI_COMMIT_REF_NAME: %s" % ref)
+    print("CI_COMMIT_TAG: %s" % tag)
+    print("CI_COMMIT_REF_NAME: %s" % commit_hash)
     if tag and tag not in json_data:
             json_data[tag] = {'sha1': commit_hash, 'wheel_name': create_wheel_name(commit_hash, ref, tag)}
     else:

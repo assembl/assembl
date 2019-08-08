@@ -9,7 +9,8 @@
     margin-right: 125px;
 
     .box {
-      border-left: 4px solid $first-color;
+      border-style: solid;
+      border-width: 0 0 0 4px;
     }
   }
 
@@ -41,8 +42,7 @@
   }
 
   .subject-prefix {
-    color: $first-color-opacity-70;
-    font-family: 'LatoLight';
+    font-family: $font-family4;
   }
 
   .no-rows {
@@ -51,7 +51,8 @@
 
   .child-level {
     .box {
-      border-left: 4px solid $first-color-light;
+      border-style: solid;
+      border-width: 4px;
     }
   }
 
@@ -61,8 +62,10 @@
   .level-4 {
     padding-bottom: $post-space;
     padding-left: $tree-indentation*2;
-    border-top: 1px solid $first-color-light;
-    border-left: 1px solid $first-color-light;
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-left-style: solid;
+    border-left-width: 1px;
 
     .box {
       border-top: none;
@@ -91,11 +94,11 @@
   .expand-indented {
     font-size: $font-size-xs;
     cursor: pointer;
-    color: $first-color;
     display: inline-block;
     position: relative;
     height: $post-space;
-    border-left: 1px solid $first-color-light;
+    border-left-style: solid;
+    border-left-width: 1px;
     width: $tree-indentation;
 
     span {
@@ -106,8 +109,8 @@
   }
 
   .expand {
-    border-left: 1px solid $first-color-light;
-    color: $first-color;
+    border-left-style: solid;
+    border-left-width: 1px;
     cursor: pointer;
     position: relative;
     height: $post-space;
@@ -120,7 +123,6 @@
   }
 
   .post-folded {
-    color: $first-color;
     cursor: pointer;
     display: inline-block;
     font-size: $font-size-xs;
@@ -145,7 +147,8 @@
   .infinite-separator {
     margin: $margin-section auto;
     width: 200px;
-    border-bottom: 1px solid $first-color;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
     position: relative;
 
     span {
@@ -193,7 +196,8 @@
     }
 
     .level {
-      border-top: 1px solid $first-color-light;
+      border-top-style: solid;
+      border-top-width: 1px;
       margin-top: 20px;
     }
 

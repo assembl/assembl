@@ -2,10 +2,7 @@
 
 Pyramid allows to use model objects as Context objects, but in our cases they're surrogates for model objects.
 """
-
 from traceback import print_exc
-
-from sqlalchemy import select
 from sqlalchemy.orm import aliased
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 from sqlalchemy.sql.expression import and_
@@ -727,7 +724,7 @@ class CollectionDefinition(AbstractCollectionDefinition):
             try:
                 query = query.join(owner_alias)
             except InvalidRequestError:
-                print "Could not join %s to %s" % (owner_alias, query)
+                print("Could not join %s to %s" % (owner_alias, query))
                 # This is very likely to fail downstream
                 return query
         found_key = False

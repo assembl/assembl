@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
 import pytest
 
 
@@ -28,7 +29,7 @@ def sections(request, discussion_with_default_data, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer sections"
+        print("finalizer sections")
         for section in sections:
             test_session.delete(section)
         test_session.flush()

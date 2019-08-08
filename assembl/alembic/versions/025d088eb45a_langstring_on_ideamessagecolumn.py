@@ -7,6 +7,8 @@ Create Date: 2017-10-02 11:53:58.487121
 """
 
 # revision identifiers, used by Alembic.
+from __future__ import print_function
+
 revision = '025d088eb45a'
 down_revision = 'aad68410c38b'
 
@@ -49,7 +51,7 @@ def upgrade(pyramid_env):
                     # Use idea language for priors?
                     lang, data = langid_services[im_column.idea.discussion_id].identify(header)
                 if not lang:
-                    print "***** Could not identify for IdeaMessageColumn %d: %s" % (im_column.id, header)
+                    print("***** Could not identify for IdeaMessageColumn %d: %s" % (im_column.id, header))
                     lang = candidate_langs[0]
 
             if header:

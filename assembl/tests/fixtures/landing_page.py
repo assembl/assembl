@@ -1,3 +1,4 @@
+from __future__ import print_function
 import pytest
 
 
@@ -23,7 +24,7 @@ def simple_landing_page_module(request, test_session, discussion, header_landing
     test_session.flush()
 
     def fin():
-        print "Finalizing the simple_landing_page_module fixture"
+        print("Finalizing the simple_landing_page_module fixture")
         test_session.delete(simple_landing_page_module)
         test_session.flush()
     request.addfinalizer(fin)

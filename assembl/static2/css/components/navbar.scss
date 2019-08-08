@@ -6,10 +6,6 @@
       font-weight: 600;
     }
 
-    &:hover {
-      background-color: $first-color-light;
-    }
-
     .timeline-title {
       font-size: $font-size-m;
     }
@@ -19,15 +15,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-left: 1px solid $first-color-light;
+    border-left-style: solid;
+    border-left-width: 1px;
 
     &.active {
       font-weight: 600;
-      background-color: $first-color-light;
-    }
-
-    &:hover {
-      background-color: $first-color-light;
     }
   }
 
@@ -115,10 +107,6 @@
       &:focus {
         outline: 0;
       }
-
-      &.active {
-        color: $second-color;
-      }
     }
 
     #search {
@@ -127,7 +115,6 @@
   }
 
   .navbar-menu-item {
-    color: $navbar-text-color;
     font-family: $font-family2;
     font-size: $font-size-xs;
     letter-spacing: 0.8px;
@@ -137,13 +124,11 @@
     white-space: nowrap;
 
     &:hover {
-      color: $navbar-active-text-color;
       font-family: $font-family3;
       text-decoration: none;
     }
 
     &:after {
-      color: $navbar-active-text-color;
       font-family: $font-family3;
       text-decoration: none;
       content: attr(data-text);
@@ -215,6 +200,10 @@
   .assembl-icon-cancel:before {
     font-size: 25px;
     padding-left: 9px;
+
+    .active {
+      font-family: $font-family3;
+    }
   }
 
   .flat-navbar {
@@ -255,6 +244,7 @@
       width: 400px;
       height: 100vh;
       overflow-y: scroll;
+      -ms-overflow-style: none;
     }
 
     .navbar-menu-item {
@@ -265,14 +255,15 @@
       justify-content: center;
 
       &.active {
-        border-bottom: $border-active;
+        border-bottom-style: solid;
+        border-bottom-width: 4px;
         padding-top: 4px;
-        color: $navbar-active-text-color;
       }
     }
 
     .logo-active {
-      border-bottom: $border-active;
+      border-bottom-style: solid;
+      border-bottom-width: 4px;
       padding-top: 4px;
       display: inline-flex;
       align-items: center;

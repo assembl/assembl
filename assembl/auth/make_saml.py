@@ -1,5 +1,6 @@
-import datetime
+from __future__ import print_function
 
+import datetime
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
@@ -148,6 +149,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     key_text, key = make_saml_key()
     crt_text, crt = make_saml_cert(key, **vars(args))
-    print key_text
-    print
-    print crt_text
+    print(key_text)
+    print()
+    print(crt_text)

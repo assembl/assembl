@@ -4,6 +4,7 @@ import { compose, graphql, type OperationComponent } from 'react-apollo';
 import { connect } from 'react-redux';
 import { setLocale } from 'react-redux-i18n';
 import { updateEditLocale } from './actions/adminActions';
+import { setTheme } from './actions/themeActions';
 import { setCookieItem, convertToISO639String } from './utils/globalFunctions';
 import manageErrorAndLoading from './components/common/manageErrorAndLoading';
 import CoreDiscussionPreferencesQuery from './graphql/CoreDiscussionPreferencesQuery.graphql';
@@ -11,7 +12,8 @@ import CoreDiscussionPreferencesQuery from './graphql/CoreDiscussionPreferencesQ
 type Props = {
   children: React.Node,
   discussionPreferences: CoreDiscussionPreferencesQuery,
-  setDefaultLocale: Function
+  setDefaultLocale: Function,
+  setDefaultTheme: Function
 };
 
 const configureDefaultLocale = (availableLanguages: Array<string>, defaultLanguage: string, setDefaultLocale: Function) => {
@@ -31,10 +33,16 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
   }
 };
 
+const configureTheme = (firstColor: String, secondColor: String, setDefaultTheme: Function) => {
+  setDefaultTheme(firstColor, secondColor);
+};
+
 // APPLICATION-LEVEL DEFAULT CONFIGURATIONS ARE MADE HERE
 const DumbApplicationContainer = (props: Props) => {
-  const { children, discussionPreferences, setDefaultLocale } = props;
-  const { languages } = discussionPreferences;
+  const { children, discussionPreferences, setDefaultLocale, setDefaultTheme } = props;
+  const { languages, firstColor, secondColor } = discussionPreferences;
+
+  configureTheme(firstColor, secondColor, setDefaultTheme);
 
   // When application loaded, it either picked a locale from the cookie previously set by the user, or nothing at all.
   // Here, with the knowledge of the available locale of the debate, and with user agent, can set the language of the debate
@@ -54,6 +62,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(setLocale(locale));
     dispatch(updateEditLocale(locale));
     setCookieItem('_LOCALE_', locale);
+  },
+  setDefaultTheme: (firstColor, secondColor) => {
+    dispatch(setTheme(firstColor, secondColor));
   }
 });
 

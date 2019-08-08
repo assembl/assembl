@@ -4,5 +4,7 @@ query DiscussionPreferences {
       locale
       nativeName
     }
+    firstColor
+    secondColor
   }
 }

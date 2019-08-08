@@ -1,8 +1,10 @@
-from datetime import datetime
+from __future__ import print_function
 
 import pytest
 from pyramid import testing
 from pyramid.threadlocal import manager
+from datetime import datetime
+
 
 from assembl.auth import R_MODERATOR, R_PARTICIPANT
 from assembl.lib.config import get_config
@@ -26,7 +28,7 @@ def participant1_user(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "finalizer participant1_user"
+        print("finalizer participant1_user")
         test_session.delete(u)
         test_session.flush()
     request.addfinalizer(fin)
@@ -42,7 +44,7 @@ def participant1_username(request, test_session, participant1_user):
     test_session.flush()
 
     def fin():
-        print "finalizer participant1_username"
+        print("finalizer participant1_username")
         test_session.delete(username)
         test_session.flush()
     request.addfinalizer(fin)
@@ -92,7 +94,7 @@ def participant2_user(request, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer participant2_user"
+        print("finalizer participant2_user")
         test_session.delete(u)
         test_session.flush()
     request.addfinalizer(fin)
@@ -118,7 +120,7 @@ def discussion_admin_user(request, test_app, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion_admin_user"
+        print("finalizer discussion_admin_user")
         test_session.delete(u)
         test_session.flush()
     request.addfinalizer(fin)
@@ -145,7 +147,7 @@ def discussion_admin_user_2(request, test_app, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion_admin_user_2"
+        print("finalizer discussion_admin_user_2")
         test_session.delete(u)
         test_session.flush()
     request.addfinalizer(fin)
@@ -159,7 +161,7 @@ def discussion_sysadmin_user(request, test_app, test_session, discussion):
     from datetime import datetime
     from assembl.auth import R_SYSADMIN
     from assembl.models import User
-    from assembl.models.auth import Role, LocalUserRole, UserRole
+    from assembl.models.auth import Role, UserRole
 
     u = User(name=u"Maximilien de Robespierre 3", type="user",
              last_assembl_login=datetime.utcnow())
@@ -172,7 +174,7 @@ def discussion_sysadmin_user(request, test_app, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion_sysadmin_user"
+        print("finalizer discussion_sysadmin_user")
         test_session.delete(u)
         test_session.flush()
     request.addfinalizer(fin)
@@ -197,7 +199,7 @@ def moderator_user(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "finalizer moderator_user"
+        print("finalizer moderator_user")
         test_session.delete(u)
         test_session.flush()
 
@@ -215,7 +217,7 @@ def agent_status_in_discussion_2(request, test_session, discussion, participant2
     test_session.flush()
 
     def fin():
-        print 'Finalizer agent_status_in_discussion for participant2_user'
+        print('Finalizer agent_status_in_discussion for participant2_user')
         test_session.delete(asid2)
         test_session.flush()
     request.addfinalizer(fin)
@@ -231,7 +233,7 @@ def agent_status_in_discussion_3(request, test_session, discussion, participant2
     test_session.flush()
 
     def fin():
-        print 'Finalizer agent_status_in_discussion for participant2_user'
+        print('Finalizer agent_status_in_discussion for participant2_user')
         test_session.delete(asid3)
         test_session.flush()
     request.addfinalizer(fin)
@@ -247,7 +249,7 @@ def agent_status_in_discussion_4(request, test_session, discussion, participant2
     test_session.flush()
 
     def fin():
-        print 'Finalizer agent_status_in_discussion for participant2_user'
+        print('Finalizer agent_status_in_discussion for participant2_user')
         test_session.delete(asid4)
         test_session.flush()
     request.addfinalizer(fin)

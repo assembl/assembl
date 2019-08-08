@@ -7,6 +7,8 @@ Create Date: 2015-12-12 15:07:06.294468
 """
 
 # revision identifiers, used by Alembic.
+from __future__ import print_function
+
 revision = '250035d23e83'
 down_revision = '53875f39d2ff'
 
@@ -14,7 +16,6 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 import pyisemail
-
 
 from assembl.lib import config
 
@@ -54,7 +55,7 @@ def upgrade(pyramid_env):
             elif isinstance(c, m.AssemblPost):
                 c.message_id = c.generate_message_id()
             else:
-                print "ERROR: Pure post", id
+                print("ERROR: Pure post", id)
 
 
 def downgrade(pyramid_env):

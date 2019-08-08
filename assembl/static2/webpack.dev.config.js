@@ -12,26 +12,10 @@ if (true) {
   disableHostCheck = true;
 }
 
-function theme_entries() {
-    var entries = {},
-        paths = glob.sync('./css/themes/**/*_web.scss'),
-        i, path, parts, name, bucket;
-    for (i = 0; i < paths.length; i++) {
-        path = paths[i];
-        parts = path.split('/');
-        theme_name = parts[parts.length - 2]
-        // Special case default, as it's not unique
-        if (theme_name === 'default') {
-          name = 'themes/' + theme_name + '/theme_' + theme_name + '_web';
-        }
-        else {
-          bucket = parts[parts.length - 3];
-          name = 'themes/' + bucket + '/' + theme_name + '/theme_' + theme_name + '_web';
-        }
-        entries[name] = path;
-    }
-    return entries;
-}
+var general_entries = {
+  bundle: './js/app/index',
+  mainStyle: './css/themes/default/assembl_web.scss'
+};
 
 module.exports = {
     // cheap-module-eval-source-map and cheap-module-source-map are giving
@@ -55,11 +39,7 @@ module.exports = {
           }
         }
     },
-    entry: _.extend(theme_entries(), {
-        bundle: [
-            './js/app/index',
-        ]
-    }),
+    entry: general_entries,
     output: {
         path: path.join(__dirname, 'build'),
         filename: '[name].js',
@@ -68,50 +48,65 @@ module.exports = {
     module: {
         rules: [
         {
-            test: /\.jsx?$/,
-            use: {
-              loader: 'babel-loader',
+          test: /\.jsx?$/,
+          use: {
+            loader: 'babel-loader',
+            options: {
+              envName: 'development',
+              babelrc: false,
+              plugins: [
+                '@babel/plugin-proposal-object-rest-spread',
+                '@babel/plugin-proposal-class-properties',
+                ['@babel/plugin-transform-runtime', { helpers: true, corejs: 2 }],
+                'react-hot-loader/babel'
+              ],
+              presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
+                                  // Exclude transforms that make all code slower
+                                  "exclude": ["transform-typeof-symbol"],
+                                  "debug": false, "useBuiltIns": "entry", "corejs": 2 }],
+                        "@babel/preset-react", "@babel/preset-flow"]
+            }
+          },
+          include: [
+            path.join(__dirname, 'js'),
+            path.join(__dirname, 'css'),
+            path.join(__dirname, 'workspaces'),
+            path.join(__dirname, 'node_modules/rc-slider')
+          ]
+        },
+        {
+          test: /\.scss$/,
+          use: [
+            {
+              loader: "file-loader",
               options: {
-                envName: 'development',
-                babelrc: false,
-                plugins: [
-                  '@babel/plugin-proposal-object-rest-spread',
-                  '@babel/plugin-proposal-class-properties',
-                  ['@babel/plugin-transform-runtime', { helpers: true, corejs: 2 }],
-                  'react-hot-loader/babel'
-                ],
-                presets: [["@babel/preset-env", { "modules": false, "targets": { "ie": 11 },
-                                    // Exclude transforms that make all code slower
-                                    "exclude": ["transform-typeof-symbol"],
-                                    "debug": false, "useBuiltIns": "entry", "corejs": 2 }],
-                          "@babel/preset-react", "@babel/preset-flow"]
+                name: "style.css"
               }
             },
-            include: [
-              path.join(__dirname, 'js'),
-              path.join(__dirname, 'css'),
-              path.join(__dirname, 'workspaces'),
-              path.join(__dirname, 'node_modules/rc-slider')
-            ]
+            "extract-loader",
+            "css-loader", // translates CSS into CommonJS
+            {
+              loader: 'postcss-loader', // generate CSS prefixes in accordance with the list of browsers defined in package.json
+              options: {
+                ident: 'postcss',
+                plugins: [
+                  require('autoprefixer'),
+                ]
+              }
+            },
+            "sass-loader" // compiles Sass to CSS, using Node Sass by default
+          ]
         },
         {
-            test: /\.scss$/,
-            use: [
-              { loader: "style-loader" },
-              { loader: "css-loader", options: { sourceMap: true } },
-              { loader: "sass-loader",
-                options: {
-                  sourceMap: true,
-                  data: "$fonts-dir: '/static2/fonts';" } }
-            ]
+          test: /\.css$/,
+          use: [
+            "style-loader", // creates style nodes from JS strings
+            "css-loader" // translates CSS into CommonJS
+          ]
         },
         {
-            test: /\.css$/,
-            use: ['style-loader', 'css-loader']
-        },
-        {
-            test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
-            use: 'url-loader?limit=100000&name=[name].[ext]'
+          test: /\.(eot|woff|woff2|ttf|svg|png|jpe?g|gif)(\?\S*)?$/,
+          use: 'url-loader?limit=100000&name=[name].[ext]'
         },
         {
           test: /\.(graphql|gql)$/,

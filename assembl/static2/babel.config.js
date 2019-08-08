@@ -7,7 +7,8 @@ module.exports = {
       {
         helpers: true
       }
-    ]
+    ],
+    'babel-plugin-styled-components'
   ],
   presets: [
     [

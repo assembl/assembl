@@ -4,7 +4,6 @@ DEFAULT:
   db_user: assembl_user
   sentry_host: sentry-aws.bluenove.com
 hosts: localhost
-theme_base: "https://s3-eu-west-1.amazonaws.com/bluenove-client-themes/default/"
 attachment_service: s3
 celery_tasks.broker: sqs://
 rds_certificate: rds-combined-ca-bundle.pem
@@ -51,7 +50,7 @@ accept_secure_connection: false
 require_secure_connection: false
 piwik_host: stats.bluenove.com
 csp_header: |-
-  default-src 'self' www.bugherd.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com *.bugherd.com *.cloudfront.net; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com www.bugherd.com *.coggle.it mindjet.com *.mindmanager.com *.slideshare.net; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com www.bugherd.com *.pusher.com bugherd-attachments.s3.amazonaws.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com www.bugherd.com *.cloudfront.net s3-eu-west-1.amazonaws.com; font-src 'self' data: fonts.gstatic.com www.bugherd.com s3-eu-west-1.amazonaws.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net img.youtube.com www.bugherd.com
+  default-src 'self' www.bugherd.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' data: %(piwik_host)s *.facebook.net *.twimg.com *.twitter.com *.bugherd.com *.cloudfront.net; frame-src 'self' www.youtube.com *.facebook.com embed.ted.com *.twitter.com twitter.com player.vimeo.com www.bugherd.com *.coggle.it mindjet.com *.mindmanager.com *.slideshare.net; connect-src 'self' wss://%(public_hostname)s %(sentry_host)s %(piwik_host)s *.twitter.com www.bugherd.com *.pusher.com bugherd-attachments.s3.amazonaws.com; style-src 'self' 'unsafe-inline' fonts.googleapis.com *.twimg.com *.twitter.com www.bugherd.com *.cloudfront.net s3-eu-west-1.amazonaws.com stackpath.bootstrapcdn.com; font-src 'self' data: fonts.gstatic.com www.bugherd.com bluenove-assembl-fonts.s3-eu-west-1.amazonaws.com; img-src 'self' data: %(piwik_host)s *.facebook.com www.gravatar.com *.googleusercontent.com *.twimg.com *.twitter.com framapic.org *.cloudfront.net img.youtube.com www.bugherd.com
 wheelhouse: s3://bluenove-assembl-wheelhouse
 secure_proxy: true
 alembic:

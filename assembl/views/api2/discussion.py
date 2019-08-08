@@ -1773,20 +1773,14 @@ def survey_csv_export(request):
     thematics = get_survey_ideas(discussion, start, end)
     rows = []
     for thematic in thematics:
-        row = {}
-        top_key_words = thematic.top_keywords()
-        for index, key_word in enumerate(top_key_words):
-            column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
-            if column_name not in fieldnames:
-                fieldnames.append(column_name)
-            row[column_name] = key_word.value.encode('utf-8')
-        row.update(get_idea_parents_titles(thematic, user_prefs))
         for question in thematic.get_children():
-            row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
-            # To be implemented later
-            # row[WATSON_SENTIMENT] = thematic.sentiments()
             posts = get_published_posts(question, start, end)
             for post in posts:
+                row = {}
+                row.update(get_idea_parents_titles(thematic, user_prefs))
+                row[QUESTION_TITLE] = get_entries_locale_original(question.title).get('entry')
+                # To be implemented later
+                # row[WATSON_SENTIMENT] = thematic.sentiments()
                 if has_lang:
                     post.maybe_translate(target_locales=[language])
 
@@ -1811,6 +1805,20 @@ def survey_csv_export(request):
                         row[name] = extra_info[num]
 
                 row[SHARE_COUNT] = post.share_count
+
+                for index, tag in enumerate(post.tags):
+                    column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
+                    if column_name not in fieldnames:
+                        fieldnames.append(column_name)
+                    row[column_name] = tag.value.encode('utf-8')
+
+                nlp_keywords = post.nlp_keywords()
+                for index, key_word in enumerate(nlp_keywords):
+                    column_name = u"Mots clés suggérés {}".format(index + 1).encode('utf-8')
+                    if column_name not in fieldnames:
+                        fieldnames.append(column_name)
+                    row[column_name] = key_word.value.encode('utf-8')
+
                 if post.sentiments:
                     row[POST_LIKE] = len([p for p in post.sentiments if p.name == 'like'])
                     row[POST_DISAGREE] = len([p for p in post.sentiments if p.name == 'disagree'])
@@ -2111,16 +2119,7 @@ def thread_csv_export(request):
     ideas = get_thread_ideas(discussion, start, end)
     rows = []
     for idea in ideas:
-        row = {}
-        top_key_words = idea.top_keywords()
-        for index, key_word in enumerate(top_key_words):
-            column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
-            if column_name not in fieldnames:
-                fieldnames.append(column_name)
-            row[column_name] = key_word.value.encode('utf-8')
-
         children = idea.get_children()
-        row.update(get_idea_parents_titles(idea, user_prefs))
         # We need to use get_posts without date filtering
         # instead of get_published_posts to create the tree.
         posts = get_posts(idea, None, None).all()
@@ -2128,6 +2127,9 @@ def thread_csv_export(request):
         # row[WATSON_SENTIMENT] = idea.sentiments()
         create_tree(posts)  # this calculate p._indentation and p._children for each post
         for post in posts:
+            row = {}
+            row.update(get_idea_parents_titles(idea, user_prefs))
+
             if post.publication_state != PublicationStates.PUBLISHED:
                 continue
 
@@ -2168,6 +2170,20 @@ def thread_csv_export(request):
                     row[name] = extra_info[num]
 
             row[SHARE_COUNT] = post.share_count
+
+            for index, tag in enumerate(post.tags):
+                column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
+                if column_name not in fieldnames:
+                    fieldnames.append(column_name)
+                row[column_name] = tag.value.encode('utf-8')
+
+            nlp_keywords = post.nlp_keywords()
+            for index, key_word in enumerate(nlp_keywords):
+                column_name = u"Mots clés suggérés {}".format(index + 1).encode('utf-8')
+                if column_name not in fieldnames:
+                    fieldnames.append(column_name)
+                row[column_name] = key_word.value.encode('utf-8')
+
             if post.sentiments:
                 row[POST_LIKE] = len([p for p in post.sentiments if p.name == 'like'])
                 row[POST_DISAGREE] = len([p for p in post.sentiments if p.name == 'disagree'])
@@ -2264,19 +2280,13 @@ def bright_mirror_csv_export(request):
     ideas = get_bright_mirror_ideas(discussion, start, end)
     rows = []
     for idea in ideas:
-        row = {}
-        # WATSON sentiment to be impemented later
-        # row[WATSON_SENTIMENT] = idea.sentiments()
-        top_key_words = idea.top_keywords()
-        for index, key_word in enumerate(top_key_words):
-            column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
-            if column_name not in fieldnames:
-                fieldnames.append(column_name)
-            row[column_name] = key_word.value.encode('utf-8')
-
-        row.update(get_idea_parents_titles(idea, user_prefs))
         posts = get_published_top_posts(idea, start, end)  # we only care about fictions
         for post in posts:
+            row = {}
+            # WATSON sentiment to be impemented later
+            # row[WATSON_SENTIMENT] = idea.sentiments()
+
+            row.update(get_idea_parents_titles(idea, user_prefs))
             if has_lang:
                 post.maybe_translate(target_locales=[language])
 
@@ -2306,6 +2316,20 @@ def bright_mirror_csv_export(request):
                     row[name] = extra_info[num]
 
             row[SHARE_COUNT] = post.share_count
+
+            for index, tag in enumerate(post.tags):
+                column_name = u"Mots clés {}".format(index + 1).encode('utf-8')
+                if column_name not in fieldnames:
+                    fieldnames.append(column_name)
+                row[column_name] = tag.value.encode('utf-8')
+
+            nlp_keywords = post.nlp_keywords()
+            for index, key_word in enumerate(nlp_keywords):
+                column_name = u"Mots clés suggérés {}".format(index + 1).encode('utf-8')
+                if column_name not in fieldnames:
+                    fieldnames.append(column_name)
+                row[column_name] = key_word.value.encode('utf-8')
+
             if post.sentiments:
                 row[POST_LIKE] = len([p for p in post.sentiments if p.name == 'like'])
                 row[POST_DISAGREE] = len([p for p in post.sentiments if p.name == 'disagree'])

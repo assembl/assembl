@@ -204,7 +204,7 @@ exports[`PostBody component should render a post body 1`] = `
   </h3>
   <React.Fragment>
     <div
-      className="post-body-content truncate body"
+      className="post-body-content body"
     >
       <Html
         contentLocale="fr"
@@ -220,14 +220,6 @@ exports[`PostBody component should render a post body 1`] = `
             "img": [Function],
           }
         }
-      />
-    </div>
-    <div
-      className="read-more"
-      onClick={[Function]}
-    >
-      <Translate
-        value="readMoreEllipsis"
       />
     </div>
   </React.Fragment>
@@ -263,7 +255,7 @@ exports[`PostBody component should render a post body with summary view 1`] = `
         dbId={124}
         divRef={[MockFunction]}
         extracts={Array []}
-        rawHtml="<p>You can't index the port without programming the wireless HTTP program!</p>"
+        rawHtml="<p>You can't index the port without programming the wireless HTTP program!</p><p>You can't index the port without programming the wireless HTTP program!</p><p>You can't index the port without programming the wireless HTTP program!</p>"
         replacementComponents={
           Object {
             "a": [Function],

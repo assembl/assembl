@@ -7,7 +7,7 @@ exports[`Storyshots DeletedFictionComment default 1`] = `
   <img
     alt="no-username-avatar"
     className="circle-avatar"
-    src="/static2/img/icons/avatar.png"
+    src="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/avatar.png"
   />
   <div
     className="content"
@@ -52,7 +52,7 @@ exports[`Storyshots DeletedFictionComment playground 1`] = `
   <img
     alt="no-username-avatar"
     className="circle-avatar"
-    src="/static2/img/icons/avatar.png"
+    src="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/avatar.png"
   />
   <div
     className="content"

@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 from datetime import datetime
 import simplejson as json
 from smtplib import SMTPRecipientsRefused
@@ -46,7 +48,6 @@ from assembl.lib.utils import normalize_email_name, get_global_base_url
 from .. import (
     get_default_context, JSONError, get_provider_data,
     HTTPTemporaryRedirect, create_get_route, sanitize_next_view)
-from pyramid.httpexceptions import HTTPOk
 
 _ = TranslationStringFactory('assembl')
 log = logging.getLogger()
@@ -448,8 +449,8 @@ def assembl_register_view(request):
         if asbool(config.get('pyramid.debug_authorization')):
             # for debugging purposes
             from assembl.auth.password import email_token
-            print "email token:", request.route_url(
-                'user_confirm_email', token=email_token(email_account))
+            print("email token:", request.route_url(
+                'user_confirm_email', token=email_token(email_account)))
         headers = remember(request, user.id)
         user.successful_login()
         request.response.headerlist.extend(headers)
@@ -947,9 +948,9 @@ def do_password_change(request):
     old_token = (
         user is None or token_date is None or (
             user.last_login and token_date < user.last_login))
-    print "pwc V%sP%sW%sB%sL%s" % tuple(map(lambda b: "-" if b else "+", (
+    print("pwc V%sP%sW%sB%sL%s" % tuple(map(lambda b: "-" if b else "+", (
         validity != Validity.VALID, lacking_password, not welcome,
-        old_token, logged_in is None)))
+        old_token, logged_in is None))))
     if welcome and not lacking_password:
         # W+P+: welcome link sends onwards irrespective of token
         if logged_in:

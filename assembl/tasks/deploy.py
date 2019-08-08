@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import os
 import os.path
 import re
@@ -403,7 +405,7 @@ def get_robot_machine(c):
             'name': robot_data[1].strip(),
             'password': robot_data[2].strip()
         }
-    print "No user machine found!"
+    print("No user machine found!")
     return None
 
 

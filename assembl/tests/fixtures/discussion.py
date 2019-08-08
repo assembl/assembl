@@ -1,3 +1,6 @@
+from __future__ import print_function
+
+
 import os
 import pytest
 from sqlalchemy import inspect
@@ -77,7 +80,7 @@ def discussion(request, test_session, participant2_user, default_preferences):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion"
+        print("finalizer discussion")
         discussion = d
         if inspect(discussion).detached:
             # How did this happen?
@@ -130,7 +133,7 @@ def discussion2(request, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer discussion2"
+        print("finalizer discussion2")
         test_session.delete(d.table_of_contents)
         test_session.delete(d.root_idea)
         test_session.delete(d.next_synthesis)
@@ -203,6 +206,7 @@ def discussion_with_2_phase_interface_v2(
 
     return discussion_with_permissions
 
+
 @pytest.fixture(scope="function")
 def discussion_with_moderation(discussion, test_session):
     """An empty Discussion fixture with default permissions"""
@@ -210,14 +214,24 @@ def discussion_with_moderation(discussion, test_session):
     test_session.commit()
     return discussion
 
+
 @pytest.fixture(scope="function")
 def discussion_with_semantic_analysis(discussion, test_session):
     discussion.preferences['with_semantic_analysis'] = True
     test_session.commit()
     return discussion
 
+
 @pytest.fixture(scope="function")
 def discussion_with_translation(discussion, test_session):
     discussion.preferences['translation_service'] = 'assembl.nlp.translation_service.GoogleTranslationService'
+    test_session.commit()
+    return discussion
+
+@pytest.fixture(scope="function")
+def discussion_with_theme_color(discussion, test_session):
+    """An empty Discussion fixture with theme colors preferences"""
+    discussion.preferences['first_color'] = "blue"
+    discussion.preferences['second_color'] = "turquoise"
     test_session.commit()
     return discussion

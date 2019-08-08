@@ -4,6 +4,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { withKnobs, text, number } from '@storybook/addon-knobs';
 /* eslint-enable */
+import { IMG_MECHANISM } from '../../../../constants';
 
 import FictionCommentHeader from '../../../../components/debate/brightMirror/fictionCommentHeader';
 import type { FictionCommentHeaderProps } from '../../../../components/debate/brightMirror/fictionCommentHeader';
@@ -11,7 +12,7 @@ import type { FictionCommentHeaderProps } from '../../../../components/debate/br
 export const defaultFictionCommentHeader: FictionCommentHeaderProps = {
   strongTitle: 'Prenez la parole !',
   title: 'Quels sujets sont abordés dans cette fiction ?',
-  imgSrc: '/static2/img/illustration-mechanisme.png',
+  imgSrc: IMG_MECHANISM,
   imgAlt: 'illustration-mechanisme',
   commentsCount: 6
 };

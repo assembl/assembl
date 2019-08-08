@@ -7,6 +7,8 @@ Create Date: 2017-09-25 13:10:05.337618
 """
 
 # revision identifiers, used by Alembic.
+from __future__ import print_function
+
 revision = 'd0fa685ff549'
 down_revision = '5dc0a7b57c0f'
 
@@ -18,7 +20,6 @@ from itertools import chain
 
 from assembl.lib import config
 from assembl.lib.clean_input import sanitize_text
-
 
 def upgrade(pyramid_env):
     with context.begin_transaction():
@@ -69,7 +70,7 @@ def upgrade(pyramid_env):
                         priors = {locale: 1  for locale in candidate_langs}
                     lang, data = langid_services[idea.discussion_id].identify(text, expected_locales=priors)
                 if not lang:
-                    print "***** Could not identify for idea %d: %s" % (idea.id, text)
+                    print("***** Could not identify for idea %d: %s" % (idea.id, text))
                     lang = candidate_langs[0]
             languages[idea.id] = lang
 

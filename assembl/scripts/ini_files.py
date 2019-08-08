@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """ Generate various secondary INI files from the main INI file. """
+from __future__ import print_function
 
 import sys
 import os
@@ -173,7 +174,7 @@ def generate_ini_files(config, config_fname):
 
     for fname in ('supervisord.conf',):
         templateloc = join(local_code_root, 'templates', 'system', fname + '.tmpl')
-        print fname
+        print(fname)
         with open(templateloc) as tmpl, open(fname, 'w') as inifile:
             inifile.write(tmpl.read() % vars)
 
@@ -223,15 +224,15 @@ def dump(ini_file):
     ini_file = asParser(ini_file, SafeConfigParser)
     ini_file._defaults['here'] = os.getcwd()
     for section in ini_file.sections():
-        print "\n[%s]\n" % section
+        print("\n[%s]\n" % section)
         for option in ini_file._sections[section]:
-            print option, '=',
+            print(option, '='),
             try:
-                print ini_file.get(section, option)
+                print(ini_file.get(section, option))
             except Exception as e:
-                print ini_file.get(section, option, True)
-                print "*"*15, "Could not interpolate"
-                print e
+                print(ini_file.get(section, option, True))
+                print("*"*15, "Could not interpolate")
+                print(e)
 
 
 def populate_random(random_file, random_templates=None, saml_info=None):

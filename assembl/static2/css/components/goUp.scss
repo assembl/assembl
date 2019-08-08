@@ -4,7 +4,6 @@
   div {
     font-size: 11px;
     text-align: center;
-    color: $first-color;
   }
 }
 
@@ -19,7 +18,6 @@
     padding: 8px 0 0 8px;
     width: 35px;
     height: 35px;
-    background-color: $first-color-light;
     display: inline-block;
     cursor: pointer;
 
@@ -41,6 +39,10 @@
   position: sticky;
   float: right;
   margin-top: $post-filter-button-margin-top;
+
+  .dropdown {
+    z-index: 9;
+  }
 
   &.sticky {
     top: $top-post-sticky-top + 60px + $post-filter-button-margin-top;

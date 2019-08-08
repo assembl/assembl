@@ -1,5 +1,6 @@
 """ Indirection layer to enable getting at the config while not littering the
 codebase with thread-local access code. """
+from __future__ import print_function
 
 from pyramid.threadlocal import get_current_registry
 
@@ -14,7 +15,7 @@ def set_config(settings, reconfig=False):
             _settings = settings
         else:
             _settings.update(settings)
-            print "combined settings:", _settings
+            print("combined settings:", _settings)
     else:
         _settings = settings
     return _settings

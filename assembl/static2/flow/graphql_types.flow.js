@@ -546,7 +546,11 @@ export type DiscussionPreferencesQuery = {|
     // A Boolean flag indicating wheter the semantic analysis is activated or not.
     withSemanticAnalysis: ?boolean,
     // A string used to form the URL of the discussion.
-    slug: string
+    slug: string,
+    // Primary color for the theme
+    firstColor: ?string,
+    // Second color for the theme
+    secondColor: ?string
   |}
 |};
 
@@ -580,7 +584,11 @@ export type DiscussionPreferencesQueryQuery = {|
     // A Boolean flag indicating wheter the users have the possibility to translate the messages or not.
     withTranslation: ?boolean,
     // A Boolean flag indicating wheter the semantic analysis is activated or not.
-    withSemanticAnalysis: ?boolean
+    withSemanticAnalysis: ?boolean,
+    // Primary color for the theme
+    firstColor: ?string,
+    // Second color for the theme
+    secondColor: ?string
   |}
 |};
 
@@ -5150,7 +5158,9 @@ export type updateDiscussionPreferenceMutationVariables = {|
   tabTitle?: ?string,
   favicon?: ?string,
   slug?: ?string,
-  logo?: ?string
+  logo?: ?string,
+  firstColor?: ?string,
+  secondColor?: ?string
 |};
 
 export type updateDiscussionPreferenceMutation = {|

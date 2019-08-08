@@ -165,7 +165,6 @@
   .link-button {
     border: none;
     font-size: $font-size-xs;
-    color: $link-color;
     text-decoration: none;
     background-color: $light-grey;
     padding: 15px;
@@ -208,7 +207,6 @@
   }
 
   .participants-count__text {
-    color: $first-color;
     padding: 0 10px 20px 10px;
   }
 
@@ -306,10 +304,6 @@
 
   .gauge-box__instructions {
     font-size: $font-size-s;
-  }
-
-  .gauge-box__estimate {
-    color: $first-color;
   }
 
   .separator {

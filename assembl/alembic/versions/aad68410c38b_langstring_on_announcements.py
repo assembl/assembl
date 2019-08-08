@@ -7,6 +7,8 @@ Create Date: 2017-09-29 15:53:21.121154
 """
 
 # revision identifiers, used by Alembic.
+from __future__ import print_function
+
 revision = 'aad68410c38b'
 down_revision = 'd0fa685ff549'
 
@@ -14,7 +16,6 @@ from alembic import context, op
 import sqlalchemy as sa
 import transaction
 from sqlalchemy.orm import (joinedload, subqueryload)
-
 
 from assembl.lib import config
 from assembl.lib.clean_input import sanitize_text
@@ -62,7 +63,7 @@ def upgrade(pyramid_env):
                     # Use idea language for priors?
                     lang, data = langid_services[announcement.discussion_id].identify(text)
                 if not lang:
-                    print "***** Could not identify for announcement %d: %s" % (announcement.id, text)
+                    print("***** Could not identify for announcement %d: %s" % (announcement.id, text))
                     lang = candidate_langs[0]
 
             def as_lang_string(text):

@@ -1,17 +1,17 @@
-import sys
+from __future__ import print_function
 
 from imaplib2 import IMAP4_SSL, IMAP4
-import transaction
 
 from assembl.models import ContentSource
 
 from .source_reader import (
-    ReaderStatus, SourceDispatcher, SourceReader,
+    ReaderStatus, SourceReader,
     ReaderError, ClientError, IrrecoverableError)
 
 
 def is_ok(response):
     return response[0] == 'OK'
+
 
 class IMAPReader(SourceReader):
     """A :py:class:`assembl.processes.source_reader.SourceReader` subclass for reading IMAP messages with imaplib2. Can wait for push."""
@@ -49,7 +49,6 @@ class IMAPReader(SourceReader):
             raise IrrecoverableError(e)
         except IMAP4.error as e:
             raise ClientError(e)
-
 
     def wait_for_push(self):
         assert self.can_push
@@ -115,7 +114,7 @@ class IMAPReader(SourceReader):
                         raise ReaderError(error)
                     self.source.db.add(email_object)
                 else:
-                    print "Skipped message with imap id %s (bounce or vacation message)" % (email_id)
+                    print("Skipped message with imap id %s (bounce or vacation message)" % (email_id))
                 # print "Setting self.source.last_imported_email_uid to "+email_id
                 self.source.last_imported_email_uid = email_id
                 self.source.db.commit()
@@ -169,13 +168,13 @@ class IMAPReader(SourceReader):
                 email_ids = search_result[0].split()
 
             if len(email_ids):
-                print "Processing messages from IMAP: %d "% (len(email_ids))
+                print("Processing messages from IMAP: %d "% (len(email_ids)))
                 for email_id in email_ids:
                     self.import_email(email_id)
                     if self.status != ReaderStatus.READING:
                         break
             else:
-                print "No IMAP messages to process"
+                print("No IMAP messages to process")
             self.successful_read()
             self.set_status(ReaderStatus.PAUSED)
         except IMAP4.abort as e:

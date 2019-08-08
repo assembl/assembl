@@ -1,5 +1,6 @@
-import pytest
+from __future__ import print_function
 
+import pytest
 from assembl.auth import P_SYSADMIN
 
 
@@ -16,7 +17,7 @@ def default_preferences(request, test_session, base_registry):
     test_session.flush()
 
     def fin():
-        print "finalizer default_preferences"
+        print("finalizer default_preferences")
         test_session.delete(prefs)
         test_session.flush()
     request.addfinalizer(fin)
@@ -57,7 +58,7 @@ def non_standard_preference(request, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer empty_preference"
+        print("finalizer empty_preference")
         test_session.delete(pref)
         test_session.flush()
     request.addfinalizer(fin)

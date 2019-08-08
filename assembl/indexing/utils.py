@@ -1,6 +1,6 @@
-from collections import defaultdict
+from __future__ import print_function
 
-import simplejson as json
+from collections import defaultdict
 from elasticsearch.client import Elasticsearch, TransportError
 
 from assembl.lib import config
@@ -68,7 +68,7 @@ def create_index(index_name):
                 push_analysis_settings(index_name)
                 assert check_analysis_settings(index_name)
             except Exception as e:
-                print e
+                print(e)
                 # cannot push settings on amazon
                 delete_index(index_name)
                 exists = False

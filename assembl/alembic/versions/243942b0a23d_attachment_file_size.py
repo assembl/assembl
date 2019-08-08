@@ -7,6 +7,8 @@ Create Date: 2019-01-01 23:43:46.462949
 """
 
 # revision identifiers, used by Alembic.
+from __future__ import print_function
+
 revision = '243942b0a23d'
 down_revision = '4227dfe5456c'
 
@@ -31,11 +33,11 @@ def upgrade(pyramid_env):
             if not fileHash: continue
             hash = hashfs.get(fileHash)
             if not hash:
-                print "Missing hash:", id, fileHash
+                print("Missing hash:", id, fileHash)
                 continue
             size = path.getsize(hash.abspath.encode('ascii'))
             if not size:
-                print "Missing size:", id, fileHash
+                print("Missing size:", id, fileHash)
                 continue
             db.execute('UPDATE file SET file_size=%d WHERE id=%d' % (size, id))
         mark_changed()

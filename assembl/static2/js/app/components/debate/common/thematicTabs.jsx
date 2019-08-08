@@ -7,7 +7,7 @@ import activeHtml from 'react-active-html';
 // Component imports
 import { ANNOUNCEMENT_TAB_ITEM_ID } from '../../../constants';
 import { richTextBodyIsEmpty } from '../../../utils/draftjs';
-import { SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
+import { SmartSemanticAnalysis as SemanticAnalysis } from '../../../pages/semanticAnalysis/semanticAnalysis';
 import { addIframeForMindMapping } from '../../../utils/linkify';
 import { postBodyReplacementComponents } from './post/postBody';
 

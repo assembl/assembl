@@ -12,7 +12,7 @@ import type { State } from '../../../reducers/rootReducer';
 import SemanticAnalysisForDiscussionQuery from '../../../graphql/SemanticAnalysisForDiscussionQuery.graphql';
 // Component imports
 import manageErrorAndLoading, { TYPE } from '../../../components/common/manageErrorAndLoading';
-import { SemanticAnalysis, type Props as SemanticAnalysisProps } from '../semanticAnalysis';
+import { SmartSemanticAnalysis as SemanticAnalysis, type Props as SemanticAnalysisProps } from '../semanticAnalysis';
 import Loader, { LOADER_TYPE } from '../../../components/common/loader/loader';
 // Constant imports
 import { SEMANTIC_ANALYSIS_PICTURE_BANNER_URL } from '../../../constants';

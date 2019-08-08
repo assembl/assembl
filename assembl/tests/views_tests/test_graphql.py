@@ -1792,7 +1792,9 @@ query { discussionPreferences { languages { locale, name(inLocale:"fr"), nativeN
             u'tabTitle': '',
             u'withModeration': False,
             u'withSemanticAnalysis': False,
-            u'withTranslation': False
+            u'withTranslation': False,
+            u'firstColor': u'#192882',
+            u'secondColor': u'#dbdeef',
         }
     }
 
@@ -1808,7 +1810,9 @@ def test_query_discussion_preferences_moderation(graphql_registry, graphql_reque
             u'tabTitle': '',
             u'withModeration': True,
             u'withSemanticAnalysis': False,
-            u'withTranslation': False
+            u'withTranslation': False,
+            u'firstColor': u'#192882',
+            u'secondColor': u'#dbdeef',
         }
     }
 
@@ -1824,7 +1828,9 @@ def test_query_discussion_preferences_semantic_analysis(graphql_registry, graphq
             u'tabTitle': '',
             u'withModeration': False,
             u'withSemanticAnalysis': True,
-            u'withTranslation': False
+            u'withTranslation': False,
+            u'firstColor': u'#192882',
+            u'secondColor': u'#dbdeef',
         }
     }
 
@@ -1840,7 +1846,27 @@ def test_query_discussion_preferences_translation(graphql_registry, graphql_requ
             u'tabTitle': '',
             u'withModeration': False,
             u'withSemanticAnalysis': False,
-            u'withTranslation': True
+            u'withTranslation': True,
+            u'firstColor': u'#192882',
+            u'secondColor': u'#dbdeef',
+        }
+    }
+
+
+def test_query_discussion_preferences_theme_colors(graphql_registry, graphql_request_with_theme_colors):
+    result = schema.execute(graphql_registry['DiscussionPreferencesQuery'], context_value=graphql_request_with_theme_colors)
+    assert result.errors is None
+    res_data = json.loads(json.dumps(result.data))
+    assert res_data == {
+        u'discussionPreferences': {
+            u'favicon': None,
+            u'logo': None,
+            u'tabTitle': '',
+            u'withModeration': False,
+            u'withSemanticAnalysis': False,
+            u'withTranslation': False,
+            u'firstColor': 'blue',
+            u'secondColor': 'turquoise',
         }
     }
 
@@ -2076,6 +2102,39 @@ mutation myMutationModeration($withTranslation: Boolean!, $languages: [String]!)
                     {u'locale': u'ja'}
                 ]
 
+            }
+        }}
+
+
+def test_mutation_update_discussion_theme_colors_preferences(graphql_request):
+    res = schema.execute(u"""
+mutation myMutationColors($firstColor: String!, $secondColor: String!, $languages: [String]!) {
+    updateDiscussionPreferences(firstColor:$firstColor, secondColor:$secondColor, languages:$languages) {
+        preferences {
+            firstColor
+            secondColor
+            languages{
+                locale
+            }
+        }
+    }
+}
+""", context_value=graphql_request,
+                        variable_values={
+                            "languages": ['de', 'ja'],
+                            "firstColor": "green",
+                            "secondColor": "marron",
+                        })
+    assert res.errors is None
+    assert json.loads(json.dumps(res.data)) == {
+        u'updateDiscussionPreferences': {
+            u'preferences': {
+                u'languages': [
+                    {u'locale': u'de'},
+                    {u'locale': u'ja'}
+                ],
+                u'firstColor': u'green',
+                u'secondColor': u'marron',
             }
         }}
 

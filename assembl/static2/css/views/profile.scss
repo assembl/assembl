@@ -66,7 +66,6 @@
   }
 
   .dark-title-2 {
-    color: $title3-dark-color;
     font-family: $font-family;
     font-size: 20px;
     letter-spacing: $title-letter-spacing;
@@ -101,7 +100,8 @@
 
     &:focus {
       border-radius: 0;
-      border: 1px solid $second-color !important;
+      border-style: solid !important;
+      border-width: 1px !important;
       box-shadow: none;
     }
   }

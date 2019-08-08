@@ -1,6 +1,7 @@
 #!env python
-import argparse
+from __future__ import print_function
 
+import argparse
 import requests
 from sqlalchemy.exc import ProgrammingError
 
@@ -35,7 +36,7 @@ def main():
     es_data = es_req.json()
     assert es_data['version']['number'] == elasticsearch_version
     assert es_data['cluster_name'] == elasticsearch_index
-    print "success"
+    print("success")
 
 
 if __name__ == '__main__':

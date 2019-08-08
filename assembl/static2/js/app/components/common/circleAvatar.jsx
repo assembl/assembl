@@ -1,8 +1,7 @@
 // @flow
 import React from 'react';
 
-import { EMPTY_STRING } from '../../constants';
-import { getIconPath } from '../../utils/globalFunctions';
+import { EMPTY_STRING, IMG_AVATAR } from '../../constants';
 
 type Props = {
   /** Optional avatar size (identical width and height) */
@@ -20,7 +19,7 @@ const CircleAvatar = ({ size, username, src }: Props) => (
 CircleAvatar.defaultProps = {
   size: '34',
   username: 'no-username',
-  src: getIconPath('avatar.png')
+  src: IMG_AVATAR
 };
 
 export default CircleAvatar;

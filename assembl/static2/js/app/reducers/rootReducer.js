@@ -9,6 +9,7 @@ import Auth from './authenticationReducer';
 import Timeline from './timelineReducers';
 import Admin from './adminReducer';
 import Tags from './tagReducer';
+import Theme from './themeReducer';
 import contentLocale, { defaultContentLocaleMapping } from './contentLocaleReducer';
 import ThreadFilter from './threadFilterReducer';
 import * as screenDimensions from './screenDimensionsReducers';
@@ -26,6 +27,7 @@ const reducers = {
   tags: Tags,
   timeline: Timeline,
   threadFilter: ThreadFilter,
+  theme: Theme,
   ...screenDimensions
 };
 

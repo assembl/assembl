@@ -4,14 +4,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 import { Translate } from 'react-redux-i18n';
 
-// const calendarImage = (
-//   <img
-//     style={{ width: 20, height: 20, marginLeft: 10 }}
-//     src="/static2/img/assembl-icon-calendar.svg"
-//     role="presentation"
-//     className="img-calendar"
-//   />);
-
 class DateRangeFilter extends Component {
   constructor(props) {
     super(props);

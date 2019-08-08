@@ -1,5 +1,6 @@
-import sys
+from __future__ import print_function
 
+import sys
 from pyramid.util import DottedNameResolver
 from pyramid.settings import aslist
 from pyramid.scripts.pshell import PShellCommand
@@ -10,7 +11,7 @@ def main(argv=sys.argv, quiet=False):
     try:
         return command.run()
     except Exception as e:
-        print e
+        print(e)
         import pdb; pdb.post_mortem()
 
 
@@ -42,8 +43,8 @@ class PShellCommandA(PShellCommand):
                     self.loaded_objects[k] = resolver.maybe_resolve(v)
                     self.object_help[k] = v
                 except ImportError:
-                    print "Pshell ImportError\n"
-                    print k, v
+                    print("Pshell ImportError\n")
+                    print(k, v)
 
 
 if __name__ == '__main__':  # pragma: no cover

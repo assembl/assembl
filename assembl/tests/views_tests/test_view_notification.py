@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
-import pytest
-from datetime import datetime
+from __future__ import print_function
 
-import simplejson as json
+import pytest
 
 from assembl.models import (
     NotificationSubscription,
@@ -94,7 +93,7 @@ def test_default_notifications(test_app, test_session, discussion, participant1_
             discussion_id, participant1_user_id))
     assert response.status_code == 200
     user_notif_subsc_3 = response.json
-    print user_notif_subsc_3
+    print(user_notif_subsc_3)
     corresponding = [s for s in user_notif_subsc_3 if s['@type'] == t_unsub['@type']]
     assert len(corresponding) == 1
     assert corresponding[0]['status'] != "ACTIVE"
@@ -131,8 +130,7 @@ def test_user_unsubscribed_stable(test_app, discussion, admin_user, participant1
     default_subscribed_id = NotificationSubscription.get_database_id(default_subscribed['@id'])
     response = test_app.put_json(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions/%d' % (
-        discussion.id, participant1_user.id, default_subscribed_id),
-        default_subscribed)
+            discussion.id, participant1_user.id, default_subscribed_id), default_subscribed)
     # Change the template default to unsubscribed
     corresponding = [s for s in template_notif_subsc if s['@type'] == default_subscribed['@type']]
     assert len(corresponding) == 1
@@ -142,25 +140,21 @@ def test_user_unsubscribed_stable(test_app, discussion, admin_user, participant1
     corresponding_id = NotificationSubscription.get_database_id(corresponding['@id'])
     response = test_app.put_json(
         '/data/Discussion/%d/user_templates/-/notification_subscriptions/%d' % (
-        discussion.id, corresponding_id),
-        corresponding)
+            discussion.id, corresponding_id), corresponding)
     assert response.status_code == 200  # or 204?
     # Change it back to subscribed
     corresponding['status'] = 'ACTIVE'
     response = test_app.put_json(
         '/data/Discussion/%d/user_templates/-/notification_subscriptions/%d' % (
-        discussion.id, corresponding_id),
-        corresponding)
+            discussion.id, corresponding_id), corresponding)
     assert response.status_code == 200  # or 204?
     # check that the user's default was not affected
     response = test_app.get(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions/%d' % (
-        discussion.id, participant1_user.id, default_subscribed_id),
-        default_subscribed)
+            discussion.id, participant1_user.id, default_subscribed_id), default_subscribed)
     assert response.status_code == 200
     default_subscribed_after = response.json
     assert default_subscribed_after['status'] == 'UNSUBSCRIBED'
-
 
 
 def test_user_subscribed_stable(test_app, discussion, admin_user, participant1_user):
@@ -201,8 +195,7 @@ def test_user_subscribed_stable(test_app, discussion, admin_user, participant1_u
     }
     response = test_app.post_json(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions' % (
-        discussion.id, participant1_user.id),
-        new_subscription)
+            discussion.id, participant1_user.id), new_subscription)
     assert response.status_code == 201
     new_subscription_id = NotificationSubscription.get_database_id(response.location)
     # Make the default active
@@ -210,21 +203,18 @@ def test_user_subscribed_stable(test_app, discussion, admin_user, participant1_u
     t_unsub_id = NotificationSubscription.get_database_id(t_unsub['@id'])
     response = test_app.put_json(
         '/data/Discussion/%d/user_templates/-/notification_subscriptions/%d' % (
-        discussion.id, t_unsub_id),
-        t_unsub)
+            discussion.id, t_unsub_id), t_unsub)
     assert response.status_code == 200  # or 204?
     # Make the default inactive again
     t_unsub['status'] = "INACTIVE_DFT"
     response = test_app.put_json(
         '/data/Discussion/%d/user_templates/-/notification_subscriptions/%d' % (
-        discussion.id, t_unsub_id),
-        t_unsub)
+            discussion.id, t_unsub_id), t_unsub)
     assert response.status_code == 200  # or 204?
     # check that the user's default was not affected
     response = test_app.get(
         '/data/Discussion/%d/all_users/%d/notification_subscriptions/%d' % (
-        discussion.id, participant1_user.id, new_subscription_id),
-        default_subscribed)
+            discussion.id, participant1_user.id, new_subscription_id), default_subscribed)
     assert response.status_code == 200
     default_subscribed_after = response.json
     assert default_subscribed_after['status'] == 'ACTIVE'
@@ -278,7 +268,7 @@ def test_notification_is_created_when_synthesis_is_posted_and_participant_had_pr
 
 
     initial_notification_count = test_session.query(Notification).count()
-    
+
     # Simulate publication of a synthesis
     dispatcher = ModelEventWatcherNotificationSubscriptionDispatcher()
     dispatcher.processPostCreated(synthesis_post_1.id)

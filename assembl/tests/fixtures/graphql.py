@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import pytest
 from freezegun import freeze_time
-
 from graphql_relay.node.node import from_global_id
 
 
@@ -37,6 +38,15 @@ def graphql_request_with_translation(request, test_adminuser_webrequest, discuss
     """ A graphql request fixture with an ADMIN user authenticated """
     req = test_adminuser_webrequest
     req.matchdict = {"discussion_id": discussion_with_translation.id}
+    req.method = 'POST'
+    return req
+
+
+@pytest.fixture(scope="function")
+def graphql_request_with_theme_colors(request, test_adminuser_webrequest, discussion_with_theme_color):
+    """ A graphql request fixture with an ADMIN user authenticated """
+    req = test_adminuser_webrequest
+    req.matchdict = {"discussion_id": discussion_with_theme_color.id}
     req.method = 'POST'
     return req
 
@@ -398,7 +408,7 @@ mutation myFirstMutation {
 """ % first_question_id, context_value=graphql_request)
     post_id = res.data['createPost']['post']['id']
     def fin():
-        print "proposition_id"
+        print("proposition_id")
         post = test_session.query(PropositionPost).get(int(from_global_id(post_id)[1]))
         test_session.delete(post)
         test_session.flush()

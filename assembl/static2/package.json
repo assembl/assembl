@@ -9,21 +9,29 @@
   "scripts": {
     "test": "jest --maxWorkers=2",
     "test:watch": "npm test -- --watch",
-    "build": "webpack --progress --colors",
+    "build:raw": "webpack --progress --colors",
+    "build:cleanup": "find ./build | egrep \"(mainStyle|glyphicons).*\" | xargs rm",
+    "build": "yarn build:raw && yarn build:cleanup",
     "coverage": "jest --coverage",
     "dev": "webpack -d --watch",
     "eslint": "eslint js/app tests workspaces --ext .js --ext .jsx --cache",
     "eslint:fix": "eslint js/app tests workspaces --ext .js --ext .jsx --fix",
     "stylelint": "stylelint '**/*.scss'",
     "stylelint:fix": "stylelint '**/*.scss' --fix",
-    "eslint:table": "eslint js/app tests workspaces --ext .js --ext .jsx --cache --format table",
-    "eslint:summary": "eslint js/app tests workspaces --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter'",
+    "eslint:table":
+      "eslint js/app tests workspaces --ext .js --ext .jsx --cache --format table",
+    "eslint:summary":
+      "eslint js/app tests workspaces --ext .js --ext .jsx --cache --format 'node_modules/eslint-friendly-formatter'",
     "flow": "flow",
-    "format": "prettier-eslint --write 'js/**/*.js' 'tests/**/*.js' 'workspaces/**/*.js' 'js/**/*.jsx' 'tests/**/*.jsx' 'workspaces/**/*.jsx' '*.js'",
-    "i18n:export": "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
-    "i18n:import": "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'",
+    "format":
+      "prettier-eslint --write 'js/**/*.js' 'tests/**/*.js' 'workspaces/**/*.js' 'js/**/*.jsx' 'tests/**/*.jsx' 'workspaces/**/*.jsx' '*.js'",
+    "i18n:export":
+      "node ./scripts/translations2messages.js && rip json2pot messages.json -k id -o ../locale/assembl-v2.pot && ./scripts/merge_po_files.bash",
+    "i18n:import":
+      "rip po2json '../locale/assembl-v2/*.po' -m messages.json -k id -o './translations'",
     "storybook": "start-storybook -p 9001 -c .storybook -s ..",
-    "documentation": "graphdoc -s /tmp/schema.json -o ./graphql-documentation --force"
+    "documentation":
+      "graphdoc -s /tmp/schema.json -o ./graphql-documentation --force"
   },
   "author": "Bluenove",
   "license": "AGPL-3.0",
@@ -49,9 +57,9 @@
     "babel-eslint": "^9.0.0",
     "babel-jest": "^23.4.2",
     "babel-loader": "^8.0.4",
+    "babel-plugin-styled-components": "^1.10.1",
     "coffee-loader": "^0.9.0",
     "coffeescript": "^1.12.5",
-    "css-loader": "^1.0.0",
     "empty": "^0.10.1",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.14.0",
@@ -82,8 +90,10 @@
     "redux-mock-store": "^1.5.3",
     "sass-loader": "^7.1.0",
     "style-loader": "^0.23.0",
-    "stylelint": "^8.2.0",
-    "stylelint-config-standard": "^17.0.0",
+    "stylelint": "^10.1.0",
+    "stylelint-config-standard": "^18.3.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-processor-styled-components": "^1.8.0",
     "terser-webpack-plugin": "^1.3.0",
     "url-loader": "^1.1.1",
     "webpack": "^4.20.0",
@@ -96,23 +106,27 @@
     "@material-ui/lab": "^3.0.0-alpha.28",
     "@sentry/browser": "4.2.4",
     "apollo-upload-client": "^5.1.1",
+    "autoprefixer": "^9.6.1",
     "bootstrap": "^3.3.7",
     "classnames": "^2.2.5",
     "co": "4.6.0",
     "core-js": "^2.0.0",
+    "css-loader": "^3.1.0",
     "draft-convert": "^2",
     "draft-js": "^0.10.5",
     "draft-js-buttons": "^2.0.1",
     "draft-js-counter-plugin": "^2.0.1",
     "draft-js-plugins-editor": "^2.1.1",
     "draft-js-static-toolbar-plugin": "^2.0.2",
+    "extract-loader": "^3.1.0",
     "final-form": "4.13.0",
     "final-form-arrays": "^1.1.1",
     "final-form-set-field-touched": "^1.0.0",
     "graphql": "^0.10.5",
     "graphql-anywhere": "^3.1.0",
     "history": "^3.0.0",
-    "hypothesis": "https://github.com/conversence/client.git#anchor_range_on_fragment",
+    "hypothesis":
+      "https://github.com/conversence/client.git#anchor_range_on_fragment",
     "immutability-helper": "^2.8.1",
     "immutable": "~3.7.4",
     "isomorphic-fetch": "^2.2.1",
@@ -122,7 +136,9 @@
     "lodash": "^4.17.11",
     "moment": "^2.22.0",
     "moment-duration-format": "^1.3.0",
-    "piwik-react-router": "assembl/piwik-react-router#skip_piwik_initialization",
+    "piwik-react-router":
+      "assembl/piwik-react-router#skip_piwik_initialization",
+    "postcss-loader": "^3.0.0",
     "prop-types": "^15.5.8",
     "query-string": "^4.1.0",
     "rc-slider": "^8.6.5",
@@ -132,7 +148,7 @@
     "react-apollo": "^1.4.12",
     "react-autosize-textarea": "^4.0.0",
     "react-bootstrap": "^0.31.2",
-    "react-color": "^2.13.8",
+    "react-color": "^2.17.3",
     "react-copy-to-clipboard": "^5.0.1",
     "react-custom-scrollbars": "^4.2.1",
     "react-datepicker": "1.5.0",
@@ -162,6 +178,7 @@
     "regenerator-runtime": "^0.13.2",
     "searchkit": "^2.3.0",
     "smoothscroll-polyfill": "^0.3.6",
+    "styled-components": "^4.3.1",
     "url-join": "^1.1.0"
   },
   "resolutions": {
@@ -172,12 +189,7 @@
   },
   "//": "See https://facebook.github.io/jest/docs/webpack.html for more info",
   "jest": {
-    "coverageReporters": [
-      "json-summary",
-      "lcov",
-      "text",
-      "text-summary"
-    ],
+    "coverageReporters": ["json-summary", "lcov", "text", "text-summary"],
     "coverageThreshold": {
       "global": {
         "lines": 52,
@@ -189,16 +201,10 @@
     "moduleNameMapper": {
       "\\.(css|less|scss)$": "identity-obj-proxy",
       "jquery": "<rootDir>/node_modules/jquery/dist/jquery.slim.min.js",
-      "annotator_range": "<rootDir>/node_modules/hypothesis/src/annotator/anchoring/range.coffee"
+      "annotator_range":
+        "<rootDir>/node_modules/hypothesis/src/annotator/anchoring/range.coffee"
     },
-    "moduleFileExtensions": [
-      "coffee",
-      "gql",
-      "graphql",
-      "js",
-      "json",
-      "jsx"
-    ],
+    "moduleFileExtensions": ["coffee", "gql", "graphql", "js", "json", "jsx"],
     "transformIgnorePatterns": [
       "/node_modules/(?!(assembl-editor-utils|assembl-test-editor-utils|draft-js-attachment-plugin|draft-js-link-plugin|draft-js-modal-plugin|hypothesis)/)"
     ],
@@ -207,15 +213,12 @@
       "\\.coffee$": "jest-coffee-preprocessor",
       "\\.(js|jsx)$": "babel-jest"
     },
-    "setupFiles": [
-      "<rootDir>/tests/setupTests.js"
-    ],
+    "setupFiles": ["<rootDir>/tests/setupTests.js"],
     "globals": {
       "globalAnalytics": {}
     }
   },
   "private": true,
-  "workspaces": [
-    "workspaces/*"
-  ]
+  "workspaces": ["workspaces/*"],
+  "browserslist": ["last 2 versions", "ie > 10", "not dead"]
 }

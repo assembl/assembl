@@ -44,10 +44,6 @@
       height: 55px;
       margin-top: 20px;
 
-      .rc-slider-track {
-        background-color: $first-color;
-      }
-
       .rc-slider-dot {
         /* rc-slider dotStyle prop mysteriously does not work anymore */
         background-color: #e6e5f4;
@@ -73,13 +69,8 @@
         }
 
         &.rc-slider-mark-text-active {
-          color: $first-color;
           font-weight: bold;
         }
-      }
-
-      svg.pointer {
-        fill: $first-color;
       }
 
       .rc-slider-handle.no-value {

@@ -2,11 +2,6 @@ from __future__ import print_function
 import argparse
 import os
 
-import transaction
-from sqlalchemy.orm import undefer
-
-from assembl.lib.sqla import mark_changed
-from assembl.lib.antivirus import get_antivirus
 from assembl.scripts import boostrap_configuration
 
 

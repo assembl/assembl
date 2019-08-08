@@ -1,5 +1,6 @@
+from __future__ import print_function
+
 from cStringIO import StringIO
-import csv
 from collections import defaultdict
 import operator
 
@@ -141,9 +142,9 @@ def votes_collection_add(request):
         db = first.db
         for instance in instances:
             db.add(instance)
-        print "before flush"
+        print("before flush")
         db.flush()
-        print "after flush"
+        print("after flush")
         return Response(
             dumps(first.generic_json('default', user_id, permissions)),
             location=first.uri_generic(first.id),

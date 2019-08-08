@@ -316,6 +316,8 @@ class DiscussionPreferences(graphene.ObjectType):
     with_semantic_analysis = graphene.Boolean(description=docs.DiscussionPreferences.with_semantic_analysis)
     slug = graphene.String(required=True, description=docs.DiscussionPreferences.slug)
     old_slugs = graphene.List(graphene.String, required=True, description=docs.DiscussionPreferences.old_slugs)
+    first_color = graphene.String(description=docs.DiscussionPreferences.first_color)
+    second_color = graphene.String(description=docs.DiscussionPreferences.second_color)
 
     def resolve_tab_title(self, args, context, info):
         return self.get('tab_title', 'Assembl')
@@ -362,6 +364,16 @@ class DiscussionPreferences(graphene.ObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         return [old_slug.slug for old_slug in discussion.old_slugs]
+
+    def resolve_first_color(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.preferences['first_color']
+
+    def resolve_second_color(self, args, context, info):
+        discussion_id = context.matchdict['discussion_id']
+        discussion = models.Discussion.get(discussion_id)
+        return discussion.preferences['second_color']
 
 
 class ResourcesCenter(graphene.ObjectType):
@@ -591,6 +603,8 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         with_translation = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_translation)
         with_semantic_analysis = graphene.Boolean(description=docs.UpdateDiscussionPreferences.with_semantic_analysis)
         slug = graphene.String(description=docs.UpdateDiscussionPreferences.slug)
+        first_color = graphene.String(description=docs.UpdateDiscussionPreferences.first_color)
+        second_color = graphene.String(description=docs.UpdateDiscussionPreferences.second_color)
 
     preferences = graphene.Field(lambda: DiscussionPreferences)
 
@@ -608,6 +622,8 @@ class UpdateDiscussionPreferences(graphene.Mutation):
         with_moderation = args.get('with_moderation', None)
         with_translation = args.get('with_translation', None)
         with_semantic_analysis = args.get('with_semantic_analysis', None)
+        first_color = args.get('first_color', None)
+        second_color = args.get('second_color', None)
         slug = args.get('slug', None)
         with cls.default_db.no_autoflush as db:
             if languages is not None:
@@ -652,6 +668,12 @@ class UpdateDiscussionPreferences(graphene.Mutation):
                 discussion.preferences['translation_service'] = "assembl.nlp.translation_service.GoogleTranslationService"
             else:
                 discussion.preferences['translation_service'] = ""
+
+            if first_color is not None:
+                discussion.preferences['first_color'] = first_color
+
+            if second_color is not None:
+                discussion.preferences['second_color'] = second_color
 
             if slug is not None:
                 if slug != discussion.slug:

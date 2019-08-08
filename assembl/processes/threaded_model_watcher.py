@@ -4,12 +4,15 @@ Note that the ModelEventWatcher are Mapper-level flush events, so they cannot
 create objects. This pushes the logic on another thread, so we're already
 using another thread-specific session."""
 
+from __future__ import print_function
+
 from threading import Thread
 from Queue import Queue
 
 from zope import interface
 
 from ..lib.model_watcher import IModelEventWatcher
+
 
 class ThreadDispatcher(Thread):
     """A thread that will receive CRUD events and hand them to another model watcher."""
@@ -33,9 +36,9 @@ class ThreadDispatcher(Thread):
 
     def run(self):
         while not self.dying:
-            print "*"*20,
+            print("*"*20)
             event = self.queue.get()
-            print event
+            print(event)
             method_name = event[0]
             method = getattr(self.mw, method_name)
             method(*event[1:])

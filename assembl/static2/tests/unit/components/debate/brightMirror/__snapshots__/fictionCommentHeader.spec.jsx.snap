@@ -19,7 +19,7 @@ exports[`Storyshots FictionCommentHeader default 1`] = `
     <img
       alt="illustration-mechanisme"
       className="img-responsive"
-      src="/static2/img/illustration-mechanisme.png"
+      src="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/illustration-mechanisme.png"
     />
   </p>
   <p
@@ -51,7 +51,7 @@ exports[`Storyshots FictionCommentHeader playground 1`] = `
     <img
       alt="illustration-mechanisme"
       className="img-responsive"
-      src="/static2/img/illustration-mechanisme.png"
+      src="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/illustration-mechanisme.png"
     />
   </p>
   <p

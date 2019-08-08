@@ -1,4 +1,5 @@
 """ZMQ setup for the changes socket"""
+from __future__ import print_function
 import atexit
 from itertools import count
 
@@ -64,7 +65,7 @@ def send_changes(socket, discussion, changeset):
     socket.send(discussion, zmq.SNDMORE)
     socket.send(str(order), zmq.SNDMORE)
     socket.send_json(changeset)
-    print "sent", order, discussion, changeset
+    print("sent", order, discussion, changeset)
 
 
 def configure_zmq(sockdef, multiplex):

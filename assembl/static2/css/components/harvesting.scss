@@ -25,8 +25,6 @@
   }
 
   .button-taxonomy:hover {
-    border-color: $first-color;
-
     span {
       color: white;
     }
@@ -75,7 +73,6 @@
     }
 
     &:hover {
-      background-color: $first-color-light;
       font-family: $font-family;
     }
   }
@@ -91,7 +88,6 @@
   }
 
   .taxonomy-label.active {
-    background-color: $first-color-light;
     font-family: $font-family;
   }
 }
@@ -390,12 +386,7 @@
 
     .btn.active {
       background-color: $white;
-      border-color: $second-color;
       box-shadow: none;
-
-      span {
-        color: $second-color;
-      }
     }
 
     .btn-default {
@@ -407,15 +398,16 @@
 
       span {
         color: $grey;
+
+        &:before {
+          font-size: 12px;
+          display: block;
+          margin: 0 0 0 -6px;
+        }
       }
 
       &:hover {
         background-color: $white;
-        border-color: $second-color;
-
-        span {
-          color: $second-color;
-        }
       }
 
       &:focus {
@@ -425,14 +417,6 @@
 
       &:active {
         box-shadow: none;
-      }
-
-      span {
-        &:before {
-          font-size: 12px;
-          display: block;
-          margin: 0 0 0 -6px;
-        }
       }
     }
   }
@@ -608,8 +592,8 @@
       display: inline-flex;
       border-radius: 16px;
       padding: 0 0 0 3px;
-      color: $first-color;
-      border: solid 1px $first-color;
+      border-style: solid;
+      border-width: 1px;
       font-size: 13px;
       line-height: 13px;
       height: 15px;
@@ -618,7 +602,6 @@
 
       &:hover {
         color: white;
-        background-color: $first-color;
       }
     }
   }

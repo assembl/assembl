@@ -9,16 +9,13 @@
 
   .dropdown-toggle {
     height: 20px;
-    color: $first-color;
     font-size: 11px;
 
     &:hover {
-      color: $first-color;
       text-decoration: none;
     }
 
     &:focus {
-      color: $first-color;
       text-decoration: none;
     }
   }
@@ -27,23 +24,17 @@
     min-width: 60px;
 
     li.active a {
-      background-color: $first-color;
       color: $white;
       cursor: default;
     }
 
     a {
-      color: $first-color;
       font-size: $font-size-xs;
 
       &:focus {
         font-family: $font-family3;
         outline: none;
       }
-    }
-
-    .caret {
-      color: $first-color;
     }
   }
 
@@ -60,17 +51,14 @@
   text-transform: uppercase;
 
   .dropdown-toggle {
-    color: $first-color;
     font-size: 11px;
     text-transform: uppercase;
 
     &:hover {
-      color: $first-color;
       text-decoration: none;
     }
 
     &:focus {
-      color: $first-color;
       text-decoration: none;
     }
   }
@@ -121,7 +109,6 @@
       outline: none;
 
       a {
-        color: $first-color;
         font-size: $font-size-xs;
         margin: 0 0 10px -6px;
         outline: none;

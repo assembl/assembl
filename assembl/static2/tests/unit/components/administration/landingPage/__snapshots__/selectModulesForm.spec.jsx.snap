@@ -18,7 +18,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       <Connect(Helper)
         classname="margin-left-20"
         helperText="Top page header. It contains the consultation's title and subtitle and a button to access to the consultation."
-        helperUrl="/static2/img/helpers/landing_page_admin/header.png"
+        helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/header.png"
         label="Header"
       />
     </Checkbox>
@@ -33,7 +33,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       <Connect(Helper)
         classname="margin-left-20"
         helperText=" "
-        helperUrl="/static2/img/helpers/landing_page_admin/introduction.png"
+        helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/introduction.png"
         label="Introduction"
       />
     </Checkbox>
@@ -48,7 +48,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       <Connect(Helper)
         classname="margin-left-20"
         helperText=" "
-        helperUrl="/static2/img/helpers/landing_page_admin/video.png"
+        helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/video.png"
         label="Video"
       />
     </Checkbox>
@@ -63,7 +63,7 @@ exports[`DumbSelectModulesForm component should render a form to select the land
       <Connect(Helper)
         classname="margin-left-20"
         helperText=" "
-        helperUrl="/static2/img/helpers/landing_page_admin/footer.png"
+        helperUrl="https://s3-eu-west-1.amazonaws.com/bluenove-assembl-images/footer.png"
         label="Footer"
       />
     </Checkbox>

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import pytest
 
 
@@ -17,7 +19,7 @@ def resource(request, discussion, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer resource"
+        print("finalizer resource")
         test_session.delete(resource)
         test_session.flush()
     request.addfinalizer(fin)
@@ -58,7 +60,7 @@ def resource_with_image_and_doc(request, discussion, moderator_user, simple_file
     test_session.flush()
 
     def fin():
-        print "finalizer resource with image and doc"
+        print("finalizer resource with image and doc")
         test_session.delete(resource_doc)
         test_session.delete(resource_image)
         test_session.delete(resource)

@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 """File/document related fixtures."""
-import os
+from __future__ import print_function
 
+import os
 import pytest
 
 
@@ -19,7 +20,7 @@ def simple_file(request, discussion, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer simple_file"
+        print("finalizer simple_file")
         f.delete_file()
         test_session.delete(f)
         test_session.flush()
@@ -42,7 +43,7 @@ def simple_file2(request, discussion, test_session):
     test_session.flush()
 
     def fin():
-        print "finalizer simple_file"
+        print("finalizer simple_file")
         f.delete_file()
         test_session.delete(f)
         test_session.flush()

@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from __future__ import print_function
+
 import pytest
 from datetime import datetime, timedelta
+
 
 @pytest.fixture(scope="function")
 def bright_mirror(phases, graphql_request, graphql_registry, test_session):
@@ -73,13 +76,14 @@ def post_published_for_bright_mirror(
     test_session.flush()
 
     def fin():
-        print "finalizer post_published_for_bright_mirror"
+        print("finalizer post_published_for_bright_mirror")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()
 
     request.addfinalizer(fin)
     return p
+
 
 @pytest.fixture(scope="function")
 def post_published_for_bright_mirror_participant(
@@ -108,7 +112,7 @@ def post_published_for_bright_mirror_participant(
     test_session.flush()
 
     def fin():
-        print "finalizer post_published_for_bright_mirror"
+        print("finalizer post_published_for_bright_mirror")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()
@@ -135,7 +139,7 @@ def participant_published_post_with_parent_post_for_bright_mirror(
         message_id="msgpublisheparticipant2@example2.com",
         creation_date=datetime.utcnow(),
         parent_id=parent_post_id
-        )
+    )
 
     idc = IdeaRelatedPostLink(
         idea=idea,
@@ -147,7 +151,7 @@ def participant_published_post_with_parent_post_for_bright_mirror(
     test_session.flush()
 
     def fin():
-        print "finalizer participant_published_post_with_parent_post_for_bright_mirror"
+        print("finalizer participant_published_post_with_parent_post_for_bright_mirror")
         test_session.delete(post)
         test_session.delete(idc)
         test_session.flush()
@@ -183,7 +187,7 @@ def post_draft_for_bright_mirror(
     test_session.flush()
 
     def fin():
-        print "finalizer post_draft_for_bright_mirror"
+        print("finalizer post_draft_for_bright_mirror")
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()

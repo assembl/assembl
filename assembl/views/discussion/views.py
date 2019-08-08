@@ -268,7 +268,7 @@ def react_base_view(request, required_permission=P_READ):
         "activate_mouseflow":activate_mouseflow,
         "mouseflow_website_id":mouseflow_website_id
     }
-    common_context.update(populate_theme_information(theme_name))
+    common_context.update(populate_theme_information())
 
     if discussion:
         canRead = user_has_permission(discussion.id, user_id, required_permission)

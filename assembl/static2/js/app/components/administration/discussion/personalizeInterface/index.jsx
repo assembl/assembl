@@ -13,7 +13,8 @@ import { load, postLoadFormat } from './load';
 import { createMutationsPromises, save } from './save';
 import validate from './validate';
 import Loader from '../../../common/loader';
-import { DEFAULT_FAVICON } from '../../../../constants';
+import { DEFAULT_FAVICON, IMG_FAVICON_TITLE } from '../../../../constants';
+import ColorPickerFieldAdapter from '../../../form/colorPickerFieldAdapter';
 
 type Props = {
   client: ApolloClient
@@ -54,11 +55,7 @@ const PersonalizeInterface = ({ client }: Props) => (
               <Translate value="administration.personalizeInterface.titleFormTitle" />
             </div>
             <div className="img-helper-container">
-              <img
-                className="img-helper"
-                src={'/static2/img/helpers/discussion_admin/favicon_title.png'}
-                alt="personalize-interface-helper"
-              />
+              <img className="img-helper" src={IMG_FAVICON_TITLE} alt="personalize-interface-helper" />
             </div>
             <form className="language-list" onSubmit={handleSubmit}>
               <SaveButton disabled={pristine || submitting} saveAction={handleSubmit} />
@@ -82,6 +79,12 @@ const PersonalizeInterface = ({ client }: Props) => (
                 label={I18n.t('administration.discussionPreferences.debateLogoLabel')}
               />
               <p className="label-indication">{I18n.t('administration.personalizeInterface.logoInstruction')}</p>
+              <div className="separator" />
+              <div className="title">
+                <Translate value="administration.theme.themeColorsTitle" />
+              </div>
+              <Field component={ColorPickerFieldAdapter} name="firstColor" label={I18n.t('administration.theme.firstColor')} />
+              <Field component={ColorPickerFieldAdapter} name="secondColor" label={I18n.t('administration.theme.secondColor')} />
             </form>
           </React.Fragment>
         )}

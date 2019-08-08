@@ -237,7 +237,7 @@ export class DumbPostBody extends React.Component<Props, State> {
     const { readMoreExpanded } = this.state;
     const divClassNames = 'post-body post-body--is-harvestable';
     const displayMode = (postsDisplayPolicy && postsDisplayPolicy.displayMode) || defaultDisplayPolicy.displayMode;
-    const isSummaryDisplayMode = displayMode === 'summary' && !!body && body.length > 60;
+    const isSummaryDisplayMode = displayMode === 'summary' && !!body && body.length > 100;
     const htmlClassNames = classNames('post-body-content', isSummaryDisplayMode && !readMoreExpanded && 'truncate', 'body', {
       'pre-wrap': bodyMimeType === 'text/plain'
     });

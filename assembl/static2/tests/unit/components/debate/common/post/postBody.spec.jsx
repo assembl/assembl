@@ -44,7 +44,10 @@ describe('PostBody component', () => {
   it('should render a post body with summary view', () => {
     const bodyDivRefSpy = jest.fn();
     const props = {
-      body: '<p>You can\'t index the port without programming the wireless HTTP program!</p>',
+      body:
+        '<p>You can\'t index the port without programming the wireless HTTP program!</p>' +
+        '<p>You can\'t index the port without programming the wireless HTTP program!</p>' +
+        '<p>You can\'t index the port without programming the wireless HTTP program!</p>',
       bodyDivRef: bodyDivRefSpy,
       bodyMimeType: 'text/*',
       connectedUserId: null,
@@ -69,7 +72,10 @@ describe('PostBody component', () => {
   it('should expand body when click on "Read more"', () => {
     const bodyDivRefSpy = jest.fn();
     const props = {
-      body: '<p>You can\'t index the port without programming the wireless HTTP program!</p>',
+      body:
+        '<p>You can\'t index the port without programming the wireless HTTP program!</p>' +
+        '<p>You can\'t index the port without programming the wireless HTTP program!</p>' +
+        '<p>You can\'t index the port without programming the wireless HTTP program!</p>',
       bodyDivRef: bodyDivRefSpy,
       bodyMimeType: 'text/*',
       connectedUserId: null,

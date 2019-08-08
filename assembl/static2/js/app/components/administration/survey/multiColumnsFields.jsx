@@ -9,6 +9,7 @@ import RadioButtonsFieldAdapter from '../../form/radioButtonsFieldAdapter';
 import MultilingualTextFieldAdapter from '../../form/multilingualTextFieldAdapter';
 import MultilingualRichTextFieldAdapter from '../../form/multilingualRichTextFieldAdapter';
 import ColorPickerFieldAdapter from '../../form/colorPickerFieldAdapter';
+import { IMG_HELPER_MULTICOL } from '../../../constants';
 
 type Props = {
   editLocale: string,
@@ -21,7 +22,7 @@ const MultiColumnsFields = ({ editLocale, nbColumnsInForm, fieldPrefix }: Props)
     <div className="margin-l" />
     <Helper
       label={I18n.t('administration.tableOfThematics.columnsConfiguration')}
-      helperUrl="/static2/img/helpers/helper_multicol.png"
+      helperUrl={IMG_HELPER_MULTICOL}
       helperText=""
       classname="title"
     />

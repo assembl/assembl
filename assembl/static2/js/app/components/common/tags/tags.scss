@@ -1,5 +1,4 @@
 .ReactTags__tags {
-  color: $first-color;
   font-size: $font-size-xs;
   font-weight: 300;
 
@@ -9,7 +8,6 @@
     flex-basis: 100%;
 
     .ReactTags__tag {
-      background-color: $first-color-light;
       border-radius: 11px;
       border: none;
       height: 22px;
@@ -52,7 +50,6 @@
       }
 
       .ReactTags__tagInput {
-        background-color: $first-color;
         border-radius: 11px;
         border: none;
         width: 22px;
@@ -86,14 +83,13 @@
         }
       }
 
-      .ReactTags__tagInput:has(> .ReactTags__suggestions) {
-        border-bottom-left-radius: 0;
-        border-bottom-right-radius: 0;
-      }
+      // .ReactTags__tagInput:has(> .ReactTags__suggestions) {
+      //   border-bottom-left-radius: 0;
+      //   border-bottom-right-radius: 0;
+      // }
     }
 
     .ReactTags__tagInput:focus-within {
-      background-color: $first-color-light;
       padding-left: 10px;
       padding-right: 5px;
       width: 150px;
@@ -105,7 +101,6 @@
     }
 
     .ReactTags__suggestions {
-      background-color: $first-color-light;
       border-bottom-left-radius: 11px;
       border-bottom-right-radius: 11px;
       z-index: -1;
@@ -134,7 +129,6 @@
 
         mark {
           background: none;
-          color: $first-color;
           margin-right: 0;
           padding-right: 0;
         }

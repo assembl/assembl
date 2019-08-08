@@ -1,5 +1,8 @@
+from __future__ import print_function
+
 from datetime import datetime
 import pytest
+
 
 @pytest.fixture(scope="function")
 def phases(request, test_session, discussion):
@@ -73,7 +76,7 @@ def phases(request, test_session, discussion):
     test_session.flush()
 
     def fin():
-        print "finalizer timeline"
+        print("finalizer timeline")
         test_session.delete(survey)
         test_session.delete(thread)
         test_session.delete(multiColumns)

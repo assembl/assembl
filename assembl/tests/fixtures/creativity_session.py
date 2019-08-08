@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 import json
 import pytest
 from datetime import datetime, timedelta
@@ -24,7 +26,7 @@ def creativity_session_widget(
     test_session.add(c)
 
     def fin():
-        print "finalizer creativity_session_widget"
+        print("finalizer creativity_session_widget")
         test_session.delete(c)
         test_session.flush()
     request.addfinalizer(fin)
@@ -58,7 +60,7 @@ def creativity_session_widget_new_idea(
     test_session.add(ipp)
 
     def fin():
-        print "finalizer creativity_session_widget_new_idea"
+        print("finalizer creativity_session_widget_new_idea")
         test_session.delete(ipp)
         test_session.delete(l_w_wi)
         test_session.delete(l_1_wi)
@@ -90,7 +92,7 @@ def creativity_session_widget_post(
     test_session.add(icwl)
 
     def fin():
-        print "finalizer creativity_session_widget_post"
+        print("finalizer creativity_session_widget_post")
         test_session.delete(icwl)
         test_session.delete(p)
         test_session.flush()

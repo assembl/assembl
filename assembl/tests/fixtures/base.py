@@ -7,20 +7,21 @@ The core fixtures that will:
     5) create a pyramid test application
     6) create a databse session
 """
+from __future__ import print_function
 
-from datetime import datetime
 
 import pytest
+import traceback
 import transaction
+from datetime import datetime
 from webtest import TestApp
 from pkg_resources import get_distribution
 from pyramid.threadlocal import manager
 from pyramid import testing
-import traceback
 
 import assembl
 from assembl.lib.config import get_config
-from assembl.lib.migration import bootstrap_db, bootstrap_db_data
+from assembl.lib.migration import bootstrap_db
 from assembl.lib.sqla import get_session_maker
 from assembl.processes import configure as configure_tasks
 from assembl.auth import R_SYSADMIN
@@ -38,7 +39,7 @@ def session_factory(request):
     session_factory = get_session_maker()
 
     def fin():
-        print "finalizer session_factory"
+        print("finalizer session_factory")
         session_factory.remove()
     request.addfinalizer(fin)
     return session_factory
@@ -63,7 +64,7 @@ def db_tables(request, empty_db):
     bootstrap_db(app_settings_file, engine)
 
     def fin():
-        print "finalizer db_tables"
+        print("finalizer db_tables")
         session = empty_db()
         drop_tables(get_config(), session)
         session.commit()
@@ -103,7 +104,7 @@ def test_app_no_perm(request, base_registry, db_tables):
     PyramidWebTestRequest._registry = base_registry
 
     def fin():
-        print "finalizer test_app_no_perm"
+        print("finalizer test_app_no_perm")
         session = db_tables()
         with transaction.manager:
             clear_rows(get_config(), session)
@@ -121,7 +122,7 @@ def test_webrequest(request, test_app_no_perm):
     req = PyramidWebTestRequest.blank('/', method="GET")
 
     def fin():
-        print "finalizer test_webrequest"
+        print("finalizer test_webrequest")
         # The request was not called
         manager.pop()
     request.addfinalizer(fin)
@@ -143,7 +144,7 @@ def test_session(request, test_app_no_perm, db_tables):
     session = db_tables()
 
     def fin():
-        print "finalizer test_session"
+        print("finalizer test_session")
         try:
             session.commit()
             #session.close()
@@ -175,7 +176,7 @@ def admin_user(request, test_session):
     uid = u.id
 
     def fin():
-        print "finalizer admin_user"
+        print("finalizer admin_user")
         # I often get expired objects here, and I need to figure out why
         user = test_session.query(User).get(uid)
         user_role = user.roles[0]
@@ -223,55 +224,71 @@ def get_resources_html(uuid, theme_name="default"):
 
 
 @pytest.fixture(scope="function")
-def static_asset_resources_html(request):
+def static_build(request):
     import os
+    import re
     import shutil
-    import uuid
     build_path = os.path.join(
         os.path.dirname(os.path.dirname(os.path.dirname(__file__))),
         'static2/build'
     )
-    resources_html_path = os.path.join(build_path, 'resources.html')
-    resources_html_tmp = os.path.join(build_path, 'resources.html.tmp')
-    resources_file_created = False
-    build_folder_created = False
-    resource_file_moved = False
 
-    def write_resouces_to_disk():
-        Uuid = uuid.uuid4().hex
-        resources_html = get_resources_html(Uuid)
-        with open(resources_html_path, 'w') as f:
-            f.seek(0)
-            f.write(resources_html)
+    bundle_exp = '(bundle)\.\w+\.js$'
+    style_exp = '(style)\.\w+\.css$'
+    names = {'bundle': None, 'style': None}
+    files_exp = [bundle_exp, style_exp]
+    build_folder_created = False
+    moved_files = False
+
+    def build_file(f):
+        return os.path.join(build_path, f)
 
     if not os.path.exists(build_path):
         os.mkdir(build_path)
         build_folder_created = True
-    if not os.path.exists(resources_html_path):
-        write_resouces_to_disk()
-        resources_file_created = True
-    else:
-        # resouce html exists, change file name temporarily for the test
-        # This happens when testing on local machine where a static2 build folder has already been done
-        shutil.move(resources_html_path, resources_html_tmp)
-        write_resouces_to_disk()
-        resource_file_moved = True
+
+    build_dir_files = os.listdir(build_path)
+    filtered_files = []
+    if not build_folder_created:
+        for f_exp in files_exp:
+            for f in build_dir_files:
+                if re.match(f_exp, f):
+                    filtered_files.append(f)
+
+    if filtered_files:
+        moved_files = True
+        for f in filtered_files:
+            # Temporarily move it
+            if 'bundle' in f:
+                f_type = 'bundle'
+            else:
+                f_type = 'style'
+            names[f_type] = f
+            shutil.move(build_file(f), build_file('%s.bak' % f))
+
+    # Doesn't exist, create it temporarily
+    if build_folder_created or moved_files:
+        with open(build_file('bundle.12345abc.js'), 'w') as fstream:
+            fstream.write("This is a bundle.js file")
+        with open(build_file('style.12345abc.css'), 'w') as fstream:
+            fstream.write("This is a css file")
 
     def fin():
         # Clean up the file creations after assertions
         if build_folder_created:
             shutil.rmtree(build_path)
-        elif resources_file_created:
-            os.unlink(resources_html_path)
-        elif resource_file_moved:
-            os.unlink(resources_html_path)
-            shutil.move(resources_html_tmp, resources_html_path)
+        else:
+            os.unlink(build_file('bundle.12345abc.js'))
+            os.unlink(build_file('style.12345abc.css'))
+            for n in names.values():
+                if n is not None:
+                    shutil.move(build_file('%s.bak' % n), build_file(n))
 
     request.addfinalizer(fin)
 
 
 @pytest.fixture(scope="function")
-def test_app(request, static_asset_resources_html, admin_user, test_app_no_perm):
+def test_app(request, admin_user, test_app_no_perm):
     """A configured Assembl fixture with permissions
     and an admin user logged in"""
 
@@ -284,6 +301,7 @@ def test_app(request, static_asset_resources_html, admin_user, test_app_no_perm)
     config.set_authorization_policy(dummy_policy)
     config.set_authentication_policy(dummy_policy)
     return test_app_no_perm
+
 
 @pytest.fixture(scope="function")
 def test_app_complex_password(request, test_app):
