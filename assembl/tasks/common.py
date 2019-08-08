@@ -128,8 +128,10 @@ def get_venv_site_packages(c):
 
 
 def set_prod_env_link(c, project_prefix):
-    # Will fail but continue if link/folder already exists
-    c.run('ln -s {0}/venv/lib/python2.7/site-packages/assembl {0}'.format(project_prefix), warn=True)
+    if not exists(c, os.path.join(project_prefix, 'assembl')):
+        production_path = os.path.join(project_prefix, get_venv_site_packages(c))
+        print("Creating symbolic link between %s and %s" % (production_path, project_prefix))
+        c.run('ln -s %s %s' % (production_path, project_prefix), warn=True)
 
 
 def get_assembl_code_path(c):
