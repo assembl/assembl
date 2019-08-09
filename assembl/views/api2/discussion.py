@@ -724,7 +724,7 @@ def escapeit(r, data):
         return ''
 
     if something:
-        if type(something) is str:
+        if isinstance(something, basestring):
             return something.decode('utf-8')
         return something
     return ''
