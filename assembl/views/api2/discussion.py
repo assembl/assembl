@@ -674,31 +674,31 @@ def users_csv_export(request):
     import assembl.models as m
     from collections import defaultdict
 
-    ID = "id"
-    NAME = "Nom prénom"
-    EMAIL = "Mail"
-    USERNAME = "Pseudo"
-    CREATION_DATE = "Date de création du compte"
-    FIRST_VISIT = "Date de la première connexion"
-    LAST_VISIT = "Date de la dernière connexion"
-    TOP_POSTS = "Nombre de Top posts"
-    TOP_POST_REPLIES = "Nombre de réponses reçues aux Top posts"
-    POSTS = "Nombre de posts"
-    POSTS_REPLIES = "Nombre de réponses reçues aux posts"
-    TOTAL_POSTS = "Nombre total de posts"
-    AGREE_GIVEN = '''Nombre de mentions "D'accord" donné'''
-    DISAGREE_GIVEN = '''Nombre de mentions "Pas d'accord" donné'''
-    DONT_UNDERSTAND_GIVEN = '''Nombre de mentions "Pas tout compris" donné'''
-    MORE_INFO_GIVEN = '''Nombre de mentions "SVP + d'infos" donné'''
-    AGREE_RECEIVED = '''Nombre de mentions "D'accord" reçu'''
-    DISAGREE_RECEIVED = '''Nombre de mentions "Pas d'accord" reçu'''
-    DONT_UNDERSTAND_RECEIVED = '''Nombre de mentions "Pas tout compris" reçu'''
-    MORE_INFO_RECEIVED = '''Nombre de mentions "SVP + d'infos" reçu'''
-    THEMATICS = "Liste des thématiques dans lesquelles il a contribué"
+    ID = u"id".encode('utf-8')
+    NAME = u"Nom prénom".encode('utf-8')
+    EMAIL = u"Mail".encode('utf-8')
+    USERNAME = u"Pseudo".encode('utf-8')
+    CREATION_DATE = u"Date de création du compte".encode('utf-8')
+    FIRST_VISIT = u"Date de la première connexion".encode('utf-8')
+    LAST_VISIT = u"Date de la dernière connexion".encode('utf-8')
+    TOP_POSTS = u"Nombre de Top posts".encode('utf-8')
+    TOP_POST_REPLIES = u"Nombre de réponses reçues aux Top posts".encode('utf-8')
+    POSTS = u"Nombre de posts".encode('utf-8')
+    POSTS_REPLIES = u"Nombre de réponses reçues aux posts".encode('utf-8')
+    TOTAL_POSTS = u"Nombre total de posts".encode('utf-8')
+    AGREE_GIVEN = u'''Nombre de mentions "D'accord" donné'''.encode('utf-8')
+    DISAGREE_GIVEN = u'''Nombre de mentions "Pas d'accord" donné'''.encode('utf-8')
+    DONT_UNDERSTAND_GIVEN = u'''Nombre de mentions "Pas tout compris" donné'''.encode('utf-8')
+    MORE_INFO_GIVEN = u'''Nombre de mentions "SVP + d'infos" donné'''.encode('utf-8')
+    AGREE_RECEIVED = u'''Nombre de mentions "D'accord" reçu'''.encode('utf-8')
+    DISAGREE_RECEIVED = u'''Nombre de mentions "Pas d'accord" reçu'''.encode('utf-8')
+    DONT_UNDERSTAND_RECEIVED = u'''Nombre de mentions "Pas tout compris" reçu'''.encode('utf-8')
+    MORE_INFO_RECEIVED = u'''Nombre de mentions "SVP + d'infos" reçu'''.encode('utf-8')
+    IDEAS = u"Liste des idées dans lesquelles il a contribué".encode('utf-8')
     fieldnames = [
         NAME, EMAIL, USERNAME, CREATION_DATE, FIRST_VISIT, LAST_VISIT, TOP_POSTS, TOP_POST_REPLIES, POSTS,
         POSTS_REPLIES, TOTAL_POSTS, AGREE_GIVEN, DISAGREE_GIVEN, DONT_UNDERSTAND_GIVEN, MORE_INFO_GIVEN, AGREE_RECEIVED,
-        DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, THEMATICS
+        DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, IDEAS
     ]
     LIKE_SENTIMENT = 'sentiment:like'
     DISLIKE_SENTIMENT = 'sentiment:disagree'
@@ -718,11 +718,10 @@ def users_csv_export(request):
         ).filter(m.Post.creation_date < end
         ).order_by(m.Post.id).all()
 
-    sentiment_counts = db.query(m.Post.id, m.SentimentOfPost.actor_id, m.SentimentOfPost.type).join(m.SentimentOfPost).filter(
-        m.Post.id.in_([post.id for post in posts]),
+    sentiment_counts = db.query(m.SentimentOfPost.post_id, m.SentimentOfPost.actor_id, m.SentimentOfPost.type).filter(
+        m.SentimentOfPost.post_id.in_([post.id for post in posts]),
         m.SentimentOfPost.tombstone_condition()
-    ).group_by(m.Post.id, m.SentimentOfPost.actor_id, m.SentimentOfPost.type).all()
-
+    ).all()
     # Sort sentiments for better access depending of post/user
     sentiments_given_by_user = defaultdict(lambda: defaultdict(int))
     sentiments_received_by_post = defaultdict(lambda: defaultdict(int))
@@ -742,10 +741,10 @@ def users_csv_export(request):
             continue
 
         username = user.username_p.encode('utf-8') if user.username_p else ''
-
+        email = user.get_preferred_email(has_anon).encode('utf-8') if user.get_preferred_email(has_anon) else ''
         users[user.id] = {
                 NAME: user.name.encode('utf-8') if not has_anon else user.anonymous_name(),
-                EMAIL: user.get_preferred_email(has_anon).encode('utf-8'),
+                EMAIL: email,
                 USERNAME: username if not has_anon else user.anonymous_username(),
                 CREATION_DATE: user.creation_date.strftime('%Y-%m-%d %H:%M:%S') if user.creation_date else '',
                 FIRST_VISIT: user.first_visit.strftime('%Y-%m-%d %H:%M:%S') if user.first_visit else '',
@@ -763,7 +762,7 @@ def users_csv_export(request):
                 POSTS: 0,
                 POSTS_REPLIES: 0,
                 TOTAL_POSTS: 0,
-                THEMATICS: []
+                IDEAS: ''
             }
 
         #Get SSO extra information
@@ -777,29 +776,30 @@ def users_csv_export(request):
                     users[user.id][key] += ', ' + value
 
     for post in posts:
-        if post.creator.id not in users.keys():
+        creator_id = post.creator.id
+        if creator_id not in users.keys():
             continue
 
         if post.parent_id is None:
-            users[post.creator.id][TOP_POSTS] += 1
-            users[post.creator.id][TOP_POST_REPLIES] += len(post.get_descendants().all())
+            users[creator_id][TOP_POSTS] += 1
+            users[creator_id][TOP_POST_REPLIES] += len(post.get_descendants().all())
         else:
-            users[post.creator.id][POSTS] += 1
-            users[post.creator.id][POSTS_REPLIES] += len(post.get_descendants().all())
+            users[creator_id][POSTS] += 1
+            users[creator_id][POSTS_REPLIES] += len(post.get_descendants().all())
 
-        users[post.creator.id][TOTAL_POSTS] += 1
-        users[post.creator.id][AGREE_RECEIVED] += sentiments_received_by_post[post.id][LIKE_SENTIMENT]
-        users[post.creator.id][DISAGREE_RECEIVED] += sentiments_received_by_post[post.id][DISLIKE_SENTIMENT]
-        users[post.creator.id][DONT_UNDERSTAND_RECEIVED] += sentiments_received_by_post[post.id][DONT_UNDERSTAND_SENTIMENT]
-        users[post.creator.id][MORE_INFO_RECEIVED] += sentiments_received_by_post[post.id][MORE_INFO_SENTIMENT]
+        users[creator_id][TOTAL_POSTS] += 1
+        users[creator_id][AGREE_RECEIVED] += sentiments_received_by_post[post.id][LIKE_SENTIMENT]
+        users[creator_id][DISAGREE_RECEIVED] += sentiments_received_by_post[post.id][DISLIKE_SENTIMENT]
+        users[creator_id][DONT_UNDERSTAND_RECEIVED] += sentiments_received_by_post[post.id][DONT_UNDERSTAND_SENTIMENT]
+        users[creator_id][MORE_INFO_RECEIVED] += sentiments_received_by_post[post.id][MORE_INFO_SENTIMENT]
 
         for idea in post.get_ideas():
             idea_title = idea.safe_title(user_prefs).encode('utf-8')
-            if idea_title not in users[post.creator.id][THEMATICS]:
-                if len(users[post.creator.id][THEMATICS]) == 0:
-                    users[post.creator.id][THEMATICS] = idea_title
+            if idea_title not in users[creator_id][IDEAS]:
+                if len(users[creator_id][IDEAS]) == 0:
+                    users[creator_id][IDEAS] = "%s(%d)" % (idea_title, idea.id)
                 else:
-                    users[post.creator.id][THEMATICS] += ', ' + idea_title
+                    users[creator_id][IDEAS] += ", %s(%d)" % (idea_title, idea.id)
 
     return csv_response(users.values(), CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="users.csv"')
 

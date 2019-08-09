@@ -1143,7 +1143,7 @@ class TestUserExport(AbstractExport):
     DISAGREE_RECEIVED = '''Nombre de mentions "Pas d'accord" reçu'''
     DONT_UNDERSTAND_RECEIVED = '''Nombre de mentions "Pas tout compris" reçu'''
     MORE_INFO_RECEIVED = '''Nombre de mentions "SVP + d'infos" reçu'''
-    THEMATICS = "Liste des thématiques dans lesquelles il a contribué"
+    THEMATICS = "Liste des idées dans lesquelles il a contribué"
     DEPARTMENT = "department"
     GRANTED_SCOPES = "Granted Scopes"
 
@@ -1154,14 +1154,13 @@ class TestUserExport(AbstractExport):
     ]
 
     participant1_data = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', '2000-01-02 00:00', '2000-01-02 00:00', '2000-01-15 00:00',
-                        '1', '1', '1', '0', '2', '0', '1', '1', '0', '1', '0', '1', '1', '[]', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
+                        '1', '1', '1', '0', '2', '0', '1', '1', '0', '1', '0', '1', '1', '', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
 
     participant2_data = ['James T. Expert', '', '', '2000-01-10 00:00', '2000-01-10 00:00', '2000-01-30 00:00',
-                        '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "[u'Favor economic growth']", '', '']
+                        '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "Favor economic growth(2)", '', '']
 
     participant1_data_missing_one_post = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', '2000-01-02 00:00', '2000-01-02 00:00', '2000-01-15 00:00',
-                        '0', '0', '1', '0', '1', '0', '0', '0', '0', '1', '0', '1', '1', '[]', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
-
+                        '0', '0', '1', '0', '1', '0', '0', '0', '0', '1', '0', '1', '1', '', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
 
     def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, reply_post_2,
                 reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2,
