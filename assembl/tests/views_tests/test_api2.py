@@ -1156,17 +1156,17 @@ class TestUserExport(AbstractExport):
     participant1_data = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', '2000-01-02 00:00', '2000-01-02 00:00', '2000-01-15 00:00',
                         '1', '1', '1', '0', '2', '0', '1', '1', '0', '1', '0', '1', '1', '', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
 
-    participant2_data = ['James T. Expert', '', '', '2000-01-10 00:00', '2000-01-10 00:00', '2000-01-30 00:00',
-                        '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "Favor economic growth(2)", '', '']
-
     participant1_data_missing_one_post = ['A. Barking Loon', 'abloon@gmail.com', 'Test.Username', '2000-01-02 00:00', '2000-01-02 00:00', '2000-01-15 00:00',
                         '0', '0', '1', '0', '1', '0', '0', '0', '0', '1', '0', '1', '1', '', 'Direction, HR', '[u\'emails\', u\'public_profiles\']']
 
     def test_base(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, reply_post_2,
                 reply_1_sentiments, reply_2_sentiments, agent_status_in_discussion_user2_visits, post_related_to_sub_idea_1_participant2,
-                participant1_social_account_w_extra, participant1_social_account_w_extra2, agent_status_in_discussion_user1_visits):
+                participant1_social_account_w_extra, participant1_social_account_w_extra2, agent_status_in_discussion_user1_visits, subidea_1):
         discussion.creation_date = datetime(year=1999, month=12, day=1)
         discussion.db.flush()
+
+        participant2_data = ['James T. Expert', '', '', '2000-01-10 00:00', '2000-01-10 00:00', '2000-01-30 00:00',
+                    '1', '0', '1', '1', '2', '1', '0', '1', '1', '0', '1', '1', '0', "Favor economic growth(%s)" % subidea_1.id, '', '']
 
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
@@ -1177,7 +1177,7 @@ class TestUserExport(AbstractExport):
         for idx, title in enumerate(self.header_titles):
             assert header[idx] == title
 
-        for idx, value in enumerate(self.participant2_data):
+        for idx, value in enumerate(participant2_data):
             # If date, remove the seconds to compare
             if idx in [3, 4, 5]:
                 assert first_row[idx][:-3] == value

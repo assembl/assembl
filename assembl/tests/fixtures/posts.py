@@ -390,7 +390,6 @@ def post_related_to_sub_idea_1_participant2(
     test_session.flush()
 
     def fin():
-        print "finalizer root_post_en_under_positive_column_of_idea"
         test_session.delete(p)
         test_session.delete(idc)
         test_session.flush()

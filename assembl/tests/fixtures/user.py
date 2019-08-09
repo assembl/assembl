@@ -276,7 +276,7 @@ def agent_status_in_discussion_user2_visits(request, test_session, discussion, p
     test_session.flush()
 
     def fin():
-        print 'Finalizer agent_status_in_discussion for participant2_user'
+        print('Finalizer agent_status_in_discussion for participant2_user')
         test_session.delete(asid)
         test_session.flush()
     request.addfinalizer(fin)

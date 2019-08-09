@@ -64,7 +64,7 @@ def participant1_social_account_w_extra(request, participant1_user, google_ident
     test_session.expire(participant1_user, ['accounts', 'social_accounts'])
 
     def fin():
-        print "finalizer participant1_social_account"
+        print("finalizer participant1_social_account")
         test_session.delete(sap)
         test_session.flush()
     request.addfinalizer(fin)
@@ -84,7 +84,7 @@ def participant1_social_account_w_extra2(request, participant1_user, google_iden
     test_session.expire(participant1_user, ['accounts', 'social_accounts'])
 
     def fin():
-        print "finalizer participant1_social_account"
+        print("finalizer participant1_social_account")
         test_session.delete(sap)
         test_session.flush()
     request.addfinalizer(fin)
