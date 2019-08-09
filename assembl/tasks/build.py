@@ -307,7 +307,7 @@ def compile_static_assets(c):
 def psql_command(c, command, use_db_user=True, database=None):
     if use_db_user:
         database = database or c.config.DEFAULT.db_database
-        pypsql = join(c.config.code_root, 'assembl', 'scripts', 'pypsql.py')
+        pypsql = join(c.config.projectpath, 'assembl', 'scripts', 'pypsql.py')
         result = c.run('python2 {pypsql} -1 --autocommit -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
             command=command, pypsql=pypsql, password=c.config.DEFAULT.db_password,
             database=database, host=c.config.DEFAULT.db_host, user=c.config.DEFAULT.db_user
@@ -365,11 +365,12 @@ def database_create(c):
 
 @task()
 def create_wheelhouse(c, dependency_links=None):
+    project_root = c.config.projectpath
     if not dependency_links:
         dependency_links = c.run('grep "git+http" %(here)s/requirements-dev.frozen.txt > %(here)s/deps.txt' % {
-                                 'here': c.config.projectpath})
+                                 'here': project_root})
         dependency_links = 'deps.txt'
-    tmp_wheel_path = os.path.join(c.config.code_root, 'wheelhouse')
+    tmp_wheel_path = os.path.join(project_root, 'wheelhouse')
     cmd = 'pip wheel --wheel-dir=%s --process-dependency-links -r %s' % (tmp_wheel_path, dependency_links)
     try:
         if is_integration_env(c):
@@ -378,8 +379,8 @@ def create_wheelhouse(c, dependency_links=None):
             with venv(c, True):
                 c.run(cmd)
     finally:
-        if exists(c, os.path.join(c.config.code_root, 'deps.txt')):
-            c.run('rm -f %(here)s/deps.txt' % {'here': c.config.code_root})
+        if exists(c, os.path.join(project_root, 'deps.txt')):
+            c.run('rm -f %(here)s/deps.txt' % {'here': project_root})
 
 
 def create_wheel_name(version, num=0, commit_hash=None, branch=None, tag=None):
@@ -447,7 +448,7 @@ def update_wheels_json_data(c, json_data):
 
 @task()
 def create_wheel(c, house=None):
-    tmp_wheel_path = house if house else os.path.join(c.config.code_root, 'wheelhouse')
+    tmp_wheel_path = house if house else os.path.join(c.config.projectpath, 'wheelhouse')
     (version, num, commit_hash, commit_tag, branch) = git_version_data(c)
     c.run("python setup.py bdist_wheel -d " + tmp_wheel_path)
 
@@ -473,7 +474,7 @@ def push_wheelhouse(c, house=None):
     C) a local folder
     Checks for zero bytes files to avoid pushing rubbish to S3 and the creation of a bad index.html
     """
-    tmp_wheel_path = house or os.path.join(c.config.code_root, 'wheelhouse')
+    tmp_wheel_path = house or os.path.join(c.config.projectpath, 'wheelhouse')
 
     # Check assembl wheel is not zero bytes - don't push this!!
     (version, num, commit_hash, commit_tag, branch) = git_version_data(c)
@@ -580,11 +581,6 @@ def push_wheelhouse(c, house=None):
         c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path))
 
 
-@task()
-def push_built_themes_to_remote_bucket(c):
-    c.run('echo "Pushing themes to remote buckets has now been deprecated. Remove this from CI/CD scripts"')
-
-
 @task(
     install_build_dependencies,
     install_node_and_yarn,
@@ -594,7 +590,7 @@ def prepare_cicd_build(c):
     """
     There is full assumption of being in CI/CD environment when calling this function
     """
-    project_path = os.getenv('CI_PROJECT_DIR', c.config.code_root)
+    project_path = os.getenv('CI_PROJECT_DIR', c.config.projectpath)
     # add github.com as known host
     c.run('ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts')
     c.run('ssh-keyscan -t rsa gitlab.com >> ~/.ssh/known_hosts')
