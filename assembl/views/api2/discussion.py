@@ -710,6 +710,25 @@ def csv_response(results, format, fieldnames=None, content_disposition=None, as_
     return output
 
 
+def escapeit(r, data):
+    """
+    Return a suitable value for excel output from data. The trap here is sometimes we have a number, None,
+    unicode or ascii, so we're trying not to break the export
+    @param: r  A dict of rows which form the lookup of a value
+    @param: data The value to find in the dict
+    """
+    try:
+        something = r.get(data)
+    except:
+        print('r.get failed')
+        return ''
+
+    if something:
+        if type(something) is str:
+            return something.decode('utf-8')
+        return something
+    return ''
+
 def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.xlsx', as_buffer=False):
     """
     Return a multiple sheets excel file
@@ -731,7 +750,10 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
             writerow([transform_fieldname(fn) for fn in fieldnames[worksheet.title]])
             if results[worksheet.title] is not None:
                 for r in results[worksheet.title]:
-                    writerow([r.get(f, empty) for f in fieldnames[worksheet.title]])
+                    try:
+                        writerow([escapeit(r, f) for f in fieldnames[worksheet.title]])
+                    except:
+                        print('Skipping row:', r)
         else:
             if results[worksheet.title] is not None:
                 for r in results[worksheet.title]:
