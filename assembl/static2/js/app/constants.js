@@ -445,6 +445,8 @@ export const availableLocales = [
   'zh_Hans'
 ];
 
+export const defaultLocale = 'en';
+
 export const datePickerPresets = [
   {
     id: 'today',

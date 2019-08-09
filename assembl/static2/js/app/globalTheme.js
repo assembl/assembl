@@ -13,7 +13,7 @@ const hexToRgb = (hex) => {
 const darkOpacity = 0.6;
 const lightOpacity = 0.2;
 
-const firstColor = props => (props.firstColor ? props.firstColor : defaultColors.firstColor);
+export const firstColor = props => (props && props.firstColor ? props.firstColor : defaultColors.firstColor);
 const firstColorWithDarkOpacity = props =>
   (props.firstColor
     ? `rgba(${hexToRgb(props.firstColor)}, ${darkOpacity})`
@@ -23,7 +23,7 @@ const firstColorWithLightOpacity = props =>
     ? `rgba(${hexToRgb(props.firstColor)}, ${lightOpacity})`
     : `rgba(${hexToRgb(defaultColors.firstColor)}, ${lightOpacity})`);
 
-const secondColor = props => (props.secondColor ? props.secondColor : defaultColors.secondColor);
+export const secondColor = props => (props && props.secondColor ? props.secondColor : defaultColors.secondColor);
 const secondColorWithDarkOpacity = props =>
   (props.secondColor
     ? `rgba(${hexToRgb(props.secondColor)}, ${darkOpacity})`
