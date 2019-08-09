@@ -468,6 +468,6 @@ export const datePickerPresets = [
   }
 ];
 
-const STARGATE_V1_BASEURL = 'http://stargate.bluenove.com/v1';
+const STARGATE_V1_BASEURL = 'https://stargate.bluenove.com/v1';
 export const MAGNUS_IDEA_ENDPOINT = `${STARGATE_V1_BASEURL}/magnus/idea`;
 export const EMPTY_EXTRACT_BODY = 'EMPTY_EXTRACT_BODY';
