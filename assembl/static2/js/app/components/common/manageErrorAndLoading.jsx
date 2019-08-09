@@ -11,7 +11,8 @@ import Loader, { type Props as LoaderProps } from './loader';
 import SemanticAnalysisLoader, { LOADER_TYPE as LOADER_TYPE_WATSON } from './loader/loader';
 
 export const TYPE = {
-  SEMANTIC_ANALYSIS: 'SEMANTIC_ANALYSIS'
+  SEMANTIC_ANALYSIS: 'SEMANTIC_ANALYSIS',
+  NO_ERROR: 'NO_ERROR'
 };
 
 type Props = {
@@ -36,6 +37,13 @@ const getLoaderToDisplay = (propsToPass: Props) => {
       // eslint-disable-next-line no-unused-vars
       ERROR: graphqlError => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.ERROR} />,
       LOADING: () => <SemanticAnalysisLoader type={LOADER_TYPE_WATSON.LOADING} />
+    };
+  }
+  case TYPE.NO_ERROR: {
+    return {
+      LOADING: () => <Loader {...propsToPass} />,
+      // eslint-disable-next-line no-unused-vars
+      ERROR: graphqlError => <Loader {...propsToPass} />
     };
   }
   default: {
@@ -79,6 +87,18 @@ export const manageErrorOnly = (WrappedComponent: React.ComponentType<any>) => (
     throw new Error(`GraphQL error: ${error.message}`);
   }
   return <WrappedComponent {...wrappedProps} />;
+};
+
+export const manageLoadingOnly = (WrappedComponent: React.ComponentType<any>) => (wrappedProps: WrappedProps) => {
+  const { data, error, loading } = wrappedProps;
+  const loaderToShow = getLoaderToDisplay({ displayLoader: true, loaderType: TYPE.NO_ERROR });
+  // LOADING
+  if (loading || (data && data.loading)) {
+    return loaderToShow.LOADING();
+  }
+  // WRAPPED COMPONENT
+  const propsToSend = { ...wrappedProps, ...data, error: error };
+  return <WrappedComponent {...propsToSend} />;
 };
 
 export default manageErrorAndLoading;

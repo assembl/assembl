@@ -6,19 +6,22 @@ import { setLocale } from 'react-redux-i18n';
 import { updateEditLocale } from './actions/adminActions';
 import { setTheme } from './actions/themeActions';
 import { setCookieItem, convertToISO639String } from './utils/globalFunctions';
-import manageErrorAndLoading from './components/common/manageErrorAndLoading';
+import { manageLoadingOnly } from './components/common/manageErrorAndLoading';
+import { firstColor as defaultFirstColour, secondColor as defaultSecondColour } from './globalTheme';
+import { availableLocales as defaultAvailableLanguages, defaultLocale } from './constants';
 import CoreDiscussionPreferencesQuery from './graphql/CoreDiscussionPreferencesQuery.graphql';
 
 type Props = {
   children: React.Node,
   discussionPreferences: CoreDiscussionPreferencesQuery,
   setDefaultLocale: Function,
-  setDefaultTheme: Function
+  setDefaultTheme: Function,
+  error: ?Object
 };
 
 const configureDefaultLocale = (availableLanguages: Array<string>, defaultLanguage: string, setDefaultLocale: Function) => {
   if (availableLanguages && availableLanguages.length === 1) {
-    // The language of the debate and user will be set to the language of the debate
+    // The language of the debate and user will be set to the ONLY language of the debate
     setDefaultLocale(availableLanguages[0]);
   } else if (availableLanguages && availableLanguages.length > 1) {
     let browserLanguage = navigator.language;
@@ -39,14 +42,18 @@ const configureTheme = (firstColor: String, secondColor: String, setDefaultTheme
 
 // APPLICATION-LEVEL DEFAULT CONFIGURATIONS ARE MADE HERE
 const DumbApplicationContainer = (props: Props) => {
-  const { children, discussionPreferences, setDefaultLocale, setDefaultTheme } = props;
-  const { languages, firstColor, secondColor } = discussionPreferences;
+  const { children, discussionPreferences, setDefaultLocale, setDefaultTheme, error } = props;
 
-  configureTheme(firstColor, secondColor, setDefaultTheme);
+  // Escape out of when the /graphql route is not present. Present default values instead
+  if (error && error.networkError && error.networkError.response.status === 404) {
+    configureTheme(defaultFirstColour(), defaultSecondColour(), setDefaultTheme);
+    configureDefaultLocale(defaultAvailableLanguages, defaultLocale, setDefaultLocale);
+  } else {
+    const { languages, firstColor, secondColor } = discussionPreferences;
+    configureTheme(firstColor, secondColor, setDefaultTheme);
+    configureDefaultLocale(languages.map(l => l.locale), defaultLocale, setDefaultLocale);
+  }
 
-  // When application loaded, it either picked a locale from the cookie previously set by the user, or nothing at all.
-  // Here, with the knowledge of the available locale of the debate, and with user agent, can set the language of the debate
-  configureDefaultLocale(languages.map(l => l.locale), 'en', setDefaultLocale);
   return <React.Fragment>{children}</React.Fragment>;
 };
 
@@ -68,8 +75,6 @@ const mapDispatchToProps = dispatch => ({
   }
 });
 
-export default compose(
-  discussionPreferencesQuery,
-  connect(null, mapDispatchToProps),
-  manageErrorAndLoading({ displayLoader: true })
-)(DumbApplicationContainer);
+export default compose(discussionPreferencesQuery, connect(null, mapDispatchToProps), manageLoadingOnly)(
+  DumbApplicationContainer
+);

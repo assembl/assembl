@@ -7,7 +7,6 @@ from pprint import pprint
 from time import sleep
 from ConfigParser import RawConfigParser
 from getpass import getuser
-from invoke.tasks import call
 
 from .common import (
     setup_ctx, running_locally, exists, venv, venv_py3, task, local_code_root,
@@ -177,9 +176,9 @@ def get_aws_invoke_yaml(c, celery=False):
 
 
 @task()
-def ensure_aws_invoke_yaml(c, override=False):
+def ensure_aws_invoke_yaml(c, override=True, celery=False):
     if not exists(c, 'invoke.yaml') or override:
-        get_aws_invoke_yaml(c)
+        get_aws_invoke_yaml(c, celery)
 
 
 def is_supervisord_running(c):
@@ -252,7 +251,7 @@ def webservers_reload(c):
             print("Your Nginx configuration returned an error, please check your nginx configuration.")
 
 
-@task(call(ensure_aws_invoke_yaml, override=True))
+@task(ensure_aws_invoke_yaml)
 def create_local_ini(c):
     """Compose local.ini from the given .yaml file"""
     from assembl.scripts.ini_files import extract_saml_info, populate_random, find_ini_file, combine_ini
@@ -287,7 +286,7 @@ def create_local_ini(c):
         base.write(f)
 
 
-@task(call(ensure_aws_invoke_yaml, override=True))
+@task(ensure_aws_invoke_yaml)
 def generate_nginx_conf(c):
     """Hard assumption that this is only used under the cloud condition"""
     if is_cloud_env(c):
@@ -320,7 +319,7 @@ def aws_server_startup_from_local(c):
     webservers_reload(c)
 
 
-@task(setup_aws_default_region, call(ensure_aws_invoke_yaml, override=True), download_rds_pem, post=[aws_server_startup_from_local])
+@task(setup_aws_default_region, ensure_aws_invoke_yaml, download_rds_pem, post=[aws_server_startup_from_local])
 def aws_instance_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
@@ -328,7 +327,7 @@ def aws_instance_startup(c):
     setup_ctx(c)
 
 
-@task(setup_aws_default_region, call(ensure_aws_invoke_yaml, override=True), download_rds_pem, install_wheel, post=[aws_server_startup_from_local])
+@task(setup_aws_default_region, ensure_aws_invoke_yaml, download_rds_pem, install_wheel, post=[aws_server_startup_from_local])
 def aws_instance_update_and_startup(c):
     """Operations to startup a fresh aws instance from an assembl AMI"""
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
@@ -339,7 +338,7 @@ def aws_instance_update_and_startup(c):
 @task(setup_aws_default_region, download_rds_pem, post=[aws_server_startup_from_local])
 def aws_celery_instance_startup(c):
     """Operations to startup a fresh celery aws instance from an assembl AMI"""
-    get_aws_invoke_yaml(c, True)
+    ensure_aws_invoke_yaml(c, celery=True)
     if not exists(c, c.config.projectpath + "/invoke.yaml"):
         raise RuntimeError("Missing invoke.yaml file")
     setup_ctx(c)
