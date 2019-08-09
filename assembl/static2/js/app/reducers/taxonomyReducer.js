@@ -1,19 +1,21 @@
+// @flow
 import { ADD_TAXONOMY_SUCCEEDED, ADD_TAXONOMY_FAILED, ADD_TAXONOMY_STARTED } from '../actions/actionTypes';
 
 const initialState = {
   loading: false,
   error: null,
-  taxonomyPayload: {}
+  data: {}
 };
 
-const taxonomyReducer = (state = initialState, action) => {
+// TODO need to set state and action type
+const taxonomyReducer = (state: any = initialState, action: any) => {
   switch (action.type) {
   case ADD_TAXONOMY_SUCCEEDED:
     return {
       ...state,
       loading: false,
       error: null,
-      taxonomyPayload: action.payload
+      data: action.payload
     };
   case ADD_TAXONOMY_FAILED:
     return {

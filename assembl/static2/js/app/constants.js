@@ -364,27 +364,27 @@ export type ColorDefinition = {
 export const harvestingColors: { [string]: ColorDefinition } = {
   blue: {
     background: '#00B6FF',
-    text: null
+    text: '#FFFFFF'
   },
   yellow: {
     background: '#FFEC00',
-    text: null
+    text: '#FFFFFF'
   },
   orange: {
     background: '#FF9F00',
-    text: null
+    text: '#FFFFFF'
   },
   red: {
     background: '#FF001F',
-    text: null
+    text: '#FFFFFF'
   },
   green: {
     background: '#35C646',
-    text: null
+    text: '#FFFFFF'
   },
   purple: {
     background: '#BD10E0',
-    text: null
+    text: '#FFFFFF'
   },
   black: {
     background: '#000000',
@@ -392,15 +392,15 @@ export const harvestingColors: { [string]: ColorDefinition } = {
   },
   green2: {
     background: '#7ed321', // default color
-    text: null
+    text: '#FFFFFF'
   },
   pink: {
     background: '#FF9BB4',
-    text: null
+    text: '#FFFFFF'
   },
   paleGreen: {
     background: '#B8E986',
-    text: null
+    text: '#FFFFFF'
   }
 };
 
@@ -467,3 +467,7 @@ export const datePickerPresets = [
     type: 'basic'
   }
 ];
+
+const STARGATE_V1_BASEURL = 'http://stargate.bluenove.com/v1';
+export const MAGNUS_IDEA_ENDPOINT = `${STARGATE_V1_BASEURL}/magnus/idea`;
+export const EMPTY_EXTRACT_BODY = 'EMPTY_EXTRACT_BODY';

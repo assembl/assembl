@@ -22,7 +22,7 @@ exports[`ExtractInPost component should render an extract in a post (submitted b
   style={
     Object {
       "backgroundColor": "#FF9BB4",
-      "color": null,
+      "color": "#FFFFFF",
     }
   }
 >
@@ -37,7 +37,7 @@ exports[`ExtractInPost component should render an extract in a post 1`] = `
   style={
     Object {
       "backgroundColor": "#00B6FF",
-      "color": null,
+      "color": "#FFFFFF",
     }
   }
 >

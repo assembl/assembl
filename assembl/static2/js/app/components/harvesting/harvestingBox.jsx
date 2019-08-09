@@ -9,6 +9,7 @@ import classnames from 'classnames';
 import moment from 'moment';
 import update from 'immutability-helper';
 import debounce from 'lodash/debounce';
+import get from 'lodash/get';
 
 import addPostExtractMutation from '../../graphql/mutations/addPostExtract.graphql';
 import updateExtractMutation from '../../graphql/mutations/updateExtract.graphql';
@@ -24,7 +25,7 @@ import { displayAlert, displayModal, closeModal } from '../../utils/utilityManag
 import { connectedUserIsAdmin } from '../../utils/permissions';
 import { editExtractTooltip, deleteExtractTooltip, nuggetExtractTooltip, qualifyExtractTooltip } from '../common/tooltips';
 import { NatureIcons, ActionIcons, type Annotation } from '../../utils/extract';
-import { ExtractStates } from '../../constants';
+import { ExtractStates, harvestingColorsMapping, EMPTY_EXTRACT_BODY } from '../../constants';
 import Tags, { type TagsData } from './tags';
 import TagsForm from './tagsForm';
 
@@ -85,8 +86,9 @@ const ACTIONS = {
   confirm: 'confirm' // confirm a submitted extract
 };
 
-const heyStargate = (taxonomy: string, onAddTaxonomy: Function) => {
-  onAddTaxonomy(taxonomy);
+// TODO define stargateParams type
+const heyStargate = (stargateParams: any, onAddTaxonomy: Function) => {
+  onAddTaxonomy(stargateParams);
 };
 
 function updateTagsMutation({ mutate }) {
@@ -237,8 +239,15 @@ class DumbHarvestingBox extends React.Component<Props, State> {
         displayAlert('success', I18n.t('harvesting.harvestingSuccess'));
         refetchPost();
 
-        const taxonomy = `extractNature: ${nature || 'EMPTY_NATURE'}, extractAction: ${action || 'EMPTY_ACTION'}`;
-        heyStargate(taxonomy, onAddTaxonomy);
+        const colorsOf = get(harvestingColorsMapping, nature, null);
+        const stargateParams = {
+          idea_title: extract ? extract.body : EMPTY_EXTRACT_BODY,
+          parent_idea_id: 1307052139,
+          map_id: 1307052139,
+          text_color: colorsOf.text.replace('#', ''),
+          background_color: colorsOf.background.replace('#', '')
+        };
+        heyStargate(stargateParams, onAddTaxonomy);
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
