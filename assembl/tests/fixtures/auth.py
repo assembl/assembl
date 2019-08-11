@@ -72,26 +72,6 @@ def participant1_social_account_w_extra(request, participant1_user, google_ident
 
 
 @pytest.fixture(scope="function")
-def participant1_social_account_w_extra2(request, participant1_user, google_identity_provider, test_session):
-    from assembl.models.social_auth import SocialAuthAccount
-    sap = SocialAuthAccount(
-        identity_provider=google_identity_provider,
-        uid="abloon2@google.com",
-        verified=True,
-        extra_data={'department': 'Direction'},
-        profile=participant1_user)
-    test_session.add(sap)
-    test_session.expire(participant1_user, ['accounts', 'social_accounts'])
-
-    def fin():
-        print("finalizer participant1_social_account")
-        test_session.delete(sap)
-        test_session.flush()
-    request.addfinalizer(fin)
-    return sap
-
-
-@pytest.fixture(scope="function")
 def simple_role(request, test_session):
     """ A very simple Role fixture """
     from assembl.models.auth import Role
