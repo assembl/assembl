@@ -81,6 +81,7 @@ export class DumbExportData extends React.Component<Props, State> {
       { lang: translation, anon: anonymous, start: startDate, end: endDate }
     );
     const exportTaxonomiesLink = get('exportTaxonomiesData', { debateId: debateId });
+    const exportUsersLink = get('exportUsersData', { debateId: debateId }, { anon: anonymous, start: startDate, end: endDate });
     return (
       <div>
         {section === '1' && (
@@ -109,6 +110,24 @@ export class DumbExportData extends React.Component<Props, State> {
             sectionTitle="taxonomySectionTitle"
             annotation="taxonomyAnnotation"
             exportLink={exportTaxonomiesLink}
+            disableExportButton={this.disableExportButton}
+            buttonIsDisabled={buttonIsDisabled}
+          />
+        )}
+        {section === '3' && (
+          <ExportSection
+            sectionTitle="usersSectionTitle"
+            annotation="usersAnnotation"
+            handleDatesChange={this.handleDatesChange}
+            handleAnonymousChange={this.toggleAnonymousOption}
+            locale={locale}
+            shouldBeAnonymous={shouldBeAnonymous}
+            shouldTranslate={shouldTranslate}
+            exportLink={exportUsersLink}
+            phases={phases}
+            start={start}
+            end={end}
+            languages={languages}
             disableExportButton={this.disableExportButton}
             buttonIsDisabled={buttonIsDisabled}
           />
