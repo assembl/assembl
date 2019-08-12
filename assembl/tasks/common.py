@@ -114,6 +114,7 @@ def get_cached_secrets(c):
     return base
 
 
+@task()
 def get_secrets(c, aws_secret_ids, cache=True, reset_cache=False):
     if exists(c, "secrets.yaml") and not reset_cache:
         return get_cached_secrets(c)
