@@ -100,7 +100,7 @@ class IdeaInterface(graphene.Interface):
         return resolve_langstring_entries(self, 'description')
 
     def resolve_top_keywords(self, args, context, info):
-        result = self.top_keywords()
+        result = self.top_keywords(display_lang=args.get('lang'))
         return [TagResult(score=r.score, value=r.value, count=r.count) for r in result]
 
     def resolve_nlp_sentiment(self, args, context, info):
