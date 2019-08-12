@@ -50,7 +50,7 @@ const jkl865 = Map({
   order: 99.0
 });
 
-export const modulesById = Map({
+export const modulesByIdData = Map({
   abc123: abc123,
   def456: def456,
   ghi789: ghi789,

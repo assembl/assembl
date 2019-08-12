@@ -1,6 +1,7 @@
 // @flow
+import * as actionTypes from './actionTypes';
 
 export const updateTimeline = (timeline: string) => ({
   timeline: timeline,
-  type: 'UPDATE_TIMELINE'
+  type: actionTypes.UPDATE_TIMELINE
 });

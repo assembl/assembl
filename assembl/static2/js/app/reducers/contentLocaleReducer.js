@@ -2,14 +2,14 @@
 import type ReduxAction from 'redux';
 import { fromJS, Map } from 'immutable';
 
-import type { Action, ContentLocaleMapping } from '../actions/actionTypes';
+import type { ContentLocaleMapping } from '../actions/actionTypes';
 import {
   UPDATE_CONTENT_LOCALE,
   UPDATE_CONTENT_LOCALE_BY_ID,
   UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE
 } from '../actions/actionTypes';
 
-export function defaultContentLocaleMapping(state: Map = Map(), action: ReduxAction<Action>): Map<string, string> {
+export function defaultContentLocaleMapping(state: Map = Map(), action: ReduxAction): Map<string, string> {
   if (action.type === UPDATE_CONTENT_LOCALE_BY_ORIGINAL_LOCALE) {
     return state.set(action.originalLocale, action.value);
   }
@@ -17,7 +17,7 @@ export function defaultContentLocaleMapping(state: Map = Map(), action: ReduxAct
   return state;
 }
 
-export default function contentLocale(state: Map = Map(), action: ReduxAction<Action>): ContentLocaleMapping {
+export default function contentLocale(state: Map = Map(), action: ReduxAction): ContentLocaleMapping {
   switch (action.type) {
   case UPDATE_CONTENT_LOCALE:
     return state.merge(fromJS(action.data));

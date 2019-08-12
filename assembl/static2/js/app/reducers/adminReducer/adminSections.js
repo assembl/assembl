@@ -2,57 +2,43 @@
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
-import {
-  type Action,
-  UPDATE_SECTIONS,
-  UPDATE_SECTION_TITLE,
-  UPDATE_SECTION_URL,
-  TOGGLE_EXTERNAL_PAGE,
-  CREATE_SECTION,
-  DELETE_SECTION,
-  MOVE_UP_SECTION,
-  MOVE_DOWN_SECTION
-} from '../../actions/actionTypes';
+import * as actionTypes from '../../../../js/app/actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 
-type SectionsHaveChanged = boolean;
-type SectionsHaveChangedReducer = (SectionsHaveChanged, ReduxAction<Action>) => SectionsHaveChanged;
-export const sectionsHaveChanged: SectionsHaveChangedReducer = (state = false, action) => {
+export const sectionsHaveChanged = (state: boolean = false, action: ReduxAction) => {
   switch (action.type) {
-  case CREATE_SECTION:
-  case DELETE_SECTION:
-  case UPDATE_SECTION_URL:
-  case TOGGLE_EXTERNAL_PAGE:
-  case MOVE_UP_SECTION:
-  case MOVE_DOWN_SECTION:
-  case UPDATE_SECTION_TITLE:
+  case actionTypes.CREATE_SECTION:
+  case actionTypes.DELETE_SECTION:
+  case actionTypes.UPDATE_SECTION_URL:
+  case actionTypes.TOGGLE_EXTERNAL_PAGE:
+  case actionTypes.MOVE_UP_SECTION:
+  case actionTypes.MOVE_DOWN_SECTION:
+  case actionTypes.UPDATE_SECTION_TITLE:
     return true;
-  case UPDATE_SECTIONS:
+  case actionTypes.UPDATE_SECTIONS:
     return false;
   default:
     return state;
   }
 };
 
-type SectionsInOrder = List<string>;
-type SectionsInOrderReducer = (SectionsInOrder, ReduxAction<Action>) => SectionsInOrder;
-export const sectionsInOrder: SectionsInOrderReducer = (state = List(), action) => {
+export const sectionsInOrder = (state: List<string> = List(), action: ReduxAction) => {
   switch (action.type) {
-  case CREATE_SECTION:
+  case actionTypes.CREATE_SECTION:
     return state.push(action.id);
-  case DELETE_SECTION: {
+  case actionTypes.DELETE_SECTION: {
     const idx = state.indexOf(action.id);
     return state.delete(idx);
   }
-  case UPDATE_SECTIONS: {
+  case actionTypes.UPDATE_SECTIONS: {
     const sections = action.sections.sort((a, b) => a.order - b.order);
     return List(sections.map(s => s.id));
   }
-  case MOVE_UP_SECTION: {
+  case actionTypes.MOVE_UP_SECTION: {
     const idx = state.indexOf(action.id);
     return state.delete(idx).insert(idx - 1, action.id);
   }
-  case MOVE_DOWN_SECTION: {
+  case actionTypes.MOVE_DOWN_SECTION: {
     const idx = state.indexOf(action.id);
     return state.delete(idx).insert(idx + 1, action.id);
   }
@@ -69,17 +55,16 @@ const defaultSection = Map({
   url: '',
   type: 'CUSTOM'
 });
-type SectionsById = Map<string, Map>;
-type SectionsByIdReducer = (SectionsById, ReduxAction<Action>) => SectionsById;
-export const sectionsById: SectionsByIdReducer = (state = Map(), action) => {
+
+export const sectionsById = (state: Map<string, Map> = Map(), action: ReduxAction) => {
   switch (action.type) {
-  case CREATE_SECTION:
+  case actionTypes.CREATE_SECTION:
     return state.set(action.id, defaultSection.set('id', action.id).set('order', action.order));
-  case DELETE_SECTION:
+  case actionTypes.DELETE_SECTION:
     return state.setIn([action.id, '_toDelete'], true);
-  case UPDATE_SECTION_URL:
+  case actionTypes.UPDATE_SECTION_URL:
     return state.setIn([action.id, 'url'], action.value).setIn([action.id, '_hasChanged'], true);
-  case TOGGLE_EXTERNAL_PAGE:
+  case actionTypes.TOGGLE_EXTERNAL_PAGE:
     return state
       .updateIn([action.id, 'url'], (url) => {
         if (url !== null) {
@@ -88,11 +73,11 @@ export const sectionsById: SectionsByIdReducer = (state = Map(), action) => {
         return '';
       })
       .setIn([action.id, '_hasChanged'], true);
-  case UPDATE_SECTION_TITLE:
+  case actionTypes.UPDATE_SECTION_TITLE:
     return state
       .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
       .setIn([action.id, '_hasChanged'], true);
-  case UPDATE_SECTIONS: {
+  case actionTypes.UPDATE_SECTIONS: {
     let newState = Map();
     action.sections.forEach((section) => {
       const sectionInfo = Map({
@@ -116,12 +101,7 @@ export const sectionsById: SectionsByIdReducer = (state = Map(), action) => {
   }
 };
 
-export type AdminSectionsReducers = {
-  sectionsHaveChanged: SectionsHaveChangedReducer,
-  sectionsInOrder: SectionsInOrderReducer,
-  sectionsById: SectionsByIdReducer
-};
-const reducers: AdminSectionsReducers = {
+const reducers = {
   sectionsHaveChanged: sectionsHaveChanged,
   sectionsInOrder: sectionsInOrder,
   sectionsById: sectionsById

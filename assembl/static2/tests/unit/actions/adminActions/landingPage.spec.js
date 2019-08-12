@@ -53,4 +53,21 @@ describe('Landing page administration actions', () => {
       expect(actual).toEqual(expected);
     });
   });
+
+  describe('createLandinconst { moveLandingPageModuleDown } = actions;gPageModule action', () => {
+    const { createLandingPageModule } = actions;
+    it('should return a CREATE_LANDING_PAGE_MODULE action type', () => {
+      const actual = createLandingPageModule('id', 'identifier', 10, 'title', 10);
+      const expected = {
+        id: 'id',
+        identifier: 'identifier',
+        numberOfDuplicatesModules: 10,
+        title: 'title',
+        order: 10,
+        type: actionTypes.CREATE_LANDING_PAGE_MODULE
+      };
+
+      expect(actual).toEqual(expected);
+    });
+  });
 });

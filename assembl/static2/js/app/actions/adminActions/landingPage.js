@@ -1,26 +1,22 @@
 // @flow
 import * as actionTypes from '../actionTypes';
 
-type toggleLandingPageModuleAction = string => actionTypes.toggleLandingPageModule;
-export const toggleLandingPageModule: toggleLandingPageModuleAction = id => ({
+export const toggleLandingPageModule = (id: string) => ({
   id: id,
   type: actionTypes.TOGGLE_LANDING_PAGE_MODULE
 });
 
-type updateLandingPageModulesAction = actionTypes.LandingPageModules => actionTypes.UpdateLandingPageModules;
-export const updateLandingPageModules: updateLandingPageModulesAction = modules => ({
+export const updateLandingPageModules = (modules: any) => ({
   modules: modules,
   type: actionTypes.UPDATE_LANDING_PAGE_MODULES
 });
 
-type moveLandingPageModuleUpAction = string => actionTypes.MoveLandingPageModuleUp;
-export const moveLandingPageModuleUp: moveLandingPageModuleUpAction = id => ({
+export const moveLandingPageModuleUp = (id: string) => ({
   id: id,
   type: actionTypes.MOVE_LANDING_PAGE_MODULE_UP
 });
 
-type moveLandingPageModuleDownAction = string => actionTypes.MoveLandingPageModuleDown;
-export const moveLandingPageModuleDown: moveLandingPageModuleDownAction = id => ({
+export const moveLandingPageModuleDown = (id: string) => ({
   id: id,
   type: actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN
 });
@@ -31,7 +27,7 @@ export const createLandingPageModule = (
   numberOfDuplicatesModules: number,
   title: string,
   order: number
-): actionTypes.createLandingPageModule => ({
+) => ({
   id: id,
   identifier: identifier,
   numberOfDuplicatesModules: numberOfDuplicatesModules,

@@ -3,13 +3,11 @@ import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
 
-import { type Action } from '../../actions/actionTypes';
-import * as actionTypes from '../../actions/actionTypes/admin/profileOptions';
+import * as actionTypes from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 import { moveItemDown, moveItemUp } from '../../utils/globalFunctions';
 
-type ProfileOptionsHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
-export const profileOptionsHasChanged: ProfileOptionsHasChangedReducer = (state = false, action) => {
+export const profileOptionsHasChanged = (state: boolean = false, action: ReduxAction) => {
   switch (action.type) {
   case actionTypes.ADD_TEXT_FIELD:
   case actionTypes.DELETE_TEXT_FIELD:
@@ -32,9 +30,7 @@ export const profileOptionsHasChanged: ProfileOptionsHasChangedReducer = (state 
 };
 
 const initialTextFields = Map();
-type TextFieldsByIdState = Map<string, any>;
-type TextFieldsByIdReducer = (TextFieldsByIdState, ReduxAction<Action>) => TextFieldsByIdState;
-export const textFieldsById: TextFieldsByIdReducer = (state = initialTextFields, action) => {
+export const textFieldsById = (state: Map<string, any> = initialTextFields, action: ReduxAction) => {
   switch (action.type) {
   case actionTypes.UPDATE_TEXT_FIELDS: {
     const textFieldsTuples = action.textFields.map((tf) => {

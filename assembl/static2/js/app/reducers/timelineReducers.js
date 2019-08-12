@@ -1,10 +1,14 @@
+// @flow
+import type ReduxAction from 'redux';
+import * as actionTypes from '../../../js/app/actions/actionTypes';
+
 // use null as default state to indicate the timeline is not loaded yet
-export const TimelineReducer = (state = null, action) => {
+export const TimelineReducer = (state: Object = null, action: ReduxAction) => {
   switch (action.type) {
-  case 'UPDATE_TIMELINE':
-    return action.timeline;
+  case actionTypes.UPDATE_TIMELINE:
+    return action.timeline; // string here ?
   default:
-    return state;
+    return state; // object here ?
   }
 };
 

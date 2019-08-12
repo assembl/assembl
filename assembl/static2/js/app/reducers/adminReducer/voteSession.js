@@ -3,45 +3,7 @@ import pick from 'lodash/pick';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
 import { fromJS, List, Map } from 'immutable';
-import {
-  type Action,
-  UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES,
-  UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE,
-  UPDATE_VOTE_SESSION_PAGE,
-  UPDATE_VOTE_MODULE,
-  UPDATE_VOTE_MODULES,
-  DELETE_VOTE_MODULE,
-  CREATE_TOKEN_VOTE_MODULE,
-  CREATE_GAUGE_VOTE_MODULE,
-  UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY,
-  UPDATE_TOKEN_VOTE_INSTRUCTIONS,
-  CREATE_TOKEN_VOTE_CATEGORY,
-  DELETE_TOKEN_VOTE_CATEGORY,
-  UPDATE_TOKEN_VOTE_CATEGORY_TITLE,
-  UPDATE_TOKEN_TOTAL_NUMBER,
-  UPDATE_TOKEN_VOTE_CATEGORY_COLOR,
-  UPDATE_VOTE_PROPOSALS,
-  CREATE_VOTE_PROPOSAL,
-  DELETE_VOTE_PROPOSAL,
-  UPDATE_VOTE_PROPOSAL_TITLE,
-  UPDATE_VOTE_PROPOSAL_DESCRIPTION,
-  MOVE_PROPOSAL_UP,
-  MOVE_PROPOSAL_DOWN,
-  UPDATE_GAUGE_VOTE_INSTRUCTIONS,
-  UPDATE_GAUGE_VOTE_NUMBER_TICKS,
-  UPDATE_GAUGE_VOTE_IS_NUMBER,
-  CREATE_GAUGE_VOTE_CHOICE,
-  DELETE_GAUGE_VOTE_CHOICE,
-  UPDATE_GAUGE_VOTE_CHOICE_LABEL,
-  UPDATE_GAUGE_MINIMUM,
-  UPDATE_GAUGE_MAXIMUM,
-  UPDATE_GAUGE_UNIT,
-  ADD_MODULE_TO_PROPOSAL,
-  UNDELETE_MODULE,
-  MARK_ALL_DEPENDENCIES_AS_CHANGED,
-  SET_VALIDATION_ERRORS,
-  CANCEL_MODULE_CUSTOMIZATION
-} from '../../actions/actionTypes';
+import * as actionTypes from '../../actions/actionTypes';
 import { updateInLangstringEntries } from '../../utils/i18n';
 import { pickerColors } from '../../constants';
 import { moveItemUp, moveItemDown } from '../../utils/globalFunctions';
@@ -57,16 +19,16 @@ const initialPage = Map({
     title: ''
   })
 });
-export type VoteSessionPageReducer = (Map, ReduxAction<Action>) => Map;
-export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, action) => {
+
+export const voteSessionPage = (state: Map = initialPage, action: ReduxAction) => {
   switch (action.type) {
-  case UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES:
-    return state.set('seeCurrentVotes', action.value).set('_hasChanged', true);
-  case UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE:
+  case actionTypes.UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE:
     return state
       .update('propositionsSectionTitleEntries', updateInLangstringEntries(action.locale, fromJS(action.value)))
       .set('_hasChanged', true);
-  case UPDATE_VOTE_SESSION_PAGE: {
+  case actionTypes.UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES:
+    return state.set('seeCurrentVotes', action.value).set('_hasChanged', true);
+  case actionTypes.UPDATE_VOTE_SESSION_PAGE: {
     return Map({
       _hasChanged: false,
       id: fromJS(action.id),
@@ -79,53 +41,53 @@ export const voteSessionPage: VoteSessionPageReducer = (state = initialPage, act
   }
 };
 
-export const modulesOrProposalsHaveChanged = (state: boolean = false, action: ReduxAction<Action>) => {
+export const modulesOrProposalsHaveChanged = (state: boolean = false, action: ReduxAction) => {
   switch (action.type) {
-  case ADD_MODULE_TO_PROPOSAL:
-  case CANCEL_MODULE_CUSTOMIZATION:
-  case CREATE_GAUGE_VOTE_CHOICE:
-  case CREATE_GAUGE_VOTE_MODULE:
-  case CREATE_TOKEN_VOTE_CATEGORY:
-  case CREATE_TOKEN_VOTE_MODULE:
-  case CREATE_VOTE_PROPOSAL:
-  case UPDATE_VOTE_MODULE:
-  case DELETE_GAUGE_VOTE_CHOICE:
-  case DELETE_TOKEN_VOTE_CATEGORY:
-  case DELETE_VOTE_MODULE:
-  case DELETE_VOTE_PROPOSAL:
-  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
-  case MOVE_PROPOSAL_DOWN:
-  case MOVE_PROPOSAL_UP:
-  case UPDATE_GAUGE_MAXIMUM:
-  case UPDATE_GAUGE_MINIMUM:
-  case UPDATE_GAUGE_UNIT:
-  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
-  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
-  case UPDATE_GAUGE_VOTE_IS_NUMBER:
-  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
-  case UPDATE_TOKEN_TOTAL_NUMBER:
-  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
-  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
-  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
-  case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
-  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
-  case UPDATE_VOTE_PROPOSAL_TITLE:
+  case actionTypes.ADD_MODULE_TO_PROPOSAL:
+  case actionTypes.CANCEL_MODULE_CUSTOMIZATION:
+  case actionTypes.CREATE_GAUGE_VOTE_CHOICE:
+  case actionTypes.CREATE_GAUGE_VOTE_MODULE:
+  case actionTypes.CREATE_TOKEN_VOTE_CATEGORY:
+  case actionTypes.CREATE_TOKEN_VOTE_MODULE:
+  case actionTypes.CREATE_VOTE_PROPOSAL:
+  case actionTypes.UPDATE_VOTE_MODULE:
+  case actionTypes.DELETE_GAUGE_VOTE_CHOICE:
+  case actionTypes.DELETE_TOKEN_VOTE_CATEGORY:
+  case actionTypes.DELETE_VOTE_MODULE:
+  case actionTypes.DELETE_VOTE_PROPOSAL:
+  case actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED:
+  case actionTypes.MOVE_PROPOSAL_DOWN:
+  case actionTypes.MOVE_PROPOSAL_UP:
+  case actionTypes.UPDATE_GAUGE_MAXIMUM:
+  case actionTypes.UPDATE_GAUGE_MINIMUM:
+  case actionTypes.UPDATE_GAUGE_UNIT:
+  case actionTypes.UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+  case actionTypes.UPDATE_GAUGE_VOTE_INSTRUCTIONS:
+  case actionTypes.UPDATE_GAUGE_VOTE_IS_NUMBER:
+  case actionTypes.UPDATE_GAUGE_VOTE_NUMBER_TICKS:
+  case actionTypes.UPDATE_TOKEN_TOTAL_NUMBER:
+  case actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
+  case actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
+  case actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS:
+  case actionTypes.UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+  case actionTypes.UPDATE_VOTE_PROPOSAL_TITLE:
     return true;
-  case UPDATE_VOTE_MODULES:
-  case UPDATE_VOTE_PROPOSALS:
+  case actionTypes.UPDATE_VOTE_MODULES:
+  case actionTypes.UPDATE_VOTE_PROPOSALS:
     return false;
   default:
     return state;
   }
 };
 
-export const modulesInOrder = (state: List<number> = List(), action: ReduxAction<Action>) => {
+export const modulesInOrder = (state: List<number> = List(), action: ReduxAction) => {
   switch (action.type) {
-  case UPDATE_VOTE_MODULES:
+  case actionTypes.UPDATE_VOTE_MODULES:
     return List(Object.keys(action.voteModules).map(key => action.voteModules[key].id || null));
-  case CREATE_TOKEN_VOTE_MODULE:
+  case actionTypes.CREATE_TOKEN_VOTE_MODULE:
     return state.push(action.id);
-  case CREATE_GAUGE_VOTE_MODULE:
+  case actionTypes.CREATE_GAUGE_VOTE_MODULE:
     return state.push(action.id);
   default:
     return state;
@@ -255,9 +217,9 @@ const updateGaugeSpecificInfo = (info: SpecificInfo) => (m: Map<string, any>) =>
     .delete('unit');
 };
 
-export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction) => {
   switch (action.type) {
-  case UPDATE_VOTE_MODULES: {
+  case actionTypes.UPDATE_VOTE_MODULES: {
     let newState = state;
     action.voteModules.forEach((m) => {
       const moduleInfo = getModuleInfo(m);
@@ -265,59 +227,59 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     });
     return newState;
   }
-  case DELETE_VOTE_MODULE:
+  case actionTypes.DELETE_VOTE_MODULE:
     return state.setIn([action.id, '_toDelete'], true);
-  case CREATE_TOKEN_VOTE_MODULE:
+  case actionTypes.CREATE_TOKEN_VOTE_MODULE:
     return state.set(action.id, defaultTokenModule.set('id', action.id));
-  case UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
+  case actionTypes.UPDATE_TOKEN_VOTE_EXCLUSIVE_CATEGORY:
     return state.setIn([action.id, 'exclusiveCategories'], action.value).setIn([action.id, '_hasChanged'], true);
-  case UPDATE_TOKEN_VOTE_INSTRUCTIONS:
+  case actionTypes.UPDATE_TOKEN_VOTE_INSTRUCTIONS:
     return state
       .updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value))
       .setIn([action.id, '_hasChanged'], true);
-  case CREATE_TOKEN_VOTE_CATEGORY:
+  case actionTypes.CREATE_TOKEN_VOTE_CATEGORY:
     return state
       .updateIn([action.moduleId, 'tokenCategories'], tokenCategories => tokenCategories.push(action.id))
       .setIn([action.moduleId, '_hasChanged'], true);
-  case DELETE_TOKEN_VOTE_CATEGORY:
+  case actionTypes.DELETE_TOKEN_VOTE_CATEGORY:
     return state
       .updateIn([action.moduleId, 'tokenCategories'], tokenCategories => tokenCategories.delete(action.index))
       .setIn([action.moduleId, '_hasChanged'], true);
-  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
-  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
-  case UPDATE_TOKEN_TOTAL_NUMBER:
+  case actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
+  case actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case actionTypes.UPDATE_TOKEN_TOTAL_NUMBER:
     return state.setIn([action.moduleId, '_hasChanged'], true);
-  case CREATE_GAUGE_VOTE_MODULE:
+  case actionTypes.CREATE_GAUGE_VOTE_MODULE:
     return state.set(action.id, defaultTextGaugeModule.set('id', action.id));
-  case UPDATE_GAUGE_VOTE_INSTRUCTIONS:
+  case actionTypes.UPDATE_GAUGE_VOTE_INSTRUCTIONS:
     return state
       .updateIn([action.id, 'instructionsEntries'], updateInLangstringEntries(action.locale, action.value))
       .setIn([action.id, '_hasChanged'], true);
-  case UPDATE_GAUGE_VOTE_IS_NUMBER: {
+  case actionTypes.UPDATE_GAUGE_VOTE_IS_NUMBER: {
     if (action.value) {
       return state.set(action.id, defaultNumberGaugeModule.set('id', action.id)).setIn([action.id, '_hasChanged'], true);
     }
     return state.set(action.id, defaultTextGaugeModule.set('id', action.id)).setIn([action.id, '_hasChanged'], true);
   }
-  case UPDATE_GAUGE_VOTE_NUMBER_TICKS:
+  case actionTypes.UPDATE_GAUGE_VOTE_NUMBER_TICKS:
     return state.setIn([action.id, 'nbTicks'], action.value).setIn([action.id, '_hasChanged'], true);
-  case CREATE_GAUGE_VOTE_CHOICE:
+  case actionTypes.CREATE_GAUGE_VOTE_CHOICE:
     return state
       .updateIn([action.moduleId, 'choices'], choices => choices.push(action.id))
       .setIn([action.moduleId, '_hasChanged'], true);
-  case DELETE_GAUGE_VOTE_CHOICE:
+  case actionTypes.DELETE_GAUGE_VOTE_CHOICE:
     return state
       .updateIn([action.moduleId, 'choices'], choices => choices.delete(action.index))
       .setIn([action.moduleId, '_hasChanged'], true);
-  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+  case actionTypes.UPDATE_GAUGE_VOTE_CHOICE_LABEL:
     return state.setIn([action.moduleId, '_hasChanged'], true);
-  case UPDATE_GAUGE_MINIMUM:
+  case actionTypes.UPDATE_GAUGE_MINIMUM:
     return state.setIn([action.id, 'minimum'], action.value).setIn([action.id, '_hasChanged'], true);
-  case UPDATE_GAUGE_MAXIMUM:
+  case actionTypes.UPDATE_GAUGE_MAXIMUM:
     return state.setIn([action.id, 'maximum'], action.value).setIn([action.id, '_hasChanged'], true);
-  case UPDATE_GAUGE_UNIT:
+  case actionTypes.UPDATE_GAUGE_UNIT:
     return state.setIn([action.id, 'unit'], action.value).setIn([action.id, '_hasChanged'], true);
-  case UPDATE_VOTE_PROPOSALS: {
+  case actionTypes.UPDATE_VOTE_PROPOSALS: {
     let newState = state;
     action.voteProposals.forEach((proposal) => {
       proposal.modules.forEach((pModule) => {
@@ -330,7 +292,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
     });
     return newState;
   }
-  case ADD_MODULE_TO_PROPOSAL:
+  case actionTypes.ADD_MODULE_TO_PROPOSAL:
     return state.set(
       action.id,
       fromJS({
@@ -343,9 +305,9 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
         voteSpecTemplateId: action.voteSpecTemplateId
       })
     );
-  case UNDELETE_MODULE:
+  case actionTypes.UNDELETE_MODULE:
     return state.setIn([action.id, '_toDelete'], false);
-  case MARK_ALL_DEPENDENCIES_AS_CHANGED:
+  case actionTypes.MARK_ALL_DEPENDENCIES_AS_CHANGED:
     return state.map((voteSpec) => {
       if (voteSpec.get('voteSpecTemplateId') === action.id && !voteSpec.get('isCustom')) {
         return voteSpec.set('_hasChanged', true);
@@ -353,7 +315,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
 
       return voteSpec;
     });
-  case CANCEL_MODULE_CUSTOMIZATION: {
+  case actionTypes.CANCEL_MODULE_CUSTOMIZATION: {
     const template = state.get(state.getIn([action.id, 'voteSpecTemplateId']));
     const specificInfo = template.filter((v, k) => specificKeys.includes(k)).toJS();
     return state
@@ -363,7 +325,7 @@ export const modulesById = (state: Map<string, Map> = Map(), action: ReduxAction
       .setIn([action.id, 'instructionsEntries'], template.get('instructionsEntries'))
       .deleteIn([action.id, 'choices']);
   }
-  case UPDATE_VOTE_MODULE: {
+  case actionTypes.UPDATE_VOTE_MODULE: {
     const { instructions, isCustom, isNumberGauge, type } = action.info;
     let specificInfo = pick(action.info, specificKeys);
     specificInfo = {
@@ -408,9 +370,9 @@ const getTokenCategories = (m) => {
   return [];
 };
 
-export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: ReduxAction) => {
   switch (action.type) {
-  case UPDATE_VOTE_MODULES: {
+  case actionTypes.UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
       getTokenCategories(m).forEach((tc) => {
@@ -420,7 +382,7 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
 
     return newState;
   }
-  case UPDATE_VOTE_PROPOSALS: {
+  case actionTypes.UPDATE_VOTE_PROPOSALS: {
     let newState = state;
     action.voteProposals.forEach((proposal) => {
       proposal.modules.forEach((m) => {
@@ -432,15 +394,15 @@ export const tokenCategoriesById = (state: Map<string, Map> = Map(), action: Red
 
     return newState;
   }
-  case CREATE_TOKEN_VOTE_CATEGORY: {
+  case actionTypes.CREATE_TOKEN_VOTE_CATEGORY: {
     const randomColor = pickerColors[Math.floor(Math.random() * Math.floor(pickerColors.length))];
     return state.set(action.id, defaultTokenCategory.set('id', action.id).set('color', randomColor));
   }
-  case UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
+  case actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_TITLE:
     return state.updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value));
-  case UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
+  case actionTypes.UPDATE_TOKEN_VOTE_CATEGORY_COLOR:
     return state.setIn([action.id, 'color'], action.value);
-  case UPDATE_TOKEN_TOTAL_NUMBER:
+  case actionTypes.UPDATE_TOKEN_TOTAL_NUMBER:
     return state.setIn([action.id, 'totalNumber'], action.value);
   default:
     return state;
@@ -458,9 +420,9 @@ const defaultVoteProposal = Map({
   modules: List()
 });
 
-export const voteProposalsById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+export const voteProposalsById = (state: Map<string, Map> = Map(), action: ReduxAction) => {
   switch (action.type) {
-  case UPDATE_VOTE_PROPOSALS: {
+  case actionTypes.UPDATE_VOTE_PROPOSALS: {
     let newState = Map();
     action.voteProposals.forEach((proposal) => {
       const proposalInfo = Map({
@@ -478,7 +440,7 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
     });
     return newState;
   }
-  case CREATE_VOTE_PROPOSAL: {
+  case actionTypes.CREATE_VOTE_PROPOSAL: {
     const order =
         state
           .filter(item => !item.get('_toDelete'))
@@ -486,23 +448,23 @@ export const voteProposalsById = (state: Map<string, Map> = Map(), action: Redux
           .max() + 1.0;
     return state.set(action.id, defaultVoteProposal.set('id', action.id).set('order', order));
   }
-  case DELETE_VOTE_PROPOSAL:
+  case actionTypes.DELETE_VOTE_PROPOSAL:
     return state.setIn([action.id, '_toDelete'], true);
-  case MOVE_PROPOSAL_UP:
+  case actionTypes.MOVE_PROPOSAL_UP:
     return moveItemUp(state, action.id);
-  case MOVE_PROPOSAL_DOWN:
+  case actionTypes.MOVE_PROPOSAL_DOWN:
     return moveItemDown(state, action.id);
-  case UPDATE_VOTE_PROPOSAL_TITLE:
+  case actionTypes.UPDATE_VOTE_PROPOSAL_TITLE:
     return state
       .updateIn([action.id, 'titleEntries'], updateInLangstringEntries(action.locale, action.value))
       .setIn([action.id, '_hasChanged'], true);
-  case UPDATE_VOTE_PROPOSAL_DESCRIPTION:
+  case actionTypes.UPDATE_VOTE_PROPOSAL_DESCRIPTION:
     return state
       .updateIn([action.id, 'descriptionEntries'], updateInLangstringEntries(action.locale, action.value))
       .setIn([action.id, '_hasChanged'], true);
-  case ADD_MODULE_TO_PROPOSAL:
+  case actionTypes.ADD_MODULE_TO_PROPOSAL:
     return state.updateIn([action.proposalId, 'modules'], modules => modules.push(action.id));
-  case SET_VALIDATION_ERRORS:
+  case actionTypes.SET_VALIDATION_ERRORS:
     return state.setIn([action.id, '_validationErrors'], action.errors);
   default:
     return state;
@@ -523,9 +485,9 @@ const getGaugeChoices = (m) => {
   return [];
 };
 
-export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxAction<Action>) => {
+export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxAction) => {
   switch (action.type) {
-  case UPDATE_VOTE_MODULE: {
+  case actionTypes.UPDATE_VOTE_MODULE: {
     if (action.info.choices) {
       let newState = state;
       action.info.choices.forEach((choice) => {
@@ -547,7 +509,7 @@ export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxA
 
     return state;
   }
-  case UPDATE_VOTE_MODULES: {
+  case actionTypes.UPDATE_VOTE_MODULES: {
     let newState = Map();
     action.voteModules.forEach((m) => {
       getGaugeChoices(m).forEach((gc) => {
@@ -557,7 +519,7 @@ export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxA
     return newState;
   }
 
-  case UPDATE_VOTE_PROPOSALS: {
+  case actionTypes.UPDATE_VOTE_PROPOSALS: {
     let newState = state;
     action.voteProposals.forEach((proposal) => {
       proposal.modules.forEach((m) => {
@@ -569,9 +531,9 @@ export const gaugeChoicesById = (state: Map<string, Map> = Map(), action: ReduxA
 
     return newState;
   }
-  case CREATE_GAUGE_VOTE_CHOICE:
+  case actionTypes.CREATE_GAUGE_VOTE_CHOICE:
     return state.set(action.id, defaultTextGaugeChoice.set('id', action.id));
-  case UPDATE_GAUGE_VOTE_CHOICE_LABEL:
+  case actionTypes.UPDATE_GAUGE_VOTE_CHOICE_LABEL:
     return state.updateIn([action.id, 'labelEntries'], updateInLangstringEntries(action.locale, action.value));
   default:
     return state;

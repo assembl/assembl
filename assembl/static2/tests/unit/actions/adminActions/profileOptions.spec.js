@@ -1,5 +1,6 @@
+// @flow
 import * as actions from '../../../../js/app/actions/adminActions/profileOptions';
-import * as actionTypes from '../../../../js/app/actions/actionTypes/admin/profileOptions';
+import * as actionTypes from '../../../../js/app/actions/actionTypes';
 
 describe('profileOptions admin actions', () => {
   describe('updateTextFields action', () => {
@@ -67,6 +68,15 @@ describe('profileOptions admin actions', () => {
     });
   });
 
+  describe('toggleTextFieldHidden action', () => {
+    const { toggleTextFieldHidden } = actions;
+    it('should return a TOGGLE_TEXT_FIELD_HIDDEN action type', () => {
+      const actual = toggleTextFieldHidden('my-field');
+      const expected = { id: 'my-field', type: actionTypes.TOGGLE_TEXT_FIELD_HIDDEN };
+      expect(actual).toEqual(expected);
+    });
+  });
+
   describe('moveTextFieldUp action', () => {
     const { moveTextFieldUp } = actions;
     it('should return a MOVE_TEXT_FIELD_UP action type', () => {
@@ -81,6 +91,57 @@ describe('profileOptions admin actions', () => {
     it('should return a MOVE_TEXT_FIELD_DOWN action type', () => {
       const actual = moveTextFieldDown('my-field');
       const expected = { id: 'my-field', type: actionTypes.MOVE_TEXT_FIELD_DOWN };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('addSelectFieldOption action', () => {
+    const { addSelectFieldOption } = actions;
+    it('should return a ADD_SELECT_FIELD_OPTION action type', () => {
+      const actual = addSelectFieldOption('my-field', 'my-id');
+      const expected = { fieldId: 'my-field', id: 'my-id', type: actionTypes.ADD_SELECT_FIELD_OPTION };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('deleteSelectFieldOption action', () => {
+    const { deleteSelectFieldOption } = actions;
+    it('should return a DELETE_SELECT_FIELD_OPTION action type', () => {
+      const actual = deleteSelectFieldOption('my-field', 'my-id');
+      const expected = { fieldId: 'my-field', id: 'my-id', type: actionTypes.DELETE_SELECT_FIELD_OPTION };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('updateSelectFieldOptionLabel action', () => {
+    const { updateSelectFieldOptionLabel } = actions;
+    it('should return a UPDATE_SELECT_FIELD_OPTION_LABEL action type', () => {
+      const actual = updateSelectFieldOptionLabel('my-field', 'my-id', 'my-locale', 'my-value');
+      const expected = {
+        fieldId: 'my-field',
+        id: 'my-id',
+        locale: 'my-locale',
+        value: 'my-value',
+        type: actionTypes.UPDATE_SELECT_FIELD_OPTION_LABEL
+      };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('moveSelectFieldOptionUp action', () => {
+    const { moveSelectFieldOptionUp } = actions;
+    it('should return a MOVE_SELECT_FIELD_OPTION_UP action type', () => {
+      const actual = moveSelectFieldOptionUp('my-field', 'my-id');
+      const expected = { fieldId: 'my-field', id: 'my-id', type: actionTypes.MOVE_SELECT_FIELD_OPTION_UP };
+      expect(actual).toEqual(expected);
+    });
+  });
+
+  describe('moveSelectFieldOptionDown action', () => {
+    const { moveSelectFieldOptionDown } = actions;
+    it('should return a MOVE_SELECT_FIELD_OPTION_DOWN action type', () => {
+      const actual = moveSelectFieldOptionDown('my-field', 'my-id');
+      const expected = { fieldId: 'my-field', id: 'my-id', type: actionTypes.MOVE_SELECT_FIELD_OPTION_DOWN };
       expect(actual).toEqual(expected);
     });
   });

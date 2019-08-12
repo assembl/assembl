@@ -1,6 +1,12 @@
-export const updateEditLocale = newLocale => ({
+// @flow
+import * as actionTypes from '../actionTypes';
+
+export const updateEditLocale = (newLocale: string) => ({
   newLocale: newLocale,
-  type: 'UPDATE_EDIT_LOCALE'
+  type: actionTypes.UPDATE_EDIT_LOCALE
 });
 
-export const displayLanguageMenu = state => ({ state: state, type: 'UPDATE_LANGUAGE_MENU_VISIBILITY' });
+export const displayLanguageMenu = (state: boolean) => ({
+  state: state,
+  type: actionTypes.UPDATE_LANGUAGE_MENU_VISIBILITY
+});

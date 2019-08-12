@@ -2,37 +2,27 @@
 import { fromJS, List, Map } from 'immutable';
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
-import {
-  type Action,
-  CREATE_LANDING_PAGE_MODULE,
-  MOVE_LANDING_PAGE_MODULE_DOWN,
-  MOVE_LANDING_PAGE_MODULE_UP,
-  TOGGLE_LANDING_PAGE_MODULE,
-  UPDATE_LANDING_PAGE_MODULES
-} from '../../actions/actionTypes';
+import * as actionTypes from '../../actions/actionTypes';
 
-type ModulesHasChangedReducer = (boolean, ReduxAction<Action>) => boolean;
-export const modulesHasChanged: ModulesHasChangedReducer = (state = false, action) => {
+export const modulesHasChanged = (state: boolean = false, action: ReduxAction) => {
   switch (action.type) {
-  case CREATE_LANDING_PAGE_MODULE:
-  case MOVE_LANDING_PAGE_MODULE_UP:
-  case MOVE_LANDING_PAGE_MODULE_DOWN:
-  case TOGGLE_LANDING_PAGE_MODULE:
+  case actionTypes.CREATE_LANDING_PAGE_MODULE:
+  case actionTypes.MOVE_LANDING_PAGE_MODULE_UP:
+  case actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN:
+  case actionTypes.TOGGLE_LANDING_PAGE_MODULE:
     return true;
-  case UPDATE_LANDING_PAGE_MODULES:
+  case actionTypes.UPDATE_LANDING_PAGE_MODULES:
     return false;
   default:
     return state;
   }
 };
 
-type ModulesInOrderState = List<string>;
-type ModulesInOrderReducer = (ModulesInOrderState, ReduxAction<Action>) => ModulesInOrderState;
-export const modulesInOrder: ModulesInOrderReducer = (state = List(), action) => {
+export const modulesInOrder = (state: List<string> = List(), action: ReduxAction) => {
   switch (action.type) {
-  case UPDATE_LANDING_PAGE_MODULES:
+  case actionTypes.UPDATE_LANDING_PAGE_MODULES:
     return List(action.modules.map(module => module.id));
-  case CREATE_LANDING_PAGE_MODULE:
+  case actionTypes.CREATE_LANDING_PAGE_MODULE:
     // insert at the end (just before FOOTER module)
     return state.insert(state.size - 1, action.id);
   default:
@@ -40,39 +30,35 @@ export const modulesInOrder: ModulesInOrderReducer = (state = List(), action) =>
   }
 };
 
-type EnabledModulesInOrderState = List<string>;
-type EnabledModulesInOrderReducer = (EnabledModulesInOrderState, ReduxAction<Action>) => EnabledModulesInOrderState;
-export const enabledModulesInOrder: EnabledModulesInOrderReducer = (state = List(), action) => {
+export const enabledModulesInOrder = (state: List<string> = List(), action: ReduxAction) => {
   switch (action.type) {
-  case CREATE_LANDING_PAGE_MODULE:
+  case actionTypes.CREATE_LANDING_PAGE_MODULE:
     // insert at the end (just before FOOTER module)
     return state.insert(state.size - 1, action.id);
-  case MOVE_LANDING_PAGE_MODULE_UP: {
+  case actionTypes.MOVE_LANDING_PAGE_MODULE_UP: {
     const idx = state.indexOf(action.id);
     if (idx === 1) {
       return state;
     }
     return state.delete(idx).insert(idx - 1, action.id);
   }
-  case MOVE_LANDING_PAGE_MODULE_DOWN: {
+  case actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN: {
     const idx = state.indexOf(action.id);
     if (idx === state.size - 2) {
       return state;
     }
-
     return state.delete(idx).insert(idx + 1, action.id);
   }
-  case TOGGLE_LANDING_PAGE_MODULE: {
+  case actionTypes.TOGGLE_LANDING_PAGE_MODULE: {
     const id = action.id;
     const idx = state.indexOf(id);
     if (idx !== -1) {
       return state.delete(idx);
     }
-
     // insert at the end (just before FOOTER module)
     return state.insert(state.size - 1, id);
   }
-  case UPDATE_LANDING_PAGE_MODULES:
+  case actionTypes.UPDATE_LANDING_PAGE_MODULES:
     return List(action.modules.filter(module => module.enabled).map(module => module.id));
   default:
     return state;
@@ -91,11 +77,9 @@ const defaultResource = Map({
 });
 
 const initialState = Map();
-type ModulesByIdState = Map<string, Map>;
-type ModulesByIdReducer = (ModulesByIdState, ReduxAction<Action>) => ModulesByIdState;
-export const modulesById: ModulesByIdReducer = (state = initialState, action) => {
+export const modulesById = (state: Map<string, Map> = initialState, action: ReduxAction) => {
   switch (action.type) {
-  case CREATE_LANDING_PAGE_MODULE:
+  case actionTypes.CREATE_LANDING_PAGE_MODULE:
     return state.set(
       action.id,
       defaultResource
@@ -105,11 +89,11 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
         .set('order', action.order)
         .set('id', action.id)
     );
-  case TOGGLE_LANDING_PAGE_MODULE: {
+  case actionTypes.TOGGLE_LANDING_PAGE_MODULE: {
     const moduleType = action.id;
     return state.updateIn([moduleType, 'enabled'], v => !v).setIn([moduleType, '_hasChanged'], true);
   }
-  case MOVE_LANDING_PAGE_MODULE_UP: {
+  case actionTypes.MOVE_LANDING_PAGE_MODULE_UP: {
     let newState = Map();
     state.forEach((module) => {
       const id = module.get('id');
@@ -117,7 +101,7 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
     });
     return state;
   }
-  case MOVE_LANDING_PAGE_MODULE_DOWN: {
+  case actionTypes.MOVE_LANDING_PAGE_MODULE_DOWN: {
     let newState = Map();
     state.forEach((module) => {
       const id = module.get('id');
@@ -125,7 +109,7 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
     });
     return state;
   }
-  case UPDATE_LANDING_PAGE_MODULES: {
+  case actionTypes.UPDATE_LANDING_PAGE_MODULES: {
     let newState = Map();
     action.modules.forEach((module) => {
       newState = newState.set(module.id, fromJS(module));
@@ -135,12 +119,6 @@ export const modulesById: ModulesByIdReducer = (state = initialState, action) =>
   default:
     return state;
   }
-};
-
-export type LandingPageState = {
-  enabledModulesInOrder: EnabledModulesInOrderState,
-  modulesById: Map<string>,
-  modulesHasChanged: boolean
 };
 
 const reducers = {
