@@ -6,7 +6,7 @@ describe('Theme actions', () => {
   describe('setTheme action', () => {
     const { setTheme } = actions;
 
-    it('should return a ADD_TEXT_FIELD action type', () => {
+    it('should return a SET_THEME action type', () => {
       const actual = setTheme('#FF0000', '#0000FF');
       const expected = {
         firstColor: '#FF0000',

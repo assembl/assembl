@@ -75,6 +75,7 @@ export const UPDATE_VOTE_SESSION_PAGE_PROPOSITIONS_TITLE: 'UPDATE_VOTE_SESSION_P
 export const UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES: 'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES' =
   'UPDATE_VOTE_SESSION_PAGE_SEECURRENTVOTES';
 
+// Should move the types below in the right actions source file
 export type UpdateContentLocaleById = {
   type: typeof UPDATE_CONTENT_LOCALE_BY_ID,
   id: string,
