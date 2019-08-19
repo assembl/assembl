@@ -99,16 +99,6 @@ class Survey extends React.Component<Props, State> {
     updateContentLocaleMapping(contentLocaleMappingData);
   }
 
-  //
-  // getIfProposals = (questions) => {
-  //   if (!questions) return false;
-  //   let isProposals = false;
-  //   questions.forEach((question) => {
-  //     if (question.posts.edges.length > 0) isProposals = true;
-  //   });
-  //   return isProposals;
-  // };
-
   scrollToQuestion = (isScroll, questionIndex) => {
     this.setState({
       isScroll: isScroll,
