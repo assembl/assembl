@@ -374,6 +374,8 @@ class Post(Content, TaggableEntity):
                 ancestor.is_tombstone = True
                 ancestor = ancestor.parent
 
+        self.tags = []
+
     # As tombstones are an optimization in this case,
     # allow necromancy.
     can_be_resurrected = True
