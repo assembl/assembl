@@ -36,44 +36,44 @@ class URLPreview extends React.Component<Props> {
     // isContribution like a twitter post
     const isContribution = authorName || authorAvatar;
     return (
-      <div className="url-container">
+      <span className="url-container">
         {isContribution ? (
-          <div className="url-header">
+          <span className="url-header">
             {authorAvatar && <img src={authorAvatar} className="url-contribution-avatar" alt={authorName} />}
             <a target="_blank" href={url} className="url-contribution-title">
               {title}
             </a>
             <span className="url-author-name">{authorName}</span>
-          </div>
+          </span>
         ) : (
           [
-            <div key={`${id}url-header`} className="url-header">
+            <span key={`${id}url-header`} className="url-header">
               {faviconUrl && <img alt="favicon" className="url-header-avatar" src={faviconUrl} />}
               <span className="url-header-title">{providerName}</span>
-            </div>,
+            </span>,
             <a key={`${id}url-link`} target="_blank" href={url} className="url-link">
               {title}
             </a>
           ]
         )}
-        <div className="url-content-container">
-          <div className="url-description">{description}</div>
-          <div className="url-media-container">
+        <span className="url-content-container">
+          <span className="url-description">{description}</span>
+          <span className="url-media-container">
             <Embed
               url={url}
               defaultEmbed={
-                thumbnailUrl ? <div style={{ backgroundImage: `url("${thumbnailUrl}")` }} className="url-img-preview" /> : null
+                thumbnailUrl ? <span style={{ backgroundImage: `url("${thumbnailUrl}")` }} className="url-img-preview" /> : null
               }
             />
-          </div>
-        </div>
+          </span>
+        </span>
         {isContribution && (
-          <div className="url-footer">
+          <span className="url-footer">
             {faviconUrl && <img alt="favicon" className="url-footer-avatar" src={faviconUrl} />}
             <span className="url-footer-title">{providerName}</span>
-          </div>
+          </span>
         )}
-      </div>
+      </span>
     );
   }
 }
