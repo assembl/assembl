@@ -11,6 +11,8 @@ from assembl import models
 from assembl.auth import CrudPermissions
 from assembl.auth import Everyone, P_SYSADMIN, P_ADMIN_DISC
 from assembl.auth.util import get_permissions
+from assembl.lib.exceptions import LocalizableError
+from assembl.views import JSONError
 from .document import Document
 from .types import SecureObjectType
 from .utils import DateTime, abort_transaction_on_exception
@@ -172,7 +174,12 @@ class UpdateUser(graphene.Mutation):
                 if old_password == new_password:
                     raise Exception(u"004: The new password has to be different than the current password.")
 
-                user.password_p = new_password
+                try:
+                    user.password_p = new_password
+                except LocalizableError as e:
+                    raise JSONError(e.localized_message(context.localizer))
+                except Exception as e:
+                    raise JSONError(str(e), code=409)
 
             # add uploaded image as an attachment to the user
             image = args.get('image')
