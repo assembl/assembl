@@ -1,0 +1,64 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`UrlPreview component should match snapshot 1`] = `
+<span
+  className="url-container"
+>
+  <span
+    className="url-header"
+  >
+    <img
+      alt="@tarti"
+      className="url-contribution-avatar"
+      src="https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
+    />
+    <a
+      className="url-contribution-title"
+      href="https://foo.bar/1234"
+      target="_blank"
+    >
+      My foo'bar title
+    </a>
+    <span
+      className="url-author-name"
+    >
+      @tarti
+    </span>
+  </span>
+  <span
+    className="url-content-container"
+  >
+    <span
+      className="url-description"
+    >
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been.
+    </span>
+    <span
+      className="url-media-container"
+    >
+      <span
+        className="url-img-preview"
+        style={
+          Object {
+            "backgroundImage": "url(\\"https://images.unsplash.com/uploads/141155339325423394b24/03982423\\")",
+          }
+        }
+      />
+    </span>
+  </span>
+  <span
+    className="url-footer"
+  >
+    <img
+      alt="favicon"
+      className="url-footer-avatar"
+      src="https://images.pexels.com/photos/247932/pexels-photo-247932.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
+    />
+    <span
+      className="url-footer-title"
+    >
+      FooBar
+    </span>
+  </span>
+</span>
+`;

@@ -19,6 +19,18 @@ export type Props = {
   afterLoad: ?Function
 };
 
+/* Safely decode a html text - interpret entities, remove tags, prevent xss */
+function safeTextDecode(text: string): string {
+  if (!text) {
+    return '';
+  }
+  const doc = new DOMParser().parseFromString(text, 'text/html');
+  if (doc.documentElement) {
+    return doc.documentElement.textContent;
+  }
+  return '';
+}
+
 class URLPreview extends React.Component<Props> {
   componentDidMount() {
     // const { html, afterLoad } = this.props;
@@ -32,9 +44,11 @@ class URLPreview extends React.Component<Props> {
     // For a future development (integration of graphs ...)
     // If we have an integration HTML code, we need to include it into an iframe (the Frame component)
     // if (html) return <Frame id={id} html={html} afterLoad={afterLoad} />;
-    const { authorName, authorAvatar, url, title, description, thumbnailUrl, providerName, faviconUrl } = this.props;
+    const { authorName, authorAvatar, url, thumbnailUrl, providerName, faviconUrl } = this.props;
     // isContribution like a twitter post
     const isContribution = authorName || authorAvatar;
+    const title = safeTextDecode(this.props.title);
+    const description = safeTextDecode(this.props.description);
     return (
       <span className="url-container">
         {isContribution ? (
