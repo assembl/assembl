@@ -45,10 +45,10 @@ const compareOnLatestCreationDate: PostsComparator = (a: PostWithChildren, b: Po
   return -1;
 };
 
-function childrenCount(post: PostWithChildren): number {
+const childrenCount = (post: PostWithChildren): number => {
   const children = post.children || [];
   return children.length + children.reduce((acc, child) => acc + (child.children ? 0 : childrenCount(child.children)), 0);
-}
+};
 
 const compareOnPopularity: PostsComparator = (a: PostWithChildren, b: PostWithChildren) => {
   const popularityA = a.sentimentCounts.like - a.sentimentCounts.disagree + childrenCount(a);
