@@ -1,13 +1,13 @@
 // @flow
 import * as React from 'react';
-import { graphql, compose } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import { connect } from 'react-redux';
-import { Translate, I18n } from 'react-redux-i18n';
-import { Grid, Col, Button } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
+import { Button, Col, Grid } from 'react-bootstrap';
 import { EditorState } from 'draft-js';
 
 import { getConnectedUserId, getPostPublicationState } from '../../../utils/globalFunctions';
-import { inviteUserToLogin, displayAlert } from '../../../utils/utilityManager';
+import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
 import { connectedUserIsModerator } from '../../../utils/permissions';
 import { MINIMUM_BODY_LENGTH } from '../../../constants';
 import { withScreenDimensions } from '../../common/screenDimensions';
@@ -17,6 +17,7 @@ import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import { DebateContext } from '../../../app';
 
 type Props = {
+  isAnonymous: boolean,
   isDebateModerated: boolean,
   isPhaseCompleted: boolean,
   title: string,
@@ -84,14 +85,22 @@ export class Question extends React.Component<Props, State> {
     });
   };
 
-  redirectToLogin = () => {
-    const isUserConnected = getConnectedUserId();
-    const { scrollToQuestion, index } = this.props;
-    if (!isUserConnected) {
+  handleRichTextFocus = () => {
+    const { index, isAnonymous, scrollToQuestion } = this.props;
+    if (isAnonymous) {
       inviteUserToLogin();
     } else {
       scrollToQuestion(true, index);
     }
+  };
+
+  handleToolbarClick = () => {
+    const { isAnonymous } = this.props;
+    if (isAnonymous) {
+      inviteUserToLogin();
+      return false;
+    }
+    return true;
   };
 
   getPostBodyCharCount = () => {
@@ -99,12 +108,11 @@ export class Question extends React.Component<Props, State> {
     if (postBody) {
       return postBody.getCurrentContent().getPlainText().length;
     }
-
     return 0;
   };
 
   render() {
-    const { index, isPhaseCompleted, title, questionsLength } = this.props;
+    const { index, isAnonymous, isPhaseCompleted, questionsLength, title } = this.props;
     const questionTitle = questionsLength > 1 ? `${index}/ ${title}` : title;
     return (
       <section className={isPhaseCompleted ? 'hidden' : 'questions-section'} id={`q${index}`}>
@@ -119,7 +127,9 @@ export class Question extends React.Component<Props, State> {
                 editorState={this.state.postBody}
                 onChange={this.updateBody}
                 placeholder={I18n.t('debate.survey.txtAreaPh')}
-                handleInputFocus={this.redirectToLogin}
+                handleInputFocus={this.handleRichTextFocus}
+                handleToolbarClick={this.handleToolbarClick}
+                toolbarBlocked={isAnonymous}
               />
               <Button
                 onClick={this.createPost}
@@ -141,7 +151,8 @@ export class Question extends React.Component<Props, State> {
 }
 
 const mapStateToProps = state => ({
-  contentLocale: state.i18n.locale
+  contentLocale: state.i18n.locale,
+  isAnonymous: !getConnectedUserId()
 });
 
 const QuestionWithContext = props => (

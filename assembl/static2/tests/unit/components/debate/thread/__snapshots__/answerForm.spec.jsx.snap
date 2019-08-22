@@ -168,70 +168,74 @@ exports[`AnswerForm component should render a answer form 1`] = `
                       </div>
                     </div>
                     <div
-                      class="editor-toolbar top"
+                      class="toolbar-container"
                     >
                       <div
-                        class="btn-group"
+                        class="editor-toolbar top"
                       >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-bold"
-                            title="Bold"
-                          />
-                        </button>
-                      </div>
-                      <div
-                        class="btn-group"
-                      >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-bold"
+                              title="Bold"
+                            />
+                          </button>
+                        </div>
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-italics"
-                            title="Italic"
-                          />
-                        </button>
-                      </div>
-                      <div
-                        class="btn-group"
-                      >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-italics"
+                              title="Italic"
+                            />
+                          </button>
+                        </div>
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-bullets"
-                            title="Bullet list"
-                          />
-                        </button>
-                      </div>
-                      <div
-                        class="btn-group"
-                      >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-bullets"
+                              title="Bullet list"
+                            />
+                          </button>
+                        </div>
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-link"
-                          />
-                        </button>
-                      </div>
-                      <div
-                        class="btn-group"
-                      >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-link"
+                            />
+                          </button>
+                        </div>
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-attachment"
-                          />
-                        </button>
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-attachment"
+                            />
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <div
@@ -309,70 +313,74 @@ exports[`AnswerForm component should render a answer form 1`] = `
                       </div>
                     </div>
                     <div
-                      class="editor-toolbar top"
+                      class="toolbar-container"
                     >
                       <div
-                        class="btn-group"
+                        class="editor-toolbar top"
                       >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-bold"
-                            title="Bold"
-                          />
-                        </button>
-                      </div>
-                      <div
-                        class="btn-group"
-                      >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-bold"
+                              title="Bold"
+                            />
+                          </button>
+                        </div>
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-italics"
-                            title="Italic"
-                          />
-                        </button>
-                      </div>
-                      <div
-                        class="btn-group"
-                      >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-italics"
+                              title="Italic"
+                            />
+                          </button>
+                        </div>
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-bullets"
-                            title="Bullet list"
-                          />
-                        </button>
-                      </div>
-                      <div
-                        class="btn-group"
-                      >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-bullets"
+                              title="Bullet list"
+                            />
+                          </button>
+                        </div>
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-link"
-                          />
-                        </button>
-                      </div>
-                      <div
-                        class="btn-group"
-                      >
-                        <button
-                          class="btn btn-default"
-                          type="button"
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-link"
+                            />
+                          </button>
+                        </div>
+                        <div
+                          class="btn-group"
                         >
-                          <span
-                            class="assembl-icon-text-attachment"
-                          />
-                        </button>
+                          <button
+                            class="btn btn-default"
+                            type="button"
+                          >
+                            <span
+                              class="assembl-icon-text-attachment"
+                            />
+                          </button>
+                        </div>
                       </div>
                     </div>
                     <div
@@ -393,6 +401,7 @@ exports[`AnswerForm component should render a answer form 1`] = `
               ],
             }
           }
+          toolbarBlocked={false}
           toolbarPosition="top"
           withAttachmentButton={true}
           withHeaderButton={false}

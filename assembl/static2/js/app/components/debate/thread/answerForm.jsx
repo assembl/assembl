@@ -2,8 +2,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Row, Col, FormGroup, Button } from 'react-bootstrap';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Button, Col, FormGroup, Row } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
 import { EditorState } from 'draft-js';
 import classNames from 'classnames';
 
