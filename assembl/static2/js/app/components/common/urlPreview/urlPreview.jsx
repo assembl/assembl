@@ -24,7 +24,12 @@ function safeTextDecode(text: string): string {
   if (!text) {
     return '';
   }
-  const doc = new DOMParser().parseFromString(text, 'text/html');
+  let doc;
+  try {
+    doc = new DOMParser().parseFromString(text, 'text/html');
+  } catch (error) {
+    return text;
+  }
   if (doc.documentElement) {
     return doc.documentElement.textContent;
   }
