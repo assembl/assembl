@@ -1,4 +1,4 @@
-from assembl.models import Discussion, LangString, Role, UserTemplate, OldSlug
+from assembl.models import Discussion, LangString, Role, UserTemplate, OldSlug, PublicationStates
 from assembl.auth import R_PARTICIPANT
 
 
@@ -170,3 +170,9 @@ def test_adding_a_discussion_automatically_adds_participant_user_template_for_no
     test_session.delete(preferences)
     test_session.delete(discussion)
     test_session.flush()
+
+
+def test_remove_tags_when_remove_post(tags, root_post_with_tags):
+    assert len(root_post_with_tags.tags) > 0
+    root_post_with_tags.delete_post(PublicationStates.DELETED_BY_ADMIN)
+    assert len(root_post_with_tags.tags) == 0
