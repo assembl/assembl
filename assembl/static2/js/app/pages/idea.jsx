@@ -25,7 +25,7 @@ import { getConnectedUserId } from '../utils/globalFunctions';
 import Announcement, { getSentimentsCount } from './../components/debate/common/announcement';
 import ColumnsView from '../components/debate/multiColumns/columnsView';
 import ThreadView from '../components/debate/thread/threadView';
-import { DELETE_CALLBACK, DeletedPublicationStates, MESSAGE_VIEW } from '../constants';
+import { DELETE_CALLBACK, DeletedPublicationStates, MESSAGE_VIEW, PublicationStates } from '../constants';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import InstructionView from '../components/debate/brightMirror/instructionView';
 import { toggleHarvesting as toggleHarvestingAction } from '../actions/contextActions';
@@ -152,11 +152,14 @@ export const transformPosts = (edges: Array<Node>, messageColumns: Array<Column>
 
 // Function that counts the total number of posts in a Bright Mirror debate section
 // transformedFilteredPosts parameter is built from transformPosts filtered with the current displayed fiction
-export const getDebateTotalMessages = (transformedFilteredPosts: Array<Object>) => {
+export const getDebateTotalMessages = (transformedFilteredPosts: Array<PostWithChildren>) => {
   if (transformedFilteredPosts.length) {
-    return (
-      1 + getDebateTotalMessages(transformedFilteredPosts[0].children) + getDebateTotalMessages(transformedFilteredPosts.slice(1))
+    const publishedPosts = transformedFilteredPosts.filter(
+      (post: PostWithChildren) =>
+        post.publicationState !== PublicationStates.DELETED_BY_ADMIN &&
+        post.publicationState !== PublicationStates.DELETED_BY_USER
     );
+    return 1 + getDebateTotalMessages(publishedPosts[0].children) + getDebateTotalMessages(publishedPosts.slice(1));
   }
   return 0;
 };
@@ -240,7 +243,7 @@ class Idea extends React.Component<Props> {
   getTopPosts = () => {
     const { debateData, ideaWithPostsData, postsOrderPolicy, routerParams, timeline } = this.props;
     if (!ideaWithPostsData.idea) return [];
-    const topPosts = transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
+    return transformPosts(ideaWithPostsData.idea.posts.edges, ideaWithPostsData.idea.messageColumns, {
       debateData: debateData,
       ideaId: ideaWithPostsData.idea.id,
       postsOrderPolicy: postsOrderPolicy,
@@ -248,7 +251,6 @@ class Idea extends React.Component<Props> {
       routerParams: routerParams,
       timeline: timeline
     });
-    return topPosts;
   };
 
   displayBrightMirrorDeleteFictionMessage() {
@@ -368,20 +370,17 @@ class Idea extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = (state) => {
-  const props = {
-    postsOrderPolicy: state.threadFilter.postsOrderPolicy,
-    postsFiltersStatus: state.threadFilter.postsFiltersStatus,
-    postsMustBeRefreshed: state.threadFilter.postsMustBeRefreshed,
-    contentLocaleMapping: state.contentLocale,
-    timeline: state.timeline,
-    defaultContentLocaleMapping: state.defaultContentLocaleMapping,
-    lang: state.i18n.locale,
-    debateData: state.debate.debateData,
-    isHarvesting: state.context.isHarvesting
-  };
-  return props;
-};
+const mapStateToProps = state => ({
+  postsOrderPolicy: state.threadFilter.postsOrderPolicy,
+  postsFiltersStatus: state.threadFilter.postsFiltersStatus,
+  postsMustBeRefreshed: state.threadFilter.postsMustBeRefreshed,
+  contentLocaleMapping: state.contentLocale,
+  timeline: state.timeline,
+  defaultContentLocaleMapping: state.defaultContentLocaleMapping,
+  lang: state.i18n.locale,
+  debateData: state.debate.debateData,
+  isHarvesting: state.context.isHarvesting
+});
 
 const mapDispatchToProps = dispatch => ({
   updateContentLocaleMapping: info => dispatch(updateContentLocale(info)),
