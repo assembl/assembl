@@ -217,6 +217,10 @@ export const ADMIN_MENU = {
       taxonomies: {
         title: 'administration.menu.exportTaxonomies',
         sectionId: '2'
+      },
+      users: {
+        title: 'administration.menu.exportUsers',
+        sectionId: '3'
       }
     }
   },

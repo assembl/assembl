@@ -30,11 +30,10 @@ beautifulsoup4==4.6.0
 billiard==3.5.0.3         # via celery
 boto3==1.9.73
 botocore==1.12.73         # via boto3, s3transfer
-cached-property==1.4.0    # via pre-commit
 celery[sqs]==4.2.1
 certifi==2018.1.18        # via sentry-sdk, tornado
 cffi==1.11.5              # via bcrypt, cryptography, pynacl
-cfgv==1.0.0               # via pre-commit
+cfgv==2.0.0               # via pre-commit
 chameleon==3.2            # via lingua
 characteristic==14.3.0    # via montague
 click==6.7                # via pip-tools
@@ -42,7 +41,8 @@ colander==1.3.1
 colanderalchemy==0.3.3
 colorama==0.3.9
 coloredlogs==7.3
-configparser==3.5.0       # via flake8
+configparser==3.5.0       # via flake8, importlib-metadata
+contextlib2==0.5.5        # via importlib-metadata
 cov-core==1.15.0
 coverage==4.1
 cryptography==2.3.1       # via paramiko, pyopenssl
@@ -67,7 +67,7 @@ flaky==3.1.1
 freezegun==0.3.11
 funcsigs==1.0.2           # via mock
 future==0.15.2
-futures==3.2.0            # via s3transfer
+futures==3.2.0            # via pre-commit, s3transfer
 gnureadline==6.3.8        # via ipython
 google-api-python-client==1.6.6
 graphene-sqlalchemy==1.1.1
@@ -81,6 +81,8 @@ identify==1.0.8           # via pre-commit
 idna==2.6                 # via cryptography
 imagesize==1.0.0          # via sphinx
 imaplib2==2.45.0
+importlib-metadata==0.18  # via pre-commit
+importlib-resources==1.0.2  # via pre-commit
 invoke==1.2.0
 ipaddress==1.0.19         # via cryptography
 ipython-genutils==0.2.0   # via traitlets
@@ -110,7 +112,7 @@ oauthlib==2.0.7           # via requests-oauthlib, social-auth-core
 openpyxl==2.4.1
 paramiko==2.4.1           # via fabric
 pastedeploy==1.5.2        # via pyramid
-pathlib2==2.3.0           # via pickleshare
+pathlib2==2.3.0           # via importlib-metadata, importlib-resources, pickleshare
 pbr==4.0.0                # via mock
 pdbsublimetextsupport==0.2
 pexpect==4.4.0            # via ipython
@@ -119,7 +121,7 @@ pickleshare==0.7.4        # via ipython
 pip-tools==3.2.0
 ply==3.11                 # via jsonpath-ng
 polib==1.0.7
-pre-commit==1.8.2
+pre-commit==1.17.0
 premailer==3.0.0
 promise==2.1              # via graphene, graphql-core, graphql-relay
 property-manager==2.2     # via executor, rotate-backups
@@ -160,7 +162,7 @@ python-magic==0.4.15
 python-openid==2.2.5      # via social-auth-core
 python-saml==2.4.2
 pytz==2016.4
-pyyaml==3.12              # via aspy.yaml, pre-commit
+pyyaml==5.1.1             # via aspy.yaml, pre-commit
 pyzmq==15.2.0
 redis==3.2.0
 repoze.lru==0.7           # via pyramid, pyramid-debugtoolbar
@@ -190,11 +192,12 @@ sqlalchemy==1.2.2
 sqlparse==0.2.4
 structlog==17.2.0
 supervisor==3.3.0
+toml==0.10.0              # via pre-commit
 tornado==4.3
 traitlets==4.3.2          # via ipython
 transaction==1.6.1
 translationstring==1.3
-typing==3.6.4             # via promise
+typing==3.6.4             # via importlib-resources, promise
 unidecode==0.4.19
 uritemplate==3.0.0        # via google-api-python-client
 urllib3==1.22             # via botocore, elasticsearch, sentry-sdk
@@ -210,6 +213,7 @@ webob==1.6.1
 websocket-client==0.47.0  # via watson-developer-cloud
 webtest==2.0.21
 werkzeug==0.11.10
+zipp==0.5.1               # via importlib-metadata
 zope.component==4.2.2
 zope.deprecation==4.3.0   # via pyramid, pyramid-jinja2
 zope.event==4.3.0         # via zope.component

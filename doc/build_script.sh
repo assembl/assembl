@@ -1,18 +1,17 @@
 #!/bin/bash
 
 # Which directory
-TARGETDIR=$HOME/assembl
+PROJECTDIR=$HOME/assembl
 
 # GIT stuff
-cd $TARGETDIR
+cd $PROJECTDIR
 git fetch
 git checkout $1
 git reset --hard origin/$1
 git pull
 
 # Remove stuff
-rm -rf assembl/wheelhouse
-rm -rf assembl/assembl/wheelhouse
+rm -rf wheelhouse
 rm -rf build
 rm -rf dist
 
@@ -20,14 +19,14 @@ rm -rf dist
 source venv/bin/activate
 
 # React front end
-cd $TARGETDIR/assembl/static2/
+cd $PROJECTDIR/assembl/static2/
 rm -rf build
 rm -rf node_modules
 yarn
 yarn build
 
 # Translations
-cd $TARGETDIR
+cd $PROJECTDIR
 inv build.compile-messages
 
 # Process to create the deployment wheel

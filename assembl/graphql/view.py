@@ -87,7 +87,8 @@ def graphql_api(request):
         request.json_body['query'].startswith(u'query TextFields(') or
             request.json_body['query'].startswith(u'query UpdateShareCount(') or
             request.json_body['query'].startswith(u'query TabsCondition(') or
-            request.json_body['query'].startswith(u'query LegalContents(')):
+            request.json_body['query'].startswith(u'query LegalContents(') or
+            request.json_body['query'].startswith(u'query DiscussionPreferences')):
         check_read_permission = False
 
     if check_read_permission and not discussion.user_can(user_id, CrudPermissions.READ, permissions):

@@ -747,7 +747,8 @@ const Translations = {
         manageProfileOptions: "Options d'inscription",
         personalizeInterface: "Personnaliser l'interface",
         configureThematic: "Configurer la thématique %{index}",
-        exportDebateData: "Exporter les données"
+        exportDebateData: "Exporter les données",
+        exportUsers: "Exporter les données des participants"
       },
       discussionPreferences: {
         debateLogoLabel: "Logo de la discussion"
@@ -970,11 +971,14 @@ const Translations = {
       export: {
         defaultAnnotation: "Vous pouvez exporter l'ensemble des données en cliquant sur le bouton exporter",
         taxonomyAnnotation: "Vous pouvez exporter l'ensemble des taxonomies en cliquant sur le bouton exporter",
+        usersAnnotation:
+          "Vous pouvez exporter l'ensemble des données associées aux participants en cliquant sur le bouton Exporter",
         link: "Exporter",
         noExportLanguage: "Conserver les messages dans leurs langues d'origine",
         title: "Exporter les données du débat",
         defaultSectionTitle: "Exporter les données",
         taxonomySectionTitle: "Exporter les taxonomies",
+        usersSectionTitle: "Exporter les données des participants",
         translateTheMessagesIn: "Traduire l'ensemble des messages en :",
         anonymity: "Anonymat",
         translation: "Traduction des données",
@@ -1853,7 +1857,8 @@ const Translations = {
         manageProfileOptions: "Registration options",
         personalizeInterface: "Personalize the interface",
         configureThematic: "Configure the theme %{index}",
-        exportDebateData: "Export the data"
+        exportDebateData: "Export the data",
+        exportUsers: "Export users data"
       },
       discussionPreferences: {
         debateLogoLabel: "Discussion logo"
@@ -2070,11 +2075,13 @@ const Translations = {
       export: {
         defaultAnnotation: "You can export all of the data by clicking on the export button",
         taxonomyAnnotation: "You can export all of the taxonomies by clicking on the export button",
+        usersAnnotation: "You can export all of the users data by clicking on the export button",
         link: "Export",
         noExportLanguage: "Keep the messages in their original languages",
         title: "Export the debate data",
         defaultSectionTitle: "Export data",
         taxonomySectionTitle: "Export taxonomy",
+        usersSectionTitle: "Export users data",
         translateTheMessagesIn: "Translate the messages in:",
         anonymity: "Anonymity",
         translation: "Translation of the data",

@@ -188,7 +188,7 @@ attachment_allowed_mime_types: "image/\\w+ video/\\w+ application/(pdf|msword) a
 
 # Password requirements
 minimum_password_length: 9
-password_required_classes: '{"[a-z]": {"en": "lower-case letter"}, "[A-Z]": {"en": "upper-case letter"}, "\\d": {"en": "digit"}, "\\W": {"en": "special character"}}'
+password_required_classes: '{"[a-z]": {"en": "lower-case letter", "fr": "une lettre minuscule"}, "[A-Z]": {"en": "upper-case letter", "fr": "une lettre majuscule"}, "\\d": {"en": "digit", "fr": "une nombre"}, "\\W": {"en": "special character", "fr": "un caractère spécial"}}'
 
 # mouseflow activation variable and website id
 activate_mouseflow: false

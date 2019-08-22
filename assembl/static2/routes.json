@@ -53,6 +53,7 @@
   "voteSession": "${slug}/debate/voteSession",
   "exportDebateData": "data/Discussion/${debateId}/multi-module-export",
   "exportTaxonomiesData": "data/Discussion/${debateId}/extract_csv_taxonomy",
+  "exportUsersData": "data/Discussion/${debateId}/users-export",
   "integrationPage": "integration",
   "integration101Page": "integration/101/index",
   "integration101FormBuilderPage": "integration/101/form-builder",

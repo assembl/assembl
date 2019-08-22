@@ -498,8 +498,7 @@
         "@extends": "VotingWidget"
     },
     "VoteSession": {
-        "@extends": "VotingWidget",
-        "discussion_phase": true
+        "@extends": "VotingWidget"
     },
     "AbstractIdeaVote": {
         "idea": true,
