@@ -275,9 +275,9 @@ def fill_template(c, template, output=None, extra=None, default_dir=None):
             if getattr(v, 'update', None):
                 # dict or DataProxy
                 continue
-            if str(v).lower() == 'false':
+            if unicode(v).lower() == 'false':
                 config[k] = False
-            if '%(' in str(v):
+            if '%(' in unicode(v):
                 try:
                     config[k] = v % config
                 except KeyError:
