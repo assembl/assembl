@@ -1,8 +1,8 @@
 // @flow
 import * as React from 'react';
 import { compose, graphql, withApollo } from 'react-apollo';
-import { Row, Col, FormGroup, Button } from 'react-bootstrap';
-import { Translate, I18n } from 'react-redux-i18n';
+import { Button, Col, FormGroup, Row } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
 import { EditorState } from 'draft-js';
 import { PublicationStates } from '../../../constants';
 import { connectedUserIsModerator } from '../../../utils/permissions';
@@ -10,11 +10,10 @@ import { DebateContext } from '../../../../app/app';
 
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
-import { displayAlert, inviteUserToLogin } from '../../../utils/utilityManager';
-import { getConnectedUserId } from '../../../utils/globalFunctions';
+import { displayAlert } from '../../../utils/utilityManager';
 import {
-  convertToEditorState,
   convertContentStateToHTML,
+  convertToEditorState,
   editorStateIsEmpty,
   uploadNewAttachments,
   type UploadNewAttachmentsPromiseResult
@@ -85,13 +84,6 @@ class DumbEditPostForm extends React.PureComponent<EditPostFormProps, EditPostFo
 
   handleCancel = (): void => {
     this.props.goBackToViewMode();
-  };
-
-  handleInputFocus = () => {
-    const isUserConnected = getConnectedUserId(); // TO DO put isUserConnected in the store
-    if (!isUserConnected) {
-      inviteUserToLogin();
-    }
   };
 
   handleSubmit = (publicationState) => {

@@ -20,9 +20,11 @@ type DraftPlugin = any;
 type Props = {
   editorState: EditorState,
   handleInputFocus?: Function,
+  handleToolbarClick?: Function,
   onChange: Function,
   placeholder?: string,
   textareaRef?: Function,
+  toolbarBlocked?: boolean,
   toolbarPosition: ToolbarPosition,
   withAttachmentButton: boolean,
   withHeaderButton?: boolean
@@ -44,7 +46,9 @@ export default class RichTextEditor extends React.Component<Props, State> {
 
   static defaultProps = {
     handleInputFocus: undefined,
+    handleToolbarClick: undefined,
     toolbarPosition: 'top',
+    toolbarBlocked: false,
     withAttachmentButton: false,
     withHeaderButton: false
   };
@@ -144,6 +148,13 @@ export default class RichTextEditor extends React.Component<Props, State> {
     );
   };
 
+  handleToolbarClick = () => {
+    if (this.props.handleToolbarClick) {
+      return this.props.handleToolbarClick();
+    }
+    return true;
+  };
+
   shouldHidePlaceholder(): boolean {
     // don't display placeholder if user changes the block type (to bullet list) before to type anything
     const contentState = this.props.editorState.getCurrentContent();
@@ -183,7 +194,7 @@ export default class RichTextEditor extends React.Component<Props, State> {
   };
 
   render() {
-    const { editorState, onChange, placeholder, textareaRef, toolbarPosition } = this.props;
+    const { editorState, onChange, placeholder, textareaRef, toolbarBlocked, toolbarPosition } = this.props;
     const divClassName = classNames('rich-text-editor', { hidePlaceholder: this.shouldHidePlaceholder() });
     const { Attachments, Modal, Toolbar } = this.components;
 
@@ -215,12 +226,17 @@ export default class RichTextEditor extends React.Component<Props, State> {
           we have to move toolbar in css for now since there is a bug in draft-js-plugin
           It should be fixed in draft-js-plugin v3
          */}
-          {toolbarPosition === 'top' || toolbarPosition === 'bottom' ? <Toolbar /> : null}
-          {toolbarPosition === 'sticky' ? (
-            <div className="editor-toolbar-sticky" style={{ top: this.state.toolbarOffset }}>
-              <Toolbar />
-            </div>
-          ) : null}
+          <div
+            className={classNames(['toolbar-container', toolbarBlocked ? 'toolbar-blocked' : null])}
+            onClick={this.handleToolbarClick}
+          >
+            {toolbarPosition === 'top' || toolbarPosition === 'bottom' ? <Toolbar /> : null}
+            {toolbarPosition === 'sticky' ? (
+              <div className="editor-toolbar-sticky" style={{ top: this.state.toolbarOffset }}>
+                <Toolbar />
+              </div>
+            ) : null}
+          </div>
           {Attachments ? <Attachments /> : null}
         </div>
       </div>

@@ -238,6 +238,10 @@
     width: 100%;
   }
 
+  .toolbar-container.toolbar-blocked button {
+    pointer-events:none;
+  }
+
   .editor-toolbar {
     float: right;
 
