@@ -84,7 +84,7 @@ export const reverseChronologicalLastPolicy: PostsOrderPolicy = {
   labelMsgId: 'debate.thread.postsOrder.reverseChronologicalLast'
 };
 
-export const chronologicalLastPolicy: PostsOrderPolicy = {
+export const chronologicalTopPolicy: PostsOrderPolicy = {
   // Chronological threads
   id: 'chronologicalTop',
   postsGroupPolicy: {
@@ -114,16 +114,6 @@ export const popularityPolicy: PostsOrderPolicy = {
   labelMsgId: 'debate.thread.postsOrder.popularityFlat'
 };
 
-export const postsOrderPolicies: PostsOrderPolicy[] = [
-  reverseChronologicalTopPolicy,
-  reverseChronologicalLastPolicy,
-  chronologicalLastPolicy,
-  reverseChronologicalFlatPolicy,
-  popularityPolicy
-];
-
-export const defaultOrderPolicy = reverseChronologicalLastPolicy;
-
 export const fullDisplayPolicy: PostsDisplayPolicy = {
   labelMsgId: 'debate.thread.postsDisplay.full',
   id: 'display-full',
@@ -135,10 +125,6 @@ export const summaryDisplayPolicy: PostsDisplayPolicy = {
   id: 'display-summary',
   displayMode: 'summary'
 };
-
-export const postsDisplayPolicies: PostsDisplayPolicy[] = [fullDisplayPolicy, summaryDisplayPolicy];
-
-export const defaultDisplayPolicy = fullDisplayPolicy;
 
 export const onlyMyPostFilterPolicy: PostsFilterPolicy = {
   excludedPolicies: ['myPostsAndAnswers'],
@@ -154,8 +140,8 @@ export const myPostsAndAnswersFilterPolicy: PostsFilterPolicy = {
   id: 'filter-myPostsAndAnswers'
 };
 
-export const postsFiltersPolicies: PostsFilterPolicy[] = [onlyMyPostFilterPolicy, myPostsAndAnswersFilterPolicy];
-
+export const defaultOrderPolicy = reverseChronologicalLastPolicy;
+export const defaultDisplayPolicy = fullDisplayPolicy;
 export const defaultPostsFiltersStatus: PostsFiltersStatus = {
   myPostsAndAnswers: false,
   onlyMyPosts: false

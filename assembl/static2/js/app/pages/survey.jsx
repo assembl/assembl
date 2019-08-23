@@ -99,15 +99,6 @@ class Survey extends React.Component<Props, State> {
     updateContentLocaleMapping(contentLocaleMappingData);
   }
 
-  getIfProposals = (questions) => {
-    if (!questions) return false;
-    let isProposals = false;
-    questions.forEach((question) => {
-      if (question.posts.edges.length > 0) isProposals = true;
-    });
-    return isProposals;
-  };
-
   scrollToQuestion = (isScroll, questionIndex) => {
     this.setState({
       isScroll: isScroll,
@@ -135,9 +126,8 @@ class Survey extends React.Component<Props, State> {
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: identifier })}`;
-    let statElements = [];
     const numContributions = numPosts + totalSentiments;
-    statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
+    const statElements = [statMessages(numPosts), statContributions(numContributions), statParticipants(numContributors)];
     return (
       <div className="survey">
         <div className="relative">
@@ -158,6 +148,7 @@ class Survey extends React.Component<Props, State> {
               </Grid>
             </section>
           ) : null}
+
           <div className="questions">
             {questions &&
               questions.map((question, index) => (

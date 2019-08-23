@@ -3,6 +3,11 @@
 exports[`PostsFilterMenu component should render a filter with sort by recently started threads and full display selected 1`] = `
 <div
   className="posts-filter-button sticky"
+  style={
+    Object {
+      "top": undefined,
+    }
+  }
 >
   <div
     className="dropdown btn-group"

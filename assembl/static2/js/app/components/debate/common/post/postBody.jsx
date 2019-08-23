@@ -7,7 +7,6 @@ import jQuery from 'jquery';
 import ARange from 'annotator_range'; // eslint-disable-line
 import { withRouter } from 'react-router';
 import { Translate } from 'react-redux-i18n';
-import { connect } from 'react-redux';
 
 import { EMPTY_STRING } from '../../../../constants';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
@@ -39,7 +38,7 @@ type Props = {
   lang: string,
   measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
   originalLocale: string,
-  postsDisplayPolicy: PostsDisplayPolicy,
+  postsDisplayPolicy?: PostsDisplayPolicy,
   subject?: React.Node, // eslint-disable-line react/require-default-props
   translate: boolean,
   translationEnabled: boolean,
@@ -303,15 +302,8 @@ export class DumbPostBody extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state) => {
-  const postsDisplayPolicy = (state.threadFilter && state.threadFilter.postsDisplayPolicy) || defaultDisplayPolicy;
-  return {
-    postsDisplayPolicy: postsDisplayPolicy
-  };
-};
-
 export default withRouter(
   graphql(UpdateHarvestingTranslationPreference, {
     name: 'updateHarvestingTranslation'
-  })(connect(mapStateToProps)(DumbPostBody))
+  })(DumbPostBody)
 );

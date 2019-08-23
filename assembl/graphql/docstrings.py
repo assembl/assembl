@@ -452,6 +452,8 @@ class Question:
     posts = """The list of all posts under the Question."""
     total_sentiments = """The count of total sentiments """
     has_pending_posts = """Whether the question has pending posts or not."""
+    only_my_posts = "Get posts created by authenticated user only"
+    posts_order = "Order of the posts to get"
 
 
 class QuestionInput:

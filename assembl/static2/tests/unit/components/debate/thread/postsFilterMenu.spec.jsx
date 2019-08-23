@@ -4,7 +4,8 @@ import renderer from 'react-test-renderer';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import PostsFilterMenu, { DumbPostsFilterMenu } from '../../../../../js/app/components/debate/common/postsFilter/menu';
+import { DumbPostsFilterMenu } from '../../../../../js/app/components/debate/common/postsFilter/menu';
+import PostsFilterMenu from '../../../../../js/app/components/debate/common/postsFilter/thread/menu';
 import {
   defaultDisplayPolicy,
   defaultOrderPolicy,
@@ -12,6 +13,11 @@ import {
   reverseChronologicalTopPolicy,
   summaryDisplayPolicy
 } from '../../../../../js/app/components/debate/common/postsFilter/policies';
+import {
+  postsDisplayPolicies,
+  postsFiltersPolicies,
+  postsOrderPolicies
+} from '../../../../../js/app/components/debate/common/postsFilter/thread/policies';
 
 configure({ adapter: new Adapter() });
 
@@ -100,7 +106,9 @@ describe('PostsFilterMenu component', () => {
         postsOrderPolicy={defaultOrderPolicy}
         postsFiltersStatus={defaultPostsFiltersStatus}
         setPostsFilterPolicies={setPostsFilterPolicies}
-        {...props}
+        postsFiltersPolicies={postsFiltersPolicies}
+        postsOrderPolicies={postsOrderPolicies}
+        postsDisplayPolicies={postsDisplayPolicies}
       />
     );
     const wrapper = mount(component);

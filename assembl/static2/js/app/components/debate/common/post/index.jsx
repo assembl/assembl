@@ -53,6 +53,7 @@ export type Props = {
   numChildren: number,
   originalLocale: string,
   parentId: string,
+  postsDisplayPolicy: PostsDisplayPolicy,
   refetchIdea: Function,
   routerParams: RouterParams,
   rowIndex: number,

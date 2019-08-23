@@ -276,6 +276,12 @@ export interface PostsFilterPolicy extends PostsFilterItem {
   filterField: string;
 }
 
+export type PostsFilterState = {
+  postsDisplayPolicy: PostsDisplayPolicy,
+  postsFiltersStatus: PostsFiltersStatus,
+  postsOrderPolicy: PostsOrderPolicy
+};
+
 type Theme = {
   firstColor: string,
   secondColor: string
