@@ -853,6 +853,7 @@ def escapeit(r, data):
     @param: r  A dict of rows which form the lookup of a value
     @param: data The value to find in the dict
     """
+    import unicodedata
     try:
         something = r.get(data)
     except:
@@ -861,9 +862,26 @@ def escapeit(r, data):
 
     if something:
         if isinstance(something, basestring):
-            return something.decode('utf-8')
+            # Clean control characters (their unicode category starts with C)
+            try:
+                return  "".join(ch for ch in remove_emoji(something.decode('utf-8')) if unicodedata.category(ch)[0]!="C")
+            except:
+                print('Error while decoding text:', something)
+                return ''
         return something
     return ''
+
+
+def remove_emoji(string):
+    import re
+    # Narrow UCS-2 build emoji removal
+    emoji_pattern = re.compile(u'('
+        u'\ud83c[\udf00-\udfff]|'
+        u'\ud83d[\udc00-\ude4f\ude80-\udeff]|'
+        u'[\u2600-\u26FF\u2700-\u27BF])+',
+        re.UNICODE)
+    return emoji_pattern.sub(' ', string)
+
 
 def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.xlsx', as_buffer=False):
     """
