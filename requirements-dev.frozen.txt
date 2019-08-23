@@ -18,7 +18,6 @@ alabaster==0.7.10         # via sphinx
 alembic==0.8.6
 amqp==2.3.2               # via kombu
 anyjson==0.3.3
-appnope==0.1.0            # via ipython
 asn1crypto==0.24.0        # via cryptography
 aspy.yaml==1.0.0          # via pre-commit
 babel==2.3.4
@@ -68,7 +67,6 @@ freezegun==0.3.11
 funcsigs==1.0.2           # via mock
 future==0.15.2
 futures==3.2.0            # via pre-commit, s3transfer
-gnureadline==6.3.8        # via ipython
 google-api-python-client==1.6.6
 graphene-sqlalchemy==1.1.1
 graphene==1.4.1
@@ -200,7 +198,7 @@ translationstring==1.3
 typing==3.6.4             # via importlib-resources, promise
 unidecode==0.4.19
 uritemplate==3.0.0        # via google-api-python-client
-urllib3==1.22             # via botocore, elasticsearch, sentry-sdk
+urllib3==1.24.3
 uwsgitop==0.9
 venusian==1.1.0           # via pyramid
 verboselogs==1.7

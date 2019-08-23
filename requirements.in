@@ -76,6 +76,7 @@ supervisor==3.3.0
 structlog==17.2.0
 transaction==1.6.1
 translationstring==1.3
+urllib3==1.24.3
 Unidecode==0.4.19
 uwsgitop==0.9
 verboselogs==1.7

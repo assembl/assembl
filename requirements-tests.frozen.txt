@@ -16,7 +16,6 @@ alabaster==0.7.12         # via sphinx
 alembic==0.8.6
 amqp==2.5.0               # via kombu
 anyjson==0.3.3
-appnope==0.1.0            # via ipython
 asn1crypto==0.24.0        # via cryptography
 babel==2.3.4
 backports.shutil-get-terminal-size==1.0.0  # via ipython
@@ -61,7 +60,6 @@ freezegun==0.3.11
 funcsigs==1.0.2           # via mock
 future==0.15.2
 futures==3.2.0            # via s3transfer
-gnureadline==6.3.8        # via ipython
 google-api-python-client==1.6.6
 graphene-sqlalchemy==1.1.1
 graphene==1.4.1
@@ -86,7 +84,7 @@ jsonpath-ng==1.4.3
 kombu==4.6.1              # via celery
 lingua==4.9
 lxml==4.2.5
-mako==1.0.12              # via alembic
+mako==1.0.12              # via alembic, pyramid-mako
 markupsafe==1.1.1         # via jinja2, mako, pyramid-jinja2
 mccabe==0.6.1             # via flake8
 meld3==1.0.2              # via supervisor
@@ -121,7 +119,7 @@ pycparser==2.19           # via cffi
 pycurl==7.43.0.2          # via celery
 pydot==1.4.1              # via sqlalchemy-schemadisplay
 pyflakes==2.0.0           # via flake8
-pygments==2.4.2           # via sphinx
+pygments==2.4.2           # via pyramid-debugtoolbar, sphinx
 pyisemail==1.3.2
 pyjwt==1.4.0
 pylibmc==1.5.1
@@ -150,7 +148,7 @@ python-saml==2.4.2
 pytz==2016.4
 pyzmq==15.2.0
 redis==3.2.0
-repoze.lru==0.7           # via pyramid
+repoze.lru==0.7           # via pyramid, pyramid-debugtoolbar
 repoze.sendmail==4.4.1    # via pyramid-mailer
 requests-oauthlib==0.6.1
 requests==2.10.0
@@ -182,7 +180,7 @@ translationstring==1.3
 typing==3.6.6             # via promise
 unidecode==0.4.19
 uritemplate==3.0.0        # via google-api-python-client
-urllib3==1.25.3           # via botocore, elasticsearch, sentry-sdk
+urllib3==1.24.3
 uwsgitop==0.9
 venusian==1.2.0           # via pyramid
 verboselogs==1.7
