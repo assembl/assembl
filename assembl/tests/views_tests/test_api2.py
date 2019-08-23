@@ -1170,8 +1170,8 @@ class TestUserExport(AbstractExport):
 
         result = self.get_result(test_app, discussion.id, view_name=self.view_name)
         header = result[0]
-        first_row = result[1]
-        last_row = result[-1]
+        barking_loon_row = [r for r in result if r[0] == 'A. Barking Loon'][0]
+        james_t_row = [r for r in result if r[0] == 'James T. Expert'][0]
 
         assert len(result) == 3
         for idx, title in enumerate(self.header_titles):
@@ -1180,16 +1180,16 @@ class TestUserExport(AbstractExport):
         for idx, value in enumerate(participant2_data):
             # If date, remove the seconds to compare
             if idx in [3, 4, 5]:
-                assert first_row[idx][:-3] == value
+                assert james_t_row[idx][:-3] == value
             else:
-                assert first_row[idx] == value
+                assert james_t_row[idx] == value
 
         for idx, value in enumerate(self.participant1_data):
             # If date, remove the seconds to compare
             if idx in [3, 4, 5]:
-                assert last_row[idx][:-3] == value
+                assert barking_loon_row[idx][:-3] == value
             else:
-                assert last_row[idx] == value
+                assert barking_loon_row[idx] == value
 
 
     def test_anon(self, test_session, test_app, discussion, user_language_preference_en_cookie, participant1_user, participant1_username, agent_status_in_discussion_user1_visits):
