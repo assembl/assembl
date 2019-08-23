@@ -11288,7 +11288,7 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-active-html@~1.2.1:
+react-active-html@1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/react-active-html/-/react-active-html-1.2.2.tgz#d3e377f356cdb400a216e06c8b275dc05488690f"
   integrity sha512-v2MiVL9hoLxPV0t841xynGHO6b1fWRBD+HASMzRVtJMATKnCn4Tl72EvBrqgg6Q8UPBkoWsKmSPmzFrtCUopfQ==

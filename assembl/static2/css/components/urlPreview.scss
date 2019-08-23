@@ -1,6 +1,7 @@
 .urls-container {
   margin-top: 15px;
   margin-bottom: 15px;
+  display: block;
 
   .url-container:last-child {
     margin-bottom: 0;
@@ -8,6 +9,7 @@
 }
 
 .url-container {
+  display: block;
   border-left: solid 3px #e8e8e8;
   padding-left: 10px;
   margin-bottom: 15px;
@@ -23,6 +25,7 @@
 
   .url-header-avatar,
   .url-footer-avatar {
+    display: block;
     width: 16px;
     height: 16px;
     border-radius: 3px;
@@ -70,17 +73,22 @@
   }
 
   .url-content-container {
+    display: block;
+
     .url-description {
+      display: block;
       color: #505050;
       padding-left: 5px;
       font-size: 12px;
     }
 
     .url-media-container {
+      display: block;
       margin-top: 10px;
       margin-bottom: 10px;
 
       .url-img-preview {
+        display: block;
         min-height: 250px;
         border-radius: 3px;
         border-width: 0.5px;

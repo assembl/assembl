@@ -139,8 +139,7 @@ export const Html = (props: HtmlProps) => {
   // this anchor is shared with marionette code
   const anchor = dbId ? getExtractTagId(dbId) : EMPTY_STRING;
   let html = `<div id="${anchor}">${rawHtml}</div>`;
-
-  if (extracts) {
+  if (extracts && extracts.length > 0) {
     const white = /^\s*$/;
     const parser = new DOMParser();
     html = parser.parseFromString(html, 'text/html');
