@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { setLocale } from 'react-redux-i18n';
 import { updateEditLocale } from './actions/adminActions';
 import { setTheme } from './actions/themeActions';
-import { setCookieItem, convertToISO639String } from './utils/globalFunctions';
+import { setCookieItem, getCookieItem, convertToISO639String } from './utils/globalFunctions';
 import { manageLoadingOnly } from './components/common/manageErrorAndLoading';
 import { firstColor as defaultFirstColour, secondColor as defaultSecondColour } from './globalTheme';
 import { availableLocales as defaultAvailableLanguages, defaultLocale } from './constants';
@@ -24,9 +24,11 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     // The language of the debate and user will be set to the ONLY language of the debate
     setDefaultLocale(availableLanguages[0]);
   } else if (availableLanguages && availableLanguages.length > 1) {
-    let browserLanguage = navigator.language;
-    browserLanguage = browserLanguage ? convertToISO639String(browserLanguage) : defaultLanguage;
-    if (browserLanguage && availableLanguages.includes(browserLanguage)) {
+    const cookieLanguage = getCookieItem('_LOCALE_');
+    const browserLanguage = navigator.language ? convertToISO639String(navigator.language) : defaultLanguage;
+    if (cookieLanguage && availableLanguages.includes(cookieLanguage)) {
+      setDefaultLocale(cookieLanguage);
+    } else if (browserLanguage && availableLanguages.includes(browserLanguage)) {
       setDefaultLocale(browserLanguage);
     }
   } else {
