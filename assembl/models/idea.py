@@ -476,8 +476,8 @@ class Idea(HistoryMixin, DiscussionBoundBase):
             include_deleted=False, include_moderating=None, user_id=None):
         from .generic import Content
         counters = cls.prepare_counters(discussion_id)
+        discussion_data = cls.get_discussion_data(discussion_id)
         if include_moderating is None:
-            discussion_data = cls.get_discussion_data(discussion_id)
             include_moderating = discussion_data.include_moderating
         if include_moderating:
             user_id = user_id or discussion_data.user_id

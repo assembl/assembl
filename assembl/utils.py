@@ -13,7 +13,11 @@ def format_date(datetime_to_format):
     return datetime_to_format.strftime('%d/%m/%Y')
 
 
-def get_posts(idea, start=None, end=None, include_deleted=None):
+def get_posts(idea, start=None, end=None,
+              include_deleted=None,
+              publication_states=None,
+              only_top_posts=False,
+              include_moderating=False):
     """
     Get all posts given a given idea filtered by start and end dates.
     @param: idea Idea
@@ -21,7 +25,7 @@ def get_posts(idea, start=None, end=None, include_deleted=None):
     @param: end datetime
     """
     Post = models.Post
-    related = idea.get_related_posts_query(True, include_moderating=False, include_deleted=include_deleted)
+    related = idea.get_related_posts_query(True, include_moderating=include_moderating, include_deleted=include_deleted)
     query = Post.query.join(
         related, Post.id == related.c.post_id
         ).order_by(desc(Post.creation_date), Post.id
@@ -33,25 +37,24 @@ def get_posts(idea, start=None, end=None, include_deleted=None):
     if end is not None:
         query = query.filter(Post.creation_date <= end)
 
+    if publication_states:
+        assert isinstance(publication_states, (tuple, list, set))
+        if len(publication_states) == 1:
+            query = query.filter(Post.publication_state == publication_states[0])
+        else:
+            query = query.filter(Post.publication_state.in_(publication_states))
+
+    if only_top_posts:
+        query = query.filter(Post.parent_id == None)  # noqa: E711
+
     return query
 
 
 def get_published_top_posts(idea, start=None, end=None):
-    Post = models.Post
-    query = get_posts(idea, start, end, include_deleted=False)
-    query = query.filter(Post.publication_state == models.PublicationStates.PUBLISHED)
-    query = query.filter(Post.parent_id == None)  # noqa: E711
-    return query
-
-
-def get_published_posts(idea, start=None, end=None):
-    """Get published posts for the given idea filtered by start and end dates.
-    @param: idea Idea
-    @param: start datetime
-    @param: end datetime
-    """
-    query = get_posts(idea, start, end, include_deleted=False)
-    query = query.filter(models.Post.publication_state == models.PublicationStates.PUBLISHED)
+    query = get_posts(idea, start=start, end=end,
+                      include_deleted=False,
+                      publication_states=[models.PublicationStates.PUBLISHED],
+                      only_top_posts=True)
     return query
 
 
@@ -62,8 +65,7 @@ def get_deleted_posts(idea, start=None, end=None):
     @param: end datetime
     """
     # Don't use include_deleted=False here. A post can be deleted (publication_state) but not tombstoned
-    query = get_posts(idea, start, end, include_deleted=None)
-    query = query.filter(models.Post.publication_state.in_(deleted_publication_states))
+    query = get_posts(idea, start, end, include_deleted=None, publication_states=deleted_publication_states)
     return query
 
 
@@ -98,7 +100,8 @@ def get_multicolumns_ideas(discussion, start=None, end=None):
 
 
 def get_survey_ideas(discussion, start=None, end=None):
-    return get_ideas_for_export(discussion, MessageView.survey.value, start=start, end=end)
+    return get_ideas_for_export(discussion, MessageView.survey.value,
+                                start=start, end=end)
 
 
 def get_thread_ideas(discussion, start=None, end=None):
