@@ -221,6 +221,10 @@ export const ADMIN_MENU = {
       users: {
         title: 'administration.menu.exportUsers',
         sectionId: '3'
+      },
+      moderatedContributions: {
+        title: 'administration.export.moderatedContributions',
+        sectionId: '4'
       }
     }
   },
