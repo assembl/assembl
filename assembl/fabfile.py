@@ -1472,8 +1472,6 @@ def app_update_dependencies(force_reinstall=False, backup=False):
     network connection to update
     """
     if not backup:
-        execute(update_vendor_themes_1)
-        execute(update_vendor_themes_2)
         execute(ensure_requirements)
     execute(update_pip_requirements, force_reinstall=force_reinstall)
     # Nodeenv is installed by python , so this must be after update_pip_requirements
@@ -2207,70 +2205,6 @@ def check_and_create_database_user(host=None, user=None, password=None):
         print(green("User exists and can connect"))
 
 
-@task
-def check_and_create_sentry_database_user():
-    "Create a database user for sentry database"
-    user = env.sentry_db_user
-    password = env.sentry_db_password
-    host = env.get("sentry_db_host", None)
-    assert user and password, "Please specify sentry database user + password"
-    check_and_create_database_user(host, user, password)
-
-
-@task
-def create_sentry_project():
-    """Create a project for the current assembl server.
-    Mostly useful for Docker. Tested on Sentry 8."""
-    # TODO: update this and test it with sentry 9
-    if os.path.exists(env.random_file):
-        env.update(as_rc(env.random_file))
-    if env.get("sentry_key", None) and env.get("sentry_secret", None):
-        return
-    import requests
-    from ConfigParser import RawConfigParser
-    assert env.sentry_host, env.sentry_api_token
-    headers = {"Authorization": "Bearer " + env.sentry_api_token}
-    organization = env.get("sentry_organization", "sentry")
-    team = env.get("sentry_team", "sentry")
-    base = "{scheme}://{host}:{port}/api/0/".format(
-        scheme='https' if as_bool(env.get("sentry_is_secure", False)) else 'http',
-        port=env.get("sentry_port", "80"),
-        host=env.sentry_host)
-    slug = "_".join(env.public_hostname.lower().split("."))
-    projects_url = "{base}teams/{organization}/{team}/projects/".format(
-        base=base, organization=organization, team=team)
-    r = requests.get(projects_url, headers=headers)
-    assert r, "Could not access sentry"
-    project_slugs = [p['slug'] for p in r.json()]
-    if slug not in project_slugs:
-        r = requests.post(projects_url, headers=headers, json={
-            "name": env.public_hostname,
-            "slug": slug})
-        assert r
-    key_url = "{base}projects/{organization}/{slug}/keys/".format(
-        base=base, organization=organization, slug=slug)
-    r = requests.get(key_url, headers=headers)
-    assert r
-    keys = r.json()
-    assert len(keys), "No key defined?"
-    default = [k for k in keys if k["label"] == "Default"]
-    if default:
-        key = default[0]
-    else:
-        key = keys[0]
-    # This should ideally go in the .rc file, but fab should not write rc files.
-    # putting it in the local random file for now.
-    parser = RawConfigParser()
-    parser.optionxform = str
-    if os.path.exists(env.random_file):
-        parser.read(env.random_file)
-    parser.set(DEFAULT_SECTION, "sentry_key", key["public"])
-    parser.set(DEFAULT_SECTION, "sentry_secret", key["secret"])
-    parser.set(DEFAULT_SECTION, "sentry_id", key["projectId"])
-    with open(env.random_file, 'w') as f:
-        parser.write(f)
-
-
 def check_if_database_exists():
     with settings(warn_only=True):
         checkDatabase = venvcmd('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
@@ -2736,7 +2670,6 @@ def execute_backup_borg_repository():
 
     # Ensure the required tools are installed
     execute(install_borg)
-    execute(set_ftp_private_information)
     execute(create_backup_script)
     command = "source {do_backup} && {put_backup}".format(do_backup=borg_backup_cmd(), put_backup=ftp_backup_cmd())
     run(command)
@@ -2771,7 +2704,6 @@ def cron_backup_borg_repository():
 
     # Ensure the required tools are installed
     execute(install_borg)
-    execute(set_ftp_private_information)
     execute(create_backup_script)
 
     command = "source {do_backup} && {put_backup}".format(do_backup=borg_backup_cmd(), put_backup=ftp_backup_cmd())
@@ -2795,7 +2727,6 @@ def docker_startup():
     Verify if your database environment exists, and create it otherwise."""
     if as_bool(getenv("BUILDING_DOCKER", True)):
         return
-    execute(create_sentry_project)
     if not exists(env.ini_file):
         execute(create_local_ini)
     if not exists("supervisord.conf"):
@@ -3080,94 +3011,6 @@ def uninstall_piwik():
         execute(uninstall_lamp())
 
 
-@task
-def install_postfix():
-    """Install postfx for SMTP."""
-    assert not env.mac
-    # take mail host from mail.host
-    external_smtp_host = env.smtp_host
-    if running_locally([external_smtp_host]):
-        external_smtp_host = None
-    sudo("debconf-set-selections <<< 'postfix postfix/mailname string %s'" % (env.host_string,))
-    if external_smtp_host:
-        sudo("debconf-set-selections <<< 'postfix postfix/main_mailer_type string \"Internet with smarthost\"'")
-        sudo("debconf-set-selections <<< 'postfix postfix/relayhost string %s'" % (external_smtp_host,))
-    else:
-        sudo("debconf-set-selections <<< 'postfix postfix/main_mailer_type string \"Internet site\"'")
-    sudo("DEBIAN_FRONTEND=noninteractive apt-get -y install postfix")
-
-
-@task
-def install_dovecot_vmm():
-    """Install dovecot and vmm for IMAP. Assumes postfix is installed. Configuration TODO."""
-    assert not env.mac
-    execute(install_postfix)
-    sudo("apt-get -y install dovecot-core dovecot-imapd dovecot-lmtpd"
-         " dovecot-pgsql vmm postfix postfix-pgsql python-egenix-mxdatetime"
-         " python-crypto libsasl2-modules libsasl2-modules-db sasl2-bin")
-
-
-def update_vendor_themes(frontend_version=1):
-    sanitize_env()
-    assert frontend_version in (1, 2)
-    frontend_version_s = '2' if frontend_version == 2 else ''
-    theme_varname = "theme%s_repositories__git-urls" % frontend_version_s
-    base_path = "assembl/static%s/css/themes/vendor" % frontend_version_s
-    if env.get(theme_varname, None):
-        urls = []
-        urls_string = env.get(theme_varname)
-        if urls_string:
-            urls = urls_string.split(',')
-        vendor_themes_path = normpath(join(
-            env.projectpath, base_path))
-        print(vendor_themes_path)
-        with settings(warn_only=True), cd(env.projectpath):
-            # We do not use env.gitbranch, because in env_deb it may not match the real current branch
-            current_assembl_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
-        for git_url in urls:
-            print(green("Updating %s" % git_url))
-            matchobj = re.match(r'.*/(.*)\.git', git_url)
-            git_dir_name = matchobj.group(1)
-            git_dir_path = normpath(join(vendor_themes_path, git_dir_name))
-            if is_dir(git_dir_path) is False:
-                print(cyan("Cloning git repository"))
-                with cd(vendor_themes_path):
-                    run('git clone %s' % git_url)
-
-            with cd(git_dir_path):
-                current_vendor_themes_branch_name = run('git symbolic-ref --short -q HEAD').split('\n')[0]
-                if current_vendor_themes_branch_name != current_assembl_branch_name:
-                    print(yellow("Vendor theme branch %s does not match current assembl branch %s" % (current_vendor_themes_branch_name, current_assembl_branch_name)))
-                    if current_assembl_branch_name in ('develop', 'master'):
-                        run('git fetch --all')
-                        print(yellow("Changing branch to %s" % current_assembl_branch_name))
-                        run('git checkout %s' % current_assembl_branch_name)
-                    else:
-                        print(red("Branch %s not known to fabfile.  Leaving theme branch on %s" % (current_assembl_branch_name, current_vendor_themes_branch_name)))
-                run('git pull --ff-only')
-
-
-@task
-def update_vendor_themes_1():
-    """Update optional themes in assembl/static/css/themes/vendor"""
-    update_vendor_themes(1)
-
-
-@task
-def update_vendor_themes_2():
-    """Update optional themes in assembl/static2/css/themes/vendor"""
-    update_vendor_themes(2)
-
-
-@task
-def update_vendor_themes_and_compile():
-    """Update vendor themes and compile them. Run this task when you want to deploy recent changes to themes on a server, without updating Assembl's code and dependencies."""
-    execute(update_vendor_themes_1)
-    execute(update_vendor_themes_2)
-    execute(compile_stylesheets)  # for themes of the v1 UI
-    execute(compile_javascript)  # for themes of the v2 UI
-
-
 def system_db_user():
     if env.get('postgres_db_user', None):
         return env.postgres_db_user
@@ -3327,32 +3170,6 @@ def set_fail2ban_configurations():
     finally:
         for path in filters_to_file.values():
             os.unlink(path)
-
-
-@task
-def set_ftp_private_information(force=False):
-    """
-    Place backup FTP information in a safe place in order to login without awareness of passwords
-    """
-    # Ensure this FTP client is installed on host
-    execute(install_ncftp_client)
-    if not exists('ncftp.cfg') or force:
-        # fill template and set file permission
-        with NamedTemporaryFile(delete=False) as f:
-            ftp_info_file = f.name
-        fill_template('assembl/templates/system/ncftp.cfg.jinja2', env, ftp_info_file)
-        path = join(env.projectpath, 'ncftp.cfg')
-        try:
-            put_status = put(ftp_info_file, path)
-            if put_status.failed:
-                raise RuntimeError('The put operation failed to put ncftp.cfg')
-
-            # Only readable by the user
-            run('chmod 400 %s' % path)
-            run('chown %(user)s:%(user)s %(file)s' % {'user': env.user, 'file': path})
-        finally:
-            # Remove the templated file
-            os.unlink(ftp_info_file)
 
 
 @task
