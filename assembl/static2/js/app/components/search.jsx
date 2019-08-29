@@ -1,6 +1,6 @@
 /* eslint no-underscore-dangle: 0, max-len: ["warn", 136] */
 import React from 'react';
-import { Localize, Translate, I18n } from 'react-redux-i18n';
+import { I18n, Localize, Translate } from 'react-redux-i18n';
 import { connect } from 'react-redux';
 import { Link } from 'react-router';
 
@@ -472,7 +472,7 @@ const HitItem = connect(mapLocaleToProps)(DumbHitItem);
 
 const NoPanel = props => <div>{props.children}</div>;
 
-const calcQueryFields = () => {
+const calcQueryFields = (locale = null) => {
   const base = [
     'body', // extract
     'name', // user
@@ -490,8 +490,12 @@ const calcQueryFields = () => {
     'conclusion', // synthesis
     'ideas' // synthesis
   ];
-  const langs = elasticsearchLangIndexes.slice();
+  let langs = elasticsearchLangIndexes.slice();
   langs.push('other');
+  if (langs && langs.indexOf(locale) !== -1) {
+    // search results in user language
+    langs = [locale];
+  }
   langs.forEach((lang) => {
     lsFields.forEach((field) => {
       base.push(`${field}_${lang}`);
@@ -499,8 +503,6 @@ const calcQueryFields = () => {
   });
   return base;
 };
-
-const queryFields = calcQueryFields();
 
 // default is fragment_size 100 and number_of_fragments 5,see
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/search-request-highlighting.html#_highlighted_fragments
@@ -649,6 +651,8 @@ export class SearchComponent extends React.Component {
         fields: [{ field: 'num_posts', options: { order: 'asc' } }]
       }
     ]);
+    const queryFields = calcQueryFields(this.props.locale);
+
     return (
       <SearchkitProvider searchkit={this.searchkit}>
         <Layout size="l">
@@ -815,9 +819,10 @@ export class SearchComponent extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  isExpert: connectedUserIsExpert(),
   connectedUserId: getConnectedUserId(state),
-  discussionId: getDebateId(state)
+  discussionId: getDebateId(state),
+  isExpert: connectedUserIsExpert(),
+  locale: state.i18n.locale
 });
 
 const ConnectedSearch = connect(mapStateToProps)(SearchComponent);
