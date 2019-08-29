@@ -164,15 +164,16 @@ class Survey extends React.Component<Props, State> {
                 />
               ))}
           </div>
-          {questions && (
-            <Navigation
-              questionsLength={questions.length}
-              questionIndex={this.state.questionIndex}
-              isScroll={this.state.isScroll}
-              scrollToQuestion={this.scrollToQuestion}
-              isPhaseCompleted={isPhaseCompleted}
-            />
-          )}
+          {questions &&
+            questions.length > 1 && (
+              <Navigation
+                questionsLength={questions.length}
+                questionIndex={this.state.questionIndex}
+                isScroll={this.state.isScroll}
+                scrollToQuestion={this.scrollToQuestion}
+                isPhaseCompleted={isPhaseCompleted}
+              />
+            )}
           <div className="proposals" style={{ minHeight: '200px' }}>
             <section className={isPhaseCompleted ? 'shown' : 'proposals-section'} id="proposals">
               <Grid fluid className="background-light">
