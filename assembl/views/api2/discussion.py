@@ -2370,7 +2370,7 @@ def thread_csv_export(request):
         fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
     publication_states = get_publication_states(request) or [PublicationStates.PUBLISHED]
-
+    import pdb; pdb.set_trace()
     ideas = get_thread_ideas(discussion, start, end)
     rows = []
     for idea in ideas:
