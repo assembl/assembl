@@ -119,6 +119,7 @@ def get_vote_session_ideas(discussion, start=None, end=None):
 def get_ideas_for_export(discussion, module_type=None, start=None, end=None):
     ideas = []
     for phase in discussion.timeline_events:
+        import pdb; pdb.set_trace()
         # If [start, end] and [phase.start, phase.end] don't overlap,
         # don't export the ideas.
         if phase.end < start or phase.start > end:
