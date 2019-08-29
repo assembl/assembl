@@ -1,13 +1,15 @@
 from __future__ import print_function
 
-
 import os
 import pytest
+import datetime
+from freezegun import freeze_time
 from sqlalchemy import inspect
 
 from assembl.auth import P_READ, R_PARTICIPANT
 
 
+@freeze_time("2018-2-1")
 @pytest.fixture(scope="function")
 def discussion(request, test_session, participant2_user, default_preferences):
     """An empty Discussion fixture with default preferences"""
@@ -17,6 +19,7 @@ def discussion(request, test_session, participant2_user, default_preferences):
         d = Discussion(
             topic=u"Jack Layton", slug="jacklayton2",
             subscribe_to_notifications_on_signup=False,
+            creation_date=datetime.datetime.utcnow(),
             creator=None,
             session=test_session)
         d.discussion_locales = ['en', 'fr', 'de']
@@ -227,6 +230,7 @@ def discussion_with_translation(discussion, test_session):
     discussion.preferences['translation_service'] = 'assembl.nlp.translation_service.GoogleTranslationService'
     test_session.commit()
     return discussion
+
 
 @pytest.fixture(scope="function")
 def discussion_with_theme_color(discussion, test_session):

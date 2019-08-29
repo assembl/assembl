@@ -2372,8 +2372,7 @@ def thread_csv_export(request):
         i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
-    publication_states = get_publication_states(request) or [PublicationStates.PUBLISHED]
-
+    publication_states = get_publication_states(request) or [PublicationStates.PUBLISHED.value]
     ideas = get_thread_ideas(discussion, start, end)
     rows = []
     for idea in ideas:

@@ -137,6 +137,7 @@ def create_root_thematic(phase):
     """
     title = u'Phase {}'.format(phase.identifier)
     root_thematic = models.Idea(
+        message_view_override=phase.identifier,
         discussion_id=phase.discussion.id,
         title=langstring_from_input_entries(
             [{'locale_code': 'en', 'value': title}]),
