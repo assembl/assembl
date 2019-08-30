@@ -8,7 +8,7 @@
   on DatePickerFieldAdapter, must add the `setFieldTouched` from final-form-set-field-touched
   along with passing the form <FormApi> prop
 */
-import DatePicker from 'react-datepicker';
+import BaseDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import * as React from 'react';
 import { ControlLabel, FormGroup } from 'react-bootstrap';
@@ -17,6 +17,24 @@ import { type FormApi } from 'final-form';
 import type { DatePickerType, DatePickerValue } from './types.flow';
 import Error from './error';
 import { getValidationState } from './utils';
+
+class DatePicker extends BaseDatePicker {
+  handleBlur = (event) => {
+    if (this.state.open && !this.props.withPortal) {
+      this.deferFocusInput();
+    } else {
+      this.props.onBlur(event);
+    }
+
+    // remove focus and close with a timeout because of conflict with react-select
+    // https://github.com/Hacker0x01/react-datepicker/issues/730
+    // https://github.com/JedWatson/react-select/issues/1539
+    setTimeout(() => {
+      this.cancelFocusInput();
+      this.setOpen(false);
+    }, 100);
+  };
+}
 
 type Props = {
   editLocale: string,
