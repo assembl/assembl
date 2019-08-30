@@ -2,7 +2,6 @@
 import React from 'react';
 import sortBy from 'lodash/sortBy';
 import { Link, withRouter } from 'react-router';
-import { OverlayTrigger } from 'react-bootstrap';
 import { compose, graphql, type ApolloClient } from 'react-apollo';
 import { Translate } from 'react-redux-i18n';
 
@@ -11,7 +10,7 @@ import { get } from '../../utils/routeMap';
 import { getPartialTreeByParentId, getPath } from '../../utils/tree';
 import { fromGlobalId } from '../../utils/globalFunctions';
 import ThematicsDataQuery from '../../graphql/ThematicsDataQuery.graphql';
-import { thematicTitle } from '../common/tooltips';
+import { thematicTitle, CustomOverlayTrigger } from '../common/tooltips';
 import { Menu, MenuItem } from '../common/menu';
 
 type Thematic = {
@@ -176,9 +175,9 @@ const ThematicsMenuItems = ({ roots, descendants, slug, phase, indexes, sectionQ
         id={index}
         title={
           thematic.title ? (
-            <OverlayTrigger placement="top" overlay={thematicTitle(thematic.title)}>
+            <CustomOverlayTrigger placement="top" overlay={thematicTitle(thematic.title)}>
               {link}
-            </OverlayTrigger>
+            </CustomOverlayTrigger>
           ) : (
             link
           )
