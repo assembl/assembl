@@ -6,7 +6,7 @@ from os.path import join, normpath
 from .common import (
     venv, task, exists, delete_foreign_tasks, setup_var_directory, get_upload_dir,
     chgrp_rec, filter_autostart_processes, supervisor_process_stop, local_db_path, is_supervisord_running,
-    get_node_base_path, is_supervisor_running, separate_pip_install)
+    get_node_base_path, is_supervisor_running, separate_pip_install, running_locally)
 from ConfigParser import SafeConfigParser
 from contextlib import nested
 
@@ -137,53 +137,6 @@ def install_java(c):
 
 
 @task()
-def install_elasticsearch(c):
-    """Install elasticsearch"""
-    ELASTICSEARCH_VERSION = c.config.elasticsearch_version
-
-    base_extract_path = normpath(
-        join(c.config.projectpath, 'var'))
-    extract_path = join(base_extract_path, 'elasticsearch')
-    if exists(c, extract_path):
-        print("elasticsearch already installed")
-        c.run('rm -rf %s' % extract_path)
-
-    base_filename = 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)
-    tar_filename = base_filename + '.tar.gz'
-    sha1_filename = tar_filename + '.sha1'
-    with c.cd(base_extract_path):
-        if not exists(c, tar_filename):
-            c.run('curl -o {fname} https://artifacts.elastic.co/downloads/elasticsearch/{fname}'.format(fname=tar_filename))
-        sha1_expected = c.run('curl https://artifacts.elastic.co/downloads/elasticsearch/' + sha1_filename).stdout
-        sha1_effective = c.run('openssl sha1 ' + tar_filename).stdout
-        if ' ' in sha1_effective:
-            sha1_effective = sha1_effective.split(' ')[-1]
-        assert sha1_effective == sha1_expected, "sha1sum of elasticsearch tarball doesn't match, exiting"
-        c.run('tar zxf ' + tar_filename)
-        c.run('rm ' + tar_filename)
-        c.run('mv %s elasticsearch' % base_filename)
-
-        # ensure that the folder being scp'ed to belongs to the user/group
-        user = c.config._user if '_user' in c.config else getpass.getuser()
-        c.run('chown -R {user}:{group} {path}'.format(
-            user=user, group=c.config._group,
-            path=extract_path))
-
-        # Make elasticsearch and plugin in /bin executable
-        c.run('chmod ug+x {es} {esp} {in_sh} {sysd} {log}'.format(
-            es=join(extract_path, 'bin/elasticsearch'),
-            esp=join(extract_path, 'bin/elasticsearch-plugin'),
-            in_sh=join(extract_path, 'bin/elasticsearch.in.sh'),
-            sysd=join(extract_path, 'bin/elasticsearch-systemd-pre-exec'),
-            log=join(extract_path, 'bin/elasticsearch-translog'),
-        ))
-        c.run(c.config.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-smartcn/analysis-smartcn-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
-        c.run(c.config.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-kuromoji/analysis-kuromoji-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
-
-        print "Successfully installed elasticsearch"
-
-
-@task()
 def install_services(c):
     """
     Install redis server
@@ -205,7 +158,7 @@ def install_single_server(c):
     print('Installing Assembl Server')
     check_brew(c)
     install_java(c)
-    install_elasticsearch(c)
+    build.install_elasticsearch(c)
     install_database(c)
     install_python_dependencies(c)
     install_core_dependencies(c)
@@ -225,7 +178,7 @@ def bootstrap_from_checkout(c, from_dump=False, dump_path=None):
     app_setup(c, from_dump=from_dump)
     build.check_and_create_database_user(c)
     app_compile_nodbupdate(c)
-    set_file_permissions(c)
+    build.set_file_permissions(c)
     if not from_dump:
         app_db_install(c)
     else:
@@ -393,7 +346,7 @@ def app_compile_noupdate(c):
     all generated files. You normally do not need to have internet connectivity.
     """
     app_compile_nodbupdate(c)
-    app_db_update(c)
+    build.app_db_update(c)
     app_reload(c)
 
 
@@ -409,20 +362,6 @@ def app_reload(c):
                 c.run("supervisorctl restart dev:")
 
 
-@task()
-def app_db_update(c):
-    """
-    Migrates database using alembic
-    """
-    print('Migrating database')
-    with venv(c):
-        result = c.run('alembic -c %s heads' % (c.config._internal.ini_file))
-        if result.stdout.count('head') > 1:
-            raise Exception('Multiple heads detected')
-        else:
-            c.run('alembic -c %s upgrade head' % (c.config._internal.ini_file))
-
-
 def ensure_requirements(c):
     "Copy the appropriate frozen requirements file into requirements.txt"
     target = c.config.frozen_requirements
@@ -435,10 +374,12 @@ def ensure_requirements(c):
         generate_new_requirements(c)
 
 
+@task()
 def generate_new_requirements(c):
     "Generate frozen requirements.txt file (with name taken from environment)."
     target = c.config.frozen_requirements or 'requirements.txt'
-    venv(" ".join(("pip-compile --output-file", target, c.config.requirement_inputs)))
+    with venv(c):
+        c.run(" ".join(("pip-compile --output-file", target, c.config._internal.requirement_inputs)))
 
 
 @task()
@@ -468,44 +409,6 @@ def create_local_ini(c):
         c.run('cp %s %s.bak' % (local_ini_path, local_ini_path))
     with venv(c):
         c.run("inv common.create-local-ini")
-
-
-@task()
-def set_file_permissions(c):
-    """Set file permissions for an isolated platform environment"""
-    setup_var_directory(c)
-    webgrp = '_www'
-    # This should cover most cases.
-    if webgrp not in c.run('groups').stdout.split():
-        username = c.run("whoami").stdout.replace('\n', '')
-        c.run('sudo dseditgroup -o edit -a {user} -t user {webgrp}'.format(
-            webgrp=webgrp, user=username))
-    with c.cd(c.config.projectpath):
-        upload_dir = get_upload_dir(c)
-        project_path = c.config.projectpath
-        code_path = os.getcwd()
-        c.run('chmod -R o-rwx ' + project_path)
-        c.run('chmod -R g-rw ' + project_path)
-        chgrp_rec(c, project_path, webgrp)
-        chgrp_rec(c, upload_dir, webgrp, project_path)
-
-        if not (code_path.startswith(project_path)):
-            c.run('chmod -R o-rwx ' + code_path)
-            c.run('chmod -R g-rw ' + code_path)
-            chgrp_rec(c, code_path, webgrp)
-
-        c.run('chgrp {webgrp} . {path}/var {path}/var/run {path}/var/share'.format(webgrp=webgrp, path=project_path))
-        c.run('chgrp -R {webgrp} {path}/assembl/static {path}/assembl/static2'.format(webgrp=webgrp, path=code_path))
-        c.run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))
-        c.run('chmod -R g+rxs {path}/var/run {path}/var/share'.format(path=project_path))
-        c.run('chmod -R g+rxs ' + upload_dir)
-        c.run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
-        c.run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
-        c.run('find {path}/assembl/static2 -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
-        c.run('find {path}/assembl/static2 -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
-        # allow postgres user to use pypsql
-        c.run('chmod go+x {path}/assembl/scripts'.format(path=code_path))
-        c.run('chmod go+r {path}/assembl/scripts/pypsql.py'.format(path=code_path))
 
 
 @task()
@@ -574,6 +477,62 @@ def database_restore(c, from_dump=False, dump_path=None):
     if not is_supervisord_running():
         with venv(c):
             c.run('supervisord')
+
+
+@task()
+def generate_frozen_requirements(c):
+    "Generate all frozen requirements file"
+    c.run("inv -f assembl/configs/mac.yaml mac.generate-new-requirements")
+    c.run("inv -f assembl/configs/testing.yaml mac.generate-new-requirements")
+    c.run("inv -f assembl/configs/develop.yaml mac.generate-new-requirements")
+
+
+@task()
+def start_edit_fontello_fonts(c):
+    """Prepare to edit the fontello fonts in Fontello."""
+    assert running_locally(c)
+    import requests
+    font_dir = os.path.join(
+        c.config.projectpath, 'assembl', 'static', 'css', 'fonts')
+    config_file = os.path.join(font_dir, 'config.json')
+    id_file = os.path.join(font_dir, 'fontello.id')
+    r = requests.post(
+        "http://fontello.com",
+        files={'config': open(config_file)})
+    if not r.ok:
+        raise RuntimeError("Could not get the ID")
+    fid = r.text
+    with open(id_file, 'w') as f:
+        f.write(fid)
+    if running_locally(c):
+        import webbrowser
+        webbrowser.open('http://fontello.com/' + fid)
+
+
+@task()
+def compile_fontello_fonts(c):
+    """Compile the fontello fonts once you have edited them in Fontello. Run start_edit_fontello_fonts first."""
+    from zipfile import ZipFile
+    assert running_locally(c)
+    import requests
+    from StringIO import StringIO
+    font_dir = join(
+        c.config.projectpath, 'assembl', 'static', 'css', 'fonts')
+    id_file = os.path.join(font_dir, 'fontello.id')
+    assert os.path.exists(id_file)
+    with open(id_file) as f:
+        fid = f.read()
+    r = requests.get("http://fontello.com/%s/get" % fid)
+    if not r.ok:
+        raise RuntimeError("Could not get the data")
+    with ZipFile(StringIO(r.content)) as data:
+        for name in data.namelist():
+            dirname, fname = os.path.split(name)
+            dirname, subdir = os.path.split(dirname)
+            if fname and (subdir == 'font' or fname == 'config.json'):
+                with data.open(name) as fdata:
+                    with open(join(font_dir, fname), 'wb') as ffile:
+                        ffile.write(fdata.read())
 
 
 delete_foreign_tasks(locals())

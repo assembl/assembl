@@ -386,6 +386,55 @@ def local_db_path(c):
     return join(c.config.projectpath, get_db_dump_name())
 
 
+def get_supervisord_conf(c):
+    return os.path.join(c.config.projectpath, "supervisord.conf")
+
+
+def supervisor_process_start(c, process_name):
+    """
+    Starts a supervisord process, and waits till it started to return
+    """
+    print('Asking supervisor to start %s' % process_name)
+    supervisor_pid_regex = re.compile(r'^\d+')
+    status_regex = re.compile(r'^%s\s*(\S*)' % process_name)
+    with venv(c):
+        supervisord_cmd_result = c.run("supervisorctl pid")
+    match = supervisor_pid_regex.match(supervisord_cmd_result)
+    if not match:
+        if c.config.uses_global_supervisor:
+            print('Supervisord doesn\'t seem to be running, aborting')
+            exit()
+        else:
+            print('Supervisord doesn\'t seem to be running, trying to start it')
+            with venv(c):
+                supervisord_cmd_result = c.run("supervisord -c %s" % get_supervisord_conf(c))
+                if supervisord_cmd_result.failed:
+                    print('Failed starting supervisord')
+                    exit()
+    for try_num in range(20):
+        with venv(c):
+            status_cmd_result = c.run("supervisorctl status %s" % process_name)
+
+        match = status_regex.match(status_cmd_result)
+        if match:
+            status = match.group(1)
+            if(status == 'RUNNING'):
+                print("%s is running" % process_name)
+                break
+            elif(status == 'STOPPED'):
+                with venv(c):
+                    c.run("supervisorctl start %s" % process_name)
+            elif(status == 'STARTING'):
+                print(status)
+            else:
+                print("unexpected status: %s" % status)
+            sleep(1)
+        else:
+            print('Unable to parse status (bad regex?)')
+            print(status_cmd_result)
+            exit()
+
+
 def supervisor_process_stop(c, process_name):
     """
     Assuming the supervisord process is running, stop one of its processes
@@ -532,6 +581,9 @@ def val_to_ini(val):
         return json.dumps(val)
     return val
 
+
+def as_bool(b):
+    return str(b).lower() in {"1", "true", "yes", "t", "on"}
 
 def ensureSection(config, section):
     """Ensure that config has that section"""

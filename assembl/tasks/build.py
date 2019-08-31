@@ -15,7 +15,7 @@ from semantic_version import Version
 
 from .common import (
     venv, task, exists, is_integration_env, fill_template, configure_github_user,
-    get_s3_file, delete_foreign_tasks)
+    get_s3_file, delete_foreign_tasks, as_bool, supervisor_process_stop, supervisor_process_start)
 from .sudoer import (
     install_build_dependencies, install_node_and_yarn, clear_aptitude_cache,
     install_chrome_dependencies)
@@ -347,6 +347,22 @@ def check_if_database_exists(c):
         c.config.DEFAULT.db_database), True, 'postgres')
 
 
+def check_if_db_tables_exist(c):
+    with venv(c):
+        checkDatabase = c.run('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
+            command="SELECT count(*) from permission", database=c.config.db_database,
+            password=c.config.db_password, host=c.config.db_host, user=c.config.db_user), warn=True)
+        return not checkDatabase.failed and int(checkDatabase.strip('()L,')) > 0
+
+
+def check_if_first_user_exists(c):
+    with venv(c):
+        checkDatabase = c.run('assembl-pypsql -1 -u {user} -p {password} -n {host} -d {database} "{command}"'.format(
+            command="SELECT count(*) from public.user", database=c.config.db_database,
+            password=c.config.db_password, host=c.config.db_host, user=c.config.db_user), warn=True)
+        return not checkDatabase.failed and int(checkDatabase.strip('()L,')) > 0
+
+
 @task(check_and_create_database_user)
 def database_create(c):
     """Create the database for this assembl instance"""
@@ -672,6 +688,500 @@ def deploy_to_sandbox(c):
         data = json.load(f)
     client_info = data.get('sandbox', None)
     start_deploy_on_client(c, client_info['id'], client_info.get('region', None))
+
+
+@task()
+def install_url_metadata_source(c):
+    "Install url_metadata in venv3 as source, for development"
+    if not exists(c, "%s/../url_metadata" % c.config.projectpath):
+        print("Cloning git repository")
+        with c.cd("%s/.." % c.config.projectpath):
+            c.run('git clone git://github.com/assembl/url_metadata.git')
+    else:
+        print("Url Metadata service being updated...")
+        with c.cd("%s/.." % c.config.projectpath):
+            c.run('git pull')
+    with venv_py3(c):
+        c.run('pip install -e ../url_metadata')
+
+
+@task()
+def app_db_update(c):
+    """
+    Migrates database using alembic
+    """
+    print('Migrating database')
+    with venv(c):
+        result = c.run('alembic -c %s heads' % (c.config._internal.ini_file))
+        if result.stdout.count('head') > 1:
+            raise Exception('Multiple heads detected')
+        else:
+            c.run('alembic -c %s upgrade head' % (c.config._internal.ini_file))
+
+
+@task()
+def set_file_permissions(c):
+    """Set file permissions for an isolated platform environment"""
+    setup_var_directory(c)
+    webgrp = '_www'
+    # This should cover most cases.
+    if webgrp not in c.run('groups').stdout.split():
+        username = c.run("whoami").stdout.replace('\n', '')
+        c.run('sudo dseditgroup -o edit -a {user} -t user {webgrp}'.format(
+            webgrp=webgrp, user=username))
+    with c.cd(c.config.projectpath):
+        upload_dir = get_upload_dir(c)
+        project_path = c.config.projectpath
+        code_path = os.getcwd()
+        c.run('chmod -R o-rwx ' + project_path)
+        c.run('chmod -R g-rw ' + project_path)
+        chgrp_rec(c, project_path, webgrp)
+        chgrp_rec(c, upload_dir, webgrp, project_path)
+
+        if not (code_path.startswith(project_path)):
+            c.run('chmod -R o-rwx ' + code_path)
+            c.run('chmod -R g-rw ' + code_path)
+            chgrp_rec(c, code_path, webgrp)
+
+        c.run('chgrp {webgrp} . {path}/var {path}/var/run {path}/var/share'.format(webgrp=webgrp, path=project_path))
+        c.run('chgrp -R {webgrp} {path}/assembl/static {path}/assembl/static2'.format(webgrp=webgrp, path=code_path))
+        c.run('chgrp -R {webgrp} {uploads}'.format(webgrp=webgrp, uploads=upload_dir))
+        c.run('chmod -R g+rxs {path}/var/run {path}/var/share'.format(path=project_path))
+        c.run('chmod -R g+rxs ' + upload_dir)
+        c.run('find {path}/assembl/static -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
+        c.run('find {path}/assembl/static -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
+        c.run('find {path}/assembl/static2 -type d -print0 |xargs -0 chmod g+rxs'.format(path=code_path))
+        c.run('find {path}/assembl/static2 -type f -print0 |xargs -0 chmod g+r'.format(path=code_path))
+        # allow postgres user to use pypsql
+        c.run('chmod go+x {path}/assembl/scripts'.format(path=code_path))
+        c.run('chmod go+r {path}/assembl/scripts/pypsql.py'.format(path=code_path))
+
+
+@task()
+def reindex_elasticsearch(c, bg=False):
+    "Rebuild the elasticsearch index"
+    cmd = "assembl-reindex-all-contents " + c.config._internal.ini_file
+    if bg:
+        cmd += "&"
+    with venv(c):
+        c.run(cmd)
+
+
+@task()
+def rotate_database_dumps(c, dry_run=False):
+    """Rotate database backups for real"""
+    try:
+        from executor.contexts import LocalContext, RemoteContext
+        from rotate_backups import RotateBackups, Location
+        import rotate_backups
+        import coloredlogs
+    except ImportError:
+        print("This fab command should be run within the venv.")
+        return
+    rotate_backups.TIMESTAMP_PATTERN = re.compile(
+        r'(?P<year>\d{4})(?P<month>\d{2})(?P<day>\d{2})')
+    coloredlogs.increase_verbosity()
+    rotation_scheme = {
+        # same as doc/borg_backup_script/assembl_borg_backup.sh
+        'daily': 7, 'weekly': 4, 'monthly': 6,
+        # Plus yearly for good conscience
+        'yearly': 'always'
+    }
+    dir = c.config.dbdumps_dir
+    if running_locally(c):
+        ctx = LocalContext()
+        dir = os.path.realpath(dir)
+    else:
+        ctx = RemoteContext(ssh_alias=c.config.host_string, ssh_user=c.config.user)
+    location = Location(context=ctx, directory=dir)
+    backup = RotateBackups(rotation_scheme, include_list=['db_*.sql.pgdump', 'db_*.bp'], dry_run=dry_run)
+    backup.rotate_backups(location, False)
+
+
+@task()
+def rotate_database_dumps_dry_run(c):
+    """Rotate database backups dry run"""
+    rotate_database_dumps(c, True)
+
+
+@task()
+def database_dump(c):
+    """
+    Dumps the database on remote site
+    """
+
+    if not exists(c, c.config._dbdumps_dir):
+        run('mkdir -m700 %s' % c.config._dbdumps_dir)
+
+    filename = 'db_%s.sql' % time.strftime('%Y%m%d')
+    compressed_filename = '%s.pgdump' % filename
+    absolute_path = os.path.join(c.config._dbdumps_dir, compressed_filename)
+
+    # Dump
+    with venv(c):
+        with c.cd(c.config.projectpath):
+            c.run('PGPASSWORD=%s pg_dump --host=%s -U%s --format=custom -b %s > %s' % (
+                c.config.DEFAULT.db_password,
+                c.config.DEFAULT.db_host,
+                c.config.DEFAULT.db_user,
+                c.config.DEFAULT.db_database,
+                absolute_path))
+
+    # Make symlink to latest
+    with c.cd(c.config._dbdumps_dir):
+        c.run('ln -sf %s %s' % (absolute_path, remote_db_path(c)))
+
+
+@task()
+def database_download(c):
+    """
+    Dumps and downloads the database from the target server
+    """
+    destination = join('./', get_db_dump_name())
+    if os.path.islink(destination):
+        print('Clearing symlink at %s to make way for downloaded file' % (destination))
+        c.run('rm %s' % (destination))
+    database_dump(c)
+    #TODO: fix with download from remote server
+    """
+    get(remote_db_path(c), destination)
+    remote_path = get_upload_dir(c)
+    rsync_path = "%s@%s:%s" % (c.config.user, c.config.host_string, remote_path)
+    local_venv = c.config.get("local_venv", "./venv")
+    local_path = get_upload_dir(c, 'var/uploads')
+    c.run("rsync -a %s/ %s" % (rsync_path, local_path), env={'host_string': "localhost", 'venvpath': local_venv,
+                                                            'user': getuser(), 'projectpath': os.getcwd()})
+    """
+
+
+@task()
+def database_upload(c):
+    """
+    Uploads a local database backup to the target environment's server
+    """
+    if(c.config.wsginame != 'dev.wsgi'):
+        #TODO: fix with upload from remote server
+        """
+        put(get_db_dump_name(), remote_db_path(c))
+        remote_path = get_upload_dir(c)
+        rsync_path = "%s@%s:%s/" % (c.config.user, c.config.host_string, remote_path)
+        local_venv = c.config.get("local_venv", "./venv")
+        local_path = get_upload_dir(c, 'var/uploads')
+        c.run("rsync -a %s/ %s" % (local_path, rsync_path), env={'host_string': "localhost", 'venvpath': local_venv,
+                                                        'user': getuser(), 'projectpath': os.getcwd()})
+        """
+
+
+@task()
+def database_delete(c):
+    """
+    Deletes the database instance
+    """
+    if(c.config.is_production_env is True):
+        print(
+            "You are not allowed to delete the database of a production " +
+            "environment.  If this is a server restore situation, you " +
+            "have to temporarily declare env.is_production_env = False " +
+            "in the environment")
+    else:
+        check_and_create_database_user(c)
+
+        with venv(c):
+            checkDatabase = c.run('assembl-pypsql -1 -u {user} -p {password} -n {host} "{command}"'.format(
+                command="SELECT 1 FROM pg_database WHERE datname='%s'" % (c.config.DEFAULT.db_database),
+                password=c.config.DEFAULT.db_password, host=c.config.DEFAULT.db_host, user=c.config.DEFAULT.db_user))
+
+        if not checkDatabase.failed and checkDatabase == '1':
+            print("Cannot connect to database, trying to create")
+            deleteDatabase = c.run('PGPASSWORD=%s dropdb --host=%s --username=%s %s' % (
+                c.config.DEFAULT.db_password, c.config.DEFAULT.postgres_db_host, c.config.DEFAULT.db_user, c.config.DEFAULT.db_database))
+            if deleteDatabase.succeeded:
+                print("Database deleted successfully!")
+        else:
+            print("Database does not exist")
+
+
+def remote_db_path(c):
+    return os.path.join(c.config.projectpath, get_db_dump_name())
+
+
+@task()
+def postgres_user_detach(c):
+    """Terminate the PID processes owned by the assembl user"""
+    process_list = c.run(
+        'psql -U %s -h %s -d %s -c "SELECT pid FROM pg_stat_activity where pid <> pg_backend_pid()" ' % (
+            c.config.DEFAULT.db_user,
+            c.config.DEFAULT.db_host,
+            c.config.DEFAULT.db_database))
+
+    pids = process_list.split("\r\n")[2:-1:]
+    for pid in pids:
+        c.run('psql -U %s -h %s -d %s -c "SELECT pg_terminate_backend(%s);"' % (
+            c.config.DEFAULT.db_user,
+            c.config.DEFAULT.db_host,
+            c.config.DEFAULT.db_database,
+            pid))
+
+
+@task()
+def flushmemcache(c):
+    """
+    Resetting all data in memcached
+    """
+    if c.config.uses_memcache:
+        print('Resetting all data in memcached :')
+        wait_str = "" if c.config._mac else "-q 2"
+        c.run('echo "flush_all" | nc %s 127.0.0.1 11211' % wait_str)
+
+
+@task()
+def set_ssl_certificates(c):
+    "Create stapled SSL certificates"
+    if c.config.ocsp_path:
+        root_certificate = c.run('curl https://letsencrypt.org/certs/isrgrootx1.pem.txt')
+        intermediate_certificate_1 = c.run('curl https://letsencrypt.org/certs/lets-encrypt-x3-cross-signed.pem.txt')
+        intermediate_certificate_2 = c.run('curl https://letsencrypt.org/certs/letsencryptauthorityx3.pem.txt')
+        with open(c.config.ocsp_path, 'w') as certificates_file:
+            for certificate_file in (root_certificate, intermediate_certificate_1, intermediate_certificate_2):
+                certificates_file.write(certificate_file)
+                certificates_file.write('\n')
+    else:
+        print("Can't set ssl certificates, env.ocsp_path is not set")
+
+
+@task()
+def create_clean_crontab(c, migrate=False):
+    """
+    Start with a clean crontab for the assembl user, or migrate by adding email at top
+    """
+    admin_email = c.config.admin_email
+    if not admin_email:
+        if not migrate:
+            c.run("echo '' | crontab -")
+    else:
+        cron_command = "MAILTO=%s" % (admin_email)
+        if not migrate:
+            c.run('echo %s | crontab -' % cron_command)
+        else:
+            c.run('(echo %s; crontab -l) | crontab -' % cron_command)
+
+
+@task()
+def create_alert_disk_space_script(c):
+    """Generates the script to alert on disk space limit and sets cron job for it."""
+    with NamedTemporaryFile(delete=False) as f:
+        alert_disk_space = f.name
+    fill_template('assembl/templates/system/alert_disk_space_template.jinja2', c.config, alert_disk_space)
+    put(alert_disk_space, '/home/%s/alert_disk_space.sh' % (c.config.user))
+    c.run('chmod +x alert_disk_space.sh')
+    cron_command = "0 5 * * * /home/" + c.config.user + "/alert_disk_space.sh"
+    c.run(create_add_to_crontab_command(cron_command))
+
+
+def create_add_to_crontab_command(crontab_line):
+    """Generates a shell command that makes sure that a cron won't be added several times (thanks to sort and uniq). This makes sure adding it several times is idempotent."""
+    return "(crontab -l | grep -Fv '{cron}'; echo '{cron}') | crontab -".format(cron=crontab_line)
+
+
+def app_db_install(c):
+    """
+    Install db the first time and fake migrations
+    """
+    database_create(c)
+    with venv(c):
+        c.run('assembl-db-manage %s bootstrap' % (c.config._internal.ini_file))
+
+@task()
+def docker_startup(c):
+    """Startup assembl from within a docker environment.
+
+    Verify if your database environment exists, and create it otherwise."""
+    if as_bool(os.getenv("BUILDING_DOCKER", True)):
+        return
+    if not exists(c.config._internal.ini_file):
+        create_local_ini(c)
+    if not exists("supervisord.conf"):
+        with venv(c):
+            c.run('assembl-ini-files populate %s' % (c.config._internal.ini_file))
+    # Copy the static file. This needs improvements.
+    copied = False
+    if not exists("/opt/assembl_static/static"):
+        c.run("cp -rp %s/assembl/static /opt/assembl_static/" % c.config.projectpath)
+        copied = True
+    if not exists("/opt/assembl_static/static2"):
+        c.run("cp -rp %s/assembl/static2 /opt/assembl_static/" % c.config.projectpath)
+        copied = True
+    if copied:
+        c.run("chmod -R a+r /opt/assembl_static")
+        c.run("find /opt/assembl_static -type d | xargs chmod a+x")
+    check_and_create_database_user(c)
+    if not check_if_database_exists(c):
+        app_db_install(c)
+    elif not check_if_db_tables_exist(c):
+        # DB exists, maybe separate the boostrap test
+        app_db_install(c)
+        reindex_elasticsearch(c)
+    else:
+        app_db_update(c)
+    if not check_if_first_user_exists(c):
+        create_first_admin_user(c)
+    with venv(c):
+        c.run("supervisord")
+
+
+@task()
+def create_first_admin_user(c):
+    "Create a user with admin rights, email given in env. as first_admin_email"
+    email = c.config.get("first_admin_email", None)
+    assert email, "Please set the first_admin_email in the .rc environment"
+    with venv(c):
+        c.run("assembl-add-user -m %s -u admin -n Admin -p admin --send-password-change %s" % (
+            email, c.config._internal.ini_file))
+
+
+@task()
+def upgrade_yarn_crontab(c):
+    """Automate the look up for a new version of yarn and update it"""
+    statement_base = "0 2 * * 1 %s"
+    if c.config._mac:
+        cmd = "brew update && brew upgrade yarn"
+        statement = statement_base % cmd
+        c.run(create_add_to_crontab_command(statement))
+
+    else:
+        cmd = "apt-get update && apt-get install --only-upgrade yarn"
+        statement = statement_base % cmd
+        c.sudo(create_add_to_crontab_command(statement))
+
+
+@task()
+def upgrade_elasticsearch(c):
+    "Upgrade elasticsearch to the appropriate version"
+    if os.getenv("IN_DOCKER"):
+        return
+
+    extract_path = normpath(
+        os.path.join(c.config.projectpath, 'var', 'elasticsearch'))
+    supervisor_process_stop('elasticsearch')
+    if exists(extract_path):
+        # Must force write permission in the folder to be able to delete
+        # it as non-root user with sudo access
+        c.sudo("chmod -R 777 %s" % extract_path)
+        c.sudo("rm -rf %s" % extract_path)
+    install_elasticsearch(c)
+    supervisor_process_start('elasticsearch')
+
+
+@task()
+def install_elasticsearch(c):
+    """Install elasticsearch"""
+    ELASTICSEARCH_VERSION = c.config.elasticsearch_version
+
+    base_extract_path = normpath(
+        join(c.config.projectpath, 'var'))
+    extract_path = join(base_extract_path, 'elasticsearch')
+    if exists(c, extract_path):
+        print("elasticsearch already installed")
+        c.run('rm -rf %s' % extract_path)
+
+    base_filename = 'elasticsearch-{version}'.format(version=ELASTICSEARCH_VERSION)
+    tar_filename = base_filename + '.tar.gz'
+    sha1_filename = tar_filename + '.sha1'
+    with c.cd(base_extract_path):
+        if not exists(c, tar_filename):
+            c.run('curl -o {fname} https://artifacts.elastic.co/downloads/elasticsearch/{fname}'.format(fname=tar_filename))
+        sha1_expected = c.run('curl https://artifacts.elastic.co/downloads/elasticsearch/' + sha1_filename).stdout
+        sha1_effective = c.run('openssl sha1 ' + tar_filename).stdout
+        if ' ' in sha1_effective:
+            sha1_effective = sha1_effective.split(' ')[-1]
+        assert sha1_effective == sha1_expected, "sha1sum of elasticsearch tarball doesn't match, exiting"
+        c.run('tar zxf ' + tar_filename)
+        c.run('rm ' + tar_filename)
+        c.run('mv %s elasticsearch' % base_filename)
+
+        # ensure that the folder being scp'ed to belongs to the user/group
+        user = c.config._user if '_user' in c.config else getpass.getuser()
+        c.run('chown -R {user}:{group} {path}'.format(
+            user=user, group=c.config._group,
+            path=extract_path))
+
+        # Make elasticsearch and plugin in /bin executable
+        c.run('chmod ug+x {es} {esp} {in_sh} {sysd} {log}'.format(
+            es=join(extract_path, 'bin/elasticsearch'),
+            esp=join(extract_path, 'bin/elasticsearch-plugin'),
+            in_sh=join(extract_path, 'bin/elasticsearch.in.sh'),
+            sysd=join(extract_path, 'bin/elasticsearch-systemd-pre-exec'),
+            log=join(extract_path, 'bin/elasticsearch-translog'),
+        ))
+        c.run(c.config.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-smartcn/analysis-smartcn-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
+        c.run(c.config.projectpath + '/var/elasticsearch/bin/elasticsearch-plugin install https://artifacts.elastic.co/downloads/elasticsearch-plugins/analysis-kuromoji/analysis-kuromoji-{version}.zip'.format(version=ELASTICSEARCH_VERSION))
+
+        print("Successfully installed elasticsearch")
+
+
+@task()
+def install_translation_dependencies(c):
+    """Install core dependencies needed in order to translate objects
+    in React-based Assembl"""
+    if c.config._mac:
+        c.run("brew install gettext; brew link --force gettext")
+    else:
+        c.sudo("apt-get install gettext")
+
+
+@task()
+def make_messages(c):
+    """
+    Run *.po file generation for translation
+    """
+    with venv(c):
+        c.run("python2 setup.py extract_messages")
+        c.run("python2 setup.py update_catalog")
+
+
+@task()
+def make_new_messages(c):
+    """Build .po files for React based instances of Assembl"""
+    with c.cd(c.config.projectpath + "/assembl/static2/"):
+        with venv(c):
+            c.run('npm run i18n:export', chdir=False)
+
+
+@task()
+def compile_new_messages(c):
+    """Build the locale.json files from the corresponding po files"""
+    with c.cd(c.config.projectpath + "/assembl/static2/"):
+        with venv(c):
+            c.run('npm run i18n:import', chdir=False)
+
+
+@task()
+def build_translation_json_files(c):
+    """Build locale json files from .po files for each locale"""
+
+    # Version1
+    compile_messages(c)
+    # Version2
+    compile_new_messages(c)
+
+
+@task()
+def build_po_files(c):
+    """Build translation files for both versions of Assembl"""
+
+    # Version 1
+    make_messages(c)
+    # Version 2
+    make_new_messages(c)
+
+
+@task()
+def secure_sshd_fail2ban(c):
+    if c.config._mac:
+        return
+    # Fail2ban needs verbose logging for full security
+    c.sudo("sed -i 's/LogLevel .*/LogLevel VERBOSE/' /etc/ssh/sshd_config")
+    c.sudo('service ssh restart')
 
 
 delete_foreign_tasks(locals())

@@ -3,6 +3,7 @@ from __future__ import print_function
 import os
 import os.path
 import re
+import build
 from pprint import pprint
 from time import sleep
 from ConfigParser import RawConfigParser
@@ -548,6 +549,266 @@ def create_clean_cronlist(c):
     else:
         email_command = "MAILTO=%s" % (admin_email)
         add_cron_job(c, email_command, force_clean=True, head=True)
+
+
+def get_upload_dir(c, path=None):
+    path = path or c.config.get('upload_root', 'var/uploads')
+    if path != '/':
+        path = os.path.join(c.config.projectpath, path)
+    return path
+
+
+@task()
+def reset_upload_folder(c):
+    if c.config._internal.wsginame == 'staging.wsginame':
+        # Ensure an uploads folder
+        remote_uploads_exists = False
+        local_upload_exists = exists(c, get_upload_dir(c))
+        with venv(c):
+            remote_uploads_exists = c.run('aws s3 ls s3://{}/uploads | wc -l'.format(c.config.aws_bucket_name),
+                env={'AWS_ACCESS_KEY_ID': c.config.aws_access_key_id, 'AWS_SECRET_ACCESS_KEY': c.config.aws_secret_access_key})
+            remote_uploads_exists = False if exists == '0' else True
+
+        if local_upload_exists and not remote_uploads_exists:
+            sync_with_remote_upload_folder(c)
+        else:
+            sync_with_local_upload_folder(c)
+
+
+def install_awscli(c):
+    with venv(c, True):
+        if c.run('which aws', warn=True).failed:
+            c.run('pip install awscli')
+
+
+def _sync_uploads_folder(c, local=False):
+    # Sync uploads folder
+    install_awscli(c)
+    cmd = '{}/var/uploads s3://{}/uploads'.format(c.config.projectpath, c.config.aws_bucket_name)
+    if local:
+        cmd = 's3://{}/uploads {} --delete'.format(c.config.aws_bucket_name, get_upload_dir(c))
+        with venv(c):
+            c.run('aws s3 sync %s' % cmd, env={'AWS_ACCESS_KEY_ID': c.config.aws_access_key_id, 'AWS_SECRET_ACCESS_KEY': c.config.aws_secret_access_key})
+    else:
+        if exists(c, get_upload_dir(c)):
+            with venv(c):
+                c.run('aws s3 cp %s' % cmd, env={'AWS_ACCESS_KEY_ID': c.config.aws_access_key_id, 'AWS_SECRET_ACCESS_KEY': c.config.aws_secret_access_key})
+        else:
+            print("There is no uploads folder to sync with Amazon S3!")
+
+
+@task()
+def sync_with_remote_upload_folder(c):
+    """
+    Syncronize the uploads folder on the host with S3 bucket
+    """
+    _sync_uploads_folder(c)
+
+
+@task()
+def sync_with_local_upload_folder(c):
+    """
+    Syncronize a remote uploads folder, on S3 bucket, with the local uploads folder
+    """
+    _sync_uploads_folder(c, local=True)
+
+
+@task()
+def reset_db(c):
+    """
+    Restore and update the latest database
+    """
+    # Only for the staging server (for tests)
+    if c.config._internal.wsginame == 'staging.wsgi':
+        install_awscli(c)
+        exists = False
+        # Test if the dump exists on the amazon s3 object storage
+        with venv(c):
+            exists = c.run('aws s3 ls s3://{}/{} | wc -l'.format(c.config.aws_bucket_name, get_db_dump_name()),
+                env={'AWS_ACCESS_KEY_ID': c.config.aws_access_key_id, 'AWS_SECRET_ACCESS_KEY': c.config.aws_secret_access_key})
+            exists = False if exists == '0' else True
+
+        print('Restore and update the latest database')
+        if not exists:
+            # If the dump don't exist, we create it
+            print('Create a new dump')
+            database_dump_aws(c)
+            sync_with_remote_upload_folder(c)
+        else:
+            # Otherwise, we restore the last dump
+            print('Restore the last dump')
+            database_restore_aws(c)
+            sync_with_local_upload_folder(c)
+
+        # Update the dump only when the schema of the database changes
+        if not is_db_updated(c):
+            print('Update the restored db')
+            build.app_db_update(c)
+            # Create the updated dump for future tests
+            print('Create the updated dump for future tests')
+            database_dump_aws(c)
+
+
+@task()
+def database_dump_aws(c):
+    """
+    Dumps the database on an amazon s3 object storage
+    """
+    if not exists(c.config.dbdumps_dir):
+        c.run('mkdir -m700 %s' % c.config.dbdumps_dir)
+
+    install_awscli(c)
+    with c.cd(c.config.projectpath):
+        dump_name = get_versioned_db_dump_name(c)
+        dump_path = os.path.join(c.config.dbdumps_dir, dump_name)
+        # Create the db dump
+        c.run('pg_dump --host={} -U{} --format=custom -b {} > {}'.format(
+            c.config.db_host,
+            c.config.db_user,
+            c.config.db_database,
+            dump_path),
+            env={'PGPASSWORD': c.config.db_password})
+        # Copy the created dump in the aws bucket
+        with venv(c):
+            c.run('aws s3 cp {} s3://{}/{} '.format(
+                dump_path,
+                c.config.aws_bucket_name,
+                dump_name),
+                env={'AWS_ACCESS_KEY_ID': c.config.aws_access_key_id, 'AWS_SECRET_ACCESS_KEY': c.config.aws_secret_access_key})
+            # Add a copy as a symbolic link
+            c.run('aws s3 cp {} s3://{}/{} '.format(
+                dump_path,
+                c.config.aws_bucket_name,
+                get_db_dump_name()),
+                env={'AWS_ACCESS_KEY_ID': c.config.aws_access_key_id, 'AWS_SECRET_ACCESS_KEY': c.config.aws_secret_access_key})
+        # Remove the created dump from the local host
+        c.run('rm -f {}'.format(dump_path))
+
+
+@task()
+def database_restore_aws(c, backup=False):
+    """
+    Restores the database backed up on the amazon s3 object storage
+    """
+    install_awscli(c)
+    # if not backup:
+    #     assert(env.wsginame in ('staging.wsgi', 'dev.wsgi'))
+    #     processes = filter_autostart_processes(_processes_to_restart_without_backup)
+    # else:
+    #     processes = filter_autostart_processes(_processes_to_restart_with_backup)
+
+    if(c.config._internal.wsginame != 'dev.wsgi'):
+        webservers_stop(c)
+        # processes.append("prod:uwsgi")  # possibly not autostarted
+
+    # for process in processes:
+    #     supervisor_process_stop(process)
+    supervisor_shutdown(c)
+
+    # Kill postgres processes in order to be able to drop tables
+    # execute(postgres_user_detach)
+
+    # Drop db
+    dropped = c.run('dropdb --host={} --username={} --no-password {}'.format(
+        c.config.db_host,
+        c.config.db_user,
+        c.config.db_database), warn=True,
+        env={'PGPASSWORD': c.config.db_password})
+
+    assert dropped.succeeded or "does not exist" in dropped, \
+        "Could not drop the database"
+
+    # Create db
+    build.database_create(c)
+    # Restore data
+    with c.cd(env.projectpath):
+        filename = remote_db_path()
+        # Download the latest dump from the amazon s3 object storage
+        with venv(c):
+            c.run('aws s3 cp s3://{}/{} {}'.format(
+                c.config.aws_bucket_name,
+                get_db_dump_name(),
+                filename),
+                env={'AWS_ACCESS_KEY_ID': c.config.aws_access_key_id, 'AWS_SECRET_ACCESS_KEY': c.config.aws_secret_access_key})
+        # Restore the downloaded dump
+        c.run('pg_restore --no-owner --role={} --host={} --dbname={} -U{} --schema=public {}'.format(
+            c.config.db_user,
+            c.config.db_host,
+            c.config.db_database,
+            c.config.db_user,
+            filename), env={'PGPASSWORD': c.config.db_password}
+        )
+        # Remove the downloaded dump from the local host
+        c.run('rm -f {}'.format(filename))
+
+    # for process in processes:
+    #     supervisor_process_start(process)
+
+    with venv(c):
+        c.run('supervisord')
+    # if(env.wsginame != 'dev.wsgi'):
+    #     execute(webservers_start)
+
+
+def get_db_dump_name():
+    return 'assembl-backup.pgdump'
+
+
+def is_db_updated(c):
+    """
+    Return if the database is update or not
+    """
+    with venv(c):
+        history = c.run('alembic -c {} history'.format(c.config._internal.ini_file))
+        current = c.run('alembic -c {} heads'.format(c.config._internal.ini_file))
+        return current in history
+
+
+def get_versioned_db_dump_name(c):
+    with venv(c):
+        current_version = c.run('python -c "import pkg_resources; print pkg_resources.require(\'assembl\')[0].version"')
+    return 'db_{}_{}.sql.pgdump'.format(c.config._internal.wsginame, current_version or strftime('%Y%m%d'))
+
+
+@task()
+def install_url_metadata_wheel(c):
+    "Install url_metadata in venv3 as a wheel."
+    # Temporary, until we have our own wheelhouse
+    with venv_py3(c):
+        c.run('pip install -U https://github.com/assembl/url_metadata/releases/download/0.0.1/url_metadata-0.0.1-py3-none-any.whl')
+
+
+@task()
+def setup_nginx_file(c):
+    c.sudo('ln -s %s/var/share/assembl.nginx /etc/nginx/sites-available/assembl.nginx' % c.config.projectpath)
+
+
+@task()
+def bootstrap_from_wheel(c):
+    """
+    The de-facto way to bootstrap the dev-staging server in a CI/CD context
+    """
+
+    # The database changes/alterations no longer should happen in the assembl instance
+    # The elasticsearch reindexing is a cluster migration, should happen with database
+    # independent of a single instance
+
+    # File permissions are redundant under AWS conditions (using roles instead)
+    # URL metadata changes are independent now
+    app_setup(c)
+    build.check_and_create_database_user(c)
+    build.set_file_permissions(c)
+    reset_upload_folder(c)
+    reset_db(c)
+    reindex_elasticsearch(c)
+    install_url_metadata_wheel(c)
+    setup_nginx_file(c)
+
+
+@task()
+def generate_dh_group(c):
+    """Generate Diffie-Hellman Group"""
+    c.sudo("openssl dhparam -out /etc/ssl/certs/dhparam.pem 2048")
 
 
 # avoid it being defined in both modules
