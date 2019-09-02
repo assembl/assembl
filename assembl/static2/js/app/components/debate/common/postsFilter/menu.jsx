@@ -4,7 +4,6 @@ import { DropdownButton } from 'react-bootstrap';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import { I18n } from 'react-redux-i18n';
-import { connect } from 'react-redux';
 
 import PostsFilterMenuItem from './menuItem';
 import PostsFilterButton from './button';
@@ -12,21 +11,25 @@ import PostsFilterButtons from './buttons';
 import PostsFilterLabelMenuItem from './label';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { withScreenHeight } from '../../../common/screenDimensions';
-import { setThreadPostsFilterPolicies } from '../../../../actions/threadFilterActions';
 import {
   defaultDisplayPolicy,
   defaultOrderPolicy,
-  defaultPostsFiltersStatus,
-  postsDisplayPolicies,
-  postsFiltersPolicies,
-  postsOrderPolicies
+  defaultPostsFiltersStatus
 } from './policies';
 import { ICO_FILTER } from '../../../../constants';
 
 type Props = {
+  defaultDisplayPolicy: PostsDisplayPolicy,
+  defaultOrderPolicy: PostsOrderPolicy,
+  defaultPostsFiltersStatus: PostsFiltersStatus,
+  postsDisplayPolicies: PostsDisplayPolicy[],
+  postsFiltersPolicies: PostsFilterPolicy[],
+  postsOrderPolicies: PostsOrderPolicy[],
   postsDisplayPolicy: PostsDisplayPolicy,
   postsFiltersStatus: PostsFiltersStatus,
   postsOrderPolicy: PostsOrderPolicy,
+  stickyOffset: number,
+  stickyTopPosition: number,
   screenHeight: number,
   setPostsFilterPolicies: (
     postsDisplay: PostsDisplayPolicy,
@@ -43,7 +46,16 @@ type State = {
   sticky: boolean
 };
 
+/*
+ * Generic post filter component. Specific filter components are in subfolders survey/, thread/, etc.
+ * */
 export class DumbPostsFilterMenu extends React.Component<Props, State> {
+  static defaultProps = {
+    defaultOrderPolicy: defaultOrderPolicy,
+    defaultDisplayPolicy: defaultDisplayPolicy,
+    defaultPostsFiltersStatus: defaultPostsFiltersStatus
+  };
+
   componentWillMount(): void {
     const { postsDisplayPolicy, postsOrderPolicy, postsFiltersStatus } = this.props;
     this.setState({
@@ -69,8 +81,8 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   };
 
   setButtonPosition = debounce(() => {
-    const { screenHeight } = this.props;
-    if (window.pageYOffset > screenHeight - 60) {
+    const { screenHeight, stickyOffset } = this.props;
+    if (window.pageYOffset > screenHeight - stickyOffset) {
       // Show the button when we scrolled minimum the height of the window.
       this.setState({ sticky: true });
     } else {
@@ -79,17 +91,17 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   }, 100);
 
   selectPostsDisplayPolicy = (postsDisplayPolicy: any) => {
-    // FIXME PostsDisplayPolicy
+    // FIXME use PostsDisplayPolicy type
     this.setState({ selectedPostsDisplayPolicy: postsDisplayPolicy });
   };
 
   selectPostsOrderPolicy = (postsOrderPolicy: any) => {
-    // FIXME PostsOrderPolicy
+    // FIXME use PostsOrderPolicy type
     this.setState({ selectedPostsOrderPolicy: postsOrderPolicy });
   };
 
   selectPostsFilter = (postsFilterPolicy: any, selected?: boolean) => {
-    // FIXME PostsFilterPolicy
+    // FIXME use PostsFilterPolicy type
     const selectedPostsFiltersStatus = { ...this.state.selectedPostsFiltersStatus };
     selectedPostsFiltersStatus[postsFilterPolicy.filterField] = !!selected;
     if (selected) {
@@ -104,8 +116,12 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   resetPolicies = () => {
     this.selectPostsDisplayPolicy(defaultDisplayPolicy);
     this.selectPostsOrderPolicy(defaultOrderPolicy);
-    this.setState({ selectedPostsFiltersStatus: defaultPostsFiltersStatus });
-    this.props.setPostsFilterPolicies(defaultDisplayPolicy, defaultOrderPolicy, defaultPostsFiltersStatus);
+    this.setState({ selectedPostsFiltersStatus: this.props.defaultPostsFiltersStatus });
+    this.props.setPostsFilterPolicies(
+      this.props.defaultDisplayPolicy,
+      this.props.defaultOrderPolicy,
+      this.props.defaultPostsFiltersStatus
+    );
     this.setState({ open: false });
   };
 
@@ -120,9 +136,13 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 
   render() {
     const { selectedPostsDisplayPolicy, selectedPostsFiltersStatus, selectedPostsOrderPolicy, sticky } = this.state;
+    const { postsDisplayPolicies, postsOrderPolicies, postsFiltersPolicies, stickyTopPosition } = this.props;
     const userIsConnected: boolean = !!getConnectedUserId();
     return (
-      <div className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}>
+      <div
+        className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}
+        style={{ top: sticky ? stickyTopPosition : null }}
+      >
         <DropdownButton
           pullRight
           open={this.state.open}
@@ -204,21 +224,4 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  setPostsFilterPolicies: (
-    postsDisplay: PostsDisplayPolicy,
-    postsOrder: PostsOrderPolicy,
-    postsFiltersStatus: PostsFiltersStatus
-  ) => dispatch(setThreadPostsFilterPolicies(postsDisplay, postsOrder, postsFiltersStatus))
-});
-
-const mapStateToProps = (state) => {
-  const { postsOrderPolicy, postsDisplayPolicy, postsFiltersStatus } = state.threadFilter;
-  return {
-    postsOrderPolicy: postsOrderPolicy,
-    postsDisplayPolicy: postsDisplayPolicy,
-    postsFiltersStatus: postsFiltersStatus
-  };
-};
-
-export default withScreenHeight(connect(mapStateToProps, mapDispatchToProps)(DumbPostsFilterMenu));
+export default withScreenHeight(DumbPostsFilterMenu);

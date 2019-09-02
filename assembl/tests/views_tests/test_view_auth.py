@@ -274,6 +274,7 @@ def test_autologin_override(
         backend=google_identity_provider.name
     ) == urlparse.urlparse(reply.location).path
 
+
 def setup_change_password(user, password):
     old_password = user.password
     token = password_change_token(user)
@@ -285,6 +286,7 @@ def setup_change_password(user, password):
 
     return old_password, password_change_payload
 
+
 def test_change_password_token(test_app_strong_password, participant1_user):
     # Set up
     old_password, my_json = setup_change_password(participant1_user, "9WWcPG9*YcVk")
@@ -294,6 +296,7 @@ def test_change_password_token(test_app_strong_password, participant1_user):
     assert response.status_code == 200
     assert old_password != participant1_user.password
     assert participant1_user.check_password("9WWcPG9*YcVk") == True
+
 
 def test_change_password_token_too_short(test_app, participant1_user, user_language_preference_en_cookie):
     # Set up
@@ -306,6 +309,7 @@ def test_change_password_token_too_short(test_app, participant1_user, user_langu
     assert "Password shorter than" in exception.value.message
     assert old_password == participant1_user.password
 
+
 def test_change_password_token_not_enough_complex(test_app_complex_password, participant1_user, user_language_preference_en_cookie):
     # Set Up
     old_password, my_json = setup_change_password(participant1_user, "password123")
@@ -316,6 +320,7 @@ def test_change_password_token_not_enough_complex(test_app_complex_password, par
     assert "520 Unknown Server Error" in exception.value.message
     assert "This is a very common password.\\nAdd another word or two. Uncommon words are better." in exception.value.message
     assert old_password == participant1_user.password
+
 
 def test_change_password_token_dont_contain_special_chars(test_app_spec_chars_password, participant1_user, user_language_preference_en_cookie):
     # Set up

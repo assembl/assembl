@@ -1,6 +1,6 @@
 // @flow
-import { SET_THREAD_POSTS_POLICIES } from '../actions/threadFilterActions';
 import { defaultDisplayPolicy, defaultOrderPolicy } from '../components/debate/common/postsFilter/policies';
+import { SET_QUESTION_POSTS_POLICIES } from '../actions/questionFilterActions';
 
 const initialState: PostsFilterState = {
   postsDisplayPolicy: defaultDisplayPolicy,
@@ -11,9 +11,9 @@ const initialState: PostsFilterState = {
   postsOrderPolicy: defaultOrderPolicy
 };
 
-const ThreadFilterReducer = (state: PostsFilterState = initialState, action: any): PostsFilterState => {
+const QuestionFilterReducer = (state: PostsFilterState = initialState, action: any): PostsFilterState => {
   switch (action.type) {
-  case SET_THREAD_POSTS_POLICIES:
+  case SET_QUESTION_POSTS_POLICIES:
     return {
       ...state,
       postsDisplayPolicy: action.postsDisplayPolicy,
@@ -25,4 +25,4 @@ const ThreadFilterReducer = (state: PostsFilterState = initialState, action: any
   }
 };
 
-export default ThreadFilterReducer;
+export default QuestionFilterReducer;

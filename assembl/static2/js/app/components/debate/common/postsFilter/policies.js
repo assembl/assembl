@@ -45,6 +45,22 @@ const compareOnLatestCreationDate: PostsComparator = (a: PostWithChildren, b: Po
   return -1;
 };
 
+const childrenCount = (post: PostWithChildren): number => {
+  const children = post.children || [];
+  return children.length + children.reduce((acc, child) => acc + (child.children ? 0 : childrenCount(child.children)), 0);
+};
+
+const compareOnPopularity: PostsComparator = (a: PostWithChildren, b: PostWithChildren) => {
+  const popularityA = a.sentimentCounts.like - a.sentimentCounts.disagree + childrenCount(a);
+  const popularityB = b.sentimentCounts.like - b.sentimentCounts.disagree + childrenCount(b);
+  if (popularityA === popularityB) {
+    return 0;
+  } else if (popularityA > popularityB) {
+    return 1;
+  }
+  return -1;
+};
+
 export const reverseChronologicalTopPolicy: PostsOrderPolicy = {
   // Recently started threads
   id: 'reverseChronologicalTop',
@@ -68,7 +84,7 @@ export const reverseChronologicalLastPolicy: PostsOrderPolicy = {
   labelMsgId: 'debate.thread.postsOrder.reverseChronologicalLast'
 };
 
-export const chronologicalLastPolicy: PostsOrderPolicy = {
+export const chronologicalTopPolicy: PostsOrderPolicy = {
   // Chronological threads
   id: 'chronologicalTop',
   postsGroupPolicy: {
@@ -90,20 +106,13 @@ export const reverseChronologicalFlatPolicy: PostsOrderPolicy = {
 export const popularityPolicy: PostsOrderPolicy = {
   // Popular messages first
   id: 'popularityFlat',
-  postsGroupPolicy: null,
+  postsGroupPolicy: {
+    comparator: compareOnPopularity,
+    reverse: true
+  },
   graphqlPostsOrder: 'popularity',
   labelMsgId: 'debate.thread.postsOrder.popularityFlat'
 };
-
-export const postsOrderPolicies: PostsOrderPolicy[] = [
-  reverseChronologicalTopPolicy,
-  reverseChronologicalLastPolicy,
-  chronologicalLastPolicy,
-  reverseChronologicalFlatPolicy,
-  popularityPolicy
-];
-
-export const defaultOrderPolicy = reverseChronologicalLastPolicy;
 
 export const fullDisplayPolicy: PostsDisplayPolicy = {
   labelMsgId: 'debate.thread.postsDisplay.full',
@@ -116,10 +125,6 @@ export const summaryDisplayPolicy: PostsDisplayPolicy = {
   id: 'display-summary',
   displayMode: 'summary'
 };
-
-export const postsDisplayPolicies: PostsDisplayPolicy[] = [fullDisplayPolicy, summaryDisplayPolicy];
-
-export const defaultDisplayPolicy = fullDisplayPolicy;
 
 export const onlyMyPostFilterPolicy: PostsFilterPolicy = {
   excludedPolicies: ['myPostsAndAnswers'],
@@ -135,8 +140,8 @@ export const myPostsAndAnswersFilterPolicy: PostsFilterPolicy = {
   id: 'filter-myPostsAndAnswers'
 };
 
-export const postsFiltersPolicies: PostsFilterPolicy[] = [onlyMyPostFilterPolicy, myPostsAndAnswersFilterPolicy];
-
+export const defaultOrderPolicy = reverseChronologicalLastPolicy;
+export const defaultDisplayPolicy = fullDisplayPolicy;
 export const defaultPostsFiltersStatus: PostsFiltersStatus = {
   myPostsAndAnswers: false,
   onlyMyPosts: false

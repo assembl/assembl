@@ -9,6 +9,7 @@ import type { FictionCommentExtraProps } from '../../../components/debate/bright
 import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 
 type Props = {
+  sharedProps?: Object, // props to pass to all items
   contentLocaleMapping: ContentLocaleMapping,
   identifier: string,
   phaseId?: string,
@@ -24,6 +25,10 @@ type Props = {
 };
 
 class Tree extends React.Component<Props> {
+  static defaultProps = {
+    sharedProps: {}
+  };
+
   componentDidMount() {
     // Reset the global prevStopIndex to not overfetch posts when changing idea
     // or to avoid recreating all dom nodes if we go back to the same idea.
@@ -125,6 +130,7 @@ class Tree extends React.Component<Props> {
     style: { [string]: string }
   }) => {
     const {
+      sharedProps,
       data,
       identifier,
       phaseId,
@@ -141,8 +147,9 @@ class Tree extends React.Component<Props> {
         <div style={style}>
           {index > 0 ? <SeparatorComponent /> : null}
           <Child
-            key={childData.id}
+            {...sharedProps}
             {...childData}
+            key={childData.id}
             identifier={identifier}
             phaseId={phaseId}
             messageViewOverride={messageViewOverride}

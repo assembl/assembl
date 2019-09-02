@@ -9,7 +9,8 @@ import FoldedPost from '../common/post/foldedPost';
 import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import type { ContentLocaleMapping } from '../../../actions/actionTypes';
-import PostsFilterMenu from '../common/postsFilter/menu';
+import ThreadPostsFilterMenu from '../common/postsFilter/thread/menu';
+import { defaultDisplayPolicy } from '../common/postsFilter/policies';
 
 type Props = {
   isUserConnected: boolean,
@@ -23,12 +24,18 @@ type Props = {
   identifier: string,
   phaseId: string,
   timeline: Timeline,
-  messageViewOverride: string
+  messageViewOverride: string,
+  postsDisplayPolicy?: PostsDisplayPolicy
 };
 
 class ThreadView extends React.Component<Props> {
+  static defaultProps = {
+    postsDisplayPolicy: defaultDisplayPolicy
+  };
+
   render() {
     const {
+      postsDisplayPolicy,
       isUserConnected,
       ideaId,
       contentLocaleMapping,
@@ -50,9 +57,10 @@ class ThreadView extends React.Component<Props> {
         ) : null}
         <Grid fluid className="background-grey">
           <div id="thread-view" className="max-container background-grey">
-            <PostsFilterMenu />
+            <ThreadPostsFilterMenu stickyOffset={60} stickyTopPosition={200} />
             <div className="content-section">
               <Tree
+                sharedProps={{ postsDisplayPolicy: postsDisplayPolicy }}
                 contentLocaleMapping={contentLocaleMapping}
                 lang={lang}
                 data={posts}

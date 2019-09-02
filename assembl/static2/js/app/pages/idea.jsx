@@ -52,6 +52,7 @@ type Props = {
   lang: string,
   location: { state: { callback: string } },
   phaseId: string,
+  postsDisplayPolicy: PostsDisplayPolicy,
   postsMustBeRefetched: boolean,
   /** Function to call action to store tags on store */
   putTagsInStore: Function,
@@ -309,6 +310,7 @@ class Idea extends React.Component<Props> {
       messageViewOverride: messageViewOverride,
       noRowsRenderer: noRowsRenderer,
       phaseId: phaseId,
+      postsDisplayPolicy: this.props.threadFilter.postsDisplayPolicy,
       refetchIdea: refetchIdea,
       timeline: timeline
     };
@@ -399,8 +401,7 @@ type SwitchViewProps = {
   isHarvestable: boolean,
   messageViewOverride: string,
   modifyContext: (newState: Object) => void,
-  postsOrderPolicy: PostsOrderPolicy,
-  postsFiltersStatus: PostsFiltersStatus
+  threadFilter: PostsFilterState
 };
 
 class SwitchView extends React.Component<SwitchViewProps> {
@@ -431,9 +432,9 @@ class SwitchView extends React.Component<SwitchViewProps> {
     return (
       <IdeaWithPosts
         {...props}
-        postsOrder={props.postsOrderPolicy.graphqlPostsOrder}
-        onlyMyPosts={props.postsFiltersStatus.onlyMyPosts} // fixme: more generic
-        myPostsAndAnswers={props.postsFiltersStatus.myPostsAndAnswers} // fixme: more generic
+        postsOrder={props.threadFilter.postsOrderPolicy.graphqlPostsOrder}
+        onlyMyPosts={props.threadFilter.postsFiltersStatus.onlyMyPosts} // fixme: more generic
+        myPostsAndAnswers={props.threadFilter.postsFiltersStatus.myPostsAndAnswers} // fixme: more generic
         additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror}
       />
     );
@@ -462,8 +463,7 @@ const semanticAnalysisForThematicQuery: OperationComponent<SemanticAnalysisForTh
 
 const mapStateToPropsForIdeaQuery = state => ({
   lang: state.i18n.locale,
-  postsOrderPolicy: state.threadFilter.postsOrderPolicy,
-  postsFiltersStatus: state.threadFilter.postsFiltersStatus
+  threadFilter: state.threadFilter
 });
 
 export default compose(

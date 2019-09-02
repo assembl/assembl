@@ -117,7 +117,9 @@ export default compose(
           after: '',
           id: props.questionId,
           fromNode: id,
-          isModerating: props.isModerating
+          isModerating: props.isModerating,
+          onlyMyPosts: props.onlyMyPosts,
+          postsOrder: props.postsOrder
         }
       };
     },
