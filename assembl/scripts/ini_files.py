@@ -191,6 +191,10 @@ def combine_ini(config, overlay, adding=True):
         # Avoid including DEFAULTSECT
         for key in overlay._sections[section]:
             value = overlay.get(section, key)
+            if isinstance(value, basestring):
+                value = value.encode('utf-8')
+            if isinstance(key, basestring):
+                key = key.encode('utf-8')
             if adding or config.has_option(section, key):
                 ensureSection(config, section)
                 config.set(section, key, value)
