@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
+"POT-Creation-Date: 2019-09-05T14:21:51.391Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -178,6 +178,14 @@ msgstr "Definir o número de indicadores"
 msgid "administration.deleteAssociatedFile"
 msgstr "Excluir a pergunta"
 
+#. [administration.deleteGauge]
+#. defaultMessage is:
+#. Delete gauge
+#: messages.json
+#, fuzzy
+msgid "administration.deleteGauge"
+msgstr "Excluir a pergunta"
+
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
@@ -187,7 +195,7 @@ msgstr "Excluir a pergunta"
 
 #. [administration.deleteSubThematicDisabled]
 #. defaultMessage is:
-#. You cannot delete a theme with sub-thematics.
+#. You cannot delete a theme with sub-themes.
 #: messages.json
 #, fuzzy
 msgid "administration.deleteSubThematicDisabled"
@@ -450,6 +458,22 @@ msgid "administration.export.translation"
 msgstr ""
 "Você pode exportar todos os dados do módulo de pesquisa ao clicar no botão "
 "Exportar"
+
+#. [administration.export.usersAnnotation]
+#. defaultMessage is:
+#. You can export all of the users data by clicking on the export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersAnnotation"
+msgstr "Você pode exportar todos os dados ao clicar no botão Exportar"
+
+#. [administration.export.usersSectionTitle]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersSectionTitle"
+msgstr "Exportar dados"
 
 #. [administration.export.vote.extractCsvVoters]
 #. defaultMessage is:
@@ -1074,6 +1098,14 @@ msgstr "Exportar taxonomias"
 #. Export taxonomies
 #: messages.json
 msgid "administration.menu.exportTaxonomies"
+msgstr "Exportar taxonomias"
+
+#. [administration.menu.exportUsers]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.menu.exportUsers"
 msgstr "Exportar taxonomias"
 
 #. [administration.menu.legalContents]
@@ -1971,6 +2003,30 @@ msgstr "Valor textual"
 msgid "administration.thematic"
 msgstr "Tema"
 
+#. [administration.theme.firstColor]
+#. defaultMessage is:
+#. Primary color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.firstColor"
+msgstr "Cor do token"
+
+#. [administration.theme.secondColor]
+#. defaultMessage is:
+#. Second color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.secondColor"
+msgstr "Cor do token"
+
+#. [administration.theme.themeColorsTitle]
+#. defaultMessage is:
+#. Theme colors
+#: messages.json
+#, fuzzy
+msgid "administration.theme.themeColorsTitle"
+msgstr "Título do cabeçalho"
+
 #. [administration.timelineAdmin.addPhase]
 #. defaultMessage is:
 #. Add a phase
@@ -2153,7 +2209,7 @@ msgstr "Configuração do título da seção de propostas"
 
 #. [administration.translationService.description]
 #. defaultMessage is:
-#. Translation service should be activated when the semantic analysis is activated
+#. Translation service must be activated to use the semantic analysis
 #: messages.json
 #, fuzzy
 msgid "administration.translationService.description"
@@ -3593,6 +3649,30 @@ msgstr "Obrigado pela sua participação. Sua proposta foi enviada!"
 msgid "debate.survey.postToBeValidated"
 msgstr "Você concorda com essas opiniões?"
 
+#. [debate.survey.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.chronologicalTop"
+msgstr "Mais opiniões"
+
+#. [debate.survey.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.popularityFlat"
+msgstr "Mais opiniões"
+
+#. [debate.survey.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Newest points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.reverseChronologicalLast"
+msgstr "Mais opiniões"
+
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
 #. Do you agree with these points of view?
@@ -3871,6 +3951,14 @@ msgstr "Escreva um comentário"
 msgid "debate.thread.fillSubject"
 msgstr "Escreva um título"
 
+#. [debate.thread.filterPosts]
+#. defaultMessage is:
+#. Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.filterPosts"
+msgstr "Mostrar %{count} respostas"
+
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
 #. Show %{count} responses
@@ -3963,6 +4051,14 @@ msgstr "Nenhuma resposta a esta publicação"
 msgid "debate.thread.numberOfResponses_1"
 msgstr "%{count} resposta a esta publicação"
 
+#. [debate.thread.overviewPosts]
+#. defaultMessage is:
+#. Overview
+#: messages.json
+#, fuzzy
+msgid "debate.thread.overviewPosts"
+msgstr "Mais opiniões"
+
 #. [debate.thread.postDeletedByAdmin]
 #. defaultMessage is:
 #. This message has been deleted by the community manager.
@@ -3999,16 +4095,104 @@ msgstr "Obrigado pela sua participação. Seu comentário foi enviado!"
 msgid "debate.thread.postToBeValidated"
 msgstr "editada"
 
+#. [debate.thread.postsDisplay.full]
+#. defaultMessage is:
+#. Full messages
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.full"
+msgstr "Obrigado pela sua participação. Seu comentário foi enviado!"
+
+#. [debate.thread.postsDisplay.summary]
+#. defaultMessage is:
+#. Message previews
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.summary"
+msgstr "Ver %{count} subtemáticas"
+
+#. [debate.thread.postsFilters.myPostsAndAnswers]
+#. defaultMessage is:
+#. Answers to my posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.myPostsAndAnswers"
+msgstr "Esta mensagem foi excluída pelo autor."
+
+#. [debate.thread.postsFilters.onlyMyPosts]
+#. defaultMessage is:
+#. My posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.onlyMyPosts"
+msgstr "editada"
+
+#. [debate.thread.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological order
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.chronologicalTop"
+msgstr "Mais opiniões"
+
+#. [debate.thread.postsOrder.cleanFilter]
+#. defaultMessage is:
+#. Clean filters
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.cleanFilter"
+msgstr "editada"
+
+#. [debate.thread.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.popularityFlat"
+msgstr "editada"
+
+#. [debate.thread.postsOrder.reverseChronologicalFlat]
+#. defaultMessage is:
+#. Newest messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalFlat"
+msgstr "Esta mensagem foi excluída pelo autor."
+
+#. [debate.thread.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Recently started threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalLast"
+msgstr "Mais opiniões"
+
+#. [debate.thread.postsOrder.reverseChronologicalTop]
+#. defaultMessage is:
+#. Recently active threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalTop"
+msgstr "Esta mensagem foi excluída pelo autor."
+
+#. [debate.thread.removeTranslation]
+#. defaultMessage is:
+#. Remove translation
+#: messages.json
+#, fuzzy
+msgid "debate.thread.removeTranslation"
+msgstr "Traduzir"
+
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
-#. See %{count} sub-thematics
+#. See %{count} sub-themes
 #: messages.json
 msgid "debate.thread.seeSubIdeas"
 msgstr "Ver %{count} subtemáticas"
 
 #. [debate.thread.seeSubIdeas_1]
 #. defaultMessage is:
-#. See sub-thematic
+#. See sub-theme
 #: messages.json
 msgid "debate.thread.seeSubIdeas_1"
 msgstr "Ver subtemática"
@@ -4019,6 +4203,22 @@ msgstr "Ver subtemática"
 #: messages.json
 msgid "debate.thread.showOriginal"
 msgstr "Mostrar original"
+
+#. [debate.thread.sortFilterPosts]
+#. defaultMessage is:
+#. Sort / Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortFilterPosts"
+msgstr "Mais opiniões"
+
+#. [debate.thread.sortPosts]
+#. defaultMessage is:
+#. Sort
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortPosts"
+msgstr "Seja o primeiro a contribuir, inicie uma discussão!"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
@@ -4172,6 +4372,14 @@ msgid "debate.voteSession.postSuccess"
 msgstr ""
 "Obrigado pela sua participação! Seu voto foi computado. Você pode modificá-"
 "lo a qualquer momento enquanto durar a sessão de votação."
+
+#. [debate.voteSession.remainingToken]
+#. defaultMessage is:
+#. %{count} token remaining
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.remainingToken"
+msgstr "Você tem %{count} tokens restantes."
 
 #. [debate.voteSession.remainingTokens]
 #. defaultMessage is:
@@ -5335,6 +5543,13 @@ msgstr "não"
 msgid "notFound.panelTitle"
 msgstr "Desculpe, esta página não existe"
 
+#. [ok]
+#. defaultMessage is:
+#. Ok
+#: messages.json
+msgid "ok"
+msgstr ""
+
 #. [postLoadError]
 #. defaultMessage is:
 #. Something went wrong when loading this post.
@@ -5544,6 +5759,20 @@ msgstr "Nome de usuário"
 #, fuzzy
 msgid "profile.usernameInformations"
 msgstr "Informações pessoais"
+
+#. [readLessEllipsis]
+#. defaultMessage is:
+#. Read less...
+#: messages.json
+msgid "readLessEllipsis"
+msgstr ""
+
+#. [readMoreEllipsis]
+#. defaultMessage is:
+#. Read more...
+#: messages.json
+msgid "readMoreEllipsis"
+msgstr ""
 
 #. [refuse]
 #. defaultMessage is:
@@ -6263,9 +6492,6 @@ msgstr "sim"
 
 #~ msgid "administration.ph.headerSubtitle"
 #~ msgstr "Subtítulo do cabeçalho"
-
-#~ msgid "administration.ph.headerTitle"
-#~ msgstr "Título do cabeçalho"
 
 #~ msgid "administration.ph.instructionsContent"
 #~ msgstr "Conteúdo das instruções"

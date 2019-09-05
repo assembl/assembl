@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
+"POT-Creation-Date: 2019-09-05T14:21:51.391Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -174,6 +174,14 @@ msgstr "确定计数器的数量"
 msgid "administration.deleteAssociatedFile"
 msgstr "删除问题"
 
+#. [administration.deleteGauge]
+#. defaultMessage is:
+#. Delete gauge
+#: messages.json
+#, fuzzy
+msgid "administration.deleteGauge"
+msgstr "删除问题"
+
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
@@ -183,7 +191,7 @@ msgstr "删除问题"
 
 #. [administration.deleteSubThematicDisabled]
 #. defaultMessage is:
-#. You cannot delete a theme with sub-thematics.
+#. You cannot delete a theme with sub-themes.
 #: messages.json
 #, fuzzy
 msgid "administration.deleteSubThematicDisabled"
@@ -440,6 +448,22 @@ msgstr "将消息翻译成："
 #, fuzzy
 msgid "administration.export.translation"
 msgstr "您可以通过点击导出按钮导出所有调查模块数据"
+
+#. [administration.export.usersAnnotation]
+#. defaultMessage is:
+#. You can export all of the users data by clicking on the export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersAnnotation"
+msgstr "您可以通过点击导出按钮导出所有数据"
+
+#. [administration.export.usersSectionTitle]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersSectionTitle"
+msgstr "导出数据"
 
 #. [administration.export.vote.extractCsvVoters]
 #. defaultMessage is:
@@ -1038,6 +1062,14 @@ msgstr "导出分类"
 #. Export taxonomies
 #: messages.json
 msgid "administration.menu.exportTaxonomies"
+msgstr "导出分类"
+
+#. [administration.menu.exportUsers]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.menu.exportUsers"
 msgstr "导出分类"
 
 #. [administration.menu.legalContents]
@@ -1930,6 +1962,30 @@ msgstr "文本值"
 msgid "administration.thematic"
 msgstr "主题"
 
+#. [administration.theme.firstColor]
+#. defaultMessage is:
+#. Primary color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.firstColor"
+msgstr "令牌的颜色"
+
+#. [administration.theme.secondColor]
+#. defaultMessage is:
+#. Second color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.secondColor"
+msgstr "令牌的颜色"
+
+#. [administration.theme.themeColorsTitle]
+#. defaultMessage is:
+#. Theme colors
+#: messages.json
+#, fuzzy
+msgid "administration.theme.themeColorsTitle"
+msgstr "页眉标题"
+
 #. [administration.timelineAdmin.addPhase]
 #. defaultMessage is:
 #. Add a phase
@@ -2111,7 +2167,7 @@ msgstr "提议部分标题配置"
 
 #. [administration.translationService.description]
 #. defaultMessage is:
-#. Translation service should be activated when the semantic analysis is activated
+#. Translation service must be activated to use the semantic analysis
 #: messages.json
 #, fuzzy
 msgid "administration.translationService.description"
@@ -3552,6 +3608,30 @@ msgstr "感谢您的参与。您的提议已经成功发送！"
 msgid "debate.survey.postToBeValidated"
 msgstr "您同意这些观点吗？"
 
+#. [debate.survey.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.chronologicalTop"
+msgstr "更多观点"
+
+#. [debate.survey.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.popularityFlat"
+msgstr "更多观点"
+
+#. [debate.survey.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Newest points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.reverseChronologicalLast"
+msgstr "更多观点"
+
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
 #. Do you agree with these points of view?
@@ -3830,6 +3910,14 @@ msgstr "请填写一条评论"
 msgid "debate.thread.fillSubject"
 msgstr "请填写一个标题"
 
+#. [debate.thread.filterPosts]
+#. defaultMessage is:
+#. Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.filterPosts"
+msgstr "显示%{count}回复"
+
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
 #. Show %{count} responses
@@ -3922,6 +4010,14 @@ msgstr "此帖没有回复"
 msgid "debate.thread.numberOfResponses_1"
 msgstr "此帖子的第%{count}条回复"
 
+#. [debate.thread.overviewPosts]
+#. defaultMessage is:
+#. Overview
+#: messages.json
+#, fuzzy
+msgid "debate.thread.overviewPosts"
+msgstr "更多观点"
+
 #. [debate.thread.postDeletedByAdmin]
 #. defaultMessage is:
 #. This message has been deleted by the community manager.
@@ -3958,16 +4054,104 @@ msgstr "感谢您的参与。您的评论已发送！"
 msgid "debate.thread.postToBeValidated"
 msgstr "已编辑"
 
+#. [debate.thread.postsDisplay.full]
+#. defaultMessage is:
+#. Full messages
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.full"
+msgstr "感谢您的参与。您的评论已发送！"
+
+#. [debate.thread.postsDisplay.summary]
+#. defaultMessage is:
+#. Message previews
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.summary"
+msgstr "参见%{count}子主题"
+
+#. [debate.thread.postsFilters.myPostsAndAnswers]
+#. defaultMessage is:
+#. Answers to my posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.myPostsAndAnswers"
+msgstr "此消息已被作者删除。"
+
+#. [debate.thread.postsFilters.onlyMyPosts]
+#. defaultMessage is:
+#. My posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.onlyMyPosts"
+msgstr "已编辑"
+
+#. [debate.thread.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological order
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.chronologicalTop"
+msgstr "更多观点"
+
+#. [debate.thread.postsOrder.cleanFilter]
+#. defaultMessage is:
+#. Clean filters
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.cleanFilter"
+msgstr "已编辑"
+
+#. [debate.thread.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.popularityFlat"
+msgstr "已编辑"
+
+#. [debate.thread.postsOrder.reverseChronologicalFlat]
+#. defaultMessage is:
+#. Newest messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalFlat"
+msgstr "此消息已被作者删除。"
+
+#. [debate.thread.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Recently started threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalLast"
+msgstr "更多观点"
+
+#. [debate.thread.postsOrder.reverseChronologicalTop]
+#. defaultMessage is:
+#. Recently active threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalTop"
+msgstr "此消息已被作者删除。"
+
+#. [debate.thread.removeTranslation]
+#. defaultMessage is:
+#. Remove translation
+#: messages.json
+#, fuzzy
+msgid "debate.thread.removeTranslation"
+msgstr "翻译"
+
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
-#. See %{count} sub-thematics
+#. See %{count} sub-themes
 #: messages.json
 msgid "debate.thread.seeSubIdeas"
 msgstr "参见%{count}子主题"
 
 #. [debate.thread.seeSubIdeas_1]
 #. defaultMessage is:
-#. See sub-thematic
+#. See sub-theme
 #: messages.json
 msgid "debate.thread.seeSubIdeas_1"
 msgstr "参见子主题"
@@ -3978,6 +4162,22 @@ msgstr "参见子主题"
 #: messages.json
 msgid "debate.thread.showOriginal"
 msgstr "显示原文"
+
+#. [debate.thread.sortFilterPosts]
+#. defaultMessage is:
+#. Sort / Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortFilterPosts"
+msgstr "更多观点"
+
+#. [debate.thread.sortPosts]
+#. defaultMessage is:
+#. Sort
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortPosts"
+msgstr "成为第一个发言者，开始讨论！"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
@@ -4129,6 +4329,14 @@ msgstr "%{count}参与者已投票"
 #: messages.json
 msgid "debate.voteSession.postSuccess"
 msgstr "感谢您的参与！您已完成投票。您可以在投票会话期间修改此投票。"
+
+#. [debate.voteSession.remainingToken]
+#. defaultMessage is:
+#. %{count} token remaining
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.remainingToken"
+msgstr "您还有%{count}个令牌。"
 
 #. [debate.voteSession.remainingTokens]
 #. defaultMessage is:
@@ -5286,6 +5494,13 @@ msgstr "否"
 msgid "notFound.panelTitle"
 msgstr "对不起，这个页面不存在"
 
+#. [ok]
+#. defaultMessage is:
+#. Ok
+#: messages.json
+msgid "ok"
+msgstr ""
+
 #. [postLoadError]
 #. defaultMessage is:
 #. Something went wrong when loading this post.
@@ -5494,6 +5709,20 @@ msgstr "用户名"
 #, fuzzy
 msgid "profile.usernameInformations"
 msgstr "个人信息"
+
+#. [readLessEllipsis]
+#. defaultMessage is:
+#. Read less...
+#: messages.json
+msgid "readLessEllipsis"
+msgstr ""
+
+#. [readMoreEllipsis]
+#. defaultMessage is:
+#. Read more...
+#: messages.json
+msgid "readMoreEllipsis"
+msgstr ""
 
 #. [refuse]
 #. defaultMessage is:
@@ -6206,9 +6435,6 @@ msgstr "是"
 
 #~ msgid "administration.ph.headerSubtitle"
 #~ msgstr "页眉副标题"
-
-#~ msgid "administration.ph.headerTitle"
-#~ msgstr "页眉标题"
 
 #~ msgid "administration.ph.instructionsContent"
 #~ msgstr "说明内容"

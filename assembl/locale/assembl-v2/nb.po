@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
+"POT-Creation-Date: 2019-09-05T14:21:51.391Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -178,6 +178,14 @@ msgstr "Definer antall målere"
 msgid "administration.deleteAssociatedFile"
 msgstr "Slett spørsmålet"
 
+#. [administration.deleteGauge]
+#. defaultMessage is:
+#. Delete gauge
+#: messages.json
+#, fuzzy
+msgid "administration.deleteGauge"
+msgstr "Slett spørsmålet"
+
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
@@ -187,7 +195,7 @@ msgstr "Slett spørsmålet"
 
 #. [administration.deleteSubThematicDisabled]
 #. defaultMessage is:
-#. You cannot delete a theme with sub-thematics.
+#. You cannot delete a theme with sub-themes.
 #: messages.json
 #, fuzzy
 msgid "administration.deleteSubThematicDisabled"
@@ -450,6 +458,22 @@ msgid "administration.export.translation"
 msgstr ""
 "Du kan eksportere alle data i undersøkelsesmodulen ved å klikke på "
 "eksportknappen"
+
+#. [administration.export.usersAnnotation]
+#. defaultMessage is:
+#. You can export all of the users data by clicking on the export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersAnnotation"
+msgstr "Du kan eksportere alle data ved å klikke på eksportknappen"
+
+#. [administration.export.usersSectionTitle]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersSectionTitle"
+msgstr "Eksporter data"
 
 #. [administration.export.vote.extractCsvVoters]
 #. defaultMessage is:
@@ -1062,6 +1086,14 @@ msgstr "Eksporter taksonomier"
 #. Export taxonomies
 #: messages.json
 msgid "administration.menu.exportTaxonomies"
+msgstr "Eksporter taksonomier"
+
+#. [administration.menu.exportUsers]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.menu.exportUsers"
 msgstr "Eksporter taksonomier"
 
 #. [administration.menu.legalContents]
@@ -1959,6 +1991,30 @@ msgstr "Tekstverdi"
 msgid "administration.thematic"
 msgstr "Tema"
 
+#. [administration.theme.firstColor]
+#. defaultMessage is:
+#. Primary color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.firstColor"
+msgstr "Farge på sjetongen"
+
+#. [administration.theme.secondColor]
+#. defaultMessage is:
+#. Second color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.secondColor"
+msgstr "Farge på sjetongen"
+
+#. [administration.theme.themeColorsTitle]
+#. defaultMessage is:
+#. Theme colors
+#: messages.json
+#, fuzzy
+msgid "administration.theme.themeColorsTitle"
+msgstr "Topptekst tittel"
+
 #. [administration.timelineAdmin.addPhase]
 #. defaultMessage is:
 #. Add a phase
@@ -2141,7 +2197,7 @@ msgstr "Forslag seksjonstittel konfigurasjon"
 
 #. [administration.translationService.description]
 #. defaultMessage is:
-#. Translation service should be activated when the semantic analysis is activated
+#. Translation service must be activated to use the semantic analysis
 #: messages.json
 #, fuzzy
 msgid "administration.translationService.description"
@@ -3581,6 +3637,30 @@ msgstr "Takk for at du deltok. Ditt forslag er blitt sendt!"
 msgid "debate.survey.postToBeValidated"
 msgstr "Er du enig i disse synspunktene?"
 
+#. [debate.survey.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.chronologicalTop"
+msgstr "Flere synspunkter"
+
+#. [debate.survey.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.popularityFlat"
+msgstr "Flere synspunkter"
+
+#. [debate.survey.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Newest points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.reverseChronologicalLast"
+msgstr "Flere synspunkter"
+
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
 #. Do you agree with these points of view?
@@ -3859,6 +3939,14 @@ msgstr "Vennligst skriv en kommentar"
 msgid "debate.thread.fillSubject"
 msgstr "Vennligst skriv en tittel"
 
+#. [debate.thread.filterPosts]
+#. defaultMessage is:
+#. Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.filterPosts"
+msgstr "Vis %{count} svar"
+
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
 #. Show %{count} responses
@@ -3951,6 +4039,14 @@ msgstr "Intet svar på denne posten"
 msgid "debate.thread.numberOfResponses_1"
 msgstr "%{count} svar på denne posten"
 
+#. [debate.thread.overviewPosts]
+#. defaultMessage is:
+#. Overview
+#: messages.json
+#, fuzzy
+msgid "debate.thread.overviewPosts"
+msgstr "Flere synspunkter"
+
 #. [debate.thread.postDeletedByAdmin]
 #. defaultMessage is:
 #. This message has been deleted by the community manager.
@@ -3987,16 +4083,104 @@ msgstr "Takk for at du deltok. Din kommentar er blitt sendt!"
 msgid "debate.thread.postToBeValidated"
 msgstr "redigert"
 
+#. [debate.thread.postsDisplay.full]
+#. defaultMessage is:
+#. Full messages
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.full"
+msgstr "Takk for at du deltok. Din kommentar er blitt sendt!"
+
+#. [debate.thread.postsDisplay.summary]
+#. defaultMessage is:
+#. Message previews
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.summary"
+msgstr "Se %{count} undertemaer"
+
+#. [debate.thread.postsFilters.myPostsAndAnswers]
+#. defaultMessage is:
+#. Answers to my posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.myPostsAndAnswers"
+msgstr "Denne meldingen er blitt slettet av forfatteren."
+
+#. [debate.thread.postsFilters.onlyMyPosts]
+#. defaultMessage is:
+#. My posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.onlyMyPosts"
+msgstr "redigert"
+
+#. [debate.thread.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological order
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.chronologicalTop"
+msgstr "Flere synspunkter"
+
+#. [debate.thread.postsOrder.cleanFilter]
+#. defaultMessage is:
+#. Clean filters
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.cleanFilter"
+msgstr "redigert"
+
+#. [debate.thread.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.popularityFlat"
+msgstr "redigert"
+
+#. [debate.thread.postsOrder.reverseChronologicalFlat]
+#. defaultMessage is:
+#. Newest messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalFlat"
+msgstr "Denne meldingen er blitt slettet av forfatteren."
+
+#. [debate.thread.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Recently started threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalLast"
+msgstr "Flere synspunkter"
+
+#. [debate.thread.postsOrder.reverseChronologicalTop]
+#. defaultMessage is:
+#. Recently active threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalTop"
+msgstr "Denne meldingen er blitt slettet av forfatteren."
+
+#. [debate.thread.removeTranslation]
+#. defaultMessage is:
+#. Remove translation
+#: messages.json
+#, fuzzy
+msgid "debate.thread.removeTranslation"
+msgstr "Oversett"
+
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
-#. See %{count} sub-thematics
+#. See %{count} sub-themes
 #: messages.json
 msgid "debate.thread.seeSubIdeas"
 msgstr "Se %{count} undertemaer"
 
 #. [debate.thread.seeSubIdeas_1]
 #. defaultMessage is:
-#. See sub-thematic
+#. See sub-theme
 #: messages.json
 msgid "debate.thread.seeSubIdeas_1"
 msgstr "Se undertematikk"
@@ -4007,6 +4191,22 @@ msgstr "Se undertematikk"
 #: messages.json
 msgid "debate.thread.showOriginal"
 msgstr "Vis original"
+
+#. [debate.thread.sortFilterPosts]
+#. defaultMessage is:
+#. Sort / Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortFilterPosts"
+msgstr "Flere synspunkter"
+
+#. [debate.thread.sortPosts]
+#. defaultMessage is:
+#. Sort
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortPosts"
+msgstr "Vær først til å bidra, start en diskusjon!"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
@@ -4160,6 +4360,14 @@ msgid "debate.voteSession.postSuccess"
 msgstr ""
 "Takk for ditt bidrag! Du kan endre stemmingen så lenge hele stemmeøkten "
 "varer."
+
+#. [debate.voteSession.remainingToken]
+#. defaultMessage is:
+#. %{count} token remaining
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.remainingToken"
+msgstr "Du har %{count} sjetonger igjen."
 
 #. [debate.voteSession.remainingTokens]
 #. defaultMessage is:
@@ -5325,6 +5533,13 @@ msgstr "nei"
 msgid "notFound.panelTitle"
 msgstr "Beklager, denne siden eksisterer ikke"
 
+#. [ok]
+#. defaultMessage is:
+#. Ok
+#: messages.json
+msgid "ok"
+msgstr ""
+
 #. [postLoadError]
 #. defaultMessage is:
 #. Something went wrong when loading this post.
@@ -5534,6 +5749,20 @@ msgstr "Brukernavn"
 #, fuzzy
 msgid "profile.usernameInformations"
 msgstr "Personlige opplysninger"
+
+#. [readLessEllipsis]
+#. defaultMessage is:
+#. Read less...
+#: messages.json
+msgid "readLessEllipsis"
+msgstr ""
+
+#. [readMoreEllipsis]
+#. defaultMessage is:
+#. Read more...
+#: messages.json
+msgid "readMoreEllipsis"
+msgstr ""
 
 #. [refuse]
 #. defaultMessage is:
@@ -6252,9 +6481,6 @@ msgstr "ja"
 
 #~ msgid "administration.ph.headerSubtitle"
 #~ msgstr "Topptekst undertittel"
-
-#~ msgid "administration.ph.headerTitle"
-#~ msgstr "Topptekst tittel"
 
 #~ msgid "administration.ph.instructionsContent"
 #~ msgstr "Instruksjonsinnhold"

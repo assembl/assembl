@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
+"POT-Creation-Date: 2019-09-05T14:21:51.391Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -177,6 +177,14 @@ msgstr "Sayaç sayısını tanımla"
 msgid "administration.deleteAssociatedFile"
 msgstr "Soruyu sil"
 
+#. [administration.deleteGauge]
+#. defaultMessage is:
+#. Delete gauge
+#: messages.json
+#, fuzzy
+msgid "administration.deleteGauge"
+msgstr "Soruyu sil"
+
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
@@ -186,7 +194,7 @@ msgstr "Soruyu sil"
 
 #. [administration.deleteSubThematicDisabled]
 #. defaultMessage is:
-#. You cannot delete a theme with sub-thematics.
+#. You cannot delete a theme with sub-themes.
 #: messages.json
 #, fuzzy
 msgid "administration.deleteSubThematicDisabled"
@@ -446,6 +454,22 @@ msgstr "Mesajları şu dile çevir:"
 msgid "administration.export.translation"
 msgstr ""
 "Tüm anket modülü verisini dışa aktarmak için Dışa Aktar butonuna tıklayın"
+
+#. [administration.export.usersAnnotation]
+#. defaultMessage is:
+#. You can export all of the users data by clicking on the export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersAnnotation"
+msgstr "Tüm veriyi dışa aktarmak için dışa aktar düğmesine basın"
+
+#. [administration.export.usersSectionTitle]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersSectionTitle"
+msgstr "Verileri dışa aktar"
 
 #. [administration.export.vote.extractCsvVoters]
 #. defaultMessage is:
@@ -1059,6 +1083,14 @@ msgstr "Taksonomileri dışarı aktar"
 #. Export taxonomies
 #: messages.json
 msgid "administration.menu.exportTaxonomies"
+msgstr "Taksonomileri dışarı aktar"
+
+#. [administration.menu.exportUsers]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.menu.exportUsers"
 msgstr "Taksonomileri dışarı aktar"
 
 #. [administration.menu.legalContents]
@@ -1955,6 +1987,30 @@ msgstr "Metinsel değer"
 msgid "administration.thematic"
 msgstr "Tema"
 
+#. [administration.theme.firstColor]
+#. defaultMessage is:
+#. Primary color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.firstColor"
+msgstr "Jeton rengi"
+
+#. [administration.theme.secondColor]
+#. defaultMessage is:
+#. Second color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.secondColor"
+msgstr "Jeton rengi"
+
+#. [administration.theme.themeColorsTitle]
+#. defaultMessage is:
+#. Theme colors
+#: messages.json
+#, fuzzy
+msgid "administration.theme.themeColorsTitle"
+msgstr "Üstbilgi başlığı"
+
 #. [administration.timelineAdmin.addPhase]
 #. defaultMessage is:
 #. Add a phase
@@ -2137,7 +2193,7 @@ msgstr "Teklifler kısmı başlık yapılandırma"
 
 #. [administration.translationService.description]
 #. defaultMessage is:
-#. Translation service should be activated when the semantic analysis is activated
+#. Translation service must be activated to use the semantic analysis
 #: messages.json
 #, fuzzy
 msgid "administration.translationService.description"
@@ -3577,6 +3633,30 @@ msgstr "Katılımınız için teşekkürler. Teklifiniz gönderildi!"
 msgid "debate.survey.postToBeValidated"
 msgstr "Bu görüşlere katılıyor musunuz?"
 
+#. [debate.survey.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.chronologicalTop"
+msgstr "Daha fazla görüş"
+
+#. [debate.survey.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.popularityFlat"
+msgstr "Daha fazla görüş"
+
+#. [debate.survey.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Newest points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.reverseChronologicalLast"
+msgstr "Daha fazla görüş"
+
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
 #. Do you agree with these points of view?
@@ -3855,6 +3935,14 @@ msgstr "Lütfen bir yorum yazın"
 msgid "debate.thread.fillSubject"
 msgstr "Lütfen bir başlık yazın"
 
+#. [debate.thread.filterPosts]
+#. defaultMessage is:
+#. Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.filterPosts"
+msgstr " %{count} cevabı göster"
+
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
 #. Show %{count} responses
@@ -3947,6 +4035,14 @@ msgstr "Bu gönderiye hiç cevap verilmemiş"
 msgid "debate.thread.numberOfResponses_1"
 msgstr "%{count} cevap"
 
+#. [debate.thread.overviewPosts]
+#. defaultMessage is:
+#. Overview
+#: messages.json
+#, fuzzy
+msgid "debate.thread.overviewPosts"
+msgstr "Daha fazla görüş"
+
 #. [debate.thread.postDeletedByAdmin]
 #. defaultMessage is:
 #. This message has been deleted by the community manager.
@@ -3983,16 +4079,104 @@ msgstr "Katılımınız için teşekkürler. Yorumunuz gönderildi!"
 msgid "debate.thread.postToBeValidated"
 msgstr "düzenlendi"
 
+#. [debate.thread.postsDisplay.full]
+#. defaultMessage is:
+#. Full messages
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.full"
+msgstr "Katılımınız için teşekkürler. Yorumunuz gönderildi!"
+
+#. [debate.thread.postsDisplay.summary]
+#. defaultMessage is:
+#. Message previews
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.summary"
+msgstr " %{count} alt tematiği gör"
+
+#. [debate.thread.postsFilters.myPostsAndAnswers]
+#. defaultMessage is:
+#. Answers to my posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.myPostsAndAnswers"
+msgstr "Bu mesaj yazar tarafından silindi."
+
+#. [debate.thread.postsFilters.onlyMyPosts]
+#. defaultMessage is:
+#. My posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.onlyMyPosts"
+msgstr "düzenlendi"
+
+#. [debate.thread.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological order
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.chronologicalTop"
+msgstr "Daha fazla görüş"
+
+#. [debate.thread.postsOrder.cleanFilter]
+#. defaultMessage is:
+#. Clean filters
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.cleanFilter"
+msgstr "düzenlendi"
+
+#. [debate.thread.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.popularityFlat"
+msgstr "düzenlendi"
+
+#. [debate.thread.postsOrder.reverseChronologicalFlat]
+#. defaultMessage is:
+#. Newest messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalFlat"
+msgstr "Bu mesaj yazar tarafından silindi."
+
+#. [debate.thread.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Recently started threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalLast"
+msgstr "Daha fazla görüş"
+
+#. [debate.thread.postsOrder.reverseChronologicalTop]
+#. defaultMessage is:
+#. Recently active threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalTop"
+msgstr "Bu mesaj yazar tarafından silindi."
+
+#. [debate.thread.removeTranslation]
+#. defaultMessage is:
+#. Remove translation
+#: messages.json
+#, fuzzy
+msgid "debate.thread.removeTranslation"
+msgstr "Çevir"
+
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
-#. See %{count} sub-thematics
+#. See %{count} sub-themes
 #: messages.json
 msgid "debate.thread.seeSubIdeas"
 msgstr " %{count} alt tematiği gör"
 
 #. [debate.thread.seeSubIdeas_1]
 #. defaultMessage is:
-#. See sub-thematic
+#. See sub-theme
 #: messages.json
 msgid "debate.thread.seeSubIdeas_1"
 msgstr "Alt tematiği gör"
@@ -4003,6 +4187,22 @@ msgstr "Alt tematiği gör"
 #: messages.json
 msgid "debate.thread.showOriginal"
 msgstr "Özgün halini göster"
+
+#. [debate.thread.sortFilterPosts]
+#. defaultMessage is:
+#. Sort / Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortFilterPosts"
+msgstr "Daha fazla görüş"
+
+#. [debate.thread.sortPosts]
+#. defaultMessage is:
+#. Sort
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortPosts"
+msgstr "İlk katkıda bulunan siz olun, bir tartışma başlatın!"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
@@ -4156,6 +4356,14 @@ msgid "debate.voteSession.postSuccess"
 msgstr ""
 "Katılımınız için teşekkür ederiz. Oyunuz gönderildi. Oyunuzu tüm oylama "
 "oturumu süresince değiştirebilirsiniz."
+
+#. [debate.voteSession.remainingToken]
+#. defaultMessage is:
+#. %{count} token remaining
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.remainingToken"
+msgstr "Geriye %{count} jetonunuz kaldı."
 
 #. [debate.voteSession.remainingTokens]
 #. defaultMessage is:
@@ -5320,6 +5528,13 @@ msgstr "hayır"
 msgid "notFound.panelTitle"
 msgstr "Üzgünüz, bu sayfa bulunamadı"
 
+#. [ok]
+#. defaultMessage is:
+#. Ok
+#: messages.json
+msgid "ok"
+msgstr ""
+
 #. [postLoadError]
 #. defaultMessage is:
 #. Something went wrong when loading this post.
@@ -5528,6 +5743,20 @@ msgstr "Kullanıcı adı"
 #, fuzzy
 msgid "profile.usernameInformations"
 msgstr "Kişisel bilgiler"
+
+#. [readLessEllipsis]
+#. defaultMessage is:
+#. Read less...
+#: messages.json
+msgid "readLessEllipsis"
+msgstr ""
+
+#. [readMoreEllipsis]
+#. defaultMessage is:
+#. Read more...
+#: messages.json
+msgid "readMoreEllipsis"
+msgstr ""
 
 #. [refuse]
 #. defaultMessage is:
@@ -6246,9 +6475,6 @@ msgstr "evet"
 
 #~ msgid "administration.ph.headerSubtitle"
 #~ msgstr "Üstbilgi alt yazısı"
-
-#~ msgid "administration.ph.headerTitle"
-#~ msgstr "Üstbilgi başlığı"
 
 #~ msgid "administration.ph.instructionsContent"
 #~ msgstr "Talimatlar içeriği"

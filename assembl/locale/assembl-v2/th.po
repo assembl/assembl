@@ -1,7 +1,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
+"POT-Creation-Date: 2019-09-05T14:21:51.391Z\n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -174,6 +174,14 @@ msgstr "กำหนดตัวเลขเกจวัด"
 msgid "administration.deleteAssociatedFile"
 msgstr "ลบคำถาม"
 
+#. [administration.deleteGauge]
+#. defaultMessage is:
+#. Delete gauge
+#: messages.json
+#, fuzzy
+msgid "administration.deleteGauge"
+msgstr "ลบคำถาม"
+
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
@@ -183,7 +191,7 @@ msgstr "ลบคำถาม"
 
 #. [administration.deleteSubThematicDisabled]
 #. defaultMessage is:
-#. You cannot delete a theme with sub-thematics.
+#. You cannot delete a theme with sub-themes.
 #: messages.json
 #, fuzzy
 msgid "administration.deleteSubThematicDisabled"
@@ -440,6 +448,22 @@ msgstr "แปลข้อความใน:"
 #, fuzzy
 msgid "administration.export.translation"
 msgstr "คุณสามารถส่งออกข้อมูลโมดูลการสำรวจทั้งหมดได้โดยคลิกที่ปุ่มส่งออก"
+
+#. [administration.export.usersAnnotation]
+#. defaultMessage is:
+#. You can export all of the users data by clicking on the export button
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersAnnotation"
+msgstr "คุณสามารถส่งออกข้อมูลทั้งหมดได้โดยคลิกที่ปุ่มส่งออก"
+
+#. [administration.export.usersSectionTitle]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.export.usersSectionTitle"
+msgstr "ส่งออกข้อมูล"
 
 #. [administration.export.vote.extractCsvVoters]
 #. defaultMessage is:
@@ -1048,6 +1072,14 @@ msgstr "ส่งออกระบบภาษี "
 #. Export taxonomies
 #: messages.json
 msgid "administration.menu.exportTaxonomies"
+msgstr "ส่งออกระบบภาษี "
+
+#. [administration.menu.exportUsers]
+#. defaultMessage is:
+#. Export users data
+#: messages.json
+#, fuzzy
+msgid "administration.menu.exportUsers"
 msgstr "ส่งออกระบบภาษี "
 
 #. [administration.menu.legalContents]
@@ -1940,6 +1972,30 @@ msgstr "ค่าข้อความ"
 msgid "administration.thematic"
 msgstr "ธีม"
 
+#. [administration.theme.firstColor]
+#. defaultMessage is:
+#. Primary color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.firstColor"
+msgstr "สีของโทเค็น"
+
+#. [administration.theme.secondColor]
+#. defaultMessage is:
+#. Second color
+#: messages.json
+#, fuzzy
+msgid "administration.theme.secondColor"
+msgstr "สีของโทเค็น"
+
+#. [administration.theme.themeColorsTitle]
+#. defaultMessage is:
+#. Theme colors
+#: messages.json
+#, fuzzy
+msgid "administration.theme.themeColorsTitle"
+msgstr "หัวข้อส่วนหัว"
+
 #. [administration.timelineAdmin.addPhase]
 #. defaultMessage is:
 #. Add a phase
@@ -2121,7 +2177,7 @@ msgstr "การกำหนดค่าหัวข้อของข้อเ
 
 #. [administration.translationService.description]
 #. defaultMessage is:
-#. Translation service should be activated when the semantic analysis is activated
+#. Translation service must be activated to use the semantic analysis
 #: messages.json
 #, fuzzy
 msgid "administration.translationService.description"
@@ -3561,6 +3617,30 @@ msgstr "ขอขอบคุณที่เข้าร่วม ส่งข�
 msgid "debate.survey.postToBeValidated"
 msgstr "คุณเห็นด้วยกับความคิดเห็นเหล่านี้หรือไม่"
 
+#. [debate.survey.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological points of view
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.chronologicalTop"
+msgstr "ความคิดเห็นเพิ่มเติม"
+
+#. [debate.survey.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.popularityFlat"
+msgstr "ความคิดเห็นเพิ่มเติม"
+
+#. [debate.survey.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Newest points of view first
+#: messages.json
+#, fuzzy
+msgid "debate.survey.postsOrder.reverseChronologicalLast"
+msgstr "ความคิดเห็นเพิ่มเติม"
+
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
 #. Do you agree with these points of view?
@@ -3839,6 +3919,14 @@ msgstr "โปรดเขียนความคิดเห็น"
 msgid "debate.thread.fillSubject"
 msgstr "โปรดเขียนหัวข้อ"
 
+#. [debate.thread.filterPosts]
+#. defaultMessage is:
+#. Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.filterPosts"
+msgstr "แสดง %{count} คำตอบ"
+
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
 #. Show %{count} responses
@@ -3931,6 +4019,14 @@ msgstr "ไม่มีการตอบรับโพสต์นี้"
 msgid "debate.thread.numberOfResponses_1"
 msgstr "%{count} การตอบรับโพสต์นี้"
 
+#. [debate.thread.overviewPosts]
+#. defaultMessage is:
+#. Overview
+#: messages.json
+#, fuzzy
+msgid "debate.thread.overviewPosts"
+msgstr "ความคิดเห็นเพิ่มเติม"
+
 #. [debate.thread.postDeletedByAdmin]
 #. defaultMessage is:
 #. This message has been deleted by the community manager.
@@ -3967,16 +4063,104 @@ msgstr "ขอขอบคุณที่เข้าร่วม ส่งค�
 msgid "debate.thread.postToBeValidated"
 msgstr "แก้ไขแล้ว"
 
+#. [debate.thread.postsDisplay.full]
+#. defaultMessage is:
+#. Full messages
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.full"
+msgstr "ขอขอบคุณที่เข้าร่วม ส่งความคิดเห็นของคุณแล้ว!"
+
+#. [debate.thread.postsDisplay.summary]
+#. defaultMessage is:
+#. Message previews
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsDisplay.summary"
+msgstr "ดู %{count} ประเด็นย่อย"
+
+#. [debate.thread.postsFilters.myPostsAndAnswers]
+#. defaultMessage is:
+#. Answers to my posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.myPostsAndAnswers"
+msgstr "ข้อความนี้ถูกลบโดยผู้เขียน"
+
+#. [debate.thread.postsFilters.onlyMyPosts]
+#. defaultMessage is:
+#. My posts
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsFilters.onlyMyPosts"
+msgstr "แก้ไขแล้ว"
+
+#. [debate.thread.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological order
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.chronologicalTop"
+msgstr "ความคิดเห็นเพิ่มเติม"
+
+#. [debate.thread.postsOrder.cleanFilter]
+#. defaultMessage is:
+#. Clean filters
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.cleanFilter"
+msgstr "แก้ไขแล้ว"
+
+#. [debate.thread.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.popularityFlat"
+msgstr "แก้ไขแล้ว"
+
+#. [debate.thread.postsOrder.reverseChronologicalFlat]
+#. defaultMessage is:
+#. Newest messages first
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalFlat"
+msgstr "ข้อความนี้ถูกลบโดยผู้เขียน"
+
+#. [debate.thread.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Recently started threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalLast"
+msgstr "ความคิดเห็นเพิ่มเติม"
+
+#. [debate.thread.postsOrder.reverseChronologicalTop]
+#. defaultMessage is:
+#. Recently active threads
+#: messages.json
+#, fuzzy
+msgid "debate.thread.postsOrder.reverseChronologicalTop"
+msgstr "ข้อความนี้ถูกลบโดยผู้เขียน"
+
+#. [debate.thread.removeTranslation]
+#. defaultMessage is:
+#. Remove translation
+#: messages.json
+#, fuzzy
+msgid "debate.thread.removeTranslation"
+msgstr "แปล"
+
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
-#. See %{count} sub-thematics
+#. See %{count} sub-themes
 #: messages.json
 msgid "debate.thread.seeSubIdeas"
 msgstr "ดู %{count} ประเด็นย่อย"
 
 #. [debate.thread.seeSubIdeas_1]
 #. defaultMessage is:
-#. See sub-thematic
+#. See sub-theme
 #: messages.json
 msgid "debate.thread.seeSubIdeas_1"
 msgstr "ดูประเด็นย่อย"
@@ -3987,6 +4171,22 @@ msgstr "ดูประเด็นย่อย"
 #: messages.json
 msgid "debate.thread.showOriginal"
 msgstr "แสดงต้นฉบับ"
+
+#. [debate.thread.sortFilterPosts]
+#. defaultMessage is:
+#. Sort / Filter
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortFilterPosts"
+msgstr "ความคิดเห็นเพิ่มเติม"
+
+#. [debate.thread.sortPosts]
+#. defaultMessage is:
+#. Sort
+#: messages.json
+#, fuzzy
+msgid "debate.thread.sortPosts"
+msgstr "โปรดเป็นคนแรกที่แสดงความคิดเห็น เริ่มต้นการสนทนา!"
 
 #. [debate.thread.startDiscussion]
 #. defaultMessage is:
@@ -4140,6 +4340,14 @@ msgid "debate.voteSession.postSuccess"
 msgstr ""
 "ขอขอบคุณสำหรับการเข้าร่วมของคุณ! การโหวตของคุณพร้อมแล้ว "
 "คุณสามารถแก้ไขการโหวตนี้ได้ตลอดเซสชั่นการโหวต"
+
+#. [debate.voteSession.remainingToken]
+#. defaultMessage is:
+#. %{count} token remaining
+#: messages.json
+#, fuzzy
+msgid "debate.voteSession.remainingToken"
+msgstr "คุณเหลือ %{count} โทเค็น"
 
 #. [debate.voteSession.remainingTokens]
 #. defaultMessage is:
@@ -5297,6 +5505,13 @@ msgstr "ไม่"
 msgid "notFound.panelTitle"
 msgstr "ขออภัย ไม่มีหน้านี้"
 
+#. [ok]
+#. defaultMessage is:
+#. Ok
+#: messages.json
+msgid "ok"
+msgstr ""
+
 #. [postLoadError]
 #. defaultMessage is:
 #. Something went wrong when loading this post.
@@ -5505,6 +5720,20 @@ msgstr "ชื่อผู้ใช้"
 #, fuzzy
 msgid "profile.usernameInformations"
 msgstr "ข้อมูลส่วนบุคคล"
+
+#. [readLessEllipsis]
+#. defaultMessage is:
+#. Read less...
+#: messages.json
+msgid "readLessEllipsis"
+msgstr ""
+
+#. [readMoreEllipsis]
+#. defaultMessage is:
+#. Read more...
+#: messages.json
+msgid "readMoreEllipsis"
+msgstr ""
 
 #. [refuse]
 #. defaultMessage is:
@@ -6217,9 +6446,6 @@ msgstr "ใช่"
 
 #~ msgid "administration.ph.headerSubtitle"
 #~ msgstr "หัวข้อย่อยส่วนหัว"
-
-#~ msgid "administration.ph.headerTitle"
-#~ msgstr "หัวข้อส่วนหัว"
 
 #~ msgid "administration.ph.instructionsContent"
 #~ msgstr "เนื้อหาคำแนะนำ"

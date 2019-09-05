@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
+"POT-Creation-Date: 2019-09-05T14:21:51.391Z\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "MIME-Version: 1.0\n"
@@ -162,6 +162,13 @@ msgid "administration.deleteAssociatedFile"
 msgstr ""
 
 #: messages.json
+#. [administration.deleteGauge]
+#. defaultMessage is:
+#. Delete gauge
+msgid "administration.deleteGauge"
+msgstr ""
+
+#: messages.json
 #. [administration.deleteQuestion]
 #. defaultMessage is:
 #. Delete the question
@@ -171,7 +178,7 @@ msgstr ""
 #: messages.json
 #. [administration.deleteSubThematicDisabled]
 #. defaultMessage is:
-#. You cannot delete a theme with sub-thematics.
+#. You cannot delete a theme with sub-themes.
 msgid "administration.deleteSubThematicDisabled"
 msgstr ""
 
@@ -404,6 +411,20 @@ msgstr ""
 #. defaultMessage is:
 #. Translation of the data
 msgid "administration.export.translation"
+msgstr ""
+
+#: messages.json
+#. [administration.export.usersAnnotation]
+#. defaultMessage is:
+#. You can export all of the users data by clicking on the export button
+msgid "administration.export.usersAnnotation"
+msgstr ""
+
+#: messages.json
+#. [administration.export.usersSectionTitle]
+#. defaultMessage is:
+#. Export users data
+msgid "administration.export.usersSectionTitle"
 msgstr ""
 
 #: messages.json
@@ -943,6 +964,13 @@ msgstr ""
 #. defaultMessage is:
 #. Export taxonomies
 msgid "administration.menu.exportTaxonomies"
+msgstr ""
+
+#: messages.json
+#. [administration.menu.exportUsers]
+#. defaultMessage is:
+#. Export users data
+msgid "administration.menu.exportUsers"
 msgstr ""
 
 #: messages.json
@@ -1765,6 +1793,27 @@ msgid "administration.thematic"
 msgstr ""
 
 #: messages.json
+#. [administration.theme.firstColor]
+#. defaultMessage is:
+#. Primary color
+msgid "administration.theme.firstColor"
+msgstr ""
+
+#: messages.json
+#. [administration.theme.secondColor]
+#. defaultMessage is:
+#. Second color
+msgid "administration.theme.secondColor"
+msgstr ""
+
+#: messages.json
+#. [administration.theme.themeColorsTitle]
+#. defaultMessage is:
+#. Theme colors
+msgid "administration.theme.themeColorsTitle"
+msgstr ""
+
+#: messages.json
 #. [administration.timelineAdmin.addPhase]
 #. defaultMessage is:
 #. Add a phase
@@ -1928,7 +1977,7 @@ msgstr ""
 #: messages.json
 #. [administration.translationService.description]
 #. defaultMessage is:
-#. Translation service should be activated when the semantic analysis is activated
+#. Translation service must be activated to use the semantic analysis
 msgid "administration.translationService.description"
 msgstr ""
 
@@ -3319,6 +3368,27 @@ msgid "debate.survey.postToBeValidated"
 msgstr ""
 
 #: messages.json
+#. [debate.survey.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological points of view
+msgid "debate.survey.postsOrder.chronologicalTop"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular points of view first
+msgid "debate.survey.postsOrder.popularityFlat"
+msgstr ""
+
+#: messages.json
+#. [debate.survey.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Newest points of view first
+msgid "debate.survey.postsOrder.reverseChronologicalLast"
+msgstr ""
+
+#: messages.json
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
 #. Do you agree with these points of view?
@@ -3578,6 +3648,13 @@ msgid "debate.thread.fillSubject"
 msgstr ""
 
 #: messages.json
+#. [debate.thread.filterPosts]
+#. defaultMessage is:
+#. Filter
+msgid "debate.thread.filterPosts"
+msgstr ""
+
+#: messages.json
 #. [debate.thread.foldedPostLink]
 #. defaultMessage is:
 #. Show %{count} responses
@@ -3669,6 +3746,13 @@ msgid "debate.thread.numberOfResponses_1"
 msgstr ""
 
 #: messages.json
+#. [debate.thread.overviewPosts]
+#. defaultMessage is:
+#. Overview
+msgid "debate.thread.overviewPosts"
+msgstr ""
+
+#: messages.json
 #. [debate.thread.postDeletedByAdmin]
 #. defaultMessage is:
 #. This message has been deleted by the community manager.
@@ -3704,16 +3788,93 @@ msgid "debate.thread.postToBeValidated"
 msgstr ""
 
 #: messages.json
+#. [debate.thread.postsDisplay.full]
+#. defaultMessage is:
+#. Full messages
+msgid "debate.thread.postsDisplay.full"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsDisplay.summary]
+#. defaultMessage is:
+#. Message previews
+msgid "debate.thread.postsDisplay.summary"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsFilters.myPostsAndAnswers]
+#. defaultMessage is:
+#. Answers to my posts
+msgid "debate.thread.postsFilters.myPostsAndAnswers"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsFilters.onlyMyPosts]
+#. defaultMessage is:
+#. My posts
+msgid "debate.thread.postsFilters.onlyMyPosts"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsOrder.chronologicalTop]
+#. defaultMessage is:
+#. Chronological order
+msgid "debate.thread.postsOrder.chronologicalTop"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsOrder.cleanFilter]
+#. defaultMessage is:
+#. Clean filters
+msgid "debate.thread.postsOrder.cleanFilter"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsOrder.popularityFlat]
+#. defaultMessage is:
+#. Most popular messages first
+msgid "debate.thread.postsOrder.popularityFlat"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsOrder.reverseChronologicalFlat]
+#. defaultMessage is:
+#. Newest messages first
+msgid "debate.thread.postsOrder.reverseChronologicalFlat"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsOrder.reverseChronologicalLast]
+#. defaultMessage is:
+#. Recently started threads
+msgid "debate.thread.postsOrder.reverseChronologicalLast"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.postsOrder.reverseChronologicalTop]
+#. defaultMessage is:
+#. Recently active threads
+msgid "debate.thread.postsOrder.reverseChronologicalTop"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.removeTranslation]
+#. defaultMessage is:
+#. Remove translation
+msgid "debate.thread.removeTranslation"
+msgstr ""
+
+#: messages.json
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
-#. See %{count} sub-thematics
+#. See %{count} sub-themes
 msgid "debate.thread.seeSubIdeas"
 msgstr ""
 
 #: messages.json
 #. [debate.thread.seeSubIdeas_1]
 #. defaultMessage is:
-#. See sub-thematic
+#. See sub-theme
 msgid "debate.thread.seeSubIdeas_1"
 msgstr ""
 
@@ -3722,6 +3883,20 @@ msgstr ""
 #. defaultMessage is:
 #. Show original
 msgid "debate.thread.showOriginal"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.sortFilterPosts]
+#. defaultMessage is:
+#. Sort / Filter
+msgid "debate.thread.sortFilterPosts"
+msgstr ""
+
+#: messages.json
+#. [debate.thread.sortPosts]
+#. defaultMessage is:
+#. Sort
+msgid "debate.thread.sortPosts"
 msgstr ""
 
 #: messages.json
@@ -3869,6 +4044,13 @@ msgstr ""
 #. defaultMessage is:
 #. Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.
 msgid "debate.voteSession.postSuccess"
+msgstr ""
+
+#: messages.json
+#. [debate.voteSession.remainingToken]
+#. defaultMessage is:
+#. %{count} token remaining
+msgid "debate.voteSession.remainingToken"
 msgstr ""
 
 #: messages.json
@@ -4992,6 +5174,13 @@ msgid "notFound.panelTitle"
 msgstr ""
 
 #: messages.json
+#. [ok]
+#. defaultMessage is:
+#. Ok
+msgid "ok"
+msgstr ""
+
+#: messages.json
 #. [postLoadError]
 #. defaultMessage is:
 #. Something went wrong when loading this post.
@@ -5192,6 +5381,20 @@ msgstr ""
 #. defaultMessage is:
 #. If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.
 msgid "profile.usernameInformations"
+msgstr ""
+
+#: messages.json
+#. [readLessEllipsis]
+#. defaultMessage is:
+#. Read less...
+msgid "readLessEllipsis"
+msgstr ""
+
+#: messages.json
+#. [readMoreEllipsis]
+#. defaultMessage is:
+#. Read more...
+msgid "readMoreEllipsis"
 msgstr ""
 
 #: messages.json
