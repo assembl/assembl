@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2019-06-11 11:29+0200\n"
+"POT-Creation-Date: 2019-09-05 16:24+0200\n"
 "PO-Revision-Date: 2017-09-27 21:10+0800\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: zh_Hans_CN\n"
@@ -43,19 +43,19 @@ msgstr "我们已经有一个使用此用户名的用户。"
 msgid "The username must be less than 20 characters."
 msgstr "请使用至少包含3个字符的名称"
 
-#: assembl/graphql/discussion.py:615
+#: assembl/graphql/discussion.py:631
 msgid "Must pass at least one language to be saved"
 msgstr ""
 
-#: assembl/graphql/discussion.py:661
+#: assembl/graphql/discussion.py:683
 msgid "This slug is an old slug of another debate, you can't use it."
 msgstr ""
 
-#: assembl/graphql/discussion.py:667
+#: assembl/graphql/discussion.py:689
 msgid "This slug is already used by another debate, you can't use it."
 msgstr ""
 
-#: assembl/graphql/document.py:79
+#: assembl/graphql/document.py:86
 msgid "Sorry, this file type is not allowed."
 msgstr ""
 
@@ -65,11 +65,11 @@ msgid ""
 "it is an error, please reconnect to the platform and try again."
 msgstr ""
 
-#: assembl/graphql/post.py:330
+#: assembl/graphql/post.py:329
 msgid "Sorry, you can no longer submit a post as the phase is now closed."
 msgstr ""
 
-#: assembl/graphql/post.py:370
+#: assembl/graphql/post.py:369
 msgid "Proposal"
 msgstr ""
 
@@ -229,7 +229,7 @@ msgstr "有人直接回复您的一个消息"
 msgid "SYNTHESIS: "
 msgstr "合成："
 
-#: assembl/models/preferences.py:116 assembl/models/preferences.py:605
+#: assembl/models/preferences.py:116 assembl/models/preferences.py:624
 msgid "No special authentication"
 msgstr "没有特殊验证"
 
@@ -376,11 +376,28 @@ msgstr "激活网页注释"
 msgid "Use Watson for semantic analysis"
 msgstr ""
 
-#: assembl/models/preferences.py:607
+#: assembl/models/preferences.py:604
+#, fuzzy
+msgid "Select first color"
+msgstr "最旧"
+
+#: assembl/models/preferences.py:606
+msgid "First color of theme"
+msgstr ""
+
+#: assembl/models/preferences.py:613
+msgid "Select second color"
+msgstr ""
+
+#: assembl/models/preferences.py:615
+msgid "Second color of theme"
+msgstr ""
+
+#: assembl/models/preferences.py:626
 msgid "Authentication service type"
 msgstr "验证服务类型"
 
-#: assembl/models/preferences.py:609
+#: assembl/models/preferences.py:628
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
@@ -388,63 +405,63 @@ msgid ""
 "backend."
 msgstr "这个讨论的主要验证服务器被定义为python-social-auth后端。参与者将自动登录到该服务器，并且自动订阅讨论需要一个来自此后端的帐户。"
 
-#: assembl/models/preferences.py:624
+#: assembl/models/preferences.py:643
 msgid "Allow access to moderated text"
 msgstr "允许访问经过审核的文本"
 
-#: assembl/models/preferences.py:627
+#: assembl/models/preferences.py:646
 msgid "Are moderated posts simply hidden or made inaccessible by default?"
 msgstr "将经过审核的帖子设置为隐藏或默认无法访问？"
 
-#: assembl/models/preferences.py:640
+#: assembl/models/preferences.py:659
 msgid "Idea panel opens automatically"
 msgstr "想法面板自动打开"
 
-#: assembl/models/preferences.py:643
+#: assembl/models/preferences.py:662
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
 msgstr "点击想法时，想法面板会自动打开吗？（当点击特殊部分时关闭）"
 
-#: assembl/models/preferences.py:655
+#: assembl/models/preferences.py:674
 msgid "Ids of columns in column view"
 msgstr "列视图中列的标识"
 
-#: assembl/models/preferences.py:657
+#: assembl/models/preferences.py:676
 msgid "What are (ordered) identifiers of columns in multi-column views?"
 msgstr "多列视图中有哪些列的（有序）标识符？"
 
-#: assembl/models/preferences.py:670
+#: assembl/models/preferences.py:689
 msgid "Default colors of columns in column view"
 msgstr "列视图中列的默认颜色"
 
-#: assembl/models/preferences.py:672
+#: assembl/models/preferences.py:691
 msgid "What are (default) theme colors of columns in multi-column views?"
 msgstr "多列视图中列的（默认）主题颜色是什么？"
 
-#: assembl/models/preferences.py:684
+#: assembl/models/preferences.py:703
 msgid "Names of columns in column view"
 msgstr "列视图中列的名称"
 
-#: assembl/models/preferences.py:686
+#: assembl/models/preferences.py:705
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
 msgstr "在多列视图中，每种讨论语言中列的（默认）名称是什么？"
 
-#: assembl/models/preferences.py:699
+#: assembl/models/preferences.py:718
 msgid "Default permissions"
 msgstr "默认权限"
 
-#: assembl/models/preferences.py:702
+#: assembl/models/preferences.py:721
 msgid "The basic permissions for a new discussion"
 msgstr "新讨论的基本权限"
 
-#: assembl/models/preferences.py:788
+#: assembl/models/preferences.py:807
 msgid "Require Email Domain"
 msgstr "要求提供电子邮件域"
 
-#: assembl/models/preferences.py:791
+#: assembl/models/preferences.py:810
 msgid ""
 "List of domain names of user email address required for self-"
 "registration. Only accounts with at least an email from those domains can"
@@ -456,140 +473,140 @@ msgstr ""
 " self-register to this discussion. Anyone can self-register if this is "
 "empty."
 
-#: assembl/models/preferences.py:807
+#: assembl/models/preferences.py:826
 msgid "Whitelist on authentication service"
 msgstr "验证服务类型"
 
-#: assembl/models/preferences.py:810
+#: assembl/models/preferences.py:829
 msgid "Allow white list to be applied to the authentication service chosen"
 msgstr ""
 
-#: assembl/models/preferences.py:822
+#: assembl/models/preferences.py:841
 msgid "Whitelist on standard registration"
 msgstr ""
 
-#: assembl/models/preferences.py:825
+#: assembl/models/preferences.py:844
 msgid "Allow white list to be applied to the default login process"
 msgstr ""
 
-#: assembl/models/preferences.py:837
+#: assembl/models/preferences.py:856
 msgid "Discussion administrators"
 msgstr "讨论统计"
 
-#: assembl/models/preferences.py:840
+#: assembl/models/preferences.py:859
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
 
-#: assembl/models/preferences.py:853
+#: assembl/models/preferences.py:872
 msgid "Show CI Dashboard"
 msgstr "显示CI仪表板"
 
-#: assembl/models/preferences.py:856
+#: assembl/models/preferences.py:875
 msgid "Show the CI Dashboard in the panel group window"
 msgstr "在面板组窗口中显示CI仪表板"
 
-#: assembl/models/preferences.py:868
+#: assembl/models/preferences.py:887
 msgid "URL of CI Dashboard"
 msgstr "CI仪表板的网址"
 
-#: assembl/models/preferences.py:870
+#: assembl/models/preferences.py:889
 msgid "Configuration of the visualizations shown in the CI Dashboard"
 msgstr "CI仪表板中显示的可视化配置"
 
-#: assembl/models/preferences.py:888
+#: assembl/models/preferences.py:907
 msgid "Catalyst Visualizations"
 msgstr "Catalyst可视化"
 
-#: assembl/models/preferences.py:891
+#: assembl/models/preferences.py:910
 msgid "A JSON description of available Catalyst visualizations"
 msgstr "可用Catalyst可视化的JSON描述"
 
-#: assembl/models/preferences.py:903
+#: assembl/models/preferences.py:922
 msgid "Navigation sections"
 msgstr "导航部分"
 
-#: assembl/models/preferences.py:906
+#: assembl/models/preferences.py:925
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
 msgstr "要在导航部分显示的Catalyst可视化的JSON规范"
 
-#: assembl/models/preferences.py:919
+#: assembl/models/preferences.py:938
 msgid "Catalyst translations"
 msgstr "Catalyst译文"
 
-#: assembl/models/preferences.py:922
+#: assembl/models/preferences.py:941
 msgid "Translations applicable to Catalyst visualizations, in Jed (JSON) format"
 msgstr "Jed（JSON）格式、适用于Catalyst可视化的译文"
 
-#: assembl/models/preferences.py:939
+#: assembl/models/preferences.py:958
 msgid "Default Table of Ideas Collapsed state"
 msgstr "默认想法表格的折叠状态"
 
-#: assembl/models/preferences.py:942
+#: assembl/models/preferences.py:961
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
 msgstr "每个想法在想法表中的默认展开/折叠状态。用户可以通过打开/关闭想法来覆盖它"
 
-#: assembl/models/preferences.py:957
+#: assembl/models/preferences.py:976
 msgid "Preference data"
 msgstr "偏好数据"
 
-#: assembl/models/preferences.py:960
+#: assembl/models/preferences.py:979
 msgid "The preference configuration; override only with care"
 msgstr "偏好配置；请谨慎覆盖"
 
-#: assembl/models/preferences.py:972
+#: assembl/models/preferences.py:991
 msgid "Cookies banner"
 msgstr "Cookie横幅"
 
-#: assembl/models/preferences.py:975
+#: assembl/models/preferences.py:994
 msgid "Show the banner offering to disable Piwik cookies"
 msgstr "显示用于禁用Piwik cookie的横幅"
 
-#: assembl/models/preferences.py:987
+#: assembl/models/preferences.py:1006
 msgid "Custom HTML code on the landing page"
 msgstr ""
 
-#: assembl/models/preferences.py:990
+#: assembl/models/preferences.py:1009
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:1000
+#: assembl/models/preferences.py:1019
 msgid "Custom HTML code on the user registration page"
 msgstr ""
 
-#: assembl/models/preferences.py:1003
+#: assembl/models/preferences.py:1022
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
 msgstr ""
 
-#: assembl/models/preferences.py:1013 assembl/models/preferences.py:1016
+#: assembl/models/preferences.py:1032 assembl/models/preferences.py:1035
 msgid "Harvesting translation"
 msgstr "Catalyst译文"
 
-#: assembl/models/preferences.py:1024
+#: assembl/models/preferences.py:1043
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr ""
 
-#: assembl/models/preferences.py:1027
+#: assembl/models/preferences.py:1046
 msgid ""
 "A list of valid domain names or IP addresses that are allowed to make "
 "CORS api calls to the GraphQL API"
 msgstr ""
 
-#: assembl/models/preferences.py:1037
+#: assembl/models/preferences.py:1056
 #, fuzzy
 msgid "Use moderation"
 msgstr "已发布但未经审阅"
 
-#: assembl/models/preferences.py:1038
+#: assembl/models/preferences.py:1057
 msgid "Is the moderation activated or not"
 msgstr ""
 
@@ -2677,7 +2694,7 @@ msgid "Subject:"
 msgstr "主题:"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:125
-#: assembl/views/auth/views.py:1017
+#: assembl/views/auth/views.py:1018
 msgid "Welcome to {discussion_topic}."
 msgstr "欢迎来到{discussion_topic}。"
 
@@ -4616,21 +4633,21 @@ msgstr "退订"
 msgid "unsubscribed"
 msgstr "退订"
 
-#: assembl/views/__init__.py:904
+#: assembl/views/__init__.py:851
 msgid "error"
 msgstr ""
 
-#: assembl/views/__init__.py:905
+#: assembl/views/__init__.py:852
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
 "accessible."
 msgstr ""
 
-#: assembl/views/__init__.py:906
+#: assembl/views/__init__.py:853
 msgid "We apologize for the inconvenience"
 msgstr ""
 
-#: assembl/views/__init__.py:907
+#: assembl/views/__init__.py:854
 msgid "Homepage"
 msgstr ""
 
@@ -4659,7 +4676,7 @@ msgstr "您必须登录才能查看哪些帖子已被阅读"
 msgid "Your message is empty"
 msgstr "您的消息是空的"
 
-#: assembl/views/api2/auth.py:47
+#: assembl/views/api2/auth.py:46
 msgid "The provided input combination is not valid."
 msgstr ""
 
@@ -4671,26 +4688,26 @@ msgstr "请给一个标识符"
 msgid "The passwords that were entered are mismatched!"
 msgstr "输入的密码不匹配！"
 
-#: assembl/views/api2/auth.py:418 assembl/views/auth/views.py:970
-#: assembl/views/auth/views.py:1038
+#: assembl/views/api2/auth.py:418 assembl/views/auth/views.py:971
+#: assembl/views/auth/views.py:1039
 msgid "This link is not valid. Do you want us to send another?"
 msgstr "此链接无效。您需要我们再发送一个链接吗？"
 
-#: assembl/views/api2/auth.py:421 assembl/views/auth/views.py:973
-#: assembl/views/auth/views.py:1041
+#: assembl/views/api2/auth.py:421 assembl/views/auth/views.py:974
+#: assembl/views/auth/views.py:1042
 msgid "This link has been used. Do you want us to send another?"
 msgstr "此链接已被使用。您需要我们再发送一个链接吗？"
 
-#: assembl/views/api2/auth.py:454 assembl/views/auth/views.py:394
+#: assembl/views/api2/auth.py:454 assembl/views/auth/views.py:395
 msgid "Please use a name of at least 3 characters"
 msgstr "请使用至少包含3个字符的名称"
 
-#: assembl/views/api2/auth.py:463 assembl/views/auth/views.py:327
-#: assembl/views/auth/views.py:401
+#: assembl/views/api2/auth.py:463 assembl/views/auth/views.py:328
+#: assembl/views/auth/views.py:402
 msgid "This is not a valid email"
 msgstr "这不是有效的电子邮件"
 
-#: assembl/views/api2/auth.py:472 assembl/views/auth/views.py:408
+#: assembl/views/api2/auth.py:472 assembl/views/auth/views.py:409
 msgid "We already have a user with this email."
 msgstr "我们已经有一个使用此电子邮件的用户。"
 
@@ -4710,47 +4727,47 @@ msgid ""
 "one of ${emails} for support."
 msgstr ""
 
-#: assembl/views/auth/views.py:300
+#: assembl/views/auth/views.py:301
 #, python-format
 msgid "The username %s is already used"
 msgstr "用户名%s已被使用"
 
-#: assembl/views/auth/views.py:319 assembl/views/auth/views.py:1052
+#: assembl/views/auth/views.py:320 assembl/views/auth/views.py:1053
 msgid "The passwords are not identical"
 msgstr "密码不一样"
 
-#: assembl/views/auth/views.py:412
+#: assembl/views/auth/views.py:413
 msgid "The passwords should be identical"
 msgstr "密码应该一致"
 
-#: assembl/views/auth/views.py:468
+#: assembl/views/auth/views.py:469
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email"
 " that does not exist."
 msgstr "您的电子邮件被SMTP服务器拒绝。您可能输入了不存在的电子邮件。"
 
-#: assembl/views/auth/views.py:525 assembl/views/auth/views.py:850
-#: assembl/views/auth/views.py:856
+#: assembl/views/auth/views.py:526 assembl/views/auth/views.py:851
+#: assembl/views/auth/views.py:857
 msgid "This user cannot be found"
 msgstr "无法找到该用户"
 
-#: assembl/views/auth/views.py:543
+#: assembl/views/auth/views.py:544
 msgid "Invalid user and password"
 msgstr "无效的用户和密码"
 
-#: assembl/views/auth/views.py:607
+#: assembl/views/auth/views.py:608
 msgid "This email address is already confirmed"
 msgstr "此电子邮件地址已被确认"
 
-#: assembl/views/auth/views.py:608
+#: assembl/views/auth/views.py:609
 msgid "You do not need to confirm this email address, it is already confirmed."
 msgstr "您不需要确认此电子邮件地址，它已经被确认过。"
 
-#: assembl/views/auth/views.py:616 assembl/views/auth/views.py:815
+#: assembl/views/auth/views.py:617 assembl/views/auth/views.py:816
 msgid "Confirmation requested"
 msgstr "已按要求确认"
 
-#: assembl/views/auth/views.py:617 assembl/views/auth/views.py:816
+#: assembl/views/auth/views.py:618 assembl/views/auth/views.py:817
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. It contains a confirmation link, please click on"
@@ -4758,91 +4775,91 @@ msgid ""
 "confirmation e-mail (check your spams), click here."
 msgstr "确认电子邮件已发送到您的帐户，并且应该在几分钟之内出现在您的收件箱中。它包含一个确认链接，请点击它以确认您的电子邮件地址。如果您没有收到任何确认电子邮件（请检查您的垃圾邮件），请点击此处。"
 
-#: assembl/views/auth/views.py:665 assembl/views/auth/views.py:689
-#: assembl/views/auth/views.py:711
+#: assembl/views/auth/views.py:666 assembl/views/auth/views.py:690
+#: assembl/views/auth/views.py:712
 #, python-format
 msgid "Email <%s> already confirmed"
 msgstr "电子邮件<%s>已经确认"
 
-#: assembl/views/auth/views.py:677
+#: assembl/views/auth/views.py:678
 msgid "This link was not valid. We sent another."
 msgstr "此链接无效。我们已再次发送了一个链接。"
 
-#: assembl/views/auth/views.py:680
+#: assembl/views/auth/views.py:681
 msgid "This link has been used. We sent another."
 msgstr "此链接已被使用。我们已再次发送了一个链接。"
 
-#: assembl/views/auth/views.py:693
+#: assembl/views/auth/views.py:694
 msgid "This link is not valid. Please attempt to login to get another one."
 msgstr "此链接无效。请尝试登录以获得另一个链接。"
 
-#: assembl/views/auth/views.py:732
+#: assembl/views/auth/views.py:733
 #, python-format
 msgid ""
 "Your email address %s has been confirmed, and you are now subscribed to "
 "discussion's default notifications."
 msgstr "您的电子邮件地址%s已被确认，您现在已订阅讨论的默认通知。"
 
-#: assembl/views/auth/views.py:737
+#: assembl/views/auth/views.py:738
 #, python-format
 msgid "Your email address %s has been confirmed."
 msgstr "您的电子邮件地址%s已被确认。"
 
-#: assembl/views/auth/views.py:762
+#: assembl/views/auth/views.py:763
 msgid "Login failed, try again"
 msgstr "登录失败，请再试一次"
 
-#: assembl/views/auth/views.py:803
+#: assembl/views/auth/views.py:804
 msgid "This email is already confirmed."
 msgstr "此电子邮件已被确认。"
 
-#: assembl/views/auth/views.py:824
+#: assembl/views/auth/views.py:825
 msgid "We do not know about this email."
 msgstr "我们不知道这封电子邮件。"
 
-#: assembl/views/auth/views.py:903
+#: assembl/views/auth/views.py:904
 msgid "Password change requested"
 msgstr "已请求更改密码"
 
-#: assembl/views/auth/views.py:904
+#: assembl/views/auth/views.py:905
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
 msgstr "我们向您发送了一个带临时链接的电子邮件。请使用该链接登录并更改密码。"
 
-#: assembl/views/auth/views.py:985
+#: assembl/views/auth/views.py:986
 msgid "You will enter the discussion as <b>{name}</b>."
 msgstr "您将作为<b>{name}</b>进入讨论。"
 
-#: assembl/views/auth/views.py:989
+#: assembl/views/auth/views.py:990
 msgid "You will enter Assembl as <b>{name}</b>."
 msgstr "您将作为<b>{name}</b>进入Assembl。"
 
-#: assembl/views/auth/views.py:992
+#: assembl/views/auth/views.py:993
 msgid "Please choose your password for security reasons."
 msgstr "出于安全考虑，请选择您的密码。"
 
-#: assembl/views/auth/views.py:1021
+#: assembl/views/auth/views.py:1022
 msgid "Change your password"
 msgstr "更改您的密码"
 
-#: assembl/views/auth/views.py:1060
+#: assembl/views/auth/views.py:1061
 msgid "Password changed"
 msgstr "密码已更改"
 
-#: assembl/views/auth/views.py:1074
+#: assembl/views/auth/views.py:1075
 msgid "email"
 msgstr "电子邮件"
 
-#: assembl/views/auth/views.py:1075
+#: assembl/views/auth/views.py:1076
 msgid "Please confirm your {confirm_what} with {assembl}"
 msgstr "请使用{assembl}确认您的{confirm_what}"
 
-#: assembl/views/auth/views.py:1077
+#: assembl/views/auth/views.py:1078
 msgid "account"
 msgstr "帐户"
 
-#: assembl/views/auth/views.py:1078
+#: assembl/views/auth/views.py:1079
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
@@ -4861,7 +4878,7 @@ msgstr ""
 "敬上，\n"
 "{assembl}团队"
 
-#: assembl/views/auth/views.py:1085
+#: assembl/views/auth/views.py:1086
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
@@ -4874,7 +4891,7 @@ msgstr ""
 "并完成您的注册。</p>\n"
 "<p>敬上，<br /> {assembl}团队</p>"
 
-#: assembl/views/auth/views.py:1090
+#: assembl/views/auth/views.py:1091
 msgid ""
 "Hello, {name}!\n"
 "\n"
@@ -4893,7 +4910,7 @@ msgstr ""
 "敬上，\n"
 " {assembl}团队"
 
-#: assembl/views/auth/views.py:1097
+#: assembl/views/auth/views.py:1098
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
@@ -4906,11 +4923,11 @@ msgstr ""
 "</p>\n"
 "<p>敬上，<br /> {assembl}团队</p>"
 
-#: assembl/views/auth/views.py:1151
+#: assembl/views/auth/views.py:1152
 msgid "Request for password change"
 msgstr "请求更改密码"
 
-#: assembl/views/auth/views.py:1155
+#: assembl/views/auth/views.py:1156
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>We have received a request to change the password on your {assembl} "
@@ -4927,7 +4944,7 @@ msgstr ""
 "<p>如果您没有请求重置密码，请忽略此电子邮件。</p>\n"
 "<p>敬上，<br /> {assembl}团队</p>\n"
 
-#: assembl/views/auth/views.py:1161
+#: assembl/views/auth/views.py:1162
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
@@ -4950,7 +4967,7 @@ msgstr ""
 "敬上，\n"
 "{assembl}团队\n"
 
-#: assembl/views/discussion/views.py:58
+#: assembl/views/discussion/views.py:60
 #, python-format
 msgid "No discussion found for slug=%s"
 msgstr "没有讨论地址=%s"
