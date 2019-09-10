@@ -160,7 +160,9 @@ export const getDebateTotalMessages = (transformedFilteredPosts: Array<PostWithC
         post.publicationState !== PublicationStates.DELETED_BY_ADMIN &&
         post.publicationState !== PublicationStates.DELETED_BY_USER
     );
-    return 1 + getDebateTotalMessages(publishedPosts[0].children) + getDebateTotalMessages(publishedPosts.slice(1));
+    const childrenTotalMessages = publishedPosts.length ? getDebateTotalMessages(publishedPosts[0].children) : 0;
+    const otherTotalMessages = publishedPosts.length > 1 ? getDebateTotalMessages(publishedPosts.slice(1)) : 0;
+    return 1 + childrenTotalMessages + otherTotalMessages;
   }
   return 0;
 };
