@@ -3,11 +3,11 @@ import * as React from 'react';
 import { Translate } from 'react-redux-i18n';
 import { compose, graphql } from 'react-apollo';
 import { filter } from 'graphql-anywhere';
-import { Grid, Row, Col } from 'react-bootstrap';
+import { Col, Grid, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
 import { displayLanguageMenu } from '../actions/adminActions';
-import { updateVoteSessionPage, updateVoteModules, updateVoteProposals } from '../actions/adminActions/voteSession';
+import { updateVoteModules, updateVoteProposals, updateVoteSessionPage } from '../actions/adminActions/voteSession';
 import { updateSections } from '../actions/adminActions/adminSections';
 import { updateLandingPageModules } from '../actions/adminActions/landingPage';
 import { updateTextFields } from '../actions/adminActions/profileOptions';
@@ -24,7 +24,7 @@ import { getPhaseId } from '../utils/timeline';
 import { fromGlobalId } from '../utils/globalFunctions';
 import { addEnumSuffixToModuleTitles } from '../components/administration/landingPage/addEnumSuffixToModuleTitles';
 
-import { SECTION_PERSONALIZE_INTERFACE, SECTION_DISCUSSION_PREFERENCES, SECTION_PROFILE_OPTIONS } from './../constants';
+import { SECTION_DISCUSSION_PREFERENCES, SECTION_PERSONALIZE_INTERFACE, SECTION_PROFILE_OPTIONS } from './../constants';
 
 const SECTIONS_WITHOUT_LANGUAGEMENU = [SECTION_PERSONALIZE_INTERFACE, SECTION_DISCUSSION_PREFERENCES];
 
@@ -58,7 +58,13 @@ type State = {
   showLanguageMenu: boolean
 };
 
+const adminMenuScrollEvent = new CustomEvent('adminMenuScroll', {});
+
 class Administration extends React.Component<Props, State> {
+  static onMenuScroll() {
+    window.dispatchEvent(adminMenuScrollEvent);
+  }
+
   state = {
     showLanguageMenu: true
   };
@@ -190,7 +196,7 @@ class Administration extends React.Component<Props, State> {
         <div className="max-container">
           <Grid fluid>
             <Row className="margin-container">
-              <Col xs={3} className="admin-menu-sticky">
+              <Col xs={3} className="admin-menu-sticky" onScroll={Administration.onMenuScroll}>
                 <div className="admin-menu-container">
                   <Menu
                     timeline={timeline}

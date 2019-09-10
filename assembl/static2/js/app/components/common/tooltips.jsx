@@ -1,12 +1,43 @@
 // @flow
 
 import * as React from 'react';
-import { Tooltip } from 'react-bootstrap';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 import { Translate } from 'react-redux-i18n';
 
 type TooltipProps = {
   level: number
 };
+
+export class CustomOverlayTrigger extends React.Component<any> {
+  overlayRef: any;
+
+  constructor() {
+    super();
+    this.overlayRef = React.createRef();
+  }
+
+  componentDidMount() {
+    window.addEventListener('scroll', this.hideOverlay);
+    window.addEventListener('adminMenuScroll', this.hideOverlay);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.hideOverlay);
+    window.removeEventListener('adminMenuScroll', this.hideOverlay);
+  }
+
+  hideOverlay = () => {
+    this.overlayRef.current.hide();
+  };
+
+  render() {
+    return (
+      <OverlayTrigger ref={this.overlayRef} {...this.props}>
+        {this.props.children}
+      </OverlayTrigger>
+    );
+  }
+}
 
 export const addSectionTooltip = (
   <Tooltip id="addSectionTooltip">
