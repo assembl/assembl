@@ -2,8 +2,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { Translate, I18n } from 'react-redux-i18n';
-import { Grid, Col, Button } from 'react-bootstrap';
+import { I18n, Translate } from 'react-redux-i18n';
+import { Button, Col, Grid } from 'react-bootstrap';
 
 import Avatar from '../components/profile/avatar';
 import ModifyPasswordForm from '../components/profile/modifyPasswordForm';
@@ -29,7 +29,6 @@ type ProfileProps = {
   email: string, // eslint-disable-line react/no-unused-prop-types
   lang: string,
   slug: string,
-  userId: string,
   username: string, // eslint-disable-line react/no-unused-prop-types
   id: string,
   hasPassword: boolean,
@@ -54,32 +53,6 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
     creationDate: null
   };
 
-  static getDerivedStateFromProps(nextProps: ProfileProps) {
-    const email = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'EMAIL');
-    const fullname = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'FULLNAME');
-    const username = nextProps.profileFields.find(pf => pf.configurableField.identifier === 'USERNAME');
-    const defaultValues =
-      email && fullname && username
-        ? {
-          [email.id]: nextProps.email,
-          [fullname.id]: nextProps.name,
-          [username.id]: nextProps.username
-        }
-        : {};
-    const values = nextProps.profileFields
-      .filter(pf => pf.configurableField.identifier === 'CUSTOM')
-      .filter(pf => pf.valueData)
-      .reduce(
-        (result, pf) => ({
-          ...result,
-          [pf.id]: pf.valueData.value
-        }),
-        defaultValues
-      );
-
-    return { values: values };
-  }
-
   constructor(props) {
     super(props);
     const { name } = this.props;
@@ -92,14 +65,45 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
   }
 
   componentDidMount() {
-    const { connectedUserId, slug } = this.props;
-    const { userId } = this.props.params;
-    const { location } = this.props;
+    const { connectedUserId, location, params, slug } = this.props;
+    const { userId } = params;
     if (!connectedUserId) {
       browserHistory.push(`${getContextual('login', { slug: slug })}?next=${location.pathname}`);
     } else if (connectedUserId !== userId) {
       browserHistory.push(get('home', { slug: slug }));
     }
+    this.setDefaultValues();
+  }
+
+  setDefaultValues() {
+    const { email, name, profileFields, username } = this.props;
+    const emailField = profileFields.find(pf => pf.configurableField.identifier === 'EMAIL');
+    const fullnameField = profileFields.find(pf => pf.configurableField.identifier === 'FULLNAME');
+    const usernameField = profileFields.find(pf => pf.configurableField.identifier === 'USERNAME');
+    const defaultValues =
+      emailField && fullnameField && usernameField
+        ? {
+          [emailField.id]: email,
+          [fullnameField.id]: name,
+          [usernameField.id]: username
+        }
+        : {};
+    const customValues = profileFields.filter(pf => pf.configurableField.identifier === 'CUSTOM').filter(pf => pf.valueData);
+
+    const values = customValues.reduce(
+      (result, pf) => ({
+        ...result,
+        [pf.id]: pf.valueData.value
+      }),
+      defaultValues
+    );
+    this.setState(prevState => ({
+      ...prevState,
+      values: {
+        ...prevState.values,
+        ...values
+      }
+    }));
   }
 
   handleSaveClick = () => {
@@ -133,13 +137,16 @@ class Profile extends React.PureComponent<ProfileProps, ProfileState> {
   };
 
   handleFieldValueChange = (id, value) => {
-    this.setState(prevState => ({
-      ...prevState,
-      values: {
-        ...prevState.values,
-        [id]: value
-      }
-    }));
+    this.setState((prevState) => {
+      const newState = {
+        ...prevState,
+        values: {
+          ...prevState.values
+        }
+      };
+      newState.values[id] = value;
+      return newState;
+    });
   };
 
   render() {
