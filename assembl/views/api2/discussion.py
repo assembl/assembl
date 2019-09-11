@@ -1,14 +1,22 @@
 # -*- coding: utf-8 -*-
-import csv
-import tempfile
 from cStringIO import StringIO
-from os import urandom
-from os.path import join, dirname
 from collections import defaultdict
 from datetime import timedelta, datetime
-import isodate
-from assembl.lib.clean_input import sanitize_text
+from graphene.relay import Node
 
+import isodate
+import simplejson as json
+import transaction
+from cornice import Service
+from pyramid.httpexceptions import (
+    HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPServerError, HTTPConflict)
+from pyramid.renderers import JSONP_VALID_CALLBACK
+from pyramid.response import Response
+from pyramid.security import Everyone
+from pyramid.settings import asbool
+from pyramid.view import view_config
+from pyramid_mailer import get_mailer
+from pyramid_mailer.message import Message
 from sqlalchemy import (
     Column,
     Integer,
@@ -21,58 +29,39 @@ from sqlalchemy import (
     and_,
     or_,
     case,
-    desc,
     Float,
 )
 from sqlalchemy.orm import with_polymorphic, joinedload, joinedload_all
 from sqlalchemy.orm.util import aliased
 from sqlalchemy.sql.expression import literal
-from cornice import Service
-import transaction
 
-import simplejson as json
-from pyramid.response import FileIter, Response
-from pyramid.view import view_config
-from pyramid.httpexceptions import (
-    HTTPOk, HTTPBadRequest, HTTPUnauthorized, HTTPNotAcceptable, HTTPFound,
-    HTTPServerError, HTTPConflict)
-from pyramid.security import Everyone
-from pyramid.renderers import JSONP_VALID_CALLBACK
-from pyramid.settings import asbool
-from pyramid_mailer import get_mailer
-from pyramid_mailer.message import Message
-import requests
-
+from assembl.auth import (
+    P_READ, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
+    R_ADMINISTRATOR)
+from assembl.auth.util import get_permissions, discussions_with_access
+from assembl.graphql.utils import get_primary_id
 from assembl.lib.clean_input import sanitize_text
 from assembl.lib.config import get_config
+from assembl.lib.json import DateJSONEncoder
 from assembl.lib.migration import create_default_discussion_data
 from assembl.lib.parsedatetime import parse_datetime
 from assembl.lib.sqla import ObjectNotUniqueError
-from assembl.lib.json import DateJSONEncoder
-from assembl.lib.utils import get_global_base_url
-from assembl.auth import (
-    P_READ, P_READ_PUBLIC_CIF, P_ADMIN_DISC, P_DISC_STATS, P_SYSADMIN,
-    R_ADMINISTRATOR)
-from assembl.auth.password import verify_data_token, data_token, Validity
-from assembl.auth.util import get_permissions, discussions_with_access
-from assembl.graphql.langstring import resolve_langstring
-from assembl.models import Discussion, Permission, Post
+from assembl.models import Discussion, Post
+from assembl.models import LanguagePreferenceCollection, Locale, PublicationStates
+from assembl.models.idea import MessageView
+from assembl.models.idea_content_link import ExtractStates
+from assembl.models.post import deleted_publication_states
+from assembl.models.social_data_extraction import (
+    get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
 from assembl.utils import (
     format_date,
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
     get_bright_mirror_ideas, get_vote_session_ideas,
     get_deleted_posts, get_related_extracts, get_posts,
     get_published_posts, get_published_top_posts)
-from assembl.models.social_data_extraction import (
-    get_social_columns_from_user, load_social_columns_info, get_provider_id_for_discussion)
-from ..traversal import InstanceContext, ClassContext
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
-from assembl.models import LanguagePreferenceCollection, Locale, PublicationStates
-from assembl.models.idea_content_link import ExtractStates
-from assembl.models.post import deleted_publication_states
-from assembl.models.timeline import Phases, get_phase_by_identifier
-from assembl.models.idea import MessageView
+from ..traversal import InstanceContext, ClassContext
 
 no_thematic_associated = "no thematic associated"
 
@@ -208,8 +197,8 @@ def get_time_series_analytics(request):
         discussion.db.execute(intervals_table.insert(), intervals)
 
         from assembl.models import (
-            Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
-            AbstractIdeaVote, Action, ActionOnPost, ActionOnIdea, Content)
+            Post, AgentStatusInDiscussion, ViewPost, Idea,
+            AbstractIdeaVote, ActionOnPost, ActionOnIdea, Content)
 
         # The posters
         post_subquery = discussion.db.query(intervals_table.c.interval_id,
@@ -673,6 +662,9 @@ def multi_module_csv_export(request):
 def users_csv_export(request):
     import assembl.models as m
     from collections import defaultdict
+    discussion = request.context._instance
+    db = discussion.db
+    user_prefs = LanguagePreferenceCollection.getCurrent()
 
     ID = u"id".encode('utf-8')
     NAME = u"Nom prénom".encode('utf-8')
@@ -695,19 +687,25 @@ def users_csv_export(request):
     DONT_UNDERSTAND_RECEIVED = u'''Nombre de mentions "Pas tout compris" reçu'''.encode('utf-8')
     MORE_INFO_RECEIVED = u'''Nombre de mentions "SVP + d'infos" reçu'''.encode('utf-8')
     IDEAS = u"Liste des idées dans lesquelles il a contribué".encode('utf-8')
-    fieldnames = [
-        NAME, EMAIL, USERNAME, CREATION_DATE, FIRST_VISIT, LAST_VISIT, TOP_POSTS, TOP_POST_REPLIES, POSTS,
+
+    custom_fields = db.query(m.AbstractConfigurableField
+                             ).filter(m.AbstractConfigurableField.discussion_id == discussion.id,
+                      m.AbstractConfigurableField.identifier == 'CUSTOM',
+             ).order_by(m.AbstractConfigurableField.order
+             ).all()
+
+    custom_fields_display = [(cf.id, cf.title.best_lang(user_prefs).value.encode('utf-8')) for cf in custom_fields]
+
+    fieldnames = [NAME, EMAIL, USERNAME] \
+                 + [cf[1] for cf in custom_fields_display] \
+                 + [CREATION_DATE, FIRST_VISIT, LAST_VISIT, TOP_POSTS, TOP_POST_REPLIES, POSTS,
         POSTS_REPLIES, TOTAL_POSTS, AGREE_GIVEN, DISAGREE_GIVEN, DONT_UNDERSTAND_GIVEN, MORE_INFO_GIVEN, AGREE_RECEIVED,
-        DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, IDEAS
-    ]
+        DISAGREE_RECEIVED, DONT_UNDERSTAND_RECEIVED, MORE_INFO_RECEIVED, IDEAS]
     LIKE_SENTIMENT = 'sentiment:like'
     DISLIKE_SENTIMENT = 'sentiment:disagree'
     DONT_UNDERSTAND_SENTIMENT = 'sentiment:dont_understand'
     MORE_INFO_SENTIMENT = 'sentiment:more_info'
 
-    discussion = request.context._instance
-    db = discussion.db
-    user_prefs = LanguagePreferenceCollection.getCurrent()
 
     start, end, interval = get_time_series_timing(request)
     has_anon = asbool(request.GET.get('anon', False))
@@ -722,6 +720,7 @@ def users_csv_export(request):
         m.SentimentOfPost.post_id.in_([post.id for post in posts]),
         m.SentimentOfPost.tombstone_condition()
     ).all()
+
     # Sort sentiments for better access depending of post/user
     sentiments_given_by_user = defaultdict(lambda: defaultdict(int))
     sentiments_received_by_post = defaultdict(lambda: defaultdict(int))
@@ -732,8 +731,25 @@ def users_csv_export(request):
 
     users = {}
 
-    users_in_discussion = db.query(m.User).join(m.AgentStatusInDiscussion, m.AgentStatusInDiscussion.profile_id == m.User.id).filter(
-        m.AgentStatusInDiscussion.discussion_id == discussion.id).order_by(m.User.id).all()
+    users_in_discussion = db.query(m.User
+      ).join(m.AgentStatusInDiscussion, m.AgentStatusInDiscussion.profile_id == m.User.id
+      ).filter(m.AgentStatusInDiscussion.discussion_id == discussion.id
+      ).order_by(m.User.id
+      ).all()
+
+    users_in_discussion_ids = [u.id for u in users_in_discussion]
+    profile_fields_ids = [cf.id for cf in custom_fields]
+    profile_field_values = db.query(m.ProfileField).filter(
+        m.ProfileField.agent_profile_id.in_(users_in_discussion_ids),
+        m.ProfileField.configurable_field_id.in_(profile_fields_ids)
+    ).join(m.AbstractConfigurableField, m.ProfileField.configurable_field_id == m.AbstractConfigurableField.id
+    ).order_by(m.ProfileField.agent_profile_id
+    ).all()
+
+    from itertools import groupby
+    from operator import attrgetter
+
+    user_profile_custom_values = {user_id: list(profile_fields) for user_id, profile_fields in groupby(profile_field_values, attrgetter('agent_profile_id'))}
 
     for user in users_in_discussion:
         # Sort out ppl who couldn't have connected during the required period
@@ -764,6 +780,17 @@ def users_csv_export(request):
                 TOTAL_POSTS: 0,
                 IDEAS: ''
             }
+        custom_values = user_profile_custom_values.get(user.id, [])
+        custom_values_dict = {cv.configurable_field_id: cv for cv in custom_values}
+        for custom_field_id, custom_field_label in custom_fields_display:
+            custom_value = custom_values_dict[custom_field_id]
+            field_type = custom_value.configurable_field.type
+            if field_type == 'text_field':
+                users[user.id][custom_field_label] = custom_value.value_data['value']
+            elif field_type == 'select_field':
+                value_id = custom_value.value_data['value'][0]
+                select_field_option = db.query(m.SelectFieldOption).get(get_primary_id(value_id))
+                users[user.id][custom_field_label] = select_field_option.label.best_lang(user_prefs).value
 
         #Get SSO extra information
         for account in user.social_accounts:
@@ -906,7 +933,7 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
                 for r in results[worksheet.title]:
                     try:
                         writerow([escapeit(r, f) for f in fieldnames[worksheet.title]])
-                    except:
+                    except Exception:
                         print('Skipping row:', r)
         else:
             if results[worksheet.title] is not None:
@@ -1037,7 +1064,6 @@ def get_visitors(request):
                           load_social_columns_info(discussion, "en"))
     db = discussion.db
     from assembl import models as m
-    from graphene.relay import Node
     # Adding configurable fields titles to the csv
     configurable_fields = db.query(m.AbstractConfigurableField).filter(m.AbstractConfigurableField.discussion_id == discussion.id).filter(
         m.AbstractConfigurableField.identifier == m.ConfigurableFieldIdentifiersEnum.CUSTOM.value).all()
@@ -1252,8 +1278,8 @@ def get_participant_time_series_analytics(request):
     sort_key = request.GET.get('sort', 'domain' if with_email else 'name')
     results = []
     from assembl.models import (
-        Post, AgentProfile, AgentStatusInDiscussion, ViewPost, Idea,
-        AbstractIdeaVote, Action, ActionOnPost, ActionOnIdea, Content,
+        Post, AgentProfile, Idea,
+        ActionOnPost, ActionOnIdea, Content,
         PublicationStates, AbstractAgentAccount, LikeSentimentOfPost,
         DisagreeSentimentOfPost, DontUnderstandSentimentOfPost,
         MoreInfoSentimentOfPost)
