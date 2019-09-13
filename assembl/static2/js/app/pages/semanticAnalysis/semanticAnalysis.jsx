@@ -50,7 +50,7 @@ export class SemanticAnalysis extends Component<Props & ReduxProps, State> {
     numberOfKeywordsToDisplay: this.NUM_WORDS_DEFAULT
   };
 
-  NUM_WORDS_DEFAULT = 20;
+  NUM_WORDS_DEFAULT = 30;
 
   MIN_WORDS = 10;
 

@@ -275,9 +275,6 @@
 
   #burger-menu {
     #screen-too-small {
-      width: 100%;
-      padding-bottom: 100px;
-
       .nav-menu {
         display: flex;
         flex-direction: column;
@@ -316,6 +313,11 @@
 
   /* Landscape phones and portrait tablets */
   @media (max-width: $screen-xs-max) {
+    #screen-too-small {
+      width: 100%;
+      padding-bottom: 100px;
+    }
+
     #search {
       display: none;
     }
