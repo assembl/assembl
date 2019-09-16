@@ -783,14 +783,21 @@ def users_csv_export(request):
         custom_values = user_profile_custom_values.get(user.id, [])
         custom_values_dict = {cv.configurable_field_id: cv for cv in custom_values}
         for custom_field_id, custom_field_label in custom_fields_display:
-            custom_value = custom_values_dict[custom_field_id]
-            field_type = custom_value.configurable_field.type
-            if field_type == 'text_field':
-                users[user.id][custom_field_label] = custom_value.value_data['value']
-            elif field_type == 'select_field':
-                value_id = custom_value.value_data['value'][0]
-                select_field_option = db.query(m.SelectFieldOption).get(get_primary_id(value_id))
-                users[user.id][custom_field_label] = select_field_option.label.best_lang(user_prefs).value
+            custom_value = custom_values_dict.get(custom_field_id, None)
+            if not custom_value:
+                formatted_value = str(custom_field_id) if custom_field_id is not None else ''
+            else:
+                field_type = custom_value.configurable_field.type
+                if field_type == 'text_field':
+                    formatted_value = custom_value.value_data['value']
+                elif field_type == 'select_field':
+                    value_id = custom_value.value_data['value'][0]
+                    select_field_option = db.query(m.SelectFieldOption).get(get_primary_id(value_id))
+                    formatted_value = select_field_option.label.best_lang(user_prefs).value
+                else:
+                    raise Exception('field type unhandled: {}'.format(field_type))
+
+            users[user.id][custom_field_label] = formatted_value
 
         #Get SSO extra information
         for account in user.social_accounts:
