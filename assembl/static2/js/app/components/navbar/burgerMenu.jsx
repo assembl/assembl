@@ -3,6 +3,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
+import { I18n } from 'react-redux-i18n';
 
 import TimelineCpt from '../debate/navigation/timeline';
 import { browserHistory } from '../../router';
@@ -115,7 +116,7 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
           <span
             className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
           />
-          <span className="menu-text">menu</span>
+          <span className="menu-text">{I18n.t('navbar.theme')}</span>
         </span>
       </div>
     );

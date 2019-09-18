@@ -202,6 +202,7 @@ const Translations = {
       download: "Télécharger le document"
     },
     navbar: {
+      theme: "thèmes",
       home: "accueil",
       debate: "débat",
       resourcesCenter: "Ressources",
@@ -1320,6 +1321,7 @@ const Translations = {
       download: "Download the document"
     },
     navbar: {
+      theme: "themes",
       home: "home",
       debate: "debate",
       community: "community",
