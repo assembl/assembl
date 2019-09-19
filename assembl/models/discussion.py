@@ -802,6 +802,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
 
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
                 from ..auth.util import get_current_user_id
+                raise HTTPUnauthorized()
                 try:
                     current_user = get_current_user_id()
                 except RuntimeError:
@@ -901,7 +902,8 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                                         raise ValueError(
                                             "Failed on content sink transaction")
 
-        return {'active_widgets': ActiveWidgetsCollection(cls),
+        return {'all_users': AllUsersCollection(cls),
+                'active_widgets': ActiveWidgetsCollection(cls),
                 'sources': SourcesCollection(cls),
                 'user_ns_kv': UserNsDictCollection(cls),
                 'settings': DiscussionPreferenceCollection(cls)}
