@@ -901,8 +901,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                                         raise ValueError(
                                             "Failed on content sink transaction")
 
-        return {'all_users': AllUsersCollection(cls),
-                'active_widgets': ActiveWidgetsCollection(cls),
+        return {'active_widgets': ActiveWidgetsCollection(cls),
                 'sources': SourcesCollection(cls),
                 'user_ns_kv': UserNsDictCollection(cls),
                 'settings': DiscussionPreferenceCollection(cls)}
