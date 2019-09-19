@@ -801,16 +801,7 @@ class Discussion(DiscussionBoundBase, NamedClassMixin):
                 super(AllUsersCollection, self).__init__(cls, User)
 
             def decorate_query(self, query, owner_alias, last_alias, parent_instance, ctx):
-                from ..auth.util import get_current_user_id
                 raise HTTPUnauthorized()
-                try:
-                    current_user = get_current_user_id()
-                except RuntimeError:
-                    current_user = None
-                participants = parent_instance.get_participants_query(
-                    True, False, current_user).subquery()
-                return query.join(
-                    owner_alias, last_alias.id.in_(participants))
 
             def decorate_instance(
                     self, instance, parent_instance, assocs, user_id,
