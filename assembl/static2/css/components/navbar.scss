@@ -243,6 +243,8 @@
     .nav-burger-menu {
       background-color: $white;
       left: 0;
+      bottom: 0;
+      padding-bottom: 60px;
       position: absolute;
       top: $navbar-height;
       width: 400px;
