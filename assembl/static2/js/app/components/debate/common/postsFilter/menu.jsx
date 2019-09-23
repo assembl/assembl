@@ -11,11 +11,7 @@ import PostsFilterButtons from './buttons';
 import PostsFilterLabelMenuItem from './label';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { withScreenHeight } from '../../../common/screenDimensions';
-import {
-  defaultDisplayPolicy,
-  defaultOrderPolicy,
-  defaultPostsFiltersStatus
-} from './policies';
+import { defaultDisplayPolicy, defaultOrderPolicy, defaultPostsFiltersStatus } from './policies';
 import { ICO_FILTER } from '../../../../constants';
 
 type Props = {
