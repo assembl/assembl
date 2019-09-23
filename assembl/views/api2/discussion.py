@@ -814,12 +814,18 @@ def users_csv_export(request):
         if creator_id not in users.keys():
             continue
 
+        if not post.id:
+            # prevent assertion error just after
+            continue
+
+        descendants = post.get_descendants().all()
+
         if post.parent_id is None:
             users[creator_id][TOP_POSTS] += 1
-            users[creator_id][TOP_POST_REPLIES] += len(post.get_descendants().all())
+            users[creator_id][TOP_POST_REPLIES] += len(descendants)
         else:
             users[creator_id][POSTS] += 1
-            users[creator_id][POSTS_REPLIES] += len(post.get_descendants().all())
+            users[creator_id][POSTS_REPLIES] += len(descendants)
 
         users[creator_id][TOTAL_POSTS] += 1
         users[creator_id][AGREE_RECEIVED] += sentiments_received_by_post[post.id][LIKE_SENTIMENT]
