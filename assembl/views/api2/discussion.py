@@ -810,16 +810,20 @@ def users_csv_export(request):
                     users[user.id][key] += ', ' + value
 
     for post in posts:
+        if not post.id:
+            continue
         creator_id = post.creator.id
         if creator_id not in users.keys():
             continue
 
+        descendants = post.get_descendants().all()
+        replies_num = len(descendants)
         if post.parent_id is None:
             users[creator_id][TOP_POSTS] += 1
-            users[creator_id][TOP_POST_REPLIES] += len(post.get_descendants().all())
+            users[creator_id][TOP_POST_REPLIES] += replies_num
         else:
             users[creator_id][POSTS] += 1
-            users[creator_id][POSTS_REPLIES] += len(post.get_descendants().all())
+            users[creator_id][POSTS_REPLIES] += replies_num
 
         users[creator_id][TOTAL_POSTS] += 1
         users[creator_id][AGREE_RECEIVED] += sentiments_received_by_post[post.id][LIKE_SENTIMENT]
