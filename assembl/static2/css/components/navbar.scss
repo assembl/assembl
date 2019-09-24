@@ -1,4 +1,8 @@
 #burger-menu {
+  .burgermenu-icon {
+    padding-left: 7px;
+  }
+
   .minimized-timeline {
     cursor: pointer;
 
@@ -239,6 +243,8 @@
     .nav-burger-menu {
       background-color: $white;
       left: 0;
+      bottom: 0;
+      padding-bottom: 60px;
       position: absolute;
       top: $navbar-height;
       width: 400px;
@@ -298,6 +304,7 @@
 
     .mobile-navbar {
       .burgermenu-icon {
+        padding-left: 7px;
         flex-grow: 0.25;
       }
     }
@@ -327,6 +334,7 @@
     }
 
     .burgermenu-icon {
+      padding-left: 7px;
       flex: 1;
     }
   }
