@@ -30,7 +30,7 @@ from sqlalchemy.orm.util import has_identity
 from sqlalchemy.util import classproperty
 from sqlalchemy.orm.session import object_session, Session
 from sqlalchemy.engine import strategies
-from sqlalchemy.engine.url import URL
+from sqlalchemy.engine.url import URL, make_url
 from zope.sqlalchemy import ZopeTransactionExtension
 from zope.sqlalchemy.datamanager import mark_changed as z_mark_changed
 from pyramid.httpexceptions import HTTPUnauthorized, HTTPBadRequest
@@ -1811,7 +1811,7 @@ event.listen(BaseOps, 'after_update', orm_update_listener, propagate=True)
 event.listen(BaseOps, 'after_delete', orm_delete_listener, propagate=True)
 
 
-def connection_url(settings, prefix='db_'):
+def connection_url(settings, prefix='db_', read_only=False):
     db_host = settings.get(prefix + 'host', None)
     db_user = settings.get(prefix + 'user', None)
     db_database = settings.get(prefix + 'database', None)
@@ -1835,10 +1835,14 @@ def connection_url(settings, prefix='db_'):
             'postgresql+psycopg2', rds_iam_role, region, db_user,
             db_host, database=db_database, query=query)
     else:
-        query = {'sslmode': 'disable' if db_host == 'localhost' else 'require'}
-        password = settings.get(prefix + 'password', None) or settings.get('db_password')
-        return URL(
-            'postgresql+psycopg2', db_user, password, db_host, None, db_database, query)
+        s_key = 'sqlalchemy.url_ro' if read_only else 'sqlalchemy.url'
+        connstring = settings.get(s_key)
+        return make_url(connstring)
+        # query = {'sslmode': 'disable' if db_host == 'localhost' else 'require'}
+        # password = settings.get(prefix + 'password', None) or settings.get('db_password')
+        ## just use sqlalchemy.url
+        # return URL(
+        #     'postgresql+psycopg2', db_user, password, db_host, None, db_database, query)
 
 
 def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
@@ -1868,7 +1872,7 @@ def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
         engine_kwargs['creator'] = creator
 
     engine = engine_from_config(settings, 'sqlalchemy.', **engine_kwargs)
-    read_url = connection_url(settings, "dbro_")
+    read_url = connection_url(settings, "dbro_", read_only=True)
     if read_url:
         settings = dict(settings)
         settings['sqlalchemy.url'] = read_url
