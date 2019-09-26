@@ -8,7 +8,6 @@ random_file = random.ini
 *db_password = assembl
 *db_database = assembl
 db_schema = public
-sqlalchemy.url = postgresql+psycopg2://%(db_user)s:%(db_password)s@%(db_host)s:%(db_port)s/%(db_database)s?sslmode=disable
 _postgres_db_user = postgres
 _postgres_db_password =
 smtp_host = localhost
