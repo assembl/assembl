@@ -257,7 +257,7 @@ Also, many lines will differ that are built with interpolation; for example, ``p
 
 .. code:: ini
 
-    sqlalchemy.url = postgresql+psycopg2://%(db_user)s:%(db_password)s@%(db_host)s/%(db_database)s?sslmode=disable
+    sqlalchemy.url = postgresql+psycopg2://%(db_user)s:%(db_password)s@%(db_host)s:%(db_port)s/%(db_database)s?sslmode=allow
 
-Ideally, you would set the values of ``*db_user``, ``*db_password``, ``*db_host``, ``*db_database`` in your ``myinstance.rc`` file until the ``sqlalchemy.url`` key disappears from migration, without overriding the ``sqlalchemy.url`` key itself. A similar process applies to ``sentry_...`` variables.
+Ideally, you would set the values of ``*db_user``, ``*db_password``, ``*db_host``, ``*db_port``, ``*db_database`` in your ``myinstance.rc`` file until the ``sqlalchemy.url`` key disappears from migration, without overriding the ``sqlalchemy.url`` key itself. A similar process applies to ``sentry_...`` variables.
 
