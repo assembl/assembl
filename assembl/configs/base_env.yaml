@@ -1,6 +1,5 @@
 DEFAULT:
   db_host: localhost
-  db_port: '5432'
   db_user: assembl
   # TODO: If generated remotely, fetch in fabfile
   db_password: assembl
@@ -194,4 +193,3 @@ password_required_classes: '{"[a-z]": {"en": "lower-case letter", "fr": "une let
 # mouseflow activation variable and website id
 activate_mouseflow: false
 mouseflow_website_id: ""
-
