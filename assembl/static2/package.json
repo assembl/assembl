@@ -112,6 +112,7 @@
     "co": "4.6.0",
     "core-js": "^2.0.0",
     "css-loader": "^3.1.0",
+    "custom-event-polyfill": "^1.0.7",
     "draft-convert": "^2",
     "draft-js": "^0.10.5",
     "draft-js-buttons": "^2.0.1",
