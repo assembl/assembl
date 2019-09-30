@@ -69,27 +69,20 @@ def graphql_participant1_request(request, test_participant1_webrequest, discussi
 
 @freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
-def idea_in_thread_phase(request, test_session, phases, graphql_request):
+def idea_in_thread_phase(request, test_session, phases, graphql_request, graphql_registry):
     from assembl.graphql.schema import Schema as schema
-    res = schema.execute(u"""
-mutation myFirstMutation {
-    createThematic(
-        messageViewOverride: "survey",
-        discussionPhaseId: """+unicode(phases['thread'].id)+u""",
-        titleEntries:[
-            {value:"Comprendre les dynamiques et les enjeux", localeCode:"fr"},
-            {value:"Understanding the dynamics and issues", localeCode:"en"}
-        ],
-    ) {
-        thematic {
-            ... on Idea {
-                id
-                titleEntries { localeCode value }
-            }
-        }
-    }
-}
-""", context_value=graphql_request)
+    res = schema.execute(
+        graphql_registry['createThematic'],
+        context_value=graphql_request,
+        variable_values={
+            'messageViewOverride': 'thread',
+            'discussionPhaseId': phases['thread'].id,
+            'titleEntries': [
+                {'value': "Comprendre les dynamiques et les enjeux", 'localeCode': "fr"},
+                {'value': "Understanding the dynamics and issues", 'localeCode': "en"},
+            ]
+        },
+    )
     assert res.errors is None
     idea_id = res.data['createThematic']['thematic']['id']
 
@@ -110,7 +103,7 @@ def another_idea_in_thread_phase(request, test_session, phases, graphql_request)
     res = schema.execute(u"""
 mutation myFirstMutation {
     createThematic(
-        messageViewOverride: "survey",
+        messageViewOverride: "thread",
         discussionPhaseId: """+unicode(phases['thread'].id)+u""",
         titleEntries:[
             {value:"Manger des pâtes", localeCode:"fr"},

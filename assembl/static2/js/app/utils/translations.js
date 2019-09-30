@@ -990,6 +990,9 @@ const Translations = {
         translation: "Traduction des données",
         anonymous: "Rendre les données anonymes",
         contributions: "Les contributions des participants",
+        moderatedContributions: "Les contributions modérées",
+        moderatedContributionsAnnotation:
+          "Vous pouvez exporter l'ensemble des contributions modérées et les données associées en cliquant sur le bouton Exporter",
         exportDate: "Date de l'export",
         startDate: "Début",
         endDate: "Fin",
@@ -2098,6 +2101,8 @@ const Translations = {
         anonymity: "Anonymity",
         translation: "Translation of the data",
         anonymous: "Make the data anonymous",
+        moderatedContributions: "Moderated contributions",
+        moderatedContributionsAnnotation: "You can export all moderated contributions and related data. Click Export button",
         contributions: "Contributions of the participants",
         exportDate: "Export date",
         startDate: "Start date",

@@ -2,7 +2,6 @@
 from cStringIO import StringIO
 from collections import defaultdict
 from datetime import timedelta, datetime
-from graphene.relay import Node
 
 import isodate
 import simplejson as json
@@ -57,21 +56,23 @@ from assembl.utils import (
     format_date,
     get_thread_ideas, get_survey_ideas, get_multicolumns_ideas,
     get_bright_mirror_ideas, get_vote_session_ideas,
-    get_deleted_posts, get_related_extracts, get_posts,
-    get_published_posts, get_published_top_posts)
+    get_deleted_posts, get_related_extracts,
+    get_posts, get_published_top_posts)
+
 from . import (JSON_HEADER, FORM_HEADER, CreationResponse)
 from ..api.discussion import etalab_discussions, API_ETALAB_DISCUSSIONS_PREFIX
 from ..traversal import InstanceContext, ClassContext
 
 no_thematic_associated = "no thematic associated"
 
-sheet_names = ["export_phase",
+SHEET_NAMES = ["export_phase",
                "export_module_survey",
                "export_module_thread",
                "export_module_multicolumns",
                "export_module_vote",
                "vote_users_data",
                "export_module_bright_mirror"]
+
 
 @view_config(context=InstanceContext, request_method='GET',
              ctx_instance_class=Discussion, permission=P_READ,
@@ -163,6 +164,17 @@ def get_time_series_timing(request, force_bounds=False):
     except isodate.ISO8601Error as e:
         raise HTTPBadRequest(e)
     return (start, end, interval)
+
+
+def get_publication_states(request):
+    publication_states_string = request.GET.get('publicationStates', None)
+    if not publication_states_string:
+        return None
+    else:
+        publication_states = [str(p) for p in publication_states_string.split(',') if p]
+        for publication_state in publication_states:
+            assert publication_state in PublicationStates.values()
+        return publication_states
 
 
 @view_config(context=InstanceContext, name="time_series_analytics",
@@ -644,8 +656,8 @@ def extract_taxonomy_csv(request):
              permission=P_DISC_STATS)
 def multi_module_csv_export(request):
     as_buffer = asbool(request.GET.get('as_buffer', False))
-    results = {sheet_name: None for sheet_name in sheet_names}
-    fieldnames = {sheet_name: None for sheet_name in sheet_names}
+    results = {sheet_name: None for sheet_name in SHEET_NAMES}
+    fieldnames = {sheet_name: None for sheet_name in SHEET_NAMES}
     fieldnames['export_phase'], results['export_phase'] = phase_csv_export(request)
     fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(request)
     fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(request)
@@ -654,6 +666,26 @@ def multi_module_csv_export(request):
     fieldnames['export_module_bright_mirror'], results['export_module_bright_mirror'] = bright_mirror_csv_export(request)
     fieldnames['export_module_vote'], results['export_module_vote'] = global_votes_csv_export(request)
     return csv_response_multiple_sheets(results, fieldnames, as_buffer=as_buffer)
+
+
+@view_config(context=InstanceContext, name="multi-module-posts-export",
+             ctx_instance_class=Discussion, request_method='GET',
+             permission=P_DISC_STATS)
+def multi_module_posts_csv_export(request):
+    """Export only multimodule posts
+    """
+    as_buffer = asbool(request.GET.get('as_buffer', False))
+    results = {}
+    fieldnames = {}
+    fieldnames['export_module_survey'], results['export_module_survey'] = survey_csv_export(request)
+    fieldnames['export_module_thread'], results['export_module_thread'] = thread_csv_export(request)
+    fieldnames['export_module_multicolumns'], results['export_module_multicolumns'] = multicolumn_csv_export(request)
+    return csv_response_multiple_sheets(
+        results,
+        fieldnames,
+        as_buffer=as_buffer,
+        content_disposition='attachment; filename=posts_excel_export.xlsx'
+    )
 
 
 @view_config(context=InstanceContext, name="users-export",
@@ -923,7 +955,10 @@ def remove_emoji(string):
     return emoji_pattern.sub(' ', string)
 
 
-def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='attachment; filename=multimodule_excel_export.xlsx', as_buffer=False):
+def csv_response_multiple_sheets(results,
+                                 fieldnames=None,
+                                 content_disposition='attachment; filename=multimodule_excel_export.xlsx',
+                                 as_buffer=False):
     """
     Return a multiple sheets excel file
     @param: results  A dict of lists. Each list contains dicts.
@@ -933,14 +968,14 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
     from zipfile import ZipFile, ZIP_DEFLATED
     from openpyxl.workbook import Workbook
     workbook = Workbook(True)
-    empty = None
     archive = ZipFile(output, 'w', ZIP_DEFLATED, allowZip64=True)
-    for sheet_name in sheet_names:
-        workbook.create_sheet(sheet_name)
+    for sheet_name in SHEET_NAMES:
+        if sheet_name in results or sheet_name in fieldnames:
+            workbook.create_sheet(sheet_name)
 
     for worksheet in workbook.worksheets:
         writerow = worksheet.append
-        if fieldnames[worksheet.title] is not None:
+        if fieldnames.get(worksheet.title, None) is not None:
             writerow([transform_fieldname(fn) for fn in fieldnames[worksheet.title]])
             if results[worksheet.title] is not None:
                 for r in results[worksheet.title]:
@@ -949,7 +984,7 @@ def csv_response_multiple_sheets(results, fieldnames=None, content_disposition='
                     except Exception:
                         print('Skipping row:', r)
         else:
-            if results[worksheet.title] is not None:
+            if results.get(worksheet.title, None) is not None:
                 for r in results[worksheet.title]:
                     writerow(r)
 
@@ -1670,7 +1705,6 @@ def get_participant_time_series_analytics(request):
             by_participant[pid][interval_id][key] = value
     interval_ids = list(interval_ids)
     interval_ids.sort()
-    num_cols = 2 + email_column + len(interval_ids) * len(data_descriptors)
     interval_starts = [interval_starts[id] for id in interval_ids]
     interval_ends = [interval_ends[id] for id in interval_ids]
     rows = []
@@ -1891,7 +1925,7 @@ def phase_csv_export(request):
         row.update(get_idea_parents_titles(idea, user_prefs))
         row[THEMATIC_SHARE_COUNT] = idea.share_count
         row[MODULE] = idea.message_view_override
-        published_posts_query = get_published_posts(idea, start, end)
+        published_posts_query = get_posts(idea, start, end)
         row[POSTED_MESSAGES_COUNT] = published_posts_query.count()
         message_share_count_query = published_posts_query.with_entities(
             func.sum(Post.share_count)).order_by(None)
@@ -1933,6 +1967,7 @@ def survey_csv_export(request):
     """CSV export for survey thematics."""
     from assembl.models import Locale, Idea
     start, end, interval = get_time_series_timing(request)
+    publication_states = get_publication_states(request) or [PublicationStates.PUBLISHED]
     has_anon = asbool(request.GET.get('anon', False))
     has_lang = request.GET.get('lang', None)
     if has_lang:
@@ -1989,7 +2024,7 @@ def survey_csv_export(request):
     rows = []
     for thematic in thematics:
         for question in thematic.get_children():
-            posts = get_published_posts(question, start, end)
+            posts = get_posts(question, start=start, end=end, publication_states=publication_states)
             for post in posts:
                 row = {}
                 row.update(get_idea_parents_titles(thematic, user_prefs))
@@ -2076,6 +2111,8 @@ def multicolumn_csv_export(request):
     else:
         language = u'fr'
 
+    publication_states = get_publication_states(request) or [PublicationStates.PUBLISHED]
+
     # This is required so that the langstring methods can operate using correct globals
     # on the request object
     LanguagePreferenceCollection.setCurrentFromLocale(language, req=request)
@@ -2131,7 +2168,11 @@ def multicolumn_csv_export(request):
             row[column_name] = key_word.value.encode('utf-8')
 
         row.update(get_idea_parents_titles(idea, user_prefs))
-        posts = get_published_posts(idea, start, end)
+        posts = get_posts(idea, start=start, end=end,
+                          publication_states=publication_states,
+                          # because we filter on publication_states, automatic filtering could be confusing
+                          include_moderating=True, include_deleted=True,
+                          )
         # WATSON sentiment to be implemented later
         # row[WATSON_SENTIMENT] = idea.sentiments()
         for post in posts:
@@ -2331,13 +2372,14 @@ def thread_csv_export(request):
         i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
+    publication_states = get_publication_states(request) or [PublicationStates.PUBLISHED.value]
     ideas = get_thread_ideas(discussion, start, end)
     rows = []
     for idea in ideas:
         children = idea.get_children()
         # We need to use get_posts without date filtering
-        # instead of get_published_posts to create the tree.
-        posts = get_posts(idea, None, None).all()
+        # to create the tree.
+        posts = get_posts(idea).all()
         # WATSON sentiment to be impemented later
         # row[WATSON_SENTIMENT] = idea.sentiments()
         create_tree(posts)  # this calculate p._indentation and p._children for each post
@@ -2345,7 +2387,7 @@ def thread_csv_export(request):
             row = {}
             row.update(get_idea_parents_titles(idea, user_prefs))
 
-            if post.publication_state != PublicationStates.PUBLISHED:
+            if post.publication_state.value not in publication_states:
                 continue
 
             if post.creation_date < start or post.creation_date > end:
@@ -2492,10 +2534,15 @@ def bright_mirror_csv_export(request):
         i = fieldnames.index(SENTIMENT_ACTOR_EMAIL.encode('utf-8')) + 1
         fieldnames[i:i] = ['sentiment ' + name.encode('utf-8') for (name, path) in extra_columns_info]
 
+    publication_states = get_publication_states(request) or [PublicationStates.PUBLISHED]
+
     ideas = get_bright_mirror_ideas(discussion, start, end)
     rows = []
     for idea in ideas:
-        posts = get_published_top_posts(idea, start, end)  # we only care about fictions
+        posts = get_posts(idea,
+                          start=start, end=end,
+                          publication_states=publication_states,
+                          only_top_posts=True)  # we only care about fictions
         for post in posts:
             row = {}
             # WATSON sentiment to be impemented later

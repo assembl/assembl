@@ -52,6 +52,7 @@
   "voteSessionAdmin": "${slug}/administration/voteSession",
   "voteSession": "${slug}/debate/voteSession",
   "exportDebateData": "data/Discussion/${debateId}/multi-module-export",
+  "exportDebatePosts": "data/Discussion/${debateId}/multi-module-posts-export",
   "exportTaxonomiesData": "data/Discussion/${debateId}/extract_csv_taxonomy",
   "exportUsersData": "data/Discussion/${debateId}/users-export",
   "integrationPage": "integration",
