@@ -1837,12 +1837,27 @@ def connection_url(settings, prefix='db_', read_only=False):
     else:
         s_key = 'sqlalchemy.url_ro' if read_only else 'sqlalchemy.url'
         connstring = settings.get(s_key)
-        return make_url(connstring)
-        # query = {'sslmode': 'disable' if db_host == 'localhost' else 'require'}
-        # password = settings.get(prefix + 'password', None) or settings.get('db_password')
-        ## just use sqlalchemy.url
-        # return URL(
-        #     'postgresql+psycopg2', db_user, password, db_host, None, db_database, query)
+        legacy = False
+        if not connstring and read_only:
+            connstring = settings.get('sqlalchemy.url')
+        if not connstring:
+            log.error('cannot get sqlalchemy.url! using legacy method')
+            legacy = True
+        if not legacy:
+            url = make_url(connstring)
+            if not url:
+                log.error('could not parse connstring "%s"; please check configuration', connstring)
+                legacy = True
+            return url
+        if legacy:
+            log.warning('connection_url: using obsolete code. please set sqlalchemy.url in the config')
+            query = {'sslmode': 'disable' if db_host == 'localhost' else 'require'}
+            password = settings.get(prefix + 'password', None) or settings.get('db_password')
+            return URL(
+                'postgresql+psycopg2', db_user, password, db_host,
+                None, db_database, query)
+        raise RuntimeError("Cannot get URL connectionString: {url}. Connstring: {cs}.".format(url=url, cs=connstring))
+        
 
 
 def configure_engine(settings, zope_tr=True, autoflush=True, session_maker=None,
