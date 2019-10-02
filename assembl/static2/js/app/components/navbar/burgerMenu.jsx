@@ -44,10 +44,10 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
   handleClickOutside = (event: MouseEvent) => {
     // Cannot call `this.debateNode.contains` with `event.target` bound to `other`
     // because `EventTarget` [1] is incompatible with `Node`
-    // $FlowFixMe
     if (
       this.state.shouldDisplayMenu &&
       this.burgerMenuNode &&
+      // $FlowFixMe
       !this.burgerMenuNode.contains(event.target)
     ) {
       this.hideMenu();
@@ -58,13 +58,10 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
     const { timeline } = this.props;
     const pathname = browserHistory.getCurrentLocation().pathname;
     const pathnameIdentifier = pathname.split('/')[3];
-    const isTheIdentifier = element =>
-      element.identifier === pathnameIdentifier;
+    const isTheIdentifier = element => element.identifier === pathnameIdentifier;
     this.setState(prevState => ({
       shouldDisplayMenu: !prevState.shouldDisplayMenu,
-      activeSegment: pathnameIdentifier
-        ? timeline.findIndex(isTheIdentifier)
-        : -1
+      activeSegment: pathnameIdentifier ? timeline.findIndex(isTheIdentifier) : -1
     }));
   };
 
@@ -95,10 +92,7 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
         }}
       >
         {shouldDisplayMenu && (
-          <div
-            id={screenTooSmall ? 'screen-too-small' : ''}
-            className="nav-burger-menu shown"
-          >
+          <div id={screenTooSmall ? 'screen-too-small' : ''} className="nav-burger-menu shown">
             <TimelineCpt
               identifier={currentPhaseIdentifier}
               timeline={timeline}
@@ -113,11 +107,7 @@ export class BurgerMenu extends React.PureComponent<Props, State> {
         )}
         <span onClick={this.toggleMenu} className="nav-burger-with-text">
           <span
-            className={classNames([
-              `assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`,
-              'burgermenu-icon',
-              'black'
-            ])}
+            className={classNames([`assembl-icon-${shouldDisplayMenu ? 'cancel' : 'menu-on'}`, 'burgermenu-icon', 'black'])}
           />
           <span className="menu-text">{I18n.t('navbar.theme')}</span>
         </span>

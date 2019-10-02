@@ -2,7 +2,7 @@
 from __future__ import print_function
 
 import pytest
-
+from freezegun import freeze_time
 
 @pytest.fixture(scope="function")
 def root_idea(request, discussion, test_session):
@@ -10,6 +10,7 @@ def root_idea(request, discussion, test_session):
     return discussion.root_idea
 
 
+@freeze_time("2018-3-1")
 @pytest.fixture(scope="function")
 def thread_phase_root_idea(root_idea, phases):
     from assembl.graphql.utils import create_root_thematic

@@ -9,6 +9,7 @@ import { getDiscussionId } from '../utils/globalFunctions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 
 import DiscussionPreferences from '../graphql/DiscussionPreferences.graphql';
+import { PublicationStates } from '../constants';
 
 type Props = {
   section: string,
@@ -80,6 +81,22 @@ export class DumbExportData extends React.Component<Props, State> {
       { debateId: debateId },
       { lang: translation, anon: anonymous, start: startDate, end: endDate }
     );
+    const exportModeratedDataLink = get(
+      'exportDebatePosts',
+      { debateId: debateId },
+      {
+        lang: translation,
+        anon: anonymous,
+        start: startDate,
+        end: endDate,
+        publicationStates: [
+          PublicationStates.DELETED_BY_ADMIN,
+          PublicationStates.MODERATED_TEXT_NEVER_AVAILABLE,
+          PublicationStates.MODERATED_TEXT_ON_DEMAND
+        ].join(',')
+      }
+    );
+
     const exportTaxonomiesLink = get('exportTaxonomiesData', { debateId: debateId });
     const exportUsersLink = get('exportUsersData', { debateId: debateId }, { anon: anonymous, start: startDate, end: endDate });
     return (
@@ -124,6 +141,27 @@ export class DumbExportData extends React.Component<Props, State> {
             shouldBeAnonymous={shouldBeAnonymous}
             shouldTranslate={shouldTranslate}
             exportLink={exportUsersLink}
+            phases={phases}
+            start={start}
+            end={end}
+            languages={languages}
+            disableExportButton={this.disableExportButton}
+            buttonIsDisabled={buttonIsDisabled}
+          />
+        )}
+        {section === '4' && (
+          <ExportSection
+            annotation="moderatedContributionsAnnotation"
+            sectionTitle="moderatedContributions"
+            handleDatesChange={this.handleDatesChange}
+            handleAnonymousChange={this.toggleAnonymousOption}
+            handleShouldTranslate={this.handleShouldTranslate}
+            handleExportLocaleChange={this.handleExportLocaleChange}
+            locale={locale}
+            shouldBeAnonymous={shouldBeAnonymous}
+            shouldTranslate={shouldTranslate}
+            exportLocale={exportLocale}
+            exportLink={exportModeratedDataLink}
             phases={phases}
             start={start}
             end={end}

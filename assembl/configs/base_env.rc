@@ -1,6 +1,7 @@
 ini_files = production.ini RANDOM:random.ini.tmpl:saml_random.ini.tmpl RC_DATA
 # The file that will hold the generated random keys.
 random_file = random.ini
+sqlalchemy.url = postgresql+psycopg2://%(db_user)s:%(db_password)s@%(db_host)s:%(db_port)s/%(db_database)s?sslmode=allow
 *db_host = localhost
 *db_port = 5432
 *db_user = assembl
