@@ -10,8 +10,9 @@ from graphene_sqlalchemy import SQLAlchemyConnectionField, SQLAlchemyObjectType
 from graphene_sqlalchemy.utils import is_mapped
 from graphql_relay.connection.arrayconnection import offset_to_cursor
 from pyramid.security import Everyone
-from sqlalchemy import desc, func, join, select, or_, and_
+from sqlalchemy import desc, func, join, select, or_, and_, cast
 from sqlalchemy import literal_column
+from sqlalchemy.dialects.postgresql import ARRAY, VARCHAR
 from sqlalchemy.orm import joinedload
 
 import assembl.graphql.docstrings as docs
@@ -354,8 +355,12 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                                           type=graphene.Boolean,
                                           required=False,
                                           description=docs.Idea.my_posts_and_answers,
-
-                                      ))  # use dotted name to avoid circular import  # noqa: E501
+                                      ),
+                                      hashtags=graphene.Argument(
+                                          type=graphene.List(graphene.String),
+                                          required=False,
+                                          description=docs.Idea.hashtags,
+                                      ))
     contributors = graphene.List(AgentProfile, description=docs.Idea.contributors)
     vote_results = graphene.Field(VoteResults, required=True, description=docs.Idea.vote_results)
 
@@ -404,6 +409,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
         order = args.get('posts_order')
         only_my_posts = args.get('only_my_posts', False)
         my_posts_and_answers = args.get('my_posts_and_answers', False)
+        hashtags = args.get('hashtags', [])
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         # include_deleted=None means all posts (live and tombstoned)
@@ -417,8 +423,8 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
             related, Post.id == related.c.post_id
         )
         user_id = context.authenticated_userid
+        session = Post.default_db
         if my_posts_and_answers:
-            session = Post.default_db
             # recursive cte that gets array of ancestor for each post
             posts_hierarchy_parent = session.query(
                 Post.id,
@@ -476,6 +482,26 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 query = query.options(*models.Content.subqueryload_options())
             else:
                 query = query.options(*models.Content.joinedload_options())
+
+            if hashtags:
+                hashtags_literal = cast(hashtags, ARRAY(VARCHAR))  # postgresql needs explicit cast
+                hashtag_aggs = func.array_agg(models.LangStringEntry.hashtags)
+                hashtags_query = session.query(
+                    models.Content.body_id,
+                ).outerjoin(
+                    models.LangStringEntry,
+                    models.LangStringEntry.langstring_id == models.Content.body_id
+                ).group_by(models.Content.body_id
+                ).filter(
+                    models.Content.discussion_id == discussion_id,  # optimisation
+                    func.array_length(models.LangStringEntry.hashtags, 1) > 0,  # can't aggregate null or empty arrays
+                ).having(
+                    hashtag_aggs.contains(hashtags_literal)
+                )
+
+                hashtags_subquery = hashtags_query.subquery()
+                query = query.filter(models.Content.body_id.in_(hashtags_subquery))
+
             post_ids = query.with_entities(models.Post.id).subquery()
         else:
             query = query.with_entities(models.Post.id, models.Post.publication_state)
