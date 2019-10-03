@@ -8,6 +8,7 @@ query IdeaWithPosts(
   $postsOrder: PostsOrderTypes
   $onlyMyPosts: Boolean
   $myPostsAndAnswers: Boolean
+  $hashtags: [String]
 ) {
   idea: node(id: $id) {
     ... on Idea {
@@ -18,7 +19,7 @@ query IdeaWithPosts(
         ...IdeaMessageColumn
       }
       messageViewOverride
-      posts(postsOrder: $postsOrder, onlyMyPosts: $onlyMyPosts, myPostsAndAnswers: $myPostsAndAnswers) {
+      posts(postsOrder: $postsOrder, onlyMyPosts: $onlyMyPosts, myPostsAndAnswers: $myPostsAndAnswers, hashtags: $hashtags) {
         edges {
           node {
             ... on Post {
