@@ -673,3 +673,41 @@ def test_clone_langstring_has_same_content_as_original(
     test_session.delete(boba_fett)
     test_session.commit()
 
+
+def test_langstring_hashtags(test_session, request, en_locale):
+    from assembl import models as m
+
+    ls = m.LangString.create("The quick brown #fox jumps over the lazy #dog. #dog", "en")
+    test_session.add(ls)
+    test_session.flush()
+    entry = m.LangStringEntry.get(ls.entries[0].id)
+    assert sorted(entry.hashtags) == ['dog', 'fox']
+
+    def fin():
+        for entry in ls.entries:
+            test_session.delete(entry)
+        test_session.delete(ls)
+        test_session.flush()
+
+    request.addfinalizer(fin)
+
+
+def test_langstring_hashtags_update(test_session, request, en_locale):
+    from assembl import models as m
+
+    ls = m.LangString.create("The quick brown #fox jumps over the lazy #dog. #dog", "en")
+    test_session.add(ls)
+    test_session.flush()
+
+    ls.entries[0].value = "The new #hashtag"
+    test_session.flush()
+
+    entry = m.LangStringEntry.get(ls.entries[0].id)
+    assert sorted(entry.hashtags) == ['hashtag']
+
+    def fin():
+        for entry in ls.entries:
+            test_session.delete(entry)
+        test_session.delete(ls)
+        test_session.flush()
+    request.addfinalizer(fin)
