@@ -132,14 +132,18 @@ mutation myFirstMutation {
     return idea_id
 
 
-def create_post_in_thread(title, request, test_session, graphql_request, idea_id):
+def create_post_in_thread(title, request, test_session, graphql_request, idea_id, body=None):
     from assembl.graphql.schema import Schema as schema
+    if body is None:
+        body = u"Je recommande de manger des choux à la crème, c'est très bon, " \
+               u"et ça permet de maintenir l'industrie de la patisserie française."
+
     mutation_query = u"""
     mutation myFirstMutation {
         createPost(
             ideaId:"%(idea_id)s",
             subject:"%(title)s",
-            body:"Je recommande de manger des choux à la crème, c'est très bon, et ça permet de maintenir l'industrie de la patisserie française."
+            body:"%(body)s"
         ) {
             post {
                 ... on Post {
@@ -151,8 +155,10 @@ def create_post_in_thread(title, request, test_session, graphql_request, idea_id
     """ % {
         'idea_id': idea_id,
         'title': title,
+        'body': body
     }
     res = schema.execute(mutation_query, context_value=graphql_request)
+    assert res.errors is None
     post_id = res.data['createPost']['post']['id']
 
     def fin():

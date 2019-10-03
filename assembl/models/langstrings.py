@@ -1,7 +1,9 @@
 """Classes for multilingual strings, using automatic or manual translation"""
+import re
 from collections import defaultdict
 from datetime import datetime
 
+import simplejson as json
 from sqlalchemy import (
     Column,
     ForeignKey,
@@ -15,17 +17,17 @@ from sqlalchemy import (
     inspect,
     Sequence,
     literal)
-from sqlalchemy.sql.expression import case
+from sqlalchemy.dialects import postgresql
+from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import relationship, backref, subqueryload, joinedload, aliased
 from sqlalchemy.orm.query import Query
-from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
-from ..lib.sqla_types import CoerceUnicode
-import simplejson as json
+from sqlalchemy.sql.expression import case
 
 from . import Base, TombstonableMixin
+from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC, P_SYSADMIN
 from ..lib.abc import classproperty
 from ..lib.locale import compatible
-from ..auth import CrudPermissions, P_READ, P_ADMIN_DISC, P_SYSADMIN
+from ..lib.sqla_types import CoerceUnicode
 
 
 class Locale(Base):
@@ -873,6 +875,35 @@ class LangString(Base):
     crud_permissions = CrudPermissions(P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN)
 
 
+UTF_CHARS = ur'a-z0-9_\u00c0-\u00d6\u00d8-\u00f6\u00f8-\u00ff'
+TAG_EXP = ur'(^|[^0-9A-Z&/]+)(#|\uff03)([0-9A-Z_]*[A-Z_]+[%s]*)' % UTF_CHARS
+TAG_REGEX = re.compile(TAG_EXP, re.UNICODE | re.IGNORECASE)
+
+
+def analyse_hashtags_onupdate(context):
+    """
+    https://stackoverflow.com/questions/2527892/parsing-a-tweet-to-extract-hashtags-into-an-array-in-python/2528131#2528131
+    :param context:
+    :return: string[]
+    """
+    parameters = context.get_current_parameters()
+    text = parameters.get('value', '')
+    return list(analyse_hashtags(text))
+
+
+def analyse_hashtags(text):
+    if not text:
+        return set()
+
+    tags = set()
+    for match in TAG_REGEX.finditer(text):
+        if match:
+            hashtag = match.group(3)
+            if hashtag:
+                tags.add(hashtag.lower())
+    return tags
+
+
 class LangStringEntry(TombstonableMixin, Base):
     """A string bound to a given :py:class:`Locale`. Many of those form a :py:class:`LangString`"""
     __tablename__ = "langstring_entry"
@@ -921,6 +952,12 @@ class LangStringEntry(TombstonableMixin, Base):
         doc="Type of error from the translation server")
     # tombstone_date = Column(DateTime) implicit from Tombstonable mixin
     value = Column(UnicodeText)  # not searchable in virtuoso
+    hashtags = Column(
+        postgresql.ARRAY(String),
+        doc="Array of hashtags contained in value",
+        default=analyse_hashtags_onupdate,
+        onupdate=analyse_hashtags_onupdate,
+    )
 
     def clone(self, langstring, db=None, tombstone=None):
         if tombstone is True:
