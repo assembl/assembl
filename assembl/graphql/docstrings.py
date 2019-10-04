@@ -70,6 +70,11 @@ class SchemaTags:
     limit = "An integer to define the number of tags to retrieve"
 
 
+class SchemaHashtags:
+    __doc__ = """The list of hashtags available on the idea."""
+    idea_id = "The id of the idea"
+
+
 class Discussion:
     __doc__ = """The Discussion object. This object describes certain parts of the core state of the debate."""
     id = Default.object_id % ("Discussion",)
