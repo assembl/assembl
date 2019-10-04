@@ -484,7 +484,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 query = query.options(*models.Content.joinedload_options())
 
             if hashtags:
-                hashtags_literal = cast(hashtags, ARRAY(VARCHAR))  # postgresql needs explicit cast
+                hashtags_value = cast(hashtags, ARRAY(VARCHAR))  # postgresql needs explicit cast
                 hashtag_aggs = func.array_agg(models.LangStringEntry.hashtags)
                 hashtags_query = session.query(
                     models.Content.body_id,
@@ -496,7 +496,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                     models.Content.discussion_id == discussion_id,  # optimisation
                     func.array_length(models.LangStringEntry.hashtags, 1) > 0,  # can't aggregate null or empty arrays
                 ).having(
-                    hashtag_aggs.contains(hashtags_literal)
+                    hashtag_aggs.contains(hashtags_value)
                 )
 
                 hashtags_subquery = hashtags_query.subquery()

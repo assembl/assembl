@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
-import dateutil.parser
-from random import randint
 from operator import attrgetter
+from random import randint
 
+import dateutil.parser
 import graphene
 from graphene.relay import Node
 from graphene_sqlalchemy import SQLAlchemyConnectionField
 from graphene_sqlalchemy.converter import (convert_column_to_string,
                                            convert_sqlalchemy_type)
 from graphene_sqlalchemy.utils import get_query
+from sqlalchemy import func
 from sqlalchemy.orm import subqueryload
 
 import assembl.graphql.docstrings as docs
 from assembl import models
-from assembl.lib import logging
-
+from assembl.auth import CrudPermissions
 from assembl.graphql.discussion import (Discussion, UpdateDiscussion, DiscussionPreferences,
                                         LegalContents,
                                         UpdateLegalContents,
@@ -22,32 +22,31 @@ from assembl.graphql.discussion import (Discussion, UpdateDiscussion, Discussion
                                         UpdateDiscussionPreferences,
                                         UpdateResourcesCenter, VisitsAnalytics)
 from assembl.graphql.document import UploadDocument
+from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
 from assembl.graphql.idea import (CreateThematic, DeleteThematic,
                                   IdeaUnion, UpdateThematic, UpdateIdeas)
 from assembl.graphql.landing_page import (LandingPageModuleType, LandingPageModule, CreateLandingPageModule,
                                           UpdateLandingPageModule)
 from assembl.graphql.langstring import resolve_langstring
 from assembl.graphql.locale import Locale
+from assembl.graphql.permissions_helpers import require_instance_permission
 from assembl.graphql.post import (CreatePost, DeletePost,
                                   ValidatePost,
                                   UpdatePost, AddPostExtract, PostConnection,
                                   AddPostsExtract, UpdateShareCount)
-from assembl.graphql.extract import (UpdateExtract, UpdateExtractTags, DeleteExtract, ConfirmExtract)
-from assembl.graphql.tag import Tag, AddTag, RemoveTag, UpdateTag
+from assembl.graphql.preferences import UpdateHarvestingTranslationPreference
 from assembl.graphql.resource import (CreateResource, DeleteResource, Resource,
                                       UpdateResource)
 from assembl.graphql.section import (CreateSection, DeleteSection, Section,
                                      UpdateSection)
 from assembl.graphql.sentiment import AddSentiment, DeleteSentiment
 from assembl.graphql.synthesis import Synthesis, CreateSynthesis, UpdateSynthesis, DeleteSynthesis
-from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
-from .configurable_fields import (
-    ConfigurableFieldUnion, CreateTextField, UpdateTextField,
-    DeleteTextField, ProfileField, UpdateProfileFields)
+from assembl.graphql.tag import Tag, AddTag, RemoveTag, UpdateTag
 from assembl.graphql.timeline import (
     DiscussionPhase, CreateDiscussionPhase,
     UpdateDiscussionPhase, DeleteDiscussionPhase)
-from assembl.graphql.votes import AddTokenVote, AddGaugeVote
+from assembl.graphql.user import UpdateUser, DeleteUserInformation, UpdateAcceptedCookies
+from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
 from assembl.graphql.vote_session import (
     VoteSession, UpdateVoteSession, CreateTokenVoteSpecification,
     CreateGaugeVoteSpecification, UpdateGaugeVoteSpecification,
@@ -55,16 +54,18 @@ from assembl.graphql.vote_session import (
     UpdateTokenVoteSpecification, DeleteVoteSpecification,
     CreateProposal, UpdateProposal, DeleteProposal
 )
-from assembl.graphql.utils import get_fields, get_root_thematic_for_phase
-from assembl.graphql.preferences import UpdateHarvestingTranslationPreference
+from assembl.graphql.votes import AddTokenVote, AddGaugeVote
+from assembl.lib import logging
 from assembl.lib.locale import strip_country
 from assembl.lib.sqla_types import EmailString
 from assembl.models.action import SentimentOfPost
 from assembl.models.post import countable_publication_states
 from assembl.nlp.translation_service import DummyGoogleTranslationService
-from assembl.graphql.permissions_helpers import require_instance_permission
-from assembl.auth import CrudPermissions
 from assembl.utils import get_ideas, get_posts_for_phases
+from .configurable_fields import (
+    ConfigurableFieldUnion, CreateTextField, UpdateTextField,
+    DeleteTextField, ProfileField, UpdateProfileFields)
+
 # from assembl.models.timeline import get_phase_by_identifier, Phases
 
 
@@ -141,6 +142,10 @@ class Query(graphene.ObjectType):
         filter=graphene.String(description=docs.SchemaTags.filter),
         limit=graphene.Int(description=docs.SchemaTags.limit),
         description=docs.SchemaTags.__doc__)
+    hashtags = graphene.List(
+        graphene.String,
+        idea_id=graphene.ID(required=True, description=docs.SchemaHashtags.idea_id),
+        description=docs.SchemaHashtags.__doc__)
 
     def resolve_tags(self, args, context, info):
         discussion_id = context.matchdict['discussion_id']
@@ -158,6 +163,40 @@ class Query(graphene.ObjectType):
 
         _filter = '%{}%'.format(_filter)
         return query.filter(model.value.ilike(_filter)).all()
+
+    def resolve_hashtags(self, args, context, info):
+        from sqlalchemy.orm import aliased
+
+        discussion_id = context.matchdict['discussion_id']
+        idea_id = args.get('idea_id')
+        idea_id = int(Node.from_global_id(idea_id)[1])
+        idea = get_query(models.Idea, context).get(idea_id)
+        idea_posts_query = idea.get_related_posts_query()
+        idea_posts_subquery = idea_posts_query.with_entities(models.Post.id).subquery('idea_posts')
+        all_posts = aliased(models.Post, name='all_posts')
+        hashtag_aggs = func.array_agg(models.LangStringEntry.hashtags)
+        posts_with_hashtags = idea.db.query(
+            all_posts.id,
+            hashtag_aggs.label('hashtags'),
+        ).join(
+            idea_posts_subquery,
+            all_posts.id == idea_posts_subquery.c.id
+        ).outerjoin(
+            models.LangStringEntry,
+            models.LangStringEntry.langstring_id == all_posts.body_id
+        ).filter(
+            all_posts.discussion_id == discussion_id,  # optimisation
+            func.array_length(models.LangStringEntry.hashtags, 1) > 0,  # can't aggregate null or empty arrays
+        ).group_by(all_posts.id)
+
+        # with unnest, we can do this in sql, but this is quite unreadable and not sure it is faster
+        all_hashtags = set()
+        for langstring_hashtags in (langstring_hashtags
+                                    for _, posts_hashtags in posts_with_hashtags.all()
+                                    for langstring_hashtags in posts_hashtags):
+            all_hashtags = all_hashtags.union(langstring_hashtags)
+
+        return sorted(all_hashtags)
 
     def resolve_resources(self, args, context, info):
         model = models.Resource

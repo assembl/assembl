@@ -120,7 +120,7 @@ mutation myFirstMutation {
 }
 """, context_value=graphql_request)
     assert res.errors is None
-    idea_id = res.data['createIdea']['thematic']['id']
+    idea_id = res.data['createThematic']['thematic']['id']
 
     def fin():
         from assembl.models import Idea

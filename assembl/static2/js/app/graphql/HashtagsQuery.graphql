@@ -1,0 +1,3 @@
+query Hashtags($ideaId: ID!) {
+  hashtags(ideaId: $ideaId)
+}
