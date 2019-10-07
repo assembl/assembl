@@ -823,9 +823,12 @@ def users_csv_export(request):
                 if field_type == 'text_field':
                     formatted_value = custom_value.value_data['value']
                 elif field_type == 'select_field':
-                    value_id = custom_value.value_data['value'][0]
-                    select_field_option = db.query(m.SelectFieldOption).get(get_primary_id(value_id))
-                    formatted_value = select_field_option.label.best_lang(user_prefs).value
+                    if not custom_value.value_data['value']:
+                        formatted_value = ''
+                    else:
+                        value_id = custom_value.value_data['value'][0]
+                        select_field_option = db.query(m.SelectFieldOption).get(get_primary_id(value_id))
+                        formatted_value = select_field_option.label.best_lang(user_prefs).value.encode('utf-8')
                 else:
                     raise Exception('field type unhandled: {}'.format(field_type))
 
