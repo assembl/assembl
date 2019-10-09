@@ -4,6 +4,8 @@ from assembl.lib.logging import getLogger
 
 log = getLogger('assembl')
 
+_email_whitelist = set()
+
 
 class SNCFSAMLAuth(SAMLAuth):
 
@@ -40,3 +42,25 @@ class SNCFSAMLAuth(SAMLAuth):
         except Exception:
             log.error("[SAML Backend] Failed to populate extra data for social user with data %s" % data)
             return None
+
+    def auth_allowed(self, response, details):
+        """Return True if the user should be allowed to authenticate, by
+        default check if email is whitelisted (if there's a whitelist)"""
+        global _email_whitelist
+        if not _email_whitelist:
+            import csv
+            whitelist_file = self.setting('WHITELISTED_EMAILS', None)
+            if whitelist_file:
+                with open(whitelist_file) as f:
+                    reader = csv.reader(f)
+                    # Assume single column of emails
+                    for row in reader:
+                        _email = row[0]
+                        if _email and isinstance(_email, basestring):
+                            _email_whitelist.add(_email.lower())
+
+        email = details.get('email')
+        allowed = True
+        if email and _email_whitelist:
+            allowed = email.lower() in _email_whitelist
+        return allowed
