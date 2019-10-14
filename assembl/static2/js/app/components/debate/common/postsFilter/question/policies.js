@@ -2,6 +2,7 @@
 import {
   chronologicalTopPolicy,
   fullDisplayPolicy,
+  hashtagsFilterPolicy,
   onlyMyPostFilterPolicy,
   popularityPolicy,
   reverseChronologicalLastPolicy,
@@ -17,4 +18,4 @@ export const postsOrderPolicies: PostsOrderPolicy[] = [
   { ...popularityPolicy, labelMsgId: 'debate.survey.postsOrder.popularityFlat' }
 ];
 export const postsDisplayPolicies: PostsDisplayPolicy[] = [fullDisplayPolicy, summaryDisplayPolicy];
-export const postsFiltersPolicies: PostsFilterPolicy[] = [onlyMyPostFilterPolicy];
+export const postsFiltersPolicies: PostsFilterPolicy[] = [onlyMyPostFilterPolicy, hashtagsFilterPolicy];

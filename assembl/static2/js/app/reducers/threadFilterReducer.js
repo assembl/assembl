@@ -6,7 +6,8 @@ const initialState: PostsFilterState = {
   postsDisplayPolicy: defaultDisplayPolicy,
   postsFiltersStatus: {
     myPostsAndAnswers: false,
-    onlyMyPosts: false
+    onlyMyPosts: false,
+    hashtags: []
   },
   postsOrderPolicy: defaultOrderPolicy
 };

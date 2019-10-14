@@ -123,26 +123,41 @@ export const fullDisplayPolicy: PostsDisplayPolicy = {
 export const summaryDisplayPolicy: PostsDisplayPolicy = {
   labelMsgId: 'debate.thread.postsDisplay.summary',
   id: 'display-summary',
-  displayMode: 'summary'
+  displayMode: 'summary',
+  type: 'choice'
 };
 
 export const onlyMyPostFilterPolicy: PostsFilterPolicy = {
+  anonymous: false,
   excludedPolicies: ['myPostsAndAnswers'],
   filterField: 'onlyMyPosts',
   id: 'filter-onlyMyPosts',
-  labelMsgId: 'debate.thread.postsFilters.onlyMyPosts'
+  labelMsgId: 'debate.thread.postsFilters.onlyMyPosts',
+  type: 'choice'
 };
 
 export const myPostsAndAnswersFilterPolicy: PostsFilterPolicy = {
+  anonymous: false,
   excludedPolicies: ['onlyMyPosts'],
   filterField: 'myPostsAndAnswers',
+  id: 'filter-myPostsAndAnswers',
   labelMsgId: 'debate.thread.postsFilters.myPostsAndAnswers',
-  id: 'filter-myPostsAndAnswers'
+  type: 'choice'
+};
+
+export const hashtagsFilterPolicy: PostsFilterPolicy = {
+  anonymous: true,
+  excludedPolicies: [],
+  filterField: 'hashtags',
+  labelMsgId: 'debate.thread.postsFilters.hashtags',
+  id: 'filter-hashtags',
+  type: 'select'
 };
 
 export const defaultOrderPolicy = reverseChronologicalLastPolicy;
 export const defaultDisplayPolicy = fullDisplayPolicy;
 export const defaultPostsFiltersStatus: PostsFiltersStatus = {
   myPostsAndAnswers: false,
-  onlyMyPosts: false
+  onlyMyPosts: false,
+  hashtags: []
 };

@@ -213,7 +213,7 @@ exports[`PostView component should render a post in view mode 1`] = `
     <div
       className="collapsed-answer-form"
     >
-      <Connect(Apollo(Apollo(DumbAnswerFormWithContext)))
+      <withRouter(Connect(Apollo(Apollo(DumbAnswerFormWithContext))))
         handleAnswerClick={[Function]}
         hideAnswerForm={[Function]}
         ideaId="ABC123"

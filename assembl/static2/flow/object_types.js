@@ -268,18 +268,21 @@ export interface PostsDisplayPolicy extends PostsFilterItem {
 
 export type PostsFiltersStatus = {
   onlyMyPosts: boolean,
-  myPostsAndAnswers: boolean
+  myPostsAndAnswers: boolean,
+  hashtags: string[]
 };
 
 export interface PostsFilterPolicy extends PostsFilterItem {
   excludedPolicies: string[]; // list of policies that are exclusives of this policy.
   filterField: string;
+  anonymous: boolean; // if true, available for anonymous users
+  type: 'choice' | 'select';
 }
 
 export type PostsFilterState = {
   postsDisplayPolicy: PostsDisplayPolicy,
   postsFiltersStatus: PostsFiltersStatus,
-  postsOrderPolicy: PostsOrderPolicy
+  postsOrderPolicy: PostsOrderPolicy,
 };
 
 type Theme = {

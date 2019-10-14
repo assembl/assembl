@@ -1,11 +1,9 @@
 import React from 'react';
-import configureStore from 'redux-mock-store';
 import renderer from 'react-test-renderer';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
 import { DumbPostsFilterMenu } from '../../../../../js/app/components/debate/common/postsFilter/menu';
-import PostsFilterMenu from '../../../../../js/app/components/debate/common/postsFilter/thread/menu';
 import {
   defaultDisplayPolicy,
   defaultOrderPolicy,
@@ -26,28 +24,25 @@ jest.mock('../../../../../js/app/utils/globalFunctions', () => ({
 }));
 
 describe('PostsFilterMenu component', () => {
-  const mockStore = configureStore();
-  const initialState = {
-    threadFilter: {
-      postsOrderPolicy: defaultOrderPolicy,
-      postsFiltersStatus: defaultPostsFiltersStatus,
-      postsDisplayPolicy: defaultDisplayPolicy
-    }
+  const props = {
+    setPostsFilterPolicies: () => {},
+    postsDisplayPolicy: defaultDisplayPolicy,
+    postsOrderPolicy: defaultOrderPolicy,
+    postsFiltersStatus: defaultPostsFiltersStatus,
+    postsFiltersPolicies: postsFiltersPolicies,
+    postsOrderPolicies: postsOrderPolicies,
+    postsDisplayPolicies: postsDisplayPolicies,
+    hashtags: []
   };
-  const props = {};
-  let store;
-  beforeEach(() => {
-    store = mockStore(initialState);
-  });
 
   it('should render a filter with sort by recently started threads and full display selected', () => {
-    const component = renderer.create(<PostsFilterMenu store={store} {...props} />);
+    const component = renderer.create(<DumbPostsFilterMenu {...props} />);
     const tree = component.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('should rollback when reset is clicked', () => {
-    const wrapper = mount(<PostsFilterMenu {...props} store={store} />);
+    const wrapper = mount(<DumbPostsFilterMenu {...props} />);
 
     const defaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalLast');
     const nonDefaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalTop');
@@ -100,18 +95,7 @@ describe('PostsFilterMenu component', () => {
 
   it('should be saved when saved is clicked', () => {
     const setPostsFilterPolicies = jest.fn();
-    const component = (
-      <DumbPostsFilterMenu
-        postsDisplayPolicy={defaultDisplayPolicy}
-        postsOrderPolicy={defaultOrderPolicy}
-        postsFiltersStatus={defaultPostsFiltersStatus}
-        setPostsFilterPolicies={setPostsFilterPolicies}
-        postsFiltersPolicies={postsFiltersPolicies}
-        postsOrderPolicies={postsOrderPolicies}
-        postsDisplayPolicies={postsDisplayPolicies}
-      />
-    );
-    const wrapper = mount(component);
+    const wrapper = mount(<DumbPostsFilterMenu {...props} setPostsFilterPolicies={setPostsFilterPolicies} />);
 
     const nonDefaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalTop');
     const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-display-summary');
@@ -125,7 +109,8 @@ describe('PostsFilterMenu component', () => {
     expect(setPostsFilterPolicies).toHaveBeenCalledTimes(1);
     expect(setPostsFilterPolicies).toHaveBeenCalledWith(summaryDisplayPolicy, reverseChronologicalTopPolicy, {
       myPostsAndAnswers: false,
-      onlyMyPosts: true
+      onlyMyPosts: true,
+      hashtags: []
     });
   });
 });

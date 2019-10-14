@@ -97,6 +97,7 @@ export class DumbQuestion extends React.Component<Props> {
                     isPhaseCompleted={isPhaseCompleted}
                     onlyMyPosts={this.props.questionFilter.postsFiltersStatus.onlyMyPosts}
                     postsOrder={this.props.questionFilter.postsOrderPolicy.graphqlPostsOrder}
+                    hashtags={this.props.questionFilter.postsFiltersStatus.hashtags}
                   />
                   <div className="back-btn-container">
                     <Link to={link} className="button-submit button-dark">
