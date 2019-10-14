@@ -437,6 +437,7 @@ class SwitchView extends React.Component<SwitchViewProps> {
         postsOrder={props.threadFilter.postsOrderPolicy.graphqlPostsOrder}
         onlyMyPosts={props.threadFilter.postsFiltersStatus.onlyMyPosts} // fixme: more generic
         myPostsAndAnswers={props.threadFilter.postsFiltersStatus.myPostsAndAnswers} // fixme: more generic
+        hashtags={props.threadFilter.postsFiltersStatus.hashtags} // fixme: more generic
         additionalFields={props.messageViewOverride === MESSAGE_VIEW.brightMirror}
       />
     );

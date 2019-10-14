@@ -466,6 +466,7 @@ const Translations = {
           summary: "Aperçu des messages"
         },
         postsFilters: {
+          hashtags: "Hashtags",
           myPostsAndAnswers: "Messages en réponse à mes contributions",
           onlyMyPosts: "Mes contributions"
         },
@@ -2695,6 +2696,7 @@ const Translations = {
           summary: "Message previews"
         },
         postsFilters: {
+          hashtags: "Hashtags",
           myPostsAndAnswers: "Answers to my posts",
           onlyMyPosts: "My posts"
         },

@@ -6,9 +6,11 @@ import { Button, Col, FormGroup, Row } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 import { EditorState } from 'draft-js';
 import classNames from 'classnames';
+import { withRouter } from 'react-router';
 
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
+import HashtagsQuery from '../../../graphql/HashtagsQuery.graphql';
 import { displayAlert, promptForLoginOr } from '../../../utils/utilityManager';
 import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
 import RichTextEditor from '../../common/richTextEditor';
@@ -205,7 +207,21 @@ const DumbAnswerFormWithContext = props => (
 );
 
 export default compose(
+  withRouter,
   connect(mapStateToProps),
-  graphql(createPostMutation, { name: 'createPost' }),
+  graphql(createPostMutation, {
+    name: 'createPost',
+    options: props => ({
+      refetchQueries:
+        props.params && props.params.themeId
+          ? [
+            {
+              query: HashtagsQuery,
+              variables: { ideaId: props.params.themeId }
+            }
+          ]
+          : []
+    })
+  }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
 )(DumbAnswerFormWithContext);

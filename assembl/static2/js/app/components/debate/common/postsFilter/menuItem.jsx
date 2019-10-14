@@ -23,7 +23,8 @@ class DumbPostsFilterMenuItem extends React.Component<PostsFilterMenuItemProps> 
     const { inputName, inputType, item, selected } = this.props;
     return (
       <MenuItem id={`postsFilterItem-${item.id}`} onClick={this.handleClick}>
-        <input id={`postsFilterItem-${item.id}-input`} type={inputType} name={inputName} checked={selected} />&nbsp;
+        <input id={`postsFilterItem-${item.id}-input`} onChange={() => {}} type={inputType} name={inputName} checked={selected} />
+        &nbsp;
         <label htmlFor={`postsFilterItem-${item.id}-input`}>
           <Translate value={item.labelMsgId} />
         </label>

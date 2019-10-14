@@ -4,12 +4,14 @@ import { compose, graphql, withApollo } from 'react-apollo';
 import { Button, Col, FormGroup, Row } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 import { EditorState } from 'draft-js';
+import { withRouter } from 'react-router';
+
 import { PublicationStates } from '../../../constants';
 import { connectedUserIsModerator } from '../../../utils/permissions';
 import { DebateContext } from '../../../../app/app';
-
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import updatePostMutation from '../../../graphql/mutations/updatePost.graphql';
+import HashtagsQuery from '../../../graphql/HashtagsQuery.graphql';
 import { displayAlert } from '../../../utils/utilityManager';
 import {
   convertContentStateToHTML,
@@ -240,7 +242,18 @@ const EditPostFormWithContext = props => (
 );
 
 export default compose(
+  withRouter,
   graphql(uploadDocumentMutation, { name: 'uploadDocument' }),
-  graphql(updatePostMutation, { name: 'updatePost' }),
+  graphql(updatePostMutation, {
+    name: 'updatePost',
+    options: props => ({
+      refetchQueries: [
+        {
+          query: HashtagsQuery,
+          variables: { ideaId: props.params.themeId }
+        }
+      ]
+    })
+  }),
   withApollo
 )(EditPostFormWithContext);

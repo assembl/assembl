@@ -3,12 +3,16 @@ import * as React from 'react';
 import { DropdownButton } from 'react-bootstrap';
 import debounce from 'lodash/debounce';
 import classNames from 'classnames';
-import { I18n } from 'react-redux-i18n';
+import { I18n, Translate } from 'react-redux-i18n';
+import Select from 'react-select';
+import { compose, graphql } from 'react-apollo';
+import { withRouter } from 'react-router';
 
 import PostsFilterMenuItem from './menuItem';
 import PostsFilterButton from './button';
 import PostsFilterButtons from './buttons';
 import PostsFilterLabelMenuItem from './label';
+import HashtagsQuery from '../../../../graphql/HashtagsQuery.graphql';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { withScreenHeight } from '../../../common/screenDimensions';
 import { defaultDisplayPolicy, defaultOrderPolicy, defaultPostsFiltersStatus } from './policies';
@@ -18,6 +22,7 @@ type Props = {
   defaultDisplayPolicy: PostsDisplayPolicy,
   defaultOrderPolicy: PostsOrderPolicy,
   defaultPostsFiltersStatus: PostsFiltersStatus,
+  hashtags?: string[],
   postsDisplayPolicies: PostsDisplayPolicy[],
   postsFiltersPolicies: PostsFilterPolicy[],
   postsOrderPolicies: PostsOrderPolicy[],
@@ -96,7 +101,7 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
     this.setState({ selectedPostsOrderPolicy: postsOrderPolicy });
   };
 
-  selectPostsFilter = (postsFilterPolicy: any, selected?: boolean) => {
+  selectPostsFilterRadio = (postsFilterPolicy: any, selected?: boolean) => {
     // FIXME use PostsFilterPolicy type
     const selectedPostsFiltersStatus = { ...this.state.selectedPostsFiltersStatus };
     selectedPostsFiltersStatus[postsFilterPolicy.filterField] = !!selected;
@@ -106,6 +111,12 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
         selectedPostsFiltersStatus[policyId] = false;
       });
     }
+    this.setState({ selectedPostsFiltersStatus: selectedPostsFiltersStatus });
+  };
+
+  selectPostsFilterValues = (postsFilterPolicy: any, values: Array<{ value: string, label: string }>) => {
+    const selectedPostsFiltersStatus = { ...this.state.selectedPostsFiltersStatus };
+    selectedPostsFiltersStatus[postsFilterPolicy.filterField] = values.map(value => value.value);
     this.setState({ selectedPostsFiltersStatus: selectedPostsFiltersStatus });
   };
 
@@ -132,8 +143,18 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 
   render() {
     const { selectedPostsDisplayPolicy, selectedPostsFiltersStatus, selectedPostsOrderPolicy, sticky } = this.state;
-    const { postsDisplayPolicies, postsOrderPolicies, postsFiltersPolicies, stickyTopPosition } = this.props;
+    const { hashtags, postsDisplayPolicies, postsOrderPolicies, postsFiltersPolicies, stickyTopPosition } = this.props;
     const userIsConnected: boolean = !!getConnectedUserId();
+    const actualPolicies = postsFiltersPolicies.filter(
+      (policy: PostsFilterPolicy) => (policy.anonymous ? true : userIsConnected)
+    );
+    const selects = {
+      'filter-hashtags': {
+        options: (hashtags || []).map(hashtag => ({ value: hashtag, label: hashtag })),
+        values: selectedPostsFiltersStatus.hashtags.map(v => ({ label: v, value: v }))
+      }
+    };
+
     return (
       <div
         className={classNames(['posts-filter-button', sticky ? 'sticky' : null])}
@@ -180,23 +201,41 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
               eventKey={item.id}
             />
           ))}
+          {actualPolicies.length && <PostsFilterLabelMenuItem labelMsgId="debate.thread.filterPosts" />}
 
-          {userIsConnected && (
-            <React.Fragment>
-              <PostsFilterLabelMenuItem labelMsgId="debate.thread.filterPosts" />
-              {postsFiltersPolicies.map(item => (
+          {actualPolicies.map((item: PostsFilterPolicy) => {
+            switch (item.type) {
+            case 'choice':
+              return (
                 <PostsFilterMenuItem
                   key={item.id}
                   item={item}
                   selected={selectedPostsFiltersStatus[item.filterField]}
                   inputType="checkbox"
                   inputName={item.filterField}
-                  onSelectItem={this.selectPostsFilter}
+                  onSelectItem={this.selectPostsFilterRadio}
                   eventKey={item.id}
                 />
-              ))}
-            </React.Fragment>
-          )}
+              );
+            case 'select':
+              return (
+                <React.Fragment key={item.id}>
+                  <strong>
+                    <Translate value={item.labelMsgId} />
+                  </strong>
+                  <Select
+                    options={selects[item.id].options}
+                    isMulti
+                    closeMenuOnSelect
+                    value={selects[item.id].values}
+                    onChange={selectedOptions => this.selectPostsFilterValues(item, selectedOptions)}
+                  />
+                </React.Fragment>
+              );
+            default:
+              return null;
+            }
+          })}
           <PostsFilterButtons>
             <PostsFilterButton
               id="postsFilter-button-reset"
@@ -220,4 +259,15 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   }
 }
 
-export default withScreenHeight(DumbPostsFilterMenu);
+export default compose(
+  withScreenHeight,
+  withRouter,
+  graphql(HashtagsQuery, {
+    options: props => ({
+      variables: {
+        ideaId: props.themeId || (props.params && props.params.themeId) || ''
+      }
+    }),
+    props: ({ data }) => ({ hashtags: data.hashtags })
+  })
+)(DumbPostsFilterMenu);

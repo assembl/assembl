@@ -117,6 +117,7 @@ export default compose(
           after: '',
           id: props.questionId,
           fromNode: id,
+          hashtags: props.hashtags,
           isModerating: props.isModerating,
           onlyMyPosts: props.onlyMyPosts,
           postsOrder: props.postsOrder
