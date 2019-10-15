@@ -35,6 +35,7 @@ import VoteSession from './voteSession';
 import { displayAlert } from '../utils/utilityManager';
 import { DebateContext } from '../app';
 import { defaultOrderPolicy } from '../components/debate/common/postsFilter/policies';
+import { addPostsFilterHashtag } from '../actions/threadFilterActions';
 
 const deletedPublicationStates = Object.keys(DeletedPublicationStates);
 
@@ -51,6 +52,7 @@ type Props = {
   isHarvesting: boolean,
   lang: string,
   location: { state: { callback: string } },
+  onHashtagClick: ((href: string) => void) | null,
   phaseId: string,
   postsDisplayPolicy: PostsDisplayPolicy,
   postsMustBeRefetched: boolean,
@@ -272,6 +274,7 @@ class Idea extends React.Component<Props> {
       ideaWithPostsData,
       identifier,
       messageViewOverride,
+      onHashtagClick,
       phaseId,
       routerParams,
       semanticAnalysisForThematicData,
@@ -311,6 +314,7 @@ class Idea extends React.Component<Props> {
       messageColumns: messageColumns,
       messageViewOverride: messageViewOverride,
       noRowsRenderer: noRowsRenderer,
+      onHashtagClick: onHashtagClick,
       phaseId: phaseId,
       postsDisplayPolicy: this.props.threadFilter.postsDisplayPolicy,
       refetchIdea: refetchIdea,
@@ -389,7 +393,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   updateContentLocaleMapping: info => dispatch(updateContentLocale(info)),
   toggleHarvesting: () => dispatch(toggleHarvestingAction()),
-  putTagsInStore: tags => dispatch(updateTags(tags))
+  putTagsInStore: tags => dispatch(updateTags(tags)),
+  addPostsFilterHashtag: (hashtag: string) => dispatch(addPostsFilterHashtag(hashtag))
 });
 
 const IdeaWithPosts = compose(
@@ -403,7 +408,8 @@ type SwitchViewProps = {
   isHarvestable: boolean,
   messageViewOverride: string,
   modifyContext: (newState: Object) => void,
-  threadFilter: PostsFilterState
+  threadFilter: PostsFilterState,
+  addPostsFilterHashtag: Function
 };
 
 class SwitchView extends React.Component<SwitchViewProps> {
@@ -434,6 +440,7 @@ class SwitchView extends React.Component<SwitchViewProps> {
     return (
       <IdeaWithPosts
         {...props}
+        onHashtagClick={props.addPostsFilterHashtag}
         postsOrder={props.threadFilter.postsOrderPolicy.graphqlPostsOrder}
         onlyMyPosts={props.threadFilter.postsFiltersStatus.onlyMyPosts} // fixme: more generic
         myPostsAndAnswers={props.threadFilter.postsFiltersStatus.myPostsAndAnswers} // fixme: more generic

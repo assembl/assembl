@@ -35,6 +35,7 @@ type Props = PostProps & {
   isHarvestable: boolean,
   modifiedSubject: ?React.Element<any>,
   multiColumns: boolean,
+  onHashtagClick: ((href: string) => void) | null,
   subject: string,
   timeline: Timeline,
   connectedUserId: ?string,
@@ -155,6 +156,7 @@ class PostView extends React.PureComponent<Props, State> {
       id,
       lang,
       ideaId,
+      onHashtagClick,
       refetchIdea,
       // creationDate is retrieved by IdeaWithPosts query, not PostQuery
       creationDate,
@@ -276,6 +278,7 @@ class PostView extends React.PureComponent<Props, State> {
                 id={id}
                 lang={lang}
                 subject={modifiedSubject}
+                onHashtagClick={onHashtagClick}
                 originalLocale={originalLocale}
                 translate={translate}
                 translationEnabled={debateData.translationEnabled}

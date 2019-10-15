@@ -37,6 +37,7 @@ type Props = {
   isHarvesting: boolean,
   lang: string,
   measureTreeHeight?: Function, // eslint-disable-line react/require-default-props
+  onHashtagClick: ((href: string) => void) | null,
   originalLocale: string,
   postsDisplayPolicy?: PostsDisplayPolicy,
   subject?: React.Node, // eslint-disable-line react/require-default-props
@@ -82,7 +83,11 @@ export const ExtractInPost = ({ extractedByMachine, id, nature, state, children 
   );
 };
 
-export const postBodyReplacementComponents = (afterLoad?: Function, isHarvesting?: boolean = false) => ({
+export const postBodyReplacementComponents = (
+  afterLoad?: Function,
+  isHarvesting?: boolean = false,
+  onHashtagClick: ((href: string) => void) | null = null
+) => ({
   iframe: (attributes: Object) => (
     // the src iframe url is different from the resource url
     <Embed
@@ -93,9 +98,17 @@ export const postBodyReplacementComponents = (afterLoad?: Function, isHarvesting
   ),
   a: (attributes: Object) => {
     const { href, key, target, title, children } = attributes;
+    const onClick = (event) => {
+      if (onHashtagClick && href[0] === '#') {
+        event.preventDefault();
+        const htag = href.slice(1).toLowerCase();
+        onHashtagClick(htag);
+      }
+    };
+
     const embeddedUrl = isSpecialURL(href);
     const origin = (
-      <a key={`url-link-${key}`} href={href} className="linkified" target={target || '_blank'} title={title}>
+      <a key={`url-link-${key}`} href={href} className="linkified" target={target || '_blank'} title={title} onClick={onClick}>
         {children}
       </a>
     );
@@ -154,7 +167,7 @@ export const Html = (props: HtmlProps) => {
           extractState: extract.extractState || EMPTY_STRING,
           nature: extract.extractNature || EMPTY_STRING
         });
-        const wrapper = jQuery(`<annotation data-extractInfo='${extractInfo}'></annotation>`);
+        const wrapper = jQuery(`<annotation data-extractInfo='${extractInfo}'/>`);
         if (tfis) {
           tfis.forEach((tfi) => {
             if (tfi && tfi.xpathStart && tfi.offsetStart !== null && tfi.xpathEnd && tfi.offsetEnd !== null) {
@@ -198,7 +211,8 @@ Html.displayName = 'Html';
 
 export class DumbPostBody extends React.Component<Props, State> {
   static defaultProps = {
-    isHarvestable: false
+    isHarvestable: false,
+    onHashtagClick: null
   };
 
   state = { readMoreExpanded: false };
@@ -226,6 +240,7 @@ export class DumbPostBody extends React.Component<Props, State> {
       lang,
       measureTreeHeight,
       originalLocale,
+      onHashtagClick,
       postsDisplayPolicy,
       subject,
       translate,
@@ -245,6 +260,7 @@ export class DumbPostBody extends React.Component<Props, State> {
     const afterLoad = () => {
       if (measureTreeHeight) measureTreeHeight(400);
     };
+    const rawHtml = body ? transformLinksInHtml(body, { hashtags: true }) : null;
     return (
       <div className={divClassNames}>
         {translationEnabled ? (
@@ -272,16 +288,16 @@ export class DumbPostBody extends React.Component<Props, State> {
           />
         ) : null}
         {subject && <h3 className="post-body-title dark-title-3">{subject}</h3>}
-        {body && (
+        {rawHtml && (
           <React.Fragment>
             <div className={htmlClassNames}>
               <Html
                 onMouseUp={handleMouseUpWhileHarvesting}
-                rawHtml={transformLinksInHtml(body)}
+                rawHtml={rawHtml}
                 divRef={bodyDivRef}
                 extracts={extracts}
                 dbId={dbId}
-                replacementComponents={postBodyReplacementComponents(afterLoad, isHarvesting)}
+                replacementComponents={postBodyReplacementComponents(afterLoad, isHarvesting, onHashtagClick)}
                 contentLocale={contentLocale}
               />
             </div>

@@ -51,6 +51,7 @@ export type Props = {
   multiColumns: boolean,
   nuggetsManager: NuggetsManager,
   numChildren: number,
+  onHashtagClick: ((href: string) => void) | null,
   originalLocale: string,
   parentId: string,
   postsDisplayPolicy: PostsDisplayPolicy,
@@ -172,6 +173,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
       isHarvesting,
       isHarvestable,
       multiColumns,
+      onHashtagClick,
       originalLocale,
       parentId,
       refetchIdea,
@@ -231,6 +233,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
             isHarvestable={isHarvestable}
             body={body}
             subject={subject}
+            onHashtagClick={onHashtagClick}
             handleEditClick={this.handleEditClick}
             modifiedSubject={modifiedSubject}
             timeline={timeline}
