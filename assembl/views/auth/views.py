@@ -523,7 +523,7 @@ def assembl_login_complete_view(request):
     query = {"identifier": identifier,
              "next": next_view} if identifier else {"next": next_view}
     if not user:
-        error_message = localizer.translate(_("This user cannot be found"))
+        error_message = localizer.translate(_("Generic Errors"))
         request.session.flash(error_message)
         route_name = 'react_login' if is_v2 else 'login'
         return HTTPFound(location=maybe_contextual_route(
@@ -541,7 +541,7 @@ def assembl_login_complete_view(request):
             # re-logging in? Why?
             return HTTPFound(location=next_view)
     if not user.check_password(password):
-        error_message = localizer.translate(_("Invalid user and password"))
+        error_message = localizer.translate(_("Generic Errors"))
         user.login_failures += 1
         # TODO: handle high failure count
         request.session.flash(error_message)
@@ -848,13 +848,13 @@ def request_password_change(request):
             user = User.get(int(user_id))
             identifier = identifier or user.get_preferred_email() or ''
         except:
-            error = error or localizer.translate(_("This user cannot be found"))
+            error = error or localizer.translate(_("Generic Errors"))
     elif identifier:
         user, account = from_identifier(identifier)
         if user:
             user_id = user.id
         else:
-            error = error or localizer.translate(_("This user cannot be found"))
+            error = error or localizer.translate(_("Generic Errors"))
     if error or not user:
         context = get_default_context(request)
         get_route = context['get_route']
