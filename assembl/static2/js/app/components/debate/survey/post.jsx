@@ -36,7 +36,6 @@ import ValidatePostButton from '../common/validatePostButton';
 import TagOnPost from '../../tagOnPost/tagOnPost';
 import QuestionQuery from '../../../graphql/QuestionQuery.graphql';
 import ThematicQuery from '../../../graphql/ThematicQuery.graphql';
-// Import types
 import type { Props as TagOnPostProps } from '../../../components/tagOnPost/tagOnPost';
 import SharePostButton from '../common/sharePostButton';
 import { defaultDisplayPolicy } from '../common/postsFilter/policies';
@@ -53,6 +52,7 @@ type Props = {
   identifier: string,
   lang: string,
   originalLocale: string,
+  onHashtagClick: ((href: string) => void) | null,
   phaseId: string,
   postsDisplayPolicy: PostsDisplayPolicy,
   questionId: string,
@@ -166,45 +166,18 @@ class Post extends React.Component<Props> {
       });
   }
 
-  handleValidatePost = (refetchQueries) => {
-    const { id } = this.props.data.post;
-    this.props
-      .validatePost({
-        variables: {
-          postId: id
-        },
-        optimisticResponse: {
-          validatePost: {
-            post: {
-              id: id,
-              publicationState: 'PUBLISHED',
-              __typename: 'Post'
-            },
-            __typename: 'ValidatePost'
-          }
-        },
-        refetchQueries: refetchQueries
-      })
-      .then(() => {
-        displayAlert('success', I18n.t('debate.validateSuccess'));
-      })
-      .catch((error) => {
-        displayAlert('danger', `${error}`);
-      });
-  };
-
   render() {
     const { post } = this.props.data;
     const { bodyEntries, publicationState } = post;
     if (!publicationState || publicationState in DeletedPublicationStates) {
       return null;
     }
-
     const {
       contentLocale,
       identifier,
       isHarvesting,
       lang,
+      onHashtagClick,
       originalLocale,
       questionId,
       questionIndex,
@@ -364,6 +337,7 @@ class Post extends React.Component<Props> {
             body={body}
             bodyMimeType={post.bodyMimeType}
             isHarvesting={isHarvesting}
+            onHashtagClick={onHashtagClick}
             postsDisplayPolicy={this.props.postsDisplayPolicy}
           />
           <TagOnPost {...tagOnPostProps} />

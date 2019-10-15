@@ -289,3 +289,7 @@ type Theme = {
   firstColor: string,
   secondColor: string
 };
+
+type TransformLinkOptions = {
+  hashtags?: boolean
+}

@@ -20,19 +20,20 @@ type PostNode = {
 };
 
 type Props = {
+  defaultContentLocaleMapping: Map,
+  fetchMore: Function,
+  identifier: string,
   isModerating: boolean,
+  isPhaseCompleted: boolean,
+  onHashtagClick: ((href: string) => void) | null,
+  networkStatus: number,
+  params: Object,
   posts: {
     edges: Array<PostNode>
   },
-  params: Object,
-  networkStatus: number,
-  defaultContentLocaleMapping: Map,
-  identifier: string,
-  isPhaseCompleted: boolean,
-  fetchMore: Function,
-  refetch: Function,
   questionId: string,
   questionIndex: string,
+  refetch: Function,
   themeId: string,
   updateContentLocaleMapping: Function
 };
@@ -65,7 +66,18 @@ export class DumbPosts extends React.Component<Props> {
   }
 
   render() {
-    const { isModerating, networkStatus, params, fetchMore, refetch, themeId, posts, questionId, isPhaseCompleted } = this.props;
+    const {
+      isModerating,
+      networkStatus,
+      params,
+      fetchMore,
+      refetch,
+      themeId,
+      posts,
+      questionId,
+      isPhaseCompleted,
+      onHashtagClick
+    } = this.props;
     return (
       <FlatList
         items={posts}
@@ -78,6 +90,7 @@ export class DumbPosts extends React.Component<Props> {
         loadPreviousMessage="debate.survey.loadRecentPosts"
         itemData={item => ({
           id: item.node.id,
+          onHashtagClick: onHashtagClick,
           isPhaseCompleted: isPhaseCompleted,
           isModerating: isModerating,
           originalLocale: item.node.originalLocale,

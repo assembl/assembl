@@ -13,19 +13,20 @@ import ThreadPostsFilterMenu from '../common/postsFilter/thread/menu';
 import { defaultDisplayPolicy } from '../common/postsFilter/policies';
 
 type Props = {
-  isUserConnected: boolean,
-  ideaId: string,
   contentLocaleMapping: ContentLocaleMapping,
-  refetchIdea: Function,
-  lang: string,
-  noRowsRenderer: Function,
-  posts: Array<Post>,
-  initialRowIndex: ?number,
+  ideaId: string,
   identifier: string,
-  phaseId: string,
-  timeline: Timeline,
+  initialRowIndex: ?number,
+  isUserConnected: boolean,
+  lang: string,
   messageViewOverride: string,
-  postsDisplayPolicy?: PostsDisplayPolicy
+  noRowsRenderer: Function,
+  onHashtagClick: ((href: string) => void) | null,
+  phaseId: string,
+  posts: Array<Post>,
+  postsDisplayPolicy?: PostsDisplayPolicy,
+  refetchIdea: Function,
+  timeline: Timeline
 };
 
 class ThreadView extends React.Component<Props> {
@@ -42,6 +43,7 @@ class ThreadView extends React.Component<Props> {
       refetchIdea,
       lang,
       noRowsRenderer,
+      onHashtagClick,
       posts,
       initialRowIndex,
       identifier,
@@ -60,7 +62,7 @@ class ThreadView extends React.Component<Props> {
             <ThreadPostsFilterMenu stickyOffset={60} stickyTopPosition={200} />
             <div className="content-section">
               <Tree
-                sharedProps={{ postsDisplayPolicy: postsDisplayPolicy }}
+                sharedProps={{ postsDisplayPolicy: postsDisplayPolicy, onHashtagClick: onHashtagClick }}
                 contentLocaleMapping={contentLocaleMapping}
                 lang={lang}
                 data={posts}

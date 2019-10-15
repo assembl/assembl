@@ -67,6 +67,7 @@ exports[`Html component should render a html body with extracts 1`] = `
         <a
           className="linkified"
           href="url"
+          onClick={[Function]}
           target="_blank"
         >
           <ExtractInPost
@@ -112,6 +113,7 @@ exports[`Html component should render a html body with extracts 1`] = `
     <a
       className="linkified"
       href="https://github.com/"
+      onClick={[Function]}
       target="_blank"
     >
       https://github.com/
@@ -139,6 +141,7 @@ exports[`Html component should render a html body without extracts 1`] = `
         <a
           className="linkified"
           href="url"
+          onClick={[Function]}
           target="_blank"
         >
           the port
@@ -170,6 +173,7 @@ exports[`Html component should render a html body without extracts 1`] = `
     <a
       className="linkified"
       href="https://github.com/"
+      onClick={[Function]}
       target="_blank"
     >
       https://github.com/
