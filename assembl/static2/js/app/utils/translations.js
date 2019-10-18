@@ -224,7 +224,7 @@ const Translations = {
       loginModalBody: "Vous devez être connecté pour participer.",
       loginModalFooter: "Connectez-vous",
       alreadyAccount: "Vous avez déjà un compte&nbsp;?",
-      loginWithSocialMedia: "Vous utilisez un réseau social ?",
+      loginWithSocialMedia: "Vous utilisez un compte Decathlon ?",
       password: "Mot de passe",
       email: "Email",
       login: "Se connecter",
