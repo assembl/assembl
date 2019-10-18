@@ -2231,6 +2231,1115 @@ const Translations = {
         newOption: "Create '%{option}'"
       }
     }
+  },
+  de: {
+    globalError: "Something went wrong. Please try again later.",
+    postLoadError: "Something went wrong when loading this post.",
+    here: "here",
+    yes: "yes",
+    no: "no",
+    ok: "Ok",
+    and: " and ",
+    cancel: "Cancel",
+    accept: "Accept",
+    readMoreEllipsis: "Read more...",
+    readLessEllipsis: "Read less...",
+    refuse: "Refuse",
+    validate: "Validate",
+    introduction: "Introduction",
+    conclusion: "Conclusion",
+    delete: "Delete",
+    deleteConfirmation: {
+      confirmDeletionTitle: "Delete an item",
+      confirmDeletionBody: "Are you sure that you wish to delete this item?"
+    },
+    accountDeleted: "Your account has been successfully deleted",
+    deletedUser: "Deleted user account",
+    chatframe: {
+      title: "Instant discussion window",
+      tooltip: "Assemb'Bot"
+    },
+    cookiesBar: {
+      cookiesNotice:
+        "Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.",
+      accept: "I agree",
+      seeCookiesPolicy: "See more"
+    },
+    harvesting: {
+      harvestedExtractNumbers: "%{extractNumber} extracts harvested on this message",
+      harvestedExtractNumbers_0: "%{extractNumber} extract harvested on this message",
+      harvestedExtractNumbers_1: "%{extractNumber} extract harvested on this message",
+      enableHarvestingMode: "Enable harvesting mode",
+      disableHarvestingMode: "Disable harvesting mode",
+      inProgress: "Harvesting in progress",
+      validated: "Harvesting validated",
+      confirm: "Confirm",
+      reject: "Reject",
+      submit: "Submit",
+      now: "Now",
+      harvesting: "Harvesting",
+      harvestingSuccess: "The extract was updated successfully.",
+      harvestingDeleted: "The extract was deleted successfully.",
+      harvestingConfirmed: "The extract was confirmed successfully.",
+      harvestingValidated: "The extract was validated successfully.",
+      harvestingSubmitted: "The extract is waiting for validation.",
+      deleteExtract: "Delete the extract",
+      confirmDeleteExtract: "Are you sure that you wish to delete this extract?",
+      validateExtract: "Extract validated",
+      editExtract: "Edit the extract",
+      nuggetExtract: "Mark as nugget",
+      qualifyExtract: "Qualify the extract",
+      move: "Move",
+      qualifyNature: "Qualify by nature",
+      qualifyAction: "Qualify by action",
+      tags: {
+        label: "Tags",
+        cancel: "Cancel",
+        validate: "Validate",
+        edit: "Click to edit the tag \"%{tag}\"",
+        deleteConfirmation: {
+          confirmDeletionTitle: "Delete the tag \"%{tag}\"",
+          confirmDeletionBody: "Are you sure that you wish to delete this tag?"
+        },
+        select: {
+          placeholder: "Select tags",
+          noOptions: "No tags",
+          newOption: "Create this tag '%{option}'"
+        },
+        addTagSuccessMsg: "Tag \"%{tag}\" has been successfully added.",
+        removeTagSuccessMsg: "Tag \"%{tag}\" has been successfully removed."
+      }
+    },
+    cookies: {
+      userSession: "User Session",
+      locale: "Language",
+      matomo: "Matomo",
+      cgu: "Terms and conditions",
+      privacyPolicy: "Privacy policy",
+      userGuideline: "User Guidelines",
+      matomoSettings: "To modify this cookie's setting please click here",
+      userSessionHelper: "This cookie is necessary to maintain the user connected on Assembl.",
+      localeHelper:
+        "This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.",
+      privacyPolicyHelper: "This cookie registers that you have accepted the privacy policy of the consultation.",
+      userGuidelineHelper: "This cookie registers that you have accepted the user guidelines of the consultation.",
+      cguHelper: "This cookie registers that you have accepted the terms and conditions of the consultation.",
+      matomoHelper: "This cookie is used for stasticial purposes regarding the participants of the consultation.",
+      required: "This cookie is required"
+    },
+    search: {
+      reset: {
+        clear_all: "Clear All Filters"
+      },
+      facets: {
+        view_more: "View more",
+        view_less: "View less",
+        view_all: "View all"
+      },
+      NoHits: {
+        NoResultsFound: "No results found for {query}.",
+        DidYouMean: "Search for {suggestion}.",
+        SearchWithoutFilters: "Search for {query} without filters",
+        NoResultsFoundDidYouMean: "No results found for {query}. Did you mean {suggestion}?"
+      },
+      hitstats: {
+        results_found: "{hitCount} results found"
+      },
+      pagination: {
+        previous: "Previous",
+        next: "Next"
+      },
+      searchbox: {
+        placeholder: "Search"
+      },
+      datefilter: {
+        from: "From",
+        to: "To"
+      },
+      search_come_from_what_you_need_to_know: "Search done in the \"What you need to know\" section of this discussion",
+      search_come_from_announcement: "Search done in the \"announcement\" section of this discussion",
+      published_on: "Published on",
+      harvested_on: "Harvested on",
+      member_since: "Member since",
+      by: "by",
+      collapse_search: "Close search",
+      Categories: "Categories",
+      All: "All",
+      extract: "Extracts",
+      post: "Messages",
+      idea: "Ideas",
+      user: "Participants",
+      synthesis: "Syntheses",
+      Extracts: "Extracts",
+      Messages: "Messages",
+      Participants: "Participants",
+      like: "Agree",
+      agree: "Agree",
+      disagree: "Disagree",
+      dont_understand: "Did not get it",
+      more_info: "More info please?",
+      Nature: "Nature",
+      taxonomy_nature: {
+        issue: "Issue",
+        actionable_solution: "Actionable solution",
+        knowledge: "Knowledge",
+        example: "Example",
+        concept: "Concept",
+        argument: "Argument",
+        cognitive_bias: "Cognitive bias"
+      },
+      Action: "Action",
+      taxonomy_action: {
+        classify: "Classify",
+        make_generic: "Make generic",
+        argument: "Argument",
+        give_examples: "Give examples",
+        more_specific: "Be more specific",
+        mix_match: "Mix & match",
+        display_multi_column: "Display Multi-column",
+        display_thread: "Display Thread",
+        display_tokens: "Display tokens",
+        display_open_questions: "Display Open questions",
+        display_bright_mirror: "Display Design Fiction"
+      },
+      State: "State",
+      taxonomy_state: {
+        SUBMITTED: "To validate",
+        PUBLISHED: "Published"
+      },
+      Sort: "Sort",
+      number_of_contributions: "Number of contributions",
+      number_of_users: "Number of users",
+      "By relevance": "By relevance",
+      "Most recent first": "More recent first",
+      "Oldest first": "Oldest first",
+      "Most popular messages": "Most popular messages",
+      "Less popular messages": "Less popular messages",
+      "Most controversial messages": "Most controversial messages",
+      "Most consensus messages": "Most consensus messages",
+      "Messages judged unclear": "Messages judged unclear",
+      "Participants having the most posted messages": "Participants having the most posted messages",
+      "Participants having the less posted messages": "Participants having the less posted messages",
+      "Participants pleased by their peers": "Participants pleased by their peers",
+      "Filter by date": "Filter by date",
+      "My messages": "My messages",
+      "Messages in response to my contributions": "Messages in response to my contributions",
+      "Creative participants": "Creative participants",
+      "Reactive participants": "Reactive participants",
+      "Learning participants": "Learning participants"
+    },
+    resourcesCenter: {
+      defaultHeaderTitle: "Online resources center",
+      download: "Download the document"
+    },
+    navbar: {
+      theme: "themen",
+      home: "home",
+      debate: "debate",
+      community: "community",
+      resourcesCenter: "Resources",
+      connection: "Login",
+      logout: "Logout",
+      administration: "Administration",
+      syntheses: "Syntheses"
+    },
+    footer: {
+      terms: "Terms & Conditions",
+      legalNotice: "Legal Notice",
+      cookiesPolicy: "Cookies",
+      privacyPolicy: "Privacy Policy",
+      socialMedias: "Follow us",
+      userGuidelines: "User guidelines"
+    },
+    login: {
+      loginModalBody: "You have to be connected to participate.",
+      loginModalFooter: "Please connect",
+      alreadyAccount: "Do you already have an account?",
+      loginWithSocialMedia: "Care to use social media?",
+      password: "Password",
+      email: "Email",
+      login: "Log in",
+      forgotPwd: "Reset your password",
+      noAccount: "No account yet?",
+      signUp: "Sign up",
+      username: "Email or user name",
+      fullName: "Full name",
+      password2: "Repeat password",
+      passwordRequirementIntro: "Your password must contain at least:",
+      specialCharacterPassword: "A special character",
+      figurePassword: "A figure",
+      upperCasePassword: "An uppercase",
+      lowerCasePassword: "A lowercase",
+      lengthPassword: "9 characters",
+      createAccount: "Create an account",
+      send: "Send",
+      sendPwdConfirm: "Password change requested",
+      accountCreated: "Your account has been created",
+      sendPwdMsg:
+        "We have sent you an email with a temporary connection link. Please use that link to log in and change your password. Make sure to check your spam folder if an email is not in your inbox",
+      resend: "Resend the email",
+      accountCreatedMsg:
+        "A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.",
+      changePassword: "Change Password",
+      incorrectPassword: "The passwords that you have entered do not match",
+      somethingWentWrong: "We are sorry! Something went terribly wrong. Please try again",
+      userName: "Username (optional)",
+      passwordChangeRequestSuccess: "Great! An email has been sent to your account. Make sure to check your spam folder as well",
+      passwordChangeRequestError: "Oh oh! There seems to be a problem on our end. Please try again later.",
+      invalidEmail: "The email you have entered is invalid",
+      existingUsername: "The username you have entered already exists",
+      existingEmail: "The email you have entered already exists",
+      emailNotFound: "The email you have entered was not found. Please try again.",
+      incorrectPasswordLogin: "The password you have entered does not match with the entered user. Please try again.",
+      newPassword: "New password",
+      newPassword2: "Re-enter new password",
+      oldPasswordWarning: "Note: The new password must be different than the last 5 passwords."
+    },
+    changePassword: {
+      panelTitle: "Welcome to Assembl forgot password page"
+    },
+    home: {
+      accessButton: "I want to participate",
+      sentiments_0: "vote",
+      sentiments_1: "vote",
+      sentiments: "votes",
+      contribution_0: "contribution",
+      contribution_1: "contribution",
+      contribution: "contributions",
+      messages_0: "message",
+      messages_1: "message",
+      messages: "messages",
+      participant_0: "participant",
+      participant_1: "participant",
+      participant: "participants",
+      participations_0: "participation",
+      participations_1: "participation",
+      participations: "participations",
+      visit: "visits",
+      pageViews: "page views",
+      sumVisitsLength: "global time spent",
+      partners: "Partners",
+      themesTitle: "Ongoing themes",
+      themesSubtitle: "Find your most controversial and highly acclaimed discussions on the front page",
+      controversial: "Controversial discussions",
+      longerThread: "Longer thread",
+      topContributor: "Top contributor",
+      recentDiscussion: "Recent discussion",
+      objectivesTitle: "What is the objective?",
+      timelineTitle: "The timeline in %{count} phases",
+      video: "Video of the debate",
+      twitterTitle: "Tweet",
+      contact: "Do you wish to know more about this platform?",
+      contactUs: "Contact us",
+      from_start_to_end: "from %{start} to %{end}",
+      chatbot: "Chat with %{chatbotName}",
+      assemblNotConfigured: "Assembl has not been fully configured yet"
+    },
+    community: {
+      panelTitle: "Welcome to Assembl community page"
+    },
+    common: {
+      attachments: {
+        download: "Download"
+      },
+      editor: {
+        attachment: "Add a file",
+        bold: "Bold",
+        italic: "Italic",
+        bulletList: "Bullet list",
+        closeModal: "Close",
+        attachmentPlugin: {
+          title: "Add an attachment"
+        },
+        linkPlugin: {
+          openInNewTab: "Open link in new tab",
+          text: "Link text",
+          title: "Insert a link",
+          url: "URL",
+          editLinkForm: {
+            title: "Edit the link"
+          }
+        }
+      },
+      icons: {
+        error: "Error icon",
+        tooltip: "Tooltip icon"
+      },
+      loader: {
+        error: "There is an error loading the analysis",
+        loading: "Loading...",
+        "no-data": "Not enough data to analyse"
+      },
+      wordCountInformation: {
+        msg: "TO BE DEFINED %{words}",
+        words: "<span class='words-watson'>%{wordCount} words</span>"
+      },
+      uploadButton: "Choose a file to upload",
+      goUp: "Back to top"
+    },
+    multiColumns: {
+      synthesis: {
+        noSynthesisYet: "The synthesis is currently being written",
+        title: "Synthesis: %{colName}"
+      }
+    },
+    synthesis: {
+      title: "synthesis",
+      seeConversation: "See the conversation",
+      noSynthesisYet: "There is no synthesis available yet.",
+      noSynthesisYetCanCreate: "There is no synthesis available yet, you can create and save one, then publish it.",
+      tableOfContents: "Table of contents"
+    },
+    debate: {
+      postAwaitingModeration: "Proposal awaiting moderation",
+      validateMessage: "Accept this message",
+      shareThematic: "Share this thematic",
+      votes: "Votes",
+      vote: "Vote",
+      answer: "I answer:",
+      toAnswer: "Answer",
+      share: "Share",
+      sharePost: "Share this message",
+      shareSynthesis: "Share this synthesis",
+      copyLink: "Copy the link to the clipboard",
+      shareMail: "Share the link via email",
+      linkCopied: "Link copied",
+      subject: "Write the title",
+      insert: "Post a comment",
+      post: "Post",
+      like: "Like",
+      agree: "Agree",
+      agreeCount: "%{count} agree",
+      disagree: "Disagree",
+      disagreeCount: "%{count} disagree",
+      dontUnderstand: "Did not get it",
+      moreInfo: "More info please",
+      remaining_x_characters: "You have %{nbCharacters} characters left",
+      deniedMessage: "Reject this message",
+      deleteMessage: "Delete this message",
+      editMessage: "Edit this message",
+      confirmDeletionTitle: "Confirm deletion",
+      confirmDeletionBody: "Are you sure you want to delete this message?",
+      confirmRefusalBody: "Are you sure you want to reject this message?",
+      confirmRefusalButton: "Reject",
+      confirmDeletionButtonDelete: "Delete",
+      confirmDeletionButtonCancel: "Cancel",
+      back: "Back",
+      syntheses: {
+        body: "The synthesis body",
+        confirmDeletionBody: "Are you sure you want to delete this synthesis?",
+        createNewSynthesis: "Create a new synthesis",
+        deleteSuccessMessage: "The synthesis has been successfully deleted",
+        deleteSynthesisTooltip: "Delete the synthesis",
+        editSynthesis: "Edit the synthesis",
+        editSynthesisTooltip: "Edit the synthesis",
+        picture: "Picture of the synthesis' frame",
+        pictureHelper: "This is the picture that will be shown to illustrate your synthesis in the syntheses page",
+        publishedOn: "Published on ",
+        saveAndBackDraft: "Save and back to draft",
+        saveAndPost: "Save and publish",
+        saveDraft: "Save as draft",
+        save: "Save",
+        successSave: "Synthesis successfully saved",
+        summary: "Syntheses summary",
+        title: "Title of the synthesis",
+        url: "URL of the synthesis"
+      },
+      validateSuccess: "The contribution has been validated. It is now visible by all participants.",
+      survey: {
+        loadRecentPosts: "Load recent proposals",
+        themesTitle: "Choose a theme!",
+        txtAreaPh: "Write your point of view (minimum of 11 characters)",
+        question_x_on_total: "Question %{current} on %{total}",
+        proposalsTitle: "Do you agree with these points of view?",
+        moderateProposalsTitle: "Moderate these points of view",
+        thematicNumerotation: "Thematic %{count}",
+        reactions_0: "Reaction",
+        reactions_1: "Reaction",
+        reactions: "Reactions",
+        react: "React:",
+        moreProposals: "More points of view",
+        allProposals: "See all points of view",
+        pendingProposals: "See all pending points of view",
+        noProposals: "There is no point of view for the moment. Be the first to contribute!",
+        submit: "Submit",
+        postSuccess: "Thanks for your participation. Your proposal has been sent!",
+        postToBeValidated:
+          "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.",
+        endPhase: "The \"%{closedPhaseName}\" phase is closed.",
+        postsOrder: {
+          chronologicalTop: "Chronological points of view",
+          popularityFlat: "Most popular points of view first",
+          reverseChronologicalLast: "Newest points of view first"
+        }
+      },
+      question: {
+        backToQuestions: "Back to questions"
+      },
+      thread: {
+        messageTranslatedFrom: "This message has been translated from %{language}.",
+        messageOriginallyIn: "This message has been written in %{language}",
+        translateAllMessagesIn: "Translate all messages posted in %{language}.",
+        untranslateAllMessagesIn: "I don't want to translate all messages in %{language}.",
+        translateOnlyThisMessage: "Translate only this message.",
+        untranslateOnlyThisMessage: "I don't want to translate only this message",
+        chooseLanguagePh: "Please choose the language",
+        postDeletedByAdmin: "This message has been deleted by the community manager.",
+        postDeletedByUser: "This message has been deleted by the author.",
+        postEdited: "edited",
+        postSuccess: "Thanks for your participation. Your comment has been sent!",
+        postToBeValidated:
+          "Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.",
+        postsDisplay: {
+          full: "Full messages",
+          summary: "Message previews"
+        },
+        postsFilters: {
+          myPostsAndAnswers: "Answers to my posts",
+          onlyMyPosts: "My posts"
+        },
+        postsOrder: {
+          cleanFilter: "Clean filters",
+          chronologicalTop: "Chronological order",
+          popularityFlat: "Most popular messages first",
+          reverseChronologicalFlat: "Newest messages first",
+          reverseChronologicalLast: "Recently started threads",
+          reverseChronologicalTop: "Recently active threads"
+        },
+        fillBody: "Please, write a comment",
+        filterPosts: "Filter",
+        fillSubject: "Please, write a title",
+        sortPosts: "Sort",
+        sortFilterPosts: "Sort / Filter",
+        overviewPosts: "Overview",
+        linkIdea: "This post is related to the following themes:",
+        foldedPostLink: "Show %{count} responses",
+        foldedPostLink_1: "Show 1 response",
+        noPostsInThread: "Be the first to contribute, start a discussion!",
+        numberOfResponses: "%{count} responses to this post",
+        numberOfResponses_0: "No response to this post",
+        numberOfResponses_1: "%{count} response to this post",
+        numberOfReactions: "%{count} reactions",
+        numberOfReactions_1: "%{count} reaction",
+        showOriginal: "Show original",
+        startDiscussion: "Start a new thread",
+        translate: "Translate",
+        removeTranslation: "Remove translation",
+        goToIdea: "View all messages",
+        voteForProposals: "Vote for the proposals",
+        seeSubIdeas: "See %{count} sub-themes",
+        seeSubIdeas_1: "See sub-theme",
+        announcement: "Announcement",
+        guidelines: "Guidelines",
+        summary: "Summary"
+      },
+      semanticAnalysis: {
+        long: "Analysis",
+        short: "Semantic",
+        occurence: "Occurence",
+        occurenceDefinition:
+          "frequency of keywords throughout the debate or throughout the discussions related to the theme being addressed.",
+        relevance: "Relevance",
+        relevanceDefinition:
+          "measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.",
+        keywordCloud: "Keyword cloud",
+        keywordCloudDefinition:
+          "The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or \"in the conversations related to the theme being addressed\" when the analysis is done on a particular thematic). The importance of each keyword is shown with font size.",
+        informationKeyword: "Information on keywords",
+        numberKeyword: "Number of keywords",
+        noKeywordSelected: "Select your keyword",
+        sentimentAnalysis: "Sentiment analysis",
+        sentimentAnalysisDefinition:
+          "The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed)."
+      },
+      tagOnPost: {
+        suggestionContainerTitle: "Suggested keywords:",
+        tagContainerAdminTitle: "Add post-related keywords:",
+        tagContainerTitle: "Keywords in post:",
+        alreadyAddedWarningMessage: "Already added"
+      },
+      brightMirror: {
+        deleteFiction: "Delete your text",
+        deleteFictionModalBody: "Are you sure you want to delete this text?",
+        deleteFictionSuccessMsg: "Your text was deleted",
+        draftEmptyTitle: "Untitled",
+        draftLabel: "Draft",
+        draftSuccessMsg: "Your text has been saved successfully.",
+        editFiction: "Edit your text",
+        fiction: "text",
+        fillBodyLabel: "Write your text",
+        noTitleSpecified: "No title specified",
+        noContentSpecified: "No content specified",
+        fillEitherTitleContent: "Please, write a title or a text",
+        noAuthorSpecified: "No author specified",
+        numberOfFictions: "List of scenarios",
+        numberOfFictions_0: "No published scenarios",
+        numberOfResponses: "%{count} responses",
+        numberOfResponses_0: "No response",
+        numberOfResponses_1: "%{count} response",
+        postSuccessMsg: "Thanks for your participation. Your text has been published successfully!",
+        saveDraft: "Save",
+        shareFiction: "Share a short story",
+        startFictionLabel: "Write my text",
+        commentFiction: {
+          cancel: "Cancel",
+          commentHelper: "Comment",
+          deleteComment: "Delete this message",
+          deleteCommentBodyMessage: "Are you sure you want to delete this message?",
+          editComment: "Edit this message",
+          imageAlt: "Let's talk illustration",
+          label: "Comments",
+          modal: {
+            title: "Comment",
+            instructionList: "You can comment the text:",
+            instructionListOne: "Underligne a quote",
+            instructionListTwo: "Click “Suggest” to open an input box",
+            instructionListThree: "Write your comment, add an image or video and validate"
+          },
+          numberOfComments: "%{count} messages",
+          numberOfComments_0: "No message at the moment",
+          numberOfComments_1: "%{count} message",
+          placeholder: "Join the debate...",
+          strongTitle: "Let's talk!",
+          submit: "Comment",
+          title: "Comment or debate on the text above"
+        },
+        sideComment: {
+          commenterSingleParticipation: "1 participant commented a quote.",
+          commentersParticipation: "%{count} participants commented quotes.",
+          commentersParticipation_1: "%{count} participant commented quotes.",
+          commentLabel: "Your comment",
+          submitSuccessMsg: "Your comment has been published successfully!",
+          editSuccessMsg: "Your comment has been edited successfully!",
+          deleteSuccessMsg: "Your comment has been deleted successfully!",
+          confirmDeleteMsg: "Are you sure you would like to delete this comment?",
+          editTooltip: "Edit",
+          deleteTooltip: "Delete"
+        },
+        sentiment: {
+          like: "Inspiring!",
+          dislike: "Scary",
+          dontUnderstand: "Strengthen the plot",
+          moreInfo: "Enrich the style"
+        },
+        suggest: "Suggest"
+      },
+      themes: "Themes",
+      notStarted: "The \"%{phaseName}\" phase has not started. Please come back from ",
+      isCompleted: "This phase is closed. You can no longer vote.",
+      noAnswer: "This phase is closed. You can no longer answer.",
+      edit: {
+        title: "I edit my message",
+        subject: "Subject",
+        body: "Comment"
+      },
+      voteSession: {
+        currentTokenDistribution: "Current distribution of tokens",
+        tokenDistribution: "Distribution of votes",
+        estimate: "Average estimate",
+        isCompleted: "This vote phase is closed. Thank you for your participation!",
+        voteResultsPlusTitle: "Vote results: %{title}",
+        postSuccess:
+          "Thank you for your participation! Your vote has been set. You can modify this vote during the entire duration of the vote session.",
+        remainingToken: "%{count} token remaining",
+        remainingTokens: "%{count} tokens remaining",
+        resetTokens: "Reset my vote",
+        submit: "Submit vote",
+        showVotesInProgress: "Show votes of the community",
+        showLess: "Close votes of the community",
+        participantsCount: "%{count} participants have expressed themselves!",
+        participantsCount_0: "No participants have expressed themselves yet",
+        participantsCount_1: "%{count} participant has expressed himself/herself",
+        tokenTooltip: "%{count} %{name} tokens",
+        notEnoughTokens: "You don't have enough tokens",
+        exclusiveTokens: "You already voted for another category for this proposal",
+        totalVotes: "%{count} votes",
+        valueWithUnit: "%{unit}%{num}"
+      }
+    },
+    profile: {
+      panelTitle: "My account",
+      personalInfos: "Personal information",
+      userName: "User name",
+      fullname: "Full name",
+      email: "Email",
+      oldPassword: "Current password",
+      newPassword: "New password",
+      newPassword2: "Retype password",
+      memberSince: "Member since %{date}",
+      save: "Save",
+      password: "Password",
+      cookies: "Cookies configuration",
+      changePassword: "Change my password",
+      usernameInformations:
+        "If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.",
+      passwordModifiedSuccess: "Your password has been changed with success",
+      saveSuccess: "Your profile is updated",
+      deleteMyAccount: "Delete my account",
+      deleteMyAccountConfirmation: "Delete my account and my data",
+      deleteMyAccountText:
+        "By deleting your account, you permanently delete all of your personal data and your account. You will no longer be able to contribute to the debate without an account.",
+      deleteMyAccountModal:
+        "Are you sure you want to permanently delete your account and all of your personal data? By validating, you will no longer be able to contribute to the consultation.",
+      updateUser: {
+        errorMessage: {
+          "1": "We already have a user with this username.",
+          "2": "The entered password doesn't match your current password.",
+          "3": "You entered two different passwords.",
+          "4": "The new password has to be different than the current password.",
+          "5": "The new password has to be different than the last 5 passwords you set."
+        }
+      }
+    },
+    loading: {
+      wait: "Please wait..."
+    },
+    error: {
+      reason: "Sorry, an error occurred:",
+      required: "This field is required.",
+      loading: "An error occurred, please reload the page"
+    },
+    notFound: {
+      panelTitle: "Sorry, this page doesn't exist"
+    },
+    termsAndConditions: {
+      headerTitle: "Terms & Conditions",
+      link: "the Terms & Conditions",
+      iAccept: "I have read and I accept the ",
+      accept: "I accept"
+    },
+    legalNotice: {
+      headerTitle: "Legal Notice"
+    },
+    cookiesPolicy: {
+      headerTitle: "Cookies",
+      sectionTitle: "Cookies policy",
+      essential: "Essential",
+      analytics: "Analytics and customization",
+      other: "Other",
+      instructions: "Select the cookies you wish to refuse below",
+      success: "Your cookies configuration has been saved"
+    },
+    privacyPolicy: {
+      headerTitle: "Privacy policy",
+      iAccept: "I have read and I accept the ",
+      link: "the Privacy Policy"
+    },
+    userGuidelines: {
+      headerTitle: "User guidelines",
+      iAccept: "I have read and I accept the ",
+      link: "the user guidelines"
+    },
+    legalContentsModal: {
+      title: "Accept the legal contents",
+      iAccept: "I have read and accepted ",
+      ofThePlatform: " of the platform."
+    },
+    administration: {
+      confirmTextFieldDeletionTitle: "Delete the field",
+      confirmTextFieldDeletion: "Are you sure that you want to delete this field?",
+      confirmSelectFieldOptionDeletionTitle: "Delete this item",
+      confirmSelectFieldOptionDeletion: "Are you sure that you want to delete this item?",
+      addThematic: "Add a level %{level} theme",
+      addQuestion: "Add a question",
+      anErrorOccured: "An error occured during save. Please check that you filled all the required fields.",
+      deleteThematic: "Delete the theme",
+      deleteSubThematicDisabled: "You cannot delete a theme with sub-themes.",
+      confirmDeleteThematicTitle: "Confirm deletion",
+      confirmDeleteThematic: "Are you sure you want to delete this theme?",
+      confirmUnsavedChanges: "You have unsaved changes. Are you sure you want to leave this page?",
+      deleteQuestion: "Delete the question",
+      changeLanguage: "Set another language",
+      question_label: "Question",
+      announcementModule: "Announcement module",
+      thematic: "Theme",
+      deleteAssociatedFile: "Delete the associated file",
+      deleteThematicImage: "Delete the image associated to this thematic",
+      edition: "Edit the discussion",
+      landingpage: "Landing page",
+      up: "Up",
+      down: "Down",
+      nextStep: "Next step",
+      previousStep: "Previous step",
+      informationOfTheDebate: "Information of the debate",
+      discussionSlug: "Slug of the debate",
+      slugWarning:
+        "This modification causes a change in the address of the debate. Please take this change into account in further communications. To insure the continuity of the service, the previous address will still be operating.",
+      invalidSlug: "Special characters are not allowed",
+      theme: {
+        themeColorsTitle: "Theme colors",
+        firstColor: "Primary color",
+        secondColor: "Second color"
+      },
+      menu: {
+        phase: "Phase %{count} - %{description}",
+        preferences: "Discussion preferences",
+        sections: "Edit debate sections",
+        legalContents: "Edit legal content",
+        timeline: "Edit the phases",
+        exportTaxonomies: "Export taxonomies",
+        manageProfileOptions: "Registration options",
+        personalizeInterface: "Personalize the interface",
+        configureThematic: "Configure the theme %{index}",
+        exportDebateData: "Export the data",
+        exportUsers: "Export users data"
+      },
+      discussionPreferences: {
+        debateLogoLabel: "Discussion logo"
+      },
+      timelineAdmin: {
+        phase: "Phase %{count}",
+        annotation: "This module has to be filled. * Fields are required",
+        phaseLabel: "Phase title",
+        descriptionPhaseLabel: "Phase description",
+        addPhase: "Add a phase",
+        deletePhase: "Delete the phase",
+        instruction1: "Choose the number of phases for your debate",
+        instruction2: "Fill in the required fields for each phase by selecting each tab",
+        instruction3: "Choose the start and the end of your phase.",
+        instruction4: "Choose the phase image for the timeline in the landing page.",
+        instruction5: "Write the phase description.",
+        successSave: "The timeline has been sucessfully saved",
+        selectStart: "Phase %{count}'s start date",
+        selectEnd: "Phase %{count}'s end date",
+        warningLabel: "The dates you have set for this phase are overlapping the previous phase or the next phase"
+      },
+      modules: {
+        noModule: "No module",
+        survey: "Survey module",
+        thread: "Thread module",
+        messageColumns: "Multi-columns module",
+        voteSession: "Vote module",
+        brightMirror: "Bright Mirror module"
+      },
+      noTimeline: "No timeline has been configured yet",
+      survey: {
+        createTable: "Create the themes table",
+        exportData: "Export data",
+        configThematic: "Configure the theme",
+        configThematics: "Configure the themes",
+        configThematicsHelperTitle: "You have chosen to configure a themes table.",
+        configThematicsHelperDescription: "To change your choice, return to the general setting of the debate."
+      },
+      voteSession: {
+        configureVoteSession: "Configure vote session associated to the theme",
+        "0": "Vote session page configuration",
+        "1": "Configure the voting modules",
+        "2": "Configure the voting proposals",
+        "3": "Export data"
+      },
+      voteWithTokens: "Tokens vote",
+      voteWithGauges: "Gauge(s) vote",
+      gauge: "Gauge %{number}",
+      token: "Token %{number}",
+      tokenVoteCheckbox:
+        "The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions",
+      gaugeVoteCheckbox: "You can choose to have one or several gages",
+      headerTitle: "Top page Header configuration",
+      propositionSectionTitle: "Proposals section title configuration",
+      instructions: "Instructions section configuration",
+      summary: "Summary section configuration",
+      voteSessionSuccess: "The vote session is saved with success.",
+      exclusive: "Exclusive",
+      tokenVoteInstructions: "Instructions for the token vote",
+      gaugeVoteInstructions: "Instructions for the gauge vote",
+      proposalSectionTitle: "Proposal section title configuration",
+      gaugeNumber: "Gauge number",
+      deleteGauge: "Delete gauge",
+      defineGaugeNumer: "Define gauges number",
+      minValue: "Minimum value",
+      maxValue: "Maximum value",
+      unit: "Unit",
+      configureVoteSessionButton: "Configure a vote session",
+      goBackToThematic: "Go back to thematic",
+      saveBeforeConfigureVoteSession: "Please save before you can access to the vote session configuration",
+      postsExistsWarning:
+        "This thematic contains posts. If you change the module, you'll delete all messages associated to this thematic when you'll save.",
+      configureVoteSession: "You need to configure a vote session.",
+      configureVoteModules: "You need to configure at least one vote module.",
+      saveFirstStep: "Please return to step 1 and save the instructions first.",
+      saveSecondStep: "Please return to step 2 and configure and save the vote modules.",
+      backToPreviousStep: "Return to step %{number}",
+      nbTicksHelper: "Define ticks number for the gauge",
+      nbTicks: "Ticks number",
+      textValue: "Textual value",
+      valueTitle: "Value title",
+      numberValue: "Number value",
+      tokenCategoryNumber: "Number of token types",
+      tokenNumber: "Number of tokens per participant",
+      tokenTitle: "Token title",
+      tokenColor: "Color of the token",
+      notExclusive: "Not exclusive",
+      voteProposals: {
+        sectionTitle: "Configure the proposals associated to the vote modules",
+        gauge: "Gauge %{number}",
+        customGauge: "Gauge %{number} (customized for this proposal)",
+        defineProposal: "Define proposal %{number}",
+        addProposal: "Add a proposal",
+        deleteProposal: "Delete this proposal",
+        deleteModalTitle: "Confirm deletion",
+        deleteModalBody: "Are you sure you want to delete this proposal?",
+        title: "Title of the proposal",
+        description: "Description",
+        tokenVote: "Token vote",
+        edit: "Modify",
+        gaugeSettings: "Edit settings",
+        cancelCustomization: "Cancel settings",
+        validationErrors: {
+          atLeastOneModule: "You should select at least one module."
+        }
+      },
+      gaugeModal: {
+        title: "Modification of the gauge's settings",
+        subTitle:
+          "You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.",
+        applyToAllProposalsCheckboxLabel: "Apply these changes to all of the proposals"
+      },
+      seeCurrentVotes: "Do you want participants to see the evolution of the votes in progress?",
+      resultsVisible: "Yes, even before having voted.",
+      resultsNotVisible: "No, only show the results once the vote is closed.",
+      sections: {
+        addSection: "Add a section",
+        deleteSection: "Delete the section",
+        resources_center: "Resources center",
+        custom: "Added section",
+        externalPage: "Use external page",
+        titlePh: "Title",
+        urlPh: "URL",
+        successSave: "Sections are modified with success",
+        sectionsTitle: "Set sections"
+      },
+      helpers: {
+        surveyQuestion:
+          "The survey module is composed of one question and a response field dedicated to the participant. You can add questions by clicking on the + icon below.",
+        timelinePhases: "Choose a description and an image for each phase of the debate displayed in the landing page",
+        timelineTitle: "Configure the title and the sub-title of the timeline section displayed in the landing page",
+        voteSessionProposalSection:
+          "The proposals section is introduced by a title. You define the title based on the proposal content.",
+        tokenCategoryNumber: "Select the number of different token types for this vote",
+        exclusive:
+          "You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal.",
+        tokenVoteInstructions: "Depending on the objective of the token module, incite the participants to take action.",
+        gaugeVoteInstructions: "Depending on the objective of the gauge module, incite the participants to take action.",
+        landingPage: {
+          header:
+            "Top page header. It contains the consultation's title and subtitle and a button to access to the consultation.",
+          timeline: " ",
+          tweets: " ",
+          chatbot: " ",
+          news: " ",
+          introduction: " ",
+          data: " ",
+          footer: " ",
+          video: " ",
+          contact: " ",
+          top_thematics: " ",
+          partners: " "
+        }
+      },
+      videoHelp:
+        "*Authorized video links: \"https://www.youtube.com/embed/[videoId]\" or \"https://player.vimeo.com/video/[videoId]?\"",
+      annotation: "* Fields are required.",
+      discussion: {
+        "0": "Discussion preferences",
+        "3": "Registration options",
+        "4": "Legal contents",
+        "5": "Edition of the phases",
+        "6": "Personalize the interface"
+      },
+      languageChoice: "Select desired languages below",
+      moderation: "Post pending for moderation",
+      activateModeration: "Activate the moderation",
+      ph: {
+        propositionSectionTitle: "Section title",
+        propositionSectionSubtitle: "Section subtitle",
+        descriptionPhase: "Description phase"
+      },
+      tableOfThematics: {
+        quote: "Quote",
+        bannerHeader:
+          "Top banner must include the thematic title defined previously, a background image and eventually a subtitle.",
+        thematicTitle: "Thematic title",
+        bannerSubtitleLabel: "Top banner subtitle",
+        bannerImagePickerLabel: "Banner image",
+        moduleTypeLabel: "Participation module configuration",
+        instructionHeader:
+          "Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.",
+        instructionLabel: "Instructions",
+        summaryHeader: "The 'Summary' section contains a brief abstract of the thematic and can be enriched with various medias.",
+        summaryLabel: "Summary",
+        sectionTitleLabel: "Section title",
+        questionsHeader: "Questions",
+        confirmDeletionTitle: "Delete %{title} theme",
+        confirmDeletionBody: "Are you sure that you wish to delete this theme?",
+        multiColumnsFormName1: "2 columns",
+        multiColumnsFormName2: "3 columns",
+        columnsConfiguration: "Columns configuration",
+        columnTitle: "Column title",
+        columnName: "Column name",
+        columnColor: "Column color",
+        columnSynthesisSubject: "Column synthesis title",
+        columnSynthesisBody: "Column synthesis"
+      },
+      resourcesCenter: {
+        createResource: "Add a media",
+        menuTitle: "Edit the resources center",
+        title: "Resources center",
+        editResourceFormTitle: "Edit resource number %{count}",
+        textLabel: "Text",
+        titleLabel: "Title",
+        embedCodeLabel: "Video/Slides",
+        deleteResource: "Delete the resource",
+        documentLabel: "Document",
+        imageLabel: "Image",
+        successSave: "Resources have been saved with success!",
+        pageTitleLabel: "Page title",
+        headerImageLabel: "Header image"
+      },
+      export: {
+        defaultAnnotation: "You can export all of the data by clicking on the export button",
+        taxonomyAnnotation: "You can export all of the taxonomies by clicking on the export button",
+        usersAnnotation: "You can export all of the users data by clicking on the export button",
+        link: "Export",
+        noExportLanguage: "Keep the messages in their original languages",
+        title: "Export the debate data",
+        defaultSectionTitle: "Export data",
+        taxonomySectionTitle: "Export taxonomy",
+        usersSectionTitle: "Export users data",
+        translateTheMessagesIn: "Translate the messages in:",
+        anonymity: "Anonymity",
+        translation: "Translation of the data",
+        anonymous: "Make the data anonymous",
+        moderatedContributions: "Moderated contributions",
+        moderatedContributionsAnnotation: "You can export all moderated contributions and related data. Click Export button",
+        contributions: "Contributions of the participants",
+        exportDate: "Export date",
+        startDate: "Start date",
+        endDate: "End date",
+        presets: {
+          today: "Today",
+          lastWeek: "Last week",
+          lastMonth: "Last month",
+          phase: "Phase %{count}",
+          fullDebate: "All of the debate",
+          placeHolder: "Presets"
+        },
+        vote: {
+          voteResultsCsv: "Export general data for the vote module",
+          extractCsvVoters: "Export vote details for each user"
+        }
+      },
+      step_x_total: "Section %{num} on %{total}",
+      saveThemes: "Save",
+      successThemeCreation: "Themes have been saved with success!",
+      successDiscussionPreference: "Discussion preferences have been saved with success!",
+      legalContents: {
+        legalNoticeLabel: "Legal notice",
+        termsAndConditionsLabel: "Terms and conditions",
+        cookiesPolicyLabel: "Information on cookies",
+        privacyPolicyLabel: "Privacy policy",
+        userGuidelinesLabel: "User guidelines",
+        successSave: "The legal contents have been saved with success!",
+        mandatoryLegalContentsValidation: "Activate the modal to accept legal contents at the first visit.",
+        legalContentsValidation: "Acceptation of the legal contents for users identified via SSO"
+      },
+      landingPage: {
+        manageModules: {
+          title: "Manage the modules",
+          helper: "Choose the modules you want to see in the landing page and their position.",
+          textAndMultimedia: "Text & Multimedia",
+          textAndMultimediaBtn: "Add a Text & Multimedia module",
+          confirmationModal: "Are you sure you want to add a Text & Multimedia module to the landing page?"
+        },
+        header: {
+          successSave: "The header has been updated successfully!",
+          title: "Header",
+          helper: "Customize appearance of the header.",
+          logoHelper: "Choose the logo inside of the header",
+          titleLabel: "Debate title",
+          subtitleLabel: "Debate subtitle",
+          buttonLabel: "Name of the referral button to the debate",
+          headerImage: "Choose the header image",
+          logoImage: "Choose the header logo",
+          headerDescription: "The image must have a height of 480px and a width of 1480px. The weight must not exceed 300ko.",
+          logoDescription:
+            "The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.",
+          startDate: "From",
+          endDate: "To",
+          timePlaceholder: "Optional: Enter the dates of the debate",
+          dateLabel: "Enter the dates of the the debate that appear in the header.",
+          dateDescription:
+            "Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.",
+          startDateError: "The start date cannot be after the end date",
+          endDateError: "The end date cannot be after the start date"
+        },
+        timeline: {
+          title: "Timeline on the landing page",
+          image: "Choose the image for this phase",
+          sectionTitle: "Configure the title and the subtitle of the section",
+          imageDescription: "The image must have a height of 500px and a width of 400px."
+        },
+        successSave: "The modules have been saved with success!",
+        headerSuccessSave: "The home page header have been saved with success!"
+      },
+      profileOptions: {
+        addTextField: "Add a field",
+        createNewFieldModalBody: "Select the field type you want to add to the register page:",
+        choiceTextField: "Text field",
+        choiceSelectField: "Dropdown field",
+        addSelectFieldOption: "Add a new item",
+        deleteTextField: "Delete the field",
+        deleteSelectFieldOption: "Delete this item",
+        toggleLegalContentIntro: "Make the legal validation mandatory or not for a user after signing up in the platform by SSO.",
+        LegalContentButton: "Activate the mandatory validation of the legal contents",
+        introText:
+          "Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.",
+        textFieldToggleOptional: "Make this field optional",
+        textFieldToggleRequired: "Make this field required",
+        successSave: "The profile options has been saved with success!",
+        hideTextField: "Hide this field for the user"
+      },
+      personalizeInterface: {
+        success: "The interface personalization has been saved with success!",
+        titleFormTitle: "Personalize the title of the page",
+        title: "Web page Title (visual 1)",
+        favicon: "Favicon (visual 2)",
+        faviconInstruction: "Favicon should have a maximum height of 110px. Its extension should be .ico",
+        logoInstruction:
+          "Logo should have a maximum height of 110px and a maximum width of 215px. The background must be transparent.",
+        icoRequired: "The favicon must be an .ico file only"
+      },
+      semanticAnalysis: {
+        title: "Semantic Analysis",
+        description: "Semantic analysis feature is only available for the following modules: thread, survey and Bright Mirror",
+        activate: "Activate the semantic analysis"
+      },
+      translationService: {
+        title: "Translation service",
+        description: "Translation service must be activated to use the semantic analysis",
+        activate: "Activate this option to allow users to translate messages"
+      }
+    },
+    unauthorizedAdministration: {
+      unauthorizedMessage:
+        "You are not authorized to access the administration section. Please contact the administrator of the website.",
+      returnButton: "Back to home"
+    },
+    date: {
+      format: "MMMM Do, YYYY",
+      format2: "YYYY-MM-DD",
+      format3: "MM/DD/YYYY"
+    },
+    duration: {
+      format: "h [h]"
+    },
+    form: {
+      select: {
+        placeholder: "Select...",
+        noOptions: "No options",
+        newOption: "Create '%{option}'"
+      }
+    }
   }
 };
 
