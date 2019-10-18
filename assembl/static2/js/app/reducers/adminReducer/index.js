@@ -1,3 +1,4 @@
+/* eslint-disable */
 // @flow
 import { combineReducers } from 'redux';
 import type ReduxAction from 'redux';
@@ -15,10 +16,11 @@ type EditLocaleReducer = (EditLocaleState, ReduxAction<Action>) => EditLocaleSta
 */
 export const editLocale: EditLocaleReducer = (state = 'fr', action) => {
   switch (action.type) {
-  case 'UPDATE_EDIT_LOCALE':
-    return action.newLocale;
-  default:
-    return state;
+    case 'UPDATE_EDIT_LOCALE':
+      console.log('HERE', action.newLocale);
+      return action.newLocale;
+    default:
+      return state;
   }
 };
 
@@ -26,10 +28,10 @@ type DisplayLanguageMenuState = boolean;
 type DisplayLanguageMenuReducer = (DisplayLanguageMenuState, ReduxAction<Action>) => DisplayLanguageMenuState;
 export const displayLanguageMenu: DisplayLanguageMenuReducer = (state = false, action) => {
   switch (action.type) {
-  case 'UPDATE_LANGUAGE_MENU_VISIBILITY':
-    return action.state;
-  default:
-    return state;
+    case 'UPDATE_LANGUAGE_MENU_VISIBILITY':
+      return action.state;
+    default:
+      return state;
   }
 };
 
