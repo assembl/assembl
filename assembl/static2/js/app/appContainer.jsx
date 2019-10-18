@@ -1,3 +1,4 @@
+/* eslint-disable */
 // @flow
 import * as React from 'react';
 import { compose, graphql, type OperationComponent } from 'react-apollo';
@@ -48,10 +49,13 @@ const DumbApplicationContainer = (props: Props) => {
 
   // Escape out of when the /graphql route is not present. Present default values instead
   if (error && error.networkError && error.networkError.response.status === 404) {
+    console.log('In the error', defaultLocale);
     configureTheme(defaultFirstColour(), defaultSecondColour(), setDefaultTheme);
     configureDefaultLocale(defaultAvailableLanguages, defaultLocale, setDefaultLocale);
   } else {
     const { languages, firstColor, secondColor } = discussionPreferences;
+    console.log('OK', languages);
+    console.log('OK', defaultLocale);
     configureTheme(firstColor, secondColor, setDefaultTheme);
     configureDefaultLocale(languages.map(l => l.locale), defaultLocale, setDefaultLocale);
   }
@@ -67,7 +71,7 @@ const discussionPreferencesQuery: OperationComponent<CoreDiscussionPreferencesQu
 );
 
 const mapDispatchToProps = dispatch => ({
-  setDefaultLocale: (locale) => {
+  setDefaultLocale: locale => {
     dispatch(setLocale(locale));
     dispatch(updateEditLocale(locale));
     setCookieItem('_LOCALE_', locale);
