@@ -1,3 +1,4 @@
+/* eslint-disable */
 // @flow
 import * as React from 'react';
 import { connect } from 'react-redux';
@@ -37,6 +38,7 @@ class LanguageMenu extends React.Component<Props> {
       locale = 'no';
     }
     setCookieItem('_LOCALE_', locale);
+    console.log('locale', locale);
     changeLanguage(key);
     location.reload(true);
   }
@@ -50,7 +52,7 @@ class LanguageMenu extends React.Component<Props> {
     const { data, locale } = props;
     const prefs = data.discussionPreferences.languages;
     const preferencesMapByLocale = {};
-    prefs.forEach((p) => {
+    prefs.forEach(p => {
       if (p.locale === 'zh_Hans') {
         preferencesMapByLocale['zh-CN'] = { ...p };
         preferencesMapByLocale['zh-CN'].name = p.name.split(' (')[0]; // shorten the name for chinese
@@ -107,7 +109,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeLanguage: (locale) => {
+  changeLanguage: locale => {
     dispatch(setLocale(locale));
   }
 });

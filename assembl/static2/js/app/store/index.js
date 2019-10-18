@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { loadTranslations, setLocale, syncTranslationWithStore } from 'react-redux-i18n';
 
 import { updateEditLocale } from '../actions/adminActions';
@@ -17,6 +18,7 @@ export default function createAppStore(initialState) {
   }
   const browserLanguage = navigator.language || navigator.userLanguage;
   let storedLocale = getCookieItem('_LOCALE_');
+  console.log('storedLocale', storedLocale);
   if (storedLocale === 'zh_CN' || storedLocale === 'zh_Hans') {
     storedLocale = 'zh-CN';
   }
@@ -31,6 +33,8 @@ export default function createAppStore(initialState) {
   }
   const isLocaleStored = !!storedLocale;
   const userLocale = isLocaleStored ? storedLocale : getLocale(browserLanguage);
+  console.log('userLocale', userLocale);
+
   syncTranslationWithStore(store);
   store.dispatch(loadTranslations(getTranslations()));
   store.dispatch(setLocale(userLocale));
