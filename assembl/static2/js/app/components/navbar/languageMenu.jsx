@@ -79,6 +79,7 @@ class LanguageMenu extends React.Component<Props> {
   render() {
     const { size, locale, style, className, setWidth = doNothing } = this.props;
     const { availableLocales, preferencesMapByLocale } = this.getAvailableLanguages(this.props);
+    console.log('availableLocales', availableLocales);
     if (availableLocales.length > 0) {
       return (
         <ul ref={refWidthUpdate(setWidth)} className={`dropdown-${size} uppercase ${className}`} style={style}>
