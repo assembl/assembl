@@ -1,3 +1,4 @@
+/* eslint-disable */
 // @flow
 import React from 'react';
 import { connect } from 'react-redux';
@@ -34,44 +35,45 @@ type Props = {
 
 const Flag = ({ locale }: { locale: string }) => {
   switch (locale) {
-  case 'de':
-    return <De />;
-  case 'en':
-    return <En />;
-  case 'es':
-    return <Es />;
-  case 'fr':
-    return <Fr />;
-  case 'hu':
-    return <Hu />;
-  case 'it':
-    return <It />;
-  case 'ja':
-    return <Ja />;
-  case 'no':
-    return <Nb />;
-  case 'nl':
-    return <Nl />;
-  case 'pl':
-    return <Pl />;
-  case 'pt':
-    return <Pt />;
-  case 'ro':
-    return <Ro />;
-  case 'ru':
-    return <Ru />;
-  case 'th':
-    return <Th />;
-  case 'tr':
-    return <Tr />;
-  case 'zh_Hans':
-    return <ZhCN />;
-  default:
-    return <span>{locale}</span>;
+    case 'de':
+      return <De />;
+    case 'en':
+      return <En />;
+    case 'es':
+      return <Es />;
+    case 'fr':
+      return <Fr />;
+    case 'hu':
+      return <Hu />;
+    case 'it':
+      return <It />;
+    case 'ja':
+      return <Ja />;
+    case 'no':
+      return <Nb />;
+    case 'nl':
+      return <Nl />;
+    case 'pl':
+      return <Pl />;
+    case 'pt':
+      return <Pt />;
+    case 'ro':
+      return <Ro />;
+    case 'ru':
+      return <Ru />;
+    case 'th':
+      return <Th />;
+    case 'tr':
+      return <Tr />;
+    case 'zh_Hans':
+      return <ZhCN />;
+    default:
+      return <span>{locale}</span>;
   }
 };
 
 const LanguageMenu = ({ changeLocale, discussionPreferencesLanguages, editLocale, isHidden }: Props) => {
+  console.log('discussionPreferencesLanguages', discussionPreferencesLanguages);
   if (!isHidden) {
     return (
       <div className="relative">
@@ -107,7 +109,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeLocale: (newLocale) => {
+  changeLocale: newLocale => {
     dispatch(updateEditLocale(newLocale));
   }
 });
