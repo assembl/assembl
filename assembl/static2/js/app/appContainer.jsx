@@ -33,13 +33,13 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
 
     let tempCookieLanguage, tempBrowserLanguage;
     if (cookieLanguage === 'zh_Hans' || cookieLanguage === 'zh_CN') {
-      tempCookieLanguage = 'zh-CN';
+      tempCookieLanguage = 'zh_Hans';
     } else {
       tempCookieLanguage = cookieLanguage;
     }
 
     if (browserLanguage === 'zh_Hans' || browserLanguage === 'zh_CN') {
-      tempBrowserLanguage = 'zh-CN';
+      tempBrowserLanguage = 'zh_Hans';
     } else {
       tempBrowserLanguage = browserLanguage;
     }
