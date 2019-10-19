@@ -450,7 +450,7 @@ export const availableLocales = [
   'ru',
   'th',
   'tr',
-  'zh_CN'
+  'zh_Hans'
 ];
 
 export const defaultLocale = 'en';
