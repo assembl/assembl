@@ -29,15 +29,23 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     let browserLanguage = navigator.language ? convertToISO639String(navigator.language) : defaultLanguage;
     console.log('cookieLanguage', cookieLanguage);
     console.log('browserLanguage', browserLanguage);
+
+    let tempCookieLanguage, tempBrowserLanguage;
     if (cookieLanguage === 'zh_Hans') {
-      cookieLanguage = 'zh-CN';
+      tempCookieLanguage = 'zh-CN';
+    } else {
+      tempCookieLanguage = cookieLanguage;
     }
+
     if (browserLanguage === 'zh_Hans') {
       browserLanguage = 'zh-CN';
+    } else {
+      tempBrowserLanguage = browserLanguage;
     }
-    if (cookieLanguage && availableLanguages.includes(cookieLanguage)) {
+
+    if (cookieLanguage && availableLanguages.includes(tempCookieLanguage)) {
       setDefaultLocale(cookieLanguage);
-    } else if (browserLanguage && availableLanguages.includes(browserLanguage)) {
+    } else if (browserLanguage && availableLanguages.includes(tempBrowserLanguage)) {
       setDefaultLocale(browserLanguage);
     }
   } else {
