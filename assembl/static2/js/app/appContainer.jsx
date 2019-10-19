@@ -38,13 +38,13 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     }
 
     if (browserLanguage === 'zh_Hans' || browserLanguage === 'zh_CN') {
-      browserLanguage = 'zh-CN';
+      tempBrowserLanguage = 'zh-CN';
     } else {
       tempBrowserLanguage = browserLanguage;
     }
 
-    console.log('cookieLanguage', cookieLanguage);
-    console.log('browserLanguage', browserLanguage);
+    console.log('tempCookieLanguage', tempCookieLanguage);
+    console.log('tempBrowserLanguage', tempBrowserLanguage);
     if (cookieLanguage && availableLanguages.includes(tempCookieLanguage)) {
       console.log('setting to cookie', cookieLanguage);
       setDefaultLocale(cookieLanguage);
