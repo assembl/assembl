@@ -31,25 +31,18 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     console.log('cookieLanguage', cookieLanguage);
     console.log('browserLanguage', browserLanguage);
 
-    let tempCookieLanguage, tempBrowserLanguage;
     if (cookieLanguage === 'zh_Hans' || cookieLanguage === 'zh_CN') {
-      tempCookieLanguage = 'zh_Hans';
-    } else {
-      tempCookieLanguage = cookieLanguage;
+      cookieLanguage = 'zh_Hans';
     }
 
     if (browserLanguage === 'zh_Hans' || browserLanguage === 'zh_CN') {
-      tempBrowserLanguage = 'zh_Hans';
-    } else {
-      tempBrowserLanguage = browserLanguage;
+      browserLanguage = 'zh_Hans';
     }
 
-    console.log('tempCookieLanguage', tempCookieLanguage);
-    console.log('tempBrowserLanguage', tempBrowserLanguage);
-    if (cookieLanguage && availableLanguages.includes(tempCookieLanguage)) {
+    if (cookieLanguage && availableLanguages.includes(cookieLanguage)) {
       console.log('setting to cookie', cookieLanguage);
       setDefaultLocale(cookieLanguage);
-    } else if (browserLanguage && availableLanguages.includes(tempBrowserLanguage)) {
+    } else if (browserLanguage && availableLanguages.includes(browserLanguage)) {
       console.log('setting to browser', browserLanguage);
       setDefaultLocale(browserLanguage);
     }
