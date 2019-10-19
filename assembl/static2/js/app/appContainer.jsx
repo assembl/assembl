@@ -43,9 +43,13 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
       tempBrowserLanguage = browserLanguage;
     }
 
+    console.log('cookieLanguage', cookieLanguage);
+    console.log('browserLanguage', browserLanguage);
     if (cookieLanguage && availableLanguages.includes(tempCookieLanguage)) {
+      console.log('setting to cookie', cookieLanguage);
       setDefaultLocale(cookieLanguage);
     } else if (browserLanguage && availableLanguages.includes(tempBrowserLanguage)) {
+      console.log('setting to browser', browserLanguage);
       setDefaultLocale(browserLanguage);
     }
   } else {
