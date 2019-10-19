@@ -25,10 +25,16 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     // The language of the debate and user will be set to the ONLY language of the debate
     setDefaultLocale(availableLanguages[0]);
   } else if (availableLanguages && availableLanguages.length > 1) {
-    const cookieLanguage = getCookieItem('_LOCALE_');
-    const browserLanguage = navigator.language ? convertToISO639String(navigator.language) : defaultLanguage;
+    let cookieLanguage = getCookieItem('_LOCALE_');
+    let browserLanguage = navigator.language ? convertToISO639String(navigator.language) : defaultLanguage;
     console.log('cookieLanguage', cookieLanguage);
     console.log('browserLanguage', browserLanguage);
+    if (cookieLanguage === 'zh_Hans') {
+      cookieLanguage = 'zh-CN';
+    }
+    if (browserLanguage === 'zh_Hans') {
+      browserLanguage = 'zh-CN';
+    }
     if (cookieLanguage && availableLanguages.includes(cookieLanguage)) {
       setDefaultLocale(cookieLanguage);
     } else if (browserLanguage && availableLanguages.includes(browserLanguage)) {
