@@ -27,6 +27,7 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
   } else if (availableLanguages && availableLanguages.length > 1) {
     let cookieLanguage = getCookieItem('_LOCALE_');
     let browserLanguage = navigator.language ? convertToISO639String(navigator.language) : defaultLanguage;
+    console.log('availableLanguages', availableLanguages);
     console.log('cookieLanguage', cookieLanguage);
     console.log('browserLanguage', browserLanguage);
 
