@@ -31,13 +31,13 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     console.log('browserLanguage', browserLanguage);
 
     let tempCookieLanguage, tempBrowserLanguage;
-    if (cookieLanguage === 'zh_Hans') {
+    if (cookieLanguage === 'zh_Hans' || cookieLanguage === 'zh_CN') {
       tempCookieLanguage = 'zh-CN';
     } else {
       tempCookieLanguage = cookieLanguage;
     }
 
-    if (browserLanguage === 'zh_Hans') {
+    if (browserLanguage === 'zh_Hans' || browserLanguage === 'zh_CN') {
       browserLanguage = 'zh-CN';
     } else {
       tempBrowserLanguage = browserLanguage;
