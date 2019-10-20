@@ -53,7 +53,12 @@ class LanguageMenu extends React.Component<Props> {
     const prefs = data.discussionPreferences.languages;
     const preferencesMapByLocale = {};
     prefs.forEach(p => {
-      if (p.locale === 'no') {
+      if (p.locale === 'zh_Hans') {
+        preferencesMapByLocale['zh-CN'] = { ...p };
+        preferencesMapByLocale['zh-CN'].name = p.name.split(' (')[0]; // shorten the name for chinese
+        preferencesMapByLocale['zh-CN'].nativeName = p.nativeName.split(' (')[0];
+        preferencesMapByLocale['zh-CN'].locale = 'zh-CN';
+      } else if (p.locale === 'no') {
         preferencesMapByLocale.nb = { ...p };
         preferencesMapByLocale.nb.locale = 'nb';
       } else {

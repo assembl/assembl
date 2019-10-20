@@ -32,11 +32,11 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     console.log('browserLanguage', browserLanguage);
 
     if (cookieLanguage === 'zh_Hans' || cookieLanguage === 'zh_CN') {
-      cookieLanguage = 'zh_Hans';
+      cookieLanguage = 'zh_CN';
     }
 
     if (browserLanguage === 'zh_Hans' || browserLanguage === 'zh_CN') {
-      browserLanguage = 'zh_Hans';
+      browserLanguage = 'zh_CN';
     }
 
     if (cookieLanguage && availableLanguages.includes(cookieLanguage)) {
