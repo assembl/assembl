@@ -31,12 +31,22 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     console.log('cookieLanguage', cookieLanguage);
     console.log('browserLanguage', browserLanguage);
 
-    if (cookieLanguage === 'zh_Hans' || cookieLanguage === 'zh_CN') {
-      cookieLanguage = 'zh_CN';
+    if (
+      cookieLanguage === 'zh_Hans' ||
+      cookieLanguage === 'zh_CN' ||
+      cookieLanguage === 'zh-Hans' ||
+      cookieLanguage === 'zh-CN'
+    ) {
+      cookieLanguage = 'zh-CN';
     }
 
-    if (browserLanguage === 'zh_Hans' || browserLanguage === 'zh_CN') {
-      browserLanguage = 'zh_CN';
+    if (
+      browserLanguage === 'zh_Hans' ||
+      browserLanguage === 'zh_CN' ||
+      browserLanguage === 'zh-Hans' ||
+      browserLanguage === 'zh-CN'
+    ) {
+      browserLanguage = 'zh-CN';
     }
 
     if (cookieLanguage && availableLanguages.includes(cookieLanguage)) {
