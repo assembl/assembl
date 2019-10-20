@@ -31,6 +31,8 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
     console.log('cookieLanguage', cookieLanguage);
     console.log('browserLanguage', browserLanguage);
 
+    let tempLangCookie = cookieLanguage;
+    let tempLangBrowser = browserLanguage;
     if (
       cookieLanguage === 'zh_Hans' ||
       cookieLanguage === 'zh_CN' ||
@@ -38,6 +40,7 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
       cookieLanguage === 'zh-CN'
     ) {
       cookieLanguage = 'zh-CN';
+      tempLangCookie = 'zh_Hans';
     }
 
     if (
@@ -47,12 +50,13 @@ const configureDefaultLocale = (availableLanguages: Array<string>, defaultLangua
       browserLanguage === 'zh-CN'
     ) {
       browserLanguage = 'zh-CN';
+      tempLangBrowser = 'zh_Hans';
     }
 
-    if (cookieLanguage && availableLanguages.includes(cookieLanguage)) {
+    if (cookieLanguage && availableLanguages.includes(tempLangCookie)) {
       console.log('setting to cookie', cookieLanguage);
       setDefaultLocale(cookieLanguage);
-    } else if (browserLanguage && availableLanguages.includes(browserLanguage)) {
+    } else if (browserLanguage && availableLanguages.includes(tempLangBrowser)) {
       console.log('setting to browser', browserLanguage);
       setDefaultLocale(browserLanguage);
     }
