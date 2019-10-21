@@ -16,7 +16,7 @@ import simplejson as json
 from pyramid.view import view_config
 from pyramid.response import Response
 from pyramid.httpexceptions import (
-    HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
+    HTTPException, HTTPInternalServerError, HTTPMovedPermanently, HTTPError,
     HTTPBadRequest, HTTPFound, HTTPTemporaryRedirect as HTTPTemporaryRedirectP)
 from pyramid.i18n import TranslationStringFactory
 from pyramid.security import Everyone
@@ -843,7 +843,10 @@ def csrf_error_view(exc, request):
 
 def error_view(exc, request):
     _ = TranslationStringFactory('assembl')
-    error_code = exc.code.replace("f", "")
+    if isinstance(exc, HTTPException):
+        error_code = exc.code.replace("f", "")
+    else:
+        error_code = None
     capture_exception(getattr(request, "exc_info", None))
     context = get_default_context(request)
     return dict(
@@ -854,6 +857,7 @@ def error_view(exc, request):
         home_button=_("Homepage")
     )
 
+
 def error_template(request):
     context = get_default_context(request)
     return dict(
@@ -863,6 +867,7 @@ def error_template(request):
         excuse="We apologize for the inconvenience",
         home_button="Homepage"
     )
+
 
 def redirector(request):
     return HTTPMovedPermanently(request.route_url(
