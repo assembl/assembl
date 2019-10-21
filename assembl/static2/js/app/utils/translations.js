@@ -548,7 +548,7 @@ const Translations = {
         numberOfResponses: "%{count} réponses",
         numberOfResponses_0: "Aucune réponse",
         numberOfResponses_1: "%{count} réponse",
-        postSuccessMsg: "Merci pour votre participation. Votre texte a bien été publiée !",
+        postSuccessMsg: "Merci pour votre participation. Votre texte a bien été publié !",
         saveDraft: "Sauvegarder",
         shareFiction: "Partager ce texte",
         startFictionLabel: "Je rédige mon texte",
