@@ -68,7 +68,7 @@ semantic-version==2.6.0
 sentry-sdk==0.5.3
 simplejson==3.8.2
 six==1.12.0
-social-auth-core==2.0.0
+social-auth-core==3.2.0
 social-auth-app-pyramid==1.0.0
 social-auth-storage-sqlalchemy==1.1.0
 SQLAlchemy==1.2.2
