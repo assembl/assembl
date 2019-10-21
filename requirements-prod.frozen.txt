@@ -145,7 +145,7 @@ simplejson==3.8.2
 singledispatch==3.4.0.3   # via graphene-sqlalchemy, tornado
 six==1.12.0
 social-auth-app-pyramid==1.0.0
-social-auth-core==2.0.0
+social-auth-core==3.2.0
 social-auth-storage-sqlalchemy==1.1.0
 sqlalchemy==1.2.2
 structlog==17.2.0
