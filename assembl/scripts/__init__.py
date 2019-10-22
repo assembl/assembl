@@ -11,15 +11,15 @@ from ..lib.config import set_config
 from ..indexing.changes import configure_indexing
 
 
-def get_multimodule_extracts_file(discussion, lang='fr', anon='false', social_columns=True, start=None, end=None, interval=None):
+def get_exported_file_by_func(func, discussion, lang='fr', anon='false', social_columns=True, start=None, end=None, interval=None):
     """
-    Helper function to get all of the exports as a file to be downloaded. Downloaded into the S3 bucket.
+    Helper function to get a specific export a file to be downloaded. Downloaded into the S3 bucket.
     To be used within a shell environment
     """
     import boto3
     from datetime import datetime
     from pyramid.threadlocal import manager
-    from assembl.views.api2.discussion import multi_module_csv_export, XSLX_MIMETYPE
+    from assembl.views.api2.discussion import XSLX_MIMETYPE
     from assembl.lib.config import get
 
     class FakeContext(object):
@@ -53,7 +53,7 @@ def get_multimodule_extracts_file(discussion, lang='fr', anon='false', social_co
     if interval:
         r.GET['interval'] = interval
     try:
-        output = multi_module_csv_export(r)
+        output = func(r)
     finally:
         manager.pop()
 
@@ -76,6 +76,24 @@ def get_multimodule_extracts_file(discussion, lang='fr', anon='false', social_co
     else:
         write(output)
         print("The account number could not be found. Saving the file to disk as %s" % name)
+
+
+def get_multimodule_extracts_file(discussion, lang='fr', anon='false', social_columns=True, start=None, end=None, interval=None):
+    """
+    Helper function to get all of the exports as a file to be downloaded. Downloaded into the S3 bucket.
+    To be used within a shell environment
+    """
+    from assembl.views.api2.discussion import multi_module_csv_export
+    get_exported_file_by_func(
+        multi_module_csv_export,
+        discussion,
+        lang=lang,
+        anon=anon,
+        social_columns=social_columns,
+        start=start,
+        end=end,
+        interval=interval
+    )
 
 
 def boostrap_configuration(config, do_bootstrap=True):
