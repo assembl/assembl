@@ -45,7 +45,7 @@ export class SocialMedia extends React.Component {
             }
             if (providerName === 'linkedin-oauth2') {
               providerName = 'linkedin';
-              classNameIcon = 'linkedin';
+              classNameIcon = 'linkedin-oauth2';
               socialMediaName = 'LinkedIn';
             }
             return (
