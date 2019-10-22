@@ -44,7 +44,7 @@ export class SocialMedia extends React.Component {
               socialMediaName = 'Google+';
             }
             if (providerName === 'linkedin-oauth2') {
-              providerName = 'linkedin';
+              providerName = 'linkedin-oauth2';
               classNameIcon = 'linkedin-oauth2';
               socialMediaName = 'LinkedIn';
             }
