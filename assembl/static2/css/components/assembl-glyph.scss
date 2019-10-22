@@ -19,35 +19,35 @@
   }
 }
 */
- 
+
  [class^="assembl-icon-"]:before, [class*=" assembl-icon-"]:before {
   font-family: "assembl-glyph";
   font-style: normal;
   font-weight: normal;
   speak: none;
- 
+
   /* For safety - reset parent styles, that can break glyph codes*/
   font-variant: normal;
   text-transform: none;
- 
+
   /* fix buttons height, for twitter bootstrap */
   line-height: 1em;
- 
+
   /* Animation center compensation - margins should be symmetric */
   /* remove if not needed */
   margin-left: .2em;
- 
+
   /* you can be more comfortable with increased icons size */
   /* font-size: 120%; */
- 
+
   /* Font smoothing. That was taken from TWBS */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
- 
+
   /* Uncomment for 3D effect */
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
- 
+
 .assembl-icon-add:before { content: '\e800'; } /* '' */
 .assembl-icon-catch:before { content: '\e801'; } /* '' */
 .assembl-icon-checked:before { content: '\e802'; } /* '' */
@@ -114,3 +114,5 @@
 .assembl-icon-google-circle:before { content: '\f310'; } /* '' */
 .assembl-icon-linkedin:before { content: '\f318'; } /* '' */
 .assembl-icon-linkedin-circle:before { content: '\f319'; } /* '' */
+.assembl-icon-instagram:before { content: '\f16d'; } /* '' */
+.assembl-icon-assembl-icon-instagram-circle:before { content: '\f16d'; } /* '' */
