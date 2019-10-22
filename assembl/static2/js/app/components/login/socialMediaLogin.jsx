@@ -43,6 +43,11 @@ export class SocialMedia extends React.Component {
               classNameIcon = 'gplus-1';
               socialMediaName = 'Google+';
             }
+            if (providerName === 'linkedin-oauth2') {
+              providerName = 'linkedin';
+              classNameIcon = 'linkedin';
+              socialMediaName = 'LinkedIn';
+            }
             return (
               <li key={provider.name}>
                 <form id={reverseString(provider.name)} method="get" action={provider.login}>

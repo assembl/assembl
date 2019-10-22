@@ -244,62 +244,62 @@ fieldset[disabled] .btn-google.focus {
   background-color: #fff;
 }
 
-.btn-linkedin {
+.btn-linkedin-oauth2 {
   color: #fff;
   background-color: #007bb6;
   border-color: rgba(0, 0, 0, 0.2);
 }
 
-.btn-linkedin:focus,
-.btn-linkedin.focus {
+.btn-linkedin-oauth2:focus,
+.btn-linkedin-oauth2.focus {
   color: #fff;
   background-color: #005983;
   border-color: rgba(0, 0, 0, 0.2);
 }
 
-.btn-linkedin:hover {
+.btn-linkedin-oauth2:hover {
   color: #fff;
   background-color: #005983;
   border-color: rgba(0, 0, 0, 0.2);
 }
 
-.btn-linkedin:active,
-.btn-linkedin.active,
-.open > .dropdown-toggle.btn-linkedin {
+.btn-linkedin-oauth2:active,
+.btn-linkedin-oauth2.active,
+.open > .dropdown-toggle.btn-linkedin-oauth2 {
   color: #fff;
   background-color: #005983;
   border-color: rgba(0, 0, 0, 0.2);
   background-image: none;
 }
 
-.btn-linkedin:active:hover,
-.btn-linkedin.active:hover,
-.open > .dropdown-toggle.btn-linkedin:hover,
-.btn-linkedin:active:focus,
-.btn-linkedin.active:focus,
-.open > .dropdown-toggle.btn-linkedin:focus,
-.btn-linkedin:active.focus,
-.btn-linkedin.active.focus,
-.open > .dropdown-toggle.btn-linkedin.focus {
+.btn-linkedin-oauth2:active:hover,
+.btn-linkedin-oauth2.active:hover,
+.open > .dropdown-toggle.btn-linkedin-oauth2:hover,
+.btn-linkedin-oauth2:active:focus,
+.btn-linkedin-oauth2.active:focus,
+.open > .dropdown-toggle.btn-linkedin-oauth2:focus,
+.btn-linkedin-oauth2:active.focus,
+.btn-linkedin-oauth2.active.focus,
+.open > .dropdown-toggle.btn-linkedin-oauth2.focus {
   color: #fff;
   background-color: #00405f;
   border-color: rgba(0, 0, 0, 0.2);
 }
 
-.btn-linkedin.disabled:hover,
-.btn-linkedin[disabled]:hover,
-fieldset[disabled] .btn-linkedin:hover,
-.btn-linkedin.disabled:focus,
-.btn-linkedin[disabled]:focus,
-fieldset[disabled] .btn-linkedin:focus,
-.btn-linkedin.disabled.focus,
-.btn-linkedin[disabled].focus,
-fieldset[disabled] .btn-linkedin.focus {
+.btn-linkedin-oauth2.disabled:hover,
+.btn-linkedin-oauth2[disabled]:hover,
+fieldset[disabled] .btn-linkedin-oauth2:hover,
+.btn-linkedin-oauth2.disabled:focus,
+.btn-linkedin-oauth2[disabled]:focus,
+fieldset[disabled] .btn-linkedin-oauth2:focus,
+.btn-linkedin-oauth2.disabled.focus,
+.btn-linkedin-oauth2[disabled].focus,
+fieldset[disabled] .btn-linkedin-oauth2.focus {
   background-color: #007bb6;
   border-color: rgba(0, 0, 0, 0.2);
 }
 
-.btn-linkedin .badge {
+.btn-linkedin-oauth2 .badge {
   color: #007bb6;
   background-color: #fff;
 }
