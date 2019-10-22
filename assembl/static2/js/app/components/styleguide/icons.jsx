@@ -19,6 +19,8 @@ const icons = [
   'assembl-icon-twitter-circle',
   'assembl-icon-linkedin',
   'assembl-icon-linkedin-circle',
+  'assembl-icon-instagram',
+  'assembl-icon-instagram-circle',
   'assembl-icon-add',
   'assembl-icon-catch',
   'assembl-icon-checked',
