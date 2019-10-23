@@ -18,7 +18,7 @@
   "ctxRequestPasswordChange": "${slug}/requestPasswordChange",
   "ctxOldLogout": "debate/${slug}/logout",
   "ctxOldLogin": "debate/${slug}/login",
-  "home": "${slug}/home",
+  "home": "https://landing.mediasetcitoyens.com",
   "homeBare": "${slug}",
   "profile": "${slug}/profile/${userId}",
   "ideas": "${slug}/ideas",
