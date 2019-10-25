@@ -167,7 +167,7 @@ export const Html = (props: HtmlProps) => {
           extractState: extract.extractState || EMPTY_STRING,
           nature: extract.extractNature || EMPTY_STRING
         });
-        const wrapper = jQuery(`<annotation data-extractInfo='${extractInfo}'/>`);
+        const wrapper = jQuery(`<annotation data-extractInfo='${extractInfo}'></annotation>`);
         if (tfis) {
           tfis.forEach((tfi) => {
             if (tfi && tfi.xpathStart && tfi.offsetStart !== null && tfi.xpathEnd && tfi.offsetEnd !== null) {

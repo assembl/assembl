@@ -1,21 +1,21 @@
 // @flow
+import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { withRouter } from 'react-router';
 import { graphql } from 'react-apollo';
-import { connect } from 'react-redux';
 
-import HashtagsFilter from '../hashtagFilter';
-import { setThreadPostsFilterHashtags } from '../../../../../actions/threadFilterActions';
 import HashtagsQuery from '../../../../../graphql/HashtagsQuery.graphql';
+import HashtagsFilter from '../hashtagFilter';
+import { setQuestionPostsFilterHashtags } from '../../../../../actions/questionFilterActions';
 
 const mapStateToProps = (state) => {
-  const { postsFiltersStatus } = state.threadFilter;
+  const { postsFiltersStatus } = state.questionFilter;
   return {
     selectedHashtag: postsFiltersStatus.hashtags[0]
   };
 };
 const mapDispatchToProps = dispatch => ({
-  setPostsFilterHashtags: (hashtags: string[]) => dispatch(setThreadPostsFilterHashtags(hashtags))
+  setPostsFilterHashtags: (hashtags: string[]) => dispatch(setQuestionPostsFilterHashtags(hashtags))
 });
 
 export default compose(
@@ -24,7 +24,7 @@ export default compose(
   graphql(HashtagsQuery, {
     options: props => ({
       variables: {
-        ideaId: props.themeId || (props.params && props.params.themeId) || ''
+        ideaId: props.questionId || (props.params && props.params.questionId) || ''
       }
     }),
     props: ({ data }) => ({ hashtags: data.hashtags })

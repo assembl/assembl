@@ -449,7 +449,8 @@ const Translations = {
       },
       thread: {
         hashtagsFilter: {
-          noOption: "Recherche ta ville, ton pays. Exemple #Lille..."
+          noOption: "Aucun tag n'a encore été utilisé dans cette section",
+          placeholder: "Recherche ta ville, ton pays. Exemple #Lille..."
         },
         messageTranslatedFrom: "Ce message a été traduit du texte %{language}.",
         messageOriginallyIn: "Ce message a été rédigé en %{language}.",
@@ -2682,7 +2683,8 @@ const Translations = {
       },
       thread: {
         hashtagsFilter: {
-          noOption: "Search your city, your country. For instance #Lille..."
+          noOption: "No tag have been used in this section for the moment",
+          placeholder: "Search for your city, your country, etc. For instance, #Lille ..."
         },
         messageTranslatedFrom: "This message has been translated from %{language}.",
         messageOriginallyIn: "This message has been written in %{language}",
