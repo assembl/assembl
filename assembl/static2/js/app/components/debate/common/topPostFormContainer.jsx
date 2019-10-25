@@ -204,13 +204,22 @@ class DumbTopPostFormContainer extends React.Component<TopPostFormContainerProps
           >
             <div className="max-container">
               <Row>
-                <Col xs={1} md={1} lg={1}>&nbsp;</Col>
-                <Col xs={8} md={6} lg={5}>{hashtagFilter}</Col>
-                <Col xs={2} md={3} lg={5}>&nbsp;</Col>
-                <Col xs={1} md={1} lg={1}>{filter}</Col>
+                <Col xs={1} md={1} lg={1}>
+                  &nbsp;
+                </Col>
+                <Col xs={8} md={6} lg={5}>
+                  {hashtagFilter}
+                </Col>
+                <Col xs={2} md={3} lg={5}>
+                  &nbsp;
+                </Col>
+                <Col xs={1} md={1} lg={1}>
+                  {filter}
+                </Col>
               </Row>
             </div>
-          </Grid>) : null}
+          </Grid>
+        ) : null}
       </div>
     );
   }

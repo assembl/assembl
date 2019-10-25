@@ -1,9 +1,5 @@
 // @flow
-import {
-  ADD_THREAD_HASHTAG_FILTER,
-  SET_THREAD_HASHTAGS_FILTER,
-  SET_THREAD_POSTS_POLICIES
-} from '../actions/threadFilterActions';
+import { ADD_THREAD_HASHTAG_FILTER, SET_THREAD_HASHTAGS_FILTER, SET_THREAD_POSTS_POLICIES } from '../actions/threadFilterActions';
 import { defaultDisplayPolicy, defaultOrderPolicy } from '../components/debate/common/postsFilter/policies';
 
 const initialState: PostsFilterState = {

@@ -251,6 +251,4 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   }
 }
 
-export default compose(
-  withScreenHeight,
-)(DumbPostsFilterMenu);
+export default compose(withScreenHeight)(DumbPostsFilterMenu);
