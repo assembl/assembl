@@ -1346,7 +1346,7 @@ const Translations = {
       loginModalBody: "You have to be connected to participate.",
       loginModalFooter: "Please connect",
       alreadyAccount: "Do you already have an account?",
-      loginWithSocialMedia: "Care to use social media?",
+      loginWithSocialMedia: "Do you use a Decathlon account?",
       password: "Password",
       email: "Email",
       login: "Log in",
