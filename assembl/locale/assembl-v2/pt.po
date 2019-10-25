@@ -4774,7 +4774,7 @@ msgstr "Por favor, conecte-se"
 #. Care to use social media?
 #: messages.json
 msgid "login.loginWithSocialMedia"
-msgstr "Que tal usar sua conta social?"
+msgstr "Você usa uma conta Decathlon?"
 
 #. [login.lowerCasePassword]
 #. defaultMessage is:

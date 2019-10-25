@@ -4772,7 +4772,7 @@ msgstr "Collegati"
 #. Care to use social media?
 #: messages.json
 msgid "login.loginWithSocialMedia"
-msgstr "Vuoi usare i social?"
+msgstr "Utilizzi un account Decathlon?"
 
 #. [login.lowerCasePassword]
 #. defaultMessage is:

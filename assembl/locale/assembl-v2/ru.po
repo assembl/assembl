@@ -4795,7 +4795,7 @@ msgstr "Подключите"
 #. Care to use social media?
 #: messages.json
 msgid "login.loginWithSocialMedia"
-msgstr "Пользоваться социальными сетями?"
+msgstr "Вы пользуетесь аккаунтом десятиборья?"
 
 #. [login.lowerCasePassword]
 #. defaultMessage is:

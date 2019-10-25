@@ -521,28 +521,28 @@ msgstr ""
 #: messages.json
 #. [administration.helpers.landingPage.chatbot]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.chatbot"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.contact]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.contact"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.data]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.data"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.footer]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.footer"
 msgstr ""
 
@@ -556,49 +556,49 @@ msgstr ""
 #: messages.json
 #. [administration.helpers.landingPage.introduction]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.introduction"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.news]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.news"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.partners]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.partners"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.timeline]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.timeline"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.top_thematics]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.top_thematics"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.tweets]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.tweets"
 msgstr ""
 
 #: messages.json
 #. [administration.helpers.landingPage.video]
 #. defaultMessage is:
-#.  
+#.
 msgid "administration.helpers.landingPage.video"
 msgstr ""
 
@@ -2180,7 +2180,7 @@ msgstr ""
 #: messages.json
 #. [and]
 #. defaultMessage is:
-#.  and 
+#.  and
 msgid "and"
 msgstr ""
 
@@ -3139,7 +3139,7 @@ msgstr ""
 #: messages.json
 #. [debate.notStarted]
 #. defaultMessage is:
-#. The "%{phaseName}" phase has not started. Please come back from 
+#. The "%{phaseName}" phase has not started. Please come back from
 msgid "debate.notStarted"
 msgstr ""
 
@@ -3524,7 +3524,7 @@ msgstr ""
 #: messages.json
 #. [debate.syntheses.publishedOn]
 #. defaultMessage is:
-#. Published on 
+#. Published on
 msgid "debate.syntheses.publishedOn"
 msgstr ""
 
@@ -4777,7 +4777,7 @@ msgstr ""
 #: messages.json
 #. [legalContentsModal.iAccept]
 #. defaultMessage is:
-#. I have read and accepted 
+#. I have read and accepted
 msgid "legalContentsModal.iAccept"
 msgstr ""
 
@@ -4947,7 +4947,7 @@ msgstr ""
 #. defaultMessage is:
 #. Care to use social media?
 msgid "login.loginWithSocialMedia"
-msgstr ""
+msgstr "Do you use a Decathlon account?"
 
 #: messages.json
 #. [login.lowerCasePassword]
@@ -5197,7 +5197,7 @@ msgstr ""
 #: messages.json
 #. [privacyPolicy.iAccept]
 #. defaultMessage is:
-#. I have read and I accept the 
+#. I have read and I accept the
 msgid "privacyPolicy.iAccept"
 msgstr ""
 
@@ -6023,7 +6023,7 @@ msgstr ""
 #: messages.json
 #. [termsAndConditions.iAccept]
 #. defaultMessage is:
-#. I have read and I accept the 
+#. I have read and I accept the
 msgid "termsAndConditions.iAccept"
 msgstr ""
 
@@ -6058,7 +6058,7 @@ msgstr ""
 #: messages.json
 #. [userGuidelines.iAccept]
 #. defaultMessage is:
-#. I have read and I accept the 
+#. I have read and I accept the
 msgid "userGuidelines.iAccept"
 msgstr ""
 

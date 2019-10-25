@@ -4802,7 +4802,7 @@ msgstr "Lütfen bağlantı kurun"
 #. Care to use social media?
 #: messages.json
 msgid "login.loginWithSocialMedia"
-msgstr "Sosyal medya kullanmak ister misiniz?"
+msgstr "Decathlon hesabı kullanıyor musunuz?"
 
 #. [login.lowerCasePassword]
 #. defaultMessage is:

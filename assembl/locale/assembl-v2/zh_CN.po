@@ -4791,7 +4791,7 @@ msgstr "请连接网络"
 #. Care to use social media?
 #: messages.json
 msgid "login.loginWithSocialMedia"
-msgstr "想要试试社交媒体吗？"
+msgstr "您是否使用十项全能帐户？"
 
 #. [login.lowerCasePassword]
 #. defaultMessage is:

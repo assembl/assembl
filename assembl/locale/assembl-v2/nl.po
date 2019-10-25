@@ -4770,7 +4770,7 @@ msgstr "Maak verbinding"
 #. Care to use social media?
 #: messages.json
 msgid "login.loginWithSocialMedia"
-msgstr "Wilt u social media gebruiken?"
+msgstr "Gebruikt u een Decathlon account?"
 
 #. [login.lowerCasePassword]
 #. defaultMessage is:

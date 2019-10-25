@@ -4776,7 +4776,7 @@ msgstr "Bitte loggen Sie sich ein"
 #. Care to use social media?
 #: messages.json
 msgid "login.loginWithSocialMedia"
-msgstr "Haben Sie Interesse an Social Media?"
+msgstr "Benutzt du ein Decathlon-Konto?"
 
 #. [login.lowerCasePassword]
 #. defaultMessage is:
