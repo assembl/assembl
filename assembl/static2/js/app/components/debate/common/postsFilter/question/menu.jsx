@@ -26,7 +26,7 @@ type State = {
   sticky: boolean
 };
 
-export class DumbThreadPostsFilterMenu extends React.Component<Props, State> {
+export class DumbQuestionPostsFilterMenu extends React.Component<Props, State> {
   render() {
     return (
       <PostsFilterMenu
@@ -56,4 +56,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DumbThreadPostsFilterMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(DumbQuestionPostsFilterMenu);

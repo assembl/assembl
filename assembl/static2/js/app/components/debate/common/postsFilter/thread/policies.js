@@ -22,7 +22,4 @@ export const postsOrderPolicies: PostsOrderPolicy[] = [
 
 export const postsDisplayPolicies: PostsDisplayPolicy[] = [fullDisplayPolicy, summaryDisplayPolicy];
 
-export const postsFiltersPolicies: PostsFilterPolicy[] = [
-  onlyMyPostFilterPolicy,
-  myPostsAndAnswersFilterPolicy
-];
+export const postsFiltersPolicies: PostsFilterPolicy[] = [onlyMyPostFilterPolicy, myPostsAndAnswersFilterPolicy];

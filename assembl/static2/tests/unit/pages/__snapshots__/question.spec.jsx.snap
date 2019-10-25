@@ -34,7 +34,7 @@ exports[`Question page should display a question 1`] = `
         }
       />
     </Connect(Header)>
-    <Connect(DumbThreadPostsFilterMenu)
+    <Connect(DumbQuestionPostsFilterMenu)
       stickyOffset={600}
       stickyTopPosition={100}
     />
@@ -51,9 +51,15 @@ exports[`Question page should display a question 1`] = `
           className="max-container"
         >
           <div
-            className="margin-xl"
+            style={
+              Object {
+                "margin": "12px 0",
+                "minWidth": "360px",
+                "width": "30%",
+              }
+            }
           >
-             
+            <Connect(withRouter(Apollo(DumbQuestionHashtagsFilter))) />
           </div>
           <Link
             className="button-diamond-dark button-submit button-dark"
@@ -163,7 +169,7 @@ exports[`Question page should display a question in moderation context 1`] = `
         }
       />
     </Connect(Header)>
-    <Connect(DumbThreadPostsFilterMenu)
+    <Connect(DumbQuestionPostsFilterMenu)
       stickyOffset={600}
       stickyTopPosition={100}
     />
@@ -180,9 +186,15 @@ exports[`Question page should display a question in moderation context 1`] = `
           className="max-container"
         >
           <div
-            className="margin-xl"
+            style={
+              Object {
+                "margin": "12px 0",
+                "minWidth": "360px",
+                "width": "30%",
+              }
+            }
           >
-             
+            <Connect(withRouter(Apollo(DumbQuestionHashtagsFilter))) />
           </div>
           <Link
             className="button-diamond-dark button-submit button-dark"

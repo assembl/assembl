@@ -54,7 +54,7 @@ class ThreadView extends React.Component<Props> {
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const hashtagFilter = <ThreadPostsHashtagsFilter />;
-    const postsFilter = <ThreadPostsFilterMenu stickyOffset={60} stickyTopPosition={200} />
+    const postsFilter = <ThreadPostsFilterMenu stickyOffset={60} stickyTopPosition={200} />;
 
     return (
       <div>

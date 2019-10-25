@@ -6,11 +6,10 @@ import { I18n } from 'react-redux-i18n';
 type Props = {
   hashtags?: string[],
   selectedHashtag: string,
-  setPostsFilterHashtags: (hashtags: string[]) => void,
-}
+  setPostsFilterHashtags: (hashtags: string[]) => void
+};
 
 export class DumbHashtagsFilter extends React.Component<Props> {
-
   selectHashtagValue(hashtag: string | null) {
     if (!hashtag) {
       this.props.setPostsFilterHashtags([]);
@@ -29,7 +28,8 @@ export class DumbHashtagsFilter extends React.Component<Props> {
       <Select
         options={options}
         isSearchable
-        placeholder={I18n.t('debate.thread.hashtagsFilter.noOption')}
+        placeholder={I18n.t('debate.thread.hashtagsFilter.placeholder')}
+        noOptionsMessage={() => I18n.t('debate.thread.hashtagsFilter.noOption')}
         closeMenuOnSelect
         isClearable
         value={value}
@@ -38,6 +38,5 @@ export class DumbHashtagsFilter extends React.Component<Props> {
     );
   }
 }
-
 
 export default DumbHashtagsFilter;

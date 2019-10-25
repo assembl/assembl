@@ -3,6 +3,7 @@ query QuestionPosts(
   $first: Int!
   $after: String!
   $fromNode: ID
+  $hashtags: [String]
   $isModerating: Boolean
   $onlyMyPosts: Boolean
   $postsOrder: PostsOrderTypes
@@ -14,6 +15,7 @@ query QuestionPosts(
         first: $first
         after: $after
         fromNode: $fromNode
+        hashtags: $hashtags
         isModerating: $isModerating
         onlyMyPosts: $onlyMyPosts
         postsOrder: $postsOrder

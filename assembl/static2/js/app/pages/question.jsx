@@ -14,6 +14,8 @@ import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
 import { getIsPhaseCompletedById } from '../utils/timeline';
 import QuestionPostsFilterMenu from '../components/debate/common/postsFilter/question/menu';
+import QuestionHashtagFilterMenu from '../components/debate/common/postsFilter/question/hashtagFilter';
+import { setQuestionPostsFilterHashtags } from '../actions/questionFilterActions';
 
 type NavigationParams = {
   questionIndex: string,
@@ -30,6 +32,7 @@ export type Props = {
   params: NavigationParams,
   phaseId: string,
   questionFilter: PostsFilterState,
+  setPostsFilterHashtags: Function,
   thematicId: string,
   thematicTitle: string,
   title: string,
@@ -45,16 +48,17 @@ export class DumbQuestion extends React.Component<Props> {
   render() {
     const {
       isModerating,
-      phaseId,
-      imgUrl,
-      timeline,
-      title,
-      numContributors,
-      numPosts,
-      thematicTitle,
-      thematicId,
       params,
       params: { phase, slug },
+      phaseId,
+      imgUrl,
+      numContributors,
+      numPosts,
+      setPostsFilterHashtags,
+      timeline,
+      thematicId,
+      thematicTitle,
+      title,
       totalSentiments
     } = this.props;
     const link = `${getRoute('idea', { slug: slug, phase: phase, phaseId: phaseId, themeId: thematicId })}`;
@@ -71,7 +75,9 @@ export class DumbQuestion extends React.Component<Props> {
           <div className="background-light proposals">
             <Grid fluid className="background-light">
               <div className="max-container">
-                <div className="margin-xl">&nbsp;</div>
+                <div style={{ margin: '12px 0', width: '30%', minWidth: '360px' }}>
+                  <QuestionHashtagFilterMenu />
+                </div>
                 <Link to={link} className="button-diamond-dark button-submit button-dark">
                   <Translate value="debate.question.backToQuestions" />
                   <span className="button-diamond-dark-back" />
@@ -91,6 +97,7 @@ export class DumbQuestion extends React.Component<Props> {
                     <span>{`${params.questionIndex}/ ${title}`}</span>
                   </h3>
                   <Posts
+                    onHashtagClick={setPostsFilterHashtags}
                     isModerating={isModerating}
                     questionId={params.questionId}
                     themeId={thematicId}
@@ -115,6 +122,10 @@ export class DumbQuestion extends React.Component<Props> {
   }
 }
 
+const mapDispatchToProps = dispatch => ({
+  setPostsFilterHashtags: (hashtag: string) => dispatch(setQuestionPostsFilterHashtags([hashtag]))
+});
+
 const mapStateToProps = state => ({
   lang: state.i18n.locale,
   timeline: state.timeline,
@@ -122,7 +133,7 @@ const mapStateToProps = state => ({
 });
 
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   graphql(Question, {
     props: ({ data }) => {
       if (data.error || data.loading) {

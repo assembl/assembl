@@ -484,23 +484,8 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 query = query.options(*models.Content.joinedload_options())
 
             if hashtags:
-                hashtags_value = cast(hashtags, ARRAY(VARCHAR))  # postgresql needs explicit cast
-                hashtag_aggs = func.array_agg(models.LangStringEntry.hashtags)
-                hashtags_query = session.query(
-                    models.Content.body_id,
-                ).outerjoin(
-                    models.LangStringEntry,
-                    models.LangStringEntry.langstring_id == models.Content.body_id
-                ).group_by(models.Content.body_id
-                ).filter(
-                    models.Content.discussion_id == discussion_id,  # optimisation
-                    func.array_length(models.LangStringEntry.hashtags, 1) > 0,  # can't aggregate null or empty arrays
-                ).having(
-                    hashtag_aggs.contains(hashtags_value)
-                )
-
-                hashtags_subquery = hashtags_query.subquery()
-                query = query.filter(models.Content.body_id.in_(hashtags_subquery))
+                hashtags_filter = get_hashtags_filter(discussion_id, hashtags)
+                query = query.filter(hashtags_filter)
 
             post_ids = query.with_entities(models.Post.id).subquery()
         else:
@@ -574,6 +559,11 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             required=False,
             description=docs.Question.only_my_posts,
         ),
+        hashtags=graphene.Argument(
+            type=graphene.List(graphene.String),
+            required=False,
+            description=docs.Question.hashtags,
+        )
     )
     total_sentiments = graphene.Int(required=True, description=docs.Question.total_sentiments)
     parent = graphene.Field(lambda: IdeaUnion, description=docs.Idea.parent)
@@ -590,6 +580,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         discussion_id = context.matchdict['discussion_id']
         discussion = models.Discussion.get(discussion_id)
         only_my_posts = args.get('only_my_posts', False)
+        hashtags = args.get('hashtags', [])
         order = args.get('posts_order')
         random = args.get('random', False)
         is_moderating = args.get('isModerating', False)
@@ -627,6 +618,10 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
 
             if only_my_posts:
                 query = query.filter(Post.creator_id == user_id)
+
+            if hashtags:
+                hashtags_filter = get_hashtags_filter(discussion_id, hashtags)
+                query = query.filter(hashtags_filter)
 
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
@@ -677,6 +672,10 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
             if only_my_posts:
                 query = query.filter(Post.creator_id == user_id)
 
+            if hashtags:
+                hashtags_filter = get_hashtags_filter(discussion_id, hashtags)
+                query = query.filter(hashtags_filter)
+
         from_node = args.get('from_node')
         after = args.get('after')
         before = args.get('before')
@@ -710,6 +709,28 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         )
         pending_count = query.count()
         return pending_count > 0
+
+
+def get_hashtags_filter(discussion_id, hashtags):
+    Post = models.Post
+    hashtags_value = cast(hashtags, ARRAY(VARCHAR))  # postgresql needs explicit cast
+    hashtag_aggs = func.array_agg(models.LangStringEntry.hashtags)
+    hashtags_query = Post.default_db.query(
+        models.Content.body_id,
+    ).outerjoin(
+        models.LangStringEntry,
+        models.LangStringEntry.langstring_id == models.Content.body_id
+    ).group_by(models.Content.body_id
+               ).filter(
+        models.Content.discussion_id == discussion_id,  # optimisation
+        func.array_length(models.LangStringEntry.hashtags, 1) > 0,  # can't aggregate null or empty arrays
+    ).having(
+        hashtag_aggs.contains(hashtags_value)
+    )
+
+    hashtags_subquery = hashtags_query.subquery()
+    hashtags_filter = models.Content.body_id.in_(hashtags_subquery)
+    return hashtags_filter
 
 
 class IdeaUnion(SQLAlchemyUnion):

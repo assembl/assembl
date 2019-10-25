@@ -2,6 +2,24 @@
 
 exports[`ThreadView component should render a ThreadView without the TopPostForm 1`] = `
 <div>
+  <DumbTopPostFormContainer
+    draftSuccessMsgId={null}
+    draftable={false}
+    filter={
+      <Connect(DumbThreadPostsFilterMenu)
+        stickyOffset={60}
+        stickyTopPosition={200}
+      />
+    }
+    fullscreen={false}
+    hashtagFilter={<Connect(withRouter(Apollo(DumbThreadHashtagsFilter))) />}
+    instructionLabelMsgId="debate.thread.startDiscussion"
+    isColumnViewInline={false}
+    messageColumns={Array []}
+    refetchIdea={[MockFunction]}
+    showForm={false}
+    topPostsCount={0}
+  />
   <Grid
     bsClass="container"
     className="background-grey"
@@ -12,10 +30,6 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
       className="max-container background-grey"
       id="thread-view"
     >
-      <Connect(DumbThreadPostsFilterMenu)
-        stickyOffset={60}
-        stickyTopPosition={200}
-      />
       <div
         className="content-section"
       >
@@ -52,11 +66,19 @@ exports[`ThreadView component should render a TopPostForm 1`] = `
   <DumbTopPostFormContainer
     draftSuccessMsgId={null}
     draftable={false}
+    filter={
+      <Connect(DumbThreadPostsFilterMenu)
+        stickyOffset={60}
+        stickyTopPosition={200}
+      />
+    }
     fullscreen={false}
+    hashtagFilter={<Connect(withRouter(Apollo(DumbThreadHashtagsFilter))) />}
     instructionLabelMsgId="debate.thread.startDiscussion"
     isColumnViewInline={false}
     messageColumns={Array []}
     refetchIdea={[MockFunction]}
+    showForm={true}
     topPostsCount={0}
   />
   <Grid
@@ -69,10 +91,6 @@ exports[`ThreadView component should render a TopPostForm 1`] = `
       className="max-container background-grey"
       id="thread-view"
     >
-      <Connect(DumbThreadPostsFilterMenu)
-        stickyOffset={60}
-        stickyTopPosition={200}
-      />
       <div
         className="content-section"
       >
