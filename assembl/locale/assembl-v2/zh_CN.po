@@ -2,14 +2,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2019-06-07T17:09:08.454Z\n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2019-10-17 17:50+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 2.0.3\n"
+"X-Generator: Poedit 2.2.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
 #. [accept]
@@ -17,23 +17,21 @@ msgstr ""
 #. Accept
 #: messages.json
 msgid "accept"
-msgstr ""
+msgstr "接受"
 
 #. [accountDeleted]
 #. defaultMessage is:
 #. Your account has been successfully deleted
 #: messages.json
-#, fuzzy
 msgid "accountDeleted"
-msgstr "您的账号已创立"
+msgstr "您的帐户已成功删除"
 
 #. [administration.activateModeration]
 #. defaultMessage is:
 #. Activate the moderation
 #: messages.json
-#, fuzzy
 msgid "administration.activateModeration"
-msgstr "编辑讨论"
+msgstr "激活审核"
 
 #. [administration.addQuestion]
 #. defaultMessage is:
@@ -102,9 +100,8 @@ msgstr "您需要配置一个投票会话。"
 #. defaultMessage is:
 #. Configure a vote session
 #: messages.json
-#, fuzzy
 msgid "administration.configureVoteSessionButton"
-msgstr "您需要配置一个投票会话。"
+msgstr "配置投票会议"
 
 #. [administration.confirmDeleteThematic]
 #. defaultMessage is:
@@ -124,33 +121,29 @@ msgstr "确认删除"
 #. defaultMessage is:
 #. Are you sure that you want to delete this item?
 #: messages.json
-#, fuzzy
 msgid "administration.confirmSelectFieldOptionDeletion"
-msgstr "您确定要删除这个主题吗？"
+msgstr "您确定要删除此项目吗？"
 
 #. [administration.confirmSelectFieldOptionDeletionTitle]
 #. defaultMessage is:
 #. Delete this item
 #: messages.json
-#, fuzzy
 msgid "administration.confirmSelectFieldOptionDeletionTitle"
-msgstr "确认删除"
+msgstr "删除这个项目"
 
 #. [administration.confirmTextFieldDeletion]
 #. defaultMessage is:
 #. Are you sure that you want to delete this field?
 #: messages.json
-#, fuzzy
 msgid "administration.confirmTextFieldDeletion"
-msgstr "您需要配置一个投票会话。"
+msgstr "您确定要删除此字段吗"
 
 #. [administration.confirmTextFieldDeletionTitle]
 #. defaultMessage is:
 #. Delete the field
 #: messages.json
-#, fuzzy
 msgid "administration.confirmTextFieldDeletionTitle"
-msgstr "确认删除"
+msgstr "删除栏位"
 
 #. [administration.confirmUnsavedChanges]
 #. defaultMessage is:
@@ -170,9 +163,8 @@ msgstr "确定计数器的数量"
 #. defaultMessage is:
 #. Delete the associated file
 #: messages.json
-#, fuzzy
 msgid "administration.deleteAssociatedFile"
-msgstr "删除问题"
+msgstr "删除关联文件"
 
 #. [administration.deleteQuestion]
 #. defaultMessage is:
@@ -185,9 +177,8 @@ msgstr "删除问题"
 #. defaultMessage is:
 #. You cannot delete a theme with sub-thematics.
 #: messages.json
-#, fuzzy
 msgid "administration.deleteSubThematicDisabled"
-msgstr "删除主题"
+msgstr "您不能删除带有子主题的主题。"
 
 #. [administration.deleteThematic]
 #. defaultMessage is:
@@ -221,41 +212,36 @@ msgstr "条款和条件及法律公告"
 #. defaultMessage is:
 #. Legal contents
 #: messages.json
-#, fuzzy
 msgid "administration.discussion.4"
-msgstr "讨论所用的语言"
+msgstr "法律内容"
 
 #. [administration.discussion.5]
 #. defaultMessage is:
 #. Edition of the phases
 #: messages.json
-#, fuzzy
 msgid "administration.discussion.5"
-msgstr "讨论所用的语言"
+msgstr "阶段的版本"
 
 #. [administration.discussion.6]
 #. defaultMessage is:
 #. Personalize the interface
 #: messages.json
-#, fuzzy
 msgid "administration.discussion.6"
-msgstr "讨论所用的语言"
+msgstr "个性化界面"
 
 #. [administration.discussionPreferences.debateLogoLabel]
 #. defaultMessage is:
 #. Discussion logo
 #: messages.json
-#, fuzzy
 msgid "administration.discussionPreferences.debateLogoLabel"
-msgstr "视频/幻灯片"
+msgstr "讨论徽标"
 
 #. [administration.discussionSlug]
 #. defaultMessage is:
 #. Slug of the debate
 #: messages.json
-#, fuzzy
 msgid "administration.discussionSlug"
-msgstr "讨论所用的语言"
+msgstr "辩论的"
 
 #. [administration.down]
 #. defaultMessage is:
@@ -282,25 +268,22 @@ msgstr "独占"
 #. defaultMessage is:
 #. Anonymity
 #: messages.json
-#, fuzzy
 msgid "administration.export.anonymity"
-msgstr "导处讨论数据"
+msgstr "匿名"
 
 #. [administration.export.anonymous]
 #. defaultMessage is:
 #. Make the data anonymous
 #: messages.json
-#, fuzzy
 msgid "administration.export.anonymous"
-msgstr "导出"
+msgstr "使数据匿名"
 
 #. [administration.export.contributions]
 #. defaultMessage is:
 #. Contributions of the participants
 #: messages.json
-#, fuzzy
 msgid "administration.export.contributions"
-msgstr "导处讨论数据"
+msgstr "参加者的贡献"
 
 #. [administration.export.defaultAnnotation]
 #. defaultMessage is:
@@ -313,25 +296,22 @@ msgstr "您可以通过点击导出按钮导出所有数据"
 #. defaultMessage is:
 #. Export data
 #: messages.json
-#, fuzzy
 msgid "administration.export.defaultSectionTitle"
-msgstr "导出数据"
+msgstr "汇出资料"
 
 #. [administration.export.endDate]
 #. defaultMessage is:
 #. End date
 #: messages.json
-#, fuzzy
 msgid "administration.export.endDate"
-msgstr "导处讨论数据"
+msgstr "结束日期"
 
 #. [administration.export.exportDate]
 #. defaultMessage is:
 #. Export date
 #: messages.json
-#, fuzzy
 msgid "administration.export.exportDate"
-msgstr "导处讨论数据"
+msgstr "出口日期"
 
 #. [administration.export.link]
 #. defaultMessage is:
@@ -351,73 +331,64 @@ msgstr "保持消息的源语言"
 #. defaultMessage is:
 #. All of the debate
 #: messages.json
-#, fuzzy
 msgid "administration.export.presets.fullDebate"
-msgstr "导处讨论数据"
+msgstr "所有辩论"
 
 #. [administration.export.presets.lastMonth]
 #. defaultMessage is:
 #. Last month
 #: messages.json
-#, fuzzy
 msgid "administration.export.presets.lastMonth"
-msgstr "您可以通过点击导出按钮导出所有调查模块数据"
+msgstr "上个月"
 
 #. [administration.export.presets.lastWeek]
 #. defaultMessage is:
 #. Last week
 #: messages.json
-#, fuzzy
 msgid "administration.export.presets.lastWeek"
-msgstr "导处讨论数据"
+msgstr "上个星期"
 
 #. [administration.export.presets.phase]
 #. defaultMessage is:
 #. Phase %{count}
 #: messages.json
-#, fuzzy
 msgid "administration.export.presets.phase"
-msgstr "导处讨论数据"
+msgstr "阶段％{count}"
 
 #. [administration.export.presets.placeHolder]
 #. defaultMessage is:
 #. Presets
 #: messages.json
-#, fuzzy
 msgid "administration.export.presets.placeHolder"
-msgstr "导处讨论数据"
+msgstr "预设值"
 
 #. [administration.export.presets.today]
 #. defaultMessage is:
 #. Today
 #: messages.json
-#, fuzzy
 msgid "administration.export.presets.today"
-msgstr "导处讨论数据"
+msgstr "今天"
 
 #. [administration.export.startDate]
 #. defaultMessage is:
 #. Start date
 #: messages.json
-#, fuzzy
 msgid "administration.export.startDate"
-msgstr "导处讨论数据"
+msgstr "开始日期"
 
 #. [administration.export.taxonomyAnnotation]
 #. defaultMessage is:
 #. You can export all of the taxonomies by clicking on the export button
 #: messages.json
-#, fuzzy
 msgid "administration.export.taxonomyAnnotation"
-msgstr "您可以通过点击导出按钮导出所有调查模块数据"
+msgstr "您可以通过单击导出按钮来导出所有分类法"
 
 #. [administration.export.taxonomySectionTitle]
 #. defaultMessage is:
 #. Export taxonomy
 #: messages.json
-#, fuzzy
 msgid "administration.export.taxonomySectionTitle"
-msgstr "导出数据"
+msgstr "出口分类法"
 
 #. [administration.export.title]
 #. defaultMessage is:
@@ -437,25 +408,22 @@ msgstr "将消息翻译成："
 #. defaultMessage is:
 #. Translation of the data
 #: messages.json
-#, fuzzy
 msgid "administration.export.translation"
-msgstr "您可以通过点击导出按钮导出所有调查模块数据"
+msgstr "数据翻译"
 
 #. [administration.export.vote.extractCsvVoters]
 #. defaultMessage is:
 #. Export vote details for each user
 #: messages.json
-#, fuzzy
 msgid "administration.export.vote.extractCsvVoters"
-msgstr "您可以通过点击导出按钮导出所有投票会话数据"
+msgstr "导出每个用户的投票详细信息"
 
 #. [administration.export.vote.voteResultsCsv]
 #. defaultMessage is:
 #. Export general data for the vote module
 #: messages.json
-#, fuzzy
 msgid "administration.export.vote.voteResultsCsv"
-msgstr "导处讨论数据"
+msgstr "导出投票模块的常规数据"
 
 #. [administration.gauge]
 #. defaultMessage is:
@@ -476,8 +444,7 @@ msgstr "将这些更改应用于所有提议"
 #. You are about to modify the settings on this gauge only. If you wish to modify all of the gauges, please check the box at the end of the form.
 #: messages.json
 msgid "administration.gaugeModal.subTitle"
-msgstr ""
-"您即将修改此计数器上的设置。如果您想修改所有的计数器，请检查表格末尾的框格。"
+msgstr "您即将修改此计数器上的设置。如果您想修改所有的计数器，请检查表格末尾的框格。"
 
 #. [administration.gaugeModal.title]
 #. defaultMessage is:
@@ -511,9 +478,8 @@ msgstr "选票计数器说明"
 #. defaultMessage is:
 #. Go back to thematic
 #: messages.json
-#, fuzzy
 msgid "administration.goBackToThematic"
-msgstr "添加一个主题"
+msgstr "回到主题"
 
 #. [administration.headerTitle]
 #. defaultMessage is:
@@ -527,9 +493,7 @@ msgstr "首页标题配置"
 #. You can decide wether the participant can distribute a single type of token (exclusive) or several types of token per proposal.
 #: messages.json
 msgid "administration.helpers.exclusive"
-msgstr ""
-"您可以决定参与者是否可以为每个提议分配单一类型的令牌（独占）或多种类型的令"
-"牌。"
+msgstr "您可以决定参与者是否可以为每个提议分配单一类型的令牌（独占）或多种类型的令牌。"
 
 #. [administration.helpers.gaugeVoteInstructions]
 #. defaultMessage is:
@@ -540,7 +504,7 @@ msgstr "根据计数器模块的使用目的，引导参与者进行投票。"
 
 #. [administration.helpers.landingPage.chatbot]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.chatbot"
@@ -548,7 +512,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.contact]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.contact"
@@ -556,7 +520,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.data]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.data"
@@ -564,7 +528,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.footer]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.footer"
@@ -579,7 +543,7 @@ msgstr "首页标题。它包含咨询的标题和副标题以及访问咨询的
 
 #. [administration.helpers.landingPage.introduction]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.introduction"
@@ -587,7 +551,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.news]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.news"
@@ -595,7 +559,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.partners]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.partners"
@@ -603,7 +567,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.timeline]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.timeline"
@@ -611,7 +575,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.top_thematics]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.top_thematics"
@@ -619,7 +583,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.tweets]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.tweets"
@@ -627,7 +591,7 @@ msgstr "登陆页"
 
 #. [administration.helpers.landingPage.video]
 #. defaultMessage is:
-#.  
+#.
 #: messages.json
 #, fuzzy
 msgid "administration.helpers.landingPage.video"
@@ -637,27 +601,24 @@ msgstr "登陆页"
 #. defaultMessage is:
 #. The survey module is composed of one question and a response field dedicated to the participant. You can add questions by clicking on the + icon below.
 #: messages.json
-#, fuzzy
 msgid "administration.helpers.surveyQuestion"
-msgstr "删除问题"
+msgstr "调查模块由一个问题和一个专用于参与者的回答字段组成。 您可以通过单击下面的+图标来添加问题。"
 
 #. [administration.helpers.timelinePhases]
 #. defaultMessage is:
 #. Choose a description and an image for each phase of the debate displayed in the landing page
 #: messages.json
-#, fuzzy
 msgid "administration.helpers.timelinePhases"
-msgstr "登陆页"
+msgstr "为着陆页上显示的辩论的每个阶段选择描述和图像"
 
 #. [administration.helpers.timelineTitle]
 #. defaultMessage is:
 #. Configure the title and the sub-title of the timeline section displayed in the landing page
 #: messages.json
-#, fuzzy
 msgid "administration.helpers.timelineTitle"
 msgstr ""
-"您可以决定参与者是否可以为每个提议分配单一类型的令牌（独占）或多种类型的令"
-"牌。"
+"配置时间线的标题和副标题\n"
+"登陆页面中显示的部分"
 
 #. [administration.helpers.tokenCategoryNumber]
 #. defaultMessage is:
@@ -684,9 +645,8 @@ msgstr "提议部分以标题进行介绍。您可以根据提议内容确定标
 #. defaultMessage is:
 #. Information of the debate
 #: messages.json
-#, fuzzy
 msgid "administration.informationOfTheDebate"
-msgstr "＊必填字段。"
+msgstr "辩论信息"
 
 #. [administration.instructions]
 #. defaultMessage is:
@@ -699,169 +659,156 @@ msgstr "说明部分的配置"
 #. defaultMessage is:
 #. Special characters are not allowed
 #: messages.json
-#, fuzzy
 msgid "administration.invalidSlug"
-msgstr "最小值"
+msgstr "不允许有特殊字符"
 
 #. [administration.landingPage.header.buttonLabel]
 #. defaultMessage is:
 #. Name of the referral button to the debate
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.buttonLabel"
-msgstr "首页标题。它包含咨询的标题和副标题以及访问咨询的按钮。"
+msgstr "辩论的引荐按钮名称"
 
 #. [administration.landingPage.header.dateDescription]
 #. defaultMessage is:
 #. Please enter the debate's date range. If no dates are selected, the dates are inferred from the timelines created.
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.dateDescription"
-msgstr "首页标题。它包含咨询的标题和副标题以及访问咨询的按钮。"
+msgstr ""
+"请输入辩论的日期范围。如果没有日期\n"
+"选择，从时间轴推断日期\n"
+"创建。"
 
 #. [administration.landingPage.header.dateLabel]
 #. defaultMessage is:
 #. Enter the dates of the the debate that appear in the header.
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.dateLabel"
-msgstr "管理模块"
+msgstr "输入出现在标题中的辩论日期。"
 
 #. [administration.landingPage.header.endDate]
 #. defaultMessage is:
 #. To
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.endDate"
-msgstr "管理模块"
+msgstr "至"
 
 #. [administration.landingPage.header.endDateError]
 #. defaultMessage is:
 #. The end date cannot be after the start date
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.endDateError"
-msgstr "选择您想在登录页面中查看的模块及其位置。"
+msgstr "结束日期不能晚于开始日期"
 
 #. [administration.landingPage.header.headerDescription]
 #. defaultMessage is:
 #. The image must have a height of 480px and a width of 1480px. The weight must not exceed 300ko.
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.headerDescription"
-msgstr "首页标题。它包含咨询的标题和副标题以及访问咨询的按钮。"
+msgstr ""
+"图片的高度必须为480px，宽度为\n"
+"1480px。重量不得超过300ko。"
 
 #. [administration.landingPage.header.headerImage]
 #. defaultMessage is:
 #. Choose the header image
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.headerImage"
-msgstr "首页标题。它包含咨询的标题和副标题以及访问咨询的按钮。"
+msgstr "选择标题图片"
 
 #. [administration.landingPage.header.helper]
 #. defaultMessage is:
 #. Customize appearance of the header.
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.helper"
-msgstr "选择您想在登录页面中查看的模块及其位置。"
+msgstr "自定义标题的外观。"
 
 #. [administration.landingPage.header.logoDescription]
 #. defaultMessage is:
 #. The logo must have a maximum height of 78px and a maximum width of 200px. The weight must not exceed 1 MB. The background must be transparent.
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.logoDescription"
-msgstr "首页标题。它包含咨询的标题和副标题以及访问咨询的按钮。"
+msgstr ""
+"徽标的最大高度必须为78px，\n"
+"最大宽度为200像素。重量不得超过\n"
+"1 MB。背景必须是透明的。"
 
 #. [administration.landingPage.header.logoHelper]
 #. defaultMessage is:
 #. Choose the logo inside of the header
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.logoHelper"
-msgstr "选择您想在登录页面中查看的模块及其位置。"
+msgstr "选择标题内的徽标"
 
 #. [administration.landingPage.header.logoImage]
 #. defaultMessage is:
 #. Choose the header logo
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.logoImage"
-msgstr "首页标题。它包含咨询的标题和副标题以及访问咨询的按钮。"
+msgstr "选择标题徽标"
 
 #. [administration.landingPage.header.startDate]
 #. defaultMessage is:
 #. From
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.startDate"
-msgstr "管理模块"
+msgstr "从"
 
 #. [administration.landingPage.header.startDateError]
 #. defaultMessage is:
 #. The start date cannot be after the end date
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.startDateError"
-msgstr "管理模块"
+msgstr "开始日期不能晚于结束日期"
 
 #. [administration.landingPage.header.subtitleLabel]
 #. defaultMessage is:
 #. Debate subtitle
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.subtitleLabel"
-msgstr "管理模块"
+msgstr "辩论字幕"
 
 #. [administration.landingPage.header.successSave]
 #. defaultMessage is:
 #. The header has been updated successfully!
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.successSave"
-msgstr "模块已成功保存！"
+msgstr "标头已成功更新"
 
 #. [administration.landingPage.header.timePlaceholder]
 #. defaultMessage is:
 #. Optional: Enter the dates of the debate
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.timePlaceholder"
-msgstr "管理模块"
+msgstr "可选：输入辩论的日期"
 
 #. [administration.landingPage.header.title]
 #. defaultMessage is:
 #. Header
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.title"
-msgstr "管理模块"
+msgstr "标头"
 
 #. [administration.landingPage.header.titleLabel]
 #. defaultMessage is:
 #. Debate title
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.header.titleLabel"
-msgstr "管理模块"
+msgstr "辩论标题"
 
 #. [administration.landingPage.headerSuccessSave]
 #. defaultMessage is:
 #. The home page header have been saved with success!
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.headerSuccessSave"
-msgstr "模块已成功保存！"
+msgstr "主页标题已成功保存！"
 
 #. [administration.landingPage.manageModules.confirmationModal]
 #. defaultMessage is:
 #. Are you sure you want to add a Text & Multimedia module to the landing page?
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.manageModules.confirmationModal"
-msgstr "管理模块"
+msgstr "您确定要在登录页面上添加文本多媒体模块吗？"
 
 #. [administration.landingPage.manageModules.helper]
 #. defaultMessage is:
@@ -874,17 +821,15 @@ msgstr "选择您想在登录页面中查看的模块及其位置。"
 #. defaultMessage is:
 #. Text & Multimedia
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.manageModules.textAndMultimedia"
-msgstr "管理模块"
+msgstr "文字多媒体"
 
 #. [administration.landingPage.manageModules.textAndMultimediaBtn]
 #. defaultMessage is:
 #. Add a Text & Multimedia module
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.manageModules.textAndMultimediaBtn"
-msgstr "管理模块"
+msgstr "添加文本多媒体模块"
 
 #. [administration.landingPage.manageModules.title]
 #. defaultMessage is:
@@ -904,33 +849,29 @@ msgstr "模块已成功保存！"
 #. defaultMessage is:
 #. Choose the image for this phase
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.timeline.image"
-msgstr "登陆页"
+msgstr "选择此阶段的图像"
 
 #. [administration.landingPage.timeline.imageDescription]
 #. defaultMessage is:
 #. The image must have a height of 500px and a width of 400px.
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.timeline.imageDescription"
-msgstr "首页标题。它包含咨询的标题和副标题以及访问咨询的按钮。"
+msgstr "图片的高度必须为500px，宽度为 400px。"
 
 #. [administration.landingPage.timeline.sectionTitle]
 #. defaultMessage is:
 #. Configure the title and the subtitle of the section
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.timeline.sectionTitle"
-msgstr "管理模块"
+msgstr "配置部分的标题和副标题"
 
 #. [administration.landingPage.timeline.title]
 #. defaultMessage is:
 #. Timeline on the landing page
 #: messages.json
-#, fuzzy
 msgid "administration.landingPage.timeline.title"
-msgstr "管理模块"
+msgstr "登陆页面上的时间轴"
 
 #. [administration.landingpage]
 #. defaultMessage is:
@@ -950,55 +891,48 @@ msgstr "从下方选择需要的语言"
 #. defaultMessage is:
 #. Information on cookies
 #: messages.json
-#, fuzzy
 msgid "administration.legalContents.cookiesPolicyLabel"
-msgstr "法律公告"
+msgstr "Cookies信息"
 
 #. [administration.legalContents.legalContentsValidation]
 #. defaultMessage is:
 #. Acceptation of the legal contents for users identified via SSO
 #: messages.json
-#, fuzzy
 msgid "administration.legalContents.legalContentsValidation"
-msgstr "法律公告"
+msgstr "接受通过SSO识别的用户的法律内容"
 
 #. [administration.legalContents.legalNoticeLabel]
 #. defaultMessage is:
 #. Legal notice
 #: messages.json
-#, fuzzy
 msgid "administration.legalContents.legalNoticeLabel"
-msgstr "法律公告"
+msgstr "法律声明"
 
 #. [administration.legalContents.mandatoryLegalContentsValidation]
 #. defaultMessage is:
 #. Activate the modal to accept legal contents at the first visit.
 #: messages.json
-#, fuzzy
 msgid "administration.legalContents.mandatoryLegalContentsValidation"
-msgstr "法律公告"
+msgstr "激活模式以在首次访问时接受合法内容。"
 
 #. [administration.legalContents.privacyPolicyLabel]
 #. defaultMessage is:
 #. Privacy policy
 #: messages.json
-#, fuzzy
 msgid "administration.legalContents.privacyPolicyLabel"
-msgstr "法律公告"
+msgstr "隐私政策"
 
 #. [administration.legalContents.successSave]
 #. defaultMessage is:
 #. The legal contents have been saved with success!
 #: messages.json
-#, fuzzy
 msgid "administration.legalContents.successSave"
-msgstr "条款和条件及法律公告已成功保存！"
+msgstr "法律内容已成功保存！"
 
 #. [administration.legalContents.termsAndConditionsLabel]
 #. defaultMessage is:
 #. Terms and conditions
 #: messages.json
-#, fuzzy
 msgid "administration.legalContents.termsAndConditionsLabel"
 msgstr "条款和条件"
 
@@ -1006,9 +940,8 @@ msgstr "条款和条件"
 #. defaultMessage is:
 #. User guidelines
 #: messages.json
-#, fuzzy
 msgid "administration.legalContents.userGuidelinesLabel"
-msgstr "法律公告"
+msgstr "用户指南"
 
 #. [administration.maxValue]
 #. defaultMessage is:
@@ -1021,17 +954,15 @@ msgstr "最大值"
 #. defaultMessage is:
 #. Configure the theme %{index}
 #: messages.json
-#, fuzzy
 msgid "administration.menu.configureThematic"
-msgstr "您确定要删除这个主题吗？"
+msgstr "配置主题％{index}"
 
 #. [administration.menu.exportDebateData]
 #. defaultMessage is:
 #. Export the data
 #: messages.json
-#, fuzzy
 msgid "administration.menu.exportDebateData"
-msgstr "导出分类"
+msgstr "导出数据"
 
 #. [administration.menu.exportTaxonomies]
 #. defaultMessage is:
@@ -1044,25 +975,22 @@ msgstr "导出分类"
 #. defaultMessage is:
 #. Edit legal content
 #: messages.json
-#, fuzzy
 msgid "administration.menu.legalContents"
-msgstr "条款和条件及法律公告"
+msgstr "编辑法律内容"
 
 #. [administration.menu.manageProfileOptions]
 #. defaultMessage is:
 #. Registration options
 #: messages.json
-#, fuzzy
 msgid "administration.menu.manageProfileOptions"
-msgstr "编辑讨论部分"
+msgstr "注册选项"
 
 #. [administration.menu.personalizeInterface]
 #. defaultMessage is:
 #. Personalize the interface
 #: messages.json
-#, fuzzy
 msgid "administration.menu.personalizeInterface"
-msgstr "条款和条件及法律公告"
+msgstr "个性化界面"
 
 #. [administration.menu.phase]
 #. defaultMessage is:
@@ -1075,9 +1003,8 @@ msgstr "阶段%{count} - %{description}"
 #. defaultMessage is:
 #. Discussion preferences
 #: messages.json
-#, fuzzy
 msgid "administration.menu.preferences"
-msgstr "阶段%{count} - %{description}"
+msgstr "讨论偏好"
 
 #. [administration.menu.sections]
 #. defaultMessage is:
@@ -1090,9 +1017,8 @@ msgstr "编辑讨论部分"
 #. defaultMessage is:
 #. Edit the phases
 #: messages.json
-#, fuzzy
 msgid "administration.menu.timeline"
-msgstr "时间轴"
+msgstr "编辑阶段"
 
 #. [administration.minValue]
 #. defaultMessage is:
@@ -1105,57 +1031,50 @@ msgstr "最小值"
 #. defaultMessage is:
 #. Post pending for moderation
 #: messages.json
-#, fuzzy
 msgid "administration.moderation"
-msgstr "编辑讨论"
+msgstr "发布待审核"
 
 #. [administration.modules.brightMirror]
 #. defaultMessage is:
 #. Bright Mirror module
 #: messages.json
-#, fuzzy
 msgid "administration.modules.brightMirror"
-msgstr "添加一个问题"
+msgstr "亮镜模块"
 
 #. [administration.modules.messageColumns]
 #. defaultMessage is:
 #. Multi-columns module
 #: messages.json
-#, fuzzy
 msgid "administration.modules.messageColumns"
-msgstr "讨论所用的语言"
+msgstr "多列模块"
 
 #. [administration.modules.noModule]
 #. defaultMessage is:
 #. No module
 #: messages.json
-#, fuzzy
 msgid "administration.modules.noModule"
-msgstr "公告模块"
+msgstr "没有模块"
 
 #. [administration.modules.survey]
 #. defaultMessage is:
 #. Survey module
 #: messages.json
-#, fuzzy
 msgid "administration.modules.survey"
-msgstr "设置主题"
+msgstr "调查模块"
 
 #. [administration.modules.thread]
 #. defaultMessage is:
 #. Thread module
 #: messages.json
-#, fuzzy
 msgid "administration.modules.thread"
-msgstr "主题"
+msgstr "线程模块"
 
 #. [administration.modules.voteSession]
 #. defaultMessage is:
 #. Vote module
 #: messages.json
-#, fuzzy
 msgid "administration.modules.voteSession"
-msgstr "页面配置"
+msgstr "投票模块"
 
 #. [administration.nbTicks]
 #. defaultMessage is:
@@ -1203,73 +1122,64 @@ msgstr "数字值"
 #. defaultMessage is:
 #. Favicon (visual 2)
 #: messages.json
-#, fuzzy
 msgid "administration.personalizeInterface.favicon"
-msgstr "根据令牌模块的使用目的，引导参与者进行投票。"
+msgstr "网站图示（视觉2）"
 
 #. [administration.personalizeInterface.faviconInstruction]
 #. defaultMessage is:
 #. Favicon should have a maximum height of 110px. Its extension should be .ico
 #: messages.json
-#, fuzzy
 msgid "administration.personalizeInterface.faviconInstruction"
-msgstr "说明部分必须包含一个标题和描述，以指导参与者发言。"
+msgstr "Favicon的最大高度应为110px。 其扩展名应为.ico"
 
 #. [administration.personalizeInterface.icoRequired]
 #. defaultMessage is:
 #. The favicon must be an .ico file only
 #: messages.json
-#, fuzzy
 msgid "administration.personalizeInterface.icoRequired"
-msgstr "使用外部页面"
+msgstr "网站图标只能是.ico文件"
 
 #. [administration.personalizeInterface.logoInstruction]
 #. defaultMessage is:
 #. Logo should have a maximum height of 110px and a maximum width of 215px. The background must be transparent.
 #: messages.json
-#, fuzzy
 msgid "administration.personalizeInterface.logoInstruction"
-msgstr "根据令牌模块的使用目的，引导参与者进行投票。"
+msgstr "应该具有110px的最大高度和215px的最大宽度。 背景必须是透明的。"
 
 #. [administration.personalizeInterface.success]
 #. defaultMessage is:
 #. The interface personalization has been saved with success!
 #: messages.json
-#, fuzzy
 msgid "administration.personalizeInterface.success"
-msgstr "资源已成功保存！"
+msgstr "个性化界面已成功保存！"
 
 #. [administration.personalizeInterface.title]
 #. defaultMessage is:
 #. Web page Title (visual 1)
 #: messages.json
-#, fuzzy
 msgid "administration.personalizeInterface.title"
-msgstr "资源中心"
+msgstr "网页标题（可视1）"
 
 #. [administration.personalizeInterface.titleFormTitle]
 #. defaultMessage is:
 #. Personalize the title of the page
 #: messages.json
-#, fuzzy
 msgid "administration.personalizeInterface.titleFormTitle"
-msgstr "编辑资源编号%{num}"
+msgstr "个性化页面标题"
 
 #. [administration.ph.descriptionPhase]
 #. defaultMessage is:
 #. Description phase
 #: messages.json
-#, fuzzy
 msgid "administration.ph.descriptionPhase"
-msgstr "视频上方的评论"
+msgstr "说明阶段"
 
 #. [administration.ph.propositionSectionSubtitle]
 #. defaultMessage is:
 #. Section subtitle
 #: messages.json
-#, fuzzy
 msgid "administration.ph.propositionSectionSubtitle"
-msgstr "部分标题"
+msgstr "节字幕"
 
 #. [administration.ph.propositionSectionTitle]
 #. defaultMessage is:
@@ -1282,9 +1192,8 @@ msgstr "部分标题"
 #. defaultMessage is:
 #. This thematic contains posts. If you change the module, you'll delete all messages associated to this thematic when you'll save.
 #: messages.json
-#, fuzzy
 msgid "administration.postsExistsWarning"
-msgstr "说明部分的配置"
+msgstr "该主题包含帖子。 如果更改模块，则保存时将删除与此主题相关的所有消息。"
 
 #. [administration.previousStep]
 #. defaultMessage is:
@@ -1297,113 +1206,99 @@ msgstr "上一步"
 #. defaultMessage is:
 #. Activate the mandatory validation of the legal contents
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.LegalContentButton"
-msgstr "提议部分标题配置"
+msgstr "激活法定内容的强制性验证"
 
 #. [administration.profileOptions.addSelectFieldOption]
 #. defaultMessage is:
 #. Add a new item
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.addSelectFieldOption"
-msgstr "添加一个部分"
+msgstr "新增项目"
 
 #. [administration.profileOptions.addTextField]
 #. defaultMessage is:
 #. Add a field
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.addTextField"
-msgstr "添加一个部分"
+msgstr "新增栏位"
 
 #. [administration.profileOptions.choiceSelectField]
 #. defaultMessage is:
 #. Dropdown field
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.choiceSelectField"
-msgstr "提议部分标题配置"
+msgstr "下拉字段"
 
 #. [administration.profileOptions.choiceTextField]
 #. defaultMessage is:
 #. Text field
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.choiceTextField"
-msgstr "提议部分标题配置"
+msgstr "文本域"
 
 #. [administration.profileOptions.createNewFieldModalBody]
 #. defaultMessage is:
 #. Select the field type you want to add to the register page:
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.createNewFieldModalBody"
-msgstr "您确定要删除这个提议吗？"
+msgstr "选择要添加到寄存器的字段类型"
 
 #. [administration.profileOptions.deleteSelectFieldOption]
 #. defaultMessage is:
 #. Delete this item
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.deleteSelectFieldOption"
-msgstr "删除该部分"
+msgstr "删除此项"
 
 #. [administration.profileOptions.deleteTextField]
 #. defaultMessage is:
 #. Delete the field
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.deleteTextField"
-msgstr "删除该部分"
+msgstr "删除栏位"
 
 #. [administration.profileOptions.hideTextField]
 #. defaultMessage is:
 #. Hide this field for the user
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.hideTextField"
-msgstr "提议部分标题配置"
+msgstr "为用户隐藏此字段"
 
 #. [administration.profileOptions.introText]
 #. defaultMessage is:
 #. Configure the fields that you want to display in the registration form. Fill in the names and whether the fields are required or optional.
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.introText"
-msgstr "提议部分标题配置"
+msgstr "配置要在注册表单中显示的字段。 填写名称以及字段是必填字段还是可选字段。"
 
 #. [administration.profileOptions.successSave]
 #. defaultMessage is:
 #. The profile options has been saved with success!
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.successSave"
-msgstr "部分已成功修改"
+msgstr "配置文件选项已成功保存！"
 
 #. [administration.profileOptions.textFieldToggleOptional]
 #. defaultMessage is:
 #. Make this field optional
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.textFieldToggleOptional"
-msgstr "删除该部分"
+msgstr "将此字段设为可选"
 
 #. [administration.profileOptions.textFieldToggleRequired]
 #. defaultMessage is:
 #. Make this field required
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.textFieldToggleRequired"
-msgstr "使用外部页面"
+msgstr "将此字段为必填项"
 
 #. [administration.profileOptions.toggleLegalContentIntro]
 #. defaultMessage is:
 #. Make the legal validation mandatory or not for a user after signing up in the platform by SSO.
 #: messages.json
-#, fuzzy
 msgid "administration.profileOptions.toggleLegalContentIntro"
-msgstr "提议部分标题配置"
+msgstr "通过SSO在平台中注册后，强制或不强制对用户进行合法验证。"
 
 #. [administration.proposalSectionTitle]
 #. defaultMessage is:
@@ -1535,9 +1430,8 @@ msgstr "是的，甚至在投票之前。"
 #. defaultMessage is:
 #. Please save before you can access to the vote session configuration
 #: messages.json
-#, fuzzy
 msgid "administration.saveBeforeConfigureVoteSession"
-msgstr "您需要配置一个投票会话。"
+msgstr "请保存后才能访问投票会话配置"
 
 #. [administration.saveFirstStep]
 #. defaultMessage is:
@@ -1634,33 +1528,29 @@ msgstr "您想让参与者看到投票中的票数变化吗？"
 #. defaultMessage is:
 #. Activate the semantic analysis
 #: messages.json
-#, fuzzy
 msgid "administration.semanticAnalysis.activate"
-msgstr "标题"
+msgstr "激活语义分析"
 
 #. [administration.semanticAnalysis.description]
 #. defaultMessage is:
 #. Semantic analysis feature is only available for the following modules: thread, survey and Bright Mirror
 #: messages.json
-#, fuzzy
 msgid "administration.semanticAnalysis.description"
-msgstr "添加一个部分"
+msgstr "语义分析功能仅适用于以下模块：线程，测量和明镜"
 
 #. [administration.semanticAnalysis.title]
 #. defaultMessage is:
 #. Semantic Analysis
 #: messages.json
-#, fuzzy
 msgid "administration.semanticAnalysis.title"
-msgstr "标题"
+msgstr "语义分析"
 
 #. [administration.slugWarning]
 #. defaultMessage is:
 #. This modification causes a change in the address of the debate. Please take this change into account in further communications. To insure the continuity of the service, the previous address will still be operating.
 #: messages.json
-#, fuzzy
 msgid "administration.slugWarning"
-msgstr "登录页面"
+msgstr "此修改导致辩论的地址发生变化。 请在进一步的通信中将此更改考虑在内。 为了确保服务的连续性，先前的地址仍将运行。"
 
 #. [administration.step_x_total]
 #. defaultMessage is:
@@ -1673,9 +1563,8 @@ msgstr "部分 %{num}，共计%{total}"
 #. defaultMessage is:
 #. Discussion preferences have been saved with success!
 #: messages.json
-#, fuzzy
 msgid "administration.successDiscussionPreference"
-msgstr "讨论语言偏好已成功保存！"
+msgstr "成功保存了讨论首选项！"
 
 #. [administration.successThemeCreation]
 #. defaultMessage is:
@@ -1688,233 +1577,204 @@ msgstr "主题已成功保存！"
 #. defaultMessage is:
 #. Summary section configuration
 #: messages.json
-#, fuzzy
 msgid "administration.summary"
-msgstr "设置主题"
+msgstr "摘要部分配置"
 
 #. [administration.survey.configThematic]
 #. defaultMessage is:
 #. Configure the theme
 #: messages.json
-#, fuzzy
 msgid "administration.survey.configThematic"
-msgstr "您确定要删除这个主题吗？"
+msgstr "配置主题"
 
 #. [administration.survey.configThematics]
 #. defaultMessage is:
 #. Configure the themes
 #: messages.json
-#, fuzzy
 msgid "administration.survey.configThematics"
-msgstr "您确定要删除这个主题吗？"
+msgstr "配置主题"
 
 #. [administration.survey.configThematicsHelperDescription]
 #. defaultMessage is:
 #. To change your choice, return to the general setting of the debate.
 #: messages.json
-#, fuzzy
 msgid "administration.survey.configThematicsHelperDescription"
-msgstr "您需要配置一个投票会话。"
+msgstr "要更改选择，请返回辩论的常规设置。"
 
 #. [administration.survey.configThematicsHelperTitle]
 #. defaultMessage is:
 #. You have chosen to configure a themes table.
 #: messages.json
-#, fuzzy
 msgid "administration.survey.configThematicsHelperTitle"
-msgstr "确认删除"
+msgstr "您已选择配置主题表"
 
 #. [administration.survey.createTable]
 #. defaultMessage is:
 #. Create the themes table
 #: messages.json
-#, fuzzy
 msgid "administration.survey.createTable"
-msgstr "设置主题"
+msgstr "创建主题表"
 
 #. [administration.survey.exportData]
 #. defaultMessage is:
 #. Export data
 #: messages.json
-#, fuzzy
 msgid "administration.survey.exportData"
-msgstr "设置主题"
+msgstr "汇出资料"
 
 #. [administration.tableOfThematics.bannerHeader]
 #. defaultMessage is:
 #. Top banner must include the thematic title defined previously, a background image and eventually a subtitle.
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.bannerHeader"
-msgstr "删除与此主题相关的图片"
+msgstr "顶部横幅必须包含先前定义的主题标题，背景图像以及最终的字幕。"
 
 #. [administration.tableOfThematics.bannerImagePickerLabel]
 #. defaultMessage is:
 #. Banner image
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.bannerImagePickerLabel"
-msgstr "删除与此主题相关的图片"
+msgstr "横幅图片"
 
 #. [administration.tableOfThematics.bannerSubtitleLabel]
 #. defaultMessage is:
 #. Top banner subtitle
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.bannerSubtitleLabel"
-msgstr "管理模块"
+msgstr "热门横幅字幕"
 
 #. [administration.tableOfThematics.columnColor]
 #. defaultMessage is:
 #. Column color
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.columnColor"
-msgstr "主题"
+msgstr "列颜色"
 
 #. [administration.tableOfThematics.columnName]
 #. defaultMessage is:
 #. Column name
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.columnName"
-msgstr "删除与此主题相关的图片"
+msgstr "栏名"
 
 #. [administration.tableOfThematics.columnSynthesisBody]
 #. defaultMessage is:
 #. Column synthesis
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.columnSynthesisBody"
-msgstr "删除与此主题相关的图片"
+msgstr "列合成"
 
 #. [administration.tableOfThematics.columnSynthesisSubject]
 #. defaultMessage is:
 #. Column synthesis title
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.columnSynthesisSubject"
-msgstr "删除与此主题相关的图片"
+msgstr "列综合标题"
 
 #. [administration.tableOfThematics.columnTitle]
 #. defaultMessage is:
 #. Column title
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.columnTitle"
-msgstr "确认删除"
+msgstr "栏标题"
 
 #. [administration.tableOfThematics.columnsConfiguration]
 #. defaultMessage is:
 #. Columns configuration
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.columnsConfiguration"
-msgstr "您可以通过点击导出按钮导出所有数据"
+msgstr "列配置"
 
 #. [administration.tableOfThematics.confirmDeletionBody]
 #. defaultMessage is:
 #. Are you sure that you wish to delete this theme?
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.confirmDeletionBody"
-msgstr "您需要配置一个投票会话。"
+msgstr "您确定要删除此主题吗？"
 
 #. [administration.tableOfThematics.confirmDeletionTitle]
 #. defaultMessage is:
 #. Delete %{title} theme
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.confirmDeletionTitle"
-msgstr "确认删除"
+msgstr "删除％{title}主题"
 
 #. [administration.tableOfThematics.instructionHeader]
 #. defaultMessage is:
 #. Instruction section include a title, an instruction and a media (video, slideshare or image) which guides users in their contribution.
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.instructionHeader"
-msgstr "说明标题"
+msgstr "指导部分包括标题，指导和媒体（视频，幻灯片共享或图像），用于指导用户做出贡献。"
 
 #. [administration.tableOfThematics.instructionLabel]
 #. defaultMessage is:
 #. Instructions
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.instructionLabel"
-msgstr "说明标题"
+msgstr "使用说明"
 
 #. [administration.tableOfThematics.moduleTypeLabel]
 #. defaultMessage is:
 #. Participation module configuration
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.moduleTypeLabel"
-msgstr "删除与此主题相关的图片"
+msgstr "参与模块配置"
 
 #. [administration.tableOfThematics.multiColumnsFormName1]
 #. defaultMessage is:
 #. 2 columns
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.multiColumnsFormName1"
-msgstr "删除与此主题相关的图片"
+msgstr "2列"
 
 #. [administration.tableOfThematics.multiColumnsFormName2]
 #. defaultMessage is:
 #. 3 columns
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.multiColumnsFormName2"
-msgstr "删除与此主题相关的图片"
+msgstr "3列"
 
 #. [administration.tableOfThematics.questionsHeader]
 #. defaultMessage is:
 #. Questions
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.questionsHeader"
-msgstr "选择标题背景图片"
+msgstr "问题"
 
 #. [administration.tableOfThematics.quote]
 #. defaultMessage is:
 #. Quote
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.quote"
-msgstr "主题"
+msgstr "引用"
 
 #. [administration.tableOfThematics.sectionTitleLabel]
 #. defaultMessage is:
 #. Section title
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.sectionTitleLabel"
-msgstr "设置部分"
+msgstr "节标题"
 
 #. [administration.tableOfThematics.summaryHeader]
 #. defaultMessage is:
 #. The 'Summary' section contains a brief abstract of the thematic and can be enriched with various medias.
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.summaryHeader"
-msgstr "删除与此主题相关的图片"
+msgstr "“摘要”部分包含主题的简短摘要，并且可以通过各种媒体进行充实。"
 
 #. [administration.tableOfThematics.summaryLabel]
 #. defaultMessage is:
 #. Summary
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.summaryLabel"
-msgstr "删除与此主题相关的图片"
+msgstr "摘要"
 
 #. [administration.tableOfThematics.thematicTitle]
 #. defaultMessage is:
 #. Thematic title
 #: messages.json
-#, fuzzy
 msgid "administration.tableOfThematics.thematicTitle"
-msgstr "删除与此主题相关的图片"
+msgstr "主题名称"
 
 #. [administration.textValue]
 #. defaultMessage is:
@@ -1934,121 +1794,106 @@ msgstr "主题"
 #. defaultMessage is:
 #. Add a phase
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.addPhase"
-msgstr "时间轴"
+msgstr "添加阶段"
 
 #. [administration.timelineAdmin.annotation]
 #. defaultMessage is:
 #. This module has to be filled. * Fields are required
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.annotation"
-msgstr "＊必填字段。"
+msgstr "该模块必须填写。 *为必填项"
 
 #. [administration.timelineAdmin.deletePhase]
 #. defaultMessage is:
 #. Delete the phase
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.deletePhase"
-msgstr "时间轴"
+msgstr "删除阶段"
 
 #. [administration.timelineAdmin.descriptionPhaseLabel]
 #. defaultMessage is:
 #. Phase description
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.descriptionPhaseLabel"
-msgstr "管理模块"
+msgstr "阶段说明"
 
 #. [administration.timelineAdmin.instruction1]
 #. defaultMessage is:
 #. Choose the number of phases for your debate
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.instruction1"
-msgstr "说明部分的配置"
+msgstr "选择辩论的阶段数"
 
 #. [administration.timelineAdmin.instruction2]
 #. defaultMessage is:
 #. Fill in the required fields for each phase by selecting each tab
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.instruction2"
-msgstr "说明部分的配置"
+msgstr "通过选择每个选项卡填写每个阶段的必填字段"
 
 #. [administration.timelineAdmin.instruction3]
 #. defaultMessage is:
 #. Choose the start and the end of your phase.
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.instruction3"
-msgstr "说明部分的配置"
+msgstr "选择阶段的开始和结束。"
 
 #. [administration.timelineAdmin.instruction4]
 #. defaultMessage is:
 #. Choose the phase image for the timeline in the landing page.
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.instruction4"
-msgstr "说明部分的配置"
+msgstr "在登录页面中为时间线选择阶段图像。"
 
 #. [administration.timelineAdmin.instruction5]
 #. defaultMessage is:
 #. Write the phase description.
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.instruction5"
-msgstr "说明部分的配置"
+msgstr "写下阶段描述。"
 
 #. [administration.timelineAdmin.phase]
 #. defaultMessage is:
 #. Phase %{count}
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.phase"
-msgstr "阶段%{count} - %{description}"
+msgstr "阶段％{count}"
 
 #. [administration.timelineAdmin.phaseLabel]
 #. defaultMessage is:
 #. Phase title
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.phaseLabel"
-msgstr "阶段%{count} - %{description}"
+msgstr "阶段标题"
 
 #. [administration.timelineAdmin.selectEnd]
 #. defaultMessage is:
 #. Phase %{count}'s end date
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.selectEnd"
-msgstr "时间轴"
+msgstr "阶段％{count}的结束日期"
 
 #. [administration.timelineAdmin.selectStart]
 #. defaultMessage is:
 #. Phase %{count}'s start date
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.selectStart"
-msgstr "时间轴"
+msgstr "阶段％{count}的开始日期"
 
 #. [administration.timelineAdmin.successSave]
 #. defaultMessage is:
 #. The timeline has been sucessfully saved
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.successSave"
-msgstr "模块已成功保存！"
+msgstr "时间线已成功保存"
 
 #. [administration.timelineAdmin.warningLabel]
 #. defaultMessage is:
 #. The dates you have set for this phase are overlapping the previous phase or the next phase
 #: messages.json
-#, fuzzy
 msgid "administration.timelineAdmin.warningLabel"
-msgstr "时间轴"
+msgstr "您为此阶段设置的日期与上一个阶段或下一个阶段重叠"
 
 #. [administration.token]
 #. defaultMessage is:
@@ -2090,9 +1935,7 @@ msgstr "令牌标题"
 #. The token vote module allows you to select propositions proportionnaly. Each participant has a certain amount of tokens et will have to spread them on the different propositions
 #: messages.json
 msgid "administration.tokenVoteCheckbox"
-msgstr ""
-"令牌投票模块允许您按比例选择命题。每位参与者都有一定数量的令牌，并且必须根据"
-"不同的命题来拓展它们"
+msgstr "令牌投票模块允许您按比例选择命题。每位参与者都有一定数量的令牌，并且必须根据不同的命题来拓展它们"
 
 #. [administration.tokenVoteInstructions]
 #. defaultMessage is:
@@ -2105,25 +1948,22 @@ msgstr "令牌投票的说明"
 #. defaultMessage is:
 #. Activate this option to allow users to translate messages
 #: messages.json
-#, fuzzy
 msgid "administration.translationService.activate"
-msgstr "提议部分标题配置"
+msgstr "激活此选项以允许用户翻译邮件"
 
 #. [administration.translationService.description]
 #. defaultMessage is:
 #. Translation service should be activated when the semantic analysis is activated
 #: messages.json
-#, fuzzy
 msgid "administration.translationService.description"
-msgstr "描述"
+msgstr "激活语义分析后，应激活翻译服务"
 
 #. [administration.translationService.title]
 #. defaultMessage is:
 #. Translation service
 #: messages.json
-#, fuzzy
 msgid "administration.translationService.title"
-msgstr "提议部分标题配置"
+msgstr "翻译服务"
 
 #. [administration.unit]
 #. defaultMessage is:
@@ -2151,9 +1991,7 @@ msgstr "价值标题"
 #. *Authorized video links: "https://www.youtube.com/embed/[videoId]" or "https://player.vimeo.com/video/[videoId]?"
 #: messages.json
 msgid "administration.videoHelp"
-msgstr ""
-"*授权视频链接：“https://www.youtube.com/embed/[videoId]”或“https://player."
-"vimeo.com/video/[videoId]?”"
+msgstr "*授权视频链接：“https://www.youtube.com/embed/[videoId]”或“https://player.vimeo.com/video/[videoId]?”"
 
 #. [administration.voteProposals.addProposal]
 #. defaultMessage is:
@@ -2215,9 +2053,8 @@ msgstr "描述"
 #. defaultMessage is:
 #. Modify
 #: messages.json
-#, fuzzy
 msgid "administration.voteProposals.edit"
-msgstr "提议标题"
+msgstr "修改"
 
 #. [administration.voteProposals.gauge]
 #. defaultMessage is:
@@ -2293,9 +2130,8 @@ msgstr "导出数据"
 #. defaultMessage is:
 #. Configure vote session associated to the theme
 #: messages.json
-#, fuzzy
 msgid "administration.voteSession.configureVoteSession"
-msgstr "您需要配置一个投票会话。"
+msgstr "配置与主题关联的投票会议"
 
 #. [administration.voteSessionSuccess]
 #. defaultMessage is:
@@ -2320,10 +2156,10 @@ msgstr "令牌投票"
 
 #. [and]
 #. defaultMessage is:
-#.  and 
+#. and
 #: messages.json
 msgid "and"
-msgstr ""
+msgstr "和"
 
 #. [cancel]
 #. defaultMessage is:
@@ -2371,9 +2207,8 @@ msgstr "添加一个文件"
 #. defaultMessage is:
 #. Add an attachment
 #: messages.json
-#, fuzzy
 msgid "common.editor.attachmentPlugin.title"
-msgstr "添加一个文件"
+msgstr "添加附件"
 
 #. [common.editor.bold]
 #. defaultMessage is:
@@ -2393,9 +2228,8 @@ msgstr "项目符号列表"
 #. defaultMessage is:
 #. Close
 #: messages.json
-#, fuzzy
 msgid "common.editor.closeModal"
-msgstr "粗体"
+msgstr "关"
 
 #. [common.editor.italic]
 #. defaultMessage is:
@@ -2408,40 +2242,36 @@ msgstr "斜体"
 #. defaultMessage is:
 #. Edit the link
 #: messages.json
-#, fuzzy
 msgid "common.editor.linkPlugin.editLinkForm.title"
-msgstr "项目符号列表"
+msgstr "编辑链接"
 
 #. [common.editor.linkPlugin.openInNewTab]
 #. defaultMessage is:
 #. Open link in new tab
 #: messages.json
 msgid "common.editor.linkPlugin.openInNewTab"
-msgstr ""
+msgstr "在新选项卡上打开链接"
 
 #. [common.editor.linkPlugin.text]
 #. defaultMessage is:
 #. Link text
 #: messages.json
-#, fuzzy
 msgid "common.editor.linkPlugin.text"
-msgstr "斜体"
+msgstr "连结文字"
 
 #. [common.editor.linkPlugin.title]
 #. defaultMessage is:
 #. Insert a link
 #: messages.json
-#, fuzzy
 msgid "common.editor.linkPlugin.title"
-msgstr "项目符号列表"
+msgstr "插入链接"
 
 #. [common.editor.linkPlugin.url]
 #. defaultMessage is:
 #. URL
 #: messages.json
-#, fuzzy
 msgid "common.editor.linkPlugin.url"
-msgstr "斜体"
+msgstr "网址"
 
 #. [common.goUp]
 #. defaultMessage is:
@@ -2454,41 +2284,36 @@ msgstr "回到顶部"
 #. defaultMessage is:
 #. Error icon
 #: messages.json
-#, fuzzy
 msgid "common.icons.error"
-msgstr "粗体"
+msgstr "错误图标"
 
 #. [common.icons.tooltip]
 #. defaultMessage is:
 #. Tooltip icon
 #: messages.json
-#, fuzzy
 msgid "common.icons.tooltip"
-msgstr "斜体"
+msgstr "工具提示图标"
 
 #. [common.loader.error]
 #. defaultMessage is:
 #. There is an error loading the analysis
 #: messages.json
-#, fuzzy
 msgid "common.loader.error"
-msgstr "选择要上传的文件"
+msgstr "加载分析时出错"
 
 #. [common.loader.loading]
 #. defaultMessage is:
 #. Loading...
 #: messages.json
-#, fuzzy
 msgid "common.loader.loading"
-msgstr "选择要上传的文件"
+msgstr "载入中…"
 
 #. [common.loader.no-data]
 #. defaultMessage is:
 #. Not enough data to analyse
 #: messages.json
-#, fuzzy
 msgid "common.loader.no-data"
-msgstr "粗体"
+msgstr "数据不足，无法分析"
 
 #. [common.uploadButton]
 #. defaultMessage is:
@@ -2502,14 +2327,14 @@ msgstr "选择要上传的文件"
 #. TO BE DEFINED %{words}
 #: messages.json
 msgid "common.wordCountInformation.msg"
-msgstr ""
+msgstr "待定义%{words}"
 
 #. [common.wordCountInformation.words]
 #. defaultMessage is:
 #. <span class='words-watson'>%{wordCount} words</span>
 #: messages.json
 msgid "common.wordCountInformation.words"
-msgstr ""
+msgstr "  %{wordCount}字"
 
 #. [community.panelTitle]
 #. defaultMessage is:
@@ -2530,200 +2355,189 @@ msgstr "结论"
 #. Terms and conditions
 #: messages.json
 msgid "cookies.cgu"
-msgstr ""
+msgstr "条款和条件"
 
 #. [cookies.cguHelper]
 #. defaultMessage is:
 #. This cookie registers that you have accepted the terms and conditions of the consultation.
 #: messages.json
 msgid "cookies.cguHelper"
-msgstr ""
+msgstr "此cookie表明您已接受磋商的条款和条件。"
 
 #. [cookies.locale]
 #. defaultMessage is:
 #. Language
 #: messages.json
-#, fuzzy
 msgid "cookies.locale"
-msgstr "法律公告"
+msgstr "语言"
 
 #. [cookies.localeHelper]
 #. defaultMessage is:
 #. This cookie is necessary to display the texts in the language of your browser or the one you selected in the navigation bar.
 #: messages.json
 msgid "cookies.localeHelper"
-msgstr ""
+msgstr "接受"
 
 #. [cookies.matomo]
 #. defaultMessage is:
 #. Matomo
 #: messages.json
 msgid "cookies.matomo"
-msgstr ""
+msgstr "Matomo"
 
 #. [cookies.matomoHelper]
 #. defaultMessage is:
 #. This cookie is used for stasticial purposes regarding the participants of the consultation.
 #: messages.json
 msgid "cookies.matomoHelper"
-msgstr ""
+msgstr "此cookie用于对磋商参与者进行统计的目的。"
 
 #. [cookies.matomoSettings]
 #. defaultMessage is:
 #. To modify this cookie's setting please click here
 #: messages.json
 msgid "cookies.matomoSettings"
-msgstr ""
+msgstr "如需修改此cookie的设置，请点击此处"
 
 #. [cookies.privacyPolicy]
 #. defaultMessage is:
 #. Privacy policy
 #: messages.json
 msgid "cookies.privacyPolicy"
-msgstr ""
+msgstr "隐私政策"
 
 #. [cookies.privacyPolicyHelper]
 #. defaultMessage is:
 #. This cookie registers that you have accepted the privacy policy of the consultation.
 #: messages.json
-#, fuzzy
 msgid "cookies.privacyPolicyHelper"
-msgstr "法律公告"
+msgstr "该cookie注册表明您已接受咨询的隐私政策。"
 
 #. [cookies.required]
 #. defaultMessage is:
 #. This cookie is required
 #: messages.json
-#, fuzzy
 msgid "cookies.required"
-msgstr "该字段为必填项。"
+msgstr "此Cookie是必填项"
 
 #. [cookies.userGuideline]
 #. defaultMessage is:
 #. User Guidelines
 #: messages.json
 msgid "cookies.userGuideline"
-msgstr ""
+msgstr "用户指南"
 
 #. [cookies.userGuidelineHelper]
 #. defaultMessage is:
 #. This cookie registers that you have accepted the user guidelines of the consultation.
 #: messages.json
 msgid "cookies.userGuidelineHelper"
-msgstr ""
+msgstr "此cookie表明您已接受磋商的用户指南。"
 
 #. [cookies.userSession]
 #. defaultMessage is:
 #. User Session
 #: messages.json
 msgid "cookies.userSession"
-msgstr ""
+msgstr "用户会话"
 
 #. [cookies.userSessionHelper]
 #. defaultMessage is:
 #. This cookie is necessary to maintain the user connected on Assembl.
 #: messages.json
 msgid "cookies.userSessionHelper"
-msgstr ""
+msgstr "此cookie是维持已连接到Assembl的用户所必需的。"
 
 #. [cookiesBar.accept]
 #. defaultMessage is:
 #. I agree
 #: messages.json
 msgid "cookiesBar.accept"
-msgstr ""
+msgstr "我同意"
 
 #. [cookiesBar.cookiesNotice]
 #. defaultMessage is:
 #. Assembl uses cookies to offer you the best possible experience. To use Assembl, you have to agree to the cookies policy of the debate.
 #: messages.json
 msgid "cookiesBar.cookiesNotice"
-msgstr ""
+msgstr "Assembly使用cookie为您提供最佳体验。如要使用Assembly，您必须同意有关辩论的Cookie政策。"
 
 #. [cookiesBar.seeCookiesPolicy]
 #. defaultMessage is:
 #. See more
 #: messages.json
 msgid "cookiesBar.seeCookiesPolicy"
-msgstr ""
+msgstr "查看更多"
 
 #. [cookiesPolicy.analytics]
 #. defaultMessage is:
 #. Analytics and customization
 #: messages.json
-#, fuzzy
 msgid "cookiesPolicy.analytics"
-msgstr "法律公告"
+msgstr "分析和定制"
 
 #. [cookiesPolicy.essential]
 #. defaultMessage is:
 #. Essential
 #: messages.json
-#, fuzzy
 msgid "cookiesPolicy.essential"
-msgstr "法律公告"
+msgstr "必要"
 
 #. [cookiesPolicy.headerTitle]
 #. defaultMessage is:
 #. Cookies
 #: messages.json
-#, fuzzy
 msgid "cookiesPolicy.headerTitle"
-msgstr "法律公告"
+msgstr "饼干"
 
 #. [cookiesPolicy.instructions]
 #. defaultMessage is:
 #. Select the cookies you wish to refuse below
 #: messages.json
-#, fuzzy
 msgid "cookiesPolicy.instructions"
-msgstr "法律公告"
+msgstr "在下面选择您要拒绝的Cookie"
 
 #. [cookiesPolicy.other]
 #. defaultMessage is:
 #. Other
 #: messages.json
-#, fuzzy
 msgid "cookiesPolicy.other"
-msgstr "法律公告"
+msgstr "其他"
 
 #. [cookiesPolicy.sectionTitle]
 #. defaultMessage is:
 #. Cookies policy
 #: messages.json
-#, fuzzy
 msgid "cookiesPolicy.sectionTitle"
-msgstr "法律公告"
+msgstr "Cookies政策"
 
 #. [cookiesPolicy.success]
 #. defaultMessage is:
 #. Your cookies configuration has been saved
 #: messages.json
-#, fuzzy
 msgid "cookiesPolicy.success"
-msgstr "法律公告"
+msgstr "您的Cookie配置已保存"
 
 #. [date.format]
 #. defaultMessage is:
 #. MMMM Do, YYYY
 #: messages.json
 msgid "date.format"
-msgstr "LL"
+msgstr "MMMM Do, YYYY"
 
 #. [date.format2]
 #. defaultMessage is:
 #. YYYY-MM-DD
 #: messages.json
 msgid "date.format2"
-msgstr "L"
+msgstr "YYYY-MM-DD"
 
 #. [date.format3]
 #. defaultMessage is:
 #. MM/DD/YYYY
 #: messages.json
-#, fuzzy
 msgid "date.format3"
-msgstr "LL"
+msgstr "MM / DD / YYYY"
 
 #. [debate.agree]
 #. defaultMessage is:
@@ -2750,412 +2564,400 @@ msgstr "我回答："
 #. defaultMessage is:
 #. Back
 #: messages.json
-#, fuzzy
 msgid "debate.back"
-msgstr "赞"
+msgstr "背部"
 
 #. [debate.brightMirror.commentFiction.cancel]
 #. defaultMessage is:
 #. Cancel
 #: messages.json
 msgid "debate.brightMirror.commentFiction.cancel"
-msgstr ""
+msgstr "取消"
 
 #. [debate.brightMirror.commentFiction.commentHelper]
 #. defaultMessage is:
 #. Comment
 #: messages.json
 msgid "debate.brightMirror.commentFiction.commentHelper"
-msgstr ""
+msgstr "评论"
 
 #. [debate.brightMirror.commentFiction.deleteComment]
 #. defaultMessage is:
 #. Delete this message
 #: messages.json
 msgid "debate.brightMirror.commentFiction.deleteComment"
-msgstr ""
+msgstr "删除此消息"
 
 #. [debate.brightMirror.commentFiction.deleteCommentBodyMessage]
 #. defaultMessage is:
 #. Are you sure you want to delete this message?
 #: messages.json
 msgid "debate.brightMirror.commentFiction.deleteCommentBodyMessage"
-msgstr ""
+msgstr "确定要删除此消息？"
 
 #. [debate.brightMirror.commentFiction.editComment]
 #. defaultMessage is:
 #. Edit this message
 #: messages.json
 msgid "debate.brightMirror.commentFiction.editComment"
-msgstr ""
+msgstr "编辑此消息"
 
 #. [debate.brightMirror.commentFiction.imageAlt]
 #. defaultMessage is:
 #. Let's talk illustration
 #: messages.json
 msgid "debate.brightMirror.commentFiction.imageAlt"
-msgstr ""
+msgstr "让我们来讨论插图"
 
 #. [debate.brightMirror.commentFiction.label]
 #. defaultMessage is:
 #. Comments
 #: messages.json
 msgid "debate.brightMirror.commentFiction.label"
-msgstr ""
+msgstr "评论"
 
 #. [debate.brightMirror.commentFiction.modal.instructionList]
 #. defaultMessage is:
 #. You can comment the text:
 #: messages.json
 msgid "debate.brightMirror.commentFiction.modal.instructionList"
-msgstr ""
+msgstr "您可以评论此文本："
 
 #. [debate.brightMirror.commentFiction.modal.instructionListOne]
 #. defaultMessage is:
 #. Underligne a quote
 #: messages.json
 msgid "debate.brightMirror.commentFiction.modal.instructionListOne"
-msgstr ""
+msgstr "突出显示报价"
 
 #. [debate.brightMirror.commentFiction.modal.instructionListThree]
 #. defaultMessage is:
 #. Write your comment, add an image or video and validate
 #: messages.json
 msgid "debate.brightMirror.commentFiction.modal.instructionListThree"
-msgstr ""
+msgstr "撰写评论、添加图片或视频并验证"
 
 #. [debate.brightMirror.commentFiction.modal.instructionListTwo]
 #. defaultMessage is:
 #. Click “Suggest” to open an input box
 #: messages.json
 msgid "debate.brightMirror.commentFiction.modal.instructionListTwo"
-msgstr ""
+msgstr "点击“建议”打开输入框"
 
 #. [debate.brightMirror.commentFiction.modal.title]
 #. defaultMessage is:
 #. Comment
 #: messages.json
 msgid "debate.brightMirror.commentFiction.modal.title"
-msgstr ""
+msgstr "评论"
 
 #. [debate.brightMirror.commentFiction.numberOfComments]
 #. defaultMessage is:
 #. %{count} messages
 #: messages.json
 msgid "debate.brightMirror.commentFiction.numberOfComments"
-msgstr ""
+msgstr "%{count}条消息"
 
 #. [debate.brightMirror.commentFiction.numberOfComments_0]
 #. defaultMessage is:
 #. No message at the moment
 #: messages.json
 msgid "debate.brightMirror.commentFiction.numberOfComments_0"
-msgstr ""
+msgstr "当前无消息"
 
 #. [debate.brightMirror.commentFiction.numberOfComments_1]
 #. defaultMessage is:
 #. %{count} message
 #: messages.json
 msgid "debate.brightMirror.commentFiction.numberOfComments_1"
-msgstr ""
+msgstr "%{count}条消息"
 
 #. [debate.brightMirror.commentFiction.placeholder]
 #. defaultMessage is:
 #. Join the debate...
 #: messages.json
 msgid "debate.brightMirror.commentFiction.placeholder"
-msgstr ""
+msgstr "加入讨论……"
 
 #. [debate.brightMirror.commentFiction.strongTitle]
 #. defaultMessage is:
 #. Let's talk!
 #: messages.json
 msgid "debate.brightMirror.commentFiction.strongTitle"
-msgstr ""
+msgstr "开始讨论！"
 
 #. [debate.brightMirror.commentFiction.submit]
 #. defaultMessage is:
 #. Comment
 #: messages.json
 msgid "debate.brightMirror.commentFiction.submit"
-msgstr ""
+msgstr "评论"
 
 #. [debate.brightMirror.commentFiction.title]
 #. defaultMessage is:
 #. Comment or debate on the text above
 #: messages.json
 msgid "debate.brightMirror.commentFiction.title"
-msgstr ""
+msgstr "评论或讨论以上文本"
 
 #. [debate.brightMirror.deleteFiction]
 #. defaultMessage is:
 #. Delete your text
 #: messages.json
 msgid "debate.brightMirror.deleteFiction"
-msgstr ""
+msgstr "删除您的文本"
 
 #. [debate.brightMirror.deleteFictionModalBody]
 #. defaultMessage is:
 #. Are you sure you want to delete this text?
 #: messages.json
 msgid "debate.brightMirror.deleteFictionModalBody"
-msgstr ""
+msgstr "确定要删除此文本？"
 
 #. [debate.brightMirror.deleteFictionSuccessMsg]
 #. defaultMessage is:
 #. Your text was deleted
 #: messages.json
 msgid "debate.brightMirror.deleteFictionSuccessMsg"
-msgstr ""
+msgstr "您的文本已删除"
 
 #. [debate.brightMirror.draftEmptyTitle]
 #. defaultMessage is:
 #. Untitled
 #: messages.json
 msgid "debate.brightMirror.draftEmptyTitle"
-msgstr ""
+msgstr "未命名"
 
 #. [debate.brightMirror.draftLabel]
 #. defaultMessage is:
 #. Draft
 #: messages.json
 msgid "debate.brightMirror.draftLabel"
-msgstr ""
+msgstr "草稿"
 
 #. [debate.brightMirror.draftSuccessMsg]
 #. defaultMessage is:
 #. Your text has been saved successfully.
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.draftSuccessMsg"
-msgstr "感谢您的参与。您的评论已发送！"
+msgstr "您的文字已成功保存。"
 
 #. [debate.brightMirror.editFiction]
 #. defaultMessage is:
 #. Edit your text
 #: messages.json
 msgid "debate.brightMirror.editFiction"
-msgstr ""
+msgstr "编辑您的文本"
 
 #. [debate.brightMirror.fiction]
 #. defaultMessage is:
 #. text
 #: messages.json
 msgid "debate.brightMirror.fiction"
-msgstr ""
+msgstr "文本"
 
 #. [debate.brightMirror.fillBodyLabel]
 #. defaultMessage is:
 #. Write your text
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.fillBodyLabel"
-msgstr "请填写一条评论"
+msgstr "写你的文字"
 
 #. [debate.brightMirror.fillEitherTitleContent]
 #. defaultMessage is:
 #. Please, write a title or a text
 #: messages.json
 msgid "debate.brightMirror.fillEitherTitleContent"
-msgstr ""
+msgstr "请填写一个标题或一个文本"
 
 #. [debate.brightMirror.noAuthorSpecified]
 #. defaultMessage is:
 #. No author specified
 #: messages.json
 msgid "debate.brightMirror.noAuthorSpecified"
-msgstr ""
+msgstr "未指定作者"
 
 #. [debate.brightMirror.noContentSpecified]
 #. defaultMessage is:
 #. No content specified
 #: messages.json
 msgid "debate.brightMirror.noContentSpecified"
-msgstr ""
+msgstr "未指定内容"
 
 #. [debate.brightMirror.noTitleSpecified]
 #. defaultMessage is:
 #. No title specified
 #: messages.json
 msgid "debate.brightMirror.noTitleSpecified"
-msgstr ""
+msgstr "未指定标题"
 
 #. [debate.brightMirror.numberOfFictions]
 #. defaultMessage is:
 #. List of scenarios
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.numberOfFictions"
-msgstr "%{count}回应"
+msgstr "方案清单"
 
 #. [debate.brightMirror.numberOfFictions_0]
 #. defaultMessage is:
 #. No published scenarios
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.numberOfFictions_0"
-msgstr "%{count}回应"
+msgstr "没有发布的方案"
 
 #. [debate.brightMirror.numberOfResponses]
 #. defaultMessage is:
 #. %{count} responses
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.numberOfResponses"
-msgstr "此贴有%{count}条回复"
+msgstr "％{count}个回应"
 
 #. [debate.brightMirror.numberOfResponses_0]
 #. defaultMessage is:
 #. No response
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.numberOfResponses_0"
-msgstr "此帖没有回复"
+msgstr "没有反应"
 
 #. [debate.brightMirror.numberOfResponses_1]
 #. defaultMessage is:
 #. %{count} response
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.numberOfResponses_1"
-msgstr "此帖子的第%{count}条回复"
+msgstr "％{count}条回复"
 
 #. [debate.brightMirror.postSuccessMsg]
 #. defaultMessage is:
 #. Thanks for your participation. Your text has been published successfully!
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.postSuccessMsg"
-msgstr "感谢您的参与。您的评论已发送！"
+msgstr "感谢您的参与。 您的文字已成功发布！"
 
 #. [debate.brightMirror.saveDraft]
 #. defaultMessage is:
 #. Save
 #: messages.json
 msgid "debate.brightMirror.saveDraft"
-msgstr ""
+msgstr "保存"
 
 #. [debate.brightMirror.sentiment.dislike]
 #. defaultMessage is:
 #. Scary
 #: messages.json
 msgid "debate.brightMirror.sentiment.dislike"
-msgstr ""
+msgstr "提心吊胆"
 
 #. [debate.brightMirror.sentiment.dontUnderstand]
 #. defaultMessage is:
 #. Strengthen the plot
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.sentiment.dontUnderstand"
-msgstr "不明白"
+msgstr "加强情节"
 
 #. [debate.brightMirror.sentiment.like]
 #. defaultMessage is:
 #. Inspiring!
 #: messages.json
 msgid "debate.brightMirror.sentiment.like"
-msgstr ""
+msgstr "鼓舞人心！"
 
 #. [debate.brightMirror.sentiment.moreInfo]
 #. defaultMessage is:
 #. Enrich the style
 #: messages.json
 msgid "debate.brightMirror.sentiment.moreInfo"
-msgstr ""
+msgstr "让风格更加丰富"
 
 #. [debate.brightMirror.shareFiction]
 #. defaultMessage is:
 #. Share a short story
 #: messages.json
 msgid "debate.brightMirror.shareFiction"
-msgstr ""
+msgstr "分享简短的故事"
 
 #. [debate.brightMirror.sideComment.commentLabel]
 #. defaultMessage is:
 #. Your comment
 #: messages.json
 msgid "debate.brightMirror.sideComment.commentLabel"
-msgstr ""
+msgstr "您的评论"
 
 #. [debate.brightMirror.sideComment.commenterSingleParticipation]
 #. defaultMessage is:
 #. 1 participant commented a quote.
 #: messages.json
 msgid "debate.brightMirror.sideComment.commenterSingleParticipation"
-msgstr ""
+msgstr "一名参与者评论了报价。"
 
 #. [debate.brightMirror.sideComment.commentersParticipation]
 #. defaultMessage is:
 #. %{count} participants commented quotes.
 #: messages.json
 msgid "debate.brightMirror.sideComment.commentersParticipation"
-msgstr ""
+msgstr "%{count}名参与者评论了报价。"
 
 #. [debate.brightMirror.sideComment.commentersParticipation_1]
 #. defaultMessage is:
 #. %{count} participant commented quotes.
 #: messages.json
 msgid "debate.brightMirror.sideComment.commentersParticipation_1"
-msgstr ""
+msgstr "%{count}名参与者评论了报价。"
 
 #. [debate.brightMirror.sideComment.confirmDeleteMsg]
 #. defaultMessage is:
 #. Are you sure you would like to delete this comment?
 #: messages.json
 msgid "debate.brightMirror.sideComment.confirmDeleteMsg"
-msgstr ""
+msgstr "确定要删除此评论？"
 
 #. [debate.brightMirror.sideComment.deleteSuccessMsg]
 #. defaultMessage is:
 #. Your comment has been deleted successfully!
 #: messages.json
 msgid "debate.brightMirror.sideComment.deleteSuccessMsg"
-msgstr ""
+msgstr "您的评论已成功删除！"
 
 #. [debate.brightMirror.sideComment.deleteTooltip]
 #. defaultMessage is:
 #. Delete
 #: messages.json
 msgid "debate.brightMirror.sideComment.deleteTooltip"
-msgstr ""
+msgstr "删除"
 
 #. [debate.brightMirror.sideComment.editSuccessMsg]
 #. defaultMessage is:
 #. Your comment has been edited successfully!
 #: messages.json
 msgid "debate.brightMirror.sideComment.editSuccessMsg"
-msgstr ""
+msgstr "您的评论已成功编辑！"
 
 #. [debate.brightMirror.sideComment.editTooltip]
 #. defaultMessage is:
 #. Edit
 #: messages.json
 msgid "debate.brightMirror.sideComment.editTooltip"
-msgstr ""
+msgstr "编辑"
 
 #. [debate.brightMirror.sideComment.submitSuccessMsg]
 #. defaultMessage is:
 #. Your comment has been published successfully!
 #: messages.json
 msgid "debate.brightMirror.sideComment.submitSuccessMsg"
-msgstr ""
+msgstr "您的评论已成功发布！"
 
 #. [debate.brightMirror.startFictionLabel]
 #. defaultMessage is:
 #. Write my text
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.startFictionLabel"
-msgstr "开始一个新线程"
+msgstr "写我的文字"
 
 #. [debate.brightMirror.suggest]
 #. defaultMessage is:
 #. Suggest
 #: messages.json
-#, fuzzy
 msgid "debate.brightMirror.suggest"
-msgstr "标题"
+msgstr "建议"
 
 #. [debate.confirmDeletionBody]
 #. defaultMessage is:
@@ -3189,17 +2991,15 @@ msgstr "确认删除"
 #. defaultMessage is:
 #. Are you sure you want to reject this message?
 #: messages.json
-#, fuzzy
 msgid "debate.confirmRefusalBody"
-msgstr "您确定要删除这条消息吗？"
+msgstr "您确定要拒绝此消息吗？"
 
 #. [debate.confirmRefusalButton]
 #. defaultMessage is:
 #. Reject
 #: messages.json
-#, fuzzy
 msgid "debate.confirmRefusalButton"
-msgstr "取消"
+msgstr "拒绝"
 
 #. [debate.copyLink]
 #. defaultMessage is:
@@ -3219,9 +3019,8 @@ msgstr "删除此消息"
 #. defaultMessage is:
 #. Reject this message
 #: messages.json
-#, fuzzy
 msgid "debate.deniedMessage"
-msgstr "删除此消息"
+msgstr "拒绝此消息"
 
 #. [debate.disagree]
 #. defaultMessage is:
@@ -3297,9 +3096,8 @@ msgstr "赞"
 #. defaultMessage is:
 #. Link copied
 #: messages.json
-#, fuzzy
 msgid "debate.linkCopied"
-msgstr "已复制链接"
+msgstr "链接已复制"
 
 #. [debate.moreInfo]
 #. defaultMessage is:
@@ -3317,7 +3115,7 @@ msgstr "此阶段已经结束。您已不能作答。"
 
 #. [debate.notStarted]
 #. defaultMessage is:
-#. The "%{phaseName}" phase has not started. Please come back from 
+#. The "%{phaseName}" phase has not started. Please come back from
 #: messages.json
 msgid "debate.notStarted"
 msgstr "此%{phaseName}阶段还未开始。请返回"
@@ -3333,9 +3131,8 @@ msgstr "发布"
 #. defaultMessage is:
 #. Proposal awaiting moderation
 #: messages.json
-#, fuzzy
 msgid "debate.postAwaitingModeration"
-msgstr "不明白"
+msgstr "正在等待审核的提案"
 
 #. [debate.question.backToQuestions]
 #. defaultMessage is:
@@ -3356,91 +3153,91 @@ msgstr "您还可以输入%{nbCharacters}个字符"
 #. Information on keywords
 #: messages.json
 msgid "debate.semanticAnalysis.informationKeyword"
-msgstr ""
+msgstr "关键词信息"
 
 #. [debate.semanticAnalysis.keywordCloud]
 #. defaultMessage is:
 #. Keyword cloud
 #: messages.json
 msgid "debate.semanticAnalysis.keywordCloud"
-msgstr ""
+msgstr "关键词云"
 
 #. [debate.semanticAnalysis.keywordCloudDefinition]
 #. defaultMessage is:
 #. The following keyword cloud is a visual representation of the most frequently used keywords in the debate (or "in the conversations related to the theme being addressed" when the analysis is done on a particular thematic). The importance of each keyword is shown with font size.
 #: messages.json
 msgid "debate.semanticAnalysis.keywordCloudDefinition"
-msgstr ""
+msgstr "以下关键词云为讨论中最常用的关键词的视觉再现（或针对特定主题进行分析时“在与主题相关的对话中”）。 每个关键词的重要性通过字体大小显示。"
 
 #. [debate.semanticAnalysis.long]
 #. defaultMessage is:
 #. Analysis
 #: messages.json
 msgid "debate.semanticAnalysis.long"
-msgstr ""
+msgstr "分析"
 
 #. [debate.semanticAnalysis.noKeywordSelected]
 #. defaultMessage is:
 #. Select your keyword
 #: messages.json
 msgid "debate.semanticAnalysis.noKeywordSelected"
-msgstr ""
+msgstr "选择您的关键词"
 
 #. [debate.semanticAnalysis.numberKeyword]
 #. defaultMessage is:
 #. Number of keywords
 #: messages.json
 msgid "debate.semanticAnalysis.numberKeyword"
-msgstr ""
+msgstr "关键词数量"
 
 #. [debate.semanticAnalysis.occurence]
 #. defaultMessage is:
 #. Occurence
 #: messages.json
 msgid "debate.semanticAnalysis.occurence"
-msgstr ""
+msgstr "出现率"
 
 #. [debate.semanticAnalysis.occurenceDefinition]
 #. defaultMessage is:
 #. frequency of keywords throughout the debate or throughout the discussions related to the theme being addressed.
 #: messages.json
 msgid "debate.semanticAnalysis.occurenceDefinition"
-msgstr ""
+msgstr "关键词在辩论或与主题相关的讨论中出现的频率。"
 
 #. [debate.semanticAnalysis.relevance]
 #. defaultMessage is:
 #. Relevance
 #: messages.json
 msgid "debate.semanticAnalysis.relevance"
-msgstr ""
+msgstr "相关性"
 
 #. [debate.semanticAnalysis.relevanceDefinition]
 #. defaultMessage is:
 #. measures how important the keyword is in order to understand the general meaning of the text. The score varies from 0 to 1, from weak to strong.
 #: messages.json
 msgid "debate.semanticAnalysis.relevanceDefinition"
-msgstr ""
+msgstr "衡量关键词的重要性以理解文本的一般含义。分数范围从0到1，其中0为最弱，1为最强。"
 
 #. [debate.semanticAnalysis.sentimentAnalysis]
 #. defaultMessage is:
 #. Sentiment analysis
 #: messages.json
 msgid "debate.semanticAnalysis.sentimentAnalysis"
-msgstr ""
+msgstr "情感分析"
 
 #. [debate.semanticAnalysis.sentimentAnalysisDefinition]
 #. defaultMessage is:
 #. The sentiment analysis score qualifies the positive or negative tonality of the discussions in the debate (or in the discussions related to the theme being addressed).
 #: messages.json
 msgid "debate.semanticAnalysis.sentimentAnalysisDefinition"
-msgstr ""
+msgstr "情绪分析得分符合辩论（或与讨论主题相关的讨论）中积极或消极的讨论基调。"
 
 #. [debate.semanticAnalysis.short]
 #. defaultMessage is:
 #. Semantic
 #: messages.json
 msgid "debate.semanticAnalysis.short"
-msgstr ""
+msgstr "语义"
 
 #. [debate.share]
 #. defaultMessage is:
@@ -3453,9 +3250,8 @@ msgstr "分享"
 #. defaultMessage is:
 #. Share the link via email
 #: messages.json
-#, fuzzy
 msgid "debate.shareMail"
-msgstr "分享"
+msgstr "通过电子邮件共享链接"
 
 #. [debate.sharePost]
 #. defaultMessage is:
@@ -3503,17 +3299,15 @@ msgstr "%{closedPhaseName}阶段已经结束。"
 #. defaultMessage is:
 #. Load recent proposals
 #: messages.json
-#, fuzzy
 msgid "debate.survey.loadRecentPosts"
-msgstr "回应"
+msgstr "加载最新建议"
 
 #. [debate.survey.moderateProposalsTitle]
 #. defaultMessage is:
 #. Moderate these points of view
 #: messages.json
-#, fuzzy
 msgid "debate.survey.moderateProposalsTitle"
-msgstr "更多观点"
+msgstr "适度这些观点"
 
 #. [debate.survey.moreProposals]
 #. defaultMessage is:
@@ -3533,9 +3327,8 @@ msgstr "目前没有观点。成为第一个发言者！"
 #. defaultMessage is:
 #. See all pending points of view
 #: messages.json
-#, fuzzy
 msgid "debate.survey.pendingProposals"
-msgstr "目前没有观点。成为第一个发言者！"
+msgstr "查看所有未决的观点"
 
 #. [debate.survey.postSuccess]
 #. defaultMessage is:
@@ -3548,9 +3341,8 @@ msgstr "感谢您的参与。您的提议已经成功发送！"
 #. defaultMessage is:
 #. Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animation team.
 #: messages.json
-#, fuzzy
 msgid "debate.survey.postToBeValidated"
-msgstr "您同意这些观点吗？"
+msgstr "您的贡献已保存。 为确保辩论的质量，动画团队对其进行审查后，所有参与者都可以看到该辩论。"
 
 #. [debate.survey.proposalsTitle]
 #. defaultMessage is:
@@ -3605,9 +3397,8 @@ msgstr "提交"
 #. defaultMessage is:
 #. Thematic %{count}
 #: messages.json
-#, fuzzy
 msgid "debate.survey.thematicNumerotation"
-msgstr "回应"
+msgstr "主题％{count}"
 
 #. [debate.survey.themesTitle]
 #. defaultMessage is:
@@ -3627,173 +3418,155 @@ msgstr "请填写您的观点"
 #. defaultMessage is:
 #. The synthesis body
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.body"
-msgstr "合成"
+msgstr "合成体"
 
 #. [debate.syntheses.confirmDeletionBody]
 #. defaultMessage is:
 #. Are you sure you want to delete this synthesis?
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.confirmDeletionBody"
-msgstr "您确定要删除这条消息吗？"
+msgstr "您确定要删除此综合吗？"
 
 #. [debate.syntheses.createNewSynthesis]
 #. defaultMessage is:
 #. Create a new synthesis
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.createNewSynthesis"
-msgstr "分享此合成"
+msgstr "创建一个新的综合"
 
 #. [debate.syntheses.deleteSuccessMessage]
 #. defaultMessage is:
 #. The synthesis has been successfully deleted
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.deleteSuccessMessage"
-msgstr "删除此消息"
+msgstr "综合已成功删除"
 
 #. [debate.syntheses.deleteSynthesisTooltip]
 #. defaultMessage is:
 #. Delete the synthesis
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.deleteSynthesisTooltip"
-msgstr "分享此合成"
+msgstr "删除综合"
 
 #. [debate.syntheses.editSynthesis]
 #. defaultMessage is:
 #. Edit the synthesis
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.editSynthesis"
-msgstr "分享此合成"
+msgstr "编辑综合"
 
 #. [debate.syntheses.editSynthesisTooltip]
 #. defaultMessage is:
 #. Edit the synthesis
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.editSynthesisTooltip"
-msgstr "分享此合成"
+msgstr "编辑综合"
 
 #. [debate.syntheses.picture]
 #. defaultMessage is:
 #. Picture of the synthesis' frame
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.picture"
-msgstr "合成"
+msgstr "综合框的图片"
 
 #. [debate.syntheses.pictureHelper]
 #. defaultMessage is:
 #. This is the picture that will be shown to illustrate your synthesis in the syntheses page
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.pictureHelper"
-msgstr "合成"
+msgstr "这是将在合成页面中显示以说明您的合成的图片"
 
 #. [debate.syntheses.publishedOn]
 #. defaultMessage is:
-#. Published on 
+#. Published on
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.publishedOn"
-msgstr "合成"
+msgstr "发表于"
 
 #. [debate.syntheses.save]
 #. defaultMessage is:
 #. Save
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.save"
-msgstr "合成"
+msgstr "救"
 
 #. [debate.syntheses.saveAndBackDraft]
 #. defaultMessage is:
 #. Save and back to draft
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.saveAndBackDraft"
-msgstr "合成"
+msgstr "保存并返回草稿"
 
 #. [debate.syntheses.saveAndPost]
 #. defaultMessage is:
 #. Save and publish
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.saveAndPost"
-msgstr "合成"
+msgstr "保存并发布"
 
 #. [debate.syntheses.saveDraft]
 #. defaultMessage is:
 #. Save as draft
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.saveDraft"
-msgstr "合成"
+msgstr "保存为草稿"
 
 #. [debate.syntheses.successSave]
 #. defaultMessage is:
 #. Synthesis successfully saved
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.successSave"
-msgstr "合成"
+msgstr "综合成功保存"
 
 #. [debate.syntheses.summary]
 #. defaultMessage is:
 #. Syntheses summary
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.summary"
-msgstr "合成"
+msgstr "综合总结"
 
 #. [debate.syntheses.title]
 #. defaultMessage is:
 #. Title of the synthesis
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.title"
-msgstr "合成"
+msgstr "综合标题"
 
 #. [debate.syntheses.url]
 #. defaultMessage is:
 #. URL of the synthesis
 #: messages.json
-#, fuzzy
 msgid "debate.syntheses.url"
-msgstr "合成"
+msgstr "综合网址"
 
 #. [debate.tagOnPost.alreadyAddedWarningMessage]
 #. defaultMessage is:
 #. Already added
 #: messages.json
 msgid "debate.tagOnPost.alreadyAddedWarningMessage"
-msgstr ""
+msgstr "已添加"
 
 #. [debate.tagOnPost.suggestionContainerTitle]
 #. defaultMessage is:
 #. Suggested keywords:
 #: messages.json
 msgid "debate.tagOnPost.suggestionContainerTitle"
-msgstr ""
+msgstr "建议关键词："
 
 #. [debate.tagOnPost.tagContainerAdminTitle]
 #. defaultMessage is:
 #. Add post-related keywords:
 #: messages.json
 msgid "debate.tagOnPost.tagContainerAdminTitle"
-msgstr ""
+msgstr "添加与帖子相关的关键词："
 
 #. [debate.tagOnPost.tagContainerTitle]
 #. defaultMessage is:
 #. Keywords in post:
 #: messages.json
 msgid "debate.tagOnPost.tagContainerTitle"
-msgstr ""
+msgstr "帖子中的关键词："
 
 #. [debate.themes]
 #. defaultMessage is:
@@ -3855,9 +3628,8 @@ msgstr "浏览所有消息"
 #. defaultMessage is:
 #. Guidelines
 #: messages.json
-#, fuzzy
 msgid "debate.thread.guidelines"
-msgstr "这条帖子和下方主题有关："
+msgstr "指导方针"
 
 #. [debate.thread.linkIdea]
 #. defaultMessage is:
@@ -3954,9 +3726,8 @@ msgstr "感谢您的参与。您的评论已发送！"
 #. defaultMessage is:
 #. Your contribution has been saved. To insure the quality of the debate, it will be visible to all participants once it has been reviewed by the animators.
 #: messages.json
-#, fuzzy
 msgid "debate.thread.postToBeValidated"
-msgstr "已编辑"
+msgstr "您的贡献已保存。 为了确保辩论的质量，动画制作人员对其进行审查后，所有参与者都可以看到该辩论。"
 
 #. [debate.thread.seeSubIdeas]
 #. defaultMessage is:
@@ -3990,9 +3761,8 @@ msgstr "开始一个新线程"
 #. defaultMessage is:
 #. Summary
 #: messages.json
-#, fuzzy
 msgid "debate.thread.summary"
-msgstr "参见%{count}子主题"
+msgstr "摘要"
 
 #. [debate.thread.translate]
 #. defaultMessage is:
@@ -4033,9 +3803,8 @@ msgstr "我不想仅翻译此消息"
 #. defaultMessage is:
 #. Vote for the proposals
 #: messages.json
-#, fuzzy
 msgid "debate.thread.voteForProposals"
-msgstr "更多观点"
+msgstr "为提案投票"
 
 #. [debate.toAnswer]
 #. defaultMessage is:
@@ -4048,17 +3817,15 @@ msgstr "回答"
 #. defaultMessage is:
 #. Accept this message
 #: messages.json
-#, fuzzy
 msgid "debate.validateMessage"
-msgstr "删除此消息"
+msgstr "接受此讯息"
 
 #. [debate.validateSuccess]
 #. defaultMessage is:
 #. The contribution has been validated. It is now visible by all participants.
 #: messages.json
-#, fuzzy
 msgid "debate.validateSuccess"
-msgstr "感谢您的参与。您的评论已发送！"
+msgstr "贡献已经过验证。 现在所有参与者都可以看到它。"
 
 #. [debate.vote]
 #. defaultMessage is:
@@ -4212,30 +3979,28 @@ msgstr "投票"
 #. Delete
 #: messages.json
 msgid "delete"
-msgstr ""
+msgstr "接受"
 
 #. [deleteConfirmation.confirmDeletionBody]
 #. defaultMessage is:
 #. Are you sure that you wish to delete this item?
 #: messages.json
-#, fuzzy
 msgid "deleteConfirmation.confirmDeletionBody"
-msgstr "您确定要删除这条消息吗？"
+msgstr "您确定要删除该项目吗？"
 
 #. [deleteConfirmation.confirmDeletionTitle]
 #. defaultMessage is:
 #. Delete an item
 #: messages.json
-#, fuzzy
 msgid "deleteConfirmation.confirmDeletionTitle"
-msgstr "确认删除"
+msgstr "删除项目"
 
 #. [deletedUser]
 #. defaultMessage is:
 #. Deleted user account
 #: messages.json
 msgid "deletedUser"
-msgstr ""
+msgstr "删除用户账号"
 
 #. [duration.format]
 #. defaultMessage is:
@@ -4270,7 +4035,7 @@ msgstr "该字段为必填项。"
 #. Cookies
 #: messages.json
 msgid "footer.cookiesPolicy"
-msgstr ""
+msgstr "Cookies"
 
 #. [footer.legalNotice]
 #. defaultMessage is:
@@ -4284,7 +4049,7 @@ msgstr "法律公告"
 #. Privacy Policy
 #: messages.json
 msgid "footer.privacyPolicy"
-msgstr ""
+msgstr "隐私政策"
 
 #. [footer.socialMedias]
 #. defaultMessage is:
@@ -4304,46 +4069,43 @@ msgstr "条款和条件"
 #. defaultMessage is:
 #. User guidelines
 #: messages.json
-#, fuzzy
 msgid "footer.userGuidelines"
-msgstr "条款和条件"
+msgstr "用户指南"
 
 #. [form.select.newOption]
 #. defaultMessage is:
 #. Create '%{option}'
 #: messages.json
 msgid "form.select.newOption"
-msgstr ""
+msgstr "创建'%{option}'"
 
 #. [form.select.noOptions]
 #. defaultMessage is:
 #. No options
 #: messages.json
 msgid "form.select.noOptions"
-msgstr ""
+msgstr "无任何选项"
 
 #. [form.select.placeholder]
 #. defaultMessage is:
 #. Select...
 #: messages.json
-#, fuzzy
 msgid "form.select.placeholder"
-msgstr "搜索"
+msgstr "选择…"
 
 #. [globalError]
 #. defaultMessage is:
 #. Something went wrong. Please try again later.
 #: messages.json
 msgid "globalError"
-msgstr ""
+msgstr "发生了错误。请稍后重试。"
 
 #. [harvesting.confirm]
 #. defaultMessage is:
 #. Confirm
 #: messages.json
-#, fuzzy
 msgid "harvesting.confirm"
-msgstr "现在"
+msgstr "确认"
 
 #. [harvesting.confirmDeleteExtract]
 #. defaultMessage is:
@@ -4384,40 +4146,36 @@ msgstr "启用标记模式"
 #. defaultMessage is:
 #. %{extractNumber} extracts harvested on this message
 #: messages.json
-#, fuzzy
 msgid "harvesting.harvestedExtractNumbers"
-msgstr "删除摘要"
+msgstr "％{extractNumber}从此消息中收获的摘录"
 
 #. [harvesting.harvestedExtractNumbers_0]
 #. defaultMessage is:
 #. %{extractNumber} extract harvested on this message
 #: messages.json
-#, fuzzy
 msgid "harvesting.harvestedExtractNumbers_0"
-msgstr "删除摘要"
+msgstr "此邮件中收集到的％{extractNumber}摘录"
 
 #. [harvesting.harvestedExtractNumbers_1]
 #. defaultMessage is:
 #. %{extractNumber} extract harvested on this message
 #: messages.json
-#, fuzzy
 msgid "harvesting.harvestedExtractNumbers_1"
-msgstr "删除摘要"
+msgstr "此邮件中收集到的％{extractNumber}摘录"
 
 #. [harvesting.harvesting]
 #. defaultMessage is:
 #. Harvesting
 #: messages.json
 msgid "harvesting.harvesting"
-msgstr "标记"
+msgstr "收割"
 
 #. [harvesting.harvestingConfirmed]
 #. defaultMessage is:
 #. The extract was confirmed successfully.
 #: messages.json
-#, fuzzy
 msgid "harvesting.harvestingConfirmed"
-msgstr "标记"
+msgstr "提取物已成功确认。"
 
 #. [harvesting.harvestingDeleted]
 #. defaultMessage is:
@@ -4430,9 +4188,8 @@ msgstr "摘要已成功删除。"
 #. defaultMessage is:
 #. The extract is waiting for validation.
 #: messages.json
-#, fuzzy
 msgid "harvesting.harvestingSubmitted"
-msgstr "摘要已成功更新。"
+msgstr "提取程序正在等待验证。"
 
 #. [harvesting.harvestingSuccess]
 #. defaultMessage is:
@@ -4445,9 +4202,8 @@ msgstr "摘要已成功更新。"
 #. defaultMessage is:
 #. The extract was validated successfully.
 #: messages.json
-#, fuzzy
 msgid "harvesting.harvestingValidated"
-msgstr "摘要已成功删除。"
+msgstr "提取物已成功验证。"
 
 #. [harvesting.inProgress]
 #. defaultMessage is:
@@ -4502,105 +4258,92 @@ msgstr "自动获得赋权"
 #. defaultMessage is:
 #. Reject
 #: messages.json
-#, fuzzy
 msgid "harvesting.reject"
-msgstr "移动"
+msgstr "拒绝"
 
 #. [harvesting.submit]
 #. defaultMessage is:
 #. Submit
 #: messages.json
-#, fuzzy
 msgid "harvesting.submit"
-msgstr "移动"
+msgstr "提交"
 
 #. [harvesting.tags.addTagSuccessMsg]
 #. defaultMessage is:
 #. Tag "%{tag}" has been successfully added.
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.addTagSuccessMsg"
-msgstr "摘要已成功更新。"
+msgstr "标记\"％{tag}\"已成功添加。"
 
 #. [harvesting.tags.cancel]
 #. defaultMessage is:
 #. Cancel
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.cancel"
-msgstr "现在"
+msgstr "取消"
 
 #. [harvesting.tags.deleteConfirmation.confirmDeletionBody]
 #. defaultMessage is:
 #. Are you sure that you wish to delete this tag?
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.deleteConfirmation.confirmDeletionBody"
-msgstr "您确定要删除这条消息吗？"
+msgstr "您确定要删除该标签吗？"
 
 #. [harvesting.tags.deleteConfirmation.confirmDeletionTitle]
 #. defaultMessage is:
 #. Delete the tag "%{tag}"
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.deleteConfirmation.confirmDeletionTitle"
-msgstr "确认删除"
+msgstr "删除标签“％{tag}”"
 
 #. [harvesting.tags.edit]
 #. defaultMessage is:
 #. Click to edit the tag "%{tag}"
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.edit"
-msgstr "编辑摘要"
+msgstr "点击以编辑标签“％{tag}”"
 
 #. [harvesting.tags.label]
 #. defaultMessage is:
 #. Tags
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.label"
-msgstr "标记已验证"
+msgstr "标签"
 
 #. [harvesting.tags.removeTagSuccessMsg]
 #. defaultMessage is:
 #. Tag "%{tag}" has been successfully removed.
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.removeTagSuccessMsg"
-msgstr "摘要已成功更新。"
+msgstr "标记“％{tag}”已成功删除。"
 
 #. [harvesting.tags.select.newOption]
 #. defaultMessage is:
 #. Create this tag '%{option}'
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.select.newOption"
-msgstr "通过操作赋权"
+msgstr "创建此标签’％{option}’"
 
 #. [harvesting.tags.select.noOptions]
 #. defaultMessage is:
 #. No tags
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.select.noOptions"
-msgstr "通过操作赋权"
+msgstr "没有标签"
 
 #. [harvesting.tags.select.placeholder]
 #. defaultMessage is:
 #. Select tags
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.select.placeholder"
-msgstr "摘要已成功删除。"
+msgstr "选择标签"
 
 #. [harvesting.tags.validate]
 #. defaultMessage is:
 #. Validate
 #: messages.json
-#, fuzzy
 msgid "harvesting.tags.validate"
-msgstr "标记已验证"
+msgstr "验证"
 
 #. [harvesting.validateExtract]
 #. defaultMessage is:
@@ -4621,7 +4364,7 @@ msgstr "标记已验证"
 #. here
 #: messages.json
 msgid "here"
-msgstr ""
+msgstr "此处"
 
 #. [home.accessButton]
 #. defaultMessage is:
@@ -4877,24 +4620,24 @@ msgstr "简介"
 
 #. [legalContentsModal.iAccept]
 #. defaultMessage is:
-#. I have read and accepted 
+#. I have read and accepted
 #: messages.json
 msgid "legalContentsModal.iAccept"
-msgstr ""
+msgstr "我已阅读并接受"
 
 #. [legalContentsModal.ofThePlatform]
 #. defaultMessage is:
-#.  of the platform.
+#. of the platform.
 #: messages.json
 msgid "legalContentsModal.ofThePlatform"
-msgstr ""
+msgstr "平台。"
 
 #. [legalContentsModal.title]
 #. defaultMessage is:
 #. Accept the legal contents
 #: messages.json
 msgid "legalContentsModal.title"
-msgstr ""
+msgstr "接受法律内容"
 
 #. [legalNotice.headerTitle]
 #. defaultMessage is:
@@ -4922,10 +4665,7 @@ msgstr "您的账号已创立"
 #. A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. Check your spam folder if you did not receive a confirmation e-mail.
 #: messages.json
 msgid "login.accountCreatedMsg"
-msgstr ""
-"一封账号确认邮件已经发送给您的账号，应该会在几分钟内出现在您的邮箱中。邮件里"
-"有个确认链接，请点击此链接以确认您的电子邮件地址。如果您没有收到此确认邮件，"
-"请查看您的垃圾邮件夹。"
+msgstr "一封账号确认邮件已经发送给您的账号，应该会在几分钟内出现在您的邮箱中。邮件里有个确认链接，请点击此链接以确认您的电子邮件地址。如果您没有收到此确认邮件，请查看您的垃圾邮件夹。"
 
 #. [login.alreadyAccount]
 #. defaultMessage is:
@@ -4980,9 +4720,8 @@ msgstr "您输入的用户名已经存在"
 #. defaultMessage is:
 #. A figure
 #: messages.json
-#, fuzzy
 msgid "login.figurePassword"
-msgstr "新密码"
+msgstr "一个数字"
 
 #. [login.forgotPwd]
 #. defaultMessage is:
@@ -5023,9 +4762,8 @@ msgstr "您输入的电子邮箱无效"
 #. defaultMessage is:
 #. 9 characters
 #: messages.json
-#, fuzzy
 msgid "login.lengthPassword"
-msgstr "新密码"
+msgstr "9个字符"
 
 #. [login.login]
 #. defaultMessage is:
@@ -5059,9 +4797,8 @@ msgstr "想要试试社交媒体吗？"
 #. defaultMessage is:
 #. A lowercase
 #: messages.json
-#, fuzzy
 msgid "login.lowerCasePassword"
-msgstr "新密码"
+msgstr "小写"
 
 #. [login.newPassword]
 #. defaultMessage is:
@@ -5088,9 +4825,8 @@ msgstr "没有账号？"
 #. defaultMessage is:
 #. Note: The new password must be different than the last 5 passwords.
 #: messages.json
-#, fuzzy
 msgid "login.oldPasswordWarning"
-msgstr "密码"
+msgstr "注意：新密码必须与最近的5个密码不同。"
 
 #. [login.password]
 #. defaultMessage is:
@@ -5124,9 +4860,8 @@ msgstr "谢谢！邮件已经发送到您的账号。请务必检查您的垃圾
 #. defaultMessage is:
 #. Your password must contain at least:
 #: messages.json
-#, fuzzy
 msgid "login.passwordRequirementIntro"
-msgstr "糟糕！我们出现了一些问题。请稍候再试。"
+msgstr "您的密码必须至少包含："
 
 #. [login.resend]
 #. defaultMessage is:
@@ -5154,9 +4889,7 @@ msgstr "要求更改密码"
 #. We have sent you an email with a temporary connection link. Please use that link to log in and change your password. Make sure to check your spam folder if an email is not in your inbox
 #: messages.json
 msgid "login.sendPwdMsg"
-msgstr ""
-"我们向您发送了一封包含临时链接的电子邮件。请使用该链接登录并更改您的密码。如"
-"果电子邮件不在您的收件箱中，请务必检查您的垃圾邮件文件夹"
+msgstr "我们向您发送了一封包含临时链接的电子邮件。请使用该链接登录并更改您的密码。如果电子邮件不在您的收件箱中，请务必检查您的垃圾邮件文件夹"
 
 #. [login.signUp]
 #. defaultMessage is:
@@ -5176,17 +4909,15 @@ msgstr "对不起！发生了错误。请再试一次"
 #. defaultMessage is:
 #. A special character
 #: messages.json
-#, fuzzy
 msgid "login.specialCharacterPassword"
-msgstr "更改密码"
+msgstr "特殊字符"
 
 #. [login.upperCasePassword]
 #. defaultMessage is:
 #. An uppercase
 #: messages.json
-#, fuzzy
 msgid "login.upperCasePassword"
-msgstr "密码"
+msgstr "一个大写"
 
 #. [login.userName]
 #. defaultMessage is:
@@ -5291,31 +5022,28 @@ msgstr "对不起，这个页面不存在"
 #. Something went wrong when loading this post.
 #: messages.json
 msgid "postLoadError"
-msgstr ""
+msgstr "加载此帖子时发生错误。"
 
 #. [privacyPolicy.headerTitle]
 #. defaultMessage is:
 #. Privacy policy
 #: messages.json
-#, fuzzy
 msgid "privacyPolicy.headerTitle"
-msgstr "法律公告"
+msgstr "隐私政策"
 
 #. [privacyPolicy.iAccept]
 #. defaultMessage is:
-#. I have read and I accept the 
+#. I have read and I accept the
 #: messages.json
-#, fuzzy
 msgid "privacyPolicy.iAccept"
-msgstr "法律公告"
+msgstr "我已阅读并接受"
 
 #. [privacyPolicy.link]
 #. defaultMessage is:
 #. the Privacy Policy
 #: messages.json
-#, fuzzy
 msgid "privacyPolicy.link"
-msgstr "法律公告"
+msgstr "隐私政策"
 
 #. [profile.changePassword]
 #. defaultMessage is:
@@ -5328,38 +5056,36 @@ msgstr "更改我的密码"
 #. defaultMessage is:
 #. Cookies configuration
 #: messages.json
-#, fuzzy
 msgid "profile.cookies"
-msgstr "保存"
+msgstr "Cookies配置"
 
 #. [profile.deleteMyAccount]
 #. defaultMessage is:
 #. Delete my account
 #: messages.json
-#, fuzzy
 msgid "profile.deleteMyAccount"
-msgstr "创建一个账号"
+msgstr "删除我的账户"
 
 #. [profile.deleteMyAccountConfirmation]
 #. defaultMessage is:
 #. Delete my account and my data
 #: messages.json
 msgid "profile.deleteMyAccountConfirmation"
-msgstr ""
+msgstr "删除我的账户和数据"
 
 #. [profile.deleteMyAccountModal]
 #. defaultMessage is:
 #. Are you sure you want to permanently delete your account and all of your personal data? By validating, you will no longer be able to contribute to the consultation.
 #: messages.json
 msgid "profile.deleteMyAccountModal"
-msgstr ""
+msgstr "您确定要永久删除您的账户和所有个人数据？一经确认，您将无法再参与磋商。"
 
 #. [profile.deleteMyAccountText]
 #. defaultMessage is:
 #. By deleting your account, you permanently delete all of your personal data and your account. You will no longer be able to contribute to the debate without an account.
 #: messages.json
 msgid "profile.deleteMyAccountText"
-msgstr ""
+msgstr "通过删除您的账户，您将永久删除所有个人数据和账户。如无账户，您将无法再参与辩论。"
 
 #. [profile.email]
 #. defaultMessage is:
@@ -5491,16 +5217,17 @@ msgstr "用户名"
 #. defaultMessage is:
 #. If you configured a username, it will be used when you post a message or vote. If you haven't configured one, the full name that you configured will be used instead.
 #: messages.json
-#, fuzzy
 msgid "profile.usernameInformations"
-msgstr "个人信息"
+msgstr ""
+"如果您配置了用户名，则在您发布消息或投票时将使用该用户名。 如果尚未配置，将使用您配置的全名\n"
+"代替。"
 
 #. [refuse]
 #. defaultMessage is:
 #. Refuse
 #: messages.json
 msgid "refuse"
-msgstr ""
+msgstr "拒绝"
 
 #. [resourcesCenter.defaultHeaderTitle]
 #. defaultMessage is:
@@ -5555,9 +5282,8 @@ msgstr "有创造性的参与者"
 #. defaultMessage is:
 #. Extracts
 #: messages.json
-#, fuzzy
 msgid "search.Extracts"
-msgstr "排列"
+msgstr "提取物"
 
 #. [search.Filter by date]
 #. defaultMessage is:
@@ -5724,17 +5450,15 @@ msgstr "排列"
 #. defaultMessage is:
 #. State
 #: messages.json
-#, fuzzy
 msgid "search.State"
-msgstr "自然"
+msgstr "州"
 
 #. [search.agree]
 #. defaultMessage is:
 #. Agree
 #: messages.json
-#, fuzzy
 msgid "search.agree"
-msgstr "不同意"
+msgstr "同意"
 
 #. [search.by]
 #. defaultMessage is:
@@ -5782,9 +5506,8 @@ msgstr "不明白"
 #. defaultMessage is:
 #. Extracts
 #: messages.json
-#, fuzzy
 msgid "search.extract"
-msgstr "排列"
+msgstr "提取物"
 
 #. [search.facets.view_all]
 #. defaultMessage is:
@@ -5811,9 +5534,8 @@ msgstr "显示更多"
 #. defaultMessage is:
 #. Harvested on
 #: messages.json
-#, fuzzy
 msgid "search.harvested_on"
-msgstr "发表于"
+msgstr "收获于"
 
 #. [search.hitstats.results_found]
 #. defaultMessage is:
@@ -5854,17 +5576,15 @@ msgstr "请提供更多信息？"
 #. defaultMessage is:
 #. Number of contributions
 #: messages.json
-#, fuzzy
 msgid "search.number_of_contributions"
-msgstr "发言"
+msgstr "捐款数量"
 
 #. [search.number_of_users]
 #. defaultMessage is:
 #. Number of users
 #: messages.json
-#, fuzzy
 msgid "search.number_of_users"
-msgstr "自   起成为会员"
+msgstr "用户数"
 
 #. [search.pagination.next]
 #. defaultMessage is:
@@ -6059,17 +5779,15 @@ msgstr "知识"
 #. defaultMessage is:
 #. Published
 #: messages.json
-#, fuzzy
 msgid "search.taxonomy_state.PUBLISHED"
-msgstr "问题"
+msgstr "已发表"
 
 #. [search.taxonomy_state.SUBMITTED]
 #. defaultMessage is:
 #. To validate
 #: messages.json
-#, fuzzy
 msgid "search.taxonomy_state.SUBMITTED"
-msgstr "问题"
+msgstr "验证"
 
 #. [search.user]
 #. defaultMessage is:
@@ -6089,9 +5807,8 @@ msgstr "没有可用的合成。"
 #. defaultMessage is:
 #. There is no synthesis available yet, you can create and save one, then publish it.
 #: messages.json
-#, fuzzy
 msgid "synthesis.noSynthesisYetCanCreate"
-msgstr "没有可用的合成。"
+msgstr "目前尚无综合信息，您可以创建和保存一个综合信息，然后发布。"
 
 #. [synthesis.seeConversation]
 #. defaultMessage is:
@@ -6130,7 +5847,7 @@ msgstr "条款和条件"
 
 #. [termsAndConditions.iAccept]
 #. defaultMessage is:
-#. I have read and I accept the 
+#. I have read and I accept the
 #: messages.json
 msgid "termsAndConditions.iAccept"
 msgstr "我已阅读并接受"
@@ -6160,23 +5877,22 @@ msgstr "您没有权限访问管理部分。请联系网站的管理者。"
 #. defaultMessage is:
 #. User guidelines
 #: messages.json
-#, fuzzy
 msgid "userGuidelines.headerTitle"
-msgstr "法律公告"
+msgstr "用户指南"
 
 #. [userGuidelines.iAccept]
 #. defaultMessage is:
-#. I have read and I accept the 
+#. I have read and I accept the
 #: messages.json
 msgid "userGuidelines.iAccept"
-msgstr ""
+msgstr "我已阅读并接受"
 
 #. [userGuidelines.link]
 #. defaultMessage is:
 #. the user guidelines
 #: messages.json
 msgid "userGuidelines.link"
-msgstr ""
+msgstr "用户指南"
 
 #. [validate]
 #. defaultMessage is:
@@ -6262,9 +5978,7 @@ msgstr "是"
 #~ msgstr "我的个人资料"
 
 #~ msgid "redirectToV1"
-#~ msgstr ""
-#~ "几秒之后您会跳转至%{phaseName}阶段。Assembl正在进行改进，界面有所改变，敬"
-#~ "请谅解！如果没有反应，请点击此按钮。"
+#~ msgstr "几秒之后您会跳转至%{phaseName}阶段。Assembl正在进行改进，界面有所改变，敬请谅解！如果没有反应，请点击此按钮。"
 
 #~ msgid "search.expand_search"
 #~ msgstr "显示搜索"

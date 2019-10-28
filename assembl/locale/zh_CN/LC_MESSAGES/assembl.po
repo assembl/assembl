@@ -7,15 +7,16 @@ msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2019-06-11 11:29+0200\n"
-"PO-Revision-Date: 2017-09-27 21:10+0800\n"
+"PO-Revision-Date: 2019-10-17 16:37+0200\n"
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
-"Language: zh_Hans_CN\n"
+"Language: zh\n"
 "Language-Team: en <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.3.4\n"
+"X-Generator: Poedit 2.2.3\n"
 
 #: assembl/auth/util.py:173
 msgid "Your session has expired, you need to login again"
@@ -45,37 +46,35 @@ msgstr "请使用至少包含3个字符的名称"
 
 #: assembl/graphql/discussion.py:615
 msgid "Must pass at least one language to be saved"
-msgstr ""
+msgstr "必须至少同意保存一种语言"
 
 #: assembl/graphql/discussion.py:661
 msgid "This slug is an old slug of another debate, you can't use it."
-msgstr ""
+msgstr "该slug是另外一个辩论网站上的旧slug，您无法使用。"
 
 #: assembl/graphql/discussion.py:667
 msgid "This slug is already used by another debate, you can't use it."
-msgstr ""
+msgstr "该slug已经被其他辩论网站使用，您无法使用。"
 
 #: assembl/graphql/document.py:79
 msgid "Sorry, this file type is not allowed."
-msgstr ""
+msgstr "抱歉，不允许使用该文件类型。"
 
 #: assembl/graphql/permissions_helpers.py:9
-msgid ""
-"It looks like you do not have the right to do this action. If you think "
-"it is an error, please reconnect to the platform and try again."
-msgstr ""
+msgid "It looks like you do not have the right to do this action. If you think it is an error, please reconnect to the platform and try again."
+msgstr "您似乎无此权限做此操作。如果您觉得是故障问题，请重新连接平台并重试。"
 
 #: assembl/graphql/post.py:330
 msgid "Sorry, you can no longer submit a post as the phase is now closed."
-msgstr ""
+msgstr "抱歉，您无法再次提交帖子，因为提交阶段已结束。"
 
 #: assembl/graphql/post.py:370
 msgid "Proposal"
-msgstr ""
+msgstr "提案"
 
 #: assembl/graphql/utils.py:59
 msgid "An error occurred. Please contact the administrator."
-msgstr ""
+msgstr "发生错误。请联系管理员。"
 
 #: assembl/lib/colander.py:174
 msgid "${val} cannot be serialized: ${err}"
@@ -87,123 +86,123 @@ msgstr "${val}不是一个字符串：${err}"
 
 #: assembl/models/auth.py:655
 msgid "Straight rows of keys are easy to guess."
-msgstr ""
+msgstr "密钥的直列很容易被猜测出来。"
 
 #: assembl/models/auth.py:656
 msgid "Short keyboard patterns are easy to guess."
-msgstr ""
+msgstr "短键盘模式很容易被猜测出来。"
 
 #: assembl/models/auth.py:657
 msgid "Repeats like \"aaa\" are easy to guess."
-msgstr ""
+msgstr "“aaa”等重复数字/字母很容易被猜测出来。"
 
 #: assembl/models/auth.py:658
 msgid "Repeats like \"abcabcabc\" are only slightly harder to guess than \"abc\"."
-msgstr ""
+msgstr "相比较\"abc\"而言，\"abcabcabc\"重复字段较难被猜测出来。"
 
 #: assembl/models/auth.py:659
 msgid "Sequences like abc or 6543 are easy to guess."
-msgstr ""
+msgstr "诸如abc或6543等序列较容易被猜测出来。"
 
 #: assembl/models/auth.py:660
 msgid "Recent years are easy to guess."
-msgstr ""
+msgstr "最近年份也容易被猜测出来。"
 
 #: assembl/models/auth.py:661
 msgid "Dates are often easy to guess."
-msgstr ""
+msgstr "日期常常容易被猜测出来。"
 
 #: assembl/models/auth.py:662
 msgid "This is a top-10 common password."
-msgstr ""
+msgstr "这是排名前10的常用密码。"
 
 #: assembl/models/auth.py:663
 msgid "This is a top-100 common password."
-msgstr ""
+msgstr "这是排名前100的常用密码。"
 
 #: assembl/models/auth.py:664
 msgid "This is a very common password."
-msgstr ""
+msgstr "这是一个非常常见的密码。"
 
 #: assembl/models/auth.py:665
 msgid "This is similar to a commonly used password."
-msgstr ""
+msgstr "这与常用密码很相似。"
 
 #: assembl/models/auth.py:666
 msgid "A word by itself is easy to guess."
-msgstr ""
+msgstr "单个词容易被猜测出来。"
 
 #: assembl/models/auth.py:667
 msgid "Names and surnames by themselves are easy to guess."
-msgstr ""
+msgstr "姓名和姓氏容易被猜测出来。"
 
 #: assembl/models/auth.py:668
 msgid "Common names and surnames are easy to guess."
-msgstr ""
+msgstr "常见姓名和姓氏容易被猜测出来。"
 
 #: assembl/models/auth.py:669
 msgid "Use a few words, avoid common phrases."
-msgstr ""
+msgstr "使用多个词，避免常用短语。"
 
 #: assembl/models/auth.py:670
 msgid "No need for symbols, digits, or uppercase letters."
-msgstr ""
+msgstr "不需要符号、数字或大些字母。"
 
 #: assembl/models/auth.py:671
 msgid "Add another word or two. Uncommon words are better."
-msgstr ""
+msgstr "再加一两个词。不常见单词最佳。"
 
 #: assembl/models/auth.py:672
 msgid "Use a longer keyboard pattern with more turns."
-msgstr ""
+msgstr "采用长键盘模式，多次变换。"
 
 #: assembl/models/auth.py:673
 msgid "Avoid repeated words and characters."
-msgstr ""
+msgstr "避免重复单词和字符。"
 
 #: assembl/models/auth.py:674
 msgid "Avoid sequences."
-msgstr ""
+msgstr "避免序列。"
 
 #: assembl/models/auth.py:675
 msgid "Avoid recent years."
-msgstr ""
+msgstr "避免最近年份。"
 
 #: assembl/models/auth.py:676
 msgid "Avoid years that are associated with you."
-msgstr ""
+msgstr "避免个人相关年份。"
 
 #: assembl/models/auth.py:677
 msgid "Avoid dates and years that are associated with you."
-msgstr ""
+msgstr "避免个人相关年份和日期。"
 
 #: assembl/models/auth.py:678
 msgid "Capitalization doesn't help very much."
-msgstr ""
+msgstr "字母大写用处不大。"
 
 #: assembl/models/auth.py:679
 msgid "All-uppercase is almost as easy to guess as all-lowercase."
-msgstr ""
+msgstr "全大写几乎和全小写一样容易猜。"
 
 #: assembl/models/auth.py:680
 msgid "Reversed words aren't much harder to guess."
-msgstr ""
+msgstr "单词倒写也不难猜。"
 
 #: assembl/models/auth.py:681
 msgid "Predictable substitutions like '@' instead of 'a' don't help very much."
-msgstr ""
+msgstr "用“@”替代“a”这样的替代词可以预测出来，没有多大帮助。"
 
 #: assembl/models/auth.py:994
 msgid "Password shorter than ${minlen} characters"
-msgstr ""
+msgstr "少于${minlen}个字符的密码"
 
 #: assembl/models/auth.py:1005
 msgid "Your password should include at least a ${class}"
-msgstr ""
+msgstr "您的密码应至少${class}"
 
 #: assembl/models/auth.py:1018
 msgid "Please do not repeat an older password."
-msgstr ""
+msgstr "请勿与旧密码重复。"
 
 #: assembl/models/edgesense_drupal.py:173
 msgid "Unknown User ${uid}"
@@ -246,9 +245,7 @@ msgid "Use landing page"
 msgstr "使用登录页"
 
 #: assembl/models/preferences.py:422
-msgid ""
-"Are users directed to the landing page and phases at login, or diretly to"
-" the debate"
+msgid "Are users directed to the landing page and phases at login, or diretly to the debate"
 msgstr "用户是否直接登录到登录页面并分阶段登录，或直接进行辩论"
 
 #: assembl/models/preferences.py:430 assembl/models/preferences.py:436
@@ -309,15 +306,15 @@ msgstr "消息标题"
 
 #: assembl/models/preferences.py:500
 msgid "Title which appears on the tab, by default assembl"
-msgstr ""
+msgstr "选项卡上的标题默认"
 
 #: assembl/models/preferences.py:508
 msgid "Mandatory legal contents validation"
-msgstr ""
+msgstr "强制性法律内容验证"
 
 #: assembl/models/preferences.py:510
 msgid "Activate or not mandatory validation of legal contents after SSO login."
-msgstr ""
+msgstr "SSO登录后的法律内容的激活或非强制性验证。"
 
 #: assembl/models/preferences.py:519
 msgid "Video description"
@@ -345,11 +342,11 @@ msgstr "公共化或私人化社交共享"
 
 #: assembl/models/preferences.py:555
 msgid "Generic Errors"
-msgstr ""
+msgstr "一般性错误"
 
 #: assembl/models/preferences.py:557
 msgid "Display a generic error message."
-msgstr ""
+msgstr "显示常见错误消息。"
 
 #: assembl/models/preferences.py:566
 msgid "Extra data for CSV reports"
@@ -368,24 +365,19 @@ msgid "Run an anti-virus on file attachments"
 msgstr "运行防病毒软件以检查文件附件"
 
 #: assembl/models/preferences.py:594
-#, fuzzy
 msgid "Activate semantic analysis"
-msgstr "激活网页注释"
+msgstr "激活语义分析"
 
 #: assembl/models/preferences.py:596
 msgid "Use Watson for semantic analysis"
-msgstr ""
+msgstr "采用Watson语义分析"
 
 #: assembl/models/preferences.py:607
 msgid "Authentication service type"
 msgstr "验证服务类型"
 
 #: assembl/models/preferences.py:609
-msgid ""
-"A primary authentication server for this discussion, defined as a python-"
-"social-auth backend. Participants will be auto-logged in to that server, "
-"and discussion auto-subscription will require an account from this "
-"backend."
+msgid "A primary authentication server for this discussion, defined as a python-social-auth backend. Participants will be auto-logged in to that server, and discussion auto-subscription will require an account from this backend."
 msgstr "这个讨论的主要验证服务器被定义为python-social-auth后端。参与者将自动登录到该服务器，并且自动订阅讨论需要一个来自此后端的帐户。"
 
 #: assembl/models/preferences.py:624
@@ -401,9 +393,7 @@ msgid "Idea panel opens automatically"
 msgstr "想法面板自动打开"
 
 #: assembl/models/preferences.py:643
-msgid ""
-"Does the Idea panel automatically open when an idea is clicked ? (and "
-"close when a special section is clicked)"
+msgid "Does the Idea panel automatically open when an idea is clicked ? (and close when a special section is clicked)"
 msgstr "点击想法时，想法面板会自动打开吗？（当点击特殊部分时关闭）"
 
 #: assembl/models/preferences.py:655
@@ -427,9 +417,7 @@ msgid "Names of columns in column view"
 msgstr "列视图中列的名称"
 
 #: assembl/models/preferences.py:686
-msgid ""
-"What are (default) names of columns in multi-column views, in each "
-"discussion language?"
+msgid "What are (default) names of columns in multi-column views, in each discussion language?"
 msgstr "在多列视图中，每种讨论语言中列的（默认）名称是什么？"
 
 #: assembl/models/preferences.py:699
@@ -445,16 +433,8 @@ msgid "Require Email Domain"
 msgstr "要求提供电子邮件域"
 
 #: assembl/models/preferences.py:791
-msgid ""
-"List of domain names of user email address required for self-"
-"registration. Only accounts with at least an email from those domains can"
-" self-register to this discussion. Anyone can self-register if this is "
-"empty."
-msgstr ""
-"List of domain names of user email address required for self-"
-"registration. Only accounts with at least an email from those domains can"
-" self-register to this discussion. Anyone can self-register if this is "
-"empty."
+msgid "List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-register if this is empty."
+msgstr "List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-register if this is empty."
 
 #: assembl/models/preferences.py:807
 msgid "Whitelist on authentication service"
@@ -462,25 +442,23 @@ msgstr "验证服务类型"
 
 #: assembl/models/preferences.py:810
 msgid "Allow white list to be applied to the authentication service chosen"
-msgstr ""
+msgstr "允许身份验证服务使用白名单"
 
 #: assembl/models/preferences.py:822
 msgid "Whitelist on standard registration"
-msgstr ""
+msgstr "标准注册的白名单"
 
 #: assembl/models/preferences.py:825
 msgid "Allow white list to be applied to the default login process"
-msgstr ""
+msgstr "允许默认登录流程中使用白名单"
 
 #: assembl/models/preferences.py:837
 msgid "Discussion administrators"
 msgstr "讨论统计"
 
 #: assembl/models/preferences.py:840
-msgid ""
-"A list of discussion administrators, if different from the server "
-"administrator"
-msgstr ""
+msgid "A list of discussion administrators, if different from the server administrator"
+msgstr "讨论管理员列表（如果与服务器管理员不同）"
 
 #: assembl/models/preferences.py:853
 msgid "Show CI Dashboard"
@@ -511,9 +489,7 @@ msgid "Navigation sections"
 msgstr "导航部分"
 
 #: assembl/models/preferences.py:906
-msgid ""
-"A JSON specification of Catalyst visualizations to show in the navigation"
-" section"
+msgid "A JSON specification of Catalyst visualizations to show in the navigation section"
 msgstr "要在导航部分显示的Catalyst可视化的JSON规范"
 
 #: assembl/models/preferences.py:919
@@ -529,9 +505,7 @@ msgid "Default Table of Ideas Collapsed state"
 msgstr "默认想法表格的折叠状态"
 
 #: assembl/models/preferences.py:942
-msgid ""
-"Default expanded/collapsed state of each idea in the table of ideas. A "
-"user can override it by opening/closing an idea"
+msgid "Default expanded/collapsed state of each idea in the table of ideas. A user can override it by opening/closing an idea"
 msgstr "每个想法在想法表中的默认展开/折叠状态。用户可以通过打开/关闭想法来覆盖它"
 
 #: assembl/models/preferences.py:957
@@ -552,23 +526,19 @@ msgstr "显示用于禁用Piwik cookie的横幅"
 
 #: assembl/models/preferences.py:987
 msgid "Custom HTML code on the landing page"
-msgstr ""
+msgstr "登陆页上的自定义HTML代码"
 
 #: assembl/models/preferences.py:990
-msgid ""
-"Custom HTML code that will be integrated on the landing page of the "
-"debate, right after the <body> tag"
-msgstr ""
+msgid "Custom HTML code that will be integrated on the landing page of the debate, right after the <body> tag"
+msgstr "将被集成到辩论网站登陆页上的自定义HTML代码，在<body>标签后"
 
 #: assembl/models/preferences.py:1000
 msgid "Custom HTML code on the user registration page"
-msgstr ""
+msgstr "用户注册页面上的自定义HTML代码"
 
 #: assembl/models/preferences.py:1003
-msgid ""
-"Custom HTML code that will be integrated on the user registration page of"
-" the debate, right after the <body> tag"
-msgstr ""
+msgid "Custom HTML code that will be integrated on the user registration page of the debate, right after the <body> tag"
+msgstr "将被集成到辩论网站用户注册页面上的自定义HTML代码，在<body>标签后"
 
 #: assembl/models/preferences.py:1013 assembl/models/preferences.py:1016
 msgid "Harvesting translation"
@@ -576,26 +546,24 @@ msgstr "Catalyst译文"
 
 #: assembl/models/preferences.py:1024
 msgid "Valid CORS paths for GraphQL API calls"
-msgstr ""
+msgstr "GraphQL API调用的有效CORS路径"
 
 #: assembl/models/preferences.py:1027
-msgid ""
-"A list of valid domain names or IP addresses that are allowed to make "
-"CORS api calls to the GraphQL API"
-msgstr ""
+msgid "A list of valid domain names or IP addresses that are allowed to make CORS api calls to the GraphQL API"
+msgstr "允许对GraphQL API进行CPRS api调用的有效域名或IP地址列表"
 
 #: assembl/models/preferences.py:1037
-#, fuzzy
 msgid "Use moderation"
-msgstr "已发布但未经审阅"
+msgstr "\n"
+"使用审核"
 
 #: assembl/models/preferences.py:1038
 msgid "Is the moderation activated or not"
-msgstr ""
+msgstr "审核是否已激活"
 
 #: assembl/static/js/app/routeManager.js:416
 msgid "Requested vote widget could not be found."
-msgstr ""
+msgstr "找不到请求的投票控件。"
 
 #: assembl/static/js/app/routeManager.js:602
 msgid "You must be logged in to access this page."
@@ -699,9 +667,7 @@ msgid "You must be logged in to create segments"
 msgstr "您必须登录才能创建细分"
 
 #: assembl/static/js/app/models/segment.js:125
-msgid ""
-"invalid extract: the extract must have a valid idPost (here ) or a valid "
-"uri (here )"
+msgid "invalid extract: the extract must have a valid idPost (here ) or a valid uri (here )"
 msgstr "无效提取：提取必须有一个有效的idPost（这里）或一个有效的uri（这里）"
 
 #: assembl/static/js/app/models/segment.js:129
@@ -937,9 +903,7 @@ msgid "Thank you"
 msgstr "谢谢"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:22
-msgid ""
-"Welcome to this discussion. We’ve created series of hints to help you get"
-" started using Assembl."
+msgid "Welcome to this discussion. We’ve created series of hints to help you get started using Assembl."
 msgstr "欢迎参加这个讨论。我们创建了一系列的提示来帮助您上手使用Assembl。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:37
@@ -947,10 +911,7 @@ msgid "Join the discussion"
 msgstr "加入讨论"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:38
-msgid ""
-"This is the conversation panel, where the discussion takes place. You can"
-" reply to messages directly, or start a new topic by clicking ‘Start a "
-"new discussion thread’ at the bottom of the panel."
+msgid "This is the conversation panel, where the discussion takes place. You can reply to messages directly, or start a new topic by clicking ‘Start a new discussion thread’ at the bottom of the panel."
 msgstr "这是讨论的会话面板。您可以直接回复消息，或通过点击面板底部的“开始新的讨论话题”来开始新的主题。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:64
@@ -958,9 +919,7 @@ msgid "Customize your view"
 msgstr "自定义您的视图"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:65
-msgid ""
-"You can view the discussion in many different ways using the filters at "
-"the top."
+msgid "You can view the discussion in many different ways using the filters at the top."
 msgstr "您可以使用顶部的过滤器以多种不同方式查看讨论。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:91
@@ -968,9 +927,7 @@ msgid "Spot relevant quotes on each idea"
 msgstr "提供每个想法的相关引述"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:92
-msgid ""
-"Excerpts from messages are harvested and are organized to help you find "
-"relevant contributions on this idea."
+msgid "Excerpts from messages are harvested and are organized to help you find relevant contributions on this idea."
 msgstr "收集消息的摘录并组织起来，以帮助您找到有关这一想法的相关发布内容。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:107
@@ -978,10 +935,7 @@ msgid "Explore one of these topics"
 msgstr "探索其中一个主题"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:108
-msgid ""
-"You can find the topics that are currently being discussed in this table "
-"of contents. Clicking on a topic will filter the conversation to only "
-"show messages that are related to this topic."
+msgid "You can find the topics that are currently being discussed in this table of contents. Clicking on a topic will filter the conversation to only show messages that are related to this topic."
 msgstr "您可以在本目录中找到当前正在讨论的主题。单击主题将过滤对话以仅显示与此主题相关的消息。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:119
@@ -989,9 +943,7 @@ msgid "Catch up on what’s been said"
 msgstr "补上刚才所说的话"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:121
-msgid ""
-"Periodically an executive summary of the discussion is created to give "
-"you a quick overview of what was said since the last executive summary"
+msgid "Periodically an executive summary of the discussion is created to give you a quick overview of what was said since the last executive summary"
 msgstr "定期推出讨论摘要，以便快速概述自上次摘要以来发表的内容"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:131
@@ -999,9 +951,7 @@ msgid "DISABLED"
 msgstr "已停用"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:133
-msgid ""
-"Find the different syntheses produced since the beginning of the "
-"discussion"
+msgid "Find the different syntheses produced since the beginning of the discussion"
 msgstr "找到自讨论开始以来产生的不同合成"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:143
@@ -1009,9 +959,7 @@ msgid "Catch up on the evolution"
 msgstr "跟进变化情况"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:145
-msgid ""
-"The facilitator of the discussion has written this synthesis to help you "
-"get on board of the discussion. Enjoy reading!"
+msgid "The facilitator of the discussion has written this synthesis to help you get on board of the discussion. Enjoy reading!"
 msgstr "讨论的协调人撰写了这一合成信息，以帮助您了解讨论情况。享受阅读！"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:155
@@ -1019,9 +967,7 @@ msgid "Dig more on an interesting idea and post your contribution"
 msgstr "挖掘更多有趣的想法，并发布您的内容"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:157
-msgid ""
-"You can click on this idea to see current discussions happening on it. "
-"You would be able to start contributing on this idea from there."
+msgid "You can click on this idea to see current discussions happening on it. You would be able to start contributing on this idea from there."
 msgstr "您可以点击这个想法来查看当前的讨论情况。您可以由此开始对这个想法发布您的内容。"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:170
@@ -1029,10 +975,7 @@ msgid "Stay informed"
 msgstr "随时收取通知！"
 
 #: assembl/static/js/app/utils/tours/assemblTours.js:171
-msgid ""
-"Notifications are set to go to your email. If you aren’t receiving them, "
-"make sure to check your spam folder! You can update your notification "
-"settings here."
+msgid "Notifications are set to go to your email. If you aren’t receiving them, make sure to check your spam folder! You can update your notification settings here."
 msgstr "通知已设置为自动发送至您的电子邮箱。如果您没有收到它们，请确保检查您的垃圾邮件文件夹！您可以在这里更新您的通知设置。"
 
 #: assembl/static/js/app/views/agent.js:87
@@ -1064,9 +1007,7 @@ msgstr "对于已上传的文件"
 
 #: assembl/static/js/app/views/attachments.js:336
 #, python-format
-msgid ""
-"We are sorry, there was an error during the upload of the file \"%s\". "
-"Please try again."
+msgid "We are sorry, there was an error during the upload of the file \"%s\". Please try again."
 msgstr "很抱歉，在上传文件“%s”时发生错误。请再试一次。"
 
 #: assembl/static/js/app/views/attachments.js:507
@@ -1157,9 +1098,7 @@ msgstr "您还可以从以下区域的文本复制粘贴"
 
 #: assembl/static/js/app/views/baseMessageList.js:1606
 #, python-format
-msgid ""
-"This extract was organized in the idea \" %s \" by the facilitator of the"
-" debate"
+msgid "This extract was organized in the idea \" %s \" by the facilitator of the debate"
 msgstr "这个摘要由辩论的协调人组织在=想法\" %s \"中"
 
 #: assembl/static/js/app/views/baseMessageList.js:1609
@@ -1201,36 +1140,28 @@ msgid "CI Dashboard"
 msgstr "CI仪表板"
 
 #: assembl/static/js/app/views/facebookViews.js:40
-msgid ""
-"The following message was posted on Assembl:\n"
+msgid "The following message was posted on Assembl:\n"
 "\n"
 "\n"
-msgstr ""
-"以下消息发布在Assembl：\n"
+msgstr "以下消息发布在Assembl：\n"
 "\n"
 "\n"
 
 #: assembl/static/js/app/views/facebookViews.js:42
 #, python-format
-msgid ""
-"The following message was posted by %s on Assembl:\n"
+msgid "The following message was posted by %s on Assembl:\n"
 "\n"
 "\n"
-msgstr ""
-"以下消息由%s发布在Assembl：\n"
+msgstr "以下消息由%s发布在Assembl：\n"
 "\n"
 "\n"
 
 #: assembl/static/js/app/views/facebookViews.js:51
-msgid ""
-"Please be aware that comments below will be imported into a discussion "
-"found at "
+msgid "Please be aware that comments below will be imported into a discussion found at "
 msgstr "请注意，以下评论将导入到讨论中"
 
 #: assembl/static/js/app/views/facebookViews.js:297
-msgid ""
-"An error occured whilst communicating with Facebook. Close the box and "
-"try again."
+msgid "An error occured whilst communicating with Facebook. Close the box and try again."
 msgstr "与Facebook进行通信时发生错误。关闭该对话框，然后重试。"
 
 #: assembl/static/js/app/views/facebookViews.js:432
@@ -1238,15 +1169,11 @@ msgid "You did not log into facebook. Please log-in to continue."
 msgstr "您没有登录Facebook。请登录再继续访问。"
 
 #: assembl/static/js/app/views/facebookViews.js:451
-msgid ""
-"There was an issue with getting your Facebook login status. Please close "
-"this box and contact your discussion administrator."
+msgid "There was an issue with getting your Facebook login status. Please close this box and contact your discussion administrator."
 msgstr "在获取您的Facebook登录状态时遇到问题。请关闭此对话框，并与您的讨论管理员联系。"
 
 #: assembl/static/js/app/views/facebookViews.js:546
-msgid ""
-"Great! You already have a facebook account. Below are the list of "
-"permissions we need for the exportation process."
+msgid "Great! You already have a facebook account. Below are the list of permissions we need for the exportation process."
 msgstr "太棒了！您已经有一个Facebook帐户。以下是导出过程所需的权限列表。"
 
 #: assembl/static/js/app/views/facebookViews.js:547
@@ -1254,10 +1181,7 @@ msgid "Click here if you agree with these permissions."
 msgstr "如果您同意这些权限，请点击此处。"
 
 #: assembl/static/js/app/views/facebookViews.js:551
-msgid ""
-"It appears that your session was expired. Click below to refresh your "
-"session. As always, below are the permissions that Assembl would need to "
-"continue."
+msgid "It appears that your session was expired. Click below to refresh your session. As always, below are the permissions that Assembl would need to continue."
 msgstr "看来您的会话已过期。点击下面刷新您的会话。和往常一样，下面是继续使用Assembl所需要的权限。"
 
 #: assembl/static/js/app/views/facebookViews.js:552
@@ -1273,9 +1197,7 @@ msgid "Sign in using your Facebook account"
 msgstr "使用您的Facebook帐户登录"
 
 #: assembl/static/js/app/views/facebookViews.js:799
-msgid ""
-"Assembl is a collective intelligence tool designed to enable open, "
-"democratic discussions that lead to idea generation and innovation."
+msgid "Assembl is a collective intelligence tool designed to enable open, democratic discussions that lead to idea generation and innovation."
 msgstr "Assembl是一个集体情报工具，旨在实现公开、民主的讨论，以激发创意想法和创新。"
 
 #: assembl/static/js/app/views/facebookViews.js:866
@@ -1283,15 +1205,11 @@ msgid "Facebook was unable to create the post. Close the box and try again."
 msgstr "Facebook无法创建该帖子。关闭该对话框，然后重试。"
 
 #: assembl/static/js/app/views/facebookViews.js:947
-msgid ""
-"Please select between pages, groups or your wall as the final destination"
-" to complete the form."
+msgid "Please select between pages, groups or your wall as the final destination to complete the form."
 msgstr "请在页面、各组或留言板之中进行选择，已在其中完成表单。"
 
 #: assembl/static/js/app/views/facebookViews.js:970
-msgid ""
-"Something went wrong on Assembl whilst creating your post. Please contact"
-" the Discussion administrator for more information."
+msgid "Something went wrong on Assembl whilst creating your post. Please contact the Discussion administrator for more information."
 msgstr "创建您的帖子时，Assembl发生错误。有关详细信息，请联系讨论管理员。"
 
 #: assembl/static/js/app/views/facebookViews.js:1066
@@ -1353,9 +1271,7 @@ msgid "You don't have the permission to do this."
 msgstr "您没有这样做的权限。"
 
 #: assembl/static/js/app/views/ideaPanel.js:214
-msgid ""
-"Detailled information about the currently selected idea in the Table of "
-"ideas"
+msgid "Detailled information about the currently selected idea in the Table of ideas"
 msgstr "有关目前想法表中的所选想法的详细信息"
 
 #: assembl/static/js/app/views/ideaPanel.js:222
@@ -1530,9 +1446,7 @@ msgstr[1] "%d更多消息见此消息的完整上下文。"
 #: assembl/static/js/app/views/messageFamily.js:123
 #, python-format
 msgid "Messages available in this message's full context are from %d more author."
-msgid_plural ""
-"Messages available in this message's full context are from %d more "
-"authors."
+msgid_plural "Messages available in this message's full context are from %d more authors."
 msgstr[0] "此消息完整上下文中可用的消息来自%d更多作者。"
 msgstr[1] "此消息完整上下文中可用的消息来自%d更多作者。"
 
@@ -1706,10 +1620,7 @@ msgid "Related to idea"
 msgstr "与想法有关"
 
 #: assembl/static/js/app/views/postFilters.js:227
-msgid ""
-"Only include messages related to the specified idea.  The filter is "
-"recursive:  Messages related to ideas that are descendents of the idea "
-"are included."
+msgid "Only include messages related to the specified idea.  The filter is recursive:  Messages related to ideas that are descendents of the idea are included."
 msgstr "只包括与指定想法相关的消息。过滤器是递归的：包含与想法后代相关的消息。"
 
 #: assembl/static/js/app/views/postFilters.js:245
@@ -1758,9 +1669,7 @@ msgid "Part of the context of"
 msgstr "部分上下文"
 
 #: assembl/static/js/app/views/postFilters.js:310
-msgid ""
-"Only include messages that are in the specified post reply thread or "
-"ancestry."
+msgid "Only include messages that are in the specified post reply thread or ancestry."
 msgstr "只包括在指定帖子回复线程或源头中的消息。"
 
 #: assembl/static/js/app/views/postFilters.js:333
@@ -1813,9 +1722,7 @@ msgid "In column category"
 msgstr "列类别"
 
 #: assembl/static/js/app/views/postFilters.js:444
-msgid ""
-"Only include messages that were classified in a specific category. Use "
-"\"null\" for no category."
+msgid "Only include messages that were classified in a specific category. Use \"null\" for no category."
 msgstr "仅包括分类在特定类别的消息。对于无类别使用\"null\"。"
 
 #: assembl/static/js/app/views/postFilters.js:451
@@ -1885,9 +1792,7 @@ msgid "Only include posts created after a given date."
 msgstr "只包括在给定日期之后创建的帖子。"
 
 #: assembl/static/js/app/views/postFilters.js:652
-msgid ""
-"Please type a date. The filter will then show only posts which have been "
-"created after this date. Example: 2015-01-01"
+msgid "Please type a date. The filter will then show only posts which have been created after this date. Example: 2015-01-01"
 msgstr "请输入日期。然后，过滤器将只显示在此日期之后创建的帖子。示例：2015-01-01"
 
 #: assembl/static/js/app/views/postFilters.js:694
@@ -1899,9 +1804,7 @@ msgid "Only include posts created before a given date."
 msgstr "只包括在给定日期之前创建的帖子。"
 
 #: assembl/static/js/app/views/postFilters.js:704
-msgid ""
-"Please type a date. The filter will then show only posts which have been "
-"created before this date. Example: 2015-01-01"
+msgid "Please type a date. The filter will then show only posts which have been created before this date. Example: 2015-01-01"
 msgstr "请输入日期。然后，过滤器将只显示在此日期之前创建的帖子。示例：2015-01-01"
 
 #: assembl/static/js/app/views/postFilters.js:744
@@ -1918,9 +1821,7 @@ msgid "Deleted messages"
 msgstr "已删除的消息"
 
 #: assembl/static/js/app/views/postFilters.js:774
-msgid ""
-"Only include messages that have been deleted (by their author or by an "
-"administrator), and their ancestors."
+msgid "Only include messages that have been deleted (by their author or by an administrator), and their ancestors."
 msgstr "仅包括已（由作者或管理员）删除的消息及其上级消息。"
 
 #: assembl/static/js/app/views/postFilters.js:811
@@ -1928,9 +1829,7 @@ msgid "Show also deleted messages"
 msgstr "还显示已删除的消息"
 
 #: assembl/static/js/app/views/postFilters.js:814
-msgid ""
-"Also include messages that have been deleted (by their author or by an "
-"administrator)."
+msgid "Also include messages that have been deleted (by their author or by an administrator)."
 msgstr "还包括已（由他们的作者或管理员）删除的消息。"
 
 #: assembl/static/js/app/views/preferencesView.js:153
@@ -2120,10 +2019,7 @@ msgid "You can add a conclusion to your synthesis here..."
 msgstr "您可以在这里为您的合成添加一个结论..."
 
 #: assembl/static/js/app/views/synthesisPanel.js:321
-msgid ""
-"Are you sure you want to publish the synthesis? You will not be able to "
-"delete it afterwards, and participants who subscribed to notifications "
-"related to the synthesis will receive a notification by email."
+msgid "Are you sure you want to publish the synthesis? You will not be able to delete it afterwards, and participants who subscribed to notifications related to the synthesis will receive a notification by email."
 msgstr "您确定要发表合成吗？之后您将无法删除，并且订阅与合成相关的通知的参与者将通过电子邮件收到通知。"
 
 #: assembl/static/js/app/views/synthesisPanel.js:344
@@ -2156,13 +2052,9 @@ msgstr "参见说明"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1037
 #, python-format
-msgid ""
-"%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens "
-"voted "
-msgid_plural ""
-"%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens"
-" voted"
-msgstr[0] "关于这个想法表决%d令牌“%s”，总共%d \"%s\" 令牌“表决数"
+msgid "%d token \"%s\" was voted on this idea, out of a total %d \"%s\" tokens voted "
+msgid_plural "%d tokens \"%s\" were voted on this idea, out of a total %d \"%s\" tokens voted"
+msgstr[0] "关于这个想法表决%d令牌“%s”，总共%d \"%s\" 令牌“表决数 "
 msgstr[1] "关于这个想法表决%d令牌“%s”关于，总共%d \"%s\" 令牌“表决数"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1093
@@ -2176,12 +2068,8 @@ msgstr "令牌：\"%s\""
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1353
 #, python-format
-msgid ""
-"%d participant voted between %s and %s. The number of tokens available "
-"for voting per participant:"
-msgid_plural ""
-"%d participants voted between %s and %s. The number of tokens available "
-"for voting per participant:"
+msgid "%d participant voted between %s and %s. The number of tokens available for voting per participant:"
+msgid_plural "%d participants voted between %s and %s. The number of tokens available for voting per participant:"
 msgstr[0] "%d参与者在%s和%s之间进行投票。每个参与者可以投票的令牌数量："
 msgstr[1] "%d参与者在%s和%s之间进行投票。。每个参与者可以投票的令牌数量："
 
@@ -2201,9 +2089,7 @@ msgid "Guideline"
 msgstr "指引"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1603
-msgid ""
-"Split your tokens among the ideas of your choice. By default, your vote "
-"is neutral per project."
+msgid "Split your tokens among the ideas of your choice. By default, your vote is neutral per project."
 msgstr "在您选择的想法之间拆分您的令牌。默认情况下，您的投票对于每项目都是中性的。"
 
 #: assembl/static/js/app/views/tokenVoteSession.js:1604
@@ -2293,15 +2179,11 @@ msgid "Unlock panel"
 msgstr "解锁面板"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:263
-msgid ""
-"We have locked the panel for you, so its content won't change while "
-"you're writing your message. Click here to unlock"
+msgid "We have locked the panel for you, so its content won't change while you're writing your message. Click here to unlock"
 msgstr "我们已经为您锁定面板，因此在撰写信息时内容不会改变。点击这里解锁"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:266
-msgid ""
-"We have unlocked the panel for you, so its content can change now that "
-"you're not writing a message anymore. Click here to lock it back"
+msgid "We have unlocked the panel for you, so its content can change now that you're not writing a message anymore. Click here to lock it back"
 msgstr "我们已经为您解锁了面板，现在您不再写信息时即可改变其内容，。点击这里锁定它"
 
 #: assembl/static/js/app/views/groups/panelWrapper.js:270
@@ -2358,9 +2240,7 @@ msgstr "您无权阅读此讨论。"
 
 #: assembl/templates/cannot_read_discussion.jinja2:5
 #, python-format
-msgid ""
-"You may <a href=\"%(logout)s\">logout</a> and login as another user with "
-"those permissions."
+msgid "You may <a href=\"%(logout)s\">logout</a> and login as another user with those permissions."
 msgstr "您可以<a href=\"%(logout)s\">注销</a>并以具有这些权限的其他用户身份登录。"
 
 #: assembl/templates/confirm.jinja2:23
@@ -2636,17 +2516,11 @@ msgid "Add users with a CSV file"
 msgstr "添加带有CSV文件的用户"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:95
-msgid ""
-"The CSV file must have two fields, in this order: full name, email. If it"
-" has a header, it MUST be on the first line. Imported user's email will "
-"be considered validated. Here is an example of CSV file:"
+msgid "The CSV file must have two fields, in this order: full name, email. If it has a header, it MUST be on the first line. Imported user's email will be considered validated. Here is an example of CSV file:"
 msgstr "CSV文件必须有两个字段：全名和电子邮件。如果有标题，则标题必须在第一行。导入的用户的电子邮件将被视为已验证。以下是CSV文件的示例："
 
 #: assembl/templates/admin/discussion_permissions.jinja2:99
-msgid ""
-"The invite message will not be sent to existing users, even if created on"
-" another discussion. If you do not get Assembl to \"Send an invite "
-"message\", send one yourself, explaining how to reset password."
+msgid "The invite message will not be sent to existing users, even if created on another discussion. If you do not get Assembl to \"Send an invite message\", send one yourself, explaining how to reset password."
 msgstr "即使在另一次讨论中创建了邀请消息也不会发送给现有用户。如果您没有收到\"发送邀请消息\"的Assembl，请自己发送一条，并说明如何重置密码。"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:101
@@ -2662,10 +2536,7 @@ msgid "Send an invite message"
 msgstr "发送邀请消息"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:120
-msgid ""
-"Note that this email will only be sent to new users. In the message, you "
-"can use the following placeholders: {name}, {confirm_url}, "
-"{discussion_topic}, {discussion_url}"
+msgid "Note that this email will only be sent to new users. In the message, you can use the following placeholders: {name}, {confirm_url}, {discussion_topic}, {discussion_url}"
 msgstr "请注意，此电子邮件只会发送给新用户。在消息中，您可以使用以下占位符：{name}，{confirm_url}，{discussion_topic}，{discussion_url}"
 
 #: assembl/templates/admin/discussion_permissions.jinja2:122
@@ -2686,19 +2557,16 @@ msgid "Text email message:"
 msgstr "文本电子邮件："
 
 #: assembl/templates/admin/discussion_permissions.jinja2:127
-msgid ""
-"Hello, {name}!\n"
+msgid "Hello, {name}!\n"
 "You have been invited to the Assembl discussion {discussion_topic}.\n"
-"This link will allow you to set your password, after which you can log "
-"in.\n"
+"This link will allow you to set your password, after which you can log in.\n"
 "<{confirm_url}>\n"
 "\n"
 "If you did not ask to join please disregard this email.\n"
 "\n"
 "Best regards,\n"
 "The Assembl Team\n"
-msgstr ""
-"您好，{name}！\n"
+msgstr "您好，{name}！\n"
 "您已被邀请参加Assembl讨论{discussion_topic}。\n"
 "此链接将允许您设置密码，之后您就可以登录了。\n"
 "<{confirm_url}>\n"
@@ -2713,16 +2581,12 @@ msgid "HTML email message:"
 msgstr "HTML电子邮件："
 
 #: assembl/templates/admin/discussion_permissions.jinja2:138
-msgid ""
-"<p>Hello, {name}!</p>\n"
-"<p>You have been invited to the Assembl discussion <a "
-"href=\"{discussion_url}\">{discussion_topic}</a>.\n"
-"Please <a href=\"{confirm_url}\">click here</a> to set your password, "
-"after which you can log in.</p>\n"
+msgid "<p>Hello, {name}!</p>\n"
+"<p>You have been invited to the Assembl discussion <a href=\"{discussion_url}\">{discussion_topic}</a>.\n"
+"Please <a href=\"{confirm_url}\">click here</a> to set your password, after which you can log in.</p>\n"
 "<p>If you did not ask to join please disregard this email.</p>\n"
 "<p>Best regards,<br />The Assembl Team</p>\n"
-msgstr ""
-"<p>您好，{name}！</p>\n"
+msgstr "<p>您好，{name}！</p>\n"
 "<p>您已被邀请参加组合讨论<a href=\"{discussion_url}\">{discussion_topic}</a>。\n"
 "请<a href=\"{confirm_url}\">点击此处</a>设置密码，然后您就可以登录了。</p>\n"
 "<p>如果您未请求加入，请忽略此电子邮件。</p>\n"
@@ -2738,9 +2602,7 @@ msgid "Global roles"
 msgstr "全球角色"
 
 #: assembl/templates/includes/updatebrowser.jinja2:41
-msgid ""
-"Your version of <strong>{0}</strong> is outdated and may deteriorate your"
-" experience on Assembl."
+msgid "Your version of <strong>{0}</strong> is outdated and may deteriorate your experience on Assembl."
 msgstr "您的<strong>{0}</strong>版本已过时，可能会影响您在Assembl上的体验。"
 
 #: assembl/templates/includes/updatebrowser.jinja2:42
@@ -2753,10 +2615,7 @@ msgstr "谢谢！"
 
 #: assembl/templates/notifications/html_mail.jinja2:82
 #, python-format
-msgid ""
-"You are receiving this because you are subscribed to discussion "
-"%(discussionLink)s.  Specifically, you currently receive a notification "
-"when:"
+msgid "You are receiving this because you are subscribed to discussion %(discussionLink)s.  Specifically, you currently receive a notification when:"
 msgstr "您收到此消息是因为您订阅了讨论%(discussionLink)s。具体来说，下列情况时您将收到一个通知："
 
 #: assembl/templates/notifications/html_mail_post.jinja2:62
@@ -2768,53 +2627,32 @@ msgid "Comment on this synthesis"
 msgstr "评论这个合成"
 
 #: assembl/templates/notifications/html_new_discussion.jinja2:22
-msgid ""
-"<h1>Congratulations, your <a href='{discussion_url}'>Assembl "
-"consultation</a> is ready.</h1>\n"
-"<p>You can <a href='{connection_url}'>connect here</a> to define your "
-"password.</p>\n"
-"<p>You will find <a href='{documentation_url}'>documentation "
-"here</a>.</p>\n"
-"<p>The Assembl tool enables consultations involving a great number of "
-"users (hundreds or thousands of users, public officials, etc.) in the co-"
-"design of a deliverable. If you need advice on structuring your "
-"consultation process and building skills in using Assembl, you can "
-"contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a "
-"href='{admin_org_url}'>{admin_org_name}</a>.</p>"
-msgstr ""
-"<h1>恭喜，您的<a href='{discussion_url}'>Assembl咨询</a>已经准备就绪。</h1>\n"
+msgid "<h1>Congratulations, your <a href='{discussion_url}'>Assembl consultation</a> is ready.</h1>\n"
+"<p>You can <a href='{connection_url}'>connect here</a> to define your password.</p>\n"
+"<p>You will find <a href='{documentation_url}'>documentation here</a>.</p>\n"
+"<p>The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on structuring your consultation process and building skills in using Assembl, you can contact <a href='mailto:{admin_email}'>{admin_name}</a> from <a href='{admin_org_url}'>{admin_org_name}</a>.</p>"
+msgstr "<h1>恭喜，您的<a href='{discussion_url}'>Assembl咨询</a>已经准备就绪。</h1>\n"
 "<p>您可以<a href='{connection_url}'>连接此处</a>以定义您的密码。</p>\n"
 "<p>您将在此处找到<a href='{documentation_url}'>文档</a>。</p>\n"
-"<p>Assembl工具可协助大量用户（数百或数千名用户、公职人员等）协同设计可交付产品。如果您需要关于构建您的咨询过程和Assembl的使用技巧的建议，可以通过<a"
-" href='{admin_org_url}'>{admin_org_name}</a>联系<a "
-"href='mailto:{admin_email}'>{admin_name}</a> 。</p>"
+"<p>Assembl工具可协助大量用户（数百或数千名用户、公职人员等）协同设计可交付产品。如果您需要关于构建您的咨询过程和Assembl的使用技巧的建议，可以通过<a href='{admin_org_url}'>{admin_org_name}</a>联系<a href='mailto:{admin_email}'>{admin_name}</a> 。</p>"
 
 #: assembl/templates/notifications/txt_new_discussion.jinja2:16
-msgid ""
-"Congratulations, your Assembl consultation is ready, and you can find it "
-"here:\n"
+msgid "Congratulations, your Assembl consultation is ready, and you can find it here:\n"
 "{discussion_url}\n"
 "You can use the following link to define your password:\n"
 "{connection_url}\n"
 "You will find documentation here:\n"
 "{documentation_url}\n"
 "\n"
-"The Assembl tool enables consultations involving a great number of users "
-"(hundreds or thousands of users, public officials, etc.) in the co-design"
-" of a deliverable. If you need advice on structuring your consultation "
-"process and building skills in using Assembl, you can contact "
-"{admin_name} at <{admin_email}>, from {admin_org_name} ({admin_org_url}) "
-"for more details."
-msgstr ""
-"恭喜，您的Assembl咨询已就绪，您可以在这里查看：\n"
+"The Assembl tool enables consultations involving a great number of users (hundreds or thousands of users, public officials, etc.) in the co-design of a deliverable. If you need advice on structuring your consultation process and building skills in using Assembl, you can contact {admin_name} at <{admin_email}>, from {admin_org_name} ({admin_org_url}) for more details."
+msgstr "恭喜，您的Assembl咨询已就绪，您可以在这里查看：\n"
 "{discussion_url}\n"
 "您可以使用以下链接来定义您的密码：\n"
 "{connection_url}\n"
 "您可以在这里找到文档：\n"
 "{documentation_url}\n"
 "\n"
-"Assembl工具可协助大量用户（数百或数千用户、公职人员等）协同设计可交付产品。如果您需要关于构建您的咨询过程和Assembl的使用技巧的建议，可以通过{admin_org_name}"
-" ({admin_org_url})，<{admin_email}>联系{admin_name}以获取更多详细信息。"
+"Assembl工具可协助大量用户（数百或数千用户、公职人员等）协同设计可交付产品。如果您需要关于构建您的咨询过程和Assembl的使用技巧的建议，可以通过{admin_org_name} ({admin_org_url})，<{admin_email}>联系{admin_name}以获取更多详细信息。"
 
 #: assembl/templates/styleguide/components/Dialogs.jinja2:120
 #: assembl/templates/styleguide/components/Dialogs.jinja2:147
@@ -2843,26 +2681,18 @@ msgstr "工作原理"
 
 #: assembl/templates/views/about.tmpl:5
 #, python-format
-msgid ""
-"<p>How to participate in the discussion \"%(debate_name)s\":</p>\n"
+msgid "<p>How to participate in the discussion \"%(debate_name)s\":</p>\n"
 "\t<ol>\n"
-"\t\t<li>Explore the discussions using the ideas that have already "
-"emerged</li>\n"
-"\t\t<li>Join in the conversation by replying directly to the "
-"contributions of participants</li>\n"
-"\t\t<li>Start a new topic of discussion if you wish to rejuvenate the "
-"discussion around a particular idea</li>\n"
+"\t\t<li>Explore the discussions using the ideas that have already emerged</li>\n"
+"\t\t<li>Join in the conversation by replying directly to the contributions of participants</li>\n"
+"\t\t<li>Start a new topic of discussion if you wish to rejuvenate the discussion around a particular idea</li>\n"
 "\t</ol>\n"
 "\t<p>How the process works:</p>\n"
 "\t<ol>\n"
-"\t\t<li>As you contribute, Harvesters will select the key ideas from your"
-" messages – they are here to make sure your contributions get "
-"noticed</li>\n"
-"\t\t<li>Based on these ideas, they will reorganize the ideas into a table"
-" of contents of the ideas shared</li>\n"
+"\t\t<li>As you contribute, Harvesters will select the key ideas from your messages – they are here to make sure your contributions get noticed</li>\n"
+"\t\t<li>Based on these ideas, they will reorganize the ideas into a table of contents of the ideas shared</li>\n"
 "\t</ol>"
-msgstr ""
-"<p>如何参与讨论\"%(debate_name)s\"：</p>\n"
+msgstr "<p>如何参与讨论\"%(debate_name)s\"：</p>\n"
 "\t<ol>\n"
 "\t\t<li>使用已有的想法探索讨论</li>\n"
 "\t\t<li>通过直接回复参与者发布的内容加入对话。</li>\n"
@@ -2939,10 +2769,7 @@ msgid "Logo URL (optional)"
 msgstr "标志网址（可选）"
 
 #: assembl/templates/views/adminDiscussion.tmpl:95
-msgid ""
-"The logo image can have a maximum height of 40px, and a maximum width of "
-"215px. Background must be transparent. Margins must be included in the "
-"image."
+msgid "The logo image can have a maximum height of 40px, and a maximum width of 215px. Background must be transparent. Margins must be included in the image."
 msgstr "标志图像的最大高度可以为40像素，最大宽度为215像素。背景必须是透明的。图像中必须包含边距。"
 
 #: assembl/templates/views/adminDiscussion.tmpl:101
@@ -3046,16 +2873,8 @@ msgid "Default notifications"
 msgstr "默认通知"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:18
-msgid ""
-"These are the notifications which a user gets subscribed to when one of "
-"these conditions is matched: 1. The user clicks on the \"Join this "
-"discussion\" button. 2. The user posts his/her first message, Assembl "
-"shows a subscription pop-in, and the user accepts subscribing. 3. The "
-"discussion parameter \"Auto-subscribe users to default notifications when"
-" they register\" is active and the user confirms their account."
-msgstr ""
-"这些是当符合这些订阅条件之一时用户获得的通知：1.用户点击\"加入此讨论\"按钮。2.用户发布他/她的第一条消息，Assembl显示订阅弹出式菜单，用户接受订阅。"
-" 3.讨论参数\"自动订阅用户注册时的默认通知\"为活动状态，用户确认其帐户。"
+msgid "These are the notifications which a user gets subscribed to when one of these conditions is matched: 1. The user clicks on the \"Join this discussion\" button. 2. The user posts his/her first message, Assembl shows a subscription pop-in, and the user accepts subscribing. 3. The discussion parameter \"Auto-subscribe users to default notifications when they register\" is active and the user confirms their account."
+msgstr "这些是当符合这些订阅条件之一时用户获得的通知：1.用户点击\"加入此讨论\"按钮。2.用户发布他/她的第一条消息，Assembl显示订阅弹出式菜单，用户接受订阅。 3.讨论参数\"自动订阅用户注册时的默认通知\"为活动状态，用户确认其帐户。"
 
 #: assembl/templates/views/adminNotificationSubscriptions.tmpl:21
 msgid "Auto-subscribe users to default notifications"
@@ -3180,10 +2999,7 @@ msgid "Assembl needs to be reloaded"
 msgstr "Assembl需要重新加载"
 
 #: assembl/templates/views/ajaxError.tmpl:7
-msgid ""
-"Assembl has encountered a problem and needs to be refreshed. Do not "
-"worry, any messages that are in the process of being composed will not be"
-" lost."
+msgid "Assembl has encountered a problem and needs to be refreshed. Do not worry, any messages that are in the process of being composed will not be lost."
 msgstr "Assembl遇到问题，需要刷新。不要担心，正在编写的任何消息都不会丢失。"
 
 #: assembl/templates/views/ajaxError.tmpl:8
@@ -3191,9 +3007,7 @@ msgid "See you in a minute on Assembl!"
 msgstr "一会在Assembl见！"
 
 #: assembl/templates/views/ajaxError.tmpl:9
-msgid ""
-"If you are in contact with the technical team, please let them know about"
-" the following message:"
+msgid "If you are in contact with the technical team, please let them know about the following message:"
 msgstr "如果您与技术团队联系，请告知他们以下信息："
 
 #: assembl/templates/views/ajaxError.tmpl:16
@@ -3223,15 +3037,11 @@ msgid "The title of this announcement"
 msgstr "本公告的标题"
 
 #: assembl/templates/views/announcementEditable.tmpl:4
-msgid ""
-"The text of this this announcement.  Will be displayed on top of the "
-"message list for this idea."
+msgid "The text of this this announcement.  Will be displayed on top of the message list for this idea."
 msgstr "本公告的文字。将显示在这个想法的消息列表的顶部。"
 
 #: assembl/templates/views/announcementEditable.tmpl:7
-msgid ""
-"If checked, this announcement will also be shown for any sub-idea that "
-"doesn't have its own announcement."
+msgid "If checked, this announcement will also be shown for any sub-idea that doesn't have its own announcement."
 msgstr "如果选中，本公告也将显示任何没有自己的公告的子想法。"
 
 #: assembl/templates/views/announcementEditable.tmpl:8
@@ -3280,11 +3090,7 @@ msgid "Drag the following button in your browser's bookmark bar."
 msgstr "在浏览器的书签栏中拖动以下按钮。"
 
 #: assembl/templates/views/bookmarket.tmpl:12
-msgid ""
-"Drag this button to your bookmark bar to create a bookmarklet. You can "
-"then capture selections from most webpages (those that are not secured "
-"with https) by 1. Clicking on the bookmarklet and 2. Highlighting the "
-"section of text you wish to send to the discussion."
+msgid "Drag this button to your bookmark bar to create a bookmarklet. You can then capture selections from most webpages (those that are not secured with https) by 1. Clicking on the bookmarklet and 2. Highlighting the section of text you wish to send to the discussion."
 msgstr "将此按钮拖到书签栏创建一个书签。然后，您可以通过以下方式从大多数网页（不使用https保护的网页）中捕获选定内容。单击书签和2.突出显示要发送到讨论的部分文本。"
 
 #: assembl/templates/views/bookmarket.tmpl:12
@@ -3292,9 +3098,7 @@ msgid "Web capture to"
 msgstr "网页捕获到"
 
 #: assembl/templates/views/bookmarket.tmpl:14
-msgid ""
-"Find extracts that will add value to the current discussion. For example,"
-" you could find extracts for:"
+msgid "Find extracts that will add value to the current discussion. For example, you could find extracts for:"
 msgstr "查找将为当前讨论增值的摘录。例如，您可以找到以下摘录："
 
 #: assembl/templates/views/bookmarket.tmpl:16
@@ -3314,9 +3118,7 @@ msgid "Add an inspiring quote"
 msgstr "添加一个鼓舞人心的引用"
 
 #: assembl/templates/views/bookmarket.tmpl:22
-msgid ""
-"Click on the button, where you had dragged it in your browser, to "
-"activate web annotation."
+msgid "Click on the button, where you had dragged it in your browser, to activate web annotation."
 msgstr "点击您曾在浏览器中拖动的按钮，激活网页注释。"
 
 #: assembl/templates/views/bookmarket.tmpl:28
@@ -3332,9 +3134,7 @@ msgid "See less"
 msgstr "查看更少"
 
 #: assembl/templates/views/cookieBanner.tmpl:2
-msgid ""
-"By using our site, you consent to cookies being used for improvement of "
-"our service?"
+msgid "By using our site, you consent to cookies being used for improvement of our service?"
 msgstr "使用我们的网站，即表示您同意使用cookie用于改进我们的服务？"
 
 #: assembl/templates/views/cookieBanner.tmpl:3
@@ -3604,9 +3404,7 @@ msgid "Admin sender"
 msgstr "管理发件人"
 
 #: assembl/templates/views/emailSource.tmpl:16
-msgid ""
-"This field is an e-mail address, and is mandatory: it will be the value "
-"of notification emails' From field"
+msgid "This field is an e-mail address, and is mandatory: it will be the value of notification emails' From field"
 msgstr "该字段是一个电子邮件地址，并且是必填字段：它将是通知电子邮件的“发件人”字段的值"
 
 #: assembl/templates/views/emailSource.tmpl:22
@@ -3658,10 +3456,7 @@ msgid "Basic"
 msgstr "基本"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:6
-msgid ""
-"We will need your permission to publish the message you are exporting on "
-"your behalf,  as well as permission to read the posts back in order to "
-"import them back into Assembl."
+msgid "We will need your permission to publish the message you are exporting on your behalf,  as well as permission to read the posts back in order to import them back into Assembl."
 msgstr "我们需要您的许可才能发布代表您导出的消息，以及读取帖子的权限，以便将其导入Assembl。"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
@@ -3669,10 +3464,7 @@ msgid "Groups"
 msgstr "群组"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:7
-msgid ""
-"We will need your permission to access the list of groups that you are a "
-"part of and to be able to post on them, both on your behalf, or if you "
-"are the group administrator, on behalf of the group itself. "
+msgid "We will need your permission to access the list of groups that you are a part of and to be able to post on them, both on your behalf, or if you are the group administrator, on behalf of the group itself. "
 msgstr "我们将需要您的许可才能访问您所属群组的列表，并且可以代表您向他们发布帖子，或者如果您是群组管理员，则代表群组。"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
@@ -3680,11 +3472,7 @@ msgid "Pages"
 msgstr "页面"
 
 #: assembl/templates/views/exportPostModal-fb-token-error.tmpl:8
-msgid ""
-"We will need your permission to access the list of pages you have liked, "
-"as well as those in which you are an administrator, and to be able to "
-"post both on your behalf or, if you are the page administrator, on behalf"
-" of the page itself"
+msgid "We will need your permission to access the list of pages you have liked, as well as those in which you are an administrator, and to be able to post both on your behalf or, if you are the page administrator, on behalf of the page itself"
 msgstr "我们需要您的许可才能访问您喜欢的页面列表以及您担任管理员的页面列表，并且能够代表您发帖，或者如果您是页面管理员，则代表页面发帖"
 
 #: assembl/templates/views/exportPostModal-fb.tmpl:23
@@ -3740,9 +3528,7 @@ msgid "Select your desired export location"
 msgstr "选择想要导出的位置"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
-msgid ""
-"How many top posts and their comments would you like to import? Leave "
-"blank to import all posts"
+msgid "How many top posts and their comments would you like to import? Leave blank to import all posts"
 msgstr "您要导入多少个热门帖子及其评论？留空以导入所有帖子"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:7
@@ -3750,9 +3536,7 @@ msgid "Maximum number of threads"
 msgstr "最大线程数"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
-msgid ""
-"When has been posted the oldest post you would like to import? Use ISO "
-"8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
+msgid "When has been posted the oldest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
 msgstr "何时发布您想导入的最旧的帖子？使用ISO 8601 UTC。 （例如：2015-10-20T00:00:00Z）留空为无限制"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:14
@@ -3760,9 +3544,7 @@ msgid "Minimum date"
 msgstr "最短日期"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
-msgid ""
-"When has been posted the newest post you would like to import? Use ISO "
-"8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
+msgid "When has been posted the newest post you would like to import? Use ISO 8601 UTC. (ex: 2015-10-20T00:00:00Z ) Leave blank for no limit"
 msgstr "什么时候发布您想导入的最新帖子？使用ISO 8601 UTC。（例如：2015-10-20T00:00:00Z）留空为无限制"
 
 #: assembl/templates/views/facebookSourceForm.tmpl:21
@@ -3780,9 +3562,7 @@ msgstr "以下时候您将收到通知："
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:12
 #: assembl/templates/views/firstPost.tmpl:12
 #: assembl/templates/views/joinDiscussion.tmpl:12
-msgid ""
-"You can modify at anytime the type of notification you receive by "
-"clicking on the ‘Notifications’ section of your profile."
+msgid "You can modify at anytime the type of notification you receive by clicking on the ‘Notifications’ section of your profile."
 msgstr "您可以随时通过点击您的个人资料的“通知”部分修改收到的通知类型。"
 
 #: assembl/templates/views/firstLoginAfterAutoSubscribeToNotifications.tmpl:18
@@ -3800,9 +3580,7 @@ msgstr "恭喜您做出您的第一个贡献！"
 
 #: assembl/templates/views/firstPost.tmpl:8
 #: assembl/templates/views/joinDiscussion.tmpl:8
-msgid ""
-"Stay informed and up to date with the evolution of the discussion and "
-"receive notifications when:"
+msgid "Stay informed and up to date with the evolution of the discussion and receive notifications when:"
 msgstr "随时随地了解讨论的进展情况，并在以下情况下收到通知："
 
 #: assembl/templates/views/firstPost.tmpl:19
@@ -3823,10 +3601,7 @@ msgid "Pick a topic and start contributing"
 msgstr "选择一个主题并开始发布内容"
 
 #: assembl/templates/views/helperDebate.tmpl:5
-msgid ""
-"This table of contents helps you find the conversations and topics you "
-"are interested in so you don’t get overwhelmed. Topics include messages "
-"from all related sub-topics as well."
+msgid "This table of contents helps you find the conversations and topics you are interested in so you don’t get overwhelmed. Topics include messages from all related sub-topics as well."
 msgstr "这个目录可以帮助您找到您感兴趣的对话和话题，这样您的帖子就不下沉了。话题还包括所有相关子话题的消息。"
 
 #: assembl/templates/views/helperDebate.tmpl:6
@@ -3835,9 +3610,7 @@ msgstr "这是一个安全和相互尊重的空间。欢迎提出任何想法！
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:3
 #, python-format
-msgid ""
-"<span class=\"harvester\">%s</span> has considered this message relevant "
-"to the idea:"
+msgid "<span class=\"harvester\">%s</span> has considered this message relevant to the idea:"
 msgstr "<span class=\"harvester\">%s</span>已经考虑了与该想法相关的消息："
 
 #: assembl/templates/views/ideaClassification_directExtract.tmpl:7
@@ -3853,23 +3626,17 @@ msgstr "由%s"
 
 #: assembl/templates/views/ideaClassification_directMessage.tmpl:3
 #, python-format
-msgid ""
-"<span class=\"author\">%s</span> started this new discussion thread "
-"directly on the idea:"
+msgid "<span class=\"author\">%s</span> started this new discussion thread directly on the idea:"
 msgstr "<span class=\"author\">%s</span>直接开始了这个与此想法相关的新讨论线程："
 
 #: assembl/templates/views/ideaClassification_indirectExtract.tmpl:3
 #, python-format
-msgid ""
-"This message is part of a thread, which <span "
-"class=\"harvester\">%s</span> considered relevant to the idea:"
+msgid "This message is part of a thread, which <span class=\"harvester\">%s</span> considered relevant to the idea:"
 msgstr "此消息是<span class=\"harvester\">%s</span>与此想法相关的线程的一部分："
 
 #: assembl/templates/views/ideaClassification_indirectMessage.tmpl:3
 #, python-format
-msgid ""
-"This message is part of a thread, started by <span "
-"class=\"author\">%s</span> on the idea:"
+msgid "This message is part of a thread, started by <span class=\"author\">%s</span> on the idea:"
 msgstr "该消息是线程的一部分，由关于此想法的<span class=\"author\">%s</span>启动："
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:7
@@ -3897,9 +3664,7 @@ msgid "Number of unread messages related to this idea, or any of its sub-ideas"
 msgstr "与这个想法或其任何子想法相关的未读邮件的数量"
 
 #: assembl/templates/views/ideaInIdeaList.tmpl:59
-msgid ""
-"Number of unread messages related to this idea, or any of its sub-ideas."
-"  Click on this number to view ONLY the new unread messages"
+msgid "Number of unread messages related to this idea, or any of its sub-ideas.  Click on this number to view ONLY the new unread messages"
 msgstr "与这个想法或其任何子想法相关的未读邮件的数量。点击此数字仅查看新的未读邮件"
 
 #: assembl/templates/views/ideaInSynthesis.tmpl:14
@@ -3968,9 +3733,7 @@ msgid "Expression in next synthesis"
 msgstr "下一个合成中的表达"
 
 #: assembl/templates/views/ideaPanel.tmpl:36
-msgid ""
-"Expression of this idea in the next synthesis.  You may want to edit them"
-" all together in the synthesis panel rather than here."
+msgid "Expression of this idea in the next synthesis.  You may want to edit them all together in the synthesis panel rather than here."
 msgstr "在下一个合成中表达的这个想法。您可能需要在合成面板中编辑它们，而不是在这里。"
 
 #: assembl/templates/views/ideaPanel.tmpl:40
@@ -3986,9 +3749,7 @@ msgid "Announcement for this idea"
 msgstr "这个想法的公告"
 
 #: assembl/templates/views/ideaPanel.tmpl:67
-msgid ""
-"Number of participants who contributed messages about this idea or it's "
-"sub-ideas."
+msgid "Number of participants who contributed messages about this idea or it's sub-ideas."
 msgstr "发布关于这个想法或其子想法的消息的参与者人数。"
 
 #: assembl/templates/views/ideaPanel.tmpl:86
@@ -4004,9 +3765,7 @@ msgid "Add extracts by dragging them in this panel from the clipboard or message
 msgstr "通过从剪贴板或消息将摘要拖动到此面板中进行添加"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
-msgid ""
-"Remove all extracts from this idea.  Removed extracts will be available "
-"in your clipboard"
+msgid "Remove all extracts from this idea.  Removed extracts will be available in your clipboard"
 msgstr "删除这个想法的所有摘要。已删除的摘要将在您的剪贴板中可用"
 
 #: assembl/templates/views/ideaPanel.tmpl:109
@@ -4034,9 +3793,7 @@ msgid "No idea selected"
 msgstr "没有已选择的想法"
 
 #: assembl/templates/views/ideaPanel.tmpl:131
-msgid ""
-"Choose an idea in the Table of ideas to explore the discussion or close "
-"this panel as you will have open"
+msgid "Choose an idea in the Table of ideas to explore the discussion or close this panel as you will have open"
 msgstr "在想法表中选择一个想法来探索讨论,或关闭此面板（因为该窗口会弹出）"
 
 #: assembl/templates/views/instigator.tmpl:6
@@ -4157,9 +3914,7 @@ msgid "Please try again later."
 msgstr "请稍后再试。"
 
 #: assembl/templates/views/message.tmpl:131
-msgid ""
-"Sorry, we cannot translate this because we could not identify the source "
-"language."
+msgid "Sorry, we cannot translate this because we could not identify the source language."
 msgstr "对不起，我们无法翻译，因为我们无法识别源语言。"
 
 #: assembl/templates/views/message.tmpl:190
@@ -4275,10 +4030,7 @@ msgstr "在\"%s\"想法下"
 
 #: assembl/templates/views/messageSend.tmpl:31
 #, python-format
-msgid ""
-"In the general \"%s\" conversation (a community manager will organize "
-"your contribution in the table of ideas afterwards, possibly by creating "
-"a new idea)"
+msgid "In the general \"%s\" conversation (a community manager will organize your contribution in the table of ideas afterwards, possibly by creating a new idea)"
 msgstr "在一般的\"%s\"对话中（社区经理可能通过创建一个新的想法，将在后面的想法表中组织您的贡献）"
 
 #: assembl/templates/views/messageSend.tmpl:33
@@ -4346,9 +4098,7 @@ msgid "Receive notifications on"
 msgstr "接收通知"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:8
-msgid ""
-"Messages top-posted and whose thread has not yet been harvested into an "
-"idea"
+msgid "Messages top-posted and whose thread has not yet been harvested into an idea"
 msgstr "最新发布的消息，其线程尚未被收录到一个想法中"
 
 #: assembl/templates/views/orphanMessagesInIdeaList.tmpl:9
@@ -4468,9 +4218,7 @@ msgid "Clear"
 msgstr "清除"
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:3
-msgid ""
-"You will be redirected to another idea in connection with the nugget on "
-"which you clicked."
+msgid "You will be redirected to another idea in connection with the nugget on which you clicked."
 msgstr "您将被重新定向到与您点击的代码碎块相关的另一个想法。"
 
 #: assembl/templates/views/showSegmentByAnnotation.tmpl:10
@@ -4553,13 +4301,8 @@ msgid "Add another email"
 msgstr "添加另一个电子邮件"
 
 #: assembl/templates/views/userAccount.tmpl:55
-msgid ""
-"Linking your account allows you to connect through social networks, and "
-"to use your profile's picture. Otherwise, you can set your profile "
-"picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
-msgstr ""
-"关联您的帐户可让您通过社交网络进行连接，并使用您的个人资料的图片。否则，您可以使用<a "
-"href='http://en.gravatar.com/'>gravatar</a>服务设置个人资料图片。"
+msgid "Linking your account allows you to connect through social networks, and to use your profile's picture. Otherwise, you can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
+msgstr "关联您的帐户可让您通过社交网络进行连接，并使用您的个人资料的图片。否则，您可以使用<a href='http://en.gravatar.com/'>gravatar</a>服务设置个人资料图片。"
 
 #: assembl/templates/views/userAccountForm.tmpl:10
 msgid "You can set a username as an alternate way to login."
@@ -4579,9 +4322,7 @@ msgid "Confirm password"
 msgstr "确认密码"
 
 #: assembl/templates/views/userAccountForm.tmpl:37
-msgid ""
-"You can set your profile picture with the <a "
-"href='http://en.gravatar.com/'>gravatar</a> service."
+msgid "You can set your profile picture with the <a href='http://en.gravatar.com/'>gravatar</a> service."
 msgstr "您可以使用<a href='http://en.gravatar.com/'>gravatar</a>服务设置个人资料图片。"
 
 #: assembl/templates/views/userNavigationMenu.tmpl:3
@@ -4618,21 +4359,19 @@ msgstr "退订"
 
 #: assembl/views/__init__.py:904
 msgid "error"
-msgstr ""
+msgstr "错误"
 
 #: assembl/views/__init__.py:905
-msgid ""
-"Our server has encountered a problem. The page you have requested is not "
-"accessible."
-msgstr ""
+msgid "Our server has encountered a problem. The page you have requested is not accessible."
+msgstr "我们的服务器遇到一个错误。您请求的页无法访问。"
 
 #: assembl/views/__init__.py:906
 msgid "We apologize for the inconvenience"
-msgstr ""
+msgstr "我们对于给您带来的不便深感抱歉。"
 
 #: assembl/views/__init__.py:907
 msgid "Homepage"
-msgstr ""
+msgstr "主页"
 
 #: assembl/views/admin/views.py:392
 msgid "No file given."
@@ -4661,7 +4400,7 @@ msgstr "您的消息是空的"
 
 #: assembl/views/api2/auth.py:47
 msgid "The provided input combination is not valid."
-msgstr ""
+msgstr "提供的输入组合无效。"
 
 #: assembl/views/api2/auth.py:368
 msgid "Please give an identifier"
@@ -4699,16 +4438,12 @@ msgid "No email."
 msgstr "没有电子邮件"
 
 #: assembl/views/api2/auth.py:518
-msgid ""
-"Your email domain has not been approved for registration. Please contact "
-"${emails} for support."
-msgstr ""
+msgid "Your email domain has not been approved for registration. Please contact ${emails} for support."
+msgstr "您的电子邮件域名尚未被批准注册。请联系${emails}获取支持。"
 
 #: assembl/views/api2/auth.py:519
-msgid ""
-"Your email domain has not been approved for registration. Please contact "
-"one of ${emails} for support."
-msgstr ""
+msgid "Your email domain has not been approved for registration. Please contact one of ${emails} for support."
+msgstr "您的电子邮件域名尚未被批准注册。请联系${emails}获取支持。"
 
 #: assembl/views/auth/views.py:300
 #, python-format
@@ -4724,9 +4459,7 @@ msgid "The passwords should be identical"
 msgstr "密码应该一致"
 
 #: assembl/views/auth/views.py:468
-msgid ""
-"Your email was refused by the SMTP server.  You probably entered an email"
-" that does not exist."
+msgid "Your email was refused by the SMTP server.  You probably entered an email that does not exist."
 msgstr "您的电子邮件被SMTP服务器拒绝。您可能输入了不存在的电子邮件。"
 
 #: assembl/views/auth/views.py:525 assembl/views/auth/views.py:850
@@ -4751,11 +4484,7 @@ msgid "Confirmation requested"
 msgstr "已按要求确认"
 
 #: assembl/views/auth/views.py:617 assembl/views/auth/views.py:816
-msgid ""
-"A confirmation e-mail has been sent to your account and should be in your"
-" inbox in a few minutes. It contains a confirmation link, please click on"
-" it in order to confirm your e-mail address. If you did not receive any "
-"confirmation e-mail (check your spams), click here."
+msgid "A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. If you did not receive any confirmation e-mail (check your spams), click here."
 msgstr "确认电子邮件已发送到您的帐户，并且应该在几分钟之内出现在您的收件箱中。它包含一个确认链接，请点击它以确认您的电子邮件地址。如果您没有收到任何确认电子邮件（请检查您的垃圾邮件），请点击此处。"
 
 #: assembl/views/auth/views.py:665 assembl/views/auth/views.py:689
@@ -4778,9 +4507,7 @@ msgstr "此链接无效。请尝试登录以获得另一个链接。"
 
 #: assembl/views/auth/views.py:732
 #, python-format
-msgid ""
-"Your email address %s has been confirmed, and you are now subscribed to "
-"discussion's default notifications."
+msgid "Your email address %s has been confirmed, and you are now subscribed to discussion's default notifications."
 msgstr "您的电子邮件地址%s已被确认，您现在已订阅讨论的默认通知。"
 
 #: assembl/views/auth/views.py:737
@@ -4805,9 +4532,7 @@ msgid "Password change requested"
 msgstr "已请求更改密码"
 
 #: assembl/views/auth/views.py:904
-msgid ""
-"We have sent you an email with a temporary connection link. Please use "
-"that link to log in and change your password."
+msgid "We have sent you an email with a temporary connection link. Please use that link to log in and change your password."
 msgstr "我们向您发送了一个带临时链接的电子邮件。请使用该链接登录并更改密码。"
 
 #: assembl/views/auth/views.py:985
@@ -4843,17 +4568,14 @@ msgid "account"
 msgstr "帐户"
 
 #: assembl/views/auth/views.py:1078
-msgid ""
-"Hello, {name}, and welcome to {assembl}!\n"
+msgid "Hello, {name}, and welcome to {assembl}!\n"
 "\n"
-"Please confirm your email address and complete your registration by "
-"clicking the link below.\n"
+"Please confirm your email address and complete your registration by clicking the link below.\n"
 "<{confirm_url}>\n"
 "\n"
 "Best regards,\n"
 "The {assembl} Team"
-msgstr ""
-"您好，{name}，欢迎来到{assembl}！\n"
+msgstr "您好，{name}，欢迎来到{assembl}！\n"
 "\n"
 "请确认您的电子邮件地址，然后点击下方链接完成注册。\n"
 "<{confirm_url}>\n"
@@ -4862,30 +4584,24 @@ msgstr ""
 "{assembl}团队"
 
 #: assembl/views/auth/views.py:1085
-msgid ""
-"<p>Hello, {name}, and welcome to {assembl}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
-"address</a>\n"
+msgid "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
+"<p>Please <a href=\"{confirm_url}\">click here to confirm your email address</a>\n"
 "and complete your registration.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
-msgstr ""
-"<p>您好，{name}，欢迎来到{assembl}！</p>\n"
+msgstr "<p>您好，{name}，欢迎来到{assembl}！</p>\n"
 "<p>请<a href=\"{confirm_url}\">点击此处确认您的电子邮件地址</a>\n"
 "并完成您的注册。</p>\n"
 "<p>敬上，<br /> {assembl}团队</p>"
 
 #: assembl/views/auth/views.py:1090
-msgid ""
-"Hello, {name}!\n"
+msgid "Hello, {name}!\n"
 "\n"
-"Please confirm your new email address <{email}> on your {assembl} account"
-" by clicking the link below.\n"
+"Please confirm your new email address <{email}> on your {assembl} account by clicking the link below.\n"
 "<{confirm_url}>\n"
 "\n"
 "Best regards,\n"
 "The {assembl} Team"
-msgstr ""
-"您好，{name}！\n"
+msgstr "您好，{name}！\n"
 "\n"
 "请点击下面的链接，在您的{assembl}帐户上确认您的新电子邮件地址<{email}>。\n"
 "<{confirm_url}>\n"
@@ -4894,14 +4610,11 @@ msgstr ""
 " {assembl}团队"
 
 #: assembl/views/auth/views.py:1097
-msgid ""
-"<p>Hello, {name}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
-"address</a>\n"
+msgid "<p>Hello, {name}!</p>\n"
+"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email address</a>\n"
 "on your {assembl} account.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
-msgstr ""
-"<p>您好，{name}！</p>\n"
+msgstr "<p>您好，{name}！</p>\n"
 "<p>请<a href=\"{confirm_url}\">点击此处确认您在{assembl}帐户上的新电子邮件地址</a>\n"
 "</p>\n"
 "<p>敬上，<br /> {assembl}团队</p>"
@@ -4911,27 +4624,20 @@ msgid "Request for password change"
 msgstr "请求更改密码"
 
 #: assembl/views/auth/views.py:1155
-msgid ""
-"<p>Hello, {name}!</p>\n"
-"<p>We have received a request to change the password on your {assembl} "
-"account.\n"
-"Please <a href=\"{confirm_url}\">click here to confirm your password "
-"change</a>.</p>\n"
-"<p>If you did not ask to reset your password please disregard this "
-"email.</p>\n"
+msgid "<p>Hello, {name}!</p>\n"
+"<p>We have received a request to change the password on your {assembl} account.\n"
+"Please <a href=\"{confirm_url}\">click here to confirm your password change</a>.</p>\n"
+"<p>If you did not ask to reset your password please disregard this email.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>\n"
-msgstr ""
-"<p>您好，{name}！</p>\n"
+msgstr "<p>您好，{name}！</p>\n"
 "<p>我们已收到您要更改{assembl}帐户密码的请求。\n"
 "请<a href=\"{confirm_url}\">点击此处确认您的密码更改</a>。</p>\n"
 "<p>如果您没有请求重置密码，请忽略此电子邮件。</p>\n"
 "<p>敬上，<br /> {assembl}团队</p>\n"
 
 #: assembl/views/auth/views.py:1161
-msgid ""
-"Hello, {name}!\n"
-"We have received a request to change the password on your {assembl} "
-"account.\n"
+msgid "Hello, {name}!\n"
+"We have received a request to change the password on your {assembl} account.\n"
 "To confirm your password change please click on the link below.\n"
 "<{confirm_url}>\n"
 "\n"
@@ -4939,8 +4645,7 @@ msgid ""
 "\n"
 "Best regards,\n"
 "The {assembl} Team\n"
-msgstr ""
-"您好，{name}！\n"
+msgstr "您好，{name}！\n"
 "我们已收到更改{assembl}帐户密码的请求。\n"
 "要确认您的密码更改，请点击下方链接。\n"
 "<{confirm_url}>\n"
@@ -4953,7 +4658,7 @@ msgstr ""
 #: assembl/views/discussion/views.py:58
 #, python-format
 msgid "No discussion found for slug=%s"
-msgstr "没有讨论地址=%s"
+msgstr "找不到讨论 slug=%s"
 
 #~ msgid "Add a title"
 #~ msgstr "添加标题"
@@ -5056,4 +4761,3 @@ msgstr "没有讨论地址=%s"
 
 #~ msgid "This is not a user"
 #~ msgstr "这不是用户"
-
