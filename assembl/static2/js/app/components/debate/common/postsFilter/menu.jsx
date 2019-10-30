@@ -5,14 +5,12 @@ import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import { I18n, Translate } from 'react-redux-i18n';
 import Select from 'react-select';
-import { compose, graphql } from 'react-apollo';
-import { withRouter } from 'react-router';
+import { compose } from 'react-apollo';
 
 import PostsFilterMenuItem from './menuItem';
 import PostsFilterButton from './button';
 import PostsFilterButtons from './buttons';
 import PostsFilterLabelMenuItem from './label';
-import HashtagsQuery from '../../../../graphql/HashtagsQuery.graphql';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { withScreenHeight } from '../../../common/screenDimensions';
 import { defaultDisplayPolicy, defaultOrderPolicy, defaultPostsFiltersStatus } from './policies';
@@ -22,7 +20,6 @@ type Props = {
   defaultDisplayPolicy: PostsDisplayPolicy,
   defaultOrderPolicy: PostsOrderPolicy,
   defaultPostsFiltersStatus: PostsFiltersStatus,
-  hashtags?: string[],
   postsDisplayPolicies: PostsDisplayPolicy[],
   postsFiltersPolicies: PostsFilterPolicy[],
   postsOrderPolicies: PostsOrderPolicy[],
@@ -143,17 +140,12 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 
   render() {
     const { selectedPostsDisplayPolicy, selectedPostsFiltersStatus, selectedPostsOrderPolicy, sticky } = this.state;
-    const { hashtags, postsDisplayPolicies, postsOrderPolicies, postsFiltersPolicies, stickyTopPosition } = this.props;
+    const { postsDisplayPolicies, postsOrderPolicies, postsFiltersPolicies, stickyTopPosition } = this.props;
     const userIsConnected: boolean = !!getConnectedUserId();
     const actualPolicies = postsFiltersPolicies.filter(
       (policy: PostsFilterPolicy) => (policy.anonymous ? true : userIsConnected)
     );
-    const selects = {
-      'filter-hashtags': {
-        options: (hashtags || []).map(hashtag => ({ value: hashtag, label: hashtag })),
-        values: selectedPostsFiltersStatus.hashtags.map(v => ({ label: v, value: v }))
-      }
-    };
+    const selects = {};
 
     return (
       <div
@@ -261,13 +253,4 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 
 export default compose(
   withScreenHeight,
-  withRouter,
-  graphql(HashtagsQuery, {
-    options: props => ({
-      variables: {
-        ideaId: props.themeId || (props.params && props.params.themeId) || ''
-      }
-    }),
-    props: ({ data }) => ({ hashtags: data.hashtags })
-  })
 )(DumbPostsFilterMenu);
