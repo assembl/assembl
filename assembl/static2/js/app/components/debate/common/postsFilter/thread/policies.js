@@ -24,6 +24,5 @@ export const postsDisplayPolicies: PostsDisplayPolicy[] = [fullDisplayPolicy, su
 
 export const postsFiltersPolicies: PostsFilterPolicy[] = [
   onlyMyPostFilterPolicy,
-  myPostsAndAnswersFilterPolicy,
-  hashtagsFilterPolicy
+  myPostsAndAnswersFilterPolicy
 ];

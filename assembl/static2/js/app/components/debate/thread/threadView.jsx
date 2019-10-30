@@ -10,6 +10,7 @@ import InfiniteSeparator from '../../../components/common/infiniteSeparator';
 import { getIsPhaseCompletedById } from '../../../utils/timeline';
 import type { ContentLocaleMapping } from '../../../actions/actionTypes';
 import ThreadPostsFilterMenu from '../common/postsFilter/thread/menu';
+import ThreadPostsHashtagsFilter from '../common/postsFilter/thread/hashtagFilter';
 import { defaultDisplayPolicy } from '../common/postsFilter/policies';
 
 type Props = {
@@ -52,14 +53,21 @@ class ThreadView extends React.Component<Props> {
       messageViewOverride
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
+    const hashtagFilter = <ThreadPostsHashtagsFilter />;
+    const postsFilter = <ThreadPostsFilterMenu stickyOffset={60} stickyTopPosition={200} />
+
     return (
       <div>
-        {(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted ? (
-          <TopPostFormContainer ideaId={ideaId} refetchIdea={refetchIdea} topPostsCount={posts.length} />
-        ) : null}
+        <TopPostFormContainer
+          showForm={(!isUserConnected || connectedUserCan(Permissions.ADD_POST)) && !isPhaseCompleted}
+          hashtagFilter={hashtagFilter}
+          filter={postsFilter}
+          ideaId={ideaId}
+          refetchIdea={refetchIdea}
+          topPostsCount={posts.length}
+        />
         <Grid fluid className="background-grey">
           <div id="thread-view" className="max-container background-grey">
-            <ThreadPostsFilterMenu stickyOffset={60} stickyTopPosition={200} />
             <div className="content-section">
               <Tree
                 sharedProps={{ postsDisplayPolicy: postsDisplayPolicy, onHashtagClick: onHashtagClick }}
