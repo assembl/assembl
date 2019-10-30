@@ -448,6 +448,9 @@ const Translations = {
         backToQuestions: "Retour aux questions"
       },
       thread: {
+        hashtagsFilter: {
+          noOption: "Recherche ta ville, ton pays. Exemple #Lille..."
+        },
         messageTranslatedFrom: "Ce message a été traduit du texte %{language}.",
         messageOriginallyIn: "Ce message a été rédigé en %{language}.",
         translateAllMessagesIn: "Je souhaite traduire tous les messages rédigés en %{language}.",
@@ -2678,6 +2681,9 @@ const Translations = {
         backToQuestions: "Back to questions"
       },
       thread: {
+        hashtagsFilter: {
+          noOption: "Search your city, your country. For instance #Lille..."
+        },
         messageTranslatedFrom: "This message has been translated from %{language}.",
         messageOriginallyIn: "This message has been written in %{language}",
         translateAllMessagesIn: "Translate all messages posted in %{language}.",

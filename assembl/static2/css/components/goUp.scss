@@ -32,16 +32,20 @@
 }
 
 .posts-filter-button {
-  $post-filter-button-margin-top: 80px;
+  $post-filter-button-margin-top: 0;
 
-  z-index: 1;
+  z-index: 9999;
   position: -webkit-sticky;
   position: sticky;
   float: right;
   margin-top: $post-filter-button-margin-top;
 
   .dropdown {
-    z-index: 9;
+    z-index: 99999;
+
+    button {
+      height: 52px;
+    }
   }
 
   ul {
