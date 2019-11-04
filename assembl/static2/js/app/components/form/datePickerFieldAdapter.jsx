@@ -25,14 +25,16 @@ class DatePicker extends BaseDatePicker {
     } else {
       this.props.onBlur(event);
     }
-
-    // remove focus and close with a timeout because of conflict with react-select
-    // https://github.com/Hacker0x01/react-datepicker/issues/730
-    // https://github.com/JedWatson/react-select/issues/1539
-    setTimeout(() => {
-      this.cancelFocusInput();
-      this.setOpen(false);
-    }, 100);
+    if (!event.relatedTarget) {
+      // if there is no secondary target, this means that we have clicked on a date
+      // there, we remove focus and close with a timeout because of conflict with react-select
+      // https://github.com/Hacker0x01/react-datepicker/issues/730
+      // https://github.com/JedWatson/react-select/issues/1539
+      setTimeout(() => {
+        this.cancelFocusInput();
+        this.setOpen(false);
+      }, 100);
+    }
   };
 }
 
