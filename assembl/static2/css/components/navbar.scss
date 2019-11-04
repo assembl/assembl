@@ -289,7 +289,7 @@
       .navbar-language {
         display: flex;
         justify-content: center;
-        padding: 20px;
+        padding: 5px 20px;
       }
 
       .dropdown-menu-right {
@@ -322,7 +322,7 @@
   @media (max-width: $screen-xs-max) {
     #screen-too-small {
       width: 100%;
-      padding-bottom: 100px;
+      padding-bottom: 150px;
     }
 
     #search {
