@@ -39,7 +39,7 @@ export default compose(
   graphql(HashtagsQuery, {
     options: props => ({
       variables: {
-        ideaId: props.questionId || (props.params && props.params.questionId) || ''
+        ideaId: props.questionId || ((props.params && (props.params.questionId || props.params.themeId)) || '')
       }
     }),
     props: ({ data }) => ({ hashtags: data.hashtags })

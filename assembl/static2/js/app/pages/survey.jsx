@@ -9,8 +9,8 @@ import type { Map } from 'immutable';
 import { updateContentLocale } from '../actions/contentLocaleActions';
 import manageErrorAndLoading from '../components/common/manageErrorAndLoading';
 import Header from '../components/common/header';
-import { SurveyAnnouncement } from '../components/debate/common/announcement';
 import type { AnnouncementContent } from '../components/debate/common/announcement';
+import { SurveyAnnouncement } from '../components/debate/common/announcement';
 import Question from '../components/debate/survey/question';
 import Navigation from '../components/debate/survey/navigation';
 import Proposals from '../components/debate/survey/proposals';
@@ -19,6 +19,8 @@ import ThematicQuery from '../graphql/ThematicQuery.graphql';
 import SemanticAnalysisForThematicQuery from '../graphql/SemanticAnalysisForThematicQuery.graphql';
 import { get as getRoute } from '../utils/routeMap';
 import HeaderStatistics, { statContributions, statMessages, statParticipants } from '../components/common/headerStatistics';
+import QuestionHashtagFilterMenu from '../components/debate/common/postsFilter/question/hashtagFilter';
+import { setQuestionPostsFilterHashtags } from '../actions/questionFilterActions';
 
 type PostNode = {
   node: {
@@ -43,6 +45,7 @@ type Props = {
   imgUrl: string,
   numContributors: number,
   numPosts: number,
+  setPostsFilterHashtags: Function,
   phaseId: string,
   questions: Array<QuestionType>,
   refetchThematic: Function,
@@ -108,6 +111,7 @@ class Survey extends React.Component<Props, State> {
 
   render() {
     const {
+      announcement,
       id,
       identifier,
       imgUrl,
@@ -119,10 +123,10 @@ class Survey extends React.Component<Props, State> {
       title,
       description,
       slug,
+      semanticAnalysisForThematicData,
+      setPostsFilterHashtags,
       totalSentiments,
-      timeline,
-      announcement,
-      semanticAnalysisForThematicData
+      timeline
     } = this.props;
     const isPhaseCompleted = getIsPhaseCompletedById(timeline, phaseId);
     const phaseUrl = `${getRoute('debate', { slug: slug, phase: identifier })}`;
@@ -148,7 +152,6 @@ class Survey extends React.Component<Props, State> {
               </Grid>
             </section>
           ) : null}
-
           <div className="questions">
             {questions &&
               questions.map((question, index) => (
@@ -186,11 +189,14 @@ class Survey extends React.Component<Props, State> {
                         <Translate value="debate.survey.proposalsTitle" />
                       </h1>
                     </div>
-
+                    <div style={{ margin: '12px 0', width: '30%', minWidth: '360px' }}>
+                      <QuestionHashtagFilterMenu />
+                    </div>
                     <div className="center">
                       {questions &&
                         questions.map((question, index) => (
                           <Proposals
+                            onHashtagClick={setPostsFilterHashtags}
                             hasPendingPosts={question.hasPendingPosts}
                             identifier={identifier}
                             nbPostsToShow={3}
@@ -222,17 +228,25 @@ class Survey extends React.Component<Props, State> {
 const mapStateToProps = state => ({
   timeline: state.timeline,
   defaultContentLocaleMapping: state.defaultContentLocaleMapping,
+  hashtags: state.questionFilter.postsFiltersStatus.hashtags,
   lang: state.i18n.locale,
   slug: state.debate.debateData.slug
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateContentLocaleMapping: data => dispatch(updateContentLocale(data))
+  updateContentLocaleMapping: data => dispatch(updateContentLocale(data)),
+  setPostsFilterHashtags: (hashtag: string) => dispatch(setQuestionPostsFilterHashtags([hashtag]))
 });
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   graphql(ThematicQuery, {
+    options: props => ({
+      variables: {
+        ...props.variables,
+        hashtags: props.hashtags
+      }
+    }),
     props: ({ data, ownProps }) => {
       if (data.error || data.loading) {
         return {

@@ -21,6 +21,7 @@ class Proposals extends React.Component {
       hasPendingPosts,
       identifier,
       isPhaseCompleted,
+      onHashtagClick,
       questionIndex,
       questionId,
       themeId,
@@ -60,6 +61,7 @@ class Proposals extends React.Component {
           <div className={this.state.hideProposals ? 'hidden' : 'shown'}>
             {postsToShow.map((post, index) => (
               <Post
+                onHashtagClick={onHashtagClick}
                 id={post.node.id}
                 identifier={identifier}
                 isPhaseCompleted={isPhaseCompleted}

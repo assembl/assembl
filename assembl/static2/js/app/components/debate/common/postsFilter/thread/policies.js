@@ -2,7 +2,6 @@
 import {
   chronologicalTopPolicy,
   fullDisplayPolicy,
-  hashtagsFilterPolicy,
   myPostsAndAnswersFilterPolicy,
   onlyMyPostFilterPolicy,
   popularityPolicy,
