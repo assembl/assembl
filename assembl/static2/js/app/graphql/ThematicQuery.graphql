@@ -1,4 +1,4 @@
-query ThematicQuery($lang: String!, $id: ID!) {
+query ThematicQuery($lang: String!, $id: ID!, $hashtags: [String]) {
   thematic: node(id: $id) {
     ... on Idea {
       id
@@ -10,7 +10,7 @@ query ThematicQuery($lang: String!, $id: ID!) {
           title(lang: $lang)
           id
           hasPendingPosts
-          posts(first: 3, random: true) {
+          posts(first: 3, random: true, hashtags: $hashtags) {
             edges {
               node {
                 ... on Post {
