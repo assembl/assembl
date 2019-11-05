@@ -2,12 +2,12 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { compose, graphql } from 'react-apollo';
-import { FormGroup, Button } from 'react-bootstrap';
+import { Button, FormGroup } from 'react-bootstrap';
 import { I18n, Translate } from 'react-redux-i18n';
 import classNames from 'classnames';
 import { EditorState } from 'draft-js';
 
-import { PublicationStates, MESSAGE_VIEW } from '../../../constants';
+import { MESSAGE_VIEW, PublicationStates } from '../../../constants';
 import createPostMutation from '../../../graphql/mutations/createPost.graphql';
 import uploadDocumentMutation from '../../../graphql/mutations/uploadDocument.graphql';
 import { convertContentStateToHTML, editorStateIsEmpty, uploadNewAttachments } from '../../../utils/draftjs';
@@ -17,6 +17,7 @@ import { TextInputWithRemainingChars } from '../../common/textInputWithRemaining
 import RichTextEditor from '../../common/richTextEditor';
 import { connectedUserIsModerator } from '../../../utils/permissions';
 import { DebateContext } from '../../../app';
+import HashtagsQuery from '../../../graphql/HashtagsQuery.graphql';
 
 export const TEXT_INPUT_MAX_LENGTH = 140;
 export const NO_BODY_LENGTH = 0;
@@ -291,6 +292,14 @@ const TopPostFormWithContext = props => (
 
 export default compose(
   connect(mapStateToProps),
-  graphql(createPostMutation, { name: 'createPost' }),
+  graphql(createPostMutation, {
+    name: 'createPost',
+    options: props => ({
+      refetchQueries: [{
+        query: HashtagsQuery,
+        variables: { ideaId: props.ideaId }
+      }]
+    })
+  }),
   graphql(uploadDocumentMutation, { name: 'uploadDocument' })
 )(TopPostFormWithContext);

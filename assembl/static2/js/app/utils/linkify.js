@@ -8,8 +8,8 @@ function addIframeForStoryChief(html: string): string {
   return html.replace(url, '<iframe class="synthesis-iframe" src="$2"></iframe>');
 }
 
-const HASHTAG_REGEX = /(?:\s|^)(#[A-Za-z0-9\-_]+)/g;
-const HASHTAG_REPLACEMENT = ' <a href="$1" target="_self">$1</a>';
+const HASHTAG_REGEX = /(\s|^|\n|>)(#[A-Za-z0-9\-_]+)/g;
+const HASHTAG_REPLACEMENT = '$1 <a href="$2" target="_self">$2</a>';
 
 export function transformLinksInHtml(html: string, options: TransformLinkOptions = {}): string {
   let content = linkifyHtml(html);
