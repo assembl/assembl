@@ -127,7 +127,7 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
   };
 
   renderFormControl = () => {
-    const { type, value, disabled, componentClass, id, onChange, formControlProps, children } = this.props;
+    const { required, type, value, disabled, componentClass, id, onChange, formControlProps, children } = this.props;
     if (type === 'rich-text') {
       return this.renderRichTextEditor();
     }
@@ -149,6 +149,7 @@ class FormControlWithLabel extends React.Component<FormControlWithLabelProps, Fo
     const name = this.props.name ? this.props.name : id;
     return (
       <FormControl
+        required={required}
         name={name}
         type={type}
         placeholder={this.getLabel()}

@@ -18,6 +18,7 @@ exports[`ConfiguredField component should match ConfiguredField snapshot (EMAIL)
     onBlur={[Function]}
     onChange={[Function]}
     placeholder="My email field"
+    required={false}
     type="text"
     value="foobar"
   />
@@ -43,6 +44,7 @@ exports[`ConfiguredField component should match ConfiguredField snapshot (TEXT) 
     onBlur={[Function]}
     onChange={[Function]}
     placeholder="My field*"
+    required={true}
     type="text"
     value="foobar"
   />

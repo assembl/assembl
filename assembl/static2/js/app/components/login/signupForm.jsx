@@ -113,7 +113,9 @@ class SignupForm extends React.Component<Props, State> {
   };
 
   toggleCheck = (legalContentsType: string) => {
-    this.setState(prevState => ({ [`${legalContentsType}IsChecked`]: !prevState[`${legalContentsType}IsChecked`] }));
+    this.setState(prevState => ({
+      [`${legalContentsType}IsChecked`]: !prevState[`${legalContentsType}IsChecked`]
+    }));
   };
 
   handleAcceptButton = (legalContentsType: string) => {
@@ -198,7 +200,7 @@ class SignupForm extends React.Component<Props, State> {
                       required={field.required}
                       labelAlwaysVisible
                     >
-                      {!field.required ? <option key="0" value="" /> : null}
+                      {!field.required ? <option key="0" value="" /> : <option key="0" disabled value="" />}
                       {field.options.map(option => (
                         <option key={option.id} value={option.id}>
                           {option.label}
