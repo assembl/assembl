@@ -6,7 +6,7 @@
   "author": "Bluenove",
   "license": "MIT",
   "dependencies": {
-    "draft-js": "^0.10.5",
+    "draft-js": "^0.11.2",
     "draft-js-plugins-utils": "^2.0.3"
   },
   "devDependencies": {

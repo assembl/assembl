@@ -114,7 +114,7 @@
     "css-loader": "^3.1.0",
     "custom-event-polyfill": "^1.0.7",
     "draft-convert": "^2",
-    "draft-js": "^0.10.5",
+    "draft-js": "^0.11.2",
     "draft-js-buttons": "^2.0.1",
     "draft-js-counter-plugin": "^2.0.1",
     "draft-js-plugins-editor": "^2.1.1",
