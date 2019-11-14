@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest --maxWorkers=2",
     "test:watch": "npm test -- --watch",
-    "build:raw": "webpack --progress --colors",
+    "build:raw": "node --max_old_space_size=4096 ./node_modules/webpack/bin/webpack.js --progress --colors",
     "build:cleanup": "find ./build | egrep \"(mainStyle|glyphicons).*\" | xargs rm",
     "build": "yarn build:raw && yarn build:cleanup",
     "coverage": "jest --coverage",
