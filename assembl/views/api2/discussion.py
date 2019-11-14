@@ -184,6 +184,7 @@ def get_time_series_analytics(request):
     start, end, interval = get_time_series_timing(request)
     discussion = request.context._instance
     user_id = request.authenticated_userid or Everyone
+    as_buffer = asbool(request.GET.get('as_buffer', False))
     format = get_format(request)
     results = []
 
@@ -486,7 +487,7 @@ def get_time_series_analytics(request):
 
         intervals_table.drop(bind=bind)
 
-    if format == JSON_MIMETYPE:
+    if format == JSON_MIMETYPE and not as_buffer:
             # json default
         return Response(json.dumps(results, cls=DateJSONEncoder),
                         content_type='application/json')
@@ -521,7 +522,7 @@ def get_time_series_analytics(request):
         "UNRELIABLE_count_post_viewers",
     ]
     # otherwise assume csv
-    return csv_response([r._asdict() for r in results], format, fieldnames)
+    return csv_response([r._asdict() for r in results], format, fieldnames, as_buffer=as_buffer)
 
 
 @view_config(context=InstanceContext, name="extract_csv_taxonomy",
@@ -531,6 +532,8 @@ def extract_taxonomy_csv(request):
     import assembl.models as m
     discussion = request.context._instance
     db = discussion.db
+    as_buffer = asbool(request.GET.get('as_buffer', False))
+
     extracts = db.query(m.Extract
         ).filter(m.Extract.discussion_id == discussion.id
         ).options(
@@ -648,7 +651,7 @@ def extract_taxonomy_csv(request):
             {tag_name: tags[index].encode('utf-8') if len_tags > index else "" for index, tag_name in enumerate(tags_names)})
         extract_list.append(extract_info)
 
-    return csv_response(extract_list, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="extract_taxonomies.csv"')
+    return csv_response(extract_list, CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="extract_taxonomies.csv"', as_buffer=as_buffer)
 
 
 @view_config(context=InstanceContext, name="multi-module-export",
@@ -697,6 +700,7 @@ def users_csv_export(request):
     discussion = request.context._instance
     db = discussion.db
     user_prefs = LanguagePreferenceCollection.getCurrent()
+    as_buffer = asbool(request.GET.get('as_buffer', False))
 
     ID = u"id".encode('utf-8')
     NAME = u"Nom prénom".encode('utf-8')
@@ -834,15 +838,38 @@ def users_csv_export(request):
 
             users[user.id][custom_field_label] = formatted_value
 
-        #Get SSO extra information
+        # Get SSO extra information
+        def _parse_sso_info(data):
+            if isinstance(data, dict):
+                # Extra Data content that is a dict type
+                clean_value = {}
+                for k, v in data.iteritems():
+                    # Many providers send their values wrapped in an array
+                    if isinstance(v, list) and len(v) == 1:
+                        _v = v[0]
+                        if isinstance(_v, basestring):
+                            _v = _v.encode('utf-8')
+                        clean_value[k] = _v
+                    elif isinstance(v, basestring):
+                        clean_value[k] = v.encode('utf-8')
+                    else:
+                        clean_value[k] = v
+                clean_value = json.dumps(clean_value)
+            else:
+                if isinstance(data, basestring):
+                    clean_value = data.encode('utf-8')
+                else:
+                    clean_value = data
+            return clean_value
+
         for account in user.social_accounts:
             for key, value in account.extra_data.iteritems():
                 if key not in fieldnames:
-                    fieldnames.append(key)
+                    fieldnames.append(key.encode('utf-8'))
                 if key not in users[user.id].keys():
-                    users[user.id][key] = value
+                    users[user.id][key] = _parse_sso_info(value)
                 else:
-                    users[user.id][key] += ', ' + value
+                    users[user.id][key] += ', ' + _parse_sso_info(value)
 
     for post in posts:
         creator_id = post.creator.id
@@ -876,7 +903,7 @@ def users_csv_export(request):
                 else:
                     users[creator_id][IDEAS] += ", %s(%d)" % (idea_title, idea.id)
 
-    return csv_response(users.values(), CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="users.csv"')
+    return csv_response(users.values(), CSV_MIMETYPE, fieldnames, content_disposition='attachment; filename="users.csv"', as_buffer=as_buffer)
 
 
 def transform_fieldname(fn):
@@ -906,7 +933,24 @@ def csv_response(results, format, fieldnames=None, content_disposition=None, as_
     if fieldnames:
         writerow([transform_fieldname(fn) for fn in fieldnames])
         for r in results:
-            writerow([r.get(f, empty) for f in fieldnames])
+            row = []
+            for f in fieldnames:
+                _r = r.get(f, empty)
+                if _r and isinstance(_r, dict):
+                    for (k, v) in _r.iteritems():
+                        if isinstance(v, list) and len(v) == 1:
+                            _v = v[0]
+                            if isinstance(_v, basestring):
+                                _v = unicode(_v)
+                        elif isinstance(v, basestring):
+                            _v = unicode(v)
+                        else:
+                            _v = v
+                        _r[k] = _v
+                    row.append(_r)
+                else:
+                    row.append(_r)
+            writerow(row)
     else:
         for r in results:
             writerow(r)
@@ -918,7 +962,7 @@ def csv_response(results, format, fieldnames=None, content_disposition=None, as_
     output.seek(0)
     if not as_buffer:
         return Response(body_file=output, content_type=format, content_disposition=content_disposition)
-    return output
+    return output, format
 
 
 def escapeit(r, data):
@@ -998,7 +1042,7 @@ def csv_response_multiple_sheets(results,
     output.seek(0)
     if not as_buffer:
         return Response(body_file=output, content_type=XSLX_MIMETYPE, content_disposition=content_disposition)
-    return output
+    return output, XSLX_MIMETYPE
 
 
 @view_config(context=InstanceContext, name="contribution_count",

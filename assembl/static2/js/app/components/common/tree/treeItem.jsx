@@ -158,6 +158,8 @@ class Child extends React.PureComponent<Props, State> {
       state => ({ expanded: !state.expanded }),
       () => {
         this.resizeTreeHeight(0);
+        // add a 10px scroll because the posts were not render after the expand but after the first scroll on firefox and safari
+        window.scrollTo({ top: window.pageYOffset + 10 });
       }
     );
   };
@@ -243,7 +245,6 @@ class Child extends React.PureComponent<Props, State> {
       hashid = hash.replace('#', '').split('?')[0];
       isVisible = hashid === id || isVisible;
     }
-
     return (
       <div
         className={classnames(`level level-${level}`, {
