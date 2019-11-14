@@ -63,7 +63,7 @@
     "empty": "^0.10.1",
     "enzyme": "3.10.0",
     "enzyme-adapter-react-16": "1.14.0",
-    "eslint": "~4.12.0",
+    "eslint": "~4.18.2",
     "eslint-config-airbnb": "~15.1.0",
     "eslint-friendly-formatter": "~3.0.0",
     "eslint-plugin-flowtype": "~2.39.0",
