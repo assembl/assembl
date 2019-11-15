@@ -126,7 +126,7 @@ export class DumbPost extends React.PureComponent<Props, State> {
         // and measureTreeHeight finished.
         setTimeout(() => {
           hashLinkScroll(hashPostId);
-        }, 2000);
+        }, 3000);
       }
     }
   }
