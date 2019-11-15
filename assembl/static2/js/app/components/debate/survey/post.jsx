@@ -129,8 +129,7 @@ class Post extends React.Component<Props> {
             },
             __typename: 'AddSentiment'
           }
-        },
-        refetchQueries: refetchQueries
+        }
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);
@@ -158,8 +157,7 @@ class Post extends React.Component<Props> {
             },
             __typename: 'DeleteSentiment'
           }
-        },
-        refetchQueries: refetchQueries
+        }
       })
       .catch((error) => {
         displayAlert('danger', `${error}`);

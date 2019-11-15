@@ -105,8 +105,10 @@ class Child extends React.PureComponent<Props, State> {
   expandParent = () => {
     const { expandParent } = this.props;
     setTimeout(() => {
-      this.setState({ expanded: true });
-      if (expandParent) expandParent();
+      this.setState({ expanded: true }, () => {
+        if (expandParent) expandParent();
+        if (!expandParent) window.location.hash = '';
+      });
     }, 300);
   };
 
