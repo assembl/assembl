@@ -579,7 +579,7 @@ def push_wheelhouse(c, house=None):
         c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path.split('local://')[1]))
     else:
         c.run('cp -r %s %s' % (tmp_wheel_path, wheel_path))
-
+    print("Wheel Built:", base_name)
 
 @task(
     install_build_dependencies,
