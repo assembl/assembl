@@ -12,7 +12,7 @@ from graphql_relay.connection.arrayconnection import offset_to_cursor
 from pyramid.security import Everyone
 from sqlalchemy import desc, func, join, select, or_, and_, cast
 from sqlalchemy import literal_column
-from sqlalchemy.dialects.postgresql import ARRAY, VARCHAR
+from sqlalchemy.dialects.postgresql import ARRAY, VARCHAR, INTEGER
 from sqlalchemy.orm import joinedload
 
 import assembl.graphql.docstrings as docs
@@ -484,8 +484,7 @@ class Idea(SecureObjectType, SQLAlchemyObjectType):
                 query = query.options(*models.Content.joinedload_options())
 
             if hashtags:
-                hashtags_filter = get_hashtags_filter(discussion_id, hashtags)
-                query = query.filter(hashtags_filter)
+                query = get_filtered_on_hashtags(query, discussion_id, hashtags)
 
             post_ids = query.with_entities(models.Post.id).subquery()
         else:
@@ -620,8 +619,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 query = query.filter(Post.creator_id == user_id)
 
             if hashtags:
-                hashtags_filter = get_hashtags_filter(discussion_id, hashtags)
-                query = query.filter(hashtags_filter)
+                query = get_filtered_on_hashtags(query, discussion_id, hashtags)
 
             # retrieve ids, do the random and get the posts for these ids
             post_ids = [e[0] for e in query]
@@ -673,8 +671,7 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
                 query = query.filter(Post.creator_id == user_id)
 
             if hashtags:
-                hashtags_filter = get_hashtags_filter(discussion_id, hashtags)
-                query = query.filter(hashtags_filter)
+                query = get_filtered_on_hashtags(query, discussion_id, hashtags)
 
         from_node = args.get('from_node')
         after = args.get('after')
@@ -711,26 +708,88 @@ class Question(SecureObjectType, SQLAlchemyObjectType):
         return pending_count > 0
 
 
-def get_hashtags_filter(discussion_id, hashtags):
+def get_filtered_on_hashtags(query, discussion_id, hashtags):
+    """
+    we get all the posts that have, anywhere in the post hierarchy, a post with the given hashtags
+    :param query: a query on Post
+    :param discussion_id:
+    :param hashtags: list of hashtags to filter on
+    :return:
+    """
     Post = models.Post
+    Content = models.Content
+    LangStringEntry = models.LangStringEntry
+    session = Post.default_db
+
+    # we join on posts of query for optimization.
+    # we use 'with_entities' because of the ambiguous id between Content.id and Post.id of Post model that breaks subqueries
+    base_posts_sq = query.with_entities(Post.id.label('base_post_id')).subquery('base_posts')
+
+    # get posts that have one of their langstring that contain the given hashtags
     hashtags_value = cast(hashtags, ARRAY(VARCHAR))  # postgresql needs explicit cast
-    hashtag_aggs = func.array_agg(models.LangStringEntry.hashtags)
-    hashtags_query = Post.default_db.query(
-        models.Content.body_id,
+    hashtag_aggs = func.array_agg(LangStringEntry.hashtags)
+
+    posts_with_hashtags = session.query(
+        Post.id,
+    ).join(
+        base_posts_sq, Content.id == base_posts_sq.c.base_post_id,  # optimization
     ).outerjoin(
-        models.LangStringEntry,
-        models.LangStringEntry.langstring_id == models.Content.body_id
-    ).group_by(models.Content.body_id
-               ).filter(
-        models.Content.discussion_id == discussion_id,  # optimisation
-        func.array_length(models.LangStringEntry.hashtags, 1) > 0,  # can't aggregate null or empty arrays
+        LangStringEntry,
+        LangStringEntry.langstring_id == Content.body_id
+    ).group_by(Post.id
+    ).filter(
+        func.array_length(LangStringEntry.hashtags, 1) > 0,  # can't aggregate null or empty arrays
     ).having(
         hashtag_aggs.contains(hashtags_value)
     )
 
-    hashtags_subquery = hashtags_query.subquery()
-    hashtags_filter = models.Content.body_id.in_(hashtags_subquery)
-    return hashtags_filter
+    posts_with_hashtags_sq = posts_with_hashtags.subquery('posts_with_hashtags')
+
+    # get the posts of the discussion with the list of their children
+    posts_hierarchy_child = session.query(
+        Post.id,
+        Post.parent_id,
+        # the post itself is considered as one of its "children" here
+        literal_column("ARRAY[public.post.id]::INTEGER[]").label("children")
+    ).join(
+        base_posts_sq, Content.id == base_posts_sq.c.base_post_id  # optimization
+    ).cte(name='children_for', recursive=True)
+    posts_hierarchy_parent = session.query(
+        Post.id,
+        Post.parent_id,
+        func.array_append(posts_hierarchy_child.c.children, Post.id)  # update array of children of post
+    ).filter(
+        Post.id == posts_hierarchy_child.c.parent_id
+    )
+    posts_hierarchy_cte = posts_hierarchy_child.union_all(posts_hierarchy_parent)  # join recursively
+    posts_hierarchy_cte_children = cast(posts_hierarchy_cte.c.children, ARRAY(INTEGER))
+
+    # get the flattened couples of top posts and all of their children
+    top_posts_children = session.query(
+        posts_hierarchy_cte.c.id,
+        func.unnest(posts_hierarchy_cte_children).label('child')  # flatten couples
+    ).filter(posts_hierarchy_cte.c.parent_id == None  # top post
+    ).distinct()
+    top_posts_children_sq = top_posts_children.subquery('top_posts_children')
+
+    # get top posts that have a children that have the hashtags
+    top_posts_with_children_with_hashtags = session.query(top_posts_children_sq.c.id
+        ).join(posts_with_hashtags_sq, top_posts_children_sq.c.child == posts_with_hashtags_sq.c.id
+        ).distinct()
+    posts_with_children_with_hashtags_sq = top_posts_with_children_with_hashtags.subquery('top_posts_children_with_hashtags')
+
+    # get all the posts whose top post have a children with the hashtag
+    posts_whose_top_post_have_children_with_hashtags = session.query(
+        top_posts_children_sq.c.child.label('post_id')
+    ).join(posts_with_children_with_hashtags_sq, top_posts_children_sq.c.id == posts_with_children_with_hashtags_sq.c.id)
+    posts_whose_top_post_have_children_with_hashtags_sq = posts_whose_top_post_have_children_with_hashtags.subquery('posts_with_top_post_with_children_with_hashtag')
+
+    # restrict the query with a join on the subquery over posts whose top post have a children with the hashtag
+    query = query.join(
+        posts_whose_top_post_have_children_with_hashtags_sq,
+        Post.id == posts_whose_top_post_have_children_with_hashtags_sq.c.post_id
+    )
+    return query
 
 
 class IdeaUnion(SQLAlchemyUnion):
