@@ -1592,6 +1592,7 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                   Object {
                     "height": "12px",
                     "left": "0%",
+                    "right": "auto",
                     "visibility": "visible",
                     "width": "NaN%",
                   }
@@ -1617,6 +1618,8 @@ exports[`Proposals component should match Proposals snapshot 1`] = `
                     "height": "0",
                     "left": "NaN%",
                     "marginTop": "-20px",
+                    "right": "auto",
+                    "transform": "translateX(-50%)",
                     "width": "0",
                   }
                 }
