@@ -174,10 +174,9 @@ class Query(graphene.ObjectType):
         idea_posts_query = idea.get_related_posts_query()
         idea_posts_subquery = idea_posts_query.with_entities(models.Post.id).subquery('idea_posts')
         all_posts = aliased(models.Post, name='all_posts')
-        hashtag_aggs = func.array_agg(models.LangStringEntry.hashtags)
         posts_with_hashtags = idea.db.query(
             all_posts.id,
-            hashtag_aggs.label('hashtags'),
+            models.LangStringEntry.array_agg_hashtags.label('hashtags'),
         ).join(
             idea_posts_subquery,
             all_posts.id == idea_posts_subquery.c.id
@@ -186,7 +185,7 @@ class Query(graphene.ObjectType):
             models.LangStringEntry.langstring_id == all_posts.body_id
         ).filter(
             all_posts.discussion_id == discussion_id,  # optimisation
-            func.array_length(models.LangStringEntry.hashtags, 1) > 0,  # can't aggregate null or empty arrays
+            models.LangStringEntry.have_hashtags_condition,  # can't aggregate null or empty arrays
         ).group_by(all_posts.id)
 
         # with unnest, we can do this in sql, but this is quite unreadable and not sure it is faster

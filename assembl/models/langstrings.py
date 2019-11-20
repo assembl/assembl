@@ -16,7 +16,7 @@ from sqlalchemy import (
     event,
     inspect,
     Sequence,
-    literal)
+    literal, func)
 from sqlalchemy.dialects import postgresql
 from sqlalchemy.ext.hybrid import hybrid_method, hybrid_property
 from sqlalchemy.orm import relationship, backref, subqueryload, joinedload, aliased
@@ -1115,6 +1115,14 @@ class LangStringEntry(TombstonableMixin, Base):
 
     # Those permissions are for an ownerless object. Accept Create before ownership.
     crud_permissions = CrudPermissions(P_READ, P_SYSADMIN, P_SYSADMIN, P_SYSADMIN)
+
+    @classproperty
+    def array_agg_hashtags(cls):
+        return func.array_agg(cls.hashtags)
+
+    @classproperty
+    def have_hashtags_condition(cls):
+        return func.array_length(cls.hashtags, 1) > 0
 
 
 # class TranslationStamp(Base):

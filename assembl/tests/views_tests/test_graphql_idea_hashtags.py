@@ -22,6 +22,10 @@ def test_idea_hashtags(graphql_request, request, test_session,
     post2 = Post.get(second_post_instance_id)
     post2.body.entries[0].value = "The quick brown #fox jumps over the lazy #mouse."
 
+    second_post_instance_id = int(from_global_id(third_post_in_thread_phase)[1])
+    post2 = Post.get(second_post_instance_id)
+    post2.body.entries[0].value = "The quick brown #fox jumps over the lazy #"
+
     create_post_in_thread(title=u"post in other idea",
                           request=request,
                           graphql_request=graphql_request,
