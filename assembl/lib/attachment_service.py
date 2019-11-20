@@ -46,10 +46,15 @@ class HashFsAttachmentService(AttachmentService):
         return address.id
 
     def get_file_path(self, fileHash):
-        return self.hashfs.get(fileHash).abspath.encode('ascii')
+        file_path = self.hashfs.get(fileHash)
+        if file_path:
+            return file_path.abspath.encode('ascii')
+        else:
+            return None
 
     def get_file_stream(self, fileHash):
-        return open(self.get_file_path(fileHash), 'rb')
+        file_path = self.get_file_path(fileHash)
+        return open(file_path, 'rb') if file_path else None
 
     def get_file_url(self, fileHash):
         return b'/private_uploads' + self.get_file_path(fileHash)[len(self.hashfs.root):]
