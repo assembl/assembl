@@ -6,13 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 2.8.9\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-<<<<<<< HEAD
 "POT-Creation-Date: 2019-09-05 16:24+0200\n"
 "PO-Revision-Date: 2018-05-18 16:16+0200\n"
-=======
-"POT-Creation-Date: 2019-06-11 11:29+0200\n"
-"PO-Revision-Date: 2019-10-08 12:24+0200\n"
->>>>>>> develop
 "Last-Translator: \n"
 "Language: nl\n"
 "Language-Team: \n"
@@ -4958,4 +4953,3 @@ msgstr "Geen discussie gevonden voor slug=%s"
 
 #~ msgid "This is not a user"
 #~ msgstr "Dit is geen gebruiker"
-

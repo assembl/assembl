@@ -6,13 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: assembl 0.0\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 "POT-Creation-Date: 2019-09-05 16:24+0200\n"
 "PO-Revision-Date: 2017-09-27 21:10+0800\n"
-=======
-"POT-Creation-Date: 2019-06-11 11:29+0200\n"
-"PO-Revision-Date: 2019-10-17 16:37+0200\n"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 "Last-Translator: Benoit Grégoire <benoitg@coeus.ca>\n"
 "Language: zh\n"
 "Language-Team: en <LL@li.org>\n"
@@ -398,17 +393,12 @@ msgstr ""
 msgid "Authentication service type"
 msgstr "验证服务类型"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:628
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
 "social-auth backend. Participants will be auto-logged in to that server, "
 "and discussion auto-subscription will require an account from this "
 "backend."
-=======
-#: assembl/models/preferences.py:609
-msgid "A primary authentication server for this discussion, defined as a python-social-auth backend. Participants will be auto-logged in to that server, and discussion auto-subscription will require an account from this backend."
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 msgstr "这个讨论的主要验证服务器被定义为python-social-auth后端。参与者将自动登录到该服务器，并且自动订阅讨论需要一个来自此后端的帐户。"
 
 #: assembl/models/preferences.py:643
@@ -423,15 +413,10 @@ msgstr "将经过审核的帖子设置为隐藏或默认无法访问？"
 msgid "Idea panel opens automatically"
 msgstr "想法面板自动打开"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:662
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
 "close when a special section is clicked)"
-=======
-#: assembl/models/preferences.py:643
-msgid "Does the Idea panel automatically open when an idea is clicked ? (and close when a special section is clicked)"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 msgstr "点击想法时，想法面板会自动打开吗？（当点击特殊部分时关闭）"
 
 #: assembl/models/preferences.py:674
@@ -454,15 +439,10 @@ msgstr "多列视图中列的（默认）主题颜色是什么？"
 msgid "Names of columns in column view"
 msgstr "列视图中列的名称"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:705
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
-=======
-#: assembl/models/preferences.py:686
-msgid "What are (default) names of columns in multi-column views, in each discussion language?"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 msgstr "在多列视图中，每种讨论语言中列的（默认）名称是什么？"
 
 #: assembl/models/preferences.py:718
@@ -477,7 +457,6 @@ msgstr "新讨论的基本权限"
 msgid "Require Email Domain"
 msgstr "要求提供电子邮件域"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:810
 msgid ""
 "List of domain names of user email address required for self-"
@@ -489,11 +468,6 @@ msgstr ""
 "registration. Only accounts with at least an email from those domains can"
 " self-register to this discussion. Anyone can self-register if this is "
 "empty."
-=======
-#: assembl/models/preferences.py:791
-msgid "List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-register if this is empty."
-msgstr "List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-register if this is empty."
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 
 #: assembl/models/preferences.py:826
 msgid "Whitelist on authentication service"
@@ -515,17 +489,11 @@ msgstr "允许默认登录流程中使用白名单"
 msgid "Discussion administrators"
 msgstr "讨论统计"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:859
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
-=======
-#: assembl/models/preferences.py:840
-msgid "A list of discussion administrators, if different from the server administrator"
-msgstr "讨论管理员列表（如果与服务器管理员不同）"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 
 #: assembl/models/preferences.py:872
 msgid "Show CI Dashboard"
@@ -555,15 +523,10 @@ msgstr "可用Catalyst可视化的JSON描述"
 msgid "Navigation sections"
 msgstr "导航部分"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:925
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
-=======
-#: assembl/models/preferences.py:906
-msgid "A JSON specification of Catalyst visualizations to show in the navigation section"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 msgstr "要在导航部分显示的Catalyst可视化的JSON规范"
 
 #: assembl/models/preferences.py:938
@@ -578,15 +541,10 @@ msgstr "Jed（JSON）格式、适用于Catalyst可视化的译文"
 msgid "Default Table of Ideas Collapsed state"
 msgstr "默认想法表格的折叠状态"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:961
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
-=======
-#: assembl/models/preferences.py:942
-msgid "Default expanded/collapsed state of each idea in the table of ideas. A user can override it by opening/closing an idea"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 msgstr "每个想法在想法表中的默认展开/折叠状态。用户可以通过打开/关闭想法来覆盖它"
 
 #: assembl/models/preferences.py:976
@@ -609,33 +567,21 @@ msgstr "显示用于禁用Piwik cookie的横幅"
 msgid "Custom HTML code on the landing page"
 msgstr "登陆页上的自定义HTML代码"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:1009
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
-=======
-#: assembl/models/preferences.py:990
-msgid "Custom HTML code that will be integrated on the landing page of the debate, right after the <body> tag"
-msgstr "将被集成到辩论网站登陆页上的自定义HTML代码，在<body>标签后"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 
 #: assembl/models/preferences.py:1019
 msgid "Custom HTML code on the user registration page"
 msgstr "用户注册页面上的自定义HTML代码"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:1022
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
 msgstr ""
-=======
-#: assembl/models/preferences.py:1003
-msgid "Custom HTML code that will be integrated on the user registration page of the debate, right after the <body> tag"
-msgstr "将被集成到辩论网站用户注册页面上的自定义HTML代码，在<body>标签后"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 
 #: assembl/models/preferences.py:1032 assembl/models/preferences.py:1035
 msgid "Harvesting translation"
@@ -645,7 +591,6 @@ msgstr "Catalyst译文"
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr "GraphQL API调用的有效CORS路径"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/models/preferences.py:1046
 msgid ""
 "A list of valid domain names or IP addresses that are allowed to make "
@@ -4469,17 +4414,11 @@ msgstr "退订"
 msgid "error"
 msgstr "错误"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/__init__.py:852
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
 "accessible."
 msgstr ""
-=======
-#: assembl/views/__init__.py:905
-msgid "Our server has encountered a problem. The page you have requested is not accessible."
-msgstr "我们的服务器遇到一个错误。您请求的页无法访问。"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 
 #: assembl/views/__init__.py:853
 msgid "We apologize for the inconvenience"
@@ -4574,15 +4513,10 @@ msgstr "密码不一样"
 msgid "The passwords should be identical"
 msgstr "密码应该一致"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:469
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email"
 " that does not exist."
-=======
-#: assembl/views/auth/views.py:468
-msgid "Your email was refused by the SMTP server.  You probably entered an email that does not exist."
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 msgstr "您的电子邮件被SMTP服务器拒绝。您可能输入了不存在的电子邮件。"
 
 #: assembl/views/auth/views.py:526 assembl/views/auth/views.py:851
@@ -4606,17 +4540,12 @@ msgstr "您不需要确认此电子邮件地址，它已经被确认过。"
 msgid "Confirmation requested"
 msgstr "已按要求确认"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:618 assembl/views/auth/views.py:817
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
 " inbox in a few minutes. It contains a confirmation link, please click on"
 " it in order to confirm your e-mail address. If you did not receive any "
 "confirmation e-mail (check your spams), click here."
-=======
-#: assembl/views/auth/views.py:617 assembl/views/auth/views.py:816
-msgid "A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. If you did not receive any confirmation e-mail (check your spams), click here."
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 msgstr "确认电子邮件已发送到您的帐户，并且应该在几分钟之内出现在您的收件箱中。它包含一个确认链接，请点击它以确认您的电子邮件地址。如果您没有收到任何确认电子邮件（请检查您的垃圾邮件），请点击此处。"
 
 #: assembl/views/auth/views.py:666 assembl/views/auth/views.py:690
@@ -4663,15 +4592,10 @@ msgstr "我们不知道这封电子邮件。"
 msgid "Password change requested"
 msgstr "已请求更改密码"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:905
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
-=======
-#: assembl/views/auth/views.py:904
-msgid "We have sent you an email with a temporary connection link. Please use that link to log in and change your password."
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 msgstr "我们向您发送了一个带临时链接的电子邮件。请使用该链接登录并更改密码。"
 
 #: assembl/views/auth/views.py:986
@@ -4706,14 +4630,9 @@ msgstr "请使用{assembl}确认您的{confirm_what}"
 msgid "account"
 msgstr "帐户"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:1079
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
-=======
-#: assembl/views/auth/views.py:1078
-msgid "Hello, {name}, and welcome to {assembl}!\n"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 "\n"
 "Please confirm your email address and complete your registration by clicking the link below.\n"
 "<{confirm_url}>\n"
@@ -4728,17 +4647,11 @@ msgstr "您好，{name}，欢迎来到{assembl}！\n"
 "敬上，\n"
 "{assembl}团队"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:1086
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
 "address</a>\n"
-=======
-#: assembl/views/auth/views.py:1085
-msgid "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your email address</a>\n"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 "and complete your registration.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr "<p>您好，{name}，欢迎来到{assembl}！</p>\n"
@@ -4746,14 +4659,9 @@ msgstr "<p>您好，{name}，欢迎来到{assembl}！</p>\n"
 "并完成您的注册。</p>\n"
 "<p>敬上，<br /> {assembl}团队</p>"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:1091
 msgid ""
 "Hello, {name}!\n"
-=======
-#: assembl/views/auth/views.py:1090
-msgid "Hello, {name}!\n"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 "\n"
 "Please confirm your new email address <{email}> on your {assembl} account by clicking the link below.\n"
 "<{confirm_url}>\n"
@@ -4768,17 +4676,11 @@ msgstr "您好，{name}！\n"
 "敬上，\n"
 " {assembl}团队"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:1098
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
 "address</a>\n"
-=======
-#: assembl/views/auth/views.py:1097
-msgid "<p>Hello, {name}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email address</a>\n"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 "on your {assembl} account.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr "<p>您好，{name}！</p>\n"
@@ -4790,7 +4692,6 @@ msgstr "<p>您好，{name}！</p>\n"
 msgid "Request for password change"
 msgstr "请求更改密码"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:1156
 msgid ""
 "<p>Hello, {name}!</p>\n"
@@ -4800,13 +4701,6 @@ msgid ""
 "change</a>.</p>\n"
 "<p>If you did not ask to reset your password please disregard this "
 "email.</p>\n"
-=======
-#: assembl/views/auth/views.py:1155
-msgid "<p>Hello, {name}!</p>\n"
-"<p>We have received a request to change the password on your {assembl} account.\n"
-"Please <a href=\"{confirm_url}\">click here to confirm your password change</a>.</p>\n"
-"<p>If you did not ask to reset your password please disregard this email.</p>\n"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr "<p>您好，{name}！</p>\n"
 "<p>我们已收到您要更改{assembl}帐户密码的请求。\n"
@@ -4814,17 +4708,11 @@ msgstr "<p>您好，{name}！</p>\n"
 "<p>如果您没有请求重置密码，请忽略此电子邮件。</p>\n"
 "<p>敬上，<br /> {assembl}团队</p>\n"
 
-<<<<<<< HEAD:assembl/locale/zh_Hans/LC_MESSAGES/assembl.po
 #: assembl/views/auth/views.py:1162
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
 "account.\n"
-=======
-#: assembl/views/auth/views.py:1161
-msgid "Hello, {name}!\n"
-"We have received a request to change the password on your {assembl} account.\n"
->>>>>>> develop:assembl/locale/zh_CN/LC_MESSAGES/assembl.po
 "To confirm your password change please click on the link below.\n"
 "<{confirm_url}>\n"
 "\n"

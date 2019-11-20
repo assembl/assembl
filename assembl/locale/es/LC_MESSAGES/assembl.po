@@ -8,13 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Assembl\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-<<<<<<< HEAD
 "POT-Creation-Date: 2019-09-05 16:24+0200\n"
 "PO-Revision-Date: 2018-05-18 16:13+0200\n"
-=======
-"POT-Creation-Date: 2019-06-11 11:29+0200\n"
-"PO-Revision-Date: 2019-10-15 10:08+0200\n"
->>>>>>> develop
 "Last-Translator: \n"
 "Language: es\n"
 "Language-Team: Spanish (http://www.transifex.com/assembl/assembl/language/es/)\n"
@@ -399,7 +394,6 @@ msgstr ""
 msgid "Authentication service type"
 msgstr "Tipo de servicio de autentificación"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:628
 msgid ""
 "A primary authentication server for this discussion, defined as a python-"
@@ -407,11 +401,6 @@ msgid ""
 "and discussion auto-subscription will require an account from this "
 "backend."
 msgstr ""
-=======
-#: assembl/models/preferences.py:609
-msgid "A primary authentication server for this discussion, defined as a python-social-auth backend. Participants will be auto-logged in to that server, and discussion auto-subscription will require an account from this backend."
-msgstr "Un servicio de autentificación primario para este debate, definido como un back-end phython-social-auth. Los participantes se conectarán automáticamente a ese servidor y la autosuscripción al debate requerirá una cuenta de este back-end."
->>>>>>> develop
 
 #: assembl/models/preferences.py:643
 msgid "Allow access to moderated text"
@@ -425,7 +414,6 @@ msgstr "¿Las publicaciones moderadas solo están ocultas o son inaccesibles por
 msgid "Idea panel opens automatically"
 msgstr "El panel de ideas se abre automáticamente"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:662
 msgid ""
 "Does the Idea panel automatically open when an idea is clicked ? (and "
@@ -433,11 +421,6 @@ msgid ""
 msgstr ""
 "El panel Idea se abre automaticamente cuando se hace click sobre una "
 "idea? (y se cierra cuando se hace click sobre una sección?)"
-=======
-#: assembl/models/preferences.py:643
-msgid "Does the Idea panel automatically open when an idea is clicked ? (and close when a special section is clicked)"
-msgstr "¿El panel de ideas se abre automáticamente al hacer clic sobre una idea? (y se cierra cuando se hace clic sobre una sección especial)"
->>>>>>> develop
 
 #: assembl/models/preferences.py:674
 msgid "Ids of columns in column view"
@@ -459,17 +442,11 @@ msgstr "¿Qué son los colores por temas (predeterminados) de las columnas en la
 msgid "Names of columns in column view"
 msgstr "Nombres de las columnas en la vista de columna"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:705
 msgid ""
 "What are (default) names of columns in multi-column views, in each "
 "discussion language?"
 msgstr ""
-=======
-#: assembl/models/preferences.py:686
-msgid "What are (default) names of columns in multi-column views, in each discussion language?"
-msgstr "¿Qué son los nombres (predeterminados) de las columnas en las vistas de multicolumna, en cada idioma de debate?"
->>>>>>> develop
 
 #: assembl/models/preferences.py:718
 msgid "Default permissions"
@@ -483,7 +460,6 @@ msgstr "Los permisos básicos para un nuevo debate"
 msgid "Require Email Domain"
 msgstr "Se requiere un correo electrónico"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:810
 msgid ""
 "List of domain names of user email address required for self-"
@@ -496,11 +472,6 @@ msgstr ""
 "correo electrónico contenido en estos dominios pueden autoinscribirse en "
 "esta discusión. Si este apartado está vacío, cualquier usuario puede "
 "autoinscribirse."
-=======
-#: assembl/models/preferences.py:791
-msgid "List of domain names of user email address required for self-registration. Only accounts with at least an email from those domains can self-register to this discussion. Anyone can self-register if this is empty."
-msgstr "Lista de nombres de dominio de direcciones de correo electrónico de usuarios requeridos para el autorregistro. Solo las cuentas con al menos un correo electrónico de esos dominios puede autorregistrarse en este debate. Cualquier persona puede autorregistrarse si está vacío."
->>>>>>> develop
 
 #: assembl/models/preferences.py:826
 msgid "Whitelist on authentication service"
@@ -522,17 +493,11 @@ msgstr "Permitir que una whitelist se aplique al proceso de inicio de sesión pr
 msgid "Discussion administrators"
 msgstr "Administradores de debate"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:859
 msgid ""
 "A list of discussion administrators, if different from the server "
 "administrator"
 msgstr ""
-=======
-#: assembl/models/preferences.py:840
-msgid "A list of discussion administrators, if different from the server administrator"
-msgstr "Una lista de administradores de los debates, si son distintos al administrador del servidor"
->>>>>>> develop
 
 #: assembl/models/preferences.py:872
 msgid "Show CI Dashboard"
@@ -562,17 +527,11 @@ msgstr "Una descripción JSON de las visualizaciones Catalyst disponibles"
 msgid "Navigation sections"
 msgstr "Secciones de navegación"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:925
 msgid ""
 "A JSON specification of Catalyst visualizations to show in the navigation"
 " section"
 msgstr ""
-=======
-#: assembl/models/preferences.py:906
-msgid "A JSON specification of Catalyst visualizations to show in the navigation section"
-msgstr "Una especificación JSON de las visualizaciones Catalyst para mostrar en la sección de navegación"
->>>>>>> develop
 
 #: assembl/models/preferences.py:938
 msgid "Catalyst translations"
@@ -586,17 +545,11 @@ msgstr "Traducciones aplicables a las visualizaciones Catalyst, en formato Jed (
 msgid "Default Table of Ideas Collapsed state"
 msgstr "Panel de ideas en estado plegado por defecto"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:961
 msgid ""
 "Default expanded/collapsed state of each idea in the table of ideas. A "
 "user can override it by opening/closing an idea"
 msgstr ""
-=======
-#: assembl/models/preferences.py:942
-msgid "Default expanded/collapsed state of each idea in the table of ideas. A user can override it by opening/closing an idea"
-msgstr "Estado expandido/plegado por defecto de cada idea en el panel de ideas. Un usuario puede desactivarlo abriendo/cerrando una idea"
->>>>>>> develop
 
 #: assembl/models/preferences.py:976
 msgid "Preference data"
@@ -618,33 +571,21 @@ msgstr "Mostrar el banner que permite desactivar las cookies Piwik"
 msgid "Custom HTML code on the landing page"
 msgstr "Personalizar el código HTML en la página de aterrizaje"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:1009
 msgid ""
 "Custom HTML code that will be integrated on the landing page of the "
 "debate, right after the <body> tag"
 msgstr ""
-=======
-#: assembl/models/preferences.py:990
-msgid "Custom HTML code that will be integrated on the landing page of the debate, right after the <body> tag"
-msgstr "Personalizar el código HTML que se integrará en la página de aterrizaje del debate, justo después de la etiqueta <body>"
->>>>>>> develop
 
 #: assembl/models/preferences.py:1019
 msgid "Custom HTML code on the user registration page"
 msgstr "Personalizar el código HTML en la página de registro"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:1022
 msgid ""
 "Custom HTML code that will be integrated on the user registration page of"
 " the debate, right after the <body> tag"
 msgstr ""
-=======
-#: assembl/models/preferences.py:1003
-msgid "Custom HTML code that will be integrated on the user registration page of the debate, right after the <body> tag"
-msgstr "Personalizar el código HTML que se integrará en la página de registro de usuario del debate, justo después de la etiqueta <body>"
->>>>>>> develop
 
 #: assembl/models/preferences.py:1032 assembl/models/preferences.py:1035
 msgid "Harvesting translation"
@@ -654,7 +595,6 @@ msgstr "Traducción de recopilación"
 msgid "Valid CORS paths for GraphQL API calls"
 msgstr "Rutas válidas CORS para llamadas API GraphQL"
 
-<<<<<<< HEAD
 #: assembl/models/preferences.py:1046
 msgid ""
 "A list of valid domain names or IP addresses that are allowed to make "
@@ -4477,17 +4417,11 @@ msgstr "suscripción cancelada"
 msgid "error"
 msgstr "error"
 
-<<<<<<< HEAD
 #: assembl/views/__init__.py:852
 msgid ""
 "Our server has encountered a problem. The page you have requested is not "
 "accessible."
 msgstr ""
-=======
-#: assembl/views/__init__.py:905
-msgid "Our server has encountered a problem. The page you have requested is not accessible."
-msgstr "Nuestro servidor ha encontrado un problema. La página que desea visitar no es accesible."
->>>>>>> develop
 
 #: assembl/views/__init__.py:853
 msgid "We apologize for the inconvenience"
@@ -4582,17 +4516,11 @@ msgstr "Las contraseñas no son idénticas"
 msgid "The passwords should be identical"
 msgstr "Las contraseñas deberían ser idénticas"
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:469
 msgid ""
 "Your email was refused by the SMTP server.  You probably entered an email"
 " that does not exist."
 msgstr ""
-=======
-#: assembl/views/auth/views.py:468
-msgid "Your email was refused by the SMTP server.  You probably entered an email that does not exist."
-msgstr "Su correo electrónico ha sido rechazado por el servidor SMTP. Es probable que haya introducido un correo que no existe."
->>>>>>> develop
 
 #: assembl/views/auth/views.py:526 assembl/views/auth/views.py:851
 #: assembl/views/auth/views.py:857
@@ -4615,7 +4543,6 @@ msgstr "No necesita confirmar esta dirección de correo electrónico, ya ha sido
 msgid "Confirmation requested"
 msgstr "Confirmación requerida"
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:618 assembl/views/auth/views.py:817
 msgid ""
 "A confirmation e-mail has been sent to your account and should be in your"
@@ -4623,11 +4550,6 @@ msgid ""
 " it in order to confirm your e-mail address. If you did not receive any "
 "confirmation e-mail (check your spams), click here."
 msgstr ""
-=======
-#: assembl/views/auth/views.py:617 assembl/views/auth/views.py:816
-msgid "A confirmation e-mail has been sent to your account and should be in your inbox in a few minutes. It contains a confirmation link, please click on it in order to confirm your e-mail address. If you did not receive any confirmation e-mail (check your spams), click here."
-msgstr "Se ha enviado un correo electrónico de confirmación a su cuenta y debería llegar a su buzón de entrada en unos minutos. El correo contiene un enlace de confirmación, por favor, haga clic para confirmar su dirección de correo electrónico. Si no recibe un correo de confirmación (compruebe el spam), haga clic aquí."
->>>>>>> develop
 
 #: assembl/views/auth/views.py:666 assembl/views/auth/views.py:690
 #: assembl/views/auth/views.py:712
@@ -4673,17 +4595,11 @@ msgstr "No conocemos este correo electrónico."
 msgid "Password change requested"
 msgstr "Se requiere cambio de contraseña."
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:905
 msgid ""
 "We have sent you an email with a temporary connection link. Please use "
 "that link to log in and change your password."
 msgstr ""
-=======
-#: assembl/views/auth/views.py:904
-msgid "We have sent you an email with a temporary connection link. Please use that link to log in and change your password."
-msgstr "Le hemos enviado un correo electrónico con un enlace temporal de conexión. Por favor, utilice ese enlace para conectarse y cambiar su contraseña."
->>>>>>> develop
 
 #: assembl/views/auth/views.py:986
 msgid "You will enter the discussion as <b>{name}</b>."
@@ -4717,14 +4633,9 @@ msgstr "Por favor, confirme su {confirm_what} con {assembl}"
 msgid "account"
 msgstr "cuenta"
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:1079
 msgid ""
 "Hello, {name}, and welcome to {assembl}!\n"
-=======
-#: assembl/views/auth/views.py:1078
-msgid "Hello, {name}, and welcome to {assembl}!\n"
->>>>>>> develop
 "\n"
 "Please confirm your email address and complete your registration by clicking the link below.\n"
 "<{confirm_url}>\n"
@@ -4739,17 +4650,11 @@ msgstr "Hola, {name}, ¡le damos la bienvenida a {assembl}!\n"
 "Un cordial saludo,\n"
 "El Equipo {assembl}"
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:1086
 msgid ""
 "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your email "
 "address</a>\n"
-=======
-#: assembl/views/auth/views.py:1085
-msgid "<p>Hello, {name}, and welcome to {assembl}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your email address</a>\n"
->>>>>>> develop
 "and complete your registration.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr "<p>Hola, {name}, ¡le damos la bienvenida a {assembl}!</p>\n"
@@ -4757,14 +4662,9 @@ msgstr "<p>Hola, {name}, ¡le damos la bienvenida a {assembl}!</p>\n"
 "y complete su proceso de registro.</p>\n"
 "<p>Un cordial saludo,<br />El Equipo {assembl}/<p>"
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:1091
 msgid ""
 "Hello, {name}!\n"
-=======
-#: assembl/views/auth/views.py:1090
-msgid "Hello, {name}!\n"
->>>>>>> develop
 "\n"
 "Please confirm your new email address <{email}> on your {assembl} account by clicking the link below.\n"
 "<{confirm_url}>\n"
@@ -4779,17 +4679,11 @@ msgstr "¡Hola, {name}!\n"
 "Un cordial saludo,\n"
 "El Equipo {assembl}"
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:1098
 msgid ""
 "<p>Hello, {name}!</p>\n"
 "<p>Please <a href=\"{confirm_url}\">click here to confirm your new email "
 "address</a>\n"
-=======
-#: assembl/views/auth/views.py:1097
-msgid "<p>Hello, {name}!</p>\n"
-"<p>Please <a href=\"{confirm_url}\">click here to confirm your new email address</a>\n"
->>>>>>> develop
 "on your {assembl} account.</p>\n"
 "<p>Best regards,<br />The {assembl} Team</p>"
 msgstr "<p>¡Hola, {name}!</p>\n"
@@ -4801,7 +4695,6 @@ msgstr "<p>¡Hola, {name}!</p>\n"
 msgid "Request for password change"
 msgstr "Solicitud de cambio de contraseña"
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:1156
 msgid ""
 "<p>Hello, {name}!</p>\n"
@@ -4811,13 +4704,6 @@ msgid ""
 "change</a>.</p>\n"
 "<p>If you did not ask to reset your password please disregard this "
 "email.</p>\n"
-=======
-#: assembl/views/auth/views.py:1155
-msgid "<p>Hello, {name}!</p>\n"
-"<p>We have received a request to change the password on your {assembl} account.\n"
-"Please <a href=\"{confirm_url}\">click here to confirm your password change</a>.</p>\n"
-"<p>If you did not ask to reset your password please disregard this email.</p>\n"
->>>>>>> develop
 "<p>Best regards,<br />The {assembl} Team</p>\n"
 msgstr "<p>¡Hola, {name}!</p>\n"
 "<p>Hemos recibido una petición de cambio de contraseña en su cuenta {assembl}.\n"
@@ -4825,17 +4711,11 @@ msgstr "<p>¡Hola, {name}!</p>\n"
 "<p>Si no ha solicitado el restablecimiento de su contraseña, por favor, ignore este correo.</p>\n"
 "<p>Un cordial saludo,<br />El Equipo {assembl}</p>\n"
 
-<<<<<<< HEAD
 #: assembl/views/auth/views.py:1162
 msgid ""
 "Hello, {name}!\n"
 "We have received a request to change the password on your {assembl} "
 "account.\n"
-=======
-#: assembl/views/auth/views.py:1161
-msgid "Hello, {name}!\n"
-"We have received a request to change the password on your {assembl} account.\n"
->>>>>>> develop
 "To confirm your password change please click on the link below.\n"
 "<{confirm_url}>\n"
 "\n"
