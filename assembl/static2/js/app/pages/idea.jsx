@@ -223,17 +223,21 @@ class Idea extends React.Component<Props> {
     const { hash } = window.location;
     if (hash !== '') {
       const id = hash.split('#')[1].split('?')[0];
-      const allPosts = {};
+      const allPosts: {[key: string]: (Post | null)} = {};
       edges.forEach((e) => {
         allPosts[e.node.id] = e.node;
       });
-      let post = allPosts[id];
-      if (!post) {
+      if (!allPosts[id]) {
         return null;
       }
 
+      let post: Post = allPosts[id];
       while (post.parentId) {
-        post = allPosts[post.parentId];
+        if (allPosts[post.parentId]) {
+          post = allPosts[post.parentId];
+        } else {
+          break;
+        }
       }
       const topPostId = post.id;
       const index = topPosts.findIndex(value => value.id === topPostId);
