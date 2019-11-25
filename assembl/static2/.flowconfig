@@ -1,18 +1,7 @@
 [ignore]
-<PROJECT_ROOT>/node_modules/draft-js/lib/ContentBlock.js.flow
-<PROJECT_ROOT>/node_modules/draft-js/lib/ContentBlockNode.js.flow
-<PROJECT_ROOT>/node_modules/draft-js/lib/DraftEditor.react.js.flow
-<PROJECT_ROOT>/node_modules/draft-js/lib/DraftEditorDragHandler.js.flow
-<PROJECT_ROOT>/node_modules/draft-js/lib/DraftEditorLeaf.react.js.flow
-<PROJECT_ROOT>/node_modules/draft-js-plugins-editor/lib/Editor/index.js.flow
-<PROJECT_ROOT>/node_modules/config-chain
-<PROJECT_ROOT>/node_modules/npm/node_modules/config-chain
-<PROJECT_ROOT>/node_modules/stylelint
-<PROJECT_ROOT>/node_modules/babel-plugin-react-docgen
-<PROJECT_ROOT>/node_modules/radium
-<PROJECT_ROOT>/node_modules/graphql
-<PROJECT_ROOT>/node_modules/react-select
-<PROJECT_ROOT>/node_modules/react-apollo/react-apollo.umd.js.flow
+
+[untyped]
+.*/node_modules/*
 
 [include]
 
