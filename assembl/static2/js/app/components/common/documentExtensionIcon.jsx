@@ -26,7 +26,7 @@ export const getExtension = (filename: string): string => {
     return 'unknown';
   }
 
-  return parts[parts.length - 1];
+  return parts[parts.length - 1].toLowerCase();
 };
 
 export const getIconPathByExtension = (extension: string): string => {
