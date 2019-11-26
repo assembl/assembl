@@ -40,312 +40,327 @@ exports[`PostsFilterMenu component should render a filter with sort by recently 
       className="dropdown-menu dropdown-menu-right"
       role="menu"
     >
-      <li
-        className="disabled"
-        role="presentation"
+      <div
+        style={
+          Object {
+            "color": "#777",
+            "fontSize": "14px",
+            "fontWeight": "bold",
+            "padding": "20px 0 5px 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
-        >
-          <strong>
-            <span>
-              Sort
-            </span>
-          </strong>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+        <strong>
+          <span>
+            Sort
+          </span>
+        </strong>
+      </div>
+      <div
+        id="postsFilterItem-reverseChronologicalTop"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-reverseChronologicalTop"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={false}
+          id="postsFilterItem-reverseChronologicalTop-input"
+          name="postsOrder"
+          type="radio"
+        />
+        <label
+          htmlFor="postsFilterItem-reverseChronologicalTop-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={false}
-            id="postsFilterItem-reverseChronologicalTop-input"
-            name="postsOrder"
-            type="radio"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-reverseChronologicalTop-input"
-          >
-            <span>
-              Recently active threads
-            </span>
-          </label>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+          <span>
+            Recently active threads
+          </span>
+        </label>
+      </div>
+      <div
+        id="postsFilterItem-reverseChronologicalLast"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-reverseChronologicalLast"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={true}
+          id="postsFilterItem-reverseChronologicalLast-input"
+          name="postsOrder"
+          type="radio"
+        />
+        <label
+          htmlFor="postsFilterItem-reverseChronologicalLast-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={true}
-            id="postsFilterItem-reverseChronologicalLast-input"
-            name="postsOrder"
-            type="radio"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-reverseChronologicalLast-input"
-          >
-            <span>
-              Recently started threads
-            </span>
-          </label>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+          <span>
+            Recently started threads
+          </span>
+        </label>
+      </div>
+      <div
+        id="postsFilterItem-chronologicalTop"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-chronologicalTop"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={false}
+          id="postsFilterItem-chronologicalTop-input"
+          name="postsOrder"
+          type="radio"
+        />
+        <label
+          htmlFor="postsFilterItem-chronologicalTop-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={false}
-            id="postsFilterItem-chronologicalTop-input"
-            name="postsOrder"
-            type="radio"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-chronologicalTop-input"
-          >
-            <span>
-              Chronological order
-            </span>
-          </label>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+          <span>
+            Chronological order
+          </span>
+        </label>
+      </div>
+      <div
+        id="postsFilterItem-reverseChronologicalFlat"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-reverseChronologicalFlat"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={false}
+          id="postsFilterItem-reverseChronologicalFlat-input"
+          name="postsOrder"
+          type="radio"
+        />
+        <label
+          htmlFor="postsFilterItem-reverseChronologicalFlat-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={false}
-            id="postsFilterItem-reverseChronologicalFlat-input"
-            name="postsOrder"
-            type="radio"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-reverseChronologicalFlat-input"
-          >
-            <span>
-              Newest messages first
-            </span>
-          </label>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+          <span>
+            Newest messages first
+          </span>
+        </label>
+      </div>
+      <div
+        id="postsFilterItem-popularityFlat"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-popularityFlat"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={false}
+          id="postsFilterItem-popularityFlat-input"
+          name="postsOrder"
+          type="radio"
+        />
+        <label
+          htmlFor="postsFilterItem-popularityFlat-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={false}
-            id="postsFilterItem-popularityFlat-input"
-            name="postsOrder"
-            type="radio"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-popularityFlat-input"
-          >
-            <span>
-              Most popular messages first
-            </span>
-          </label>
-        </a>
-      </li>
-      <li
-        className="disabled"
-        role="presentation"
+          <span>
+            Most popular messages first
+          </span>
+        </label>
+      </div>
+      <div
+        style={
+          Object {
+            "color": "#777",
+            "fontSize": "14px",
+            "fontWeight": "bold",
+            "padding": "20px 0 5px 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
-        >
-          <strong>
-            <span>
-              Overview
-            </span>
-          </strong>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+        <strong>
+          <span>
+            Overview
+          </span>
+        </strong>
+      </div>
+      <div
+        id="postsFilterItem-display-full"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-display-full"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={true}
+          id="postsFilterItem-display-full-input"
+          name="postsDisplay"
+          type="radio"
+        />
+        <label
+          htmlFor="postsFilterItem-display-full-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={true}
-            id="postsFilterItem-display-full-input"
-            name="postsDisplay"
-            type="radio"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-display-full-input"
-          >
-            <span>
-              Full messages
-            </span>
-          </label>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+          <span>
+            Full messages
+          </span>
+        </label>
+      </div>
+      <div
+        id="postsFilterItem-display-summary"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-display-summary"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={false}
+          id="postsFilterItem-display-summary-input"
+          name="postsDisplay"
+          type="radio"
+        />
+        <label
+          htmlFor="postsFilterItem-display-summary-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={false}
-            id="postsFilterItem-display-summary-input"
-            name="postsDisplay"
-            type="radio"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-display-summary-input"
-          >
-            <span>
-              Message previews
-            </span>
-          </label>
-        </a>
-      </li>
-      <li
-        className="disabled"
-        role="presentation"
+          <span>
+            Message previews
+          </span>
+        </label>
+      </div>
+      <div
+        style={
+          Object {
+            "color": "#777",
+            "fontSize": "14px",
+            "fontWeight": "bold",
+            "padding": "20px 0 5px 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
-        >
-          <strong>
-            <span>
-              Filter
-            </span>
-          </strong>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+        <strong>
+          <span>
+            Filter
+          </span>
+        </strong>
+      </div>
+      <div
+        id="postsFilterItem-filter-onlyMyPosts"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-filter-onlyMyPosts"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={false}
+          id="postsFilterItem-filter-onlyMyPosts-input"
+          name="onlyMyPosts"
+          type="checkbox"
+        />
+        <label
+          htmlFor="postsFilterItem-filter-onlyMyPosts-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={false}
-            id="postsFilterItem-filter-onlyMyPosts-input"
-            name="onlyMyPosts"
-            type="checkbox"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-filter-onlyMyPosts-input"
-          >
-            <span>
-              My posts
-            </span>
-          </label>
-        </a>
-      </li>
-      <li
-        className=""
-        role="presentation"
+          <span>
+            My posts
+          </span>
+        </label>
+      </div>
+      <div
+        id="postsFilterItem-filter-myPostsAndAnswers"
+        onClick={[Function]}
+        style={
+          Object {
+            "fontSize": "14px",
+            "padding": "0 20px",
+            "textAlign": "left",
+          }
+        }
       >
-        <a
-          href="#"
-          id="postsFilterItem-filter-myPostsAndAnswers"
-          onClick={[Function]}
-          onKeyDown={[Function]}
-          role="menuitem"
-          tabIndex="-1"
+        <input
+          checked={false}
+          id="postsFilterItem-filter-myPostsAndAnswers-input"
+          name="myPostsAndAnswers"
+          type="checkbox"
+        />
+        <label
+          htmlFor="postsFilterItem-filter-myPostsAndAnswers-input"
+          style={
+            Object {
+              "paddingLeft": "5px",
+            }
+          }
         >
-          <input
-            checked={false}
-            id="postsFilterItem-filter-myPostsAndAnswers-input"
-            name="myPostsAndAnswers"
-            type="checkbox"
-          />
-           
-          <label
-            htmlFor="postsFilterItem-filter-myPostsAndAnswers-input"
-          >
-            <span>
-              Answers to my posts
-            </span>
-          </label>
-        </a>
-      </li>
+          <span>
+            Answers to my posts
+          </span>
+        </label>
+      </div>
       <li
         className=""
         role="presentation"

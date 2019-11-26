@@ -12,7 +12,7 @@ exports[`ThreadView component should render a ThreadView without the TopPostForm
       className="max-container background-grey"
       id="thread-view"
     >
-      <Connect(DumbThreadPostsFilterMenu)
+      <Connect(ThreadFiltersDropdown)
         stickyOffset={60}
         stickyTopPosition={200}
       />
@@ -68,7 +68,7 @@ exports[`ThreadView component should render a TopPostForm 1`] = `
       className="max-container background-grey"
       id="thread-view"
     >
-      <Connect(DumbThreadPostsFilterMenu)
+      <Connect(ThreadFiltersDropdown)
         stickyOffset={60}
         stickyTopPosition={200}
       />

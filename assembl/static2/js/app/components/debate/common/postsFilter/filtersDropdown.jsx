@@ -5,10 +5,10 @@ import debounce from 'lodash/debounce';
 import classNames from 'classnames';
 import { I18n } from 'react-redux-i18n';
 
-import PostsFilterMenuItem from './menuItem';
+import FiltersDropdownItem from './filtersDropdownItem';
 import PostsFilterButton from './button';
 import PostsFilterButtons from './buttons';
-import PostsFilterLabelMenuItem from './label';
+import PostsFiltersCategoryLabel from './filtersCategoryLabel';
 import { getConnectedUserId } from '../../../../utils/globalFunctions';
 import { withScreenHeight } from '../../../common/screenDimensions';
 import { defaultDisplayPolicy, defaultOrderPolicy, defaultPostsFiltersStatus } from './policies';
@@ -45,7 +45,7 @@ type State = {
 /*
  * Generic post filter component. Specific filter components are in subfolders survey/, thread/, etc.
  * */
-export class DumbPostsFilterMenu extends React.Component<Props, State> {
+export class FiltersDropdown extends React.Component<Props, State> {
   static defaultProps = {
     defaultOrderPolicy: defaultOrderPolicy,
     defaultDisplayPolicy: defaultDisplayPolicy,
@@ -99,7 +99,9 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   selectPostsFilter = (postsFilterPolicy: any, selected?: boolean) => {
     // FIXME use PostsFilterPolicy type
     const selectedPostsFiltersStatus = { ...this.state.selectedPostsFiltersStatus };
+
     selectedPostsFiltersStatus[postsFilterPolicy.filterField] = !!selected;
+
     if (selected) {
       // unselect excluded policies
       postsFilterPolicy.excludedPolicies.forEach((policyId: string) => {
@@ -154,10 +156,10 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
           }
           id="postsFilter-dropdown"
         >
-          <PostsFilterLabelMenuItem labelMsgId="debate.thread.sortPosts" />
+          <PostsFiltersCategoryLabel labelMsgId="debate.thread.sortPosts" />
 
           {postsOrderPolicies.map(item => (
-            <PostsFilterMenuItem
+            <FiltersDropdownItem
               key={item.id}
               item={item}
               selected={item.id === selectedPostsOrderPolicy.id}
@@ -167,10 +169,10 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
               eventKey={item.id}
             />
           ))}
-          <PostsFilterLabelMenuItem labelMsgId="debate.thread.overviewPosts" />
+          <PostsFiltersCategoryLabel labelMsgId="debate.thread.overviewPosts" />
 
           {postsDisplayPolicies.map(item => (
-            <PostsFilterMenuItem
+            <FiltersDropdownItem
               key={item.id}
               item={item}
               selected={item.id === selectedPostsDisplayPolicy.id}
@@ -183,9 +185,9 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
 
           {userIsConnected && (
             <React.Fragment>
-              <PostsFilterLabelMenuItem labelMsgId="debate.thread.filterPosts" />
+              <PostsFiltersCategoryLabel labelMsgId="debate.thread.filterPosts" />
               {postsFiltersPolicies.map(item => (
-                <PostsFilterMenuItem
+                <FiltersDropdownItem
                   key={item.id}
                   item={item}
                   selected={selectedPostsFiltersStatus[item.filterField]}
@@ -220,4 +222,4 @@ export class DumbPostsFilterMenu extends React.Component<Props, State> {
   }
 }
 
-export default withScreenHeight(DumbPostsFilterMenu);
+export default withScreenHeight(FiltersDropdown);

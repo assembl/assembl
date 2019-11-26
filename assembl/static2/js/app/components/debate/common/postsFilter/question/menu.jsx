@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { postsDisplayPolicies, postsFiltersPolicies, postsOrderPolicies } from './policies';
 
-import PostsFilterMenu from '../menu';
+import PostsFilterMenu from '../filtersDropdown';
 import { setQuestionPostsFilterPolicies } from '../../../../../actions/questionFilterActions';
 
 type Props = {

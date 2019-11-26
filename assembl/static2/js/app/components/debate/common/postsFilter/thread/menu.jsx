@@ -3,7 +3,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { postsDisplayPolicies, postsFiltersPolicies, postsOrderPolicies } from './policies';
 
-import PostsFilterMenu from '../menu';
+import FiltersDropdown from '../filtersDropdown';
 import { setThreadPostsFilterPolicies } from '../../../../../actions/threadFilterActions';
 
 type Props = {
@@ -26,10 +26,10 @@ type State = {
   sticky: boolean
 };
 
-export class DumbThreadPostsFilterMenu extends React.Component<Props, State> {
+export class ThreadFiltersDropdown extends React.Component<Props, State> {
   render() {
     return (
-      <PostsFilterMenu
+      <FiltersDropdown
         postsDisplayPolicies={postsDisplayPolicies}
         postsFiltersPolicies={postsFiltersPolicies}
         postsOrderPolicies={postsOrderPolicies}
@@ -56,4 +56,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(DumbThreadPostsFilterMenu);
+export default connect(mapStateToProps, mapDispatchToProps)(ThreadFiltersDropdown);

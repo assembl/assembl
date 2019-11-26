@@ -4,7 +4,7 @@ import renderer from 'react-test-renderer';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 
-import { DumbPostsFilterMenu } from '../../../../../js/app/components/debate/common/postsFilter/menu';
+import { FiltersDropdown } from '../../../../../js/app/components/debate/common/postsFilter/filtersDropdown';
 import PostsFilterMenu from '../../../../../js/app/components/debate/common/postsFilter/thread/menu';
 import {
   defaultDisplayPolicy,
@@ -49,11 +49,11 @@ describe('PostsFilterMenu component', () => {
   it('should rollback when reset is clicked', () => {
     const wrapper = mount(<PostsFilterMenu {...props} store={store} />);
 
-    const defaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalLast');
-    const nonDefaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalTop');
-    const defaultDisplayItem = () => wrapper.find('a#postsFilterItem-display-full');
-    const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-display-summary');
-    const onlyMyPostsItem = () => wrapper.find('a#postsFilterItem-filter-onlyMyPosts');
+    const defaultSortItem = () => wrapper.find('div#postsFilterItem-reverseChronologicalLast');
+    const nonDefaultSortItem = () => wrapper.find('div#postsFilterItem-reverseChronologicalTop');
+    const defaultDisplayItem = () => wrapper.find('div#postsFilterItem-display-full');
+    const nonDefaultDisplayItem = () => wrapper.find('div#postsFilterItem-display-summary');
+    const onlyMyPostsItem = () => wrapper.find('div#postsFilterItem-filter-onlyMyPosts');
 
     const resetButton = () => wrapper.find('button#postsFilter-button-reset');
 
@@ -101,7 +101,7 @@ describe('PostsFilterMenu component', () => {
   it('should be saved when saved is clicked', () => {
     const setPostsFilterPolicies = jest.fn();
     const component = (
-      <DumbPostsFilterMenu
+      <FiltersDropdown
         postsDisplayPolicy={defaultDisplayPolicy}
         postsOrderPolicy={defaultOrderPolicy}
         postsFiltersStatus={defaultPostsFiltersStatus}
@@ -113,9 +113,9 @@ describe('PostsFilterMenu component', () => {
     );
     const wrapper = mount(component);
 
-    const nonDefaultSortItem = () => wrapper.find('a#postsFilterItem-reverseChronologicalTop');
-    const nonDefaultDisplayItem = () => wrapper.find('a#postsFilterItem-display-summary');
-    const onlyMyPostsItem = () => wrapper.find('a#postsFilterItem-filter-onlyMyPosts');
+    const nonDefaultSortItem = () => wrapper.find('div#postsFilterItem-reverseChronologicalTop');
+    const nonDefaultDisplayItem = () => wrapper.find('div#postsFilterItem-display-summary');
+    const onlyMyPostsItem = () => wrapper.find('div#postsFilterItem-filter-onlyMyPosts');
     const saveButton = () => wrapper.find('button#postsFilter-button-save');
 
     nonDefaultSortItem().simulate('click');
